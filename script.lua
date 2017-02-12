@@ -3446,6 +3446,7 @@ local VacancyDATA = {
 	["ФБР"] = {250, "ФБР", 0, 286},
 	["Директор ЦРУ"] = {0, "ЦРУ", 0, 166},
 	["Санитар"] = {0, "МЧС", 0, 276},
+	["Репортер"] = {500, "Мирные жители", 0}, 
 	["Ученик"] = {70, "МЧС", 0, 275},
 	["Врач"] = {120, "МЧС", 0, 274},
 	["Учёный CPC"] = {200, "ЦРУ", 0, 70},
@@ -4899,7 +4900,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -1890, -566.4, 37.2, 0, 0 --
+		local x,y,z,i,d  = 783.4, -1329, 13.5, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -8858,8 +8859,8 @@ function buybiz(thePlayer, biz)
 		if(GetDatabaseAccount(thePlayer, "money") >= BPrice) then
 			if(BPrice ~= 0) then
 				AddPlayerMoney(thePlayer, -BPrice)
-				MissionCompleted(thePlayer, "КУПЛЕНО!", getElementData(biz, "biz"))
-				outputChatBox("Теперь ты владеешь бизнесом!", thePlayer, 255,255,255,true)
+				MissionCompleted(thePlayer, "КУПЛЕНО!", getElementData(biz, "biz"), false, true)
+				
 				local bizNode = xmlFindChild(BizNode, getElementData(biz, "name"), 0)
 				xmlNodeSetAttribute(bizNode, "owner", getPlayerName(thePlayer))
 				setElementData(biz, "bizowner", getPlayerName(thePlayer))
@@ -8874,7 +8875,7 @@ function buybiz(thePlayer, biz)
 		if(getElementData(biz, "bizowner") == getPlayerName(thePlayer)) then
 			if(BPrice ~= 0) then
 				AddPlayerMoney(thePlayer, BPrice/2)
-				MissionCompleted(thePlayer, "ПРОДАНО!", getElementData(biz, "biz"))
+				MissionCompleted(thePlayer, "ПРОДАНО!", getElementData(biz, "biz"), false, true)
 				local bizNode = xmlFindChild(BizNode, getElementData(biz, "name"), 0)
 				xmlNodeSetAttribute(bizNode, "owner", "")
 				removeElementData(biz, "bizowner")
@@ -9349,7 +9350,8 @@ function buyHouse(thePlayer, buyhouse)
 		end
 		AddPlayerMoney(thePlayer, GetHousePrice(HouseNode))
 		triggerEvent("onPickupUse", getElementByID(buyhouse), thePlayer)
-		triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))), "СОБСТВЕННОСТЬ ПРОДАНА")
+		triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))), true)
+		MissionCompleted(thePlayer, "ПРОДАНО!", false, false, true)
 	else
 		if(getElementData(getElementByID(buyhouse), "owner") == "") then
 			if(GetDatabaseAccount(thePlayer, "money") >= tonumber(getElementData(getElementByID(buyhouse), "price"))) then
@@ -9375,9 +9377,10 @@ function buyHouse(thePlayer, buyhouse)
 				end
 				AddPlayerMoney(thePlayer, -tonumber(getElementData(getElementByID(buyhouse), "price")))
 				triggerEvent("onPickupUse", getElementByID(buyhouse), thePlayer)
-				triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))), "СОБСТВЕННОСТЬ КУПЛЕНА")
+				triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))), true)
+				MissionCompleted(thePlayer, "КУПЛЕНО!", false, false, true)
 			else
-				triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Недостаточно средств для покупки дома!")
+				ToolTip(thePlayer, "Недостаточно средств для покупки дома!")
 			end
 		end
 	end
@@ -10871,6 +10874,7 @@ function PlayerElementSync(thePlayer, obj, state)
 					local theVehicle = CreateVehicle(model, x, y, z, 0, 0, rotz)
 					setElementData(theVehicle, "destroy", "true", false)
 					warpPedIntoVehicle(obj,theVehicle)
+					--setElementFrozen(theVehicle, true)
 				end
 			end
 			SData["PlayerElementSync"][obj][getPlayerName(thePlayer)] = state
@@ -13462,19 +13466,19 @@ function EatCluckin(thePlayer, thePed, name, count)
 		if(name == "The Well Stacked Pizza Co.") then
 			StartAnimation(thePlayer, "FOOD", "EAT_Pizza",false,false,false,false)
 			AddPlayerArmas(thePlayer, 2881)
-			PData[thePlayer]["anitimer"] = setTimer(DestroyChiken, 3000, 1, thePlayer, 2881)
+			PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2881)
 		elseif(name == "Burger Shot") then
 			StartAnimation(thePlayer, "FOOD", "EAT_Burger",false,false,false,false)
 			AddPlayerArmas(thePlayer, 2880)
-			PData[thePlayer]["anitimer"] = setTimer(DestroyChiken, 3000, 1, thePlayer, 2880)
+			PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2880)
 		elseif(name == "Cluckin' Bell") then
 			StartAnimation(thePlayer, "FOOD", "EAT_Chicken",false,false,false,false)
 			AddPlayerArmas(thePlayer, 2880)
-			PData[thePlayer]["anitimer"] = setTimer(DestroyChiken, 3000, 1, thePlayer, 2880)
+			PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2880)
 		elseif(name == "Chilli Dogs") then
 			StartAnimation(thePlayer, "FOOD", "EAT_Chicken",false,false,false,false)
 			AddPlayerArmas(thePlayer, 2880)
-			PData[thePlayer]["anitimer"] = setTimer(DestroyChiken, 3000, 1, thePlayer, 2880)
+			PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2880)
 		end
 		
 		AddPlayerMoney(thePlayer, count)
@@ -13484,9 +13488,6 @@ addEvent("EatCluckin", true)
 addEventHandler("EatCluckin", getRootElement(), EatCluckin)
 
 
-function DestroyChiken(thePlayer, model)
-	RemovePlayerArmas(thePlayer, model)
-end
 
 
 
@@ -14177,8 +14178,8 @@ addEventHandler("SellItem", getRootElement(), AddPlayerMoney)
 
 
 
-function MissionCompleted(thePlayer, count, mission, target)
-	triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "", mission, count, target)
+function MissionCompleted(thePlayer, count, mission, target, cinema)
+	triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "", mission, count, target, cinema)
 end
 
 

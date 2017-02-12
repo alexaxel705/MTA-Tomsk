@@ -2354,6 +2354,10 @@ function NextSkinEnter()
 	end
 end
 
+
+
+
+
 function StartLookZones(zones, update)
 	if(#MyHouseBlip > 0) then 
 		for slot = 1, #MyHouseBlip do
@@ -2407,21 +2411,10 @@ function StartLookZones(zones, update)
 		bindKey ("arrow_r", "down", NextSkinPlus) 
 		bindKey ("enter", "down", NextSkinEnter)
 		LookHouse(SpawnPoints[1])
-	else
-		playSFX("genrl", 75, 1, false)
-		helpmessage("", update, "")
-		local x,y,z = getElementPosition(localPlayer)
-		setCameraMatrix(x+20, y-20, z+30, x, y, z)
-		PEDChangeSkin = "cinema"
-		setTimer(function(thePlayer)
-			setCameraTarget(localPlayer)
-			PEDChangeSkin = "play"
-		end, 4000, 1)
 	end
 end
 addEvent("StartLookZones", true)
 addEventHandler("StartLookZones", localPlayer, StartLookZones)
-
 
 
 
@@ -4025,7 +4018,7 @@ addEventHandler("RespectMessage", localPlayer, RespectMessage)
 
 
 
-function helpmessage(message, job, money, removetarget)
+function helpmessage(message, job, money, removetarget, cinema)
 	if(removetarget) then
 		Targets["thePlayer"] = nil
 	end
@@ -4053,6 +4046,17 @@ function helpmessage(message, job, money, removetarget)
 		PText["HUD"][6] = nil
 		PText["HUD"][7] = nil
 	end, 3500, 1)
+	
+	if(cinema) then
+		playSFX("genrl", 75, 1, false)
+		local x,y,z = getElementPosition(localPlayer)
+		setCameraMatrix(x+20, y-20, z+30, x, y, z)
+		PEDChangeSkin = "cinema"
+		setTimer(function(thePlayer)
+			setCameraTarget(localPlayer)
+			PEDChangeSkin = "play"
+		end, 3500, 1)
+	end
 end
 addEvent("helpmessageEvent", true)
 addEventHandler("helpmessageEvent", localPlayer, helpmessage)

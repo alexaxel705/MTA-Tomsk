@@ -17,6 +17,9 @@
         
     </FARMFR>
     
+    <SANNEWS owner="" xyz="[783.4, -1329, 13.5]" biz="San News" price="550000" money="0">
+        <VAC name="Репортер"></VAC>
+    </SANNEWS>
     
     <MEDBC owner="" xyz="[-314.2, 1049.4, 20.34]" biz="Скорая помощь Bone County" price="680000" money="0">
         <VAC name="Санитар"></VAC>
