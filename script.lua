@@ -3998,7 +3998,6 @@ local RandVeh = {
 	{1987.7, -1275, 22.8, 0, 0, 180},
 	{1062, -1763.8, 12.4, 0, 0, 90},
 	{1098.3, -1760.9, 12.4, 0, 0, 89},
-	{696.4, -1590.5, 13, 0, 0, 270},
 	{-93.2, -1194.8, 1.3, 355, 0, 344},
 	{-2265.7, 208.4, 34.2, 0, 0, 90},
 	{-2135.4, 645.3, 51.3, 0, 0, 0},
@@ -8557,7 +8556,7 @@ addEventHandler("BandInvite", getRootElement(), BandInvite)
 
 function DialogStart(thePlayer, dial, thePed)
 
-	StartAnimation(thePed, "ped", "factalk", 1, false, true, true, true, false)
+	StartAnimation(thePed, "ped", "factalk", 1, false, true, true, true)
 	triggerClientEvent(thePlayer, "PlayerDialog", thePlayer, dial, thePed)
 	PData[thePlayer]["dialog"] = dial
 end
@@ -8584,7 +8583,7 @@ function DialogRelease(thePlayer, release, thePed)
 		timing = #PData[thePlayer]["dialog"][release]["text"]*50
 	end
 	triggerClientEvent(thePlayer, "MyVoice", thePlayer, 'gg', md5(PData[thePlayer]["dialog"][release]["text"]))
-	StartAnimation(thePlayer, "ped", "factalk", 1, false, true, true, true, false)
+	StartAnimation(thePlayer, "ped", "factalk", 1, false, true, true, true)
 	
 	PData[thePlayer]["dialogActionTimer"] = setTimer(function()
 		if(PData[thePlayer]["dialog"][release]["action"]) then
@@ -12159,17 +12158,16 @@ addEventHandler("onVehicleDriftEnd", root, onVehicleDriftEnd)
 
 
 function DrinkSprunk(thePlayer, model)
-
 	if(not isTimer(PData[thePlayer]["anitimer"])) then
 		if(model == 956) then
-			StartAnimation(thePlayer, "VENDING", "VEND_Use",false,false,false,false,false)
+			StartAnimation(thePlayer, "VENDING", "VEND_Use",false,false,false,false)
 			triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 203, 1)
 			AddPlayerMoney(thePlayer, -20)
 			AddBizMoney("SPRUNK", 20)
 			
 			PData[thePlayer]["anitimer"] = setTimer(function(thePlayer)
 				AddPlayerArmas(thePlayer, 2769)
-				StartAnimation(thePlayer, "VENDING", "vend_eat1_P",false,false,false,false,false)
+				StartAnimation(thePlayer, "VENDING", "vend_eat1_P",false,false,false,false)
 				setElementHealth(thePlayer, getElementHealth(thePlayer) + 20)
 				
 				PData[thePlayer]["anitimer"] = setTimer(function(thePlayer)
@@ -12178,14 +12176,14 @@ function DrinkSprunk(thePlayer, model)
 			end, 2800, 1, thePlayer)
 
 		else
-			StartAnimation(thePlayer, "VENDING", "VEND_Use",false,false,false,false,false)
+			StartAnimation(thePlayer, "VENDING", "VEND_Use",false,false,false,false)
 			triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 203, 0)
 			AddPlayerMoney(thePlayer, -20)
 			AddBizMoney("SPRUNK", 20)
 			
 			PData[thePlayer]["anitimer"] = setTimer(function(thePlayer)
 				AddPlayerArmas(thePlayer, 1546)
-				StartAnimation(thePlayer, "VENDING", "VEND_Drink_P",false,false,false,false,false)
+				StartAnimation(thePlayer, "VENDING", "VEND_Drink_P",false,false,false,false)
 				setElementHealth(thePlayer, getElementHealth(thePlayer) + 20)
 				
 				PData[thePlayer]["anitimer"] = setTimer(function(thePlayer)
@@ -12362,7 +12360,7 @@ addCommandHandler("call", CallPhones)
 function CallIn(thePlayer)
 	SetControls(thePlayer, "phone", {["fire"] = true, ["jump"] = true, ["sprint"] = true})
 	
-	StartAnimation(thePlayer, "ped", "phone_in", 1, false, true, true, true, false)
+	StartAnimation(thePlayer, "ped", "phone_in", 1, false, true, true, true)
 	Phones[thePlayer] = true
 	AddPlayerArmas(thePlayer, 330)
 end
@@ -12371,7 +12369,7 @@ end
 function CallOut(thePlayer)
 	SetControls(thePlayer, "phone", {["fire"] = false, ["jump"] = false, ["sprint"] = false})
 	
-	StartAnimation(thePlayer, "ped", "phone_out", 1, false, true, true, true, false)
+	StartAnimation(thePlayer, "ped", "phone_out", 1, false, true, true, true)
 	setTimer(function()
 		RemovePlayerArmas(thePlayer, 330)
 		Phones[thePlayer] = false
@@ -14792,7 +14790,7 @@ function onPlayerChat(message, messageType, messagenovision)
 					if(getPedOccupiedVehicle(source)) then
 						StartAnimation(source, "ped", "phone_talk", false,false,false,false)
 					else
-						StartAnimation(source, "ped", "phone_talk", 1, false, true, true, true, false)
+						StartAnimation(source, "ped", "phone_talk", 1, false, true, true, true)
 					end
 
 					if(Phones[CallTo]) then

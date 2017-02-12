@@ -84,7 +84,7 @@ local SprunkObject = false
 local CallPolice = false
 local BANKCTL = false
 local BIZCTL = false
-local MovePlayerTo = {}
+local MovePlayerTo = {} -- x,y,z,rz,mode [silent, fast],action,args
 local Targets = {}
 local MyHouseBlip={}
 local SpawnPoints={}
@@ -673,6 +673,23 @@ function DestroyRadar(name, area)
 	end
 end
 
+
+
+function SetControl(thePlayer, control, state, analog)
+	if(getElementType(thePlayer) == "player") then
+		if(analog) then
+			setAnalogControlState(control, state)
+		else
+			setControlState(control, state)
+		end
+	else
+		if(analog) then
+			setPedAnalogControlState(thePlayer, control, state)
+		else
+			setPedControlState(thePlayer, control, state)
+		end
+	end
+end
 
 
 function SetZoneDisplay(zone)
@@ -2842,7 +2859,7 @@ function UpdateBot()
 						local x,y,z = getPedBonePosition(attacker, ActualBones[math.random(#ActualBones)])
 						setPedControlState(ped, "aim_weapon", true)
 						setPedAimTarget(ped,x,y,z)
-						MovePlayerTo[ped]={x,y,z,0}
+						MovePlayerTo[ped]={x,y,z,0,"fast"}
 					else
 						local x,y,z = getElementPosition(ped)
 						local x2,y2,z2 = getPositionInFront(ped, 2)
@@ -2897,9 +2914,9 @@ function UpdateBot()
 					
 						
 					if(brake) then
-						setAnalogControlState("accelerate", 0)
-						setAnalogControlState("brake_reverse", 0)
-						setControlState("handbrake", true)
+						SetControl(thePlayer, "accelerate", 0, true)
+						SetControl(thePlayer, "brake_reverse", 0, true)
+						SetControl(thePlayer, "handbrake", true)
 						setElementVelocity(theVehicle, 0,0,0)
 					else
 						local rot = GetMarrot(findRotation(x,y,MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2]),rz)*3
@@ -2907,19 +2924,19 @@ function UpdateBot()
 						elseif(rot < -60) then rot = -60 end
 						
 						if(rot > 0) then
-							setAnalogControlState("vehicle_right", (rot)/60)
+							SetControl(thePlayer, "vehicle_right", (rot)/60, true)
 						else
-							setAnalogControlState("vehicle_left", -(rot)/60)
+							SetControl(thePlayer, "vehicle_left", -(rot)/60, true)
 						end
 					
 					
-						setAnalogControlState("brake_reverse", 0)
-						setControlState("handbrake", false)
+						SetControl(thePlayer, "brake_reverse", 0, true)
+						SetControl(thePlayer, "handbrake", false)
 						if(s < limitspeed) then 
-							setAnalogControlState("accelerate", getAnalogControlState("accelerate")+0.02)
+							SetControl(thePlayer, "accelerate", getAnalogControlState("accelerate")+0.02, true)
 						else
-							setAnalogControlState("accelerate", 0)
-							setAnalogControlState("brake_reverse", (s/limitspeed)-1)
+							SetControl(thePlayer, "accelerate", 0, true)
+							SetControl(thePlayer, "brake_reverse", (s/limitspeed)-1, true)
 						end
 					end
 				else
@@ -2927,22 +2944,22 @@ function UpdateBot()
 					local px,py,pz = getElementPosition(thePlayer)
 					if(dialog) then
 						setPedAimTarget(thePlayer,px,py,pz)
-						setPedAnalogControlState(thePlayer, "forwards", 0)
+						SetControl(thePlayer, "forwards", 0, true)
 					else
 						local distance = getDistanceBetweenPoints3D(px,py,pz,MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2],MovePlayerTo[thePlayer][3])
 						
 						if(distance > 1) then
 							local angle = findRotation(px,py,MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2])
 							if(getElementType(thePlayer) == "player") then
-								setAnalogControlState("forwards", 1)
-								setControlState(thePlayer, "walk", true)
+								SetControl(thePlayer, "forwards", 1, true)
+								SetControl(thePlayer, "walk", true)
 								setPedCameraRotation(thePlayer, angle)
 							else
-								setPedAnalogControlState(thePlayer, "forwards", 1)
+								SetControl(thePlayer, "forwards", 1, true)
 								if(getElementData(thePlayer, "sprint")) then
-									setPedControlState(thePlayer, "sprint", true)
+									SetControl(thePlayer, "sprint", true)
 								else
-									setPedControlState(thePlayer, "walk", true)
+									SetControl(thePlayer, "walk", true)
 								end
 								setPedCameraRotation(thePlayer, -angle)
 							end
@@ -2957,30 +2974,25 @@ function UpdateBot()
 									local firespeed = 300
 									if(WeaponTiming[weapon]) then firespeed = WeaponTiming[weapon] end
 									if(range > distance) then
-										setPedAnalogControlState(thePlayer, "forwards", 0)
-										setPedControlState(thePlayer, "sprint", false)
-										setPedControlState(thePlayer, "walk", false)
+										SetControl(thePlayer, "forwards", 0, true)
+										SetControl(thePlayer, "sprint", false)
+										SetControl(thePlayer, "walk", false)
 										if(not isTimer(FireTimer[thePlayer])) then
-											setPedControlState(thePlayer, "fire", true)
+											SetControl(thePlayer, "fire", true)
 											
 											FireTimer[thePlayer] = setTimer(function(thePlayer)
-												setPedControlState(thePlayer, "fire", false)
+												SetControl(thePlayer, "fire", false)
 											end, firespeed, 1, thePlayer)
 										end
 									end
 								end
 							end
-							
 						else
 							if(getElementType(thePlayer) == "player") then
-							
-							
-							
-							
-								setControlState("forwards", false)
+								SetControl(thePlayer, "forwards", false)
 								setElementRotation(thePlayer, 0,0,MovePlayerTo[thePlayer][4],"default",true)
-								if(MovePlayerTo[thePlayer][5]) then
-									triggerServerEvent(MovePlayerTo[thePlayer][5], thePlayer, thePlayer, unpack(MovePlayerTo[thePlayer][6]))
+								if(MovePlayerTo[thePlayer][6]) then
+									triggerServerEvent(MovePlayerTo[thePlayer][6], thePlayer, thePlayer, unpack(MovePlayerTo[thePlayer][7]))
 								end
 								MovePlayerTo[thePlayer]=nil
 							end
@@ -3245,35 +3257,36 @@ function FoundBotPath(ped, zone)
 		local thePlayer = getPlayerFromName(getElementData(ped, "GROUP"))
 		if(thePlayer) then
 			local xp,yp,zp = getElementPosition(thePlayer)
-			return {xp,yp,zp,0}
+			return {xp,yp,zp,0,"silent"}
 		end
 	end
 	
 	if(BotCheckPath(x,y,z,x2,y2,z2,zone)) then 
-		return {x2,y2,z2,0}
+		return {x2,y2,z2,0,"silent"}
 	else
 		local x3,y3,z3 = getPositionInRight(ped, 2)
 		local a3,b3,c3 = getPositionInFR(ped, 2)
 		local x4,y4,z4 = getPositionInLeft(ped, 2)
 		local a4,b4,c4 = getPositionInFL(ped, 2)
 		if(BotCheckPath(x,y,z, a3,b3,c3,zone)) then
-			arr[#arr+1] = {a3,b3,c3,0}
+			arr[#arr+1] = {a3,b3,c3,0,"silent"}
 		elseif(BotCheckPath(x,y,z, x3,y3,z3,zone)) then
-			arr[#arr+1] = {x3,y3,z3,0}
+			arr[#arr+1] = {x3,y3,z3,0,"silent"}
 		end
 
 		if(BotCheckPath(x,y,z, a4,b4,c4,zone)) then
-			arr[#arr+1] = {a4,b4,c4,0}
+			arr[#arr+1] = {a4,b4,c4,0,"silent"}
 		elseif(BotCheckPath(x,y,z, x4,y4,z4,zone)) then
-			arr[#arr+1] = {x4,y4,z4,0}
+			arr[#arr+1] = {x4,y4,z4,0,"silent"}
 		end
 
 		if(#arr == 0) then
 			local x5,y5,z5 = getPositionInBack(ped, 8)
 			if(BotCheckPath(x,y,z, x5,y5,z5,zone)) then -- В крайнем случае идем назад
-				return {x5,y5,z5,0}
+				return {x5,y5,z5,0,"silent"}
 			else
-				local arr = fromJSON(getElementData(ped, "TINF"))
+				arr = fromJSON(getElementData(ped, "TINF"))
+				arr[5] = "silent"
 				return arr --Если нет путей
 			end
 		end
@@ -7017,7 +7030,7 @@ function autoMove()
 		
 		local arr = fromJSON(getElementData(PData['gps'][#PData['gps']], "coord"))
 		
-		MovePlayerTo[localPlayer] = {arr[1],arr[2],arr[3],0}
+		MovePlayerTo[localPlayer] = {arr[1],arr[2],arr[3],0,"silent"}
 	else
 		breakMove()
 	end
@@ -8865,12 +8878,11 @@ addEventHandler("GameSky", getRootElement(), GameSky)
 
 
 
-function SprunkFunk(model)
+function SprunkFunk()
 	local x,y,z = getPositionInFront(SprunkObject, -0.7)
-	local rx,ry,rz = getElementRotation(SprunkObject)
-	local model = getElementModel(localPlayer)
+	local _,_,rz = getElementRotation(SprunkObject)
 	local objmodel = getElementModel(SprunkObject)
-	MovePlayerTo[localPlayer]={x,y,z,180-rz, "DrinkSprunk", {objmodel}}
+	MovePlayerTo[localPlayer]={x,y,z,180-rz, "silent", "DrinkSprunk", {objmodel}}
 end
 
 
