@@ -56,7 +56,7 @@ local COLOR = {
 	["KEY"] = {
 		["RGB"] = {160, 160, 160},
 		["HEX"] = "#A0A0A0"
-	}
+	},
 }
 
 
@@ -83,8 +83,8 @@ function setCameraOnPlayerJoin()
 	setCameraMatrix(source,1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
 	outputChatBox("Нажми "..COLOR["KEY"]["HEX"].."T#FFFFFF чтобы писать в общий чат", source, 255, 255, 255,true)
 	outputChatBox("Нажми "..COLOR["KEY"]["HEX"].."Y#FFFFFF чтобы писать в командный чат", source, 255, 255, 255,true)
-	outputChatBox("Исходный код сервера "..COLOR["KEY"]["HEX"].."https://github.com/alexaxel705/MTA-Tomsk", source, 255, 255, 255,true)
-	outputChatBox("Группа ВКонтакте "..COLOR["KEY"]["HEX"].."http://vk.com/mtatomsk", source, 255, 255, 255,true)
+	outputChatBox("Исходный код сервера #2980B9https://github.com/alexaxel705/MTA-Tomsk", source, 255, 255, 255,true)
+	outputChatBox("Группа ВКонтакте #2980B9http://vk.com/mtatomsk", source, 255, 255, 255,true)
 	
 end
 addEventHandler("onPlayerJoin", getRootElement(), setCameraOnPlayerJoin)

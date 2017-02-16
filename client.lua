@@ -7870,8 +7870,8 @@ function DrawPlayerMessage()
 						key[7] = false
 					end
 				else
-					dxDrawText("RPG RealLife\nSA-MP 2006-2011\n Multi Theft Auto 2011-2017\nhttp://109.227.228.4", 0, (screenHeight/7), screenWidth, screenHeight, tocolor(199, 132, 60, 255), scale, "pricedown", "center", "top", false, false, false, true)
-					dxDrawText("Над сервером работали:\n800 (real_life@sibmail.com) 2006-2011\nTanker (tankerktv@mail.ru) 2006-2009\nDark_ALEX (dark_alex@sibmail.com) 2009-2017\n\nБлагодарности: \nCrystalMV [bone_attach]", screenWidth, screenHeight-(300*NewScale), screenWidth-(50*NewScale), screenHeight, tocolor(103,104,107, 255), scale*1.2, "default-bold", "right", "top", false, false, false, true)
+					dxDrawBorderedText("RealLife\nSA-MP 2006-2011\n Multi Theft Auto 2011-2017", 0, (screenHeight/7), screenWidth, screenHeight, tocolor(199, 132, 60, 255), scale, "pricedown", "center", "top", false, false, false, true)
+					dxDrawBorderedText("#FF9800Благодарности\n#FFFFFFCrystalMV #69749Abone_attach\n\n#C7843CНад сервером работали#FFFFFF\n800 #194299real_life@sibmail.com#FFFFFF 2006-2011\nTanker #194299tankerktv@mail.ru#FFFFFF 2006-2009\nDark_ALEX #194299dark_alex@sibmail.com#FFFFFF 2009-2017", screenWidth, screenHeight-(240*NewScale), screenWidth-(30*NewScale), screenHeight, tocolor(103,104,107, 255), NewScale*2, "default-bold", "right", "top", false, false, false, true)
 
 					
 					local x2, y2, z2, lx, ly, lz, rz = getCameraMatrix ()
