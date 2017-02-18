@@ -2289,17 +2289,31 @@ end
 local lookedHouse = false
 local ViewHouse = 1
 
+local CityColor = {
+	["San Fierro"] = "#404552",  
+	["Los Santos"] = "#FFC200", 
+	["Las Venturas"] = "#DBC2FF", 
+	["Tierra Robada"] = "#097380", 
+	["Bone County"] = "#CCB277", 
+	["Red County"] = "#C02221", 
+	["Flint County"] = "#7C9B5F", 
+	["Whetstone"] = "#999999"
+}
+
+
 function LookHouse(h)
 	setElementDimension(localPlayer, 0)
 	setElementInterior(localPlayer, 0) 
 	local x,y,z= h[1],h[2],h[3] 
-	--PlayerChangeSkinTeam="#9EDA46"..h[5]
-	PlayerChangeSkinTeam="#9EDA46"..getZoneName(x,y,z, true)
+	local zone = getZoneName(x,y,z,true)
+	local color = {"#9EDA46", "#FFFFFF"}
+	if(CityColor[zone]) then color[1] = CityColor[zone] end
+	PlayerChangeSkinTeam = color[1]..getZoneName(x,y,z, true)
 
 	if(h[4] == "house") then
-		PlayerChangeSkinTeamRang = "#FF8000"..getZoneName(x,y,z).." "..getElementData(getElementByID(h[5]), "zone")
+		PlayerChangeSkinTeamRang = color[2]..getZoneName(x,y,z).." "..getElementData(getElementByID(h[5]), "zone")
 	else
-		PlayerChangeSkinTeamRang="#FF8000"..h[5]
+		PlayerChangeSkinTeamRang = color[2]..h[5]
 	end
 	lookedHouse=h
 	
@@ -2314,7 +2328,6 @@ function LookHouse(h)
 	else
 		setCameraMatrix(x-100, y-100, z+150, x, y, z)
 	end
-	local zone = getZoneName(x,y,z,true)
 	
 	GameSky(zone)
 end
