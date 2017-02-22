@@ -11763,7 +11763,7 @@ addEvent("saveserver", true)
 addEventHandler("saveserver", root, saveserver)
 
 
-
+-- 1257 автобусная остановка
 
 function usecellphone(thePlayer, number)
 	DialogStart(thePlayer, Dialogs["Телефон"][1], false)

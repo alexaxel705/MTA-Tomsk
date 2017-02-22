@@ -10,7 +10,6 @@
 
     <sync_map_element_data>true</sync_map_element_data>
 
-	<file src="invobject/newspaper.png" />
 	<file src="invobject/laser.png" />
 	<file src="invobject/chroma.png" />
 	<file src="invobject/crap.png" />

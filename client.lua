@@ -207,6 +207,7 @@ local TexturesPosition = {
 	["18.5-мм"] = {-4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 250}, 
 	["Скот"] = {10,0,1.2, 0,0,1.2, 0,70, 255}, 
 	["Сено"] = {2,0,0, 0,0,0, 0,70, 200},
+	["Газета"] = {0.8,0.2,0.7, 0.8,0.2,0, 0,70, 200},
 }
 
 local PreloadTextures = {
@@ -269,8 +270,7 @@ local PreloadTextures = {
 	["18.5-мм"] = createObject(18044, 4340, 4000, 4000),
 	["Скот"] = createObject(11470, 4345, 4000, 4000),
 	["Сено"] = createObject(1453, 4350, 4000, 4020),
-	
-	
+	["Газета"] = createObject(2674, 4355, 4000, 4020),
 }
 
 local CreateTextureStage = false
@@ -466,7 +466,7 @@ local items = {
 	["Скот"] = {false, "Скот", 1, false, 90000, 5, false, false}, 
 	["Сено"] = {false, "Сено", 10, false, 2500, 5, false, false}, 
 	
-	["Газета"] = {"invobject/newspaper.png", "Обычная газета", 1, "usenewspaper", 45, 20, false, false}, 
+	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false}, 
 	--Путь к картинке, Описание, Стаки, Используемый или нет, вес, цена, {связанные предметы}
 }
 
