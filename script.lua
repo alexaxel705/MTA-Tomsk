@@ -12,7 +12,7 @@ local disableVoice = {}
 local hFile = fileOpen("serverdata/time.txt")
 local timebuffer = fileRead(hFile, 500)
 fileClose(hFile)
-local ServerDate = getRealTime(timebuffer) -- Сюда записывается виртуальное время игры
+local ServerDate = getRealTime(timebuffer) -- Сюда записывается виртуальное время
 
 
 function GeneratePlayerScore(arr)
@@ -4884,7 +4884,7 @@ local InteriorsClass = {
 
 local cs = 1
 function tp(thePlayer, command, h)
-	if getPlayerName(thePlayer) == "alexaxel705" or getPlayerName(thePlayer) == "Mishel'" then
+	if(getPlayerName(thePlayer) == "alexaxel705") then
 		local theVehicle = getPedOccupiedVehicle(thePlayer)
 		local count =1
 		local int = false
