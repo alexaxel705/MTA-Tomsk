@@ -39,7 +39,7 @@ local PData = {
 	['stamina'] = 8,
 	['LVLUPSTAMINA'] = 10,
 	['ShakeLVL'] = 0, 
-	['TARR'] = {}, -- Target, по центру, ниже, выше
+	['TARR'] = {}, -- Target, по центру, ниже, выше!
 	['MultipleAction'] = {},
 	['infopath'] = {} -- Для разработчика
 }
