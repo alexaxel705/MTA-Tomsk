@@ -12,7 +12,7 @@ local disableVoice = {}
 local hFile = fileOpen("serverdata/time.txt")
 local timebuffer = fileRead(hFile, 500)
 fileClose(hFile)
-local ServerDate = getRealTime(timebuffer) -- Сюда записывается виртуальное время
+local ServerDate = getRealTime(timebuffer) -- Сюда записывается виртуальное время игры
 
 
 function GeneratePlayerScore(arr)
@@ -4899,7 +4899,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 1371.1, -1033.7, 25.2, 0, 0 --
+		local x,y,z,i,d  = 2340.2, -1647.5, 13, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5959,7 +5959,6 @@ CreateCluckin(-1213.8, 1830.4, 41.9) -- BC
 CreateCluckin(172.9, 1176.9, 14.7) -- BC
 CreateCluckin(2397.8, -1899.2, 13.5) -- LS
 CreateCluckin(928.8, -1352.9, 13.3) -- LS
-CreateCluckin(928.7, -1352.9, 13.3) -- LS
 CreateCluckin(2420, -1508.9, 24) -- LS
 CreateCluckin(2393.2, 2041.6, 10.8) -- LV
 CreateCluckin(2638.27, 1671.9, 11) -- LV
