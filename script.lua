@@ -4899,7 +4899,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 2224.9, -1128, 24.6, 0, 0 --
+		local x,y,z,i,d  = 1371.1, -1033.7, 25.2, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -11747,7 +11747,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz)
 		datess=datess..'['..i..'] = {'..arr[1]..', "'..arr[2]..'", "'..arr[3]..'", "'..arr[4]..'", "'..arr[5]..'", "'..arr[6]..'", "'..arr[7]..'", '..arr[8]..', {'..math.random(0,11)..', '..arr[9]..'}, {'..math.random(0,11)..', '..endy..'}, "'..arr[11]..'"},\n'
 	end--]]
 	
-	AddInventoryItem(thePlayer, "Спанк", 1, 0, {})
+	--AddInventoryItem(thePlayer, "Спанк", 1, 0, {})
 
 	
 	fileDelete("save.txt")
