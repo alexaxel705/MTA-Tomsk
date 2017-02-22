@@ -4884,7 +4884,7 @@ local InteriorsClass = {
 
 local cs = 1
 function tp(thePlayer, command, h)
-	if(getPlayerName(thePlayer) == "alexaxel705") then
+	if getPlayerName(thePlayer) == "alexaxel705" or getPlayerName(thePlayer) == "Mishel'" then
 		local theVehicle = getPedOccupiedVehicle(thePlayer)
 		local count =1
 		local int = false

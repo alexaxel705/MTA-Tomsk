@@ -353,7 +353,7 @@ function saveauto()
 	
 end
 
-if getPlayerName(localPlayer) == "alexaxel705" then
+if getPlayerName(localPlayer) == "alexaxel705" or getPlayerName(localPlayer) == "Mishel'"  then
 	--[[bindKey("num_6", "down", plusx) 
 	bindKey("num_4", "down", minusx) 
 	bindKey("num_8", "down", plusy) 
