@@ -4899,7 +4899,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 2264, -1147.8, 25.8, 0, 0 --
+		local x,y,z,i,d  = -2036.1, -397.7, 35.5, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6056,6 +6056,8 @@ CreateChilliDogs(1030.9, 1362, 10.8, 0, 264) -- Las Venturas (come on Kids)
 CreateChilliDogs(2175.5, 1522.5, 10.8,0, 264) -- Las Venturas (come on Kids)
 CreateChilliDogs(1557.2, 979.4, 10.8,270, 168) -- Las Venturas
 CreateChilliDogs(-2145.6, -425.2, 35.3,64, 168) -- San Fierro
+CreateChilliDogs(-2036.1, -397.7, 35.5,11, 168) -- San Fierro
+CreateChilliDogs(-2093.6, -397.2, 35.5,38, 168) -- San Fierro
 CreateChilliDogs(-2384.8, -584.4, 132.1, 270, 264) -- San Fierro (come on Kids)
 CreateChilliDogs(-2151, -436.2, 35.3,41, 168) -- San Fierro Roodle Exchange
 CreateChilliDogs(-2692.4, 385.2, 4.4,225, 168) -- San Fierro 

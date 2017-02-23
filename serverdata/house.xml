@@ -590,4 +590,15 @@
     <h588 x="-2620" y="874.8" z="58.9" price="115000" locked="1" type="Маленькая комната" int="Safe House 10"></h588>
     <h589 x="-2620.2" y="883.1" z="63.3" price="109000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h589>
     <h590 x="-2657.4" y="848.6" z="64" price="420000" locked="1" type="Дом 2 этажа (нормальный)" int="Johnson House"></h590>
+	<h591 x="653.6" y="-1714.1" z="14.8" price="330000" locked="0" type="Дом 1 этаж (нормальный)" int="Safe House 3" dolg="330">alexaxel705</h591>
+    <h592 x="652.7" y="-1694" z="14.5" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h592>
+    <h593 x="657.2" y="-1652.7" z="15.4" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h593>
+    <h594 x="656" y="-1635.9" z="15.9" price="200000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h594>
+    <h595 x="653.2" y="-1619.8" z="15" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h595>
+    <h596 x="660.4" y="-1599.8" z="15" price="280000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h596>
+    <h597 x="692.9" y="-1602.8" z="15" price="360000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h597>
+    <h598 x="697.3" y="-1627" z="3.7" price="220000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h598>
+    <h599 x="693.8" y="-1645.8" z="4.1" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h599>
+    <h600 x="694.8" y="-1690.7" z="4.3" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h600>
+    <h601 x="693.5" y="-1705.8" z="3.8" price="230000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h601>
 </house>
