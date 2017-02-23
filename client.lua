@@ -6141,24 +6141,29 @@ addEventHandler("InformTitle", localPlayer, InformTitle)
 function AddInventoryItem(itemname, count, quality, data)
 	InformTitle("В #4682B4инвентарь#FFFFFF добавлен предмет "..COLOR["KEY"]["HEX"]..itemname.."#FFFFFF, нажми #C00000i#FFFFFF чтобы посмотреть")
 	if(not data) then data = toJSON({}) end
-	for i = 1, count do
-		local NumberStack = FoundStackedInventoryItem(itemname, quality)
-		if(NumberStack) then
-			SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], PInv["player"][NumberStack][2]+1, PInv["player"][NumberStack][3], data)
+	
+	
+	local NumberStack = FoundStackedInventoryItem(itemname, quality)
+	if(NumberStack) then
+		if(PInv["player"][NumberStack][2]+count <= items[itemname][3]) then
+			SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], PInv["player"][NumberStack][2]+count, PInv["player"][NumberStack][3], data)
+			count = 0
 		else
-			local stacked = math.floor((1+(count-i))/items[itemname][3])
-			if(stacked >= 1) then
-				for v = 1, stacked do
-					AddInventoryItemNewStack(itemname, items[itemname][3], quality, data)
-				end
+			count = count - (items[itemname][3]-PInv["player"][NumberStack][2])
+			SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], items[itemname][3], PInv["player"][NumberStack][3], data)
+		end
+	end
+	
+	if(count > 0) then
+		local stacked = math.floor(count/items[itemname][3])
+		if(stacked >= 1) then
+			for v = 1, stacked do
+				AddInventoryItemNewStack(itemname, items[itemname][3], quality, data)
+				count = count - items[itemname][3]
 			end
-			
-			if(items[itemname][3]*stacked < 1+(count-i)) then --Докладываем остаток
-				AddInventoryItemNewStack(itemname, (1+(count-i))-items[itemname][3]*stacked, quality, data)
-				break
-			else
-				break
-			end
+		end
+		if(count > 0) then
+			AddInventoryItemNewStack(itemname, count, quality, data) --Докладываем остаток
 		end
 	end
 end
