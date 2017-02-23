@@ -207,7 +207,8 @@ local TexturesPosition = {
 	["18.5-мм"] = {-4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 250}, 
 	["Скот"] = {10,0,1.2, 0,0,1.2, 0,70, 255}, 
 	["Сено"] = {2,0,0, 0,0,0, 0,70, 200},
-	["Газета"] = {0.8,0.2,0.7, 0.8,0.2,0, 0,70, 200},
+	["Газета"] = {0.8,0.2,0.75, 0.8,0.2,0, 0,70, 200},
+	["Деньги"] = {0.2,0.2,0.35, -0.05,-0.05,0, 0,70, 200},
 }
 
 local PreloadTextures = {
@@ -271,6 +272,7 @@ local PreloadTextures = {
 	["Скот"] = createObject(11470, 4345, 4000, 4000),
 	["Сено"] = createObject(1453, 4350, 4000, 4020),
 	["Газета"] = createObject(2674, 4355, 4000, 4020),
+	["Деньги"] = createObject(1212, 4360, 4000, 4020),
 }
 
 local CreateTextureStage = false
@@ -465,8 +467,8 @@ local items = {
 	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, false},  
 	["Скот"] = {false, "Скот", 1, false, 90000, 5, false, false}, 
 	["Сено"] = {false, "Сено", 10, false, 2500, 5, false, false}, 
-	
 	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false}, 
+	["Деньги"] = {false, "Деньги", 99999999, false, 1, 1, false, true}, 
 	--Путь к картинке, Описание, Стаки, Используемый или нет, вес, цена, {связанные предметы}
 }
 
@@ -3550,7 +3552,7 @@ function GenerateTexture()
 	end
 		 
 	if(LoadTexture) then
-		if(LoadTexture == "Рыба") then
+		if(LoadTexture == "Рыба" or LoadTexture == "Деньги" or LoadTexture == "Газета") then
 			setSkyGradient(0,0,255,0,0,255)
 			CreateTextureStage = {LoadTexture, 1, 3} -- 3 Синий хромакей
 		elseif(LoadTexture == "Скот") then
