@@ -7284,7 +7284,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 					if(randmoney > 0) then
 						for i = 1, randmoney do
 							local p = createPickup(x+((math.random(-1000,1000))/1000), y+((math.random(-1000,1000)/1000)), z, 3, 1212)
-							setElementData(p, "ammount", amount/randmoney)
+							setElementData(p, "ammount", amount)
 						end
 					end
 				elseif(PTeam == "Баллас" or PTeam == "Колумбийский картель" or PTeam == "Русская мафия") then
