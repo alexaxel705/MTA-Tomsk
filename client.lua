@@ -5825,6 +5825,7 @@ function DropInvItem(name, id, komu)
 	else
 		triggerServerEvent("dropinvitem", localPlayer, localPlayer, name, id, false, komu)	
 	end
+	SetInventoryItem(name, id, nil, nil, nil, nil)
 end
 addEvent("DropInvItem", true)
 addEventHandler("DropInvItem", localPlayer, DropInvItem)

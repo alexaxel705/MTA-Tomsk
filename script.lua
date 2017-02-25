@@ -6891,7 +6891,6 @@ addEventHandler("DropHarvest", root, DropHarvest)
 
 
 function dropinvitem(thePlayer, name, item, backpack, komu)
-	RemoveInventorySlot(thePlayer, name, item)
 	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
 	if(name == "backpack") then
 		arr = arr[backpack][4]["content"]
