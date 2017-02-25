@@ -8857,7 +8857,7 @@ end
 function buybiz(thePlayer, biz)
 	local BPrice = tonumber(getElementData(biz, "price"))
 	if(not getElementData(biz, "bizowner")) then
-		if(GetDatabaseAccount(thePlayer, "money") >= BPrice) then
+		if(GetPlayerMoney(thePlayer) >= BPrice) then
 			if(BPrice ~= 0) then
 				AddPlayerMoney(thePlayer, -BPrice)
 				MissionCompleted(thePlayer, "КУПЛЕНО!", getElementData(biz, "biz"), false, true)
@@ -9355,7 +9355,7 @@ function buyHouse(thePlayer, buyhouse)
 		MissionCompleted(thePlayer, "ПРОДАНО!", false, false, true)
 	else
 		if(getElementData(getElementByID(buyhouse), "owner") == "") then
-			if(GetDatabaseAccount(thePlayer, "money") >= tonumber(getElementData(getElementByID(buyhouse), "price"))) then
+			if(GetPlayerMoney(thePlayer) >= tonumber(getElementData(getElementByID(buyhouse), "price"))) then
 				local HouseNodes = xmlNodeGetChildren(HouseNode)
 				local HouseNode = xmlFindChild(HouseNode, buyhouse, 0)
 				xmlNodeSetValue(HouseNode, getPlayerName(thePlayer))
@@ -9539,7 +9539,7 @@ function BuyCar(theVehicle)
 	if(getElementData(theVehicle, "price")) then
 		local Seller = getPlayerFromName(getElementData(theVehicle, "seller"))
 		if(Seller ~= source) then
-			if(tonumber(GetDatabaseAccount(source, "money")) >= tonumber(getElementData(theVehicle, "price"))) then
+			if(tonumber(GetPlayerMoney(source)) >= tonumber(getElementData(theVehicle, "price"))) then
 				if(Seller) then
 					AddPlayerMoney(Seller, tonumber(getElementData(theVehicle, "price")))
 					MissionCompleted(Seller, "", "ТРАНСПОРТ ПРОДАН!")
@@ -9637,7 +9637,7 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 	toggleControl(thePlayer, "radar", false)
 	setPlayerNametagShowing(thePlayer, false)
 
-	setPlayerMoney(thePlayer, GetDatabaseAccount(thePlayer, "money"), true)
+	setPlayerMoney(thePlayer, GetPlayerMoney(thePlayer), true)
 	
 	
 	local skills = fromJSON(GetDatabaseAccount(thePlayer, "skill"))
@@ -9694,7 +9694,7 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 		end
 	else
 		if(typespawn == "death") then
-			if(GetDatabaseAccount(thePlayer, "money") >= 500) then
+			if(GetPlayerMoney(thePlayer) >= 500) then
 				AddPlayerMoney(thePlayer, -500)
 				AddBizMoney(ClinicSpawn[zone][5], 500)
 				ToolTip(thePlayer, "Клиника #CC99EE"..zone.."\n#FFFFFFСчёт за лечение "..COLOR["DOLLAR"]["HEX"].."$500")
@@ -12087,7 +12087,7 @@ function buyshopitem(thePlayer, count, args)
 	local arg = fromJSON(args)
 	local name, price, quality, data, biz = arg[1], tonumber(arg[2]), arg[3], arg[4], arg[5]
 
-	if(GetDatabaseAccount(thePlayer, "money") >= price) then
+	if(GetPlayerMoney(thePlayer) >= price) then
 		if(not data) then data = {} end
 		if(name == "CoK") then
 			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
@@ -12126,7 +12126,7 @@ function moneyPlayerEvent(thePlayer, money, args)
 	local money = tonumber(money)
 	if(money) then
 		if(money > 0) then
-			if(tonumber(GetDatabaseAccount(source, "money")) >= money) then
+			if(tonumber(GetPlayerMoney(source)) >= money) then
 				AddPlayerMoney(source, -money)
 				ToolTip(thePlayer, "Ты передал "..COLOR["DOLLAR"]["HEX"].."$"..money.."#FFFFFF игроку "..arg[1])
 				AddPlayerMoney(ToPlayer, money)
@@ -12825,7 +12825,7 @@ function player_Wasted(ammo, killer, weapon, bodypart)
 				local PTeam = getTeamName(getPlayerTeam(source))				
 				if(PTeam ~= "Уголовники" and KTeam == "Полиция" or KTeam == "ФБР") then
 					if(GetDatabaseAccount(source, "wanted") > 0) then
-						if(GetDatabaseAccount(source, "money") >= GetDatabaseAccount(source, "wanted")*100) then
+						if(GetPlayerMoney(source) >= GetDatabaseAccount(source, "wanted")*100) then
 							AddPlayerMoney(source, -(GetDatabaseAccount(source, "wanted")*100))
 						end
 						SetDatabaseAccount(source, "PrisonTime", GetDatabaseAccount(source, "wanted")*20)
@@ -12846,7 +12846,7 @@ function player_Wasted(ammo, killer, weapon, bodypart)
 						Respect(killer, "civilian", 1)
 						Respect(killer, "police", 1)
 						Respect(killer, "ugol", -1)
-						if(GetDatabaseAccount(source, "money") >= GetDatabaseAccount(source, "wanted")*100) then
+						if(GetPlayerMoney(source) >= GetDatabaseAccount(source, "wanted")*100) then
 							MissionCompleted(killer, "УВАЖЕНИЕ +", "ПРЕСТУПНИК ПОЙМАН!")
 							AddBizMoney("PLSPD", GetDatabaseAccount(source, "wanted")*100)
 							AddPlayerMoney(source, -(GetDatabaseAccount(source, "wanted")*100))
@@ -13390,7 +13390,7 @@ function buywardrobe(thePlayer, new, cost)
 	if(new) then
 		new=tonumber(new)
 		if(old ~= new) then
-			if(GetDatabaseAccount(thePlayer, "money") >= cost) then --Если хватает денег
+			if(GetPlayerMoney(thePlayer) >= cost) then --Если хватает денег
 				AddPlayerMoney(thePlayer, -tonumber(cost))
 				SetDatabaseAccount(thePlayer, "skin", new)
 				old=new
@@ -14163,9 +14163,13 @@ end
 
 
 
+function GetPlayerMoney(thePlayer)
+	return GetDatabaseAccount(thePlayer, "money")
+end
+
 function AddPlayerMoney(thePlayer, count, mission)
 	givePlayerMoney(thePlayer, count)
-	SetDatabaseAccount(thePlayer, "money", GetDatabaseAccount(thePlayer, "money")+(count))
+	SetDatabaseAccount(thePlayer, "money", GetPlayerMoney(thePlayer)+(count))
 	if(count ~= 0) then
 		if(count < 0) then count = count-count-count end
 		if(mission) then
@@ -15191,7 +15195,7 @@ function bank(thePlayer, count, args)
 	local arg = fromJSON(args)
 	local count = tonumber(count)
 	if(count) then
-		if(GetDatabaseAccount(thePlayer, "money") >= count and count > 0) then
+		if(GetPlayerMoney(thePlayer) >= count and count > 0) then
 			local bankMoney=GetDatabaseAccount(thePlayer, "bank")
 			SetDatabaseAccount(thePlayer, "bank", bankMoney+count)
 			AddPlayerMoney(thePlayer, -count)
@@ -15234,7 +15238,7 @@ function givebizmoney(thePlayer, count, args)
 	local count = tonumber(count)
 	if(count) then
 		local bizNode = xmlFindChild(BizNode, arg[1], 0)
-		local PlayerMoney = GetDatabaseAccount(thePlayer, "money")
+		local PlayerMoney = GetPlayerMoney(thePlayer)
 		if(xmlNodeGetAttribute(bizNode, "owner") == getPlayerName(thePlayer)) then
 			if(PlayerMoney-count >= 0) then
 				AddPlayerMoney(thePlayer, -count)
@@ -15304,7 +15308,7 @@ addEventHandler("ExitTuning", root, ExitTuning)
 
 function VehicleUpgrade(upgrade, count)
 	local theVehicle = getPedOccupiedVehicle(source)
-	if(GetDatabaseAccount(source, "money") >= count) then
+	if(GetPlayerMoney(source) >= count) then
 		if(ModificationVehicle[upgrade]) then
 				PData[source]["theVehicleTuningHandl"] = getElementData(theVehicle, "handl")
 				AddPlayerMoney(source, 0, "УСТАНОВЛЕНО!")
