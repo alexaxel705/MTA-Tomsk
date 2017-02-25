@@ -7686,6 +7686,18 @@ local Dialogs = {
 				["action"] = {"iznas", {}}
 			},
 			[3] = {
+				["text"] = "[Дать в рот]",
+				["action"] = {"blowjob", {}}
+			},
+			[4] = {
+				["text"] = "[Выебать]",
+				["action"] = {"iznas2", {}}
+			},
+			[5] = {
+				["text"] = "[Выебать раком]",
+				["action"] = {"iznas3", {}}
+			},
+			[6] = {
 				["text"] = "[ничего не делать]"
 			}
 		}
@@ -9972,14 +9984,16 @@ function worldtime()
 				SpawnAllVehicle()
 			end
 			setElementData(root, "ServerTime", ServerDate.timestamp)
+			Score = {}
 			local PlayerNodes = xmlNodeGetChildren(PlayerNode)
-			for i,node in ipairs(PlayerNodes) do
+			for _, node in ipairs(PlayerNodes) do
 				Score[xmlNodeGetValue(node)] = GeneratePlayerScore(xmlNodeGetAttribute(node, "skill"))
 				local thePlayer = getPlayerFromName(xmlNodeGetValue(node))
 				if(thePlayer) then
 					setElementData(thePlayer, "rate", GetScoreboardPositionFromName(xmlNodeGetValue(node)))
 				end
 			end
+			
 		end
 		for v,k in pairs(Threes) do
 			if(isElement(Threes[v])) then
@@ -10144,6 +10158,7 @@ function getPointInFrontOfPoint(x, y, z, rZ, dist)
 	local vy = y + dist * math.sin(offsetRot)  
 	return vx, vy, z
 end
+
 
 
 
@@ -13486,7 +13501,8 @@ end
 
 local wanktimers={}
 
-function iznas(thePlayer, thePed)
+
+function iznas2(thePlayer, thePed)
 	local player2=thePed
 	if(player2) then
 		if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
@@ -13495,12 +13511,12 @@ function iznas(thePlayer, thePed)
 			else
 				setElementCollisionsEnabled(player2, false)
 				local x, y, z = getElementPosition(thePlayer)
-				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, 0, 1)
+				local rx,ry,rz = getElementRotation(thePlayer)
+				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
 				setElementPosition(player2, x2, y2, z2)
-				local rx,ry,rz=getElementRotation(thePlayer)
 				setElementRotation(player2,rx,ry,rz+180, "default", true)
-				StartAnimation(thePlayer, "SEX", "SEX_1_Cum_P", false,false,false,false,false,true)
-				StartAnimation(player2, "SEX", "SEX_1_Cum_W", false,false,false,false,false,true)
+				StartAnimation(thePlayer, "SEX", "SEX_2_Fail_P", 6800, true, false, false, false, true)
+				StartAnimation(player2, "SEX", "SEX_2_Fail_W", 6800, true, false, false, false, true)
 				UnBindAllKey(thePlayer)
 				UnBindAllKey(player2)
 				Pain(thePlayer)
@@ -13524,14 +13540,138 @@ function iznas(thePlayer, thePed)
 						end
 					end
 
-				end, 6800, 1)
-				wanktimers[thePlayer] = setTimer(function() end, 240000, 1)
+				end, 5800, 1)
+				wanktimers[thePlayer] = setTimer(function() end, 1000, 1) -- 240000
+			end
+		end
+	end
+end
+addEvent("iznas2", true)
+addEventHandler("iznas2", getRootElement(), iznas2)
+
+
+function iznas3(thePlayer, thePed)
+	local player2=thePed
+	if(player2) then
+		if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
+			if(isTimer(wanktimers[thePlayer])) then
+				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
+			else
+				setElementCollisionsEnabled(player2, false)
+				local x, y, z = getElementPosition(thePlayer)
+				local rx,ry,rz = getElementRotation(thePlayer)
+				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
+				setElementPosition(player2, x2, y2, z2)
+				setElementRotation(player2,rx,ry,rz+180, "default", true)
+				StartAnimation(thePlayer, "SEX", "SEX_3_Fail_P", 6800, true, false, false, false, true)
+				StartAnimation(player2, "SEX", "SEX_3_Fail_W", 6800, true, false, false, false, true)
+				UnBindAllKey(thePlayer)
+				UnBindAllKey(player2)
+				Pain(thePlayer)
+				Pain(player2)
+				setTimer(function()
+					BindAllKey(thePlayer)
+					BindAllKey(player2)
+					setElementCollisionsEnabled(player2, true)
+					triggerClientEvent(player2, "bloodfoot", player2, true)
+					addPlayerBolezn(player2, "Порванный анус", 1)
+					outputChatBox("Ты порвал анус "..getPlayerName(player2), thePlayer, 255,255,255,true)
+				end, 5800, 1)
+				wanktimers[thePlayer] = setTimer(function() end, 1000, 1) -- 240000
+			end
+		end
+	end
+end
+addEvent("iznas3", true)
+addEventHandler("iznas3", getRootElement(), iznas3)
+
+
+
+
+function iznas(thePlayer, thePed)
+	local player2=thePed
+	if(player2) then
+		if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
+			if(isTimer(wanktimers[thePlayer])) then
+				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
+			else
+				setElementCollisionsEnabled(player2, false)
+				local x, y, z = getElementPosition(thePlayer)
+				local rx,ry,rz = getElementRotation(thePlayer)
+				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
+				setElementPosition(player2, x2, y2, z2)
+				setElementRotation(player2,rx,ry,rz+180, "default", true)
+				StartAnimation(thePlayer, "SEX", "SEX_1_Cum_P", 6800, true, false, false, false, true)
+				StartAnimation(player2, "SEX", "SEX_1_Cum_W", 6800, true, false, false, false, true)
+				UnBindAllKey(thePlayer)
+				UnBindAllKey(player2)
+				Pain(thePlayer)
+				Pain(player2)
+				setTimer(function()
+					BindAllKey(thePlayer)
+					BindAllKey(player2)
+					setElementCollisionsEnabled(player2, true)
+					if(isPlayerBolezn(thePlayer, "СПИД") or isPlayerBolezn(player2, "СПИД")) then
+						addPlayerBolezn(player2, "СПИД", 1)
+						addPlayerBolezn(thePlayer, "СПИД", 1)
+					else
+						local randSpid = math.random(1,10)
+						if(randSpid == 1) then
+							addPlayerBolezn(player2, "СПИД", 1)
+							addPlayerBolezn(thePlayer, "СПИД", 1)
+						elseif(randSpid == 2) then
+							triggerClientEvent(player2, "bloodfoot", player2, true)
+							addPlayerBolezn(player2, "Порванный анус", 1)
+							outputChatBox("Ты порвал анус "..getPlayerName(player2), thePlayer, 255,255,255,true)
+						end
+					end
+
+				end, 5800, 1)
+				wanktimers[thePlayer] = setTimer(function() end, 1000, 1) -- 240000
 			end
 		end
 	end
 end
 addEvent("iznas", true)
 addEventHandler("iznas", getRootElement(), iznas)
+
+
+
+function blowjob(thePlayer, thePed)
+	local player2=thePed
+	if(player2) then
+		if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
+			if(isTimer(wanktimers[thePlayer])) then
+				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
+			else
+				setElementCollisionsEnabled(player2, false)
+				local x, y, z = getElementPosition(thePlayer)
+				local rx,ry,rz = getElementRotation(thePlayer)
+				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
+				setElementPosition(player2, x2, y2, z2)
+				setElementRotation(player2,rx,ry,rz+180, "default", true)
+				StartAnimation(thePlayer, "BLOWJOBZ", "BJ_STAND_START_P", 6800, true, false, false, false, true)
+				StartAnimation(player2, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
+				UnBindAllKey(thePlayer)
+				UnBindAllKey(player2)
+				Pain(thePlayer)
+				Pain(player2)
+				
+				setTimer(function()
+					BindAllKey(thePlayer)
+					BindAllKey(player2)
+					setElementCollisionsEnabled(player2, true)
+				end, 6800, 1)
+				wanktimers[thePlayer] = setTimer(function() end, 1000, 1)
+			end
+		end
+	end
+end
+addEvent("blowjob", true)
+addEventHandler("blowjob", getRootElement(), blowjob)
+
+
+
 
 
 
@@ -13806,11 +13946,11 @@ function playerDamage(attacker, weapon, bodypart, loss) --when a player is damag
 		Pain(source)
 		removePedFromVehicle(source)
 		if(getElementHealth(source) > 15) then
-			StartAnimation(source, "CRACK", "crckidle1", -1, true, true, true)
+			StartAnimation(source, "CRACK", "crckidle1", -1, true, true, true, false, true)
 		elseif(getElementHealth(source) > 7) then
-			StartAnimation(source, "CRACK", "crckidle2", -1, true, true, true)
+			StartAnimation(source, "CRACK", "crckidle2", -1, true, true, true, false, true)
 		elseif(getElementHealth(source) > 0) then
-			StartAnimation(source, "CRACK", "crckidle4", -1, true, true, true)
+			StartAnimation(source, "CRACK", "crckidle4", -1, true, true, true, false, true) -- тут
 		end
 		SetControls(source, "crack", {["fire"] = true, ["jump"] = true})
 	else
@@ -14955,7 +15095,7 @@ end
 
 function StartMP()
 	local mp={"Race1", "Race2", "Race3"}
-	local rand = mp[math.random(1,#mp)]--тут
+	local rand = mp[math.random(1,#mp)]
 	if(rand == "Race1") then
 		race(NightRace1)
 	elseif(rand == "Race2") then
