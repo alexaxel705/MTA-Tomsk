@@ -203,7 +203,7 @@ local PlayersEnteredPickup = {}
 local Threes = {}
 local ActionTimer = {}
 local ThreesPickup = {}
-local StandartInventory = toJSON({{},{},{},{},{},{},{},{},{},{}})
+local StandartInventory = toJSON({{},{},{},{},{},{},{},{},{},{"Деньги", 500, 550, {}}})
 local PlayersPickups = {}
 local PriceAuto = {434, 461, 494, 495, 502, 503, 504, 521, 522, 568, 573, 581, 429, 587, 602}
 local VehicleBand = {} -- Заспауненые автомобили фракций
@@ -7639,19 +7639,15 @@ local Dialogs = {
 				["action"] = {"MCHSEventHealth", {}}
 			},
 			[2] = {
-				["text"] = "[Передать деньги]",
-				["action"] = {"GivePlayerMoneyEvent", {}}
-			},
-			[3] = {
 				["text"] = "[Выразить уважение]",
 				["action"] = {"UpReputation", {}}
 			},
-			[4] = {
+			[3] = {
 				["text"] = "[Понизить уважение]",
 				["action"] = {"DownReputation", {}}
 			
 			},
-			[5] = {
+			[4] = {
 				["text"] = "[ничего не делать]"
 			}
 		},
@@ -7699,19 +7695,15 @@ local Dialogs = {
 		[1] = {
 			["dialog"] = {" "},
 			[1] = {
-				["text"] = "[Передать деньги]",
-				["action"] = {"GivePlayerMoneyEvent", {}}
-			},
-			[2] = {
 				["text"] = "[Выразить уважение]",
 				["action"] = {"UpReputation", {}}
 			},
-			[3] = {
+			[2] = {
 				["text"] = "[Понизить уважение]",
 				["action"] = {"DownReputation", {}}
 			
 			},
-			[4] = {
+			[3] = {
 				["text"] = "[промолчать]"
 			}
 		}
@@ -9251,13 +9243,6 @@ function PoliceCallRemove(x,y,z,info)
 		end
 	end
 end
-
-
-function GivePlayerMoneyEvent(thePlayer, thePed)
-	triggerClientEvent(thePlayer, "GivePlayerMoneyEvent", thePlayer, getPlayerName(thePed))
-end
-addEvent("GivePlayerMoneyEvent", true)
-addEventHandler("GivePlayerMoneyEvent", root, GivePlayerMoneyEvent)
 
 
 
@@ -11865,10 +11850,10 @@ function saved(thePlayer, command, h)
 	for i,node in ipairs(PlayerNodes) do
 		--local arr = fromJSON(xmlNodeGetAttribute(node, "inv"))
 		
-		xmlNodeSetAttribute(node, "zone", toJSON(StandartClosedMap))
-
+		--xmlNodeSetAttribute(node, "zone", toJSON(StandartClosedMap))
 		xmlNodeSetAttribute(node, "inv", StandartInventory)
-		for i, v in pairs(arr) do
+		xmlNodeSetAttribute(node, "money", nil)
+		--[[for i, v in pairs(arr) do
 			if(v[1]) then
 				if(v[1] == "Redwood") then
 					v[1] = "CoK"
@@ -11878,7 +11863,7 @@ function saved(thePlayer, command, h)
 				
 				xmlNodeSetAttribute(node, "inv", toJSON(arr))
 			end
-		end
+		end--]]
 		
 		--xmlNodeSetAttribute(node, "wanted", 0)
 		
@@ -12012,7 +11997,6 @@ function AddDatabaseAccount(thePlayer, password)
 	xmlNodeSetAttribute(NewNode, "inv", StandartInventory)
 	xmlNodeSetAttribute(NewNode, "PrisonTime", 500)
 	xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
-	xmlNodeSetAttribute(NewNode, "money", 500)
 	xmlNodeSetAttribute(NewNode, "password", md5(password))
 	xmlNodeSetAttribute(NewNode, "skill", toJSON({[24] = 569}))
 	xmlNodeSetAttribute(NewNode, "zone", toJSON(StandartClosedMap))
@@ -12076,6 +12060,7 @@ addEventHandler("loginPlayerEvent", root, loginPlayer)
 function SaveInventory(thePlayer, arr)
 	SetDatabaseAccount(thePlayer, "inv", arr)
 	setElementData(thePlayer, "inv", arr)
+	setPlayerMoney(thePlayer, GetPlayerMoney(thePlayer))
 end
 addEvent("SaveInventory", true)
 addEventHandler("SaveInventory", root, SaveInventory)
@@ -12117,32 +12102,6 @@ end
 addEvent("buyshopitem", true)
 addEventHandler("buyshopitem", root, buyshopitem)
 
-
-
-
-function moneyPlayerEvent(thePlayer, money, args)
-	local arg = fromJSON(args)
-	local ToPlayer = getPlayerFromName(arg[1])
-	local money = tonumber(money)
-	if(money) then
-		if(money > 0) then
-			if(tonumber(GetPlayerMoney(source)) >= money) then
-				AddPlayerMoney(source, -money)
-				ToolTip(thePlayer, "Ты передал "..COLOR["DOLLAR"]["HEX"].."$"..money.."#FFFFFF игроку "..arg[1])
-				AddPlayerMoney(ToPlayer, money)
-				ToolTip(ToPlayer, "Ты получил "..COLOR["DOLLAR"]["HEX"].."$"..money.."#FFFFFF от игрока "..getPlayerName(source))
-			else
-				ToolTip(thePlayer, "Недостаточно средств!")
-			end
-		else
-			ToolTip(thePlayer, "Значение не может быть меньше 0!")
-		end
-	else
-		ToolTip(thePlayer, "Введи число!")
-	end
-end
-addEvent("moneyPlayerEvent", true)
-addEventHandler("moneyPlayerEvent", root, moneyPlayerEvent)
 
 
 
@@ -14164,12 +14123,23 @@ end
 
 
 function GetPlayerMoney(thePlayer)
-	return GetDatabaseAccount(thePlayer, "money")
+	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
+	local count = 0
+	for i, v in pairs(arr) do
+		if(v[1]) then
+			if(v[1] == "Деньги") then
+				count=count+v[2]
+			end
+		end
+	end
+	return count
 end
+
+
 
 function AddPlayerMoney(thePlayer, count, mission)
 	givePlayerMoney(thePlayer, count)
-	SetDatabaseAccount(thePlayer, "money", GetPlayerMoney(thePlayer)+(count))
+	AddInventoryItem(thePlayer, "Деньги", count, 550, {})
 	if(count ~= 0) then
 		if(count < 0) then count = count-count-count end
 		if(mission) then

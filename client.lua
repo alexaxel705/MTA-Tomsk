@@ -4838,12 +4838,6 @@ addEventHandler("onClientKey", root, playerPressedKey)
 
 
 
-function GivePlayerMoneyEvent(thePed)
-	CreateButtonInputInt("moneyPlayerEvent", "Введи сумму", 8, toJSON({thePed}))
-end
-addEvent("GivePlayerMoneyEvent", true)
-addEventHandler("GivePlayerMoneyEvent", localPlayer, GivePlayerMoneyEvent)
-
 
 
 
