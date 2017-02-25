@@ -6891,6 +6891,7 @@ addEventHandler("DropHarvest", root, DropHarvest)
 
 
 function dropinvitem(thePlayer, name, item, backpack, komu)
+	RemoveInventorySlot(thePlayer, name, item)
 	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
 	if(name == "backpack") then
 		arr = arr[backpack][4]["content"]
@@ -6903,7 +6904,6 @@ function dropinvitem(thePlayer, name, item, backpack, komu)
 		AddInventoryItem(getPlayerFromName(komu), arr[item][1], arr[item][2], arr[item][3], arr[item][4])
 		triggerEvent("onPlayerChat", thePlayer, "передал что-то "..komu, 1)
 	end	
-	RemoveInventorySlot(thePlayer, name, item)
 end
 addEvent("dropinvitem", true)
 addEventHandler("dropinvitem", root, dropinvitem)
@@ -11734,7 +11734,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz)
 		datess=datess..'['..i..'] = {'..arr[1]..', "'..arr[2]..'", "'..arr[3]..'", "'..arr[4]..'", "'..arr[5]..'", "'..arr[6]..'", "'..arr[7]..'", '..arr[8]..', {'..math.random(0,11)..', '..arr[9]..'}, {'..math.random(0,11)..', '..endy..'}, "'..arr[11]..'"},\n'
 	end--]]
 	
-	--AddInventoryItem(thePlayer, "Деньги", 10000, 0, {})
+	--AddInventoryItem(thePlayer, "Деньги", 10000, 550, {})
 
 	
 	fileDelete("save.txt")
