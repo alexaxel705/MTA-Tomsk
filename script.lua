@@ -4899,7 +4899,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -1744.8, 303.7, 6, 0, 0 --
+		local x,y,z,i,d  = -213.7, 2607.6, 62.7, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -15456,13 +15456,22 @@ function VehicleUpgrade(upgrade, count)
 				end
 			end	
 		else
-			addVehicleUpgrade(theVehicle, upgrade)
-			triggerClientEvent(source, "BuyUpgrade", source)
-			AddPlayerMoney(source, -count)
 			local upgr={}
+			local removeUpgr = false
 			for upgradeKey, upgradeValue in ipairs (getVehicleUpgrades(theVehicle)) do 
-				upgr[upgradeKey]=upgradeValue
+				if(upgradeValue == upgrade) then
+					removeUpgr = true
+					removeVehicleUpgrade(theVehicle, upgrade)
+				else
+					upgr[upgradeKey]=upgradeValue
+				end
 			end
+			if(not removeUpgr) then
+				addVehicleUpgrade(theVehicle, upgrade)
+				AddPlayerMoney(source, -count)
+			end
+			
+			triggerClientEvent(source, "BuyUpgrade", source)
 			if(getElementData(theVehicle, "x")) then
 				local CarNodes = xmlNodeGetChildren(CarNode)
 				for i,node in ipairs(CarNodes) do
