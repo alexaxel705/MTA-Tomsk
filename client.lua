@@ -348,7 +348,7 @@ function save()
 end
 
 function saveauto()
-	outputChatBox("Запись начата!")
+	helpmessage("Запись начата!")
 	setTimer(function() 
 		if(PData["drdist"] > 10) then
 			PData["drdist"] = 0
