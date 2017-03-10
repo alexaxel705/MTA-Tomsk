@@ -4899,7 +4899,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -1341.6, 2642.5, 49.5, 0, 0 --
+		local x,y,z,i,d  = -1837.1, -113.7, 4.5, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -9928,11 +9928,11 @@ function worldtime()
 		if(not isPedDead(thePed)) then
 			local theVehicle = getPedOccupiedVehicle(thePed)
 			if(SData["PlayerElementSync"][thePed]) then 
-				--[[if(getElementSyncer(theVehicle)) then
+				if(getElementSyncer(theVehicle)) then
 					setElementFrozen(theVehicle, false)
 				else
 					setElementFrozen(theVehicle, true)
-				end--]]
+				end
 				if(TimersAgain[thePed]) then
 					TimersAgain[thePed] = nil
 					SetNextDynamicNode(thePed)
@@ -10874,7 +10874,7 @@ function PlayerElementSync(thePlayer, obj, state)
 					local theVehicle = CreateVehicle(model, x, y, z, 0, 0, rotz)
 					setElementData(theVehicle, "destroy", "true", false)
 					warpPedIntoVehicle(obj,theVehicle)
-					--setElementFrozen(theVehicle, true)
+					setElementFrozen(theVehicle, true)
 				end
 			end
 			SData["PlayerElementSync"][obj][getPlayerName(thePlayer)] = state
