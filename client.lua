@@ -7526,6 +7526,10 @@ function DrawPlayerMessage()
 				dxDrawBorderedText("Материал: "..material.."\nЗона: "..getZoneName(x,y,z), 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
 				for zone, arr in pairs(PData['infopath']) do
 					for i, arr2 in pairs(arr) do
+						local maincolor = false
+						if(arr2[1] == "Closed") then
+							maincolor = "Closed"
+						end
 						local x,y,z = arr2[2], arr2[3], arr2[4]
 						
 						local px,py,pz = getElementPosition(localPlayer)
@@ -7550,15 +7554,20 @@ function DrawPlayerMessage()
 								if(PData['infopath'][arr3[1]]) then
 									local dat = PData['infopath'][arr3[1]][tostring(arr3[2])]
 									if(dat) then
+										local color = tocolor(50,255,50,150)
+										if(dat[1] == "Closed" or maincolor == "Closed") then
+											color = tocolor(255,50,50,150)
+										end
 										local x2,y2,z2 = dat[2], dat[3], dat[4]
-										dxDrawLine3D(x,y,z+0.2,x2,y2,z2+0.2, tocolor(50,255,50,150), 6)
+										
+										dxDrawLine3D(x,y,z+0.2,x2,y2,z2+0.2, color, 6)
 										
 										
-										local a3,b3,c3 = getPointInFrontOfPoint(x,y,z, findRotation(x,y,x2,y2)-60, 2)
-										local a4,b4,c4 = getPointInFrontOfPoint(x,y,z, findRotation(x,y,x2,y2)-120, 2)
+										local a3,b3,c3 = getPointInFrontOfPoint(x2,y2,z2, findRotation(x,y,x2,y2)-60, 2)
+										local a4,b4,c4 = getPointInFrontOfPoint(x2,y2,z2, findRotation(x,y,x2,y2)-120, 2)
 										
-										dxDrawLine3D(x,y,z+0.2,a3,b3,c3+0.2, tocolor(50,255,50,150), 6)
-										dxDrawLine3D(x,y,z+0.2,a4,b4,c4+0.2, tocolor(50,255,50,150), 6)
+										dxDrawLine3D(x2,y2,z2+0.2,a3,b3,c3+0.2, color, 6)
+										dxDrawLine3D(x2,y2,z2+0.2,a4,b4,c4+0.2, color, 6)
 									end
 								end
 							end

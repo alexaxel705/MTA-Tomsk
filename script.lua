@@ -4899,7 +4899,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -1816.1, 2125.4, 7, 0, 0 --
+		local x,y,z,i,d  = -75.4, 1269.5, 11.3, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -9928,11 +9928,11 @@ function worldtime()
 		if(not isPedDead(thePed)) then
 			local theVehicle = getPedOccupiedVehicle(thePed)
 			if(SData["PlayerElementSync"][thePed]) then 
-				if(getElementSyncer(theVehicle)) then
+				--[[if(getElementSyncer(theVehicle)) then
 					setElementFrozen(theVehicle, false)
 				else
 					setElementFrozen(theVehicle, true)
-				end
+				end--]]
 				if(TimersAgain[thePed]) then
 					TimersAgain[thePed] = nil
 					SetNextDynamicNode(thePed)
@@ -10662,7 +10662,11 @@ CreateDriverBot(-225.9, 2616.2, 62.7, testpath)
 function FoundNextRandomNode(node, id)
 	local nextnodes = {}
 	if(PathNodes[node][id][6]) then
-		table.insert(nextnodes, PathNodes[node][id][6][math.random(#PathNodes[node][id][6])])
+		for v,k in pairs(PathNodes[node][id][6]) do
+			if(PathNodes[k[1]][k[2]][1] ~= "Closed") then
+				table.insert(nextnodes, {k[1], k[2]})
+			end
+		end
 	end
 	if(PathNodes[node][id+1]) then
 		table.insert(nextnodes, {node, id+1})
@@ -10694,7 +10698,7 @@ function SetNextDynamicNode(thePed)
 					return true
 				end
 			end
-			if(PathNodes[nextnode][nextid][1]) then
+			if(PathNodes[nextnode][nextid][1] == true) then
 				local nextnode2, nextid2 = unpack(FoundNextRandomNode(nextnode, nextid))
 
 				if(not PathNodes[nextnode2][nextid2]) then
@@ -10727,7 +10731,7 @@ addEventHandler("SetNextDynamicNode", root, SetNextDynamicNode)
 
 
 function CreateDynamicBot(node, id)
-	if(PathNodes[node][id][1]) then
+	if(PathNodes[node][id][1] == true) then
 		PathNodes[node][id][1] = false -- Блокируем ноду
 		local x,y,z = PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4]+2
 		local nextnode, nextid = unpack(FoundNextRandomNode(node, id))
@@ -10770,9 +10774,11 @@ end
 function InitDynamicBot()
 	for district, arr in pairs(PathNodes) do
 		for i, k in pairs(arr) do
-			local rand = math.random(1,35)
-			if(rand == 1) then 
-				CreateDynamicBot(district, i)
+			if(k[1] == true) then
+				local rand = math.random(1,35)
+				if(rand == 1) then 
+					CreateDynamicBot(district, i)
+				end
 			end
 		end
 	end
@@ -10874,7 +10880,7 @@ function PlayerElementSync(thePlayer, obj, state)
 					local theVehicle = CreateVehicle(model, x, y, z, 0, 0, rotz)
 					setElementData(theVehicle, "destroy", "true", false)
 					warpPedIntoVehicle(obj,theVehicle)
-					setElementFrozen(theVehicle, true)
+					--setElementFrozen(theVehicle, true)
 				end
 			end
 			SData["PlayerElementSync"][obj][getPlayerName(thePlayer)] = state
