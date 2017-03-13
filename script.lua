@@ -4897,7 +4897,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 625, -1402.4, 12.3, 0, 0 --
+		local x,y,z,i,d  = 1041, -1038.8, 30.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7069,7 +7069,7 @@ function preLoad(name)
 	end
 	
 	
-	local CarNodes = xmlNodeGetChildren(CarNode)
+	local CarNodes = xmlNodeGetChildren(CarNode) -- tut
 	for i,node in ipairs(CarNodes) do
 		local v = CreateVehicle(tonumber(xmlNodeGetAttribute(node, "vmodel")), xmlNodeGetAttribute(node, "vx"), xmlNodeGetAttribute(node, "vy"), xmlNodeGetAttribute(node, "vz"), xmlNodeGetAttribute(node, "vrx"), xmlNodeGetAttribute(node, "vry"), xmlNodeGetAttribute(node, "vrz"), xmlNodeGetValue(node), true, 0, 0)
 		setVehicleColor(v, xmlNodeGetAttribute(node, "vc1"), xmlNodeGetAttribute(node, "vc2"), xmlNodeGetAttribute(node, "vc3"), xmlNodeGetAttribute(node, "vc4"))
@@ -7098,6 +7098,9 @@ function preLoad(name)
 			setVehiclePaintjob(v, xmlNodeGetAttribute(node, "vinyl"))
 		end
 		if(xmlNodeGetAttribute(node, "siren")) then setElementData(v, "siren", xmlNodeGetAttribute(node, "siren")) end
+
+		local comp = fromJSON(xmlNodeGetAttribute(node, "handl"))
+		UpdateVehicleHandling(v, comp)
 	end
 	
 	
@@ -9445,6 +9448,8 @@ function ParkMyCar(theVehicle)
 		xmlNodeSetAttribute(node, "vrz", math.round(rz, 1))
 		xmlNodeSetAttribute(node, "i", i)
 		xmlNodeSetAttribute(node, "d", d)
+		xmlNodeSetAttribute(node, "handl", getElementData(theVehicle, "handl"))
+		
 		setElementData(theVehicle, "x", tostring(math.round(x, 1)), false)
 		setElementData(theVehicle, "y", tostring(math.round(y, 1)), false)
 		setElementData(theVehicle, "z", tostring(math.round(z, 1)), false)
@@ -15424,7 +15429,20 @@ function VehicleUpgrade(upgrade, count)
 	if(GetPlayerMoney(source) >= count) then
 		if(ModificationVehicle[upgrade]) then
 				PData[source]["theVehicleTuningHandl"] = getElementData(theVehicle, "handl")
+		
 				AddPlayerMoney(source, 0, "УСТАНОВЛЕНО!")
+								
+				if(getElementData(theVehicle, "x")) then
+					local CarNodes = xmlNodeGetChildren(CarNode)
+					for i,node in ipairs(CarNodes) do
+						if(getElementData(theVehicle, "owner") == xmlNodeGetValue(node)) then
+							if(getElementData(theVehicle, "x") == xmlNodeGetAttribute(node, "vx") and getElementData(theVehicle, "y") == xmlNodeGetAttribute(node, "vy") and getElementData(theVehicle, "z") == xmlNodeGetAttribute(node, "vz")) then
+								xmlNodeSetAttribute(node, "handl", getElementData(theVehicle, "handl"))
+							end
+						end
+					end
+				end	
+				
 				local othercomp = toJSON(VComp)
 				triggerClientEvent(source, "BuyUpgrade", source, PData[source]["theVehicleTuningHandl"], othercomp)
 		elseif(upgrade == 8) then
