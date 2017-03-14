@@ -1803,7 +1803,7 @@ function SetGPS(arr)
 		PData['gps'][id] = createRadarArea(k[1]-10, k[2]-10, 20,20, 210,0,0,255)
 		setElementData(PData['gps'][id], "coord", toJSON({k[1],k[2],k[3]}))
 	end
-	ToolTip("Нажми "..COLOR["KEY"]["HEX"].."P#FFFFFF для автоматического перемещения")
+	InformTitle("На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу "..COLOR["KEY"]["HEX"].."P#FFFFFF для автоматического перемещения")
 end
 addEvent("SetGPS", true)
 addEventHandler("SetGPS", localPlayer, SetGPS)
@@ -2853,7 +2853,7 @@ function UpdateBot()
 				setPedAnalogControlState(ped, "brake_reverse", 0)
 				setPedControlState(ped, "handbrake", false)
 				if(s < limitspeed) then 
-					setPedAnalogControlState(ped, "accelerate", getPedAnalogControlState(ped, "accelerate")+0.02)
+					setPedAnalogControlState(ped, "accelerate", 1-(s*1/limitspeed))
 				else
 					setPedAnalogControlState(ped, "accelerate", 0)
 					setPedAnalogControlState(ped, "brake_reverse", (s/limitspeed)-1)
@@ -2944,7 +2944,7 @@ function UpdateBot()
 						SetControl(thePlayer, "brake_reverse", 0, true)
 						SetControl(thePlayer, "handbrake", false)
 						if(s < limitspeed) then 
-							SetControl(thePlayer, "accelerate", getAnalogControlState("accelerate")+0.02, true)
+							SetControl(thePlayer, "accelerate", 1-(s*1/limitspeed), true)
 						else
 							SetControl(thePlayer, "accelerate", 0, true)
 							SetControl(thePlayer, "brake_reverse", (s/limitspeed)-1, true)
@@ -3475,6 +3475,22 @@ function updateCamera()
 	end
 	for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
 		UpdateDisplayArmas(thePed)
+				
+		local theVehicle = getPedOccupiedVehicle(thePed)
+		if(theVehicle) then -- Костыль 
+			local x,y,z = getElementPosition(theVehicle)
+			local hit,_,_,_,ele,_,_,_,material = processLineOfSight(x,y,z,x,y,z-2, true,false,false,false,false,true,true,true,localPlayer, true)
+
+			if(not material) then
+				if(not isElementFrozen(theVehicle)) then
+					setElementFrozen(theVehicle, true)
+				end
+			else
+				if(isElementFrozen(theVehicle)) then
+					setElementFrozen(theVehicle, false)
+				end
+			end
+		end
 	end
 	
 	
@@ -4754,7 +4770,7 @@ function playerPressedKey(button, press)
 			elseif(button == "e" or button == "enter" or button == "space" or button == "d") then
 				cancelEvent()
 				triggerEvent(unpack(PText["tuning"][TuningSelector][20]))
-			elseif(button == "backspace" or button == "escape" or button == "a") then
+			elseif(button == "backspace" or button == "escape") then
 				cancelEvent()
 				if(PText["tuning"][TuningSelector][20][5]) then 
 					LoadUpgrade()

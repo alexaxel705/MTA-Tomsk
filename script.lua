@@ -4897,7 +4897,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 1041, -1038.8, 30.8, 0, 0 --
+		local x,y,z,i,d  = 477, 2376.6, 28.1, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12976,7 +12976,6 @@ local TrailersPositions = {
 		[5] = {false, 2261, 2747.7, 9.8, 0,0,90, SUG, SLG},  
 		[6] = {false, 2261, 2738.3, 9.8, 0,0,90, SUG, SLG}, 
 		
-		
 		[7] = {false, 2296, 2780, 9.8, 0,0,270, SUG, SLG}, 
 		[8] = {false, 2296, 2770.6, 9.8, 0,0,270, SUG, SLG}, 
 		[9] = {false, 2296, 2763.8, 9.8, 0,0,270, SUG, SLG}, 
@@ -12998,7 +12997,7 @@ local TrailersPositions = {
 		[23] = {false, 2311.7, 2747.9, 9.8, 0,0,90, SUG, SLG}, 
 		[24] = {false, 2311.7, 2738.4, 9.8, 0,0,90, SUG, SLG},
 	},
-	["Las Venturas [Склад Redsands West]"] = {
+	["Склад «Redsands West»"] = {
 		[1] = {false, 1638, 2303, 9.3, 0,0,90, SUG, SLG}, 
 		[2] = {false, 1638, 2312.2, 9.2, 0,0,90, SUG, SLG}, 
 		[3] = {false, 1638, 2340.2, 9.3, 0,0,90, SUG, SLG},  
@@ -13082,8 +13081,16 @@ local TrailersPositions = {
 		[2] = {false, 1351.3, 356, 19, 352,0,66, nil, {"Химикаты"}}, 
 		[3] = {false, 1340.9, 333, 19, 352,0,66, nil, {"Химикаты"}}, 
 		[4] = {false, 1337.7, 325.2, 19, 352,0,66, nil, {"Химикаты"}}, 
-	}
-	
+	},
+	["Склад «Rockshore East»"] = {
+		[1] = {false, 2818.1, 895.7, 9.1, 0,0,0, {"Инструменты"}, {"Фрукты", "Мебель"}}, 
+		[2] = {false, 2827.3, 896.9, 9.2, 0,0,0, {"Инструменты"}, {"Фрукты", "Мебель"}}, 
+		[3] = {false, 2855.1, 895.9, 9.1, 0,0,0, {"Инструменты"}, {"Фрукты", "Мебель"}}, 
+		
+		[4] = {false, 2818, 853, 9.2, 0,0,180, {"Инструменты"}, {"Фрукты", "Мебель"}}, 
+		[5] = {false, 2827.3, 853, 9.2, 0,0,180, {"Инструменты"}, {"Фрукты", "Мебель"}}, 
+		[6] = {false, 2855.3, 852.5, 9.2, 0,0,180, {"Инструменты"}, {"Фрукты", "Мебель"}}, 
+	},  
 }
 
 function FoundRandomEmptyTruckLocation(banned) -- Генерирует случайный груз [Возвращает {Имя базы, id трейлера}]
@@ -13761,7 +13768,7 @@ function race(thePlayer, command, h)
 			triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Теперь ты участник гонки, ожидай начала")
 			MPPlayerList[#MPPlayerList+1]=getPlayerName(thePlayer)
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, RaceArray[1], RaceArray[2], RaceArray[3], "Гонка")
-			outputChatBox("#99CC66"..getPlayerName(thePlayer).." присоединился к гонке!",getRootElement(),255,255,255,true)
+			outputChatBox("* "..getElementData(thePlayer, "color")..getPlayerName(thePlayer).." #FFFFFFприсоединился к гонке!",getRootElement(),255,255,255,true)
 		end
 	else
 		outputChatBox("В настоящий момент гонки не проходят", thePlayer, 255, 255, 255, true)
@@ -14600,6 +14607,7 @@ function CreateRaceMarker(thePlayer, array, checkpoint)
 			EndRaceInfoTimer=setTimer(function()
 				if(EndRaceTimeout == 0) then 
 					if(racePlayerFinish[1]) then 
+						RacePrice=PriceAuto[math.random(1, #PriceAuto)]
 						local v = CreateVehicle(RacePrice, RaceArray[#RaceArray-2], RaceArray[#RaceArray-1], RaceArray[#RaceArray]+2, 0,0,0, racePlayerFinish[1])
 						setElementData(v, "owner", racePlayerFinish[1])
 						outputChatBox("Победитель: #CC9966"..racePlayerFinish[1], getRootElement(), 255,255,255, true)
@@ -14697,9 +14705,8 @@ end
 
 function race(arr)
 	RaceArray=arr
-	RacePrice=PriceAuto[math.random(1, #PriceAuto)]
 	local raceblip = createBlip(arr[1], arr[2], 0, 33)
-	outputChatBox("Стартует мероприятие гонка! Приз #99CC33"..getVehicleNameFromModel(RacePrice), getRootElement(), 255,255,255, true)
+	outputChatBox("Стартует мероприятие гонка!", getRootElement(), 255,255,255, true)
 	
 	local StartRaceTimeout = 120
 	MPTimer = setTimer(function()
@@ -14722,7 +14729,7 @@ function race(arr)
 
 			for slot = 1, #MPPlayerList do
 				if(getPlayerFromName(MPPlayerList[slot])) then
-					triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "ChangeInfoAdv", getPlayerFromName(MPPlayerList[slot]), "Начало гонки через "..StartRaceTimeout)
+					triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "ChangeInfoAdv", getPlayerFromName(MPPlayerList[slot]), "Начало гонки через "..StartRaceTimeout.." сек.")
 				end
 			end
 		end
