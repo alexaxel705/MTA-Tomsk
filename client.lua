@@ -2113,7 +2113,9 @@ local ArraySkinInfo = {
 	[266]={"Полиция", "Офицер 2 класса", false, 9},
 	[265]={"Полиция", "Начальник LSPD", false, 10},
 	
-	[286]={"ФБР", "ФБР", false, 10}
+	[286]={"ФБР", "ФБР", false, 10},
+	
+	[299] ={"Мирные жители", "Claude"},
 }
 
 
@@ -3420,7 +3422,7 @@ function OpenTAB()
 			if(getPlayerMoney(localPlayer) >= getVehicleHandlingProperty(Targets["theVehicle"], "monetary")) then
 				triggerServerEvent("BuyCar", localPlayer, Targets["theVehicle"])
 			else
-				outputChatBox("Недостаточно средств!")
+				ToolTip("Недостаточно средств!")
 			end
 		end
 	end
@@ -4858,16 +4860,6 @@ end
 addEventHandler("onClientKey", root, playerPressedKey)
 
 
-
-
-
-
-function StartUpgradeVehicle(theVehicle, arr)
-	local handl = fromJSON(arr)
-	outputChatBox(getElementModel(theVehicle).." "..handl[1])
-end
-addEvent("StartUpgradeVehicle", true)
-addEventHandler("StartUpgradeVehicle", localPlayer, StartUpgradeVehicle)
 
 
 
