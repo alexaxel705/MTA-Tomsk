@@ -129,8 +129,8 @@ HUD:
 	5 - helpmessage
 	6 - helpmessage
 	7 - helpmessage
+	8 - input
 --]]
-local ButtonInputInt = {}
 local RespawnTimer = false
 local LainOS = false
 local LainOSCursorTimer = false
@@ -769,16 +769,7 @@ addEventHandler("UpdateZones", getRootElement(), UpdateZones)
 addEventHandler("onClientGUIClick", getResourceRootElement(getThisResource()),  
 function()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
-	if(getElementData(source, "data") == "AcceptLogin") then
-		local pass = guiGetText(LoginBox)
-		triggerServerEvent("loginPlayerEvent", localPlayer, pass)
-	elseif(getElementData(source, "data") == "NEWGENBUTTON") then
-		local count = guiGetText(ButtonInputInt[2])
-		local func = getElementData(ButtonInputInt[3], "FUNC")
-		local args = getElementData(ButtonInputInt[3], "ARGS")
-		triggerServerEvent(func, localPlayer, localPlayer, count, args)
-		CreateButtonInputInt()
-	elseif(getElementData(source, "data") == "tuningRepair") then
+	if(getElementData(source, "data") == "tuningRepair") then
 		triggerServerEvent("repairVeh", localPlayer)
 		guiSetVisible(source, false)
 	elseif(getElementData(source, "ped")) then
@@ -1580,16 +1571,6 @@ end
 
 
 
-addEventHandler("onClientGUIAccepted", getResourceRootElement(getThisResource()),  
-function()
-	if(ButtonInputInt[2]) then
-		if(ButtonInputInt[2] == source) then
-			triggerEvent("onClientGUIClick", ButtonInputInt[3])
-		end
-	end
-end)  
-
-
 function PoliceAddMarker(x, y, z, gpsmessage)
 	GPS(x,y,z,gpsmessage)
 	helpmessage("#4682B4Поступил новый вызов!\n #FFFFFFОтправляйся на #FF0000красный маркер#FFFFFF")
@@ -1777,9 +1758,9 @@ function bankControlUpdate(biz, data)
 	local text = "Денег на счету $"..m[1].." "
 	local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
 	PText["bank"][#PText["bank"]+1] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
-	PText["bank"][#PText["bank"]+1] = {"пополнить", 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "bank", "Введи сумму", 8, toJSON{biz}}}
+	PText["bank"][#PText["bank"]+1] = {"пополнить", 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "bank", "Введи сумму", toJSON{biz}}}
 	local textWidth = textWidth+dxGetTextWidth("пополнить ", scale*0.8, "default-bold", true)
-	PText["bank"][#PText["bank"]+1] = {"снять",  660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "withdraw", "Введи сумму", 8, toJSON{biz}}}	
+	PText["bank"][#PText["bank"]+1] = {"снять",  660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "withdraw", "Введи сумму", toJSON{biz}}}	
 	BANKCTL = m[2]
 	showCursor(true)
 end
@@ -1908,9 +1889,9 @@ function bizControl(name, data)
 		local text = "Текущий баланс "..COLOR["DOLLAR"]["HEX"].."$"..data["money"].." "
 		local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
 		PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
-		PText["biz"][#PText["biz"]+1] = {"пополнить", 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "givebizmoney", "Введи сумму", 8, toJSON{name}}}	
+		PText["biz"][#PText["biz"]+1] = {"пополнить", 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "givebizmoney", "Введи сумму", toJSON{name}}}	
 		local textWidth = textWidth+dxGetTextWidth("пополнить ", scale*0.8, "default-bold", true)
-		PText["biz"][#PText["biz"]+1] = {"снять",  660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "removebizmoney", "Введи сумму", 8, toJSON{name}}}	
+		PText["biz"][#PText["biz"]+1] = {"снять",  660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "removebizmoney", "Введи сумму", toJSON{name}}}	
 		for i, dat in pairs(data["vacancy"]) do
 			local text = "#CCCCCC"..dat[2].."#FFFFFF - "..dat[3].." "
 			local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
@@ -1919,7 +1900,7 @@ function bizControl(name, data)
 			if(dat[3] ~= "") then
 				PText["biz"][#PText["biz"]+1] = {"уволить", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"editBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
 			else
-				PText["biz"][#PText["biz"]+1] = {"назначить", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "editBizVacancy", "Введи имя", 64, toJSON{dat[1], dat[2], name, i-1}}}
+				PText["biz"][#PText["biz"]+1] = {"назначить", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "editBizVacancy", "Введи имя", toJSON{dat[1], dat[2], name, i-1}}}
 			end
 		end
 	else
@@ -2747,8 +2728,6 @@ local ActualBones = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33,
 
 
 
-
-
 local FireTimer = {}
 function UpdateBot()
 	for _,ped in pairs(getElementsByType("ped", getRootElement(), true)) do
@@ -2814,8 +2793,6 @@ function UpdateBot()
 				end
 			end
 
-
-			
 			local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)/7 -- При максимальном угле уменьшаем скорость до 10
 			if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
 			local limitspeed = 30-nextrot
@@ -3680,7 +3657,7 @@ end
 
 
 function LoginClient()
-	CreateButtonInputInt("loginPlayerEvent", "Регистрация/Вход", 64, nil)
+	CreateButtonInputInt("loginPlayerEvent", "Регистрация/Вход")
 end
 addEvent("LoginWindow", true )
 addEventHandler("LoginWindow", localPlayer, LoginClient)
@@ -3688,7 +3665,7 @@ addEventHandler("LoginWindow", localPlayer, LoginClient)
 
 
 function CallPhoneInput()
-	CreateButtonInputInt("CallPhoneOutput", "Введите номер или ИД игрока", 64, nil)
+	CreateButtonInputInt("CallPhoneOutput", "Введите номер или ИД игрока")
 end
 addEvent("CallPhoneInput", true )
 addEventHandler("CallPhoneInput", localPlayer, CallPhoneInput)
@@ -3697,7 +3674,7 @@ addEventHandler("CallPhoneInput", localPlayer, CallPhoneInput)
 
 
 function UpdTarget() targetingActivated(getPedTarget(localPlayer)) end
-addEvent("UpdTarget", true )
+addEvent("UpdTarget", true)
 addEventHandler("UpdTarget", localPlayer, UpdTarget)
 
 
@@ -4400,6 +4377,13 @@ function handleVehicleDamage(attacker, weapon, loss, x, y, z, tyre)
 		end
 		triggerServerEvent("FireVehicle", localPlayer, source, weapon)
     end
+
+	local occupant = getVehicleOccupant(source)
+	if(occupant) then
+		if(getElementType(occupant) == "ped") then
+			triggerServerEvent("PedDamage", localPlayer, occupant)
+		end
+	end
 end
 addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
 
@@ -4674,12 +4658,6 @@ addEventHandler("SetupInventory", localPlayer, SetupInventory)
 
 
 
-
-
-
-
-
-
 function playerPressedKey(button, press)
 	if(button == "mouse2") then
 		if(isPlayerMapForced()) then
@@ -4717,8 +4695,25 @@ function playerPressedKey(button, press)
     if (press) then
 		if(BindedKeys[button]) then
 			triggerEvent(unpack(BindedKeys[button]))
+			if(button == "enter") then
+				PText["HUD"][8] = nil
+				BindedKeys[button] = nil
+			end
 			cancelEvent()
 		end
+		
+		if(PText["HUD"][8]) then
+			if(button == "space") then
+				button = " "
+			elseif(button == "backspace") then
+				BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]:sub(1, -2)
+			end
+			if(#button == 1) then
+				BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]..button
+				cancelEvent()
+			end
+		end
+		
 		
 		for key, arr in pairs(PData["MultipleAction"]) do
 			if(key == button) then
@@ -5581,24 +5576,13 @@ end
 
 
 
-function CreateButtonInputInt(func, option1, option2, args)
-	if(isElement(ButtonInputInt[1])) then
-		destroyElement(ButtonInputInt[1])
+function CreateButtonInputInt(func, text, args)
+	if(PText["HUD"][8]) then
+		PText["HUD"][8] = nil
 	else
-		ButtonInputInt[1] = guiCreateWindow(screenWidth/2-(75*scale), screenHeight/2-(37.5*scale), 150*scale, 75*scale, option1, false)
-		ButtonInputInt[2] = guiCreateEdit(0.1, 0.25, 0.8, 0.3, "", true, ButtonInputInt[1])
-		if(option1 == "Регистрация/Вход") then
-			guiEditSetMasked(ButtonInputInt[2], true) 
-		end
+		PText["HUD"][8] = {text, screenWidth, screenHeight-(650*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
 
-		guiEditSetMaxLength(ButtonInputInt[2], option2)
-		guiBringToFront(ButtonInputInt[2])
-		guiEditSetCaretIndex(ButtonInputInt[2], 1)
-		ButtonInputInt[3] = guiCreateButton(0.1, 0.6, 0.8, 0.3, "Принять", true, ButtonInputInt[1])
-		setElementData(ButtonInputInt[3], "data", "NEWGENBUTTON")
-		setElementData(ButtonInputInt[3], "FUNC", func)
-		setElementData(ButtonInputInt[3], "ARGS", args)
-		showCursor(true)
+		BindedKeys["enter"] = {"ServerCall", localPlayer, {func, localPlayer, localPlayer, "", args}}
 	end
 end
 addEvent("CreateButtonInputInt", true)
@@ -5640,7 +5624,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 											local quality = PInv[DragElementName][DragElementId][3]
 											local data = PInv[DragElementName][DragElementId][4]
 											if(items[text][3] > 1) then
-												CreateButtonInputInt("buyshopitem", "Введи количество", 3, toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
+												CreateButtonInputInt("buyshopitem", "Введи количество", toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
 												StopDrag(name, i)
 											else
 												triggerServerEvent("buyshopitem", localPlayer, localPlayer, 1, toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
@@ -5955,7 +5939,7 @@ function onMyMouseDoubleClick(button, absoluteX, absoluteY, worldX, worldY,  wor
 							local quality = PInv[name][i][3]
 							local data = PInv[name][i][4]
 							if(items[text][3] > 1) then
-								CreateButtonInputInt("buyshopitem", "Введи количество", 3, toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
+								CreateButtonInputInt("buyshopitem", "Введи количество", toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
 							else
 								triggerServerEvent("buyshopitem", localPlayer, localPlayer, 1, toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
 							end
@@ -6298,6 +6282,7 @@ function PedDamage(attacker, weapon, bodypart, loss)
 	end
 end
 addEventHandler("onClientPedDamage", getRootElement(), PedDamage)
+
 
 function RemoveInventoryItemNew(name, i)
 	local count = PInv[name][i][2]-1
@@ -7963,6 +7948,19 @@ function DrawPlayerMessage()
 		end
 	end
 
+	if(PText["HUD"][8]) then
+		dxDrawRectangle(screenWidth/2-(150*scaley), screenHeight-(660*scalex), 300*NewScale, 150*NewScale, tocolor(100, 100, 100, 180))	
+		if(BindedKeys["enter"][3][1] == "loginPlayerEvent") then
+			local text = ""
+			for _ = 1, #BindedKeys["enter"][3][4] do
+				text = text.."*"
+			end
+			dxDrawBorderedText(text.."|", screenWidth/2-(120*scaley), screenHeight-(580*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
+		else
+			dxDrawBorderedText(BindedKeys["enter"][3][4].."|", screenWidth/2-(120*scaley), screenHeight-(580*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
+		end
+	end
+	
 	for name,arr in pairs(PText) do
 		for i,el in pairs(arr) do
 			color = el[6]

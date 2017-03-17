@@ -42166,7 +42166,6 @@ addEventHandler("CreateVehicleNodeMarker", root, CreateVehicleNodeMarker)
 
 
 
-
 function table.copy(t)
 	local t2 = {};
 	for k,v in pairs(t) do
