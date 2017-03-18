@@ -2835,6 +2835,40 @@ function UpdateBot()
 				setPedAnalogControlState(ped, "accelerate", 0)
 				setPedAnalogControlState(ped, "brake_reverse", 0)
 				setPedControlState(ped, "handbrake", false)
+				
+				local attacker = getElementData(ped, "attacker")
+				if(attacker) then
+					attacker = getPlayerFromName(attacker)
+					if(attacker) then
+						local x2,y2,z2 = getElementPosition(attacker)
+						
+			
+						local limitspeed = 140	
+						
+						local vx, vy, vz = getElementVelocity(theVehicle)
+						local s = (vx^2 + vy^2 + vz^2)^(0.5)*156
+						
+						local rot = GetMarrot(findRotation(x,y,x2,y2),rz)*3
+						if(rot > 60) then rot = 60
+						elseif(rot < -60) then rot = -60 end
+						
+						if(rot > 0) then
+							setPedAnalogControlState(ped, "vehicle_right", (rot)/60)
+						else
+							setPedAnalogControlState(ped, "vehicle_left", -(rot)/60)
+						end
+					
+					
+						setPedAnalogControlState(ped, "brake_reverse", 0)
+						setPedControlState(ped, "handbrake", false)
+						if(s < limitspeed) then 
+							setPedAnalogControlState(ped, "accelerate", 1-(s*1/limitspeed))
+						else
+							setPedAnalogControlState(ped, "accelerate", 0)
+							setPedAnalogControlState(ped, "brake_reverse", (s/limitspeed)-1)
+						end
+					end
+				end
 			end
 		else
 			local zone = getElementData(ped, "zone")
@@ -3454,7 +3488,7 @@ function updateCamera()
 		local theVehicle = getPedOccupiedVehicle(thePed)
 		if(theVehicle) then -- Костыль 
 			local x,y,z = getElementPosition(theVehicle)
-			local hit,_,_,_,ele,_,_,_,material = processLineOfSight(x,y,z,x,y,z-2, true,false,false,false,false,true,true,true,localPlayer, true)
+			local hit,_,_,_,ele,_,_,_,material = processLineOfSight(x,y,z,x,y,z-5, true,false,false,false,false,true,true,true,localPlayer, true)
 
 			if(not material) then
 				if(not isElementFrozen(theVehicle)) then

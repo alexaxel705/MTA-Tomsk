@@ -5241,7 +5241,27 @@ addEventHandler("AddMeWanted", root, AddMeWanted)
 
 
 
+-- [Зона] = {{Модель авто, модель скина}, {Модель авто 2, модель скина 2}}
+local PoliceSpecificZone = {
+	["Los Santos"] = {{596, 280}},
+	["San Fierro"] = {{597, 281}},
+	["Las Venturas"] = {{598, 282}},
+	["Red County"] = {{599, 283}},
+	["Whetstone"] = {{599, 283}},
+	["Flint County"] = {{599, 283}},
+	["Bone County"] = {{599, 283}},
+	["Tierra Robada"] = {{599, 283}},
+	["UNDERWATER"] = {{596, 280}},
+	["Unknown"] = {{596, 280}},
+}
+
 function WantedLevel(thePlayer, count)
+	local x,y,z = getElementPosition(thePlayer)
+	local zone = getZoneName(x,y,z, true)
+	if(count > 0) then
+		local rand = PoliceSpecificZone[zone][math.random(#PoliceSpecificZone[zone])]
+		kr(thePlayer, rand[1], rand[2]) -- Выезжает полиция
+	end
 	local wanted = GetDatabaseAccount(thePlayer, "wanted")+(count)
 	if(wanted > 6) then wanted = 6 
 	elseif(wanted < 0) then wanted = 0 end
@@ -10632,11 +10652,13 @@ end
 
 
 
-function CreateDriverBot(x,y,z,path)
+
+
+function CreateDriverBot(vmodel, pedmodel, x,y,z,path,attacker)
 	local rotz = findRotation(path[1][1], path[1][2], path[2][1], path[2][2])
-	local v = CreateVehicle(596, x,y,z+VehicleSystem[596][1], 0, 0, rotz)
+	local v = CreateVehicle(vmodel, x,y,z+VehicleSystem[vmodel][1], 0, 0, rotz)
 	SData["DriverID"] = SData["DriverID"]+1
-	SData["DriverBot"][SData["DriverID"]] = createPed(280, x,y,z)
+	SData["DriverBot"][SData["DriverID"]] = createPed(pedmodel, x,y,z)
 	setElementData(SData["DriverBot"][SData["DriverID"]], "DriverRoute", toJSON(path), false)
 	
 	setElementData(SData["DriverBot"][SData["DriverID"]], "DynamicBot", toJSON({
@@ -10645,7 +10667,7 @@ function CreateDriverBot(x,y,z,path)
 	}))
 	
 	
-	setElementData(SData["DriverBot"][SData["DriverID"]], "attacker", "huy")
+	setElementData(SData["DriverBot"][SData["DriverID"]], "attacker", getPlayerName(attacker))
 	setElementData(SData["DriverBot"][SData["DriverID"]], "TINF", "DriverBot"..SData["DriverID"])
 	warpPedIntoVehicle(SData["DriverBot"][SData["DriverID"]],v)
 	setVehicleSirensOn(v, true)
@@ -10654,22 +10676,25 @@ end
 
 
 
-
-
-function kr(thePlayer)
+function kr(thePlayer, vmodel, pedmodel)
 	local x,y,z = getElementPosition(thePlayer)
 	local arr = {}
-	arr[#arr+1] = NEWGPSFound(x-180,y,z, x,y,z)
-	arr[#arr+1] = NEWGPSFound(x+180,y,z, x,y,z)
-	arr[#arr+1] = NEWGPSFound(x,y+180,z, x,y,z)
-	arr[#arr+1] = NEWGPSFound(x,y-180,z, x,y,z)
+	arr[#arr+1] = NEWGPSFound(x-120,y,z, x,y,z)
+	arr[#arr+1] = NEWGPSFound(x+120,y,z, x,y,z)
+	arr[#arr+1] = NEWGPSFound(x,y+120,z, x,y,z)
+	arr[#arr+1] = NEWGPSFound(x,y-120,z, x,y,z)
 	if(#arr > 0) then
-		local out = arr[math.random(#arr)]
-		CreateDriverBot(out[1][1], out[1][2], out[1][3], out)
+		local minarr = 99999999
+		local minarrindex = false
+		for slot = 1, #arr do
+			if(minarr > #arr[slot]) then
+				minarr = #arr[slot]
+				minarrindex = slot
+			end
+		end
+		CreateDriverBot(vmodel, pedmodel, arr[minarrindex][1][1], arr[minarrindex][1][2], arr[minarrindex][1][3], arr[minarrindex], thePlayer)
 	end
 end
-addCommandHandler("kr", kr)
-
 
 
 
@@ -11743,7 +11768,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz)
 		datess=datess..'['..i..'] = {'..arr[1]..', "'..arr[2]..'", "'..arr[3]..'", "'..arr[4]..'", "'..arr[5]..'", "'..arr[6]..'", "'..arr[7]..'", '..arr[8]..', {'..math.random(0,11)..', '..arr[9]..'}, {'..math.random(0,11)..', '..endy..'}, "'..arr[11]..'"},\n'
 	end--]]
 	
-	--AddInventoryItem(thePlayer, "Кредитка", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Деньги", 100000, 550, {})
 
 	
 	fileDelete("save.txt")
