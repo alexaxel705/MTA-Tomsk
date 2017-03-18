@@ -42304,6 +42304,3 @@ addEvent("GetPathByCoordsNEW", true)
 addEventHandler("GetPathByCoordsNEW", root, GetPathByCoordsNEW)
 
 
-
-
-

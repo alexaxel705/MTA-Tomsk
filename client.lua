@@ -2740,21 +2740,7 @@ function UpdateBot()
 			local nextpath = false
 			
 			
-			if(getElementData(ped, "DriverRoute")) then
-				local arr = fromJSON(getElementData(ped, "DriverRoute"))
-				
-				path = arr["path"][arr["current"]]
-				nextpath = arr["path"][arr["current"]+1]
-				if(not nextpath) then -- Зацикливание
-					nextpath = arr["path"][1]
-					arr["current"] = 0
-				end			
-				local distance = getDistanceBetweenPoints2D(path[1], path[2], x, y)
-				if(distance < 4) then
-					arr["current"] = arr["current"]+1
-					setElementData(ped, "DriverRoute", toJSON(arr))
-				end
-			else
+			if(getElementData(ped, "DynamicBot")) then
 				local arr = fromJSON(getElementData(ped, "DynamicBot"))
 				path = {arr[1],arr[2],arr[3]}
 
@@ -2791,52 +2777,64 @@ function UpdateBot()
 						brake = true
 					end
 				end
-			end
+					
+					
 
-			local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)/7 -- При максимальном угле уменьшаем скорость до 10
-			if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
-			local limitspeed = 30-nextrot
-
-			local vx, vy, vz = getElementVelocity(theVehicle)
-			local s = (vx^2 + vy^2 + vz^2)^(0.5)*156
-			
-			
-			-- Ближнее торможение аля пробки
-			local x2,y2,z2 = getPositionInFront(theVehicle, 6)
-			local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
-			if(hitElement) then
-				if(getElementType(hitElement) == "vehicle" or getElementType(hitElement) == "player" or getElementType(hitElement) == "ped") then
-					brake = true
+				local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)
+				if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
+				local maxspd = 40
+				if(getElementData(ped, "attacker")) then
+					maxspd = 80
 				end
-			end
-			
 				
-			if(brake) then
+				local limitspeed = maxspd-((maxspd-10)*(nextrot/180))
+				
+				
+				local vx, vy, vz = getElementVelocity(theVehicle)
+				local s = (vx^2 + vy^2 + vz^2)^(0.5)*156
+				
+				
+				-- Ближнее торможение аля пробки
+				local x2,y2,z2 = getPositionInFront(theVehicle, 6)
+				local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
+				if(hitElement) then
+					if(getElementType(hitElement) == "vehicle" or getElementType(hitElement) == "player" or getElementType(hitElement) == "ped") then
+						brake = true
+					end
+				end
+				
+					
+				if(brake) then
+					setPedAnalogControlState(ped, "accelerate", 0)
+					setPedAnalogControlState(ped, "brake_reverse", 0)
+					setPedControlState(ped, "handbrake", true)
+					setElementVelocity (theVehicle, 0,0,0)
+				else
+				
+					local rot = GetMarrot(findRotation(x,y,path[1], path[2]),rz)*3
+					if(rot > 60) then rot = 60
+					elseif(rot < -60) then rot = -60 end
+					
+					if(rot > 0) then
+						setPedAnalogControlState(ped, "vehicle_right", (rot)/60)
+					else
+						setPedAnalogControlState(ped, "vehicle_left", -(rot)/60)
+					end
+				
+				
+					setPedAnalogControlState(ped, "brake_reverse", 0)
+					setPedControlState(ped, "handbrake", false)
+					if(s < limitspeed) then 
+						setPedAnalogControlState(ped, "accelerate", 1-(s*1/limitspeed))
+					else
+						setPedAnalogControlState(ped, "accelerate", 0)
+						setPedAnalogControlState(ped, "brake_reverse", (s/limitspeed)-1)
+					end
+				end
+			else  -- Без маршрута
 				setPedAnalogControlState(ped, "accelerate", 0)
 				setPedAnalogControlState(ped, "brake_reverse", 0)
-				setPedControlState(ped, "handbrake", true)
-				setElementVelocity (theVehicle, 0,0,0)
-			else
-			
-				local rot = GetMarrot(findRotation(x,y,path[1], path[2]),rz)*3
-				if(rot > 60) then rot = 60
-				elseif(rot < -60) then rot = -60 end
-				
-				if(rot > 0) then
-					setPedAnalogControlState(ped, "vehicle_right", (rot)/60)
-				else
-					setPedAnalogControlState(ped, "vehicle_left", -(rot)/60)
-				end
-			
-			
-				setPedAnalogControlState(ped, "brake_reverse", 0)
 				setPedControlState(ped, "handbrake", false)
-				if(s < limitspeed) then 
-					setPedAnalogControlState(ped, "accelerate", 1-(s*1/limitspeed))
-				else
-					setPedAnalogControlState(ped, "accelerate", 0)
-					setPedAnalogControlState(ped, "brake_reverse", (s/limitspeed)-1)
-				end
 			end
 		else
 			local zone = getElementData(ped, "zone")
@@ -2882,12 +2880,10 @@ function UpdateBot()
 					local x,y,z = getElementPosition(theVehicle)
 					local rx,ry,rz = getElementRotation(theVehicle)
 					local brake = false
-
-
 					
-					local nextrot = GetMarrot(findRotation(x, y, MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2]),rz)/7 -- При максимальном угле уменьшаем скорость до 10
+					local nextrot = GetMarrot(findRotation(x, y, MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2]),rz)
 					if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
-					local limitspeed = 30-nextrot
+					local limitspeed = 40-(40*(nextrot/180))
 					
 					local vx, vy, vz = getElementVelocity(theVehicle)
 					local s = (vx^2 + vy^2 + vz^2)^(0.5)*156

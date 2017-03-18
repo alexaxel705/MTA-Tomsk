@@ -4897,7 +4897,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 139.5, 687.8, 5, 0, 0 --
+		local x,y,z,i,d  = -1507.5, 2608.7, 55.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -8730,7 +8730,6 @@ addEventHandler("PedDamage", getRootElement(), PedDamage)
 
 
 
-
 function InviteBot(ped)
 	local Team = getElementData(ped, "team")
 	if(Team) then
@@ -9942,21 +9941,7 @@ function worldtime()
 					SetNextDynamicNode(thePed)
 				end
 			else
-				if(getElementData(thePed, "DriverRoute")) then
-					local arr = fromJSON(getElementData(thePed, "DriverRoute"))
-					local path = arr["path"][arr["current"]]
-					local nextpath = arr["path"][arr["current"]+1]
-					if(not nextpath) then -- Зацикливание
-						nextpath = arr["path"][1]
-						arr["current"] = 0
-					end 
-					local rot = findRotation(path[1], path[2], nextpath[1], nextpath[2])
-					setElementPosition(theVehicle, path[1], path[2], path[3]+VehicleSystem[getElementModel(theVehicle)][1])
-					setElementRotation(theVehicle, 0,0,rot)
-					
-					arr["current"] = arr["current"]+1
-					setElementData(thePed, "DriverRoute", toJSON(arr))
-				elseif(getElementData(thePed, "DynamicBot")) then -- Dynamic bot
+				if(getElementData(thePed, "DynamicBot")) then
 				--	SetNextDynamicNode(thePed)
 				end
 			end
@@ -10648,17 +10633,44 @@ end
 
 
 function CreateDriverBot(x,y,z,path)
-	local v = CreateVehicle(404, x,y,z)
+	local rotz = findRotation(path[1][1], path[1][2], path[2][1], path[2][2])
+	local v = CreateVehicle(596, x,y,z+VehicleSystem[596][1], 0, 0, rotz)
 	SData["DriverID"] = SData["DriverID"]+1
-	SData["DriverBot"][SData["DriverID"]] = createPed(154, x,y,z)
-	local arr = {}
-	arr["path"] = table.copy(path)
-	arr["current"] = 1
-	setElementData(SData["DriverBot"][SData["DriverID"]], "DriverRoute", toJSON(arr))
+	SData["DriverBot"][SData["DriverID"]] = createPed(280, x,y,z)
+	setElementData(SData["DriverBot"][SData["DriverID"]], "DriverRoute", toJSON(path), false)
+	
+	setElementData(SData["DriverBot"][SData["DriverID"]], "DynamicBot", toJSON({
+		path[1][1], path[1][2], path[1][3], false, 
+		path[2][1], path[2][2], path[2][3], false
+	}))
+	
+	
+	setElementData(SData["DriverBot"][SData["DriverID"]], "attacker", "huy")
 	setElementData(SData["DriverBot"][SData["DriverID"]], "TINF", "DriverBot"..SData["DriverID"])
 	warpPedIntoVehicle(SData["DriverBot"][SData["DriverID"]],v)
+	setVehicleSirensOn(v, true)
 end
-CreateDriverBot(-225.9, 2616.2, 62.7, testpath)
+
+
+
+
+
+
+function kr(thePlayer)
+	local x,y,z = getElementPosition(thePlayer)
+	local arr = {}
+	arr[#arr+1] = NEWGPSFound(x-180,y,z, x,y,z)
+	arr[#arr+1] = NEWGPSFound(x+180,y,z, x,y,z)
+	arr[#arr+1] = NEWGPSFound(x,y+180,z, x,y,z)
+	arr[#arr+1] = NEWGPSFound(x,y-180,z, x,y,z)
+	if(#arr > 0) then
+		local out = arr[math.random(#arr)]
+		CreateDriverBot(out[1][1], out[1][2], out[1][3], out)
+	end
+end
+addCommandHandler("kr", kr)
+
+
 
 
 
@@ -10704,17 +10716,12 @@ function SetNextDynamicNode(thePed)
 			end
 			if(PathNodes[nextnode][nextid][1] == true) then
 				local nextnode2, nextid2 = unpack(FoundNextRandomNode(nextnode, nextid))
-
-				if(not PathNodes[nextnode2][nextid2]) then
-					outputChatBox(nextnode2.." "..nextid2.." is missing!!!!")
-				end
 				setElementData(thePed, "DynamicBot", toJSON({
 					PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4], PathNodes[nextnode][nextid][5], 
 					PathNodes[nextnode2][nextid2][2], PathNodes[nextnode2][nextid2][3], PathNodes[nextnode2][nextid2][4], PathNodes[nextnode2][nextid2][5],
 					
 					}))
 				
-				 
 				PathNodes[node][id][1] = true
 				PathNodes[nextnode][nextid][1] = false
 				setElementData(thePed, "CurNode", toJSON({nextnode, nextid}), false)
@@ -10724,6 +10731,21 @@ function SetNextDynamicNode(thePed)
 				end
 			else
 				TimersAgain[thePed] = true
+			end
+		else
+			if(getElementData(thePed, "DriverRoute")) then
+				local path = fromJSON(getElementData(thePed, "DriverRoute"))
+				table.remove(path, 1)
+				if(#path > 2) then
+					setElementData(thePed, "DynamicBot", toJSON({
+						path[1][1], path[1][2], path[1][3], false, 
+						path[2][1], path[2][2], path[2][3], false
+					}))
+					setElementData(thePed, "DriverRoute", toJSON(path), false)
+				else
+					removeElementData(thePed, "DynamicBot")
+					removeElementData(thePed, "DriverRoute")
+				end
 			end
 		end
 	end
@@ -10794,43 +10816,6 @@ end
 
 
 
-function TestDriverBot(thePlayer)
-	local out = ""
-	local starti = 0
-	local genarr = calculatePathByCoords(-1873.7, 262.1, 38.3, -1913.7, -299.7, 37.2)
-	for i, k in pairs(genarr) do
-		if(genarr[i+1]) then
-			local rot = findRotation(genarr[i]["x"], genarr[i]["y"], genarr[i+1]["x"], genarr[i+1]["y"])
-			local gx,gy,gz = getPointInFrontOfPoint(genarr[i+1]["x"], genarr[i+1]["y"], genarr[i+1]["z"], rot-45, 4)
-			local m = createMarker(gx,gy,gz, "cylinder", 1.5, 255, 255, 0, 170)
-
-			gx = math.round(gx, 1)
-			gy = math.round(gy, 1)
-			gz = math.round(gz, 1)
-			out=out..'['..i+starti..'] = {false, '..gx..', '
-			..gy..', '
-			..gz..'}, \n'
-			
-		end
-	end	
-	
-	fileDelete("save.txt")
-	local hFile = fileCreate("save.txt")
-	fileWrite(hFile, out) -- write a text line
-	fileClose(hFile)
-end
-addCommandHandler("bot", TestDriverBot)
-
-
-
-
-
-
-
-
-
-
-
 
 local Objects = {
 	["Doherty"] = { -- Будет разрушен в 1987
@@ -10865,38 +10850,38 @@ function PlayerElementSync(thePlayer, obj, state)
 		if(getElementType(obj) == "ped") then
 			if(not SData["PlayerElementSync"][obj]) then 
 				SData["PlayerElementSync"][obj] = {} 
-				if(getElementData(obj, "DriverRoute")) then
-				elseif(getElementData(obj, "DynamicBot")) then
-					local arr = fromJSON(getElementData(obj, "CurNode"))
-					local node, id = arr[1], arr[2]
-					local nextnode, nextid = unpack(FoundNextRandomNode(node, id))
-					local model = table.copy(NewTeamVehicle["Полиция"][ZonesRegion[node]])
-					if(VehicleRegionSpecific[node]) then
-						for _, k in pairs(VehicleRegionSpecific[node]) do
-							model[#model+1] = {k}
+				if(getElementData(obj, "DynamicBot")) then
+					if(not getElementData(obj, "DriverRoute")) then
+						local arr = fromJSON(getElementData(obj, "CurNode"))
+						local node, id = arr[1], arr[2]
+						local nextnode, nextid = unpack(FoundNextRandomNode(node, id))
+						local model = table.copy(NewTeamVehicle["Полиция"][ZonesRegion[node]])
+						if(VehicleRegionSpecific[node]) then
+							for _, k in pairs(VehicleRegionSpecific[node]) do
+								model[#model+1] = {k}
+							end
 						end
+						model = model[math.random(#model)][1]
+						local x,y,z = PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4]+VehicleSystem[model][1]
+						local x2,y2,z2 = PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4]
+						local rotz = findRotation(x,y, x2,y2)
+						
+						local theVehicle = CreateVehicle(model, x, y, z, 0, 0, rotz)
+						setElementData(theVehicle, "destroy", "true", false)
+						warpPedIntoVehicle(obj,theVehicle)
 					end
-					model = model[math.random(#model)][1]
-					local x,y,z = PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4]+VehicleSystem[model][1]
-					local x2,y2,z2 = PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4]
-					local rotz = findRotation(x,y, x2,y2)
-					
-					local theVehicle = CreateVehicle(model, x, y, z, 0, 0, rotz)
-					setElementData(theVehicle, "destroy", "true", false)
-					warpPedIntoVehicle(obj,theVehicle)
-					--setElementFrozen(theVehicle, true)
 				end
 			end
 			SData["PlayerElementSync"][obj][getPlayerName(thePlayer)] = state
 
 			if(getArrSize(SData["PlayerElementSync"][obj]) == 0) then
 				SData["PlayerElementSync"][obj] = nil
-				if(getElementData(obj, "DriverRoute")) then
-				elseif(getElementData(obj, "DynamicBot")) then
-					local theVehicle = getPedOccupiedVehicle(obj)
-					if(theVehicle) then
-						setElementFrozen(obj, true)
-						destroyElement(theVehicle)
+				if(getElementData(obj, "DynamicBot")) then
+					if(not getElementData(obj, "DriverRoute")) then
+						local theVehicle = getPedOccupiedVehicle(obj)
+						if(theVehicle) then
+							destroyElement(theVehicle)
+						end
 					end
 				end
 			end
@@ -14669,6 +14654,7 @@ function displayVehicleLoss(loss)
 	end
 end
 addEventHandler("onVehicleDamage", getRootElement(), displayVehicleLoss)
+
 
 function Pain(thePlayer)
 	local x,y,z = getElementPosition(thePlayer)
