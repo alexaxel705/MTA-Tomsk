@@ -71,6 +71,7 @@ function setCameraOnPlayerJoin()
 	end
 	PData[source] = {
 		['radar'] = createBlipAttachedTo(source, 0, 2, 0, 0, 0, 0),
+		['Cops'] = {}, -- Хранит ботов, полицейских которые учавствуют в погоне за игроком
 		['CONTROLS'] = {
 			['fire'] = {},
 			['vehicle_fire'] = {},
@@ -5258,13 +5259,18 @@ local PoliceSpecificZone = {
 function WantedLevel(thePlayer, count)
 	local x,y,z = getElementPosition(thePlayer)
 	local zone = getZoneName(x,y,z, true)
-	if(count > 0) then
-		local rand = PoliceSpecificZone[zone][math.random(#PoliceSpecificZone[zone])]
-		kr(thePlayer, rand[1], rand[2]) -- Выезжает полиция
-	end
 	local wanted = GetDatabaseAccount(thePlayer, "wanted")+(count)
 	if(wanted > 6) then wanted = 6 
 	elseif(wanted < 0) then wanted = 0 end
+	if(wanted > 0) then
+		if(wanted < 4) then
+			local rand = PoliceSpecificZone[zone][math.random(#PoliceSpecificZone[zone])]
+			kr(thePlayer, rand[1], rand[2]) -- Выезжает полиция
+		else
+			--kr(thePlayer, 497, 280) -- Вертолет
+			kr(thePlayer, 490, 286) -- ФБР
+		end
+	end
 	SetDatabaseAccount(thePlayer, "wanted", wanted)
 	if(GetDatabaseAccount(thePlayer, "PrisonTime") <= 0) then
 		setElementData(thePlayer, "WantedLevel", wanted)
@@ -9948,22 +9954,22 @@ local Events = {
 
 function worldtime()
 	for theKey,thePed in ipairs(SData["DriverBot"]) do
-		if(not isPedDead(thePed)) then
-			local theVehicle = getPedOccupiedVehicle(thePed)
-			if(SData["PlayerElementSync"][thePed]) then 
-				--[[if(getElementSyncer(theVehicle)) then
-					setElementFrozen(theVehicle, false)
+		if(thePed) then
+			if(not isPedDead(thePed)) then
+				local theVehicle = getPedOccupiedVehicle(thePed)
+				if(SData["PlayerElementSync"][thePed]) then 
+					if(TimersAgain[thePed]) then
+						TimersAgain[thePed] = nil
+						SetNextDynamicNode(thePed)
+					end
 				else
-					setElementFrozen(theVehicle, true)
-				end--]]
-				if(TimersAgain[thePed]) then
-					TimersAgain[thePed] = nil
-					SetNextDynamicNode(thePed)
+					if(getElementData(thePed, "DynamicBot")) then
+					--	SetNextDynamicNode(thePed)
+					end
 				end
 			else
-				if(getElementData(thePed, "DynamicBot")) then
-				--	SetNextDynamicNode(thePed)
-				end
+				destroyElement(thePed)
+				SData["DriverBot"][theKey] = nil
 			end
 		else
 			destroyElement(thePed)
@@ -10669,8 +10675,11 @@ function CreateDriverBot(vmodel, pedmodel, x,y,z,path,attacker)
 	
 	setElementData(SData["DriverBot"][SData["DriverID"]], "attacker", getPlayerName(attacker))
 	setElementData(SData["DriverBot"][SData["DriverID"]], "TINF", "DriverBot"..SData["DriverID"])
+	setElementData(SData["DriverBot"][SData["DriverID"]], "SpawnBlock", "true", false)
+	setElementData(v, "destroy", "true", false)
 	warpPedIntoVehicle(SData["DriverBot"][SData["DriverID"]],v)
 	setVehicleSirensOn(v, true)
+	return v
 end
 
 
@@ -10679,20 +10688,28 @@ end
 function kr(thePlayer, vmodel, pedmodel)
 	local x,y,z = getElementPosition(thePlayer)
 	local arr = {}
-	arr[#arr+1] = NEWGPSFound(x-120,y,z, x,y,z)
-	arr[#arr+1] = NEWGPSFound(x+120,y,z, x,y,z)
-	arr[#arr+1] = NEWGPSFound(x,y+120,z, x,y,z)
-	arr[#arr+1] = NEWGPSFound(x,y-120,z, x,y,z)
-	if(#arr > 0) then
-		local minarr = 99999999
-		local minarrindex = false
-		for slot = 1, #arr do
-			if(minarr > #arr[slot]) then
-				minarr = #arr[slot]
-				minarrindex = slot
+	arr["east"] = NEWGPSFound(x-120,y,z, x,y,z)
+	arr["south"] = NEWGPSFound(x+120,y,z, x,y,z)
+	arr["north"] = NEWGPSFound(x,y+120,z, x,y,z)
+	arr["west"] = NEWGPSFound(x,y-120,z, x,y,z)
+	local minarr = 99999999
+	local minarrindex = false
+	for name, dat in pairs(arr) do
+		if(dat) then
+			if(#dat > 5) then -- Отсекаем слишком короткие пути
+				if(minarr > #dat) then
+					minarr = #dat
+					minarrindex = name
+				end
 			end
 		end
-		CreateDriverBot(vmodel, pedmodel, arr[minarrindex][1][1], arr[minarrindex][1][2], arr[minarrindex][1][3], arr[minarrindex], thePlayer)
+	end
+	if(minarrindex) then
+		--if(vmodel == 497) then 
+		--	CreateDriverBot(vmodel, pedmodel, arr[minarrindex][1][1], arr[minarrindex][1][2], arr[minarrindex][1][3]+20, arr[minarrindex], thePlayer)
+		--else
+		--end
+		PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, arr[minarrindex][1][1], arr[minarrindex][1][2], arr[minarrindex][1][3], arr[minarrindex], thePlayer)
 	end
 end
 
@@ -12620,6 +12637,21 @@ function quitPlayer()
 				killTimer(el)
 			elseif(isElement(el)) then
 				destroyElement(el)
+			end
+			if(name == 'Cops') then
+				for _, theVehicle in pairs(el) do
+					if(theVehicle) then
+						local thePed = getVehicleOccupant(theVehicle)
+						if(thePed) then
+							if(getElementType(thePed) == "ped") then
+								destroyElement(thePed)
+								destroyElement(theVehicle)
+							end
+						else
+							destroyElement(theVehicle)
+						end
+					end
+				end
 			end
 		end
 		PData[source] = nil

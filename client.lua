@@ -2842,7 +2842,6 @@ function UpdateBot()
 					if(attacker) then
 						local x2,y2,z2 = getElementPosition(attacker)
 						
-			
 						local limitspeed = 140	
 						
 						local vx, vy, vz = getElementVelocity(theVehicle)
@@ -2857,7 +2856,6 @@ function UpdateBot()
 						else
 							setPedAnalogControlState(ped, "vehicle_left", -(rot)/60)
 						end
-					
 					
 						setPedAnalogControlState(ped, "brake_reverse", 0)
 						setPedControlState(ped, "handbrake", false)
