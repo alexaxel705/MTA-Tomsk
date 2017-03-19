@@ -41,7 +41,8 @@ local PData = {
 	['ShakeLVL'] = 0, 
 	['TARR'] = {}, -- Target, по центру, ниже, выше
 	['MultipleAction'] = {},
-	['infopath'] = {} -- Для разработчика
+	['infopath'] = {}, -- Для разработчика
+	['changezone'] = {} -- Для разработчика
 }
 local timers={}
 local timersAction={}
@@ -4584,6 +4585,21 @@ addEvent("InfoPath", true)
 addEventHandler("InfoPath", localPlayer, InfoPath)
 
 
+function InfoPathPed(zone, arr)
+outputChatBox(zone)
+	local arr = fromJSON(arr)
+	for name, dat2 in pairs(arr) do
+		PData['changezone'][#PData['changezone']+1] = {
+			[1] = {dat2[1], dat2[2], dat2[3], zone}, 
+			[2] = {dat2[4], dat2[5], dat2[6]}
+		}
+	end
+end
+addEvent("InfoPathPed", true)
+addEventHandler("InfoPathPed", localPlayer, InfoPathPed)
+
+
+
 function ShowInfoKey()
 	if(ShowInfo) then
 		ShowInfo = false
@@ -5831,6 +5847,29 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 					DropInvItem(DragElementName, DragElementId)
 				end
 				StopDrag()
+			end
+		end
+	end
+	
+	
+	if(getPlayerName(localPlayer) == "alexaxel705") then
+		worldX = math.round(worldX, 0)
+		worldY = math.round(worldY, 0)
+		worldZ = math.round(worldZ, 1)
+		if(button == "left") then
+			if(state == "down") then
+				PData['changezone'][#PData['changezone']+1] = {[1] = {worldX, worldY, worldZ, getZoneName(worldX, worldY, worldZ, false)}}
+			else
+				if(getZoneName(worldX, worldY, worldZ, false) == PData['changezone'][#PData['changezone']][1][4]) then
+					PData['changezone'][#PData['changezone']][2] = {worldX, worldY, worldZ}
+					triggerServerEvent("saveserver", localPlayer, localPlayer, 
+					PData['changezone'][#PData['changezone']][1][1], PData['changezone'][#PData['changezone']][1][2], PData['changezone'][#PData['changezone']][1][3],
+					worldX, worldY, worldZ, "PedPath"
+					)
+				else
+					PData['changezone'][#PData['changezone']] = nil
+					ToolTip("Разные зоны!!!")
+				end
 			end
 		end
 	end
@@ -7543,6 +7582,39 @@ function DrawPlayerMessage()
 			
 	
 			if(ShowInfo) then
+				
+				for i, arr in pairs(PData['changezone']) do
+					local wx,wy,wz = false, false, false
+					if(arr[2]) then
+						wx,wy,wz = arr[2][1], arr[2][2], arr[2][3]
+					else
+						local _, _, worldx, worldy, worldz = getCursorPosition()
+						local px, py, pz = getCameraMatrix()
+						_,wx,wy,wz,_ = processLineOfSight(px, py, pz, worldx, worldy, worldz)
+						wx,wy,wz = math.round(wx, 0), math.round(wy, 0), math.round(wz, 1)
+						
+					end
+					local color = tocolor(50,150,200,80)
+					if(arr[1][4] ~= getZoneName(wx,wy,wz, false)) then
+						color = tocolor(200,50,50,80)
+					end
+					
+					local point = {arr[1][1], wy, math.round(getGroundPosition(arr[1][1], wy, arr[1][3]+500), 1)}
+					local point2 = {wx, arr[1][2], math.round(getGroundPosition(wx, arr[1][2], wz+500), 1)}
+					
+					
+					dxDrawLine3D(arr[1][1], arr[1][2], arr[1][3], point[1], point[2], point[3], color, 6)
+					
+					dxDrawLine3D(point[1], point[2], point[3], wx,wy,wz, color, 6)
+
+					dxDrawLine3D(wx,wy,wz, point2[1], point2[2], point2[3], color, 6)
+
+					dxDrawLine3D(point2[1], point2[2], point2[3], arr[1][1], arr[1][2], arr[1][3], color, 6)
+
+					--dxDrawLine3D(arr[1][1], wy, arr[1][3], wx,arr[1][2],wz, color, 6)
+				end
+				
+				
 				local hit,_,_,_,ele,_,_,_,material = processLineOfSight(x,y,z,x,y,z-2, true,false,false,false,false,true,true,true,localPlayer, true)
 				dxDrawBorderedText("Материал: "..material.."\nЗона: "..getZoneName(x,y,z), 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
 				for zone, arr in pairs(PData['infopath']) do

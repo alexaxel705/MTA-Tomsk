@@ -1,3 +1,13 @@
+-- x,y,z, x2,y2,z2, rz (+ - 180)
+PedNodes = {
+	["King's"] = {
+		[1] = {-2016, 367, 34.2, -2012, 472, 34.2, 0}, 
+	}, 
+
+}
+
+
+
 -- Транспорт, x,y,z, светофор [north[0], west[3]], узлы
 PathNodes = {
 	["San Fierro"] = {
@@ -42157,6 +42167,10 @@ function CreateVehicleNodeMarker(zone)
 			MarkerZoneCreated[zone] = true
 			if(PathNodes[zone]) then
 				triggerClientEvent(source, "InfoPath", source, zone, toJSON(PathNodes[zone]))
+			end
+			
+			if(PedNodes[zone]) then
+				triggerClientEvent(source, "InfoPathPed", source, zone, toJSON(PedNodes[zone]))
 			end
 		end
 	end

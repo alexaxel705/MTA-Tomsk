@@ -11735,56 +11735,75 @@ function seti(thePlayer, command, h)
 end
 addCommandHandler("seti", seti)
 
-function saveserver(thePlayer, x,y,z,rx,ry,rz)
+function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	local zone = getZoneName(x,y,z)
-	
-	if(tmpcity ~= zone) then
-		if(PathNodes[zone]) then
-			local maxkey = 1
-			for i, v in pairs(PathNodes[zone]) do
-				if(i > maxkey) then
-					maxkey = i
+	if(savetype == "PedPath") then
+		local angle = findRotation(x,y, x,ry)
+		if(angle <= 0) then angle = 0 end
+		if(tmpcity ~= zone) then
+			if(PedNodes[zone]) then
+				local maxkey = 1
+				for i, v in pairs(PedNodes[zone]) do
+					if(i > maxkey) then
+						maxkey = i
+					end
 				end
+				tmpi = (math.ceil(maxkey/100))*100
+			else
+				PedNodes[zone] = {}
+				tmpi = 1
 			end
-			tmpi = (math.ceil(maxkey/100))*100
+			
+			if(PedNodes[zone][tmpi]) then tmpi = tmpi+100 end
+			
+			if(tmpcity ~= "") then
+				datess = datess.."\n"
+			end
+			tmpcity = zone
+			
+			
+			datess = datess.."	[\""..zone.."\"] = {\n"
+			datess = datess.."		["..tmpi.."] = {"..math.round(x, 0)..", "..math.round(y, 0)..", "..math.round(z, 1)..
+			", "..math.round(rx, 0)..", "..math.round(ry, 0)..", "..math.round(rz, 1)..", "..angle.."}, "
+			PedNodes[zone][tmpi] = {math.round(x, 0), math.round(y, 0), math.round(z, 1), math.round(rx, 0), math.round(ry, 0), math.round(rz, 1), angle}
 		else
-			PathNodes[zone] = {}
-			tmpi = 1
+			tmpi = tmpi+1
+			datess = datess.."\n		["..tmpi.."] = {"..math.round(x, 0)..", "..math.round(y, 0)..", "..math.round(z, 1)..
+			", "..math.round(rx, 0)..", "..math.round(ry, 0)..", "..math.round(rz, 1)..", "..angle.."}, "
+			PedNodes[zone][tmpi] = {math.round(x, 0), math.round(y, 0), math.round(z, 1), math.round(rx, 0), math.round(ry, 0), math.round(rz, 1), angle}
 		end
-		
-		if(PathNodes[zone][tmpi]) then tmpi = tmpi+100 end
-		
-		if(tmpcity ~= "") then
-			datess = datess..", false, {{\""..zone.."\", "..tmpi.."}}}, \n"
-		end
-		tmpcity = zone
-		
-		
-		datess = datess.."	[\""..zone.."\"] = {\n"
-		datess = datess.."		["..tmpi.."] = {true, "..math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)
-		PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 	else
-		tmpi = tmpi+1
-		datess = datess..", false}, \n		["..tmpi.."] = {true, "..math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)
-		PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
-	end
-	--datess = datess.."{"..math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)..","..math.round(rx, 0)..","..math.round(ry, 0)..","..math.round(rz, 0).."}, "
-	--datess = datess.."{"..math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)..","..math.round(rz, 0).."}, "
-	
-	
-	--datess = datess.."		["..tmpi.."] = {true, "..math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)..", false}, \n"
-	--tmpi = tmpi+1
-	
-	
-	--[[local datess=""
-	for i, arr in pairs(VehicleSystem) do
-		local endy = arr[10]
-		if(endy == 2016) then
-			endy = "CYear"
+		if(tmpcity ~= zone) then
+			if(PathNodes[zone]) then
+				local maxkey = 1
+				for i, v in pairs(PathNodes[zone]) do
+					if(i > maxkey) then
+						maxkey = i
+					end
+				end
+				tmpi = (math.ceil(maxkey/100))*100
+			else
+				PathNodes[zone] = {}
+				tmpi = 1
+			end
+			
+			if(PathNodes[zone][tmpi]) then tmpi = tmpi+100 end
+			
+			if(tmpcity ~= "") then
+				datess = datess..", false, {{\""..zone.."\", "..tmpi.."}}}, \n"
+			end
+			tmpcity = zone
+			
+			
+			datess = datess.."	[\""..zone.."\"] = {\n"
+			datess = datess.."		["..tmpi.."] = {true, "..math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)
+			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
+		else
+			tmpi = tmpi+1
+			datess = datess..", false}, \n		["..tmpi.."] = {true, "..math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)
+			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
-		datess=datess..'['..i..'] = {'..arr[1]..', "'..arr[2]..'", "'..arr[3]..'", "'..arr[4]..'", "'..arr[5]..'", "'..arr[6]..'", "'..arr[7]..'", '..arr[8]..', {'..math.random(0,11)..', '..arr[9]..'}, {'..math.random(0,11)..', '..endy..'}, "'..arr[11]..'"},\n'
-	end--]]
-	
+	end
 	--AddInventoryItem(thePlayer, "Деньги", 100000, 550, {})
 
 	
