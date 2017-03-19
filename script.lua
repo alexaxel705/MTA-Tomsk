@@ -4898,7 +4898,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  =  1331, -1411, 13.5, 0, 0 --
+		local x,y,z,i,d  = -2521.2, -624.5, 132.7, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -11815,7 +11815,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Деньги", 100000, 550, {})
+	--AddInventoryItem(thePlayer, "Деньги", 10000000, 550, {})
 
 	
 	fileDelete("save.txt")
@@ -14384,8 +14384,6 @@ addEventHandler("SellItem", getRootElement(), AddPlayerMoney)
 function MissionCompleted(thePlayer, count, mission, target, cinema)
 	triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "", mission, count, target, cinema)
 end
-
-
 
 
 

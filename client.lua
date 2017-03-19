@@ -6218,32 +6218,59 @@ function AddInventoryItem(itemname, count, quality, data)
 	if(not data) then data = toJSON({}) end
 	
 	
-	local NumberStack = FoundStackedInventoryItem(itemname, quality)
-	if(NumberStack) then
-		if(PInv["player"][NumberStack][2]+count <= items[itemname][3]) then
-			SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], PInv["player"][NumberStack][2]+count, PInv["player"][NumberStack][3], data)
-			count = 0
-		else
-			count = count - (items[itemname][3]-PInv["player"][NumberStack][2])
-			SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], items[itemname][3], PInv["player"][NumberStack][3], data)
-		end
-	end
-	
-	if(count > 0) then
-		local stacked = math.floor(count/items[itemname][3])
+	for slot = 1, 10 do
+		local stacked = math.round(count/items[itemname][3], 0)
+
 		if(stacked >= 1) then
 			for v = 1, stacked do
 				AddInventoryItemNewStack(itemname, items[itemname][3], quality, data)
 				count = count - items[itemname][3]
 			end
+		elseif(stacked <= -1) then
+			for v = 1, stacked-stacked-stacked do
+				local NumberStack = FoundFullStackedInventoryItem(itemname, quality)
+				RemoveInventorySlot("player", NumberStack)
+				count = count + items[itemname][3]
+			end
 		end
-		if(count > 0) then
-			AddInventoryItemNewStack(itemname, count, quality, data) --Докладываем остаток
+		
+		if(count == 0) then
+			break
+		elseif(count > 0) then
+			local NumberStack = FoundStackedInventoryItem(itemname, quality)
+			if(NumberStack) then
+				if(PInv["player"][NumberStack][2]+count <= items[itemname][3]) then
+					SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], PInv["player"][NumberStack][2]+count, PInv["player"][NumberStack][3], data)
+					count = 0
+				else
+					count = count - (items[itemname][3]-PInv["player"][NumberStack][2])
+					SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], items[itemname][3], PInv["player"][NumberStack][3], data)
+				end
+			end
+	
+			if(count > 0) then
+				AddInventoryItemNewStack(itemname, count, quality, data) --Докладываем остаток
+			end
+			break
+		elseif(count < 0) then
+			local NumberStack = FoundStackedInventoryItem(itemname, quality)
+			if(not NumberStack) then NumberStack = FoundFullStackedInventoryItem(itemname, quality) end
+			if(NumberStack) then
+				if(PInv["player"][NumberStack][2]+count < 0) then
+					count = count + PInv["player"][NumberStack][2]
+					RemoveInventorySlot("player", NumberStack)
+				else
+					SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], PInv["player"][NumberStack][2]+count, PInv["player"][NumberStack][3], data)
+					break
+				end
+			end
 		end
 	end
 end
 addEvent("AddInventoryItem", true)
 addEventHandler("AddInventoryItem", localPlayer, AddInventoryItem)
+
+
 
 
 function AddInventoryItemNewStack(itemname, count, quality, data)
@@ -6485,6 +6512,23 @@ function FoundStackedInventoryItem(itemname, quality)
 	else return false end
 end
 
+ 
+function FoundFullStackedInventoryItem(itemname, quality)
+	local id = false
+	for i = 1, #PInv["player"] do
+		if(PInv["player"][i][1] == itemname) then
+			if(items[itemname][3] == PInv["player"][i][2]) then
+				if(GetQuality(quality) == GetQuality(PInv["player"][i][3])) then
+					id=i
+					break
+				end
+			end
+		end
+	end
+	if(id) then return id
+	else return false end
+end
+ 
  
 
  
