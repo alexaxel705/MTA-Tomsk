@@ -4586,7 +4586,6 @@ addEventHandler("InfoPath", localPlayer, InfoPath)
 
 
 function InfoPathPed(zone, arr)
-outputChatBox(zone)
 	local arr = fromJSON(arr)
 	for name, dat2 in pairs(arr) do
 		PData['changezone'][#PData['changezone']+1] = {
@@ -5860,11 +5859,28 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 			if(state == "down") then
 				PData['changezone'][#PData['changezone']+1] = {[1] = {worldX, worldY, worldZ, getZoneName(worldX, worldY, worldZ, false)}}
 			else
-				if(getZoneName(worldX, worldY, worldZ, false) == PData['changezone'][#PData['changezone']][1][4]) then
-					PData['changezone'][#PData['changezone']][2] = {worldX, worldY, worldZ}
+				local zone = getZoneName(worldX, worldY, worldZ, false)
+				if(zone == PData['changezone'][#PData['changezone']][1][4]) then
+					local oldx, oldy, oldz = PData['changezone'][#PData['changezone']][1][1], PData['changezone'][#PData['changezone']][1][2], PData['changezone'][#PData['changezone']][1][3]
+		
+
+					local out = {oldx, oldy, oldz, worldX, worldY, worldZ}
+					if(out[1] > out[4]) then
+						out = {out[4], out[2], math.round(getGroundPosition(out[4], out[2], out[3]+3), 1), out[1], out[5], math.round(getGroundPosition(out[1], out[5], out[6]+3), 1)}
+					end
+					
+					if(out[2] > out[5]) then
+						out = {out[1], out[5], math.round(getGroundPosition(out[1], out[5], out[3]+3), 1), out[4], out[2], math.round(getGroundPosition(out[4], out[2], out[6]+3), 1)}
+					end
+					
+	
+					PData['changezone'][#PData['changezone']][1] = {out[1], out[2], out[3], zone}
+					PData['changezone'][#PData['changezone']][2] = {out[4], out[5], out[6]}
+					
+
 					triggerServerEvent("saveserver", localPlayer, localPlayer, 
-					PData['changezone'][#PData['changezone']][1][1], PData['changezone'][#PData['changezone']][1][2], PData['changezone'][#PData['changezone']][1][3],
-					worldX, worldY, worldZ, "PedPath"
+					out[1], out[2], out[3], 
+					out[4], out[5], out[6], "PedPath"
 					)
 				else
 					PData['changezone'][#PData['changezone']] = nil
@@ -7598,20 +7614,19 @@ function DrawPlayerMessage()
 					if(arr[1][4] ~= getZoneName(wx,wy,wz, false)) then
 						color = tocolor(200,50,50,80)
 					end
-					
-					local point = {arr[1][1], wy, math.round(getGroundPosition(arr[1][1], wy, arr[1][3]+500), 1)}
-					local point2 = {wx, arr[1][2], math.round(getGroundPosition(wx, arr[1][2], wz+500), 1)}
-					
-					
-					dxDrawLine3D(arr[1][1], arr[1][2], arr[1][3], point[1], point[2], point[3], color, 6)
-					
-					dxDrawLine3D(point[1], point[2], point[3], wx,wy,wz, color, 6)
 
-					dxDrawLine3D(wx,wy,wz, point2[1], point2[2], point2[3], color, 6)
+					
+					local point = {arr[1][1], wy, math.round(getGroundPosition(arr[1][1], wy, arr[1][3]+3), 1)}
+					local point2 = {wx, arr[1][2], math.round(getGroundPosition(wx, arr[1][2], wz+3), 1)}
+					
+					dxDrawLine3D(arr[1][1], arr[1][2], arr[1][3], point[1], point[2], point[3], color, 25)
+					
+					dxDrawLine3D(point[1], point[2], point[3], wx,wy,wz, color, 25)
 
-					dxDrawLine3D(point2[1], point2[2], point2[3], arr[1][1], arr[1][2], arr[1][3], color, 6)
+					dxDrawLine3D(wx,wy,wz, point2[1], point2[2], point2[3], color, 25)
 
-					--dxDrawLine3D(arr[1][1], wy, arr[1][3], wx,arr[1][2],wz, color, 6)
+					dxDrawLine3D(point2[1], point2[2], point2[3], arr[1][1], arr[1][2], arr[1][3], color, 25)
+
 				end
 				
 				

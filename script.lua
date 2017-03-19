@@ -204,7 +204,7 @@ local PlayersEnteredPickup = {}
 local Threes = {}
 local ActionTimer = {}
 local ThreesPickup = {}
-local StandartInventory = toJSON({{},{},{},{},{},{},{},{},{},{"Деньги", 500, 550, {}}})
+local StandartInventory = toJSON({{},{},{},{},{},{},{},{},{},{}})
 local PlayersPickups = {}
 local PriceAuto = {434, 461, 494, 495, 502, 503, 504, 521, 522, 568, 573, 581, 429, 587, 602}
 local VehicleBand = {} -- Заспауненые автомобили фракций
@@ -4898,7 +4898,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -1507.5, 2608.7, 55.8, 0, 0 --
+		local x,y,z,i,d  =  1331, -1411, 13.5, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7157,6 +7157,25 @@ function preLoad(name)
 		for key,val in pairs(arr) do
 			CreateBot(val[1],val[2],val[3],val[4],nil,nil,zone,val[5])
 		end
+	end
+	
+	local CountRandomBot = 180
+	local availzones = {}
+	for name, dat in pairs(PedNodes) do
+		availzones[#availzones+1] = name
+	end
+	
+	for slot = 1, CountRandomBot do
+		local rand = math.random(#availzones)
+		local randnode = math.random(#PedNodes[availzones[rand]])
+		local randx = math.random(PedNodes[availzones[rand]][randnode][1], PedNodes[availzones[rand]][randnode][4])
+		local randy = math.random(PedNodes[availzones[rand]][randnode][2], PedNodes[availzones[rand]][randnode][5])
+		local randz = PedNodes[availzones[rand]][randnode][3]+1 -- Доработать потом. найти координату между точками
+		
+		local rot = PedNodes[availzones[rand]][randnode][7]
+		local randrot = math.random(1,2)
+		if(randrot == 1) then rot = rot+180 end
+		CreateBot(randx,randy,randz,rot,nil,nil,availzones[rand])
 	end
 	
 	setTimer(worldtime, 1000, 0)
@@ -11742,19 +11761,11 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 		if(angle <= 0) then angle = 0 end
 		if(tmpcity ~= zone) then
 			if(PedNodes[zone]) then
-				local maxkey = 1
-				for i, v in pairs(PedNodes[zone]) do
-					if(i > maxkey) then
-						maxkey = i
-					end
-				end
-				tmpi = (math.ceil(maxkey/100))*100
+				tmpi = #PedNodes[zone]+1
 			else
 				PedNodes[zone] = {}
 				tmpi = 1
 			end
-			
-			if(PedNodes[zone][tmpi]) then tmpi = tmpi+100 end
 			
 			if(tmpcity ~= "") then
 				datess = datess.."\n"
