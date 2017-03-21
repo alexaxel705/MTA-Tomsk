@@ -2786,7 +2786,8 @@ function UpdateBot()
 				end
 				if(not StreamData[ped]["UpdateRequest"]) then
 					path = {arr[5],arr[6],arr[7]}
-					nextpath = {arr[5],arr[6],arr[7]}
+					local tmpx, tmpy, tmpz = getPointInFrontOfPoint(arr[5],arr[6],arr[7], 0, 10)
+					nextpath = {tmpx, tmpy, tmpz}
 					distance = getDistanceBetweenPoints2D(path[1], path[2], x,y)
 					if(distance < 4) then
 						brake = true
@@ -2797,13 +2798,13 @@ function UpdateBot()
 
 				local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)
 				if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
-				if(nextrot > 45) then nextrot = 45 end
+				if(nextrot > 90) then nextrot = 90 end
 				local maxspd = 40
 				if(getElementData(ped, "attacker")) then
 					maxspd = 80
 				end
 				
-				local limitspeed = maxspd-((maxspd-10)*(nextrot/45))
+				local limitspeed = maxspd-((maxspd-10)*(nextrot/90))
 				
 				
 				local vx, vy, vz = getElementVelocity(theVehicle)
@@ -2933,7 +2934,12 @@ function UpdateBot()
 					
 					local nextrot = GetMarrot(findRotation(x, y, MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2]),rz)
 					if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
-					local limitspeed = 40-(40*(nextrot/180))
+					if(nextrot > 90) then nextrot = 90 end
+					local maxspd = 40
+					
+					local limitspeed = maxspd-((maxspd-10)*(nextrot/90))
+					
+					
 					
 					local vx, vy, vz = getElementVelocity(theVehicle)
 					local s = (vx^2 + vy^2 + vz^2)^(0.5)*156

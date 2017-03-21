@@ -4898,7 +4898,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 1378, 1966, 10.8, 0, 0 --
+		local x,y,z,i,d  = -2738.9, 531.4, 10.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5249,12 +5249,12 @@ addEventHandler("AddMeWanted", root, AddMeWanted)
 
 -- [Зона] = {{Модель авто, модель скина}, {Модель авто 2, модель скина 2}}
 local PoliceSpecificZone = {
-	["Los Santos"] = {{596, 280}},
+	["Los Santos"] = {{523, 284}, {596, 280}},
 	["San Fierro"] = {{597, 281}},
 	["Las Venturas"] = {{598, 282}},
-	["Red County"] = {{599, 283}},
-	["Whetstone"] = {{599, 283}},
-	["Flint County"] = {{599, 283}},
+	["Red County"] = {{523, 284}, {599, 283}},
+	["Whetstone"] = {{523, 284}, {599, 283}},
+	["Flint County"] = {{523, 284}, {599, 283}},
 	["Bone County"] = {{599, 283}},
 	["Tierra Robada"] = {{599, 283}},
 	["UNDERWATER"] = {{596, 280}},
@@ -5268,12 +5268,22 @@ function WantedLevel(thePlayer, count)
 	if(wanted > 6) then wanted = 6 
 	elseif(wanted < 0) then wanted = 0 end
 	if(wanted > 0) then
-		if(wanted < 4) then
-			local rand = PoliceSpecificZone[zone][math.random(#PoliceSpecificZone[zone])]
-			kr(thePlayer, rand[1], rand[2]) -- Выезжает полиция
-		else
+		if(wanted >= 5) then
+			local rand = math.random(1,2)
+			if(rand == 1) then
+				kr(thePlayer, 433, 287) -- Армия
+			else
+				kr(thePlayer, 470, 287) -- Армия
+			end
+			
+		elseif(wanted >= 4) then	
 			--kr(thePlayer, 497, 280) -- Вертолет
 			kr(thePlayer, 490, 286) -- ФБР
+		elseif(wanted >= 3) then
+			kr(thePlayer, 427, 285) -- SWAT
+		elseif(wanted < 3) then
+			local rand = PoliceSpecificZone[zone][math.random(#PoliceSpecificZone[zone])]
+			kr(thePlayer, rand[1], rand[2]) -- Выезжает полиция
 		end
 	end
 	SetDatabaseAccount(thePlayer, "wanted", wanted)
@@ -7306,6 +7316,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 		if(getElementType(killer) == "player") then
 			local PTeam = getElementData(source, "team")
 			local KTeam = getTeamName(getPlayerTeam(killer))
+
 			if(WeaponModel[weapon][2]) then 
 				AddSkill(killer, WeaponModel[weapon][2]) 
 			end
@@ -7354,7 +7365,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 				elseif(PTeam == "Вагос" or PTeam == "Якудзы" or PTeam == "Рифа") then
 					Respect(killer, "vagos", -1)
 					Respect(killer, "grove", 1)
-				elseif(PTeam == "Полиция" or PTeam == "ФБР") then
+				elseif(PTeam == "Полиция" or PTeam == "ФБР" or PTeam == "Военные") then
 					Respect(killer, "ugol", 3)
 					Respect(killer, "police", -3)	
 					Respect(killer, "civilian", -3)
@@ -7376,7 +7387,9 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 	if(not getElementData(source, "SpawnBlock")) then
 		setTimer(function(ped)
 			if(isElement(ped)) then
-				if(not getElementData(ped, "SpawnBlock")) then
+				if(getElementData(ped, "SpawnBlock")) then
+					destroyElement(ped)
+				else
 					local zone = getElementData(ped, "zone")
 					local i, d = getElementInterior(ped), getElementDimension(ped)
 					if(zone) then
@@ -9991,11 +10004,9 @@ function worldtime()
 					end
 				end
 			else
-				destroyElement(thePed)
 				SData["DriverBot"][theKey] = nil
 			end
 		else
-			destroyElement(thePed)
 			SData["DriverBot"][theKey] = nil
 		end
 	end
@@ -10698,6 +10709,7 @@ function CreateDriverBot(vmodel, pedmodel, x,y,z,path,attacker)
 	
 	setElementData(SData["DriverBot"][SData["DriverID"]], "attacker", getPlayerName(attacker))
 	setElementData(SData["DriverBot"][SData["DriverID"]], "SpawnBlock", "true", false)
+	setElementData(SData["DriverBot"][SData["DriverID"]], "team", getTeamName(SkinData[pedmodel][2]))
 	setElementData(v, "destroy", "true", false)
 	warpPedIntoVehicle(SData["DriverBot"][SData["DriverID"]],v)
 	setVehicleSirensOn(v, true)
