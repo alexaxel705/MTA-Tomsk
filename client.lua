@@ -704,8 +704,12 @@ function SetZoneDisplay(zone)
 		if(zone == "Yellow Bell Station") then zone = "Koyoen Station" end
 		
 		if(ZonesDisplay[#ZonesDisplay]) then
-			if(ZonesDisplay[#ZonesDisplay][3] > 255) then
-				ZonesDisplay[#ZonesDisplay][3] = 255 -- Для ускорения
+			if(ZonesDisplay[#ZonesDisplay][3]) then
+				if(ZonesDisplay[#ZonesDisplay][3] > 255) then
+					ZonesDisplay[#ZonesDisplay][3] = 255 -- Для ускорения
+				end
+			else
+				ZonesDisplay[#ZonesDisplay][3] = "fast"
 			end
 		end
 		ZonesDisplay[#ZonesDisplay+1] = {zone, 0, false}
@@ -1531,10 +1535,14 @@ function TuningExit()
 	PText["tuning"] = {}
 end
 
---Исключить: 26, 27
-local materials = {9 ,10 ,11 ,12 ,13 ,14 ,15 ,16 ,17 ,20 ,80 ,81 ,82 ,115 ,116 ,117 ,118 ,119 ,120 ,121 ,122 ,125 ,146 ,147 ,148 ,149 ,150 ,151 ,152 ,153 ,160 ,19 ,21 ,22 ,24 ,25 ,40 ,83 ,84 ,87 ,88 ,100 ,110 ,123 ,124 ,126 ,128 ,129 ,130 ,132 ,133 ,141 ,142 ,145 ,155 ,156}
-function GetGroundMaterial(x,y,z,gz)
-    local hit, _,_,_,ele,_,_,_,material = processLineOfSight(x,y,z,x,y,gz-1, true,false,false,false,false,true,true,true,localPlayer, true)
+
+
+
+
+function ValidateMaterialForThree(x,y,z,gz)
+	--Исключить: 26, 27
+	local materials = {9 ,10 ,11 ,12 ,13 ,14 ,15 ,16 ,17 ,20 ,80 ,81 ,82 ,115 ,116 ,117 ,118 ,119 ,120 ,121 ,122 ,125 ,146 ,147 ,148 ,149 ,150 ,151 ,152 ,153 ,160 ,19 ,21 ,22 ,24 ,25 ,40 ,83 ,84 ,87 ,88 ,100 ,110 ,123 ,124 ,126 ,128 ,129 ,130 ,132 ,133 ,141 ,142 ,145 ,155 ,156}
+    local material = GetGroundMaterial(x,y,z,gz)
 	for _,k in pairs(materials) do
 		if(k == material) then
 			return true
@@ -1543,6 +1551,12 @@ function GetGroundMaterial(x,y,z,gz)
 	return false
 end 
 
+
+function GetGroundMaterial(x,y,z,gz)
+    local _,_,_,_,_,_,_,_,material = processLineOfSight(x,y,z,x,y,gz-1, true,false,false,false,false,true,true,true,localPlayer, true)
+	if(not material) then material = 1337 end
+	return material
+end
 
 function LatencyUpgrade(Upgrade)
 	if(not tonumber(Upgrade)) then return true end
@@ -2888,11 +2902,13 @@ function UpdateBot()
 						local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z,x2,y2,z2, false,true)
 						if(hitElement) then
 							if(getElementType(hitElement) == "vehicle") then
-								local rand = math.random(1,2)
-								if(rand == 1) then
-									setPedAnimation(ped, "ped", "fucku", 1500, false, true, true, true)
-								elseif(rand == 2) then
-									setPedAnimation(ped, "ped", "ev_step", 1500, false, true, true, true)
+								if(getVehicleOccupant(hitElement)) then
+									local rand = math.random(1,2)
+									if(rand == 1) then
+										StartAnimation(ped, "ped", "fucku", 1500, false, true, true, false)
+									elseif(rand == 2) then
+										StartAnimation(ped, "ped", "ev_step", 1500, false, true, true, false)
+									end
 								end
 							end
 						end
@@ -3028,8 +3044,10 @@ function UpdateBot()
 end
 
 
-
-
+		
+function StartAnimation(thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame, forced)
+	triggerServerEvent("StartAnimation", localPlayer, thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame, forced)
+end
 
 
 local VehTypeSkill = {
@@ -3251,7 +3269,7 @@ function BotCheckPath(x,y,z,x2,y2,z2,zone)
 		if(zone == getZoneName(x2,y2,z2)) then
 			local material = 2
 			if(not IgnoreMaterial[zone]) then  
-				_, _,_,_,_,_,_,_,material = processLineOfSight(x,y,z,x2,y2,gz-2, true,false,false,false,false,true,true,true,localPlayer, true) 
+				material = GetGroundMaterial(x2,y2,z2, gz-2)
 			end
 			if(material) then
 				if(not BannedMaterial[material]) then
@@ -3488,9 +3506,9 @@ function updateCamera()
 		local theVehicle = getPedOccupiedVehicle(thePed)
 		if(theVehicle) then -- Костыль 
 			local x,y,z = getElementPosition(theVehicle)
-			local hit,_,_,_,ele,_,_,_,material = processLineOfSight(x,y,z,x,y,z-5, true,false,false,false,false,true,true,true,localPlayer, true)
+			local material = GetGroundMaterial(x,y,z+5,z-10)
 
-			if(not material) then
+			if(material == 1337) then
 				if(not isElementFrozen(theVehicle)) then
 					setElementFrozen(theVehicle, true)
 				end
@@ -4241,7 +4259,7 @@ function targetingActivated(target)
 			DrugsEffect[#DrugsEffect+1] = createPed(math.random(0,299),x+math.random(-10,10),y+math.random(-10,10), ground+0.5, math.random(0,360))
 			setElementInterior(DrugsEffect[#DrugsEffect], getElementInterior(localPlayer))
 			setElementDimension(DrugsEffect[#DrugsEffect], getElementDimension(localPlayer))
-			setPedAnimation(DrugsEffect[#DrugsEffect], "STRIP", DrugsAnimation[math.random(1,#DrugsAnimation)])
+			StartAnimation(DrugsEffect[#DrugsEffect], "STRIP", DrugsAnimation[math.random(1,#DrugsAnimation)])
 			local rand = math.random(0,10)
 			if(rand == 0) then 
 				setPedHeadless(DrugsEffect[#DrugsEffect],true)
@@ -4257,9 +4275,6 @@ function targetingActivated(target)
 			CallPolice = false
 			unbindKey ("F3", "down", CallPoliceEvent) 
 		end
-
-		
-		
 
 
 	
@@ -4582,6 +4597,8 @@ addEvent("InfoPath", true)
 addEventHandler("InfoPath", localPlayer, InfoPath)
 
 
+
+		
 function InfoPathPed(zone, arr)
 	local arr = fromJSON(arr)
 	for name, dat2 in pairs(arr) do
@@ -4954,7 +4971,9 @@ function CreateTarget(el)
 						local distdummy = getDistanceBetweenPoints3D(x,y,z,px,py,pz)
 						if(distdummy < 2) then
 							sx,sy = getScreenFromWorldPosition(x,y,z)
-							PData["MultipleAction"]["e"] = {"TrunkWindow", "открыть", sx, sy}
+							if(sx and sy) then
+								PData["MultipleAction"]["e"] = {"TrunkWindow", "открыть", sx, sy}
+							end
 						end
 					end
 
@@ -6298,7 +6317,7 @@ function UseInventoryItem(name, i)
 	elseif(items[text][4] == "CreateCanabis") then
 		local x, y, z = getElementPosition(localPlayer)
 		local gz = getGroundPosition(x, y, z)
-		if(GetGroundMaterial(x,y,z, gz)) then
+		if(ValidateMaterialForThree(x,y,z, gz)) then
 			triggerServerEvent("CreateThreePlayer", localPlayer, localPlayer, 823, x,y,gz, PInv[name][i][3])
 		else
 			outputChatBox("Здесь нельзя садить #558833коноплю",255,255,255,true)
@@ -6306,7 +6325,7 @@ function UseInventoryItem(name, i)
 	elseif(items[text][4] == "CreateCoka") then
 		local x, y, z = getElementPosition(localPlayer)
 		local gz = getGroundPosition(x, y, z)
-		if(GetGroundMaterial(x,y,z, gz)) then
+		if(ValidateMaterialForThree(x,y,z, gz)) then
 			triggerServerEvent("CreateThreePlayer", localPlayer, localPlayer, 782, x,y,gz, PInv[name][i][3])
 		else
 			outputChatBox("Здесь нельзя садить коку",255,255,255,true)
@@ -7552,7 +7571,7 @@ function DrawPlayerMessage()
 					dxDrawImage(screenWidth-(dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.15)-(25*scalex), screenHeight-(140*scaley), (dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.3), dxGetFontHeight(NewScale*4, "default-bold"), DrawLocation(ZonesDisplay[1][1]), 0, 0, 0, tocolor(255, 255, 255, ZonesDisplay[1][2]))
 				end
 
-				if(ZonesDisplay[1][3]) then
+				if(tonumber(ZonesDisplay[1][3])) then
 					if(ZonesDisplay[1][3] > 0) then
 						ZonesDisplay[1][3] = ZonesDisplay[1][3]-5
 						if(ZonesDisplay[1][3] <= 255) then
@@ -7565,7 +7584,11 @@ function DrawPlayerMessage()
 				elseif(ZonesDisplay[1][2] < 255) then
 					ZonesDisplay[1][2] = ZonesDisplay[1][2]+5
 				elseif(ZonesDisplay[1][2] == 255) then
-					ZonesDisplay[1][3] = 1200
+					if(ZonesDisplay[1][3] == "fast") then
+						ZonesDisplay[1][3] = 255
+					else
+						ZonesDisplay[1][3] = 1200
+					end
 				end
 			end
 			
@@ -7671,7 +7694,7 @@ function DrawPlayerMessage()
 				end
 				
 				
-				local hit,_,_,_,ele,_,_,_,material = processLineOfSight(x,y,z,x,y,z-2, true,false,false,false,false,true,true,true,localPlayer, true)
+				local material = GetGroundMaterial(x,y,z,z-2)
 				dxDrawBorderedText("Материал: "..material.."\nЗона: "..getZoneName(x,y,z), 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
 				for zone, arr in pairs(PData['infopath']) do
 					for i, arr2 in pairs(arr) do
@@ -7725,14 +7748,16 @@ function DrawPlayerMessage()
 				end
 				
 			
-				for k, ped in pairs(getElementsByType("ped", getRootElement(), true)) do
-					if(getElementData(ped, "DynamicBot")) then
-						local arr = fromJSON(getElementData(ped, "DynamicBot"))
-						local x,y,z = getElementPosition(getPedOccupiedVehicle(ped))
-
-						path = {arr[1],arr[2],arr[3]}
-						nextpath = {arr[5],arr[6],arr[7]}
-						dxDrawLine3D(x,y,z,arr[1],arr[2],arr[3]+1, tocolor(255,50,50,150), 8)
+				for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
+					local theVehicle = getPedOccupiedVehicle(thePed)
+					if(theVehicle) then
+						if(getElementData(thePed, "DynamicBot")) then
+							local arr = fromJSON(getElementData(thePed, "DynamicBot"))
+							local x,y,z = getElementPosition(theVehicle)
+							path = {arr[1],arr[2],arr[3]}
+							nextpath = {arr[5],arr[6],arr[7]}
+							dxDrawLine3D(x,y,z,arr[1],arr[2],arr[3]+1, tocolor(255,50,50,150), 8)
+						end
 					end
 				end
 			end

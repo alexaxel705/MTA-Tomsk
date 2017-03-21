@@ -4898,7 +4898,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 946, -1315, 12.4, 0, 0 --
+		local x,y,z,i,d  = -2257.7, 47.2, 34.2, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -4962,17 +4962,21 @@ function StartAnimation(thePlayer, block, anim, times, loop, updatePosition, int
 			end
 		end
 	end
-	if(getElementHealth(thePlayer) > 20 or forced) then
-		setPedAnimation(thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame)
-		if(getElementType(thePlayer) == "ped") then
-			if(loop) then
-				setElementData(thePlayer, "anim", toJSON({block, anim, times, loop, updatePosition, interruptable, freezeLastFrame}))
-			end
+	if(getElementType(thePlayer) == "ped") then
+		if(loop) then
+			setElementData(thePlayer, "anim", toJSON({block, anim, times, loop, updatePosition, interruptable, freezeLastFrame}))
 		end
-	else
-		return false
+	elseif(getElementType(thePlayer) == "player") then
+		if(getElementHealth(thePlayer) < 20) then
+			return false
+		end
 	end
+	
+	setPedAnimation(thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame)
+	return true
 end
+addEvent("StartAnimation", true)
+addEventHandler("StartAnimation", root, StartAnimation)
 
 
 CreateEnter(1642.3, -2286.5, -1.2, 180, 0, 0, false, -1855.6, 41.2, 1061.4, 180, 14, 0, "Аэропорт Los Santos")
