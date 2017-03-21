@@ -3444,11 +3444,7 @@ end
 function OpenTAB()
 	if(Targets["theVehicle"]) then
 		if(getVehiclePlateText(Targets["theVehicle"]) == "SELL 228") then
-			if(getPlayerMoney(localPlayer) >= getVehicleHandlingProperty(Targets["theVehicle"], "monetary")) then
-				triggerServerEvent("BuyCar", localPlayer, Targets["theVehicle"])
-			else
-				ToolTip("Недостаточно средств!")
-			end
+			triggerServerEvent("BuyCar", localPlayer, Targets["theVehicle"])
 		end
 	end
 	UpdateTabEvent()

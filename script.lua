@@ -4898,7 +4898,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -2257.7, 47.2, 34.2, 0, 0 --
+		local x,y,z,i,d  = 1378, 1966, 10.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5123,22 +5123,23 @@ end
 
 function PlayCasino(casino, game)
 	if(not isTimer(CasinoGame[casino][game]["timer"])) then
-		AddPlayerMoney(source, -100)
-		local MaxCombo = 360/getArrSize(CasinoObjectInfo[getElementModel(CasinoGame[casino][game][1])])
-		local r1,r2,r3 = math.random(1,MaxCombo), math.random(MaxCombo,MaxCombo*2), math.random(MaxCombo*2,MaxCombo*3)
-		victory = false
-		local ro1, ro2, ro3 = RotateBandits(CasinoGame[casino][game][1], r1), RotateBandits(CasinoGame[casino][game][2], r2), RotateBandits(CasinoGame[casino][game][3], r3)
-		if(ro1 == ro2) then
-			victory = CasinoPrice[ro1]*CasinoPrice[ro2]
-			if(ro2 == ro3) then
-				victory = CasinoPrice[ro1]*CasinoPrice[ro2]*CasinoPrice[ro3]
+		if(AddPlayerMoney(source, -100)) then
+			local MaxCombo = 360/getArrSize(CasinoObjectInfo[getElementModel(CasinoGame[casino][game][1])])
+			local r1,r2,r3 = math.random(1,MaxCombo), math.random(MaxCombo,MaxCombo*2), math.random(MaxCombo*2,MaxCombo*3)
+			victory = false
+			local ro1, ro2, ro3 = RotateBandits(CasinoGame[casino][game][1], r1), RotateBandits(CasinoGame[casino][game][2], r2), RotateBandits(CasinoGame[casino][game][3], r3)
+			if(ro1 == ro2) then
+				victory = CasinoPrice[ro1]*CasinoPrice[ro2]
+				if(ro2 == ro3) then
+					victory = CasinoPrice[ro1]*CasinoPrice[ro2]*CasinoPrice[ro3]
+				end
 			end
+			CasinoGame[casino][game]["timer"] = setTimer(function(thePlayer, victory)
+				if(victory) then
+					AddPlayerMoney(thePlayer, victory, "ВЫИГРЫШ")
+				end
+			end, 1000+(50*r3), 1, source, victory)
 		end
-		CasinoGame[casino][game]["timer"] = setTimer(function(thePlayer, victory)
-			if(victory) then
-				AddPlayerMoney(thePlayer, victory, "ВЫИГРЫШ")
-			end
-		end, 1000+(50*r3), 1, source, victory)
 	end
 end
 addEvent("PlayCasino", true)
@@ -6251,12 +6252,13 @@ addCommandHandler("inlab", Labfunc)
 
 function sms(thePlayer, _, h, ...)
 	if(h) then
-		local stringWithAllParameters = table.concat({...}, " ")
-		for key,thePlayers in pairs(getElementsByType "player") do
-			if(tostring(getElementData(thePlayers, "id")) == tostring(h)) then
-				outputChatBox("(СМС) от ["..getElementData(thePlayer, "id").."] "..getPlayerName(thePlayer)..": "..stringWithAllParameters, thePlayers, 255,255,0,true)
-				outputChatBox("(СМС) для ["..getElementData(thePlayers, "id").."] "..getPlayerName(thePlayers)..": "..stringWithAllParameters, thePlayer, 255,255,0,true)
-				AddPlayerMoney(thePlayer, -100)
+		if(AddPlayerMoney(thePlayer, -100)) then
+			local stringWithAllParameters = table.concat({...}, " ")
+			for key,thePlayers in pairs(getElementsByType "player") do
+				if(tostring(getElementData(thePlayers, "id")) == tostring(h)) then
+					outputChatBox("(СМС) от ["..getElementData(thePlayer, "id").."] "..getPlayerName(thePlayer)..": "..stringWithAllParameters, thePlayers, 255,255,0,true)
+					outputChatBox("(СМС) для ["..getElementData(thePlayers, "id").."] "..getPlayerName(thePlayers)..": "..stringWithAllParameters, thePlayer, 255,255,0,true)
+				end
 			end
 		end
 	else
@@ -6270,9 +6272,10 @@ addCommandHandler("pm", sms)
 
 function ad(thePlayer, _, ...)
 	if(...) then
-		local stringWithAllParameters = table.concat({...}, " ")
-		outputChatBox("* Объявление "..stringWithAllParameters.." от "..getPlayerName(thePlayer).."["..getElementData(thePlayer, "id").."]", getRootElement(), 0,255,0,true)
-		AddPlayerMoney(thePlayer, -#...*500)
+		if(AddPlayerMoney(thePlayer, -#...*500)) then
+			local stringWithAllParameters = table.concat({...}, " ")
+			outputChatBox("* Объявление "..stringWithAllParameters.." от "..getPlayerName(thePlayer).."["..getElementData(thePlayer, "id").."]", getRootElement(), 0,255,0,true)
+		end
 	else
 		outputChatBox("Используй /ad текст чтобы дать рекламу, стоимость "..COLOR["DOLLAR"]["HEX"].."$500#FFFFFF за символ", thePlayer, 255,255,255,true)
 	end
@@ -7166,7 +7169,11 @@ function preLoad(name)
 	local CountRandomBot = 180
 	local availzones = {}
 	for name, dat in pairs(PedNodes) do
-		availzones[#availzones+1] = name
+		for _, dat2 in pairs(dat) do
+			for slot = 1, dat2[4]-dat2[1]+dat2[5]-dat2[2] do
+				availzones[#availzones+1] = name
+			end
+		end
 	end
 	
 	for slot = 1, CountRandomBot do
@@ -8909,9 +8916,8 @@ end
 function buybiz(thePlayer, biz)
 	local BPrice = tonumber(getElementData(biz, "price"))
 	if(not getElementData(biz, "bizowner")) then
-		if(GetPlayerMoney(thePlayer) >= BPrice) then
+		if(AddPlayerMoney(thePlayer, -BPrice)) then
 			if(BPrice ~= 0) then
-				AddPlayerMoney(thePlayer, -BPrice)
 				MissionCompleted(thePlayer, "КУПЛЕНО!", getElementData(biz, "biz"), false, true)
 				
 				local bizNode = xmlFindChild(BizNode, getElementData(biz, "name"), 0)
@@ -8921,8 +8927,6 @@ function buybiz(thePlayer, biz)
 			else
 				outputChatBox("Нельзя купить! Этот бизнес является федеральной собственностью!", thePlayer, 255,255,255,true)
 			end
-		else
-			outputChatBox("Недостаточно средств!", thePlayer, 255,255,255,true)
 		end
 	else
 		if(getElementData(biz, "bizowner") == getPlayerName(thePlayer)) then
@@ -9400,7 +9404,7 @@ function buyHouse(thePlayer, buyhouse)
 		MissionCompleted(thePlayer, "ПРОДАНО!", false, false, true)
 	else
 		if(getElementData(getElementByID(buyhouse), "owner") == "") then
-			if(GetPlayerMoney(thePlayer) >= tonumber(getElementData(getElementByID(buyhouse), "price"))) then
+			if(AddPlayerMoney(thePlayer, -tonumber(getElementData(getElementByID(buyhouse), "price")))) then
 				local HouseNodes = xmlNodeGetChildren(HouseNode)
 				local HouseNode = xmlFindChild(HouseNode, buyhouse, 0)
 				xmlNodeSetValue(HouseNode, getPlayerName(thePlayer))
@@ -9421,12 +9425,9 @@ function buyHouse(thePlayer, buyhouse)
 						setElementData(Garages[buyhouse][slot]["enter"], "owner", getPlayerName(thePlayer))
 					end
 				end
-				AddPlayerMoney(thePlayer, -tonumber(getElementData(getElementByID(buyhouse), "price")))
 				triggerEvent("onPickupUse", getElementByID(buyhouse), thePlayer)
 				triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))), true)
 				MissionCompleted(thePlayer, "КУПЛЕНО!", false, false, true)
-			else
-				ToolTip(thePlayer, "Недостаточно средств для покупки дома!")
 			end
 		end
 	end
@@ -9586,19 +9587,18 @@ function BuyCar(theVehicle)
 	if(getElementData(theVehicle, "price")) then
 		local Seller = getPlayerFromName(getElementData(theVehicle, "seller"))
 		if(Seller ~= source) then
-			if(tonumber(GetPlayerMoney(source)) >= tonumber(getElementData(theVehicle, "price"))) then
+			if(AddPlayerMoney(source, -tonumber(getElementData(theVehicle, "price")))) then
 				if(Seller) then
 					AddPlayerMoney(Seller, tonumber(getElementData(theVehicle, "price")))
 					MissionCompleted(Seller, "", "ТРАНСПОРТ ПРОДАН!")
 				end
-				AddPlayerMoney(source, -tonumber(getElementData(theVehicle, "price")))
-			else
-				outputChatBox("Недостаточно средств!", source, 255, 255, 255, true)
 			end
 		end
 	else
 		local vmodelH = getOriginalHandling(model)
-		AddPlayerMoney(source, -vmodelH["monetary"])
+		if(not AddPlayerMoney(source, -vmodelH["monetary"])) then
+			return false
+		end
 	end
 	MissionCompleted(source, "", "ТРАНСПОРТ КУПЛЕН!")
 	
@@ -9634,11 +9634,12 @@ function el(thePlayer, command, h)
 	for i,node in ipairs(HouseNodes) do
 		if(getPlayerName(thePlayer) == xmlNodeGetValue(node)) then
 			if(xmlNodeGetAttribute(node, "dolg")) then
-				AddPlayerMoney(thePlayer, -xmlNodeGetAttribute(node, "dolg"))
-				outputChatBox("Ты заплатил "..COLOR["DOLLAR"]["HEX"].."$"..xmlNodeGetAttribute(node, "dolg").."#FFFFFF за электричество", thePlayer,255,255,255,true)
-				AddBizMoney("ELSF", xmlNodeGetAttribute(node, "dolg"))			
-				xmlNodeSetAttribute(node, "dolg", nil)
-				setElementData(getElementByID(xmlNodeGetName(node)), "price", GetHousePrice(node))
+				if(AddPlayerMoney(thePlayer, -xmlNodeGetAttribute(node, "dolg"))) then
+					outputChatBox("Ты заплатил "..COLOR["DOLLAR"]["HEX"].."$"..xmlNodeGetAttribute(node, "dolg").."#FFFFFF за электричество", thePlayer,255,255,255,true)
+					AddBizMoney("ELSF", xmlNodeGetAttribute(node, "dolg"))			
+					xmlNodeSetAttribute(node, "dolg", nil)
+					setElementData(getElementByID(xmlNodeGetName(node)), "price", GetHousePrice(node))
+				end
 			else
 				outputChatBox("У тебя нет долгов за электричество!", thePlayer)
 			end
@@ -11816,7 +11817,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Деньги", 10000000, 550, {})
+	--AddInventoryItem(thePlayer, "Деньги", 100, 550, {})
 
 	
 	fileDelete("save.txt")
@@ -12154,7 +12155,7 @@ function buyshopitem(thePlayer, count, args)
 	local arg = fromJSON(args)
 	local name, price, quality, data, biz = arg[1], tonumber(arg[2]), arg[3], arg[4], arg[5]
 
-	if(GetPlayerMoney(thePlayer) >= price) then
+	if(AddPlayerMoney(thePlayer, -price*count)) then
 		if(not data) then data = {} end
 		if(name == "CoK") then
 			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
@@ -12173,12 +12174,10 @@ function buyshopitem(thePlayer, count, args)
 		end
 		
 		AddInventoryItem(thePlayer, name, 1*count, quality, data)
-		AddPlayerMoney(thePlayer, -price*count)
+		
 		if(biz) then
 			AddBizMoney(biz, price*count)
 		end
-	else
-		outputChatBox("Недостаточно средств!", thePlayer)
 	end
 end
 addEvent("buyshopitem", true)
@@ -12205,37 +12204,38 @@ addEventHandler("onVehicleDriftEnd", root, onVehicleDriftEnd)
 
 function DrinkSprunk(thePlayer, model)
 	if(not isTimer(PData[thePlayer]["anitimer"])) then
-		if(model == 956) then
-			StartAnimation(thePlayer, "VENDING", "VEND_Use",false,false,false,false)
-			triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 203, 1)
-			AddPlayerMoney(thePlayer, -20)
-			AddBizMoney("SPRUNK", 20)
-			
-			PData[thePlayer]["anitimer"] = setTimer(function(thePlayer)
-				AddPlayerArmas(thePlayer, 2769)
-				StartAnimation(thePlayer, "VENDING", "vend_eat1_P",false,false,false,false)
-				setElementHealth(thePlayer, getElementHealth(thePlayer) + 20)
+		if(AddPlayerMoney(thePlayer, -20)) then
+			if(model == 956) then
+				StartAnimation(thePlayer, "VENDING", "VEND_Use",false,false,false,false)
+				triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 203, 1)
+				
+				AddBizMoney("SPRUNK", 20)
 				
 				PData[thePlayer]["anitimer"] = setTimer(function(thePlayer)
-					RemovePlayerArmas(thePlayer, 2769)
-				end, 2600, 1, thePlayer)
-			end, 2800, 1, thePlayer)
+					AddPlayerArmas(thePlayer, 2769)
+					StartAnimation(thePlayer, "VENDING", "vend_eat1_P",false,false,false,false)
+					setElementHealth(thePlayer, getElementHealth(thePlayer) + 20)
+					
+					PData[thePlayer]["anitimer"] = setTimer(function(thePlayer)
+						RemovePlayerArmas(thePlayer, 2769)
+					end, 2600, 1, thePlayer)
+				end, 2800, 1, thePlayer)
 
-		else
-			StartAnimation(thePlayer, "VENDING", "VEND_Use",false,false,false,false)
-			triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 203, 0)
-			AddPlayerMoney(thePlayer, -20)
-			AddBizMoney("SPRUNK", 20)
-			
-			PData[thePlayer]["anitimer"] = setTimer(function(thePlayer)
-				AddPlayerArmas(thePlayer, 1546)
-				StartAnimation(thePlayer, "VENDING", "VEND_Drink_P",false,false,false,false)
-				setElementHealth(thePlayer, getElementHealth(thePlayer) + 20)
+			else
+				StartAnimation(thePlayer, "VENDING", "VEND_Use",false,false,false,false)
+				triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 203, 0)
+				AddBizMoney("SPRUNK", 20)
 				
 				PData[thePlayer]["anitimer"] = setTimer(function(thePlayer)
-					RemovePlayerArmas(thePlayer, 1546)
-				end, 1600, 1, thePlayer)
-			end, 2800, 1, thePlayer)
+					AddPlayerArmas(thePlayer, 1546)
+					StartAnimation(thePlayer, "VENDING", "VEND_Drink_P",false,false,false,false)
+					setElementHealth(thePlayer, getElementHealth(thePlayer) + 20)
+					
+					PData[thePlayer]["anitimer"] = setTimer(function(thePlayer)
+						RemovePlayerArmas(thePlayer, 1546)
+					end, 1600, 1, thePlayer)
+				end, 2800, 1, thePlayer)
+			end
 		end
 	end
 end
@@ -13453,12 +13453,9 @@ function buywardrobe(thePlayer, new, cost)
 	if(new) then
 		new=tonumber(new)
 		if(old ~= new) then
-			if(GetPlayerMoney(thePlayer) >= cost) then --Если хватает денег
-				AddPlayerMoney(thePlayer, -tonumber(cost))
+			if(AddPlayerMoney(thePlayer, -tonumber(cost))) then
 				SetDatabaseAccount(thePlayer, "skin", new)
 				old=new
-			else
-				outputChatBox("Недостаточно средств!", thePlayer, 255,255,255,true)
 			end
 		end
 	end
@@ -13525,27 +13522,27 @@ addEventHandler("OpenTuning", getRootElement(), OpenTuning)
 
 function EatCluckin(thePlayer, thePed, name, count)
 	if(not isTimer(PData[thePlayer]["anitimer"])) then
-		local health = getElementHealth(thePlayer)
-		setElementHealth(thePlayer, health+40)
-		if(name == "The Well Stacked Pizza Co.") then
-			StartAnimation(thePlayer, "FOOD", "EAT_Pizza",false,false,false,false)
-			AddPlayerArmas(thePlayer, 2881)
-			PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2881)
-		elseif(name == "Burger Shot") then
-			StartAnimation(thePlayer, "FOOD", "EAT_Burger",false,false,false,false)
-			AddPlayerArmas(thePlayer, 2880)
-			PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2880)
-		elseif(name == "Cluckin' Bell") then
-			StartAnimation(thePlayer, "FOOD", "EAT_Chicken",false,false,false,false)
-			AddPlayerArmas(thePlayer, 2880)
-			PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2880)
-		elseif(name == "Chilli Dogs") then
-			StartAnimation(thePlayer, "FOOD", "EAT_Chicken",false,false,false,false)
-			AddPlayerArmas(thePlayer, 2880)
-			PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2880)
+		if(AddPlayerMoney(thePlayer, count)) then
+			local health = getElementHealth(thePlayer)
+			setElementHealth(thePlayer, health+40)
+			if(name == "The Well Stacked Pizza Co.") then
+				StartAnimation(thePlayer, "FOOD", "EAT_Pizza",false,false,false,false)
+				AddPlayerArmas(thePlayer, 2881)
+				PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2881)
+			elseif(name == "Burger Shot") then
+				StartAnimation(thePlayer, "FOOD", "EAT_Burger",false,false,false,false)
+				AddPlayerArmas(thePlayer, 2880)
+				PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2880)
+			elseif(name == "Cluckin' Bell") then
+				StartAnimation(thePlayer, "FOOD", "EAT_Chicken",false,false,false,false)
+				AddPlayerArmas(thePlayer, 2880)
+				PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2880)
+			elseif(name == "Chilli Dogs") then
+				StartAnimation(thePlayer, "FOOD", "EAT_Chicken",false,false,false,false)
+				AddPlayerArmas(thePlayer, 2880)
+				PData[thePlayer]["anitimer"] = setTimer(RemovePlayerArmas, 3000, 1, thePlayer, 2880)
+			end
 		end
-		
-		AddPlayerMoney(thePlayer, count)
 	end
 end
 addEvent("EatCluckin", true)
@@ -14367,15 +14364,21 @@ end
 
 
 function AddPlayerMoney(thePlayer, count, mission)
-	givePlayerMoney(thePlayer, count)
-	AddInventoryItem(thePlayer, "Деньги", count, 550, {})
-	if(count ~= 0) then
-		if(count < 0) then count = count-count-count end
-		if(mission) then
-			triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "", mission, count)
-			triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 6)
+	if(count < 0) then 
+		if(GetPlayerMoney(thePlayer)+count <= 0) then
+			local c = count+GetPlayerMoney(thePlayer)
+			ToolTip(thePlayer, "Необходимо еще "..COLOR["DOLLAR"]["HEX"].."$"..c-c-c)
+			return false
 		end
 	end
+	
+	givePlayerMoney(thePlayer, count)
+	AddInventoryItem(thePlayer, "Деньги", count, 550, {})
+	if(mission) then
+		triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "", mission, count)
+		triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 6)
+	end
+	return true
 end
 addEvent("SellItem", true)
 addEventHandler("SellItem", getRootElement(), AddPlayerMoney)
@@ -15393,13 +15396,11 @@ function bank(thePlayer, count, args)
 	local arg = fromJSON(args)
 	local count = tonumber(count)
 	if(count) then
-		if(GetPlayerMoney(thePlayer) >= count and count > 0) then
+		if(AddPlayerMoney(thePlayer, -count)) then
 			local bankMoney=GetDatabaseAccount(thePlayer, "bank")
 			SetDatabaseAccount(thePlayer, "bank", bankMoney+count)
-			AddPlayerMoney(thePlayer, -count)
+			
 			BankEvent(thePlayer, false, arg[1], true)
-		else
-			outputChatBox("У тебя нет столько денег!", thePlayer, 255, 255, 255, true)
 		end
 	end
 end
@@ -15436,11 +15437,8 @@ function givebizmoney(thePlayer, count, args)
 			local bizNode = xmlFindChild(BizNode, arg[1], 0)
 			local PlayerMoney = GetPlayerMoney(thePlayer)
 			if(xmlNodeGetAttribute(bizNode, "owner") == getPlayerName(thePlayer)) then
-				if(PlayerMoney-count >= 0) then
-					AddPlayerMoney(thePlayer, -count)
+				if(AddPlayerMoney(thePlayer, -count)) then
 					AddBizMoney(arg[1], count)
-				else
-					outputChatBox("Нет таких денег!", thePlayer, 255, 255, 255, true)
 				end
 			end
 		end
@@ -15475,13 +15473,14 @@ addEventHandler("removebizmoney", root, removebizmoney)
 
 
 
-function repairVeh()
-	local theVehicle = getPedOccupiedVehicle(source)
-	local vehh = getVehicleHandling(theVehicle)
-	local count =  (vehh["mass"]/5)+(1000-getElementHealth(theVehicle))
-	AddPlayerMoney(source, -count)
-	fixVehicle(theVehicle)
-	triggerClientEvent(source, "PlaySFXSoundEvent", source, 4)
+function repairVeh()	
+	if(AddPlayerMoney(source, -count)) then
+		local theVehicle = getPedOccupiedVehicle(source)
+		local vehh = getVehicleHandling(theVehicle)
+		local count =  (vehh["mass"]/5)+(1000-getElementHealth(theVehicle))
+		fixVehicle(theVehicle)
+		triggerClientEvent(source, "PlaySFXSoundEvent", source, 4)
+	end
 end
 addEvent("repairVeh", true)
 addEventHandler("repairVeh", root, repairVeh)
@@ -15594,23 +15593,24 @@ addEvent("VehicleUpgrade", true)
 addEventHandler("VehicleUpgrade", root, VehicleUpgrade)
 
 function BuyColor(c1,c2,c3,c4,money)
-	local theVehicle = getPedOccupiedVehicle(source)
-	setVehicleColor(theVehicle, c1, c2, c3, c4)
-	AddPlayerMoney(source, -money)
-	if(getElementData(theVehicle, "x")) then
-		local CarNodes = xmlNodeGetChildren(CarNode)
-		for i,node in ipairs(CarNodes) do
-			if(getElementData(theVehicle, "owner") == xmlNodeGetValue(node)) then
-				if(getElementData(theVehicle, "x") == xmlNodeGetAttribute(node, "vx") and getElementData(theVehicle, "y") == xmlNodeGetAttribute(node, "vy") and getElementData(theVehicle, "z") == xmlNodeGetAttribute(node, "vz")) then
-					xmlNodeSetAttribute(node, "vc1", c1)
-					xmlNodeSetAttribute(node, "vc2", c2)
-					xmlNodeSetAttribute(node, "vc3", c3)
-					xmlNodeSetAttribute(node, "vc4", c4)
+	if(AddPlayerMoney(source, -money)) then
+		local theVehicle = getPedOccupiedVehicle(source)
+		setVehicleColor(theVehicle, c1, c2, c3, c4)
+		if(getElementData(theVehicle, "x")) then
+			local CarNodes = xmlNodeGetChildren(CarNode)
+			for i,node in ipairs(CarNodes) do
+				if(getElementData(theVehicle, "owner") == xmlNodeGetValue(node)) then
+					if(getElementData(theVehicle, "x") == xmlNodeGetAttribute(node, "vx") and getElementData(theVehicle, "y") == xmlNodeGetAttribute(node, "vy") and getElementData(theVehicle, "z") == xmlNodeGetAttribute(node, "vz")) then
+						xmlNodeSetAttribute(node, "vc1", c1)
+						xmlNodeSetAttribute(node, "vc2", c2)
+						xmlNodeSetAttribute(node, "vc3", c3)
+						xmlNodeSetAttribute(node, "vc4", c4)
+					end
 				end
 			end
 		end
+		triggerClientEvent(source, "BuyUpgrade", source)
 	end
-	triggerClientEvent(source, "BuyUpgrade", source)
 end
 addEvent("BuyColor", true)
 addEventHandler("BuyColor", root, BuyColor)
