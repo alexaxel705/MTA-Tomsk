@@ -4898,7 +4898,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -2521.2, -624.5, 132.7, 0, 0 --
+		local x,y,z,i,d  = 946, -1315, 12.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -9975,7 +9975,6 @@ function worldtime()
 	for theKey,thePed in ipairs(SData["DriverBot"]) do
 		if(thePed) then
 			if(not isPedDead(thePed)) then
-				local theVehicle = getPedOccupiedVehicle(thePed)
 				if(SData["PlayerElementSync"][thePed]) then 
 					if(TimersAgain[thePed]) then
 						TimersAgain[thePed] = nil
@@ -10693,7 +10692,6 @@ function CreateDriverBot(vmodel, pedmodel, x,y,z,path,attacker)
 	
 	
 	setElementData(SData["DriverBot"][SData["DriverID"]], "attacker", getPlayerName(attacker))
-	setElementData(SData["DriverBot"][SData["DriverID"]], "TINF", "DriverBot"..SData["DriverID"])
 	setElementData(SData["DriverBot"][SData["DriverID"]], "SpawnBlock", "true", false)
 	setElementData(v, "destroy", "true", false)
 	warpPedIntoVehicle(SData["DriverBot"][SData["DriverID"]],v)
@@ -10850,7 +10848,6 @@ function CreateDynamicBot(node, id)
 		setElementData(SData["DriverBot"][SData["DriverID"]], "SpawnBlock", "true", false)
 		setElementData(SData["DriverBot"][SData["DriverID"]], "CurNode", toJSON({node, id}), false)
 		setElementData(SData["DriverBot"][SData["DriverID"]], "NextNode", toJSON({nextnode2, nextid2}), false)
-		setElementData(SData["DriverBot"][SData["DriverID"]], "TINF", "DriverBot"..SData["DriverID"])
 		--createBlipAttachedTo(SData["DriverBot"][SData["DriverID"]],0,2,255,0,0, 255,0, 99999)
 
 	else

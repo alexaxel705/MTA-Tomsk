@@ -2783,12 +2783,13 @@ function UpdateBot()
 
 				local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)
 				if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
+				if(nextrot > 45) then nextrot = 45 end
 				local maxspd = 40
 				if(getElementData(ped, "attacker")) then
 					maxspd = 80
 				end
 				
-				local limitspeed = maxspd-((maxspd-10)*(nextrot/180))
+				local limitspeed = maxspd-((maxspd-10)*(nextrot/45))
 				
 				
 				local vx, vy, vz = getElementVelocity(theVehicle)
@@ -4401,18 +4402,14 @@ function handleVehicleDamage(attacker, weapon, loss, x, y, z, tyre)
 			if(getElementType(occupant) == "thePlayer") then
 				if(getTeamName(getPlayerTeam(occupant)) == "Полиция" or getTeamName(getPlayerTeam(occupant)) == "Военные") then
 					triggerServerEvent("AddMeWanted", localPlayer)
+				elseif(getElementType(occupant) == "thePed") then
+					triggerServerEvent("PedDamage", localPlayer, occupant)
 				end
 			end
 		end
 		triggerServerEvent("FireVehicle", localPlayer, source, weapon)
     end
 
-	local occupant = getVehicleOccupant(source)
-	if(occupant) then
-		if(getElementType(occupant) == "ped") then
-			triggerServerEvent("PedDamage", localPlayer, occupant)
-		end
-	end
 end
 addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
 
