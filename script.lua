@@ -1392,6 +1392,8 @@ local WeaponModel = {
 	[44] = {368, nil},
 	[45] = {369, nil},
 	[46] = {371, nil},
+	[49] = {nil, nil}, 
+	[50] = {nil, nil}, 
 	[51] = {nil, nil},
 	[160] = {nil, 160}
 }
@@ -8784,7 +8786,15 @@ function PedDamage(ped, weapon, bodypart, loss)
 	end
 	if(bodypart == 9) then
 		setPedHeadless(ped, true)
-		killPed(ped, source, weapon, 9) 
+		killPed(ped, source, weapon, bodypart) 
+	end
+	
+	if(weapon == 49) then
+		if(loss) then
+			if(loss*11 > 100) then
+				killPed(ped, source, weapon, bodypart, true) 
+			end
+		end
 	end
 	local PedZone = getElementData(ped, "zone")
 	if(PedZone) then
@@ -10689,8 +10699,6 @@ function findRotation(x1,y1,x2,y2)
   if t < 0 then t = t + 360 end;
   return t;
 end
-
-
 
 
 
@@ -13327,12 +13335,13 @@ function MarkerHit(hitElement, Dimension)
 				local g = getElementData(source, "id")
 				setGarageOpen(g, false)
 				setTimer(function()
-					fixVehicle(theVehicle)
-					AddPlayerMoney(thePlayer, -100)
-					MissionCompleted(thePlayer, "$100", "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА")
-					setVehicleColor(theVehicle, math.random(0,127), math.random(0,127), math.random(0,127), math.random(0,127))
+					if(AddPlayerMoney(thePlayer, -100)) then
+						fixVehicle(theVehicle)
+						MissionCompleted(thePlayer, "$100", "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА")
+						setVehicleColor(theVehicle, math.random(0,127), math.random(0,127), math.random(0,127), math.random(0,127))
+						AddBizMoney("SPRAYSA", 100)
+					end
 					setGarageOpen(g, true)
-					AddBizMoney("SPRAYSA", 100)
 				end, 3000, 1)
 			elseif(getElementData(source, "type") == "GEnter") then
 				ToolTip(thePlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nзаехать в гараж")
@@ -13872,7 +13881,7 @@ function respawnExplodedVehicle()
 	if(killer) then 
 		killer = getPlayerFromName(killer) 
 	end
-	local weapon = getElementData(source, "weapon")
+	local weapon = getElementData(source, "weapon") 
 	
 	
 	local occupants = getVehicleOccupants(source) or {}
@@ -14058,6 +14067,15 @@ function playerDamage(attacker, weapon, bodypart, loss) --when a player is damag
 	if(bodypart == 9) then
 		setPedHeadless(source, true)
 		killPed(source, attacker, weapon, 9) 
+	end
+	
+	
+	if(weapon == 49) then
+		if(loss) then
+			if(loss*11 > 100) then
+				killPed(source, attacker, weapon, bodypart, true) 
+			end
+		end
 	end
 end
 addEventHandler("onPlayerDamage", getRootElement (), playerDamage)

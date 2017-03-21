@@ -2753,7 +2753,7 @@ function UpdateBot()
 			local brake = false
 			local path = false
 			local nextpath = false
-			
+			local mreverse = false
 			
 			if(getElementData(ped, "DynamicBot")) then
 				local arr = fromJSON(getElementData(ped, "DynamicBot"))
@@ -2786,7 +2786,8 @@ function UpdateBot()
 				end
 				if(not StreamData[ped]["UpdateRequest"]) then
 					path = {arr[5],arr[6],arr[7]}
-					local tmpx, tmpy, tmpz = getPointInFrontOfPoint(arr[5],arr[6],arr[7], 0, 10)
+					local tmpx, tmpy, tmpz = getPointInFrontOfPoint(arr[5],arr[6],arr[7], rz+90, 20) -- Создает плавность до того как станет известно положение следующей точки
+					
 					nextpath = {tmpx, tmpy, tmpz}
 					distance = getDistanceBetweenPoints2D(path[1], path[2], x,y)
 					if(distance < 4) then
@@ -2810,7 +2811,6 @@ function UpdateBot()
 				local vx, vy, vz = getElementVelocity(theVehicle)
 				local s = (vx^2 + vy^2 + vz^2)^(0.5)*156
 				
-				
 				-- Ближнее торможение аля пробки
 				local x2,y2,z2 = getPositionInFront(theVehicle, 6)
 				local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
@@ -2820,14 +2820,14 @@ function UpdateBot()
 					end
 				end
 				
-					
+				
+
 				if(brake) then
 					setPedAnalogControlState(ped, "accelerate", 0)
 					setPedAnalogControlState(ped, "brake_reverse", 0)
 					setPedControlState(ped, "handbrake", true)
 					setElementVelocity (theVehicle, 0,0,0)
 				else
-				
 					local rot = GetMarrot(findRotation(x,y,path[1], path[2]),rz)*3
 					if(rot > 60) then rot = 60
 					elseif(rot < -60) then rot = -60 end
@@ -2864,23 +2864,45 @@ function UpdateBot()
 						local vx, vy, vz = getElementVelocity(theVehicle)
 						local s = (vx^2 + vy^2 + vz^2)^(0.5)*156
 						
-						local rot = GetMarrot(findRotation(x,y,x2,y2),rz)*3
-						if(rot > 60) then rot = 60
-						elseif(rot < -60) then rot = -60 end
-						
-						if(rot > 0) then
-							setPedAnalogControlState(ped, "vehicle_right", (rot)/60)
-						else
-							setPedAnalogControlState(ped, "vehicle_left", -(rot)/60)
+						local rot = GetMarrot(findRotation(x,y,x2,y2),rz)
+						if(rot > 20) then 
+							if(rot > 90) then mreverse = true end
+							rot = 20 
+						elseif(rot < -20) then 
+							if(rot < -90) then mreverse = true end
+							rot = -20 
 						end
-					
-						setPedAnalogControlState(ped, "brake_reverse", 0)
-						setPedControlState(ped, "handbrake", false)
-						if(s < limitspeed) then 
-							setPedAnalogControlState(ped, "accelerate", 1-(s*1/limitspeed))
-						else
+						
+						
+						if(mreverse) then
+							setPedAnalogControlState(ped, "brake_reverse", 1-(s*1/limitspeed))
 							setPedAnalogControlState(ped, "accelerate", 0)
-							setPedAnalogControlState(ped, "brake_reverse", (s/limitspeed)-1)
+							setPedControlState(ped, "handbrake", false)
+							if(s > 10) then
+								setPedControlState(ped, "handbrake", true)
+							else
+								if(rot > 0) then
+									setPedAnalogControlState(ped, "vehicle_left", (rot)/20)
+								else
+									setPedAnalogControlState(ped, "vehicle_right", -(rot)/20)
+								end
+							end
+						else
+							
+							if(rot > 0) then
+								setPedAnalogControlState(ped, "vehicle_right", (rot)/20)
+							else
+								setPedAnalogControlState(ped, "vehicle_left", -(rot)/20)
+							end
+						
+							setPedAnalogControlState(ped, "brake_reverse", 0)
+							setPedControlState(ped, "handbrake", false)
+							if(s < limitspeed) then 
+								setPedAnalogControlState(ped, "accelerate", 1-(s*1/limitspeed))
+							else
+								setPedAnalogControlState(ped, "accelerate", 0)
+								setPedAnalogControlState(ped, "brake_reverse", (s/limitspeed)-1)
+							end
 						end
 					end
 				end
@@ -2961,14 +2983,14 @@ function UpdateBot()
 						SetControl(thePlayer, "handbrake", true)
 						setElementVelocity(theVehicle, 0,0,0)
 					else
-						local rot = GetMarrot(findRotation(x,y,MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2]),rz)*3
-						if(rot > 60) then rot = 60
-						elseif(rot < -60) then rot = -60 end
+						local rot = GetMarrot(findRotation(x,y,MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2]),rz)
+						if(rot > 20) then rot = 20
+						elseif(rot < -20) then rot = -20 end
 						
 						if(rot > 0) then
-							SetControl(thePlayer, "vehicle_right", (rot)/60, true)
+							SetControl(thePlayer, "vehicle_right", (rot)/20, true)
 						else
-							SetControl(thePlayer, "vehicle_left", -(rot)/60, true)
+							SetControl(thePlayer, "vehicle_left", -(rot)/20, true)
 						end
 					
 					
@@ -3495,9 +3517,6 @@ end
 
 
 
-
-
-
 function updateCamera()
 	for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
 		UpdateDisplayArmas(thePlayer)
@@ -3508,7 +3527,7 @@ function updateCamera()
 		local theVehicle = getPedOccupiedVehicle(thePed)
 		if(theVehicle) then -- Костыль 
 			local x,y,z = getElementPosition(theVehicle)
-			local material = GetGroundMaterial(x,y,z+5,z-10)
+			local material = GetGroundMaterial(x,y,z+15,z-50)
 
 			if(material == 1337) then
 				if(not isElementFrozen(theVehicle)) then
@@ -6395,7 +6414,6 @@ function PedDamage(attacker, weapon, bodypart, loss)
 			attacker = getVehicleOccupant(attacker)
 		end
 		
-		
 		if(attacker == localPlayer) then
 			triggerServerEvent("PedDamage", localPlayer, source, weapon, bodypart, loss)
 			for i, ped in pairs(getElementsByType("ped", getRootElement(), true)) do
@@ -7800,6 +7818,15 @@ function DrawPlayerMessage()
 				if(PData["WantedLevel"]) then
 					if(PData["WantedLevel"] ~= wanted) then
 						VideoMemory["HUD"]["Wanted"] = nil
+						if(wanted > 0) then
+							local rand = math.random(6)
+							if(rand == 1) then playSFX("script", 0, math.random(0, 163), false)
+							elseif(rand == 2) then playSFX("script", 1, math.random(0, 14), false)
+							elseif(rand == 3) then playSFX("script", 2, math.random(0, 4), false)
+							elseif(rand == 4) then playSFX("script", 3, math.random(0, 8), false)
+							elseif(rand == 5) then playSFX("script", 4, math.random(0, 13), false)
+							elseif(rand == 6) then playSFX("script", 5, math.random(0, 57), false) end
+						end
 					end
 				end
 				PData["WantedLevel"] = wanted
