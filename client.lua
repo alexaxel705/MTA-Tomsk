@@ -4399,10 +4399,10 @@ function handleVehicleDamage(attacker, weapon, loss, x, y, z, tyre)
 	if(attacker == localPlayer) then
 		local occupants = getVehicleOccupants(source) or {}
 		for seat, occupant in pairs(occupants) do
-			if(getElementType(occupant) == "thePlayer") then
+			if(getElementType(occupant) == "player") then
 				if(getTeamName(getPlayerTeam(occupant)) == "Полиция" or getTeamName(getPlayerTeam(occupant)) == "Военные") then
 					triggerServerEvent("AddMeWanted", localPlayer)
-				elseif(getElementType(occupant) == "thePed") then
+				elseif(getElementType(occupant) == "ped") then
 					triggerServerEvent("PedDamage", localPlayer, occupant)
 				end
 			end
