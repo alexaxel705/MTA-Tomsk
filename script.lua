@@ -14377,7 +14377,7 @@ end
 
 function AddPlayerMoney(thePlayer, count, mission)
 	if(count < 0) then 
-		if(GetPlayerMoney(thePlayer)+count <= 0) then
+		if(GetPlayerMoney(thePlayer)+count < 0) then
 			local c = count+GetPlayerMoney(thePlayer)
 			ToolTip(thePlayer, "Необходимо еще "..COLOR["DOLLAR"]["HEX"].."$"..c-c-c)
 			return false
