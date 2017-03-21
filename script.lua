@@ -15428,21 +15428,20 @@ addEventHandler("withdraw", root, withdraw)
 
 
 
-
-
-
 function givebizmoney(thePlayer, count, args)
 	local arg = fromJSON(args)
 	local count = tonumber(count)
 	if(count) then
-		local bizNode = xmlFindChild(BizNode, arg[1], 0)
-		local PlayerMoney = GetPlayerMoney(thePlayer)
-		if(xmlNodeGetAttribute(bizNode, "owner") == getPlayerName(thePlayer)) then
-			if(PlayerMoney-count >= 0) then
-				AddPlayerMoney(thePlayer, -count)
-				AddBizMoney(arg[1], count)
-			else
-				outputChatBox("Нет таких денег!", thePlayer, 255, 255, 255, true)
+		if(count > 0) then
+			local bizNode = xmlFindChild(BizNode, arg[1], 0)
+			local PlayerMoney = GetPlayerMoney(thePlayer)
+			if(xmlNodeGetAttribute(bizNode, "owner") == getPlayerName(thePlayer)) then
+				if(PlayerMoney-count >= 0) then
+					AddPlayerMoney(thePlayer, -count)
+					AddBizMoney(arg[1], count)
+				else
+					outputChatBox("Нет таких денег!", thePlayer, 255, 255, 255, true)
+				end
 			end
 		end
 	end
@@ -15457,14 +15456,16 @@ function removebizmoney(thePlayer, count, args)
 	local arg = fromJSON(args)
 	local count = tonumber(count)
 	if(count) then
-		local bizNode = xmlFindChild(BizNode, arg[1], 0)
-		local BizMoney = tonumber(xmlNodeGetAttribute(bizNode, "money"))
-		if(xmlNodeGetAttribute(bizNode, "owner") == getPlayerName(thePlayer)) then
-			if(BizMoney-count >= 0) then
-				AddPlayerMoney(thePlayer, count)
-				AddBizMoney(arg[1], -count)
-			else
-				outputChatBox("Нет таких денег!", thePlayer, 255, 255, 255, true)
+		if(count > 0) then
+			local bizNode = xmlFindChild(BizNode, arg[1], 0)
+			local BizMoney = tonumber(xmlNodeGetAttribute(bizNode, "money"))
+			if(xmlNodeGetAttribute(bizNode, "owner") == getPlayerName(thePlayer)) then
+				if(BizMoney-count >= 0) then
+					AddPlayerMoney(thePlayer, count)
+					AddBizMoney(arg[1], -count)
+				else
+					outputChatBox("Нет таких денег!", thePlayer, 255, 255, 255, true)
+				end
 			end
 		end
 	end
