@@ -6911,7 +6911,7 @@ function Drop(item, x,y,z,i,d)
 		pic = createPickup(x, y, z, 3, ItemsNamesArr[item[1]], 0)
 	else
 		if(item[1]) then
-			pic = createPickup(x, y, z, 3, 2037)
+			pic = createPickup(x, y, z, 3, 2037, 0)
 		end
 	end
 	setElementData(pic, "arr", toJSON(item))

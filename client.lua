@@ -2745,20 +2745,20 @@ local ActualBones = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33,
 
 local FireTimer = {}
 function UpdateBot()
-	for _,ped in pairs(getElementsByType("ped", getRootElement(), true)) do
-		local theVehicle = getPedOccupiedVehicle(ped)
+	for _,thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
+		local theVehicle = getPedOccupiedVehicle(thePed)
+		local attacker = GetElementAttacker(thePed)
 		if(theVehicle) then
 			local x,y,z = getElementPosition(theVehicle)
 			local rx,ry,rz = getElementRotation(theVehicle)
-			local attacker = getElementData(ped, "attacker")
 			local brake = false
 			local path = false
 			local nextpath = false
 			local maxspd = 40
 			local mreverse = false
 			
-			if(getElementData(ped, "DynamicBot")) then
-				local arr = fromJSON(getElementData(ped, "DynamicBot"))
+			if(getElementData(thePed, "DynamicBot")) then
+				local arr = fromJSON(getElementData(thePed, "DynamicBot"))
 				path = {arr[1],arr[2],arr[3]}
 
 				nextpath = {arr[5],arr[6],arr[7]}
@@ -2780,13 +2780,13 @@ function UpdateBot()
 					end
 					
 					if(brake == false) then -- Если не ждет на светофоре
-						if(StreamData[ped]["UpdateRequest"]) then
-							StreamData[ped]["UpdateRequest"] = false
-							triggerServerEvent("SetNextDynamicNode", localPlayer, ped)
+						if(StreamData[thePed]["UpdateRequest"]) then
+							StreamData[thePed]["UpdateRequest"] = false
+							triggerServerEvent("SetNextDynamicNode", localPlayer, thePed)
 						end
 					end
 				end
-				if(not StreamData[ped]["UpdateRequest"]) then
+				if(not StreamData[thePed]["UpdateRequest"]) then
 					path = {arr[5],arr[6],arr[7]}
 					local tmpx, tmpy, tmpz = getPointInFrontOfPoint(arr[5],arr[6],arr[7], rz+90, 20) -- Создает плавность до того как станет известно положение следующей точки
 					
@@ -2809,13 +2809,10 @@ function UpdateBot()
 				
 			else
 				if(attacker) then
-					attacker = getPlayerFromName(attacker)
-					if(attacker) then
-						local x2,y2,z2 = getElementPosition(attacker)
-						path = {x2,y2,z2}
-						local tmpx, tmpy, tmpz = getPointInFrontOfPoint(x2,y2,z2, rz+90, 20) -- Создает плавность до того как станет известно положение следующей точки
-						nextpath = {tmpx, tmpy, tmpz}
-					end
+					local x2,y2,z2 = getElementPosition(attacker)
+					path = {x2,y2,z2}
+					local tmpx, tmpy, tmpz = getPointInFrontOfPoint(x2,y2,z2, rz+90, 20) -- Создает плавность до того как станет известно положение следующей точки
+					nextpath = {tmpx, tmpy, tmpz}
 				end
 			end
 			
@@ -2824,6 +2821,7 @@ function UpdateBot()
 			local s = (vx^2 + vy^2 + vz^2)^(0.5)*156
 			
 
+			
 			local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)
 			if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
 			if(nextrot > 90) then nextrot = 90 end
@@ -2835,9 +2833,9 @@ function UpdateBot()
 			
 			
 			if(brake) then
-				setPedAnalogControlState(ped, "accelerate", 0)
-				setPedAnalogControlState(ped, "brake_reverse", 0)
-				setPedControlState(ped, "handbrake", true)
+				setPedAnalogControlState(thePed, "accelerate", 0)
+				setPedAnalogControlState(thePed, "brake_reverse", 0)
+				setPedControlState(thePed, "handbrake", true)
 				setElementVelocity (theVehicle, 0,0,0)
 			else
 				local rot = GetMarrot(findRotation(x,y,path[1], path[2]),rz)
@@ -2850,64 +2848,61 @@ function UpdateBot()
 				end
 
 				if(mreverse) then
-					setPedAnalogControlState(ped, "brake_reverse", 1-(s*1/limitspeed))
-					setPedAnalogControlState(ped, "accelerate", 0)
-					setPedControlState(ped, "handbrake", false)
+					setPedAnalogControlState(thePed, "brake_reverse", 1-(s*1/limitspeed))
+					setPedAnalogControlState(thePed, "accelerate", 0)
+					setPedControlState(thePed, "handbrake", false)
 					if(s > 10) then
-						setPedControlState(ped, "handbrake", true)
+						setPedControlState(thePed, "handbrake", true)
 					else
 						if(rot > 0) then
-							setPedAnalogControlState(ped, "vehicle_left", (rot)/20)
+							setPedAnalogControlState(thePed, "vehicle_left", (rot)/20)
 						else
-							setPedAnalogControlState(ped, "vehicle_right", -(rot)/20)
+							setPedAnalogControlState(thePed, "vehicle_right", -(rot)/20)
 						end
 					end
 				else
 					if(rot > 0) then
-						setPedAnalogControlState(ped, "vehicle_right", (rot)/20)
+						setPedAnalogControlState(thePed, "vehicle_right", (rot)/20)
 					else
-						setPedAnalogControlState(ped, "vehicle_left", -(rot)/20)
+						setPedAnalogControlState(thePed, "vehicle_left", -(rot)/20)
 					end
 				
-					setPedAnalogControlState(ped, "brake_reverse", 0)
-					setPedControlState(ped, "handbrake", false)
+					setPedAnalogControlState(thePed, "brake_reverse", 0)
+					setPedControlState(thePed, "handbrake", false)
 					if(s < limitspeed) then 
-						setPedAnalogControlState(ped, "accelerate", 1-(s*1/limitspeed))
+						setPedAnalogControlState(thePed, "accelerate", 1-(s*1/limitspeed))
 					else
-						setPedAnalogControlState(ped, "accelerate", 0)
-						setPedAnalogControlState(ped, "brake_reverse", (s/limitspeed)-1)
+						setPedAnalogControlState(thePed, "accelerate", 0)
+						setPedAnalogControlState(thePed, "brake_reverse", (s/limitspeed)-1)
 					end
 				end
 			end
 		else
-			local zone = getElementData(ped, "zone")
-			local dialogrz = getElementData(ped, "dialogrz") --Костыль
+			local zone = getElementData(thePed, "zone")
+			local dialogrz = getElementData(thePed, "dialogrz") --Костыль
 			if(zone and not dialogrz) then
-				if(isElementSyncer(ped)) then
-					local attacker = GetElementAttacker(ped)
+				if(isElementSyncer(thePed)) then
 					if(attacker) then
-						local x,y,z = getPedBonePosition(attacker, ActualBones[math.random(#ActualBones)])
-						setPedAimTarget(ped,x,y,z)
-						setPedControlState(ped, "aim_weapon", true)
-						MovePlayerTo[ped]={x,y,z,0,"fast"}
+						local x,y,z = getPedBonePosition(GetElementAttacker(thePed), ActualBones[math.random(#ActualBones)])
+						MovePlayerTo[thePed]={x,y,z,0,"fast"}
 					else
-						local x,y,z = getElementPosition(ped)
-						local x2,y2,z2 = getPositionInFront(ped, 2)
+						local x,y,z = getElementPosition(thePed)
+						local x2,y2,z2 = getPositionInFront(thePed, 2)
 						local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z,x2,y2,z2, false,true)
 						if(hitElement) then
 							if(getElementType(hitElement) == "vehicle") then
 								if(getVehicleOccupant(hitElement)) then
 									local rand = math.random(1,2)
 									if(rand == 1) then
-										StartAnimation(ped, "ped", "fucku", 1500, false, true, true, false)
+										StartAnimation(thePed, "ped", "fucku", 1500, false, true, true, false)
 									elseif(rand == 2) then
-										StartAnimation(ped, "ped", "ev_step", 1500, false, true, true, false)
+										StartAnimation(thePed, "ped", "ev_step", 1500, false, true, true, false)
 									end
 								end
 							end
 						end
 						if(zone ~= "Unknown Bar") then
-							MovePlayerTo[ped] = FoundBotPath(ped, zone) -- обычное поведение
+							MovePlayerTo[thePed] = FoundBotPath(thePed, zone) -- обычное поведение
 						end
 					end
 				end
@@ -2916,7 +2911,7 @@ function UpdateBot()
 	end
 	
 	
-	for thePlayer, k in pairs(MovePlayerTo) do
+	for thePlayer, _ in pairs(MovePlayerTo) do
 		if(isElement(thePlayer)) then
 			if(not isPedDead(thePlayer)) then
 				local theVehicle = getPedOccupiedVehicle(thePlayer)
@@ -3012,10 +3007,14 @@ function UpdateBot()
 										SetControl(thePlayer, "sprint", false)
 										SetControl(thePlayer, "walk", false)
 										if(not isTimer(FireTimer[thePlayer])) then
+											setPedControlState(thePlayer, "aim_weapon", true)
+											setPedAimTarget(thePlayer,MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2],MovePlayerTo[thePlayer][3])
+											
 											SetControl(thePlayer, "fire", true)
 											
 											FireTimer[thePlayer] = setTimer(function(thePlayer)
 												SetControl(thePlayer, "fire", false)
+												setPedAimTarget(thePlayer,0,0,0) -- Костыль
 											end, firespeed, 1, thePlayer)
 										end
 									end
