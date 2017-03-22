@@ -74,6 +74,7 @@ function setCameraOnPlayerJoin()
 		['Cops'] = {}, -- Хранит ботов, полицейских которые учавствуют в погоне за игроком
 		['CONTROLS'] = {
 			['fire'] = {},
+			['action'] = {}, 
 			['vehicle_fire'] = {},
 			['vehicle_secondary_fire'] = {},
 			['jump'] = {},
@@ -4892,7 +4893,7 @@ function tp(thePlayer, command, h)
 		for a, b in pairs (Interiors) do
 			if(count == cs) then
 				int = Interiors[a]
-				outputChatBox(a)
+				outputChatBox(a, thePlayer)
 			end
 			count=count+1
 		end
@@ -5470,8 +5471,9 @@ function laltEnteredPickup(thePlayer)
 									if(VehicleSystem[model][8] <= getElementData(theVehicle, "Fuel")+0.5) then
 										setElementData(theVehicle, "Fuel", VehicleSystem[model][8])
 									else
-										setElementData(theVehicle, "Fuel", getElementData(theVehicle, "Fuel")+0.5)
-										AddPlayerMoney(thePlayer, -2)
+										if(AddPlayerMoney(thePlayer, -2)) then
+											setElementData(theVehicle, "Fuel", getElementData(theVehicle, "Fuel")+0.5)
+										end
 									end
 								end, 100, 0, thePlayer, theVehicle)
 							end
@@ -6787,7 +6789,7 @@ end
 
 
 function useinvweapon(thePlayer, slot)
-	SetControls(thePlayer, "ammo", {["fire"] = false, ["vehicle_fire"] = false, ["vehicle_secondary_fire"] = false})
+	SetControls(thePlayer, "ammo", {["fire"] = false, ["action"] = false, ["vehicle_fire"] = false, ["vehicle_secondary_fire"] = false})
 	if(slot) then PData[thePlayer]["WeaponSlot"]=slot end
 	if(not PData[thePlayer]["WeaponSlot"]) then PData[thePlayer]["WeaponSlot"] = 1 end
 	
@@ -6833,7 +6835,7 @@ function useinvweapon(thePlayer, slot)
 					end
 				end
 				if ammo == 0 then
-					SetControls(thePlayer, "ammo", {["fire"] = true, ["vehicle_fire"] = true, ["vehicle_secondary_fire"] = true}) 
+					SetControls(thePlayer, "ammo", {["fire"] = true, ['action'] = true, ["vehicle_fire"] = true, ["vehicle_secondary_fire"] = true}) 
 				end
 			end
 			if(ammo == 0) then
@@ -6909,7 +6911,7 @@ function Drop(item, x,y,z,i,d)
 		pic = createPickup(x, y, z, 3, ItemsNamesArr[item[1]], 0)
 	else
 		if(item[1]) then
-			pic = createPickup(x, y, z, 3, 2037, 0)
+			pic = createPickup(x, y, z, 3, 2037)
 		end
 	end
 	setElementData(pic, "arr", toJSON(item))
@@ -7306,6 +7308,7 @@ end
 
 
 function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
+	local x,y,z = getElementPosition(source)
 	if(getElementData(source, "CurNode")) then
 		local dat = fromJSON(getElementData(source, "CurNode"))
 		PathNodes[dat[1]][dat[2]][1] = true
@@ -7326,7 +7329,6 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 			if(WeaponModel[dropWeapon][1]) then
 				local weaponName = FoundWName(dropWeapon)
 				if(weaponName) then
-					local x,y,z = getElementPosition(source)
 					local pic = createPickup(x+((math.random(-1000,1000))/1000), y+((math.random(-1000,1000)/1000)), z, 2, dropWeapon,0, 0)
 						
 					if(WeaponAmmo[weaponName]) then
@@ -7350,7 +7352,6 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 					WantedLevel(killer, 1)
 					local randmoney = math.random(-4,8)
 					local amount = math.random(1000)
-					local x,y,z = getElementPosition(source)
 					if(randmoney > 0) then
 						for i = 1, randmoney do
 							local p = createPickup(x+((math.random(-1000,1000))/1000), y+((math.random(-1000,1000)/1000)), z, 3, 1212)
@@ -10001,7 +10002,7 @@ local Events = {
 
 function worldtime()
 	for theKey,thePed in ipairs(SData["DriverBot"]) do
-		if(thePed) then
+		if(isElement(thePed)) then
 			if(not isPedDead(thePed)) then
 				if(SData["PlayerElementSync"][thePed]) then 
 					if(TimersAgain[thePed]) then
@@ -10717,6 +10718,7 @@ function CreateDriverBot(vmodel, pedmodel, x,y,z,path,attacker)
 	
 	setElementData(SData["DriverBot"][SData["DriverID"]], "attacker", getPlayerName(attacker))
 	setElementData(SData["DriverBot"][SData["DriverID"]], "SpawnBlock", "true", false)
+	setElementData(SData["DriverBot"][SData["DriverID"]], "DestroyAfterStreamOut", "true", false)
 	setElementData(SData["DriverBot"][SData["DriverID"]], "team", getTeamName(SkinData[pedmodel][2]))
 	setElementData(v, "destroy", "true", false)
 	warpPedIntoVehicle(SData["DriverBot"][SData["DriverID"]],v)
@@ -10966,6 +10968,15 @@ function PlayerElementSync(thePlayer, obj, state)
 							destroyElement(theVehicle)
 						end
 					end
+				end
+				
+				
+				if(getElementData(obj, "DestroyAfterStreamOut")) then
+					local theVehicle = getPedOccupiedVehicle(obj)
+					if(theVehicle) then
+						destroyElement(theVehicle)
+					end
+					destroyElement(obj)
 				end
 			end
 		end
@@ -12878,12 +12889,11 @@ local PrisonVariable = {
 	["UNDERWATER"] = "AREA51",
 	["Unknown"] = "AREA51"
 }
-function player_Wasted(ammo, killer, weapon, bodypart)	
+function player_Wasted(ammo, killer, weapon, bodypart, stealth)	
 	if(PData[source]["RobPed"]) then
 		StopRob(thePlayer)
 	end
 	UnBindAllKey(source)
-	
 	SetControls(source, "crack", {["fire"] = false, ["jump"] = false})
 	AddSkill(source, 22, -7)
 	if(getPedStat(source, 24) > 5) then AddSkill(source, 24, -5) end
@@ -12898,8 +12908,9 @@ function player_Wasted(ammo, killer, weapon, bodypart)
 				end
 			
 				local KTeam = getElementData(killer, "team")
-				local PTeam = getTeamName(getPlayerTeam(source))				
-				if(PTeam ~= "Уголовники" and KTeam == "Полиция" or KTeam == "ФБР") then
+				local PTeam = getTeamName(getPlayerTeam(source))	
+			
+				if(PTeam ~= "Уголовники" and KTeam == "Полиция" or KTeam == "ФБР" or KTeam == "Военные") then
 					if(GetDatabaseAccount(source, "wanted") > 0) then
 						if(GetPlayerMoney(source) >= GetDatabaseAccount(source, "wanted")*100) then
 							AddPlayerMoney(source, -(GetDatabaseAccount(source, "wanted")*100))
@@ -12917,7 +12928,7 @@ function player_Wasted(ammo, killer, weapon, bodypart)
 				local KTeam = getTeamName(getPlayerTeam(killer))
 				
 								
-				if(PTeam ~= "Уголовники" and KTeam == "Полиция" or KTeam == "ФБР") then
+				if(PTeam ~= "Уголовники" and KTeam == "Полиция" or KTeam == "ФБР" or KTeam == "Военные") then
 					if(GetDatabaseAccount(source, "wanted") > 0) then
 						Respect(killer, "civilian", 1)
 						Respect(killer, "police", 1)
@@ -14073,7 +14084,7 @@ function playerDamage(attacker, weapon, bodypart, loss) --when a player is damag
 	if(weapon == 49) then
 		if(loss) then
 			if(loss*11 > 100) then
-				killPed(source, attacker, weapon, bodypart, true) 
+				killPed(source, getVehicleOccupant(attacker), weapon, bodypart, true) 
 			end
 		end
 	end
@@ -15504,10 +15515,10 @@ addEventHandler("removebizmoney", root, removebizmoney)
 
 
 function repairVeh()	
+	local theVehicle = getPedOccupiedVehicle(source)
+	local vehh = getVehicleHandling(theVehicle)
+	local count =  (vehh["mass"]/5)+(1000-getElementHealth(theVehicle))
 	if(AddPlayerMoney(source, -count)) then
-		local theVehicle = getPedOccupiedVehicle(source)
-		local vehh = getVehicleHandling(theVehicle)
-		local count =  (vehh["mass"]/5)+(1000-getElementHealth(theVehicle))
 		fixVehicle(theVehicle)
 		triggerClientEvent(source, "PlaySFXSoundEvent", source, 4)
 	end

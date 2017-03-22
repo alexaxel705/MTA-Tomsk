@@ -2885,11 +2885,10 @@ function UpdateBot()
 			if(zone and not dialogrz) then
 				if(isElementSyncer(ped)) then
 					local attacker = GetElementAttacker(ped)
-					local move = false
 					if(attacker) then
 						local x,y,z = getPedBonePosition(attacker, ActualBones[math.random(#ActualBones)])
-						setPedControlState(ped, "aim_weapon", true)
 						setPedAimTarget(ped,x,y,z)
+						setPedControlState(ped, "aim_weapon", true)
 						MovePlayerTo[ped]={x,y,z,0,"fast"}
 					else
 						local x,y,z = getElementPosition(ped)
@@ -4407,7 +4406,9 @@ function handleVehicleDamage(attacker, weapon, loss, x, y, z, tyre)
 		local occupants = getVehicleOccupants(source) or {}
 		for seat, occupant in pairs(occupants) do
 			if(getElementType(occupant) == "player") then
-				if(getTeamName(getPlayerTeam(occupant)) == "Полиция" or getTeamName(getPlayerTeam(occupant)) == "Военные") then
+				if(getTeamName(getPlayerTeam(occupant)) == "Полиция" 
+				or getTeamName(getPlayerTeam(occupant)) == "Военные"
+				or getTeamName(getPlayerTeam(occupant)) == "ФБР") then
 					triggerServerEvent("AddMeWanted", localPlayer)
 				elseif(getElementType(occupant) == "ped") then
 					triggerServerEvent("PedDamage", localPlayer, occupant)
@@ -7787,15 +7788,6 @@ function DrawPlayerMessage()
 				if(PData["WantedLevel"]) then
 					if(PData["WantedLevel"] ~= wanted) then
 						VideoMemory["HUD"]["Wanted"] = nil
-						if(wanted > 0) then
-							local rand = math.random(6)
-							if(rand == 1) then playSFX("script", 0, math.random(0, 163), false)
-							elseif(rand == 2) then playSFX("script", 1, math.random(0, 14), false)
-							elseif(rand == 3) then playSFX("script", 2, math.random(0, 4), false)
-							elseif(rand == 4) then playSFX("script", 3, math.random(0, 8), false)
-							elseif(rand == 5) then playSFX("script", 4, math.random(0, 13), false)
-							elseif(rand == 6) then playSFX("script", 5, math.random(0, 57), false) end
-						end
 					end
 				end
 				PData["WantedLevel"] = wanted
@@ -8288,6 +8280,15 @@ end
 
 function DrawWanted(level)
 	if(not VideoMemory["HUD"]["Wanted"]) then
+		if(level > 0) then
+			local rand = math.random(6)
+			if(rand == 1) then playSFX("script", 0, math.random(0, 163), false)
+			elseif(rand == 2) then playSFX("script", 1, math.random(0, 14), false)
+			elseif(rand == 3) then playSFX("script", 2, math.random(0, 4), false)
+			elseif(rand == 4) then playSFX("script", 3, math.random(0, 8), false)
+			elseif(rand == 5) then playSFX("script", 4, math.random(0, 13), false)
+			elseif(rand == 6) then playSFX("script", 5, math.random(0, 57), false) end
+		end
 		VideoMemory["HUD"]["Wanted"] = dxCreateRenderTarget(dxGetTextWidth("★★★★★★", NewScale*2, "pricedown", false), dxGetFontHeight(NewScale*2, "pricedown"), true)
 		dxSetRenderTarget(VideoMemory["HUD"]["Wanted"], true)
 		dxSetBlendMode("modulate_add")
