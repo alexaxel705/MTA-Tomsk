@@ -4901,7 +4901,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -1996, 862, 45.4, 0, 0 --
+		local x,y,z,i,d  = 1964, -1815, 12.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7201,6 +7201,7 @@ function preLoad(name)
 		local randrot = math.random(1,2)
 		if(randrot == 1) then rot = rot+180 end
 		CreateBot(randx,randy,randz,rot,nil,nil,availzones[rand])
+		table.remove(availzones, rand)
 	end
 	
 	setTimer(worldtime, 1000, 0)
@@ -8744,9 +8745,11 @@ addEventHandler("PedDialog", root, PedDialog)
 
 
 function PedDamage(ped, weapon, bodypart, loss)
+	local theVehicle = getPedOccupiedVehicle(ped)
 	local Team = getElementData(ped, "team")
 	if(source and weapon) then
 		if(getElementType(source) == "player") then
+			setElementData(ped, "attacker", getPlayerName(source))
 			if(weapon >= 0 and weapon <=9) then
 				AddSkill(source, 177)
 				if(weapon == 6) then
@@ -8769,19 +8772,20 @@ function PedDamage(ped, weapon, bodypart, loss)
 	
 	
 	if(Team) then
-		if(SkinData[getElementModel(ped)][4]) then
-			setElementData(ped, "attacker", getPlayerName(source))
-			giveWeapon(ped, SkinData[getElementModel(ped)][4], 9999, true)
-			setElementData(ped, "sprint", "true")
-		else
-			local rand = math.random(1,3)
-			if(rand == 1) then
-				StartAnimation(ped, "ped", "cower",1000,true,true,true)
-			elseif(rand == 2) then
+		if(not theVehicle) then
+			if(SkinData[getElementModel(ped)][4]) then
+				giveWeapon(ped, SkinData[getElementModel(ped)][4], 9999, true)
 				setElementData(ped, "sprint", "true")
-			elseif(rand == 3) then
-				setElementData(ped, "attacker", getPlayerName(source))
-				setElementData(ped, "sprint", "true")
+			else
+				local rand = math.random(1,3)
+				if(rand == 1) then
+					StartAnimation(ped, "ped", "cower",1000,true,true,true)
+				elseif(rand == 2) then
+					setElementData(ped, "sprint", "true")
+				elseif(rand == 3) then
+					setElementData(ped, "attacker", nil)
+					setElementData(ped, "sprint", "true")
+				end
 			end
 		end
 	end
@@ -13892,7 +13896,7 @@ function respawnExplodedVehicle()
 	if(killer) then 
 		killer = getPlayerFromName(killer) 
 	end
-	local weapon = getElementData(source, "weapon") 
+	local weapon = getElementData(source, "weapon") or 1337
 	
 	
 	local occupants = getVehicleOccupants(source) or {}

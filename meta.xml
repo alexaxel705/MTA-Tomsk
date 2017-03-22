@@ -4,6 +4,7 @@
 	<min_mta_version client="1.5" server="1.5" />
    	<script src="mapEditorScriptingExtension_s.lua" type="server"></script>
     <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
+	<script src="PedNode.lua" type="server"/>
 	<script src="VehicleNode.lua" type="server"/>
 	<script src="script.lua" />
 	<export function='BurnChatMSG' type="server" http='true' />

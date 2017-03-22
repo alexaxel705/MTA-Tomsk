@@ -2806,7 +2806,6 @@ function UpdateBot()
 						brake = true
 					end
 				end
-				
 			else
 				if(attacker) then
 					local x2,y2,z2 = getElementPosition(attacker)
@@ -2816,64 +2815,64 @@ function UpdateBot()
 				end
 			end
 			
-			
-			local vx, vy, vz = getElementVelocity(theVehicle)
-			local s = (vx^2 + vy^2 + vz^2)^(0.5)*156
-			
+			if(path) then
+				local vx, vy, vz = getElementVelocity(theVehicle)
+				local s = (vx^2 + vy^2 + vz^2)^(0.5)*156
 
-			
-			local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)
-			if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
-			if(nextrot > 90) then nextrot = 90 end
-			
-			
-			if(attacker) then maxspd = 140 end
-			local limitspeed = maxspd-((maxspd-10)*(nextrot/90))
+				
+				local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)
+				if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
+				if(nextrot > 90) then nextrot = 90 end
+				
+				
+				if(attacker) then maxspd = 140 end
+				local limitspeed = maxspd-((maxspd-10)*(nextrot/90))
 
-			
-			
-			if(brake) then
-				setPedAnalogControlState(thePed, "accelerate", 0)
-				setPedAnalogControlState(thePed, "brake_reverse", 0)
-				setPedControlState(thePed, "handbrake", true)
-				setElementVelocity (theVehicle, 0,0,0)
-			else
-				local rot = GetMarrot(findRotation(x,y,path[1], path[2]),rz)
-				if(rot > 80) then 
-					if(rot > 100) then mreverse = true end
-					rot = 20 
-				elseif(rot < -20) then 
-					if(rot < -80) then mreverse = true end
-					rot = -20 
-				end
-
-				if(mreverse) then
-					setPedAnalogControlState(thePed, "brake_reverse", 1-(s*1/limitspeed))
+				
+				
+				if(brake) then
 					setPedAnalogControlState(thePed, "accelerate", 0)
-					setPedControlState(thePed, "handbrake", false)
-					if(s > 10) then
-						setPedControlState(thePed, "handbrake", true)
+					setPedAnalogControlState(thePed, "brake_reverse", 0)
+					setPedControlState(thePed, "handbrake", true)
+					setElementVelocity (theVehicle, 0,0,0)
+				else
+					local rot = GetMarrot(findRotation(x,y,path[1], path[2]),rz)
+					if(rot > 80) then 
+						if(rot > 100) then mreverse = true end
+						rot = 20 
+					elseif(rot < -20) then 
+						if(rot < -80) then mreverse = true end
+						rot = -20 
+					end
+
+					if(mreverse) then
+						setPedAnalogControlState(thePed, "brake_reverse", 1-(s*1/limitspeed))
+						setPedAnalogControlState(thePed, "accelerate", 0)
+						setPedControlState(thePed, "handbrake", false)
+						if(s > 10) then
+							setPedControlState(thePed, "handbrake", true)
+						else
+							if(rot > 0) then
+								setPedAnalogControlState(thePed, "vehicle_left", (rot)/20)
+							else
+								setPedAnalogControlState(thePed, "vehicle_right", -(rot)/20)
+							end
+						end
 					else
 						if(rot > 0) then
-							setPedAnalogControlState(thePed, "vehicle_left", (rot)/20)
+							setPedAnalogControlState(thePed, "vehicle_right", (rot)/20)
 						else
-							setPedAnalogControlState(thePed, "vehicle_right", -(rot)/20)
+							setPedAnalogControlState(thePed, "vehicle_left", -(rot)/20)
 						end
-					end
-				else
-					if(rot > 0) then
-						setPedAnalogControlState(thePed, "vehicle_right", (rot)/20)
-					else
-						setPedAnalogControlState(thePed, "vehicle_left", -(rot)/20)
-					end
-				
-					setPedAnalogControlState(thePed, "brake_reverse", 0)
-					setPedControlState(thePed, "handbrake", false)
-					if(s < limitspeed) then 
-						setPedAnalogControlState(thePed, "accelerate", 1-(s*1/limitspeed))
-					else
-						setPedAnalogControlState(thePed, "accelerate", 0)
-						setPedAnalogControlState(thePed, "brake_reverse", (s/limitspeed)-1)
+					
+						setPedAnalogControlState(thePed, "brake_reverse", 0)
+						setPedControlState(thePed, "handbrake", false)
+						if(s < limitspeed) then 
+							setPedAnalogControlState(thePed, "accelerate", 1-(s*1/limitspeed))
+						else
+							setPedAnalogControlState(thePed, "accelerate", 0)
+							setPedAnalogControlState(thePed, "brake_reverse", (s/limitspeed)-1)
+						end
 					end
 				end
 			end
@@ -4409,9 +4408,9 @@ function handleVehicleDamage(attacker, weapon, loss, x, y, z, tyre)
 				or getTeamName(getPlayerTeam(occupant)) == "Военные"
 				or getTeamName(getPlayerTeam(occupant)) == "ФБР") then
 					triggerServerEvent("AddMeWanted", localPlayer)
-				elseif(getElementType(occupant) == "ped") then
-					triggerServerEvent("PedDamage", localPlayer, occupant)
 				end
+			elseif(getElementType(occupant) == "ped") then
+				triggerServerEvent("PedDamage", localPlayer, occupant, weapon, 0, 0)
 			end
 		end
 		triggerServerEvent("FireVehicle", localPlayer, source, weapon)
@@ -6294,8 +6293,7 @@ end
 
 
 function UseInventoryItem(name, i)
-	local text = PInv[name][i][1]
-	if(not text) then text = "Кулак" end
+	local text = PInv[name][i][1] or "Кулак"
 	
 	if(PData["fishpos"]) then
 		triggerServerEvent("StopFish", localPlayer, localPlayer)
