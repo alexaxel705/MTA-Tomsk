@@ -1235,10 +1235,10 @@ local SpawnPoint = {
 	["SFPD"] = {219.5, 110, 999, 0, false, false, 10, 1, "#FFA500Тюрьма San Fierro", "До освобождения"},
 	["LVPD"] = {264.5, 77.6, 1001, 90, false, false, 6, 1, "#FFA500Тюрьма Las Venturas", "До освобождения"},
 	["RCPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 4, "#FFA500Тюрьма Red County", "До освобождения"},
-	["WSPD"] = {264.5, 77.6, 1001, 90, false, false, 6, 1, "#FFA500Тюрьма Whetstone", "До освобождения"},
-	["FCPD"] = {264.5, 77.6, 1001, 90, false, false, 6, 1, "#FFA500Тюрьма Flint County", "До освобождения"},
-	["BCPD"] = {264.5, 77.6, 1001, 90, false, false, 6, 1, "#FFA500Тюрьма Bone County", "До освобождения"},
-	["TRPD"] = {264.5, 77.6, 1001, 90, false, false, 6, 1, "#FFA500Тюрьма Tierra Robada", "До освобождения"},
+	["WSPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 1, "#FFA500Тюрьма Whetstone", "До освобождения"},
+	["FCPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 1, "#FFA500Тюрьма Flint County", "До освобождения"},
+	["BCPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 2, "#FFA500Тюрьма Bone County", "До освобождения"},
+	["TRPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 3, "#FFA500Тюрьма Tierra Robada", "До освобождения"},
 	
 	["Ganton"] = {2512, -1671, 13.51, 0, 270, false, 0, 0},
 	["Zone 51 Prison"] = {212, 1865,13, 0, false, false, 0, 0},
@@ -4901,7 +4901,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 1964, -1815, 12.4, 0, 0 --
+		local x,y,z,i,d  = -963.9, -1903.4, 79.7, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5157,32 +5157,27 @@ local CopsBiz = {
 	["Шериф округа Red County"] = "RCPD BIZ",
 }
 
-SData["CopIds"] = 1
-function CreateCop(x,y,z,rz, types)
-	CreateEnter(x, y, z, rz, 0, 0, false, 322.2, 302.3, 999.2, 0, 5, SData["CopIds"], types)
+function CreateCop(x,y,z,rz, types, id)
+	CreateEnter(x, y, z, rz, 0, 0, false, 322.2, 302.3, 999.2, 0, 5, id, types)
 	local o = createObject(2930, 320.9, 316.1, 1000.7)
-	setElementDimension(o, SData["CopIds"])
+	setElementDimension(o, id)
 	setElementInterior(o, 5)
 	
 	local o = createObject(2930, 320.9, 318, 1000.7)
-	setElementDimension(o, SData["CopIds"])
+	setElementDimension(o, id)
 	setElementInterior(o, 5)
 	
 	local o = createObject(1536, 321.45, 301.9, 998.2)
-	setElementDimension(o, SData["CopIds"])
+	setElementDimension(o, id)
 	setElementInterior(o, 5)
 
-	local ped = CreateDialogBot(280, 325.4, 308.9, 999.2,170, 5, SData["CopIds"], CopsBiz[types], "HR-менеджер")
+	local ped = CreateDialogBot(280, 325.4, 308.9, 999.2,170, 5, id, CopsBiz[types], "HR-менеджер")
 	StartAnimation(ped,"INT_OFFICE", "OFF_Sit_Bored_Loop", -1, true)
-	
-	
-	SData["CopIds"]=SData["CopIds"]+1
 end
-CreateCop(-2161.3, -2384.8, 30.9, 0, "Шериф Angel Pine")
-CreateCop(-217.8, 979.2, 19.5, 270, "Шериф округа Bone County")
-CreateCop(-1390, 2638.5, 56, 0, "Шериф El Quebrados")
-CreateCop(627, -571.8, 17.9, 270, "Шериф округа Red County")
-
+CreateCop(-2161.3, -2384.8, 30.9, 0, "Шериф Angel Pine", 1)
+CreateCop(-217.8, 979.2, 19.5, 270, "Шериф округа Bone County", 2)
+CreateCop(-1390, 2638.5, 56, 0, "Шериф El Quebrados", 3)
+CreateCop(627, -571.8, 17.9, 270, "Шериф округа Red County", 4)
 
 
 
@@ -6811,9 +6806,9 @@ function useinvweapon(thePlayer, slot)
 	end
 	if(carry) then
 		StartAnimation(thePlayer, "CARRY", "crry_prtial", 1, false, true, true, true, false)
-		SetControls(thePlayer, "carry", {["fire"] = true, ["jump"] = true, ["aim_weapon"] = true})
+		SetControls(thePlayer, "carry", {["fire"] = true, ["action"] = true, ["jump"] = true, ["aim_weapon"] = true})
 	else
-		SetControls(thePlayer, "carry", {["fire"] = false, ["jump"] = false, ["aim_weapon"] = false})
+		SetControls(thePlayer, "carry", {["fire"] = false, ["action"] = false, ["jump"] = false, ["aim_weapon"] = false})
 	end
 
 	local WM = WeaponNamesArr[arr[PData[thePlayer]["WeaponSlot"]][1]]
@@ -7389,7 +7384,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 		end
 	end
 	if(not getElementData(source, "SpawnBlock")) then
-		setTimer(function(ped)
+		setTimer(function(source)
 			if(isElement(ped)) then
 				if(getElementData(ped, "SpawnBlock")) then
 					destroyElement(ped)
@@ -10724,6 +10719,7 @@ function CreateDriverBot(vmodel, pedmodel, x,y,z,path,attacker)
 	setElementData(SData["DriverBot"][SData["DriverID"]], "SpawnBlock", "true", false)
 	setElementData(SData["DriverBot"][SData["DriverID"]], "DestroyAfterStreamOut", "true", false)
 	setElementData(SData["DriverBot"][SData["DriverID"]], "team", getTeamName(SkinData[pedmodel][2]))
+	setPedStat(SData["DriverBot"][SData["DriverID"]], 160, 1000)
 	setElementData(v, "destroy", "true", false)
 	warpPedIntoVehicle(SData["DriverBot"][SData["DriverID"]],v)
 	setVehicleSirensOn(v, true)
@@ -10876,6 +10872,8 @@ function CreateDynamicBot(node, id)
 			PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4], PathNodes[nextnode][nextid][5],
 			PathNodes[nextnode2][nextid2][2], PathNodes[nextnode2][nextid2][3], PathNodes[nextnode2][nextid2][4], PathNodes[nextnode2][nextid2][5],
 		}))
+		
+		setElementData(SData["DriverBot"][SData["DriverID"]], "team", getTeamName(SkinData[skin][2]))
 		setElementData(SData["DriverBot"][SData["DriverID"]], "SpawnBlock", "true", false)
 		setElementData(SData["DriverBot"][SData["DriverID"]], "CurNode", toJSON({node, id}), false)
 		setElementData(SData["DriverBot"][SData["DriverID"]], "NextNode", toJSON({nextnode2, nextid2}), false)
@@ -12439,7 +12437,7 @@ addCommandHandler("call", CallPhones)
 
 
 function CallIn(thePlayer)
-	SetControls(thePlayer, "phone", {["fire"] = true, ["jump"] = true, ["sprint"] = true})
+	SetControls(thePlayer, "phone", {["fire"] = true, ["action"] = true, ["jump"] = true, ["sprint"] = true})
 	
 	StartAnimation(thePlayer, "ped", "phone_in", 1, false, true, true, true)
 	Phones[thePlayer] = true
@@ -12448,7 +12446,7 @@ end
 
 
 function CallOut(thePlayer)
-	SetControls(thePlayer, "phone", {["fire"] = false, ["jump"] = false, ["sprint"] = false})
+	SetControls(thePlayer, "phone", {["fire"] = false, ["action"] = false, ["jump"] = false, ["sprint"] = false})
 	
 	StartAnimation(thePlayer, "ped", "phone_out", 1, false, true, true, true)
 	setTimer(function()
@@ -12898,7 +12896,7 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 		StopRob(thePlayer)
 	end
 	UnBindAllKey(source)
-	SetControls(source, "crack", {["fire"] = false, ["jump"] = false})
+	SetControls(source, "crack", {["fire"] = false,  ["action"] = false, ["jump"] = false})
 	AddSkill(source, 22, -7)
 	if(getPedStat(source, 24) > 5) then AddSkill(source, 24, -5) end
 	if(killer) then
@@ -14075,9 +14073,9 @@ function playerDamage(attacker, weapon, bodypart, loss) --when a player is damag
 		elseif(getElementHealth(source) > 0) then
 			StartAnimation(source, "CRACK", "crckidle4", -1, true, true, true, false, true) -- тут
 		end
-		SetControls(source, "crack", {["fire"] = true, ["jump"] = true})
+		SetControls(source, "crack", {["fire"] = true, ["action"] = true, ["jump"] = true})
 	else
-		SetControls(source, "crack", {["fire"] = false, ["jump"] = false})
+		SetControls(source, "crack", {["fire"] = false, ["action"] = false, ["jump"] = false})
 	end
 	if(bodypart == 9) then
 		setPedHeadless(source, true)

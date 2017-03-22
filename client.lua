@@ -147,6 +147,15 @@ local LainOSCursorLoadData = {
 local BindedKeys = {} --[key] = {TriggerServerEvent(unpack)}
 
 
+local trafficlight = {
+	["0"] = "west",
+	["1"] = "west",
+	["2"] = false,
+	["3"] = "north",
+	["4"] = "north"
+}
+
+
 -- X,Y,Z, look At X, look At Y, look At Z,roll,fov, Порог срабатывания хромокея
 local TexturesPosition = {
 	["Кулак"] = {0,0,0, 0,0,0, 0,70, 255}, 
@@ -2765,13 +2774,6 @@ function UpdateBot()
 				
 				local distance = getDistanceBetweenPoints2D(path[1], path[2], x, y)
 				if(distance < 4) then
-					local trafficlight = {
-						["0"] = "west",
-						["1"] = "west",
-						["2"] = false,
-						["3"] = "north",
-						["4"] = "north"
-					}
 					if(arr[4]) then
 						if(trafficlight[tostring(getTrafficLightState())] == arr[4]) then
 							brake = true
@@ -2825,7 +2827,7 @@ function UpdateBot()
 				if(nextrot > 90) then nextrot = 90 end
 				
 				
-				if(attacker) then maxspd = 140 end
+				if(attacker) then maxspd = 340 end
 				local limitspeed = maxspd-((maxspd-10)*(nextrot/90))
 
 				
@@ -6385,11 +6387,13 @@ function PedDamage(attacker, weapon, bodypart, loss)
 		
 		if(attacker == localPlayer) then
 			triggerServerEvent("PedDamage", localPlayer, source, weapon, bodypart, loss)
-			for i, ped in pairs(getElementsByType("ped", getRootElement(), true)) do
-				local team = getElementData(ped, "team")
-				if(team) then
-					if(getTeamName(getTeamFromName(team)) ~= "Мирные жители") then
-						triggerServerEvent("PedDamage", localPlayer, ped, nil, nil, loss)
+			for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
+				if(source ~= thePed) then
+					local team = getElementData(thePed, "team")
+					if(team) then
+						if(getTeamName(getTeamFromName(team)) ~= "Мирные жители") then
+							triggerServerEvent("PedDamage", localPlayer, thePed, nil, nil, loss)
+						end
 					end
 				end
 			end
@@ -6611,12 +6615,12 @@ function onWasted(killer, weapon, bodypart)
 					setPedControlState(killer, "fire", false)
 				end
 				local KTeam = getElementData(killer, "team")				
-				if(KTeam == "Полиция" or KTeam == "ФБР") then
+				if(KTeam == "Полиция" or KTeam == "ФБР" or KTeam == "Военные") then
 					PData["wasted"]="СЛОМАНО"
 				end
 			elseif(getElementType(killer) == "player") then
 				local KTeam = getTeamName(getPlayerTeam(killer))			
-				if(KTeam == "Полиция" or KTeam == "ФБР") then
+				if(KTeam == "Полиция" or KTeam == "ФБР" or KTeam == "Военные") then
 					PData["wasted"]="СЛОМАНО"
 				end
 			end
@@ -7198,7 +7202,8 @@ end
 
 function reload()
 	local found = false
-	if(WeaponAmmo[WeaponNamesArr[PInv["player"][usableslot][1]]]) then
+	local item = PInv["player"][usableslot][1] or "Кулак"
+	if(WeaponAmmo[WeaponNamesArr[item]]) then
 		for key, k in pairs(PInv["player"][usableslot][4]) do
 			if(k[1] == PInv["player"][usableslot][4][key][1]) then
 				found = true
@@ -8374,6 +8379,8 @@ function initTrunk(theVehicle, trunkobj)
 end
 
 
+
+
 function StreamIn()
 	if(CreateTextureStage) then
 		if(CreateTextureStage[2] == 3) then
@@ -8404,7 +8411,9 @@ function StreamIn()
 
 		if(occupant) then
 			if(getElementType(occupant) == "ped") then
-				setElementVelocity(source, 0, 0, 0)
+				if(getElementData(occupant, "DynamicBot")) then
+					setElementVelocity(source, 0, 0, 0)
+				end
 			end
 		end
 		
