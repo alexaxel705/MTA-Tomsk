@@ -2764,7 +2764,11 @@ function UpdateBot()
 			local path = false
 			local nextpath = false
 			local maxspd = 40
+			local PointDistance = 4
 			local mreverse = false
+			if(attacker) then
+				PointDistance = 10
+			end
 			
 			if(getElementData(thePed, "DynamicBot")) then
 				local arr = fromJSON(getElementData(thePed, "DynamicBot"))
@@ -2773,7 +2777,7 @@ function UpdateBot()
 				nextpath = {arr[5],arr[6],arr[7]}
 				
 				local distance = getDistanceBetweenPoints2D(path[1], path[2], x, y)
-				if(distance < 4) then
+				if(distance < PointDistance) then
 					if(arr[4]) then
 						if(trafficlight[tostring(getTrafficLightState())] == arr[4]) then
 							brake = true
@@ -2794,18 +2798,19 @@ function UpdateBot()
 					
 					nextpath = {tmpx, tmpy, tmpz}
 					distance = getDistanceBetweenPoints2D(path[1], path[2], x,y)
-					if(distance < 4) then
+					if(distance < PointDistance) then
 						brake = true
 					end
 				end
 				
 								
-				-- Ближнее торможение аля пробки
-				local x2,y2,z2 = getPositionInFront(theVehicle, 6)
-				local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
-				if(hitElement) then
-					if(getElementType(hitElement) == "vehicle" or getElementType(hitElement) == "player" or getElementType(hitElement) == "ped") then
-						brake = true
+				if(not attacker) then-- Ближнее торможение аля пробки
+					local x2,y2,z2 = getPositionInFront(theVehicle, 6)
+					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
+					if(hitElement) then
+						if(getElementType(hitElement) == "vehicle" or getElementType(hitElement) == "player" or getElementType(hitElement) == "ped") then
+							brake = true
+						end
 					end
 				end
 			else
@@ -2827,10 +2832,9 @@ function UpdateBot()
 				if(nextrot > 90) then nextrot = 90 end
 				
 				
-				if(attacker) then maxspd = 340 end
+				if(attacker) then maxspd = 220 end
 				local limitspeed = maxspd-((maxspd-10)*(nextrot/90))
 
-				
 				
 				if(brake) then
 					setPedAnalogControlState(thePed, "accelerate", 0)

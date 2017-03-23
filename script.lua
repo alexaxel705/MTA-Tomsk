@@ -4,7 +4,6 @@ local SData = {}
 local Score = {}
 local Vibori = false
 SData["DriverBot"] = {}
-SData["DriverID"] = 0
 SData["PlayerElementSync"] = {}
 local TimersAgain = {}
 local kandidats = {}
@@ -4901,7 +4900,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -963.9, -1903.4, 79.7, 0, 0 --
+		local x,y,z,i,d  = 2690.6, -1700, 10.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6297,10 +6296,12 @@ end
 
 function vp(thePlayer, command, h)
 	local model = 439
+	local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
 	if(h) then model = tonumber(h) end
 	local x,y,z=getElementPosition(thePlayer)
 	local v  = CreateVehicle(model, x,y,z+1)
-
+	setElementInterior(v, i)
+	setElementDimension(v, d)
 
 	warpPedIntoVehicle(thePlayer, v)
 end
@@ -10000,7 +10001,7 @@ local Events = {
 }
 
 function worldtime()
-	for theKey,thePed in ipairs(SData["DriverBot"]) do
+	for thePed,DriverRoute in ipairs(SData["DriverBot"]) do
 		if(isElement(thePed)) then
 			if(not isPedDead(thePed)) then
 				if(SData["PlayerElementSync"][thePed]) then 
@@ -10014,10 +10015,10 @@ function worldtime()
 					end
 				end
 			else
-				SData["DriverBot"][theKey] = nil
+				SData["DriverBot"][thePed] = nil
 			end
 		else
-			SData["DriverBot"][theKey] = nil
+			SData["DriverBot"][thePed] = nil
 		end
 	end
 
@@ -10702,26 +10703,34 @@ end
 
 
 
-function CreateDriverBot(vmodel, pedmodel, x,y,z,path,attacker)
+function CreateDriverBot(vmodel, pedmodel, x,y,z,i,d, path,attacker)
 	local rotz = findRotation(path[1][1], path[1][2], path[2][1], path[2][2])
 	local v = CreateVehicle(vmodel, x,y,z+VehicleSystem[vmodel][1], 0, 0, rotz)
-	SData["DriverID"] = SData["DriverID"]+1
-	SData["DriverBot"][SData["DriverID"]] = createPed(pedmodel, x,y,z)
-	setElementData(SData["DriverBot"][SData["DriverID"]], "DriverRoute", toJSON(path), false)
+	local thePed = createPed(pedmodel, x,y,z)
+	SData["DriverBot"][thePed] = path
 	
-	setElementData(SData["DriverBot"][SData["DriverID"]], "DynamicBot", toJSON({
+	setElementData(thePed, "DynamicBot", toJSON({
 		path[1][1], path[1][2], path[1][3], false, 
 		path[2][1], path[2][2], path[2][3], false
 	}))
+	if(i) then
+		setElementInterior(v, i)
+		setElementInterior(thePed, i)
+	end
+	if(d) then
+		setElementDimension(v, d)
+		setElementDimension(thePed, d)
+	end
 	
-	
-	setElementData(SData["DriverBot"][SData["DriverID"]], "attacker", getPlayerName(attacker))
-	setElementData(SData["DriverBot"][SData["DriverID"]], "SpawnBlock", "true", false)
-	setElementData(SData["DriverBot"][SData["DriverID"]], "DestroyAfterStreamOut", "true", false)
-	setElementData(SData["DriverBot"][SData["DriverID"]], "team", getTeamName(SkinData[pedmodel][2]))
-	setPedStat(SData["DriverBot"][SData["DriverID"]], 160, 1000)
+	if(attacker) then
+		setElementData(thePed, "attacker", getPlayerName(attacker))
+	end
+	setElementData(thePed, "SpawnBlock", "true", false)
+	setElementData(thePed, "DestroyAfterStreamOut", "true", false)
+	setElementData(thePed, "team", getTeamName(SkinData[pedmodel][2]))
+	setPedStat(thePed, 160, 1000)
 	setElementData(v, "destroy", "true", false)
-	warpPedIntoVehicle(SData["DriverBot"][SData["DriverID"]],v)
+	warpPedIntoVehicle(thePed,v)
 	setVehicleSirensOn(v, true)
 	return v
 end
@@ -10731,29 +10740,32 @@ end
 
 function kr(thePlayer, vmodel, pedmodel)
 	local x,y,z = getElementPosition(thePlayer)
+	local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
+	if(i == 0 and d == 0) then
 	local arr = {}
-	arr["east"] = NEWGPSFound(x-120,y,z, x,y,z)
-	arr["south"] = NEWGPSFound(x+120,y,z, x,y,z)
-	arr["north"] = NEWGPSFound(x,y+120,z, x,y,z)
-	arr["west"] = NEWGPSFound(x,y-120,z, x,y,z)
-	local minarr = 99999999
-	local minarrindex = false
-	for name, dat in pairs(arr) do
-		if(dat) then
-			if(#dat > 5) then -- Отсекаем слишком короткие пути
-				if(minarr > #dat) then
-					minarr = #dat
-					minarrindex = name
+		arr["east"] = NEWGPSFound(x-120,y,z, x,y,z)
+		arr["south"] = NEWGPSFound(x+120,y,z, x,y,z)
+		arr["north"] = NEWGPSFound(x,y+120,z, x,y,z)
+		arr["west"] = NEWGPSFound(x,y-120,z, x,y,z)
+		local minarr = 99999999
+		local minarrindex = false
+		for name, dat in pairs(arr) do
+			if(dat) then
+				if(#dat > 5) then -- Отсекаем слишком короткие пути
+					if(minarr > #dat) then
+						minarr = #dat
+						minarrindex = name
+					end
 				end
 			end
 		end
-	end
-	if(minarrindex) then
-		--if(vmodel == 497) then 
-		--	CreateDriverBot(vmodel, pedmodel, arr[minarrindex][1][1], arr[minarrindex][1][2], arr[minarrindex][1][3]+20, arr[minarrindex], thePlayer)
-		--else
-		--end
-		PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, arr[minarrindex][1][1], arr[minarrindex][1][2], arr[minarrindex][1][3], arr[minarrindex], thePlayer)
+		if(minarrindex) then
+			--if(vmodel == 497) then 
+			--	CreateDriverBot(vmodel, pedmodel, arr[minarrindex][1][1], arr[minarrindex][1][2], arr[minarrindex][1][3]+20, arr[minarrindex], thePlayer)
+			--else
+			--end
+			PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, arr[minarrindex][1][1], arr[minarrindex][1][2], arr[minarrindex][1][3], 0, 0, arr[minarrindex], thePlayer)
+		end
 	end
 end
 
@@ -10819,18 +10831,16 @@ function SetNextDynamicNode(thePed)
 				TimersAgain[thePed] = true
 			end
 		else
-			if(getElementData(thePed, "DriverRoute")) then
-				local path = fromJSON(getElementData(thePed, "DriverRoute"))
-				table.remove(path, 1)
-				if(#path > 2) then
+			if(SData["DriverBot"][thePed]) then
+				table.remove(SData["DriverBot"][thePed], 1)
+				if(#SData["DriverBot"][thePed] > 2) then
 					setElementData(thePed, "DynamicBot", toJSON({
-						path[1][1], path[1][2], path[1][3], false, 
-						path[2][1], path[2][2], path[2][3], false
+						SData["DriverBot"][thePed][1][1], SData["DriverBot"][thePed][1][2], SData["DriverBot"][thePed][1][3], false, 
+						SData["DriverBot"][thePed][2][1], SData["DriverBot"][thePed][2][2], SData["DriverBot"][thePed][2][3], false
 					}))
-					setElementData(thePed, "DriverRoute", toJSON(path), false)
 				else
 					removeElementData(thePed, "DynamicBot")
-					removeElementData(thePed, "DriverRoute")
+					SData["DriverBot"][thePed] = false
 				end
 			end
 		end
@@ -10865,19 +10875,19 @@ function CreateDynamicBot(node, id)
 		end
 		
 		
-		SData["DriverID"] = SData["DriverID"]+1
-		SData["DriverBot"][SData["DriverID"]] = createPed(skin, x,y,z,0.0,true)
+		local thePed = createPed(skin, x,y,z,0.0,true)
+		SData["DriverBot"][thePed] = false
 		
-		setElementData(SData["DriverBot"][SData["DriverID"]], "DynamicBot", toJSON({
+		setElementData(thePed, "DynamicBot", toJSON({
 			PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4], PathNodes[nextnode][nextid][5],
 			PathNodes[nextnode2][nextid2][2], PathNodes[nextnode2][nextid2][3], PathNodes[nextnode2][nextid2][4], PathNodes[nextnode2][nextid2][5],
 		}))
 		
-		setElementData(SData["DriverBot"][SData["DriverID"]], "team", getTeamName(SkinData[skin][2]))
-		setElementData(SData["DriverBot"][SData["DriverID"]], "SpawnBlock", "true", false)
-		setElementData(SData["DriverBot"][SData["DriverID"]], "CurNode", toJSON({node, id}), false)
-		setElementData(SData["DriverBot"][SData["DriverID"]], "NextNode", toJSON({nextnode2, nextid2}), false)
-		--createBlipAttachedTo(SData["DriverBot"][SData["DriverID"]],0,2,255,0,0, 255,0, 99999)
+		setElementData(thePed, "team", getTeamName(SkinData[skin][2]))
+		setElementData(thePed, "SpawnBlock", "true", false)
+		setElementData(thePed, "CurNode", toJSON({node, id}), false)
+		setElementData(thePed, "NextNode", toJSON({nextnode2, nextid2}), false)
+		--createBlipAttachedTo(thePed,0,2,255,0,0, 255,0, 99999)
 
 	else
 		return false
@@ -10938,7 +10948,7 @@ function PlayerElementSync(thePlayer, obj, state)
 			if(not SData["PlayerElementSync"][obj]) then 
 				SData["PlayerElementSync"][obj] = {} 
 				if(getElementData(obj, "DynamicBot")) then
-					if(not getElementData(obj, "DriverRoute")) then
+					if(not SData["DriverBot"][obj]) then
 						local arr = fromJSON(getElementData(obj, "CurNode"))
 						local node, id = arr[1], arr[2]
 						local nextnode, nextid = unpack(FoundNextRandomNode(node, id))
@@ -10964,7 +10974,7 @@ function PlayerElementSync(thePlayer, obj, state)
 			if(getArrSize(SData["PlayerElementSync"][obj]) == 0) then
 				SData["PlayerElementSync"][obj] = nil
 				if(getElementData(obj, "DynamicBot")) then
-					if(not getElementData(obj, "DriverRoute")) then
+					if(not SData["DriverBot"][obj]) then
 						local theVehicle = getPedOccupiedVehicle(obj)
 						if(theVehicle) then
 							destroyElement(theVehicle)
@@ -11635,6 +11645,194 @@ function st(thePlayer)
 	end
 end
 addCommandHandler("st", st)
+
+
+
+local EightTrackStadium = {
+	{-1399, -188.5, 1042.2}, 
+	{-1398.2, -199.6, 1042.1}, 
+	{-1397.8, -209.7, 1042.1}, 
+	{-1397.3, -220, 1042.2}, 
+	{-1396.4, -230.2, 1042.2}, 
+	{-1395.1, -240.3, 1042.4}, 
+	{-1393, -250.4, 1042.6}, 
+	{-1390.3, -260.2, 1042.9}, 
+	{-1385.2, -269.5, 1043.2}, 
+	{-1377.9, -277.1, 1043.7}, 
+	{-1368, -281.6, 1044.2}, 
+	{-1357.6, -283.7, 1044.8}, 
+	{-1346.8, -283.5, 1045.2}, 
+	{-1336.3, -281.5, 1045.7}, 
+	{-1326.2, -279.2, 1046.1}, 
+	{-1316.1, -275.5, 1046.7}, 
+	{-1306.8, -271.3, 1047.2}, 
+	{-1297, -266, 1047.9}, 
+	{-1288.9, -260.2, 1048.5}, 
+	{-1281.3, -253.2, 1049.2}, 
+	{-1273.8, -245.6, 1049.6}, 
+	{-1268.5, -236.2, 1049.8}, 
+	{-1265.8, -226.4, 1049.8}, 
+	{-1264.5, -215.4, 1049.7}, 
+	{-1263.9, -205, 1049.6}, 
+	{-1264.7, -194.9, 1049.7}, 
+	{-1266.5, -184.6, 1049.7}, 
+	{-1270.4, -174.8, 1049.7}, 
+	{-1276, -166.3, 1049.6}, 
+	{-1283.4, -158.4, 1049.5}, 
+	{-1292.1, -151.3, 1049.3}, 
+	{-1300.7, -146.1, 1049.2}, 
+	{-1309.8, -140.8, 1049.1}, 
+	{-1320, -136.4, 1049.2}, 
+	{-1329.7, -133.5, 1049.5}, 
+	{-1340.4, -131.4, 1049.7}, 
+	{-1351.1, -130.6, 1050}, 
+	{-1361.6, -131.1, 1050.2}, 
+	{-1371.6, -134, 1050.2}, 
+	{-1380.3, -138.9, 1050.2}, 
+	{-1386.4, -146.8, 1050.1}, 
+	{-1390.3, -156, 1050.2}, 
+	{-1393.3, -165.9, 1050.3}, 
+	{-1395.6, -177.1, 1050.4}, 
+	{-1396.8, -188.1, 1050.5}, 
+	{-1397.5, -198.3, 1050.4}, 
+	{-1398.1, -210.4, 1050.2}, 
+	{-1398.6, -220.7, 1050.1}, 
+	{-1399.2, -231, 1050}, 
+	{-1401.1, -243.1, 1050}, 
+	{-1403.3, -253.2, 1050.1}, 
+	{-1406.7, -263.5, 1050.1}, 
+	{-1412.5, -272.4, 1050.1}, 
+	{-1420.6, -279.5, 1050.2}, 
+	{-1430.2, -283.8, 1050.2}, 
+	{-1440.8, -284.5, 1050.1}, 
+	{-1451.2, -283.5, 1049.9}, 
+	{-1462.2, -281.2, 1049.6}, 
+	{-1473.1, -278.1, 1049.3}, 
+	{-1483.6, -274, 1049.1}, 
+	{-1493.1, -269.2, 1049.2}, 
+	{-1502.3, -263.6, 1049.3}, 
+	{-1510.6, -256.9, 1049.4}, 
+	{-1518.5, -249.5, 1049.6}, 
+	{-1524.6, -240.6, 1049.7}, 
+	{-1528.4, -231, 1049.7}, 
+	{-1530.7, -219.9, 1049.7}, 
+	{-1531.2, -209, 1049.7}, 
+	{-1531.1, -198.5, 1049.7}, 
+	{-1529.7, -187.8, 1049.8}, 
+	{-1527, -178.2, 1049.8}, 
+	{-1522, -169.5, 1049.7}, 
+	{-1515.8, -161.6, 1049.2}, 
+	{-1507.5, -154.2, 1048.6}, 
+	{-1498.1, -147.9, 1047.9}, 
+	{-1489.3, -143, 1047.2}, 
+	{-1479.9, -138.7, 1046.7}, 
+	{-1470.6, -135, 1046.2}, 
+	{-1460, -132.2, 1045.7}, 
+	{-1449.3, -130.5, 1045.3}, 
+	{-1439.2, -130.6, 1044.8}, 
+	{-1429.2, -131.8, 1044.3}, 
+	{-1418.5, -136.2, 1043.7}, 
+	{-1410.5, -143.4, 1043.2}, 
+	{-1405.5, -153, 1042.9}, 
+	{-1402.5, -163.9, 1042.6}, 
+	{-1400.7, -174.1, 1042.4}, 
+	
+	{-1399, -188.5, 1042.2}, 
+	{-1398.2, -199.6, 1042.1}, 
+	{-1397.8, -209.7, 1042.1}, 
+	{-1397.3, -220, 1042.2}, 
+	{-1396.4, -230.2, 1042.2}, 
+	{-1395.1, -240.3, 1042.4}, 
+	{-1393, -250.4, 1042.6}, 
+	{-1390.3, -260.2, 1042.9}, 
+	{-1385.2, -269.5, 1043.2}, 
+	{-1377.9, -277.1, 1043.7}, 
+	{-1368, -281.6, 1044.2}, 
+	{-1357.6, -283.7, 1044.8}, 
+	{-1346.8, -283.5, 1045.2}, 
+	{-1336.3, -281.5, 1045.7}, 
+	{-1326.2, -279.2, 1046.1}, 
+	{-1316.1, -275.5, 1046.7}, 
+	{-1306.8, -271.3, 1047.2}, 
+	{-1297, -266, 1047.9}, 
+	{-1288.9, -260.2, 1048.5}, 
+	{-1281.3, -253.2, 1049.2}, 
+	{-1273.8, -245.6, 1049.6}, 
+	{-1268.5, -236.2, 1049.8}, 
+	{-1265.8, -226.4, 1049.8}, 
+	{-1264.5, -215.4, 1049.7}, 
+	{-1263.9, -205, 1049.6}, 
+	{-1264.7, -194.9, 1049.7}, 
+	{-1266.5, -184.6, 1049.7}, 
+	{-1270.4, -174.8, 1049.7}, 
+	{-1276, -166.3, 1049.6}, 
+	{-1283.4, -158.4, 1049.5}, 
+	{-1292.1, -151.3, 1049.3}, 
+	{-1300.7, -146.1, 1049.2}, 
+	{-1309.8, -140.8, 1049.1}, 
+	{-1320, -136.4, 1049.2}, 
+	{-1329.7, -133.5, 1049.5}, 
+	{-1340.4, -131.4, 1049.7}, 
+	{-1351.1, -130.6, 1050}, 
+	{-1361.6, -131.1, 1050.2}, 
+	{-1371.6, -134, 1050.2}, 
+	{-1380.3, -138.9, 1050.2}, 
+	{-1386.4, -146.8, 1050.1}, 
+	{-1390.3, -156, 1050.2}, 
+	{-1393.3, -165.9, 1050.3}, 
+	{-1395.6, -177.1, 1050.4}, 
+	{-1396.8, -188.1, 1050.5}, 
+	{-1397.5, -198.3, 1050.4}, 
+	{-1398.1, -210.4, 1050.2}, 
+	{-1398.6, -220.7, 1050.1}, 
+	{-1399.2, -231, 1050}, 
+	{-1401.1, -243.1, 1050}, 
+	{-1403.3, -253.2, 1050.1}, 
+	{-1406.7, -263.5, 1050.1}, 
+	{-1412.5, -272.4, 1050.1}, 
+	{-1420.6, -279.5, 1050.2}, 
+	{-1430.2, -283.8, 1050.2}, 
+	{-1440.8, -284.5, 1050.1}, 
+	{-1451.2, -283.5, 1049.9}, 
+	{-1462.2, -281.2, 1049.6}, 
+	{-1473.1, -278.1, 1049.3}, 
+	{-1483.6, -274, 1049.1}, 
+	{-1493.1, -269.2, 1049.2}, 
+	{-1502.3, -263.6, 1049.3}, 
+	{-1510.6, -256.9, 1049.4}, 
+	{-1518.5, -249.5, 1049.6}, 
+	{-1524.6, -240.6, 1049.7}, 
+	{-1528.4, -231, 1049.7}, 
+	{-1530.7, -219.9, 1049.7}, 
+	{-1531.2, -209, 1049.7}, 
+	{-1531.1, -198.5, 1049.7}, 
+	{-1529.7, -187.8, 1049.8}, 
+	{-1527, -178.2, 1049.8}, 
+	{-1522, -169.5, 1049.7}, 
+	{-1515.8, -161.6, 1049.2}, 
+	{-1507.5, -154.2, 1048.6}, 
+	{-1498.1, -147.9, 1047.9}, 
+	{-1489.3, -143, 1047.2}, 
+	{-1479.9, -138.7, 1046.7}, 
+	{-1470.6, -135, 1046.2}, 
+	{-1460, -132.2, 1045.7}, 
+	{-1449.3, -130.5, 1045.3}, 
+	{-1439.2, -130.6, 1044.8}, 
+	{-1429.2, -131.8, 1044.3}, 
+	{-1418.5, -136.2, 1043.7}, 
+	{-1410.5, -143.4, 1043.2}, 
+	{-1405.5, -153, 1042.9}, 
+	{-1402.5, -163.9, 1042.6}, 
+	{-1400.7, -174.1, 1042.4}, 
+}
+
+
+function balls(thePlayer)
+	local hotrings = {502, 494, 503}
+	CreateDriverBot(hotrings[math.random(#hotrings)], 299, -1399.8, -178.9, 1042.3, 7, 0, table.copy(EightTrackStadium), thePlayer)
+end
+addCommandHandler("balls", balls)
+
 
 
 
