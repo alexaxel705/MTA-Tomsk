@@ -1779,7 +1779,7 @@ addEventHandler("BankControl", localPlayer, BankControl)
 function bankControlUpdate(biz, data)
 	PText["bank"] = {}
 	local m = fromJSON(data)
-	local text = "Денег на счету $"..m[1].." "
+	local text = "Денег на счету "..COLOR["DOLLAR"]["HEX"].."$"..m[1].." "
 	local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
 	PText["bank"][#PText["bank"]+1] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
 	PText["bank"][#PText["bank"]+1] = {"пополнить", 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "bank", "Введи сумму", toJSON{biz}}}
@@ -6240,7 +6240,7 @@ function AddInventoryItem(itemname, count, quality, data)
 				count = count - items[itemname][3]
 			end
 		elseif(stacked <= -1) then
-			for v = 1, stacked-stacked-stacked do
+			for v = stacked-stacked-stacked, 1 do
 				local NumberStack = FoundFullStackedInventoryItem(itemname, quality)
 				RemoveInventorySlot("player", NumberStack)
 				count = count + items[itemname][3]

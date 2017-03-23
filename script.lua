@@ -4900,7 +4900,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 2690.6, -1700, 10.4, 0, 0 --
+		local x,y,z,i,d  = 592.8, -1251, 18.2, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12048,7 +12048,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Деньги", 100, 550, {})
+	--AddInventoryItem(thePlayer, "Деньги", 1000000000, 550, {})
 
 	
 	fileDelete("save.txt")
