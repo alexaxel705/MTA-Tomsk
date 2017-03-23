@@ -14112,7 +14112,6 @@ function respawnExplodedVehicle()
 			end
 		end
 	end
-	local x,y,z = getElementPosition(source)
 
 	if(not getElementData(source, "destroy")) then 
 		setTimer(respawnVehicle, 10000, 1, source)
