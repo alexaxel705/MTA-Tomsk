@@ -6304,6 +6304,8 @@ function vp(thePlayer, command, h)
 	setElementDimension(v, d)
 
 	warpPedIntoVehicle(thePlayer, v)
+	
+	setElementData(v, "destroy", "true", false)
 end
 addCommandHandler("vp", vp)
 
@@ -7384,35 +7386,34 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 			end
 		end
 	end
-	if(not getElementData(source, "SpawnBlock")) then
-		setTimer(function(source)
-			if(isElement(ped)) then
-				if(getElementData(ped, "SpawnBlock")) then
-					destroyElement(ped)
+	
+	setTimer(function(ped)
+		if(isElement(ped)) then
+			if(getElementData(ped, "SpawnBlock")) then
+				destroyElement(ped)
+			else
+				local zone = getElementData(ped, "zone")
+				local i, d = getElementInterior(ped), getElementDimension(ped)
+				if(zone) then
+					local TINF = fromJSON(getElementData(ped, "TINF"))
+					destroyElement(BotCreated[zone][TINF[1]])
+					CreateBot(TINF[2], TINF[3], TINF[4],TINF[5],i,d,zone,TINF[1])
 				else
-					local zone = getElementData(ped, "zone")
-					local i, d = getElementInterior(ped), getElementDimension(ped)
-					if(zone) then
-						local TINF = fromJSON(getElementData(ped, "TINF"))
-						destroyElement(BotCreated[zone][TINF[1]])
-						CreateBot(TINF[2], TINF[3], TINF[4],TINF[5],i,d,zone,TINF[1])
-					else
-					    local data = getAllElementData(ped)
-						local x,y,z = getElementPosition(ped)
-						local _,_,rz = getElementRotation(ped)
-						local model = getElementModel(ped)
-						destroyElement(ped)
-						ped = createPed(model,x,y,z,rz)
-						setElementInterior(ped, i)
-						setElementDimension(ped, d)
-						for k, v in pairs (data) do
-							setElementData(ped, k, v)
-						end
+				    local data = getAllElementData(ped)
+					local x,y,z = getElementPosition(ped)
+					local _,_,rz = getElementRotation(ped)
+					local model = getElementModel(ped)
+					destroyElement(ped)
+					ped = createPed(model,x,y,z,rz)
+					setElementInterior(ped, i)
+					setElementDimension(ped, d)
+					for k, v in pairs (data) do
+						setElementData(ped, k, v)
 					end
 				end
 			end
-		end, 15000, 1, source)
-	end
+		end
+	end, 15000, 1, source)
 end
 addEvent("OnPedWasted", true)
 addEventHandler("onPedWasted", root, WastedPed)
@@ -12902,9 +12903,9 @@ function quitPlayer()
 			end
 			if(name == 'Cops') then
 				for _, theVehicle in pairs(el) do
-					if(theVehicle) then
+					if(isElement(theVehicle)) then
 						local thePed = getVehicleOccupant(theVehicle)
-						if(thePed) then
+						if(isElement(thePed)) then
 							if(getElementType(thePed) == "ped") then
 								destroyElement(thePed)
 								destroyElement(theVehicle)
@@ -14111,7 +14112,7 @@ function respawnExplodedVehicle()
 			end
 		end
 	end
-	
+	local x,y,z = getElementPosition(source)
 
 	if(not getElementData(source, "destroy")) then 
 		setTimer(respawnVehicle, 10000, 1, source)
@@ -14208,6 +14209,23 @@ function FireVehicle(theVehicle, weapon)
 end
 addEvent("FireVehicle", true)
 addEventHandler("FireVehicle", getRootElement(), FireVehicle)
+
+
+
+function CreateFire(arr)
+	arr = fromJSON(arr)
+	for v, k in pairs(arr) do
+		local obj = createObject(1362, k[1],k[2],k[3]-0.7)
+		setTimer(function(obj) 
+			destroyElement(obj)
+		end, 120000, 1, obj)
+	end
+end
+addEvent("CreateFire", true)
+addEventHandler("CreateFire", getRootElement(), CreateFire)
+
+
+
 
 
 
@@ -15717,7 +15735,7 @@ addEventHandler("removebizmoney", root, removebizmoney)
 function repairVeh()	
 	local theVehicle = getPedOccupiedVehicle(source)
 	local vehh = getVehicleHandling(theVehicle)
-	local count =  (vehh["mass"]/5)+(1000-getElementHealth(theVehicle))
+	local count =  math.round((vehh["mass"]/5)+(1000-getElementHealth(theVehicle)), 0)
 	if(AddPlayerMoney(source, -count)) then
 		fixVehicle(theVehicle)
 		triggerClientEvent(source, "PlaySFXSoundEvent", source, 4)

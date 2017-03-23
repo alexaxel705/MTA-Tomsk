@@ -7143,6 +7143,19 @@ playSFX3D("script", 89, 0,-441.3, 2233.6, 42.7, true)--Музыка у дома 
 
 
 addEventHandler("onClientVehicleExplode", getRootElement(), function()
+	if(isElementSyncer(source)) then
+		local x,y,z = getElementPosition(source)
+		local rand = math.random(0, 4)
+		if(rand > 0) then
+			local arr = {}
+			for slot = 1, rand do
+				local randx, randy = math.random(-5,5), math.random(-5,5)
+				z = getGroundPosition(x+randx,y+randy,z)
+				arr[#arr+1] = {x+randx, y+randy, z}
+			end
+			triggerServerEvent("CreateFire", localPlayer, toJSON(arr))
+		end
+	end
 	if(getElementModel(source) == 592) then
 		local x,y,z = getElementPosition(source)
 		for slot = 1, 40 do
@@ -8627,7 +8640,7 @@ function StreamOut()
 	triggerServerEvent("PlayerElementSync", localPlayer, localPlayer, source, nil)
 end
 addEventHandler("onClientElementStreamOut", getRootElement(), StreamOut)
-
+addEventHandler("onClientElementDestroy", getRootElement(), StreamOut)
 			
 
 
