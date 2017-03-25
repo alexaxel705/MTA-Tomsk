@@ -9675,7 +9675,7 @@ addCommandHandler("el", el)
 
 
 
-function ServerOff(name)
+function ServerSave()
 	xmlSaveFile(CarNode)
 	xmlSaveFile(HouseNode)
 	xmlSaveFile(BizNode)
@@ -9684,6 +9684,16 @@ function ServerOff(name)
 	xmlSaveFile(ZoneNode)
 	xmlSaveFile(ThreesNode)
 
+	
+	local hFile = fileOpen("serverdata/time.txt")
+	fileWrite(hFile, tostring(ServerDate.timestamp))
+    fileClose(hFile)
+end
+
+
+function ServerOff(name)
+	ServerSave()
+
 	xmlUnloadFile(CarNode)
 	xmlUnloadFile(HouseNode)
 	xmlUnloadFile(BizNode)
@@ -9691,9 +9701,6 @@ function ServerOff(name)
 	xmlUnloadFile(PlayerNode)
 	xmlUnloadFile(ZoneNode)
 	xmlUnloadFile(ThreesNode)
-	local hFile = fileOpen("serverdata/time.txt")
-	fileWrite(hFile, tostring(ServerDate.timestamp))
-    fileClose(hFile)
 end
 addEventHandler("onResourceStop", getResourceRootElement(), ServerOff)
 
@@ -10040,6 +10047,7 @@ function worldtime()
 		callRemote("http://109.227.228.4/engine/include/MTA/online.php", ResultGet, webplay)
 
 		if(hour == 0) then
+			ServerSave() -- Сохранение данных на диск
 			if(ServerDate.monthday == 1) then -- Первый день месяца
 				SpawnCarForSale(true)
 				SpawnAllVehicle()
