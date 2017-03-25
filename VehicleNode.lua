@@ -42268,7 +42268,6 @@ PathNodes = {
 
 for name, dat in pairs(PathNodes) do
 	for i, arr in pairs(dat) do
-	
 			--local m = createMarker(arr[2],arr[3],arr[4], "cylinder", 1.5, 85, 87, 152, 120)
 			--createBlip(arr[2],arr[3],arr[4], 0, 1, 0,255,255,255)
 			--setElementData(m, "Dev", i)
