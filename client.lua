@@ -3501,7 +3501,8 @@ function updateCamera()
 		local theVehicle = getPedOccupiedVehicle(thePed)
 		if(theVehicle) then -- Костыль 
 			local x,y,z = getElementPosition(theVehicle)
-			local material = GetGroundMaterial(x,y,z+15,z-50)
+			local gz = getGroundPosition(x,y,z)
+			local material = GetGroundMaterial(x,y,z+50,gz)
 
 			if(material == 1337) then
 				if(not isElementFrozen(theVehicle)) then
@@ -4406,28 +4407,29 @@ end
 
 
 function handleVehicleDamage(attacker, weapon, loss, x, y, z, tyre)
-	if(getElementType(attacker) == "vehicle") then
-		local acc = getVehicleOccupant(attacker)
-		if(getElementType(acc) == "player") then
-			attacker = acc
-		end
-	end
-	if(attacker == localPlayer) then
-		local occupants = getVehicleOccupants(source) or {}
-		for seat, occupant in pairs(occupants) do
-			if(getElementType(occupant) == "player") then
-				if(getTeamName(getPlayerTeam(occupant)) == "Полиция" 
-				or getTeamName(getPlayerTeam(occupant)) == "Военные"
-				or getTeamName(getPlayerTeam(occupant)) == "ФБР") then
-					triggerServerEvent("AddMeWanted", localPlayer)
-				end
-			elseif(getElementType(occupant) == "ped") then
-				triggerServerEvent("PedDamage", localPlayer, occupant, 228, 0, 0)
+	if(attacker) then
+		if(getElementType(attacker) == "vehicle") then
+			local acc = getVehicleOccupant(attacker)
+			if(getElementType(acc) == "player") then
+				attacker = acc
 			end
 		end
-		triggerServerEvent("FireVehicle", localPlayer, source, weapon)
-    end
-
+		if(attacker == localPlayer) then
+			local occupants = getVehicleOccupants(source) or {}
+			for seat, occupant in pairs(occupants) do
+				if(getElementType(occupant) == "player") then
+					if(getTeamName(getPlayerTeam(occupant)) == "Полиция" 
+					or getTeamName(getPlayerTeam(occupant)) == "Военные"
+					or getTeamName(getPlayerTeam(occupant)) == "ФБР") then
+						triggerServerEvent("AddMeWanted", localPlayer)
+					end
+				elseif(getElementType(occupant) == "ped") then
+					triggerServerEvent("PedDamage", localPlayer, occupant, 228, 0, 0)
+				end
+			end
+			triggerServerEvent("FireVehicle", localPlayer, source, weapon)
+		end
+	end
 end
 addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
 

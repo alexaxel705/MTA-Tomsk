@@ -10705,6 +10705,7 @@ end
 
 
 function CreateDriverBot(vmodel, pedmodel, x,y,z,i,d, path,attacker)
+	path = GetCoordsByGPS(path) -- Временное, переделывает ноды в координаты, потом доделать
 	local rotz = findRotation(path[1][1], path[1][2], path[2][1], path[2][2])
 	local v = CreateVehicle(vmodel, x,y,z+VehicleSystem[vmodel][1], 0, 0, rotz)
 	local thePed = createPed(pedmodel, x,y,z)
@@ -10761,11 +10762,8 @@ function kr(thePlayer, vmodel, pedmodel)
 			end
 		end
 		if(minarrindex) then
-			--if(vmodel == 497) then 
-			--	CreateDriverBot(vmodel, pedmodel, arr[minarrindex][1][1], arr[minarrindex][1][2], arr[minarrindex][1][3]+20, arr[minarrindex], thePlayer)
-			--else
-			--end
-			PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, arr[minarrindex][1][1], arr[minarrindex][1][2], arr[minarrindex][1][3], 0, 0, arr[minarrindex], thePlayer)
+			local bx,by,bz = PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][2], PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][3], PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][4]
+			PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[minarrindex], thePlayer)
 		end
 	end
 end
@@ -11830,6 +11828,10 @@ local EightTrackStadium = {
 
 function balls(thePlayer)
 	local hotrings = {502, 494, 503}
+	local track = {}
+	for i, v in pairs(PathNodes["8 Ball Stadium"]) do
+
+	end
 	CreateDriverBot(hotrings[math.random(#hotrings)], 299, -1399.8, -178.9, 1042.3, 7, 0, table.copy(EightTrackStadium), thePlayer)
 end
 addCommandHandler("balls", balls)

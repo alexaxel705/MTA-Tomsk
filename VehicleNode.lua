@@ -30717,7 +30717,7 @@ PathNodes = {
 		[919] = {true, 1692, -1629.6, 12.4, false}, 
 		[920] = {true, 1692, -1619, 12.4, false}, 
 		[921] = {true, 1692, -1608.9, 12.4, false}, 
-		[922] = {true, 1692.1, -1598.7, 12.4, false, {{"Commerce", 1706}}},
+		[922] = {true, 1692.2, -1594.5, 12.4, false, {{"Commerce", 1706}}},
 		[923] = {true, 1699.1, -1594.6, 12.4, false}, 
 		[924] = {true, 1710.7, -1595.5, 12.4, false}, 
 		[925] = {true, 1721.1, -1597.1, 12.4, false}, 
@@ -30786,8 +30786,9 @@ PathNodes = {
 		[1206] = {true, 1650.2, -1594.7, 12.4, false}, 
 		[1207] = {true, 1660.7, -1594.7, 12.4, false}, 
 		[1208] = {true, 1670.8, -1594.7, 12.4, false}, 
-		[1209] = {true, 1681.3, -1594.4, 12.4, false, {{"Commerce", 923}, {"Commerce", 1300}}},	
-
+		[1209] = {true, 1677.7, -1594.6, 12.4, false},
+		[1210] = {true, 1686.7, -1594.5, 12.4, false, {{"Commerce", 923}, {"Commerce", 1300}}},	
+		
 		[1300] = {true, 1687, -1599.1, 12.4, false}, 
 		[1301] = {true, 1686.9, -1610.1, 12.4, false}, 
 		[1302] = {true, 1686.8, -1620.5, 12.4, false}, 
@@ -30891,7 +30892,7 @@ PathNodes = {
 		[1703] = {true, 1718.7, -1592.1, 12.4, false}, 
 		[1704] = {true, 1708.6, -1590.8, 12.4, false}, 
 		[1705] = {true, 1698.6, -1590.3, 12.4, false}, 
-		[1706] = {true, 1688.5, -1590.3, 12.4, false, {{"Commerce", 1300}}}, 
+		[1706] = {true, 1688.5, -1590.3, 12.4, false, {{"Commerce", 1210}}}, 
 		[1707] = {true, 1678.3, -1590, 12.4, false}, 
 		[1708] = {true, 1667.9, -1590.2, 12.4, false}, 
 		[1709] = {true, 1657.4, -1590.3, 12.4, false}, 
@@ -42202,6 +42203,65 @@ PathNodes = {
 		[2914] = {true, 1819.2, -1595.6, 12.4, false}, 
 		[2915] = {true, 1818.9, -1609.9, 12.4, false, {{"Little Mexico", 500}, {"Idlewood", 2400}}}, 
 	}, 
+	["8 Ball Stadium"] = {
+		[1] = {true, -1399, -188.5, 1042.2, false}, 
+		[2] = {true, -1398.2, -199.6, 1042.1, false}, 
+		[3] = {true, -1397.8, -209.7, 1042.1, false}, 
+		[4] = {true, -1397.3, -220, 1042.2, false}, 
+		[5] = {true, -1396.4, -230.2, 1042.2, false}, 
+		[6] = {true, -1395.1, -240.3, 1042.4, false}, 
+		[7] = {true, -1393, -250.4, 1042.6, false}, 
+		[8] = {true, -1390.3, -260.2, 1042.9, false}, 
+		[9] = {true, -1385.2, -269.5, 1043.2, false}, 
+		[10] = {true, -1377.9, -277.1, 1043.7, false}, 
+		[11] = {true, -1368, -281.6, 1044.2, false}, 
+		[12] = {true, -1357.6, -283.7, 1044.8, false}, 
+		[13] = {true, -1346.8, -283.5, 1045.2, false}, 
+		[14] = {true, -1336.3, -281.5, 1045.7, false}, 
+		[15] = {true, -1326.2, -279.2, 1046.1, false}, 
+		[16] = {true, -1316.1, -275.5, 1046.7, false}, 
+		[17] = {true, -1306.8, -271.3, 1047.2, false}, 
+		[18] = {true, -1297, -266, 1047.9, false}, 
+		[19] = {true, -1288.9, -260.2, 1048.5, false}, 
+		[20] = {true, -1281.3, -253.2, 1049.2, false}, 
+		[21] = {true, -1273.8, -245.6, 1049.6, false}, 
+		[22] = {true, -1268.5, -236.2, 1049.8, false}, 
+		[23] = {true, -1265.8, -226.4, 1049.8, false}, 
+		[24] = {true, -1264.5, -215.4, 1049.7, false}, 
+		[25] = {true, -1263.9, -205, 1049.6, false}, 
+		[26] = {true, -1264.7, -194.9, 1049.7, false}, 
+		[27] = {true, -1266.5, -184.6, 1049.7, false}, 
+		[28] = {true, -1270.4, -174.8, 1049.7, false}, 
+		[29] = {true, -1276, -166.3, 1049.6, false}, 
+		[30] = {true, -1283.4, -158.4, 1049.5, false}, 
+		[31] = {true, -1292.1, -151.3, 1049.3, false}, 
+		[32] = {true, -1300.7, -146.1, 1049.2, false}, 
+		[33] = {true, -1309.8, -140.8, 1049.1, false}, 
+		[34] = {true, -1320, -136.4, 1049.2, false}, 
+		[35] = {true, -1329.7, -133.5, 1049.5, false}, 
+		[36] = {true, -1340.4, -131.4, 1049.7, false}, 
+		[37] = {true, -1351.1, -130.6, 1050, false}, 
+		[38] = {true, -1361.6, -131.1, 1050.2, false}, 
+		[39] = {true, -1371.6, -134, 1050.2, false}, 
+		[40] = {true, -1380.3, -138.9, 1050.2, false}, 
+		[41] = {true, -1386.4, -146.8, 1050.1, false}, 
+		[42] = {true, -1390.3, -156, 1050.2, false}, 
+		[43] = {true, -1393.3, -165.9, 1050.3, false}, 
+		[44] = {true, -1395.6, -177.1, 1050.4, false}, 
+		[45] = {true, -1396.8, -188.1, 1050.5, false}, 
+		[46] = {true, -1397.5, -198.3, 1050.4, false}, 
+		[47] = {true, -1398.1, -210.4, 1050.2, false}, 
+		[48] = {true, -1398.6, -220.7, 1050.1, false}, 
+		[49] = {true, -1399.2, -231, 1050, false}, 
+		[50] = {true, -1401.1, -243.1, 1050, false}, 
+		[51] = {true, -1403.3, -253.2, 1050.1, false}, 
+		[52] = {true, -1406.7, -263.5, 1050.1, false}, 
+		[53] = {true, -1412.5, -272.4, 1050.1, false}, 
+		[54] = {true, -1420.6, -279.5, 1050.2, false}, 
+		[55] = {true, -1430.2, -283.8, 1050.2, false}, 
+		[56] = {true, -1440.8, -284.5, 1050.1, false}, 
+		[57] = {true, -1451.2, -283.5, 1049.9, false}, 
+	}
 }
 
 
@@ -42339,20 +42399,20 @@ function NEWGPSFound(x,y,z, x2,y2,z2)
 					
 					if(PathNodes[arr[1]][arr[2]][6]) then
 						if(PathNodes[arr[1]][arr[2]+1]) then
-							table.insert(tmp["threads"], {{PathNodes[arr[1]][arr[2]][2], PathNodes[arr[1]][arr[2]][3], PathNodes[arr[1]][arr[2]][4]}})
+							table.insert(tmp["threads"], {{arr[1], arr[2]}})
 							local newarr = table.copy(arr[4])
 							table.insert(newarr, #tmp["threads"])
 							table.insert(tmp["nextnodes"], {arr[1], arr[2]+1, #tmp["threads"], newarr})
 						end
 						
 						for i2, k2 in pairs(PathNodes[arr[1]][arr[2]][6]) do
-							table.insert(tmp["threads"], {{PathNodes[arr[1]][arr[2]][2], PathNodes[arr[1]][arr[2]][3], PathNodes[arr[1]][arr[2]][4]}})
+							table.insert(tmp["threads"], {{arr[1], arr[2]}})
 							local newarr = table.copy(arr[4])
 							table.insert(newarr, #tmp["threads"])
 							table.insert(tmp["nextnodes"], {k2[1], k2[2], #tmp["threads"], newarr})
 						end
 					else
-						table.insert(tmp["threads"][arr[3]], {PathNodes[arr[1]][arr[2]][2], PathNodes[arr[1]][arr[2]][3], PathNodes[arr[1]][arr[2]][4]})
+						table.insert(tmp["threads"][arr[3]], {arr[1], arr[2]})
 						tmp["nextnodes"][i] = {arr[1], arr[2]+1, arr[3], arr[4]}
 					end
 					
@@ -42380,11 +42440,27 @@ end
 
 
 
+AllPathNodes = {}
+for name, dat in pairs(PathNodes) do
+	for i, dat2 in pairs(dat) do
+		AllPathNodes[#AllPathNodes+1] = {name, i}
+	end
+end
+		
+
+function GetCoordsByGPS(arr)
+	local out = {}
+	for _, v in pairs(arr) do
+		out[#out+1] = {PathNodes[v[1]][v[2]][2], PathNodes[v[1]][v[2]][3], PathNodes[v[1]][v[2]][4]}
+	end	
+	return out
+end
+		
 
 function GetPathByCoordsNEW(thePlayer, gx,gy,gz,gx2,gy2,gz2)
 	local arr = NEWGPSFound(gx,gy,gz,gx2,gy2,gz2)
 	if(arr) then
-		triggerClientEvent(thePlayer, "SetGPS", thePlayer, toJSON(arr))
+		triggerClientEvent(thePlayer, "SetGPS", thePlayer, toJSON(GetCoordsByGPS(arr)))
 		return true
 	else
 		ToolTip(thePlayer, "GPS: Невозможно найти путь!")
