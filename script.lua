@@ -4900,7 +4900,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 523.5, -141.5, 36.8, 0, 0 --
+		local x,y,z,i,d  = 2693.7, -1705, 11.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5261,9 +5261,18 @@ local PoliceSpecificZone = {
 function WantedLevel(thePlayer, count)
 	local x,y,z = getElementPosition(thePlayer)
 	local zone = getZoneName(x,y,z, true)
-	local wanted = GetDatabaseAccount(thePlayer, "wanted")+(count)
+	
+	local wanted = GetDatabaseAccount(thePlayer, "wanted")
+	
+	if(count > 0) then
+		count = math.round(count/(wanted+1), 2)
+	end
+	wanted = wanted+(count)
+	
 	if(wanted > 6) then wanted = 6 
 	elseif(wanted < 0) then wanted = 0 end
+	
+	
 	if(wanted > 0) then
 		if(wanted >= 5) then
 			local rand = math.random(1,2)
@@ -10047,7 +10056,7 @@ function worldtime()
 		callRemote("http://109.227.228.4/engine/include/MTA/online.php", ResultGet, webplay)
 
 		if(hour == 0) then
-			ServerSave() -- Сохранение данных на диск
+			ServerSave() -- Сохранение данных на диск 
 			if(ServerDate.monthday == 1) then -- Первый день месяца
 				SpawnCarForSale(true)
 				SpawnAllVehicle()
@@ -10752,11 +10761,13 @@ function kr(thePlayer, vmodel, pedmodel)
 	local x,y,z = getElementPosition(thePlayer)
 	local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
 	if(i == 0 and d == 0) then
-	local arr = {}
-		arr["east"] = NEWGPSFound(x-120,y,z, x,y,z)
-		arr["south"] = NEWGPSFound(x+120,y,z, x,y,z)
-		arr["north"] = NEWGPSFound(x,y+120,z, x,y,z)
-		arr["west"] = NEWGPSFound(x,y-120,z, x,y,z)
+		local arr = {
+			["east"] = NEWGPSFound(x-120,y,z, x,y,z), 
+			["south"] = NEWGPSFound(x+120,y,z, x,y,z), 
+			["north"] = NEWGPSFound(x,y+120,z, x,y,z), 
+			["west"] = NEWGPSFound(x,y-120,z, x,y,z)
+		}
+
 		local minarr = 99999999
 		local minarrindex = false
 		for name, dat in pairs(arr) do
@@ -10775,7 +10786,6 @@ function kr(thePlayer, vmodel, pedmodel)
 		end
 	end
 end
-
 
 
 
@@ -10862,7 +10872,7 @@ addEventHandler("SetNextDynamicNode", root, SetNextDynamicNode)
 function CreateDynamicBot(node, id)
 	if(PathNodes[node][id][1] == true) then
 		PathNodes[node][id][1] = false -- Блокируем ноду
-		local x,y,z = PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4]+2
+		local x,y,z = PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4]
 		local nextnode, nextid = unpack(FoundNextRandomNode(node, id))
 
 		local nextnode2, nextid2 = unpack(FoundNextRandomNode(nextnode, nextid))
@@ -10883,7 +10893,8 @@ function CreateDynamicBot(node, id)
 		
 		
 		local thePed = createPed(skin, x,y,z,0.0,true)
-		SData["DriverBot"][thePed] = false
+		
+		SData["DriverBot"][thePed] = track
 		
 		setElementData(thePed, "DynamicBot", toJSON({
 			PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4], PathNodes[nextnode][nextid][5],
@@ -11837,10 +11848,10 @@ local EightTrackStadium = {
 function balls(thePlayer)
 	local hotrings = {502, 494, 503}
 	local track = {}
-	for i, v in pairs(PathNodes["8 Ball Stadium"]) do
-
+	for slot = 1, 57 do
+		track[#track+1] = {"Unknown", slot}
 	end
-	CreateDriverBot(hotrings[math.random(#hotrings)], 299, -1399.8, -178.9, 1042.3, 7, 0, table.copy(EightTrackStadium), thePlayer)
+	CreateDriverBot(hotrings[math.random(#hotrings)], 299, -1399.8, -178.9, 1042.3, 7, 0, track, thePlayer)
 end
 addCommandHandler("balls", balls)
 

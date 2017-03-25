@@ -709,7 +709,6 @@ end
 
 function SetZoneDisplay(zone)
 	if(zone ~= "Unknown") then
-		triggerServerEvent("CreateVehicleNodeMarker", localPlayer, zone)
 		if(zone == "Yellow Bell Station") then zone = "Koyoen Station" end
 		
 		if(ZonesDisplay[#ZonesDisplay]) then
@@ -723,6 +722,7 @@ function SetZoneDisplay(zone)
 		end
 		ZonesDisplay[#ZonesDisplay+1] = {zone, 0, false}
 	end
+	triggerServerEvent("CreateVehicleNodeMarker", localPlayer, zone)
 end
 addEvent("SetZoneDisplay", true)
 addEventHandler("SetZoneDisplay", getRootElement(), SetZoneDisplay)
@@ -7718,6 +7718,7 @@ function DrawPlayerMessage()
 				for zone, arr in pairs(PData['infopath']) do
 					for i, arr2 in pairs(arr) do
 						local maincolor = false
+
 						if(arr2[1] == "Closed") then
 							maincolor = "Closed"
 						end
@@ -8642,7 +8643,9 @@ function StreamOut()
 	elseif getElementType(source) == "vehicle" then
 		if(VehiclesInStream[source]) then
 			for _, object in pairs(VehiclesInStream[source]) do
-				destroyElement(object)
+				if(isElement(object)) then
+					destroyElement(object)
+				end
 			end
 		end
 	end

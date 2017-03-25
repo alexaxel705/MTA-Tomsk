@@ -42203,7 +42203,8 @@ PathNodes = {
 		[2914] = {true, 1819.2, -1595.6, 12.4, false}, 
 		[2915] = {true, 1818.9, -1609.9, 12.4, false, {{"Little Mexico", 500}, {"Idlewood", 2400}}}, 
 	}, 
-	["8 Ball Stadium"] = {
+	["Unknown"] = {
+		-- "8 Ball Stadium"
 		[1] = {false, -1399, -188.5, 1042.2, false}, 
 		[2] = {false, -1398.2, -199.6, 1042.1, false}, 
 		[3] = {false, -1397.8, -209.7, 1042.1, false}, 
@@ -42260,7 +42261,7 @@ PathNodes = {
 		[54] = {false, -1420.6, -279.5, 1050.2, false}, 
 		[55] = {false, -1430.2, -283.8, 1050.2, false}, 
 		[56] = {false, -1440.8, -284.5, 1050.1, false}, 
-		[57] = {false, -1451.2, -283.5, 1049.9, false}, 
+		[57] = {false, -1451.2, -283.5, 1049.9, false, {{"Unknown", 1}}}, 
 	}
 }
 
@@ -42268,6 +42269,7 @@ PathNodes = {
 
 for name, dat in pairs(PathNodes) do
 	for i, arr in pairs(dat) do
+	
 			--local m = createMarker(arr[2],arr[3],arr[4], "cylinder", 1.5, 85, 87, 152, 120)
 			--createBlip(arr[2],arr[3],arr[4], 0, 1, 0,255,255,255)
 			--setElementData(m, "Dev", i)
@@ -42332,6 +42334,7 @@ end
 function NEWGPSFound(x,y,z, x2,y2,z2)
 	local startzone = getZoneName(x,y,z)
 	local endzone = getZoneName(x2,y2,z2)
+	
 	if(PathNodes[startzone] and PathNodes[endzone]) then
 		local tmp = {
 			["startdist"] = {[1] = 9999, [2] = 9999, [3] = 9999, [4] = 9999}, 
