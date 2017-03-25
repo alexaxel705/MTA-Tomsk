@@ -4406,6 +4406,12 @@ end
 
 
 function handleVehicleDamage(attacker, weapon, loss, x, y, z, tyre)
+	if(getElementType(attacker) == "vehicle") then
+		local acc = getVehicleOccupant(attacker)
+		if(getElementType(acc) == "player") then
+			attacker = acc
+		end
+	end
 	if(attacker == localPlayer) then
 		local occupants = getVehicleOccupants(source) or {}
 		for seat, occupant in pairs(occupants) do
@@ -4416,7 +4422,7 @@ function handleVehicleDamage(attacker, weapon, loss, x, y, z, tyre)
 					triggerServerEvent("AddMeWanted", localPlayer)
 				end
 			elseif(getElementType(occupant) == "ped") then
-				triggerServerEvent("PedDamage", localPlayer, occupant, weapon, 0, 0)
+				triggerServerEvent("PedDamage", localPlayer, occupant, 228, 0, 0)
 			end
 		end
 		triggerServerEvent("FireVehicle", localPlayer, source, weapon)
@@ -5320,7 +5326,9 @@ addEventHandler("onClientRender", root,
 							text = text..RGBToHex(getTeamColor(getTeamFromName(ArraySkinInfo[skin][1]))).."『 неизвестно 』"
 						else
 							if(not ArraySkinInfo[skin]) then outputChatBox(skin) end
-							text = text..RGBToHex(getTeamColor(getTeamFromName(ArraySkinInfo[skin][1])))..getPlayerName(thePlayer)
+							if(thePlayer ~= localPlayer) then
+								text = text..RGBToHex(getTeamColor(getTeamFromName(ArraySkinInfo[skin][1])))..getPlayerName(thePlayer)
+							end
 							if(skin == 252) then --CENSORED
 								sx, sy, sz = getCameraMatrix()
 								local x2,y2,z2 = getPedBonePosition(thePlayer, 1)

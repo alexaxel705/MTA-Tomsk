@@ -4900,7 +4900,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 592.8, -1251, 18.2, 0, 0 --
+		local x,y,z,i,d  = 523.5, -141.5, 36.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -13606,6 +13606,8 @@ function MarkerHit(hitElement, Dimension)
 		elseif(getElementData(source, "type") == "GExit") then
 			ToolTip(thePlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы выйти")
 			PlayersEnteredPickup[thePlayer] = source
+		elseif(getElementData(source, "type") == "FIRE") then
+			setPedOnFire(thePlayer, true)
 		elseif(getElementData(source, "type") == "enter") then
 		local r,g,b,a = getMarkerColor(source)
 		local text = "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы войти"
@@ -14215,9 +14217,13 @@ function CreateFire(arr)
 	arr = fromJSON(arr)
 	for v, k in pairs(arr) do
 		local obj = createObject(1362, k[1],k[2],k[3]-0.7)
-		setTimer(function(obj) 
+		local mar = createMarker(k[1], k[2], k[3], "checkpoint", 1, 0,0,0,0)
+		setElementVisibleTo(mar, root, false)
+		setElementData(mar, "type", "FIRE")
+		setTimer(function(obj, mar) 
 			destroyElement(obj)
-		end, 120000, 1, obj)
+			destroyElement(mar)
+		end, 120000, 1, obj, mar)
 	end
 end
 addEvent("CreateFire", true)
@@ -14266,7 +14272,7 @@ function playerDamage(attacker, weapon, bodypart, loss) --when a player is damag
 			if(PTeam == "Полиция" and KTeam ~= "Уголовники") then
 				WantedLevel(attacker, 0.1)
 			end
-			if(weapon >= 0 and weapon <=9) then
+			if(weapon >= 0 and weapon <= 9) then
 				AddSkill(attacker, 177)
 				if(weapon == 6) then
 					local rand = math.random(4)
