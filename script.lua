@@ -1939,8 +1939,56 @@ local SkinData = {
 
 
 
-
-
+-- Звезды розыска
+createPickup(2743.0, 1316.0, 8.0, 3, 1247, 60000)
+createPickup(2168.66, 2267.96, 15.34, 3, 1247, 60000)
+createPickup(2408.0, 1389.0, 22.0, 3, 1247, 60000)
+createPickup(2034.0, 842.0, 10.0, 3, 1247, 60000)
+createPickup(2096.0, 1287.0, 10.8, 3, 1247, 60000)
+createPickup(1987.0, 1543.0, 16.0, 3, 1247, 60000)
+createPickup(1854.0, 912.0, 10.8, 3, 1247, 60000)
+createPickup(2540.38, 2527.85, 10.39, 3, 1247, 60000)
+createPickup(1548.02, 1024.47, 10.39, 3, 1247, 60000)
+createPickup(1592.91, 2053.83, 10.26, 3, 1247, 60000)
+createPickup(1971.29, 2330.26, 10.41, 3, 1247, 60000)
+createPickup(1700.74, 1792.7, 10.41, 3, 1247, 60000)
+createPickup(2581.0, -1491.0, 24.0, 3, 1247, 60000)
+createPickup(2296.0, -1696.0, 14.0, 3, 1247, 60000)
+createPickup(2273.0, -1099.0, 38.0, 3, 1247, 60000)
+createPickup(2716.0, -1048.0, 66.0, 3, 1247, 60000)
+createPickup(2614.0, -2496.0, 33.0, 3, 1247, 60000)
+createPickup(1183.85, -1250.68, 14.7, 3, 1247, 60000)
+createPickup(1970.0, -1158.0, 21.0, 3, 1247, 60000)
+createPickup(734.0, -1137.0, 18.0, 3, 1247, 60000)
+createPickup(2553.76, -2464.31, 13.62, 3, 1247, 60000)
+createPickup(1204.06, -1613.89, 13.28, 3, 1247, 60000)
+createPickup(611.21, -1459.63, 14.01, 3, 1247, 60000)
+createPickup(1116.67, -719.91, 100.17, 3, 1247, 60000)
+createPickup(-1903.1, -466.44, 25.18, 3, 1247, 60000)
+createPickup(-2657.0, -144.0, 4.0, 3, 1247, 60000)
+createPickup(-2454.0, -166.0, 35.0, 3, 1247, 60000)
+createPickup(-2009.0, 1227.0, 32.0, 3, 1247, 60000)
+createPickup(-2120.0, 96.39, 39.0, 3, 1247, 60000)
+createPickup(-2411.0, -334.0, 37.0, 3, 1247, 60000)
+createPickup(-1690.0, 450.0, 13.0, 3, 1247, 60000)
+createPickup(-1991.26, -1144.13, 29.69, 3, 1247, 60000)
+createPickup(-2636.13, -492.83, 70.09, 3, 1247, 60000)
+createPickup(-2022.68, 345.98, 35.17, 3, 1247, 60000)
+createPickup(-2683.2, 784.13, 49.98, 3, 1247, 60000)
+createPickup(-1820.67, -154.12, 9.4, 3, 1247, 60000)
+createPickup(-736.0, 66.0, 24.0, 3, 1247, 60000)
+createPickup(262.33, -149.12, 1.58, 3, 1247, 60000)
+createPickup(1643.0, 264.0, 20.0, 3, 1247, 60000)
+createPickup(601.98, 2150.38, 39.41, 3, 1247, 60000)
+createPickup(-1407.0, -2039.0, 1.0, 3, 1247, 60000)
+createPickup(-2156.0, -2371.0, 31.0, 3, 1247, 60000)
+createPickup(-419.25, 1362.36, 12.21, 3, 1247, 60000)
+createPickup(629.04, 2842.83, 25.21, 3, 1247, 60000)
+createPickup(690.49, -209.59, 25.6, 3, 1247, 60000)
+createPickup(88.82, -125.1, 0.85, 3, 1247, 60000)
+createPickup(215.69, 1089.1, 16.4, 3, 1247, 60000)
+createPickup(-2305.24, 2310.11, 4.98, 3, 1247, 60000)
+createPickup(-213.61, 2717.44, 62.68, 3, 1247, 60000)
 
 
 
@@ -4900,7 +4948,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 2693.7, -1705, 11.8, 0, 0 --
+		local x,y,z,i,d  =  -212, 2709.6, 62.7, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -10006,10 +10054,25 @@ function moneyPickupHit(thePlayer)
 			end
 		end
 		ToolTip(thePlayer, text)
+	else
+		if(getElementModel(source) == 1247) then
+			WantedLevel(thePlayer, -1)
+		end
 	end
 end
 addEvent("onPickupUse", true)
 addEventHandler("onPickupUse", getRootElement(), moneyPickupHit)
+
+
+function PickupHit(thePlayer)
+	if(getElementModel(source) == 1247) then
+		usePickup(source, thePlayer)
+	end
+end
+addEventHandler("onPickupHit", getRootElement(), PickupHit)
+
+
+
 
 
 -- [timestamp] = command
@@ -10894,7 +10957,7 @@ function CreateDynamicBot(node, id)
 		
 		local thePed = createPed(skin, x,y,z,0.0,true)
 		
-		SData["DriverBot"][thePed] = track
+		SData["DriverBot"][thePed] = false
 		
 		setElementData(thePed, "DynamicBot", toJSON({
 			PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4], PathNodes[nextnode][nextid][5],
