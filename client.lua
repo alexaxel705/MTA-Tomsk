@@ -8215,6 +8215,8 @@ end
 
 
 
+
+
 function GetMarrot(angle, rz)
 	local marrot = 0
 	if(angle > rz) then

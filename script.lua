@@ -1585,17 +1585,17 @@ local TeamVehicle = {
 	["Баллас"] = {{517,"BALS 228",{30, 30, 30, 30}}, {412,"BALS 228",{30, 30, 30, 30}}, {566 ,"BALS 228",{30, 30, 30, 30}}},
 	["Ацтекас"] = {{466,"AZTC 228",{93, 71, 0, 0}}, {576,"AZTC 228",{93, 71, 0, 0}}, {474 ,"AZTC 228",{93, 71, 0, 0}}},
 	["Байкеры"] = {{468,"METAL228"}, {463,"METAL228"}, {586 ,"METAL228"}},
-	--404, 419, 439, 496, 475 для всех
+	--{для всех}, {такси}, {эксклюзивы}, {полиция}
 	["Полиция"] = {
-		["Los Santos"] = {{404}, {419}, {439}, {496}, {475}, {420}, {467}, {436}, {585}, {462}, {602}, {458}, {526}, {527}, {529}, {566}, {540}, {547}, {546}, {466}, {491}, {507}, {516}, {426}, {596, "POLS 228"}, {603}}, -- Phoenix эксклюзив 
-		["Red County"] = {{404}, {419}, {439}, {496}, {475}, {478}, {489}, {554}, {483}, {468}, {599, "PORC"}, {477}}, -- ZR-350 эксклюзив
-		["Whetstone"] = {{404}, {419}, {439}, {496}, {475}, {478}, {483}, {489}, {554}, {468}, {599, "POWS 228"}, {506}}, -- Super GT эксклюзив
-		["Flint County"] = {{404}, {419}, {439}, {496}, {475}, {478}, {483}, {489}, {554}, {468}, {599, "POFC 228"}, {402}}, -- Buffalo эксклюзив
-		["San Fierro"] = {{404}, {419}, {439}, {496}, {475}, {438}, {579}, {554}, {468}, {550}, {580}, {405}, {421}, {426}, {445}, {507}, {540}, {551}, {418}, {597, "POSF 228"}, {415}}, -- Cheetah эксклюзив
-		["Bone County"] = {{404}, {419}, {439}, {496}, {475}, {549}, {554}, {500}, {586}, {505}, {518}, {542}, {543}, {604}, {605}, {508}, {598, "POBC 228"}, {480}}, -- Comet эксклюзив
-		["Tierra Robada"] = {{404}, {419}, {439}, {496}, {475}, {549}, {500}, {586}, {505}, {518}, {542}, {543}, {604}, {605}, {508}, {598, "POTR 228"}, {533}}, -- Feltzer эксклюзив
-		["Las Venturas"] = {{404}, {419}, {439}, {496}, {475}, {420}, {555}, {587}, {589}, {463}, {561}, {560}, {559}, {558}, {562}, {400}, {565}, {575}, {598, "POLV 228"}, {541}}, -- Bullet эксклюзив
-		["Unknown"] = {{404}, {419}, {439}, {496}, {475}}
+		["Los Santos"] = {{404},{419},{439},{496},{475}, {420}, {603}, {467},{436},{585},{462},{602},{458},{526},{527},{529},{566},{540},{547},{546},{466},{491},{507},{516},{426}, {596, "POLS 228"}}, -- Phoenix эксклюзив 
+		["Red County"] = {{404},{419},{439},{496},{475}, {477}, {478},{489},{554},{483},{468}, {599, "PORC"}}, -- ZR-350 эксклюзив
+		["Whetstone"] = {{404},{419},{439},{496},{475}, {506}, {478},{483},{489},{554},{468}, {599, "POWS 228"}}, -- Super GT эксклюзив
+		["Flint County"] = {{404},{419},{439},{496},{475}, {402}, {478},{483},{489},{554},{468}, {599, "POFC 228"}}, -- Buffalo эксклюзив
+		["San Fierro"] = {{404},{419},{439},{496},{475}, {415}, {438},{579},{554},{468},{550},{580},{405},{421},{426},{445},{507},{540},{551},{418}, {597, "POSF 228"}}, -- Cheetah эксклюзив
+		["Bone County"] = {{404},{419},{439},{496},{475}, {480}, {549},{554},{500},{586},{505},{518},{542},{543},{604},{605},{508}, {598, "POBC 228"}}, -- Comet эксклюзив
+		["Tierra Robada"] = {{404},{419},{439},{496},{475}, {533}, {549},{500},{586},{505},{518},{542},{543},{604},{605},{508}, {598, "POTR 228"}}, -- Feltzer эксклюзив
+		["Las Venturas"] = {{404},{419},{439},{496},{475}, {420}, {541}, {400},{555},{587},{589},{463},{561},{560},{559},{558},{562},{400},{565},{575}, {598, "POLV 228"}}, -- Bullet эксклюзив
+		["Unknown"] = {{404},{419},{439},{496},{475}}
 	},
 	["Вагос"] = {{474,"VAGOS228",{6, 6, 0, 0}}, {467,"VAGOS228",{6, 6, 0, 0}}, {576 ,"VAGOS228",{6, 6, 0, 0}}},
 	["Колумбийский картель"] = {{422,"COKA 228",{116, 116, 116, 116},{2, 2}}, {440,"COKA 228",{116, 116, 116, 116},{1, 1}}, {600 ,"COKA 228",{116, 116, 116, 116},{2, 2}}, {543 ,"COKA 228",{116, 116, 116, 116},{4, 4}}},
@@ -4948,7 +4948,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 1060.7, -1293.2, 12.7, 0, 0 --
+		local x,y,z,i,d  = -1999.9, 584.3, 34, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -10827,25 +10827,23 @@ function kr(thePlayer, vmodel, pedmodel)
 	local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
 	if(i == 0 and d == 0) then
 		local arr = {
-			["east"] = NEWGPSFound(x-120,y,z, x,y,z), 
-			["south"] = NEWGPSFound(x+120,y,z, x,y,z), 
-			["north"] = NEWGPSFound(x,y+120,z, x,y,z), 
-			["west"] = NEWGPSFound(x,y-120,z, x,y,z)
+			[1] = NEWGPSFound(x-120,y,z, x,y,z), 
+			[2] = NEWGPSFound(x+120,y,z, x,y,z), 
+			[3] = NEWGPSFound(x,y+120,z, x,y,z), 
+			[4] = NEWGPSFound(x,y-120,z, x,y,z)
 		}
 
-		local minarr = 99999999
-		local minarrindex = false
 		for name, dat in pairs(arr) do
 			if(dat) then
 				if(#dat > 5) then -- Отсекаем слишком короткие пути
-					if(minarr > #dat) then
-						minarr = #dat
-						minarrindex = name
-					end
+					table.remove(arr, name)
 				end
+			else
+				table.remove(arr, name)
 			end
 		end
-		if(minarrindex) then
+		if(#arr > 0) then
+			local minarrindex = math.random(#arr)
 			local bx,by,bz = PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][2], PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][3], PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][4]
 			PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[minarrindex], thePlayer)
 		end
@@ -11578,6 +11576,8 @@ CreateShop(-314.1, 1774.8, 43.6, 4) --LV
 CreateShop(-2420.2, 969.9, 45.3, 16) -- SF
 CreateShop(2380.7, -1213.6, 27.4, 6) -- LS
 CreateShop(-2106, -2480.7, 30.6, 16) -- LS
+CreateShop(2292.3, -1722.7, 13.5, 4) -- LS
+
 
 
 function PrisonEvent(hour, minutes)
@@ -14990,7 +14990,7 @@ function CreateTruckMarker(thePlayer, x, y, z)
 	setElementData(TruckMarker[thePlayer], "type", "TruckMarker")
 	setElementData(TruckMarker[thePlayer], "player", getPlayerName(thePlayer))
 	
-	triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "#FFFFFFОтвези груз на #FF0000красный маркер#FFFFFF \nчтобы получить #32CD32вознаграждение")
+	triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "#FFFFFFОтвези груз на #FF0000красный маркер#FFFFFF\nчтобы получить #32CD32вознаграждение")
 	triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, x, y, z, "Отвези груз")
 end
 
