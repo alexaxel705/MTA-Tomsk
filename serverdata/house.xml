@@ -611,4 +611,14 @@
 	<h609 x="794" y="-1707.5" z="14" price="260000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h609>
 	<h610 x="797.2" y="-1729.3" z="13.5" price="290000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h610>
 	<h611 x="791.5" y="-1753.2" z="13.5" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h611>
+	<h612 x="-923.7" y="-497" z="26.8" price="85000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h612>
+    <h613 x="-940.5" y="-491.2" z="26.4" price="77000" locked="1" type="Маленькая комната" int="Safe House 10"></h613>
+    <h614 x="-960.7" y="-507.7" z="26.2" price="80000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h614>
+    <h615 x="-938.8" y="-517.9" z="26.1" price="74000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h615>
+    <h616 x="-929.1" y="-519.2" z="26.1" price="65000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h616>
+    <h617 x="-914.3" y="-528.8" z="26.1" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h617>
+    <h618 x="-914.3" y="-533.5" z="26.1" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h618>
+    <h619 x="-924.5" y="-536.3" z="26.1" price="65000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h619>
+    <h620 x="-940.2" y="-536.8" z="26.8" price="82000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h620>
+    <h621 x="-950.9" y="-530.7" z="26" price="93000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h621>
 </house>

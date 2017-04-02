@@ -3243,7 +3243,7 @@ local BannedMaterial = {
 	[76] = true
 }
 
-local IgnoreMaterial = {
+local IgnoreMaterial = { -- Костыль, убрать после того как сделаешь систему материалов
 	["Unknown"] = true,
 	["Unknown Bar"] = true,	
 	["Redsands West"] = true,	
@@ -3259,7 +3259,8 @@ local IgnoreMaterial = {
 	["Julius Thruway North"] = true,
 	["Prickle Pine"] = true,
 	["The Emerald Isle"] = true,
-	["Greenglass College"] = true
+	["Greenglass College"] = true,
+	["Missionary Hill"] = true,
 }
 
 

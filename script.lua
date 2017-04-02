@@ -3186,10 +3186,6 @@ setVehicleVariant(tmpv, 4, 4, 4, 4)
 
 
 
---ELLS
-CreateVehicle(552, -2520.6, -602.3, 132.5, 0, 0, 180, "IEL0 228")
-
-
 
 --Автошкола SF
 CreateVehicle(439, -2062.2, -108.7, 35.3, 0, 0, 180, "USF0 228", true, 1, 1)
@@ -3638,9 +3634,12 @@ addVehicleUpgrade(tmpv, 1181)
 addVehicleUpgrade(tmpv, 1183)
 
 
--- theVehicle, mode, x,y,z,rx,ry,rz, plateNumber, {характеристики}, "название"
+-- theVehicle, model, x,y,z,rx,ry,rz, plateNumber, {характеристики}, "название"
 local NonRandVeh = {
 -- San Fierro
+	-- Электростанция
+	{false, 552, -2520.6, -602.3, 131.6, 0,0,180, "IEL0 228"}, 
+
 	-- Аэропорт
 	{false, 519, -1289.1, -353.9,13.1, 0,0,219}, 
 	{false, 519, -1253.1, -347.9,13.1, 0,0,219}, 
@@ -4948,7 +4947,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -1493.3, 2668.5, 54.7, 0, 0 --
+		local x,y,z,i,d  = 1852.7, -1459.6, 12.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7237,7 +7236,7 @@ function preLoad(name)
 		end
 	end
 	
-	local CountRandomBot = 180
+	local CountRandomBot = 360
 	local availzones = {}
 	for name, dat in pairs(PedNodes) do
 		for _, dat2 in pairs(dat) do
