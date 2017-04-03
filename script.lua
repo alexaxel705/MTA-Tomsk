@@ -4947,7 +4947,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 1852.7, -1459.6, 12.4, 0, 0 --
+		local x,y,z,i,d  = 2413.8, -1447, 22.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7029,7 +7029,7 @@ end
 function preLoad(name)
 	setServerConfigSetting("ped_sync_interval", 50, true)
 	Createkickstart()
-	setGarageOpen(44, true)--Наркомафия
+	setGarageOpen(44, true) -- Наркомафия
 	setGarageOpen(40, true)	
 	setGarageOpen(41, true)
 	setGarageOpen(8, true)
@@ -7039,7 +7039,7 @@ function preLoad(name)
 	setGarageOpen(27, true)
 	setGarageOpen(36, true)	
 	setGarageOpen(47, true)
-	setGarageOpen(22, true) --SF
+	setGarageOpen(22, true) -- SF
 	setGarageOpen(7, true)
 	setGarageOpen(10, true)		
 	setGarageOpen(18, true)
@@ -7051,7 +7051,7 @@ function preLoad(name)
 	setGarageOpen(46, true)
 	setGameSpeed(1)
 	setMinuteDuration(1000)
-	local players = getElementsByType("player")--Даем ID
+	local players = getElementsByType("player") -- Даем ID
 	for theKey,thePlayer in ipairs(players) do 
 		triggerEvent("onPlayerJoin", thePlayer)
 	end
@@ -7213,7 +7213,7 @@ function preLoad(name)
 		local NodeName = xmlNodeGetName(node)
 		if(xmlNodeGetAttribute(node, "xyz")) then
 			local x,y,z,i,d = fromJSON(xmlNodeGetAttribute(node, "xyz"))
-			BusinessPickup[NodeName] = createPickup(x,y,z, 3, 1274, 0) --Электростанция SF
+			BusinessPickup[NodeName] = createPickup(x,y,z, 3, 1274, 0)
 			if(xmlNodeGetAttribute(node, "owner") ~= "") then
 				setElementData(BusinessPickup[NodeName], "bizowner", xmlNodeGetAttribute(node, "owner"))
 			end

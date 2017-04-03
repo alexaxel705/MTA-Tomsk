@@ -621,4 +621,15 @@
     <h619 x="-924.5" y="-536.3" z="26.1" price="65000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h619>
     <h620 x="-940.2" y="-536.8" z="26.8" price="82000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h620>
     <h621 x="-950.9" y="-530.7" z="26" price="93000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h621>
+	<h622 x="1296.3" y="191" z="20.5" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h622>
+    <h623 x="1300.4" y="193.3" z="20.5" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h623>
+    <h624 x="1303.6" y="186.1" z="20.5" price="65000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h624>
+    <h625 x="1295.4" y="174.6" z="20.9" price="80000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h625>
+    <h626 x="1283.3" y="158.4" z="20.8" price="82000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h626>
+    <h627 x="1294.5" y="157.6" z="20.6" price="67000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h627>
+    <h628 x="1299.2" y="140.3" z="20.5" price="55000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h628>
+    <h629 x="1305.8" y="148.8" z="20.5" price="43000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h629>
+    <h630 x="1307.3" y="153.3" z="20.5" price="43000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h630>
+    <h631 x="1311.8" y="169.5" z="20.6" price="68000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h631>
+    <h632 x="1315.6" y="180.1" z="20.6" price="61000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h632>
 </house>

@@ -133,12 +133,15 @@
     <CERBC owner="" xyz="[-207.9, 1119.2, 20.4, 0, 0]" biz="Церковь Tierra Robada" price="6250000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERBC>
-    <CERLV owner="" xyz="[2520.4, 918.5, 11, 0, 0]" biz="Свадебная часовня Las Venturas" price="7620000" money="0">
+    <CERLV owner="" xyz="[2520.4, 918.5, 11, 0, 0]" biz="Свадебная часовня Las Venturas" price="4650000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERLV>
-    <CERLV2 owner="" xyz="[2519.4, 2033.4, 11.2, 0, 0]" biz="Свадебная часовня Las Venturas" price="5620000" money="0">
+    <CERLV2 owner="" xyz="[2519.4, 2033.4, 11.2, 0, 0]" biz="Свадебная часовня Las Venturas" price="4600000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERLV2>
+    <CERLV3 owner="" xyz="[2439.5, 1293.3, 11, 0, 0]" biz="Свадебная часовня Las Venturas" price="4620000" money="0">
+        <VAC name="Патриарх"></VAC>
+    </CERLV3>
     <CERSF owner="" xyz="[-1989.9, 1117.9, 54.5, 0, 0]" biz="Церковь San Fierro" price="12000000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERSF>
