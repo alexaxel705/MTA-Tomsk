@@ -4947,7 +4947,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 2413.8, -1447, 22.8, 0, 0 --
+		local x,y,z,i,d  =  -2252.3, 728.8, 48.3, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -9472,6 +9472,11 @@ function buyHouse(thePlayer, buyhouse)
 			setElementID(el, buyhouse)
 		end
 
+		AddPlayerMoney(thePlayer, GetHousePrice(HouseNode))
+		triggerEvent("onPickupUse", getElementByID(buyhouse), thePlayer)
+		triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))), true)
+		MissionCompleted(thePlayer, "ПРОДАНО!", false, false, true)
+		
 		if(xmlNodeGetAttribute(HouseNode, "dolg")) then
 			xmlNodeSetAttribute(HouseNode, "dolg", nil)
 		end
@@ -9481,10 +9486,6 @@ function buyHouse(thePlayer, buyhouse)
 				setElementData(Garages[buyhouse][slot]["enter"], "owner", "")
 			end
 		end
-		AddPlayerMoney(thePlayer, GetHousePrice(HouseNode))
-		triggerEvent("onPickupUse", getElementByID(buyhouse), thePlayer)
-		triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))), true)
-		MissionCompleted(thePlayer, "ПРОДАНО!", false, false, true)
 	else
 		if(getElementData(getElementByID(buyhouse), "owner") == "") then
 			if(AddPlayerMoney(thePlayer, -tonumber(getElementData(getElementByID(buyhouse), "price")))) then
@@ -10082,7 +10083,7 @@ local Events = {
 }
 
 function worldtime()
-	for thePed,DriverRoute in ipairs(SData["DriverBot"]) do
+	for thePed,_ in pairs(SData["DriverBot"]) do
 		if(isElement(thePed)) then
 			if(not isPedDead(thePed)) then
 				if(SData["PlayerElementSync"][thePed]) then 
@@ -10102,7 +10103,6 @@ function worldtime()
 			SData["DriverBot"][thePed] = nil
 		end
 	end
-
 
 
 	local hour, minutes = getTime()
@@ -10911,15 +10911,17 @@ function SetNextDynamicNode(thePed)
 			end
 		else
 			if(SData["DriverBot"][thePed]) then
-				table.remove(SData["DriverBot"][thePed], 1)
-				if(#SData["DriverBot"][thePed] > 2) then
-					setElementData(thePed, "DynamicBot", toJSON({
-						SData["DriverBot"][thePed][1][1], SData["DriverBot"][thePed][1][2], SData["DriverBot"][thePed][1][3], false, 
-						SData["DriverBot"][thePed][2][1], SData["DriverBot"][thePed][2][2], SData["DriverBot"][thePed][2][3], false
-					}))
-				else
-					removeElementData(thePed, "DynamicBot")
-					SData["DriverBot"][thePed] = false
+				if(SData["DriverBot"][thePed] ~= "auto") then
+					table.remove(SData["DriverBot"][thePed], 1)
+					if(#SData["DriverBot"][thePed] > 2) then
+						setElementData(thePed, "DynamicBot", toJSON({
+							SData["DriverBot"][thePed][1][1], SData["DriverBot"][thePed][1][2], SData["DriverBot"][thePed][1][3], false, 
+							SData["DriverBot"][thePed][2][1], SData["DriverBot"][thePed][2][2], SData["DriverBot"][thePed][2][3], false
+						}))
+					else
+						removeElementData(thePed, "DynamicBot")
+						SData["DriverBot"][thePed] = nil
+					end
 				end
 			end
 		end
@@ -10956,7 +10958,7 @@ function CreateDynamicBot(node, id)
 		
 		local thePed = createPed(skin, x,y,z,0.0,true)
 		
-		SData["DriverBot"][thePed] = false
+		SData["DriverBot"][thePed] = "auto"
 		
 		setElementData(thePed, "DynamicBot", toJSON({
 			PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4], PathNodes[nextnode][nextid][5],
@@ -11028,7 +11030,7 @@ function PlayerElementSync(thePlayer, obj, state)
 			if(not SData["PlayerElementSync"][obj]) then 
 				SData["PlayerElementSync"][obj] = {} 
 				if(getElementData(obj, "DynamicBot")) then
-					if(not SData["DriverBot"][obj]) then
+					if(SData["DriverBot"][obj] == "auto") then
 						local arr = fromJSON(getElementData(obj, "CurNode"))
 						local node, id = arr[1], arr[2]
 						local nextnode, nextid = unpack(FoundNextRandomNode(node, id))
@@ -11054,7 +11056,7 @@ function PlayerElementSync(thePlayer, obj, state)
 			if(getArrSize(SData["PlayerElementSync"][obj]) == 0) then
 				SData["PlayerElementSync"][obj] = nil
 				if(getElementData(obj, "DynamicBot")) then
-					if(not SData["DriverBot"][obj]) then
+					if(SData["DriverBot"][obj] == "auto") then
 						local theVehicle = getPedOccupiedVehicle(obj)
 						if(theVehicle) then
 							destroyElement(theVehicle)
@@ -12019,13 +12021,12 @@ function PayDay()
 	local HouseNodes = xmlNodeGetChildren(HouseNode)
 	for i,node in ipairs(HouseNodes) do
 		if(xmlNodeGetValue(node) ~= "") then
-			local dolg = tonumber(xmlNodeGetAttribute(node, "dolg"))
-			local price = tonumber(xmlNodeGetAttribute(node, "price"))
-			if(dolg) then
-				dolg = dolg+math.floor(price/2000)
-			else
-				dolg = math.floor(price/2000)
+			local dolg = 0
+			if(xmlNodeGetAttribute(node, "dolg")) then
+				dolg = tonumber(xmlNodeGetAttribute(node, "dolg"))
 			end
+			local price = tonumber(xmlNodeGetAttribute(node, "price"))
+			dolg = dolg+math.round(price/2000, 0)
 			xmlNodeSetAttribute(node, "dolg", dolg)
 			setElementData(getElementByID(xmlNodeGetName(node)), "price", GetHousePrice(node))
 			if(GetHousePrice(node) <= 0) then
@@ -12326,6 +12327,7 @@ function wipe()
 	local HouseNodes = xmlNodeGetChildren(HouseNode)
 	for i,node in ipairs(HouseNodes) do
 		xmlNodeSetValue(node, "")
+		xmlNodeSetAttribute(node, "dolg", nil)
 		xmlNodeSetAttribute(node, "locked", "1")
 	end
 	
@@ -15745,11 +15747,13 @@ function bank(thePlayer, count, args)
 	local arg = fromJSON(args)
 	local count = tonumber(count)
 	if(count) then
-		if(AddPlayerMoney(thePlayer, -count)) then
-			local bankMoney=GetDatabaseAccount(thePlayer, "bank")
-			SetDatabaseAccount(thePlayer, "bank", bankMoney+count)
-			
-			BankEvent(thePlayer, false, arg[1], true)
+		if(count > 0) then
+			if(AddPlayerMoney(thePlayer, -count)) then
+				local bankMoney=GetDatabaseAccount(thePlayer, "bank")
+				SetDatabaseAccount(thePlayer, "bank", bankMoney+count)
+				
+				BankEvent(thePlayer, false, arg[1], true)
+			end
 		end
 	end
 end

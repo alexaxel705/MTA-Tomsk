@@ -1672,7 +1672,6 @@ addEventHandler("GPSFoundShop", localPlayer, GPSFoundShop)
 
 
 
-local MarkerTrigger = false
 function MarkerHit(hitPlayer, Dimension)
 	if(not Dimension) then return false end
 	if(hitPlayer == localPlayer) then
@@ -1689,14 +1688,14 @@ function MarkerHit(hitPlayer, Dimension)
 		elseif(getElementData(source, "type") == "RVMarker") then
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			if(theVehicle) then
-				if(not MarkerTrigger) then
+				if(not PData["MarkerTrigger"]) then
 					setPedCanBeKnockedOffBike(localPlayer, false)
 					local x,y,z = getElementPosition(theVehicle)
 					local _,_,rz = getElementRotation(theVehicle)
 					triggerServerEvent("OpenTuning", localPlayer, localPlayer, x,y,z,rz)
-					MarkerTrigger = true
+					 PData["MarkerTrigger"] = true
 				else
-					MarkerTrigger = false
+					 PData["MarkerTrigger"] = nil
 				end
 			end
 		elseif(getElementData(source, "type") == "SPRAY") then
