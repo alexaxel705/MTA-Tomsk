@@ -6658,8 +6658,7 @@ function usedrink(thePlayer, slot)
 		setPedWalkingStyle(thePlayer, 126)
 		
 		local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-		local PedTeam = getTeamName(getPlayerTeam(thePed))
-		if(PlayerTeam == "Военные" and PedTeam == "Уголовники") then
+		if(PlayerTeam == "Военные") then
 				if(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
 				setTimer(function()
 					triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
@@ -14131,7 +14130,8 @@ function butilka(thePlayer, name, i, thePed)
 			removeElementData(thePed, "BottleAnus")
 			
 			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-			if(PlayerTeam == "Военные") then
+			local PedTeam = getTeamName(getPlayerTeam(thePed))
+			if(PlayerTeam == "Военные" and PedTeam == "Уголовники") then
 				if(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
 					SetTeam(thePlayer, "Мирные жители")
 					SetDatabaseAccount(thePlayer, "skin", 48)

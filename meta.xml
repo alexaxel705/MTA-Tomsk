@@ -15,6 +15,12 @@
 	<file src="invobject/chroma.png" />
 	<file src="invobject/crap.png" />
 	<file src="invobject/unknown.png" />
+
+	<file src="lang/Ru_ru.po" download="false" />
+	<file src="lang/Ru_en.po" download="false" />
+	<file src="lang/Ru_pt_BR.po" download="false" />
+	<file src="lang/Ru_az_AZ.po" download="false" />
+	<file src="lang/Ru_tr.po" download="false" />
 	
 	<file src="GTA3.mp3" />
 	<script src="client.lua" type="client" validate="true" />
