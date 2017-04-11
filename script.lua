@@ -90,10 +90,13 @@ function setCameraOnPlayerJoin()
 end
 addEventHandler("onPlayerJoin", getRootElement(), setCameraOnPlayerJoin)
 
---[[
+
 local Lang = {
-	["Русский"] = "ru.po",
-	["English"] = "en.po"
+	["Русский"] = "Ru_ru.po",
+	["English"] = "Ru_en.po",
+	["Portuguese"] = "Ru_pt_BR.po", 
+	["Azerbaijani"] = "Ru_az_AZ.po", 
+	["Turkish"] = "Ru_tr.po", 
 }
 
 local LangArr = {}
@@ -102,9 +105,9 @@ local LangArr = {}
 for lng, name in pairs(Lang) do
 	local hFile = fileOpen("lang/"..name, true)
 
-	local ft = fileRead(hFile, 100)
+	local ft = fileRead(hFile, 2500)
 	while not fileIsEOF(hFile) do
-		ft = ft .. fileRead(hFile, 100)
+		ft = ft .. fileRead(hFile, 2500)
 	end
 	
 	
@@ -112,18 +115,22 @@ for lng, name in pairs(Lang) do
 	local Lines = split (ft, "\n")
 	for i = 1, #Lines do
 		if(string.sub(Lines[i], 0, 5) == "msgid") then
-			LangArr[lng][string.sub(Lines[i], 8, #Lines[i]-2)] = string.sub(Lines[i+1], 9, #Lines[i+1]-2)
+			LangArr[lng][string.sub(Lines[i], 8, #Lines[i]-1)] = string.sub(Lines[i+1], 9, #Lines[i+1]-1)
 		end
 	end
 	fileClose(hFile)
 end
 
 
---outputServerLog(LangArr["Русский"]["WASTED"])
---]]
 
 
-
+function SetLang(thePlayer, lang)
+	PData[source]["lang"] = lang
+	triggerClientEvent(thePlayer, "SetLang", thePlayer, Lang[lang])
+	
+end
+addEvent("SetLang", true)
+addEventHandler("SetLang", root,SetLang)
 
 
 
@@ -12475,12 +12482,14 @@ function loginPlayer(thePlayer, password)
 			Respect(thePlayer)
 			SpawnedAfterChange(thePlayer)
 			PData[thePlayer]["auth"] = true
+			triggerClientEvent(thePlayer, "AuthComplete", thePlayer)
 		else
 			outputChatBox("Неверный пароль", thePlayer, 255, 255, 255, true)
 			triggerClientEvent(thePlayer, "LoginWindow", thePlayer)
 		end
 	else
 		PData[thePlayer]["auth"] = true
+		triggerClientEvent(thePlayer, "AuthComplete", thePlayer)
 		AddDatabaseAccount(thePlayer, password)
 		Respect(thePlayer)
 		triggerClientEvent(thePlayer, "intro", thePlayer)

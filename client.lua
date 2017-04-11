@@ -41,15 +41,17 @@ local PData = {
 	['ShakeLVL'] = 0, 
 	['TARR'] = {}, -- Target, по центру, ниже, выше
 	['MultipleAction'] = {},
+	['LANG'] = "Ru_ru.po", 
 	['infopath'] = {}, -- Для разработчика
 	['changezone'] = {} -- Для разработчика
 }
-local timers={}
-local timersAction={}
+local LangArr = {}
+local timers = {}
+local timersAction = {}
 local backpackid = false
 local titleText = ""
-local ToolTipText=""
-local ToolTipTimers=false
+local ToolTipText = ""
+local ToolTipTimers = false
 toggleAllControls(true)
 local screenWidth, screenHeight = guiGetScreenSize()
 local scale = ((screenWidth/1920)+(screenHeight/1080))
@@ -131,6 +133,12 @@ HUD:
 	6 - helpmessage
 	7 - helpmessage
 	8 - input
+	
+	10 - Russian
+	11 - English
+	12 - Portuguese
+	13 - Azerbaijani
+	14 - Turkish
 --]]
 local RespawnTimer = false
 local LainOS = false
@@ -727,6 +735,16 @@ end
 addEvent("SetZoneDisplay", true)
 addEventHandler("SetZoneDisplay", getRootElement(), SetZoneDisplay)
 
+
+
+function Text(text)
+	if(LangArr[text]) then
+		if(LangArr[text] ~= "") then
+			return LangArr[text]
+		end
+	end
+	return text
+end
 
 
 function UpdateZones(zones)
@@ -1614,7 +1632,7 @@ function GPS(x,y,z,info,after)
 		local px, py, pz = getElementPosition(localPlayer)
 		triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x,y,z)
 	end
-	if(info) then setElementData(GPSM, "info", info) end
+	if(info) then setElementData(GPSM, "info", Text(info)) end
 	if(after) then setElementData(GPSM, "after", after) end
 	playSFX("script", 217, 0, false)
 end
@@ -3576,23 +3594,52 @@ end
 --]]
 
 
-
-
-
-
-function StartLoad()
-	if(HUDPreload()) then
-		setFogDistance(10)
-		setTime(12, 0)
-		setWeather(0)
-		GenerateTexture()
-	end
+function StartUnload()
+	LoginClient()
+	stopSound(GTASound)
+	return true
 end
 
 
 
-function GenerateTexture()
-	PData['loading'] = 8+(92-(92/getArrSize(TexturesPosition))*getArrSize(PreloadTextures))
+function StartLoad() -- Первый этап загрузки
+	if(HUDPreload()) then
+		setFogDistance(10)
+		setTime(12, 0)
+		setWeather(0)
+		downloadFile("lang/"..PData["LANG"])
+	end
+end
+
+function onDownloadFinish(file, success) -- Второй этап загрузки
+	if(file == "lang/"..PData["LANG"]) then
+		PData['loading'] = 10
+		
+		local hFile = fileOpen("lang/"..PData["LANG"], true)
+
+		local ft = fileRead(hFile, 2500)
+		while not fileIsEOF(hFile) do
+			ft = ft .. fileRead(hFile, 2500)
+		end
+		
+		LangArr = {}
+		local Lines = split(ft, "\n")
+		for i = 1, #Lines do
+			if(string.sub(Lines[i], 0, 5) == "msgid") then
+				LangArr[string.sub(Lines[i], 8, #Lines[i]-1)] = string.sub(Lines[i+1], 9, #Lines[i+1]-1)
+			end
+		end
+		fileClose(hFile)
+
+		GenerateTexture()
+	end
+end
+addEventHandler("onClientFileDownloadComplete", root, onDownloadFinish)
+
+
+
+function GenerateTexture() -- Третий этап загрузки
+	PData['loading'] = 10+(92-(92/getArrSize(TexturesPosition))*getArrSize(PreloadTextures))
 	
 	local LoadTexture = false
 
@@ -3707,17 +3754,50 @@ end
 
 
 function LoginClient()
-	CreateButtonInputInt("loginPlayerEvent", "Регистрация/Вход")
+	CreateButtonInputInt("loginPlayerEvent", Text("Регистрация/Вход"))
+	showCursor(true)
+	
+	PText["INVHUD"][10] = {"Русский", 100*NewScale, 500*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Русский"}}}
+	PText["INVHUD"][11] = {"English", 100*NewScale, 540*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "English"}}}
+	PText["INVHUD"][12] = {"Portuguese", 100*NewScale, 580*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Portuguese"}}}
+	PText["INVHUD"][13] = {"Azerbaijani", 100*NewScale, 620*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Azerbaijani"}}}
+	PText["INVHUD"][14] = {"Turkish", 100*NewScale, 660*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Turkish"}}}
 end
-addEvent("LoginWindow", true )
+addEvent("LoginWindow", true)
 addEventHandler("LoginWindow", localPlayer, LoginClient)
+
+
+function AuthComplete()
+	PText["INVHUD"][10] = nil
+	PText["INVHUD"][11] = nil
+	PText["INVHUD"][12] = nil
+	PText["INVHUD"][13] = nil
+	PText["INVHUD"][14] = nil
+end
+addEvent("AuthComplete", true)
+addEventHandler("AuthComplete", localPlayer, AuthComplete)
+
+
+
+
+function SetLang(lang)
+	PData["LANG"] = lang
+	if(StartUnload()) then
+		StartLoad()
+	end
+end
+addEvent("SetLang", true)
+addEventHandler("SetLang", localPlayer, SetLang)
+
+
+
 
 
 
 function CallPhoneInput()
 	CreateButtonInputInt("CallPhoneOutput", "Введите номер или ИД игрока")
 end
-addEvent("CallPhoneInput", true )
+addEvent("CallPhoneInput", true)
 addEventHandler("CallPhoneInput", localPlayer, CallPhoneInput)
 
 
@@ -4090,10 +4170,10 @@ function helpmessage(message, job, money, removetarget, cinema)
 	end
 	
 	
-	PText["HUD"][5] = {message, screenWidth, screenHeight-(350*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
+	PText["HUD"][5] = {Text(message), screenWidth, screenHeight-(350*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
 
 	if(job) then
-		PText["HUD"][6] = {"#744D02"..job, screenWidth, screenHeight/2-dxGetFontHeight(NewScale*6, "sans")/2, 0, 0, tocolor(255, 255, 255, 255), NewScale*6, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
+		PText["HUD"][6] = {"#744D02"..Text(job), screenWidth, screenHeight/2-dxGetFontHeight(NewScale*6, "sans")/2, 0, 0, tocolor(255, 255, 255, 255), NewScale*6, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
 	end
 	
 	if(money) then
