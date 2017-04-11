@@ -1720,6 +1720,10 @@ function MarkerHit(hitPlayer, Dimension)
 					if(not theVehicle) then
 						if(not isPedDoingTask(localPlayer, "TASK_SIMPLE_FIGHT") and not isPedDoingTask(thePed, "TASK_SIMPLE_FIGHT")) then
 							if(GetElementAttacker(thePed)) then
+								if(getElementHealth(thePed) < 20) then
+									triggerServerEvent("PedDialog", localPlayer, localPlayer, thePed)
+									setElementData(thePed, "saytome", "true")
+								end
 								return false
 							end
 							triggerServerEvent("PedDialog", localPlayer, localPlayer, thePed)
@@ -5850,7 +5854,10 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 											end
 											
 											if(PInv[name][i][1] == "Pissh Gold" 
-											or PInv[name][i][1] == "Pissh") then
+											or PInv[name][i][1] == "Pissh"
+											or PInv[name][i][1] == "KBeer"
+											or PInv[name][i][1] == "KBeer Dark"
+											or PInv[name][i][1] == "isabella") then
 												for id, player in pairs(getElementsByType("player", getRootElement(), true)) do
 													if(player ~= localPlayer) then
 														local x2, y2, z2 = getElementPosition(player)

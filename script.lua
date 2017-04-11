@@ -5004,12 +5004,11 @@ function StartAnimation(thePlayer, block, anim, times, loop, updatePosition, int
 		if(loop) then
 			setElementData(thePlayer, "anim", toJSON({block, anim, times, loop, updatePosition, interruptable, freezeLastFrame}))
 		end
-	elseif(getElementType(thePlayer) == "player") then
-		if(getElementHealth(thePlayer) < 20) then
-			return false
-		end
 	end
 	
+	if(getElementHealth(thePlayer) < 20 and not forced) then
+		return false
+	end
 	setPedAnimation(thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame)
 	return true
 end
@@ -8674,7 +8673,6 @@ addEventHandler("BandInvite", getRootElement(), BandInvite)
 
 
 function DialogStart(thePlayer, dial, thePed)
-
 	StartAnimation(thePed, "ped", "factalk", 1, false, true, true, true)
 	triggerClientEvent(thePlayer, "PlayerDialog", thePlayer, dial, thePed)
 	PData[thePlayer]["dialog"] = dial
@@ -8733,32 +8731,32 @@ end
 
 function PedDialog(thePlayer, thePed)
 	if(not isPedDead(thePed) and not isPedDead(thePlayer)) then
-		if(getElementType(thePed) == "ped") then
-			if(getElementData(thePed, "dialog")) then
-				local rand = math.random(1, tablelength(Dialogs[getElementData(thePed, "dialog")]))
-				DialogStart(thePlayer, Dialogs[getElementData(thePed, "dialog")][rand], thePed)
-			else
-				local model = getElementModel(thePed)
-				if(SkinData[model][5]) then
-					local rand = math.random(1, tablelength(Dialogs[SkinData[model][5]]))
-					DialogStart(thePlayer, Dialogs[SkinData[model][5]][rand], thePed)
+		if(getElementHealth(thePed) > 20) then
+			if(getElementType(thePed) == "ped") then
+				if(getElementData(thePed, "dialog")) then
+					local rand = math.random(1, tablelength(Dialogs[getElementData(thePed, "dialog")]))
+					DialogStart(thePlayer, Dialogs[getElementData(thePed, "dialog")][rand], thePed)
 				else
-					local team = getElementData(thePed, "team")
-					if(team) then
-						if(Dialogs[team]) then
-							local rand = math.random(1, tablelength(Dialogs[team]))
-							for i, k in pairs(Dialogs[team]) do
-								if(i == rand) then
-									DialogStart(thePlayer, Dialogs[team][rand], thePed)
-									break
+					local model = getElementModel(thePed)
+					if(SkinData[model][5]) then
+						local rand = math.random(1, tablelength(Dialogs[SkinData[model][5]]))
+						DialogStart(thePlayer, Dialogs[SkinData[model][5]][rand], thePed)
+					else
+						local team = getElementData(thePed, "team")
+						if(team) then
+							if(Dialogs[team]) then
+								local rand = math.random(1, tablelength(Dialogs[team]))
+								for i, k in pairs(Dialogs[team]) do
+									if(i == rand) then
+										DialogStart(thePlayer, Dialogs[team][rand], thePed)
+										break
+									end
 								end
 							end
 						end
 					end
 				end
-			end
-		elseif(getElementType(thePed) == "player") then
-			if(getElementHealth(thePed) > 20) then
+			elseif(getElementType(thePed) == "player") then
 				if(GetDatabaseAccount(thePlayer, "team") == "МЧС") then
 					if(getElementData(thePed, "sleep")) then
 						DialogStart(thePlayer, Dialogs["Игрок МЧС"][2], thePed)
@@ -8772,9 +8770,9 @@ function PedDialog(thePlayer, thePed)
 				else
 					DialogStart(thePlayer, Dialogs["Игрок обычный"][1], thePed)
 				end
-			else
-				DialogStart(thePlayer, Dialogs["Игрок в корячке"][1], thePed)
 			end
+		else
+			DialogStart(thePlayer, Dialogs["Игрок в корячке"][1], thePed)
 		end
 	end
 end
@@ -8829,9 +8827,14 @@ function PedDamage(ped, weapon, bodypart, loss)
 			end
 		end
 	end
+	
 	if(bodypart == 9) then
 		setPedHeadless(ped, true)
 		killPed(ped, source, weapon, bodypart) 
+	end
+	
+	if(getElementHealth(ped) < 20) then
+		Koryachka(ped)
 	end
 	
 	if(weapon == 49) then
@@ -8852,7 +8855,17 @@ addEvent("PedDamage", true)
 addEventHandler("PedDamage", getRootElement(), PedDamage)
 
 
-
+function Koryachka(thePlayer)
+	if(getElementHealth(thePlayer) < 20) then
+		if(getElementHealth(thePlayer) > 15) then
+			StartAnimation(thePlayer, "CRACK", "crckidle1", -1, true, true, true, false, true)
+		elseif(getElementHealth(thePlayer) > 7) then
+			StartAnimation(thePlayer, "CRACK", "crckidle2", -1, true, true, true, false, true)
+		elseif(getElementHealth(thePlayer) > 0) then
+			StartAnimation(thePlayer, "CRACK", "crckidle4", -1, true, true, true, false, true)
+		end
+	end
+end
 
 function InviteBot(ped)
 	local Team = getElementData(ped, "team")
@@ -10823,26 +10836,30 @@ function kr(thePlayer, vmodel, pedmodel)
 	local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
 	if(i == 0 and d == 0) then
 		local arr = {
-			[1] = NEWGPSFound(x-120,y,z, x,y,z), 
-			[2] = NEWGPSFound(x+120,y,z, x,y,z), 
-			[3] = NEWGPSFound(x,y+120,z, x,y,z), 
-			[4] = NEWGPSFound(x,y-120,z, x,y,z)
+			["west"] = NEWGPSFound(x-120,y,z, x,y,z), 
+			["east"] = NEWGPSFound(x+120,y,z, x,y,z), 
+			["south"] = NEWGPSFound(x,y+120,z, x,y,z), 
+			["north"] = NEWGPSFound(x,y-120,z, x,y,z)
 		}
 
 		for name, dat in pairs(arr) do
 			if(dat) then
 				if(#dat < 5) then -- Отсекаем слишком короткие пути
-					table.remove(arr, name)
+					arr[name] = nil
 				end
 			else
-				table.remove(arr, name)
+				arr[name] = nil
 			end
 		end
-		if(#arr > 0) then
-			local minarrindex = math.random(#arr)
-			if(#arr[minarrindex] > 5) then -- Костыль
-				local bx,by,bz = PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][2], PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][3], PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][4]
-				PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[minarrindex], thePlayer)
+		if(getArrSize(arr) > 0) then
+			local ind = 0
+			local minarrindex = math.random(getArrSize(arr))
+			for name, dat in pairs(arr) do
+				ind = ind+1
+				if(ind == minarrindex) then
+					local bx,by,bz = PathNodes[arr[name][1][1]][arr[name][1][2]][2], PathNodes[arr[name][1][1]][arr[name][1][2]][3], PathNodes[arr[name][1][1]][arr[name][1][2]][4]
+					PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[name], thePlayer)
+				end
 			end
 		end
 	end
@@ -13924,44 +13941,42 @@ end
 
 
 
-local wanktimers={}
-
-
+local wanktimers = {}
 function iznas2(thePlayer, thePed)
-	local player2=thePed
-	if(player2) then
-		if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
+	if(thePed) then
+		if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
 			if(isTimer(wanktimers[thePlayer])) then
 				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
 			else
-				setElementCollisionsEnabled(player2, false)
+				setElementCollisionsEnabled(thePed, false)
 				local x, y, z = getElementPosition(thePlayer)
 				local rx,ry,rz = getElementRotation(thePlayer)
 				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
-				setElementPosition(player2, x2, y2, z2)
-				setElementRotation(player2,rx,ry,rz+180, "default", true)
+				setElementPosition(thePed, x2, y2, z2)
+				setElementRotation(thePed,rx,ry,rz+180, "default", true)
 				StartAnimation(thePlayer, "SEX", "SEX_2_Fail_P", 6800, true, false, false, false, true)
-				StartAnimation(player2, "SEX", "SEX_2_Fail_W", 6800, true, false, false, false, true)
+				StartAnimation(thePed, "SEX", "SEX_2_Fail_W", 6800, true, false, false, false, true)
 				UnBindAllKey(thePlayer)
-				UnBindAllKey(player2)
+				UnBindAllKey(thePed)
 				Pain(thePlayer)
-				Pain(player2)
+				Pain(thePed)
 				setTimer(function()
 					BindAllKey(thePlayer)
-					BindAllKey(player2)
-					setElementCollisionsEnabled(player2, true)
-					if(isPlayerBolezn(thePlayer, "СПИД") or isPlayerBolezn(player2, "СПИД")) then
-						addPlayerBolezn(player2, "СПИД", 1)
+					BindAllKey(thePed)
+					Koryachka(thePed)
+					setElementCollisionsEnabled(thePed, true)
+					if(isPlayerBolezn(thePlayer, "СПИД") or isPlayerBolezn(thePed, "СПИД")) then
+						addPlayerBolezn(thePed, "СПИД", 1)
 						addPlayerBolezn(thePlayer, "СПИД", 1)
 					else
 						local randSpid = math.random(1,10)
 						if(randSpid == 1) then
-							addPlayerBolezn(player2, "СПИД", 1)
+							addPlayerBolezn(thePed, "СПИД", 1)
 							addPlayerBolezn(thePlayer, "СПИД", 1)
 						elseif(randSpid == 2) then
-							triggerClientEvent(player2, "bloodfoot", player2, true)
-							addPlayerBolezn(player2, "Порванный анус", 1)
-							outputChatBox("Ты порвал анус "..getPlayerName(player2), thePlayer, 255,255,255,true)
+							triggerClientEvent(thePed, "bloodfoot", thePed, true)
+							addPlayerBolezn(thePed, "Порванный анус", 1)
+							outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
 						end
 					end
 
@@ -13976,31 +13991,31 @@ addEventHandler("iznas2", getRootElement(), iznas2)
 
 
 function iznas3(thePlayer, thePed)
-	local player2=thePed
-	if(player2) then
-		if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
+	if(thePed) then
+		if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
 			if(isTimer(wanktimers[thePlayer])) then
 				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
 			else
-				setElementCollisionsEnabled(player2, false)
+				setElementCollisionsEnabled(thePed, false)
 				local x, y, z = getElementPosition(thePlayer)
 				local rx,ry,rz = getElementRotation(thePlayer)
 				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
-				setElementPosition(player2, x2, y2, z2)
-				setElementRotation(player2,rx,ry,rz+180, "default", true)
+				setElementPosition(thePed, x2, y2, z2)
+				setElementRotation(thePed,rx,ry,rz+180, "default", true)
 				StartAnimation(thePlayer, "SEX", "SEX_3_Fail_P", 6800, true, false, false, false, true)
-				StartAnimation(player2, "SEX", "SEX_3_Fail_W", 6800, true, false, false, false, true)
+				StartAnimation(thePed, "SEX", "SEX_3_Fail_W", 6800, true, false, false, false, true)
 				UnBindAllKey(thePlayer)
-				UnBindAllKey(player2)
+				UnBindAllKey(thePed)
 				Pain(thePlayer)
-				Pain(player2)
+				Pain(thePed)
 				setTimer(function()
 					BindAllKey(thePlayer)
-					BindAllKey(player2)
-					setElementCollisionsEnabled(player2, true)
-					triggerClientEvent(player2, "bloodfoot", player2, true)
-					addPlayerBolezn(player2, "Порванный анус", 1)
-					outputChatBox("Ты порвал анус "..getPlayerName(player2), thePlayer, 255,255,255,true)
+					BindAllKey(thePed)
+					Koryachka(thePed)
+					setElementCollisionsEnabled(thePed, true)
+					triggerClientEvent(thePed, "bloodfoot", thePed, true)
+					addPlayerBolezn(thePed, "Порванный анус", 1)
+					outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
 				end, 5800, 1)
 				wanktimers[thePlayer] = setTimer(function() end, 1000, 1) -- 240000
 			end
@@ -14013,40 +14028,40 @@ addEventHandler("iznas3", getRootElement(), iznas3)
 
 
 function iznas(thePlayer, thePed)
-	local player2=thePed
-	if(player2) then
-		if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
+	if(thePed) then
+		if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
 			if(isTimer(wanktimers[thePlayer])) then
 				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
 			else
-				setElementCollisionsEnabled(player2, false)
+				setElementCollisionsEnabled(thePed, false)
 				local x, y, z = getElementPosition(thePlayer)
 				local rx,ry,rz = getElementRotation(thePlayer)
 				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
-				setElementPosition(player2, x2, y2, z2)
-				setElementRotation(player2,rx,ry,rz+180, "default", true)
+				setElementPosition(thePed, x2, y2, z2)
+				setElementRotation(thePed,rx,ry,rz+180, "default", true)
 				StartAnimation(thePlayer, "SEX", "SEX_1_Cum_P", 6800, true, false, false, false, true)
-				StartAnimation(player2, "SEX", "SEX_1_Cum_W", 6800, true, false, false, false, true)
+				StartAnimation(thePed, "SEX", "SEX_1_Cum_W", 6800, true, false, false, false, true)
 				UnBindAllKey(thePlayer)
-				UnBindAllKey(player2)
+				UnBindAllKey(thePed)
 				Pain(thePlayer)
-				Pain(player2)
+				Pain(thePed)
 				setTimer(function()
 					BindAllKey(thePlayer)
-					BindAllKey(player2)
-					setElementCollisionsEnabled(player2, true)
-					if(isPlayerBolezn(thePlayer, "СПИД") or isPlayerBolezn(player2, "СПИД")) then
-						addPlayerBolezn(player2, "СПИД", 1)
+					BindAllKey(thePed)
+					Koryachka(thePed)
+					setElementCollisionsEnabled(thePed, true)
+					if(isPlayerBolezn(thePlayer, "СПИД") or isPlayerBolezn(thePed, "СПИД")) then
+						addPlayerBolezn(thePed, "СПИД", 1)
 						addPlayerBolezn(thePlayer, "СПИД", 1)
 					else
 						local randSpid = math.random(1,10)
 						if(randSpid == 1) then
-							addPlayerBolezn(player2, "СПИД", 1)
+							addPlayerBolezn(thePed, "СПИД", 1)
 							addPlayerBolezn(thePlayer, "СПИД", 1)
 						elseif(randSpid == 2) then
-							triggerClientEvent(player2, "bloodfoot", player2, true)
-							addPlayerBolezn(player2, "Порванный анус", 1)
-							outputChatBox("Ты порвал анус "..getPlayerName(player2), thePlayer, 255,255,255,true)
+							triggerClientEvent(thePed, "bloodfoot", thePed, true)
+							addPlayerBolezn(thePed, "Порванный анус", 1)
+							outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
 						end
 					end
 
@@ -14062,29 +14077,29 @@ addEventHandler("iznas", getRootElement(), iznas)
 
 
 function blowjob(thePlayer, thePed)
-	local player2=thePed
-	if(player2) then
-		if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
+	if(thePed) then
+		if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
 			if(isTimer(wanktimers[thePlayer])) then
 				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
 			else
-				setElementCollisionsEnabled(player2, false)
+				setElementCollisionsEnabled(thePed, false)
 				local x, y, z = getElementPosition(thePlayer)
 				local rx,ry,rz = getElementRotation(thePlayer)
 				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
-				setElementPosition(player2, x2, y2, z2)
-				setElementRotation(player2,rx,ry,rz+180, "default", true)
+				setElementPosition(thePed, x2, y2, z2)
+				setElementRotation(thePed,rx,ry,rz+180, "default", true)
 				StartAnimation(thePlayer, "BLOWJOBZ", "BJ_STAND_START_P", 6800, true, false, false, false, true)
-				StartAnimation(player2, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
+				StartAnimation(thePed, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
 				UnBindAllKey(thePlayer)
-				UnBindAllKey(player2)
+				UnBindAllKey(thePed)
 				Pain(thePlayer)
-				Pain(player2)
+				Pain(thePed)
 				
 				setTimer(function()
 					BindAllKey(thePlayer)
-					BindAllKey(player2)
-					setElementCollisionsEnabled(player2, true)
+					BindAllKey(thePed)
+					Koryachka(thePed)
+					setElementCollisionsEnabled(thePed, true)
 				end, 6800, 1)
 				wanktimers[thePlayer] = setTimer(function() end, 1000, 1)
 			end
@@ -14106,12 +14121,12 @@ function butilka(thePlayer, name, i, thePed)
 	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
 	
 	if(getElementHealth(thePed) < 20) then
-		outputChatBox(ItemsNamesArr[arr[i][1]])
 		StartAnimation(thePed, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
 		setElementData(thePed, "BottleAnus", ItemsNamesArr[arr[i][1]])
 		AddPlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
 		outputChatBox(getPlayerName(thePlayer).." посадил на бутылку "..getPlayerName(thePed), getRootElement(),255, 255,255,true) 
 		setTimer(function()
+			Koryachka(thePed)
 			RemovePlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
 			removeElementData(thePed, "BottleAnus")
 			
@@ -14427,15 +14442,7 @@ function playerDamage(attacker, weapon, bodypart, loss) --when a player is damag
 		end
 	end
 	if(getElementHealth(source) < 20) then
-		Pain(source)
-		removePedFromVehicle(source)
-		if(getElementHealth(source) > 15) then
-			StartAnimation(source, "CRACK", "crckidle1", -1, true, true, true, false, true)
-		elseif(getElementHealth(source) > 7) then
-			StartAnimation(source, "CRACK", "crckidle2", -1, true, true, true, false, true)
-		elseif(getElementHealth(source) > 0) then
-			StartAnimation(source, "CRACK", "crckidle4", -1, true, true, true, false, true) -- тут
-		end
+		Koryachka(source)
 		SetControls(source, "crack", {["fire"] = true, ["action"] = true, ["jump"] = true})
 	else
 		SetControls(source, "crack", {["fire"] = false, ["action"] = false, ["jump"] = false})
