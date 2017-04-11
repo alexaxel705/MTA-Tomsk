@@ -86,7 +86,7 @@ function setCameraOnPlayerJoin()
 	outputChatBox("Нажми "..COLOR["KEY"]["HEX"].."Y#FFFFFF чтобы писать в командный чат", source, 255, 255, 255,true)
 	outputChatBox("Исходный код сервера #2980B9https://github.com/alexaxel705/MTA-Tomsk", source, 255, 255, 255,true)
 	outputChatBox("Группа ВКонтакте #2980B9http://vk.com/mtatomsk", source, 255, 255, 255,true)
-	
+	outputChatBox("11.04.2017 Добавлена возможность служить в армии /arm, добавлена возможность садить игроков в корячке на бутылку", source, 255, 255, 255,true)
 end
 addEventHandler("onPlayerJoin", getRootElement(), setCameraOnPlayerJoin)
 
@@ -4591,28 +4591,17 @@ local hg = createObject(975,263.7, -1332.6, 53.92, 0,-1.7,38)
 setElementData(hg, "house", "h280")
 setElementData(hg, "gates", toJSON({270, -1327.8, 54.15, 0,0,0}))
 
-
-
-
-
 local hg = createObject(10184,1535.1, -1451.8, 14.9, 0,0,270)
 setElementData(hg, "house", "h544")
 setElementData(hg, "gates", toJSON({1535.1, -1451.8, 18.4, 0,0,0}))
-
-
-
 
 local hg = createObject(975,832.5, -866.4, 69.1, 0,0,200)
 setElementData(hg, "house", "h56")
 setElementData(hg, "gates", toJSON({827, -868.6, 69.1, 0,0,0}))
 
-
-
 local hg = createObject(975, 200.4, -1386.5, 49.3, 0,354,46)
 setElementData(hg, "house", "h281")
 setElementData(hg, "gates", toJSON({206, -1380.7, 50.1, 0,2,0}))
-
-
 
 local hg = createObject(988, 284.3, -1318.1, 54, 0,1,216)
 setElementData(hg, "house", "h279")
@@ -4647,23 +4636,23 @@ setElementDimension(ArmourPickup, 1)
 
 local PoliceLSStreetGates = createObject(11327, 1587.5, -1638, 14.9, 0,0,90)
 setElementData(PoliceLSStreetGates, "gates", toJSON({1587.5, -1638, 17, 0,-60,0}))
-setElementData(PoliceLSStreetGates, "team", "Полиция")
+setElementData(PoliceLSStreetGates, "team",  toJSON({{"Военные", "Полиция", "ФБР"}}))
 
 
 
 local CIAGATES = createObject(10149, 233.6, 1822.7, 7.8, 0,0,90)
 setElementData(CIAGATES, "gates", toJSON({233.6, 1822.7, 10, 0,0,0}))
-setElementData(CIAGATES, "team", "ЦРУ")
+setElementData(CIAGATES, "team", toJSON({"ЦРУ"}))
 
 
 
 local Zone51GateMCHS = createObject(975, 245.8, 1842.1, 9, 0,0,0)
 setElementData(Zone51GateMCHS, "gates", toJSON({244, 1842.1, 9, 0,0,0}))
-setElementData(Zone51GateMCHS, "team", "МЧС")
+setElementData(Zone51GateMCHS, "team",  toJSON({{"МЧС", "Военные", "Полиция", "ФБР"}}))
 
 local Zone51GateMCHS2 = createObject(975, 256, 1845.2, 9, 0,0,90)
 setElementData(Zone51GateMCHS2, "gates", toJSON({256, 1839, 9, 0,0,0}))
-setElementData(Zone51GateMCHS2, "team", "МЧС")
+setElementData(Zone51GateMCHS2, "team",  toJSON({{"МЧС", "Военные", "Полиция", "ФБР"}}))
 
 
 local CrackDoor1 = createObject(18553,2522.5, -1301.9, 1048.5)
@@ -4947,7 +4936,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  =  -2147.6, 1017.9, 78.9, 0, 0 --
+		local x,y,z,i,d  =  162.8, 1917.5, 18.6, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6010,7 +5999,7 @@ function CreateSpirt()
 				BindAllKey(thePlayer)
 			end, 10000, 1, source)
 		else
-			outputChatBox("Тебе нужны фекалии", source, 255,255,255,true)
+			ToolTip(thePlayer, "Тебе нужны #CC3300фекалии")
 		end
 	end
 end
@@ -6663,33 +6652,29 @@ addEventHandler("usesmoke", root, usesmoke)
 
 function usedrink(thePlayer, slot)
 	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
-	
-	local theVehicle = getPedOccupiedVehicle(thePlayer)
-	
-	StartAnimation(thePlayer, "VENDING","VEND_Drink2_P", 1500, false, true, true, false)
-	setElementHealth(thePlayer, getElementHealth(thePlayer)+5)
-	triggerClientEvent(thePlayer, "ShakeLevel", thePlayer, 25)
-	setPedWalkingStyle(thePlayer, 126)
-	
 	if(arr[slot][4]["hp"]) then
+		StartAnimation(thePlayer, "VENDING","VEND_Drink2_P", 1500, false, true, true, false)
+		setElementHealth(thePlayer, getElementHealth(thePlayer)+5)
+		triggerClientEvent(thePlayer, "ShakeLevel", thePlayer, 25)
+		setPedWalkingStyle(thePlayer, 126)
+		
+		local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+		local PedTeam = getTeamName(getPlayerTeam(thePed))
+		if(PlayerTeam == "Военные" and PedTeam == "Уголовники") then
+				if(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
+				setTimer(function()
+					triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
+					triggerClientEvent(thePlayer, "RemoveGPSMarker", thePlayer, "Служба: найди способ нажраться")
+					MissionCompleted(thePlayer, "Полиция +", "МИССИЯ ВЫПОЛНЕНА")
+					Respect(thePlayer, "police", 5)
+					SetDatabaseAccount(thePlayer, "ATUT", 2)
+					triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Посади заключенного на бутылку")
+				end, 1500, 1, thePlayer)
+			end
+		end
 		RemoveButtonDataNew(thePlayer, "player", slot, "hp", -20)
 	else
-		setTimer(function()
-			RemoveInventoryItemNew(thePlayer, "player", slot)
-		end, 1500, 1, thePlayer)
-	end
-	
-	local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-	if(PlayerTeam == "Военные") then
-		if(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
-			triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
-			triggerClientEvent(thePlayer, "RemoveGPSMarker", thePlayer, "Служба: найди способ нажраться")
-			SetDatabaseAccount(thePlayer, "ATUT", 2)
-			MissionCompleted(thePlayer, "Полиция +", "ОТСЛУЖИЛ")
-			Respect(thePlayer, "police", 10)
-			outputChatBox("Ты получил военный билет! Теперь ты можешь работать в #4169E1полиции#FFFFFF, вступить в #000000триаду#FFFFFF или #363D5Aколумбийский картель",thePlayer, 255,255,255,true)
-			SpawnedAfterChange(thePlayer)
-		end
+		ToolTip(thePlayer, "Бутылка пуста!")
 	end
 end
 addEvent("usedrink", true)
@@ -9324,9 +9309,20 @@ function opengate(TargetGate)
 				return false
 			end
 		end
-		if(getElementData(TargetGate, "team")) then
-			if(GetDatabaseAccount(source, "team") ~= getElementData(TargetGate, "team") and getTeamName(SkinData[getElementModel(source)][2]) ~= getElementData(TargetGate, "team")) then
-				outputChatBox("Ты не "..getElementData(TargetGate, "team"), source, 255,255,255,true)
+		local dat = getElementData(TargetGate, "team")
+		if(dat) then
+			dat = fromJSON(dat)
+			local out = ""
+			local op = false
+			for _, v in pairs(dat) do
+				local r,g,b = getTeamColor(getTeamFromName(v))
+				out = out.." "..RGBToHex(r,g,b)..v
+				if(GetDatabaseAccount(source, "team") == v or getTeamName(SkinData[getElementModel(source)][2]) == v) then
+					op = true
+				end
+			end
+			if(not op) then
+				ToolTip(source, "Только "..out.."\n#FFFFFFмогут управлять этими воротами")
 				return false
 			end
 		end
@@ -9820,16 +9816,17 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 		spawnPlayer(thePlayer, SpawnPoint[Prison][1]+math.random(-1,1), SpawnPoint[Prison][2]+math.random(-1,1), SpawnPoint[Prison][3], SpawnPoint[Prison][4], skin, SpawnPoint[Prison][7], SpawnPoint[Prison][8])
 		SetDatabaseAccount(thePlayer, "wanted", 0)
 		setElementData(thePlayer, "WantedLevel", PlayerPrison)
-	elseif(frname == "Военные" and GetDatabaseAccount(thePlayer, "ATUT") <= 1) then
+	elseif(frname == "Военные" and GetDatabaseAccount(thePlayer, "ATUT") <= 2) then
+		spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
 		if(GetDatabaseAccount(thePlayer, "ATUT") == 0) then
 			SetDatabaseAccount(thePlayer, "ATUT", 1)
-			spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
 			AddInventoryItem(thePlayer, "АК-47", 1, 0, {})
 			AddInventoryItem(thePlayer, "7.62-мм", 100, 0, {})
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
 		elseif(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
-			spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
+		elseif(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Посади заключенного на бутылку")
 		end
 	else
 		if(typespawn == "death") then
@@ -11737,7 +11734,7 @@ addCommandHandler("st", st)
 
 
 function arm(thePlayer)
-	if(GetDatabaseAccount(thePlayer, "ATUT") ~= 2) then
+	if(GetDatabaseAccount(thePlayer, "ATUT") ~= 3) then
 		SetTeam(thePlayer, "Военные")
 		SetDatabaseAccount(thePlayer, "skin", 312)
 		triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))))
@@ -12841,19 +12838,19 @@ addEventHandler("PoliceArrestCar", root, PoliceArrestCar)
 
 PrisonMainGate = createObject(10184, 188.9,1919, 19.2, 0,0,0)
 setElementData(PrisonMainGate, "gates", toJSON({188.9,1919, 23}))
-setElementData(PrisonMainGate, "team", "МЧС")
+setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
 
 PrisonStreetGate = createObject(10184, 214.6, 1875.4, 14,0,0,270)
 setElementData(PrisonStreetGate, "gates", toJSON({214.6, 1875.4, 17,0,60,0}))
-setElementData(PrisonStreetGate, "team", "МЧС")
+setElementData(PrisonStreetGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
 
 PrisonFoodGate1 = createObject(2930, 226.6, 1874.1, 15.4)
 setElementData(PrisonFoodGate1, "gates", toJSON({226.6, 1875.1,15.4}))
-setElementData(PrisonFoodGate1, "team", "МЧС")
+setElementData(PrisonFoodGate1, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
 
 PrisonFoodGate2 = createObject(2930, 226.6, 1872.4, 15.4)
 setElementData(PrisonFoodGate2, "gates", toJSON({226.6, 1871.4, 15.4}))
-setElementData(PrisonFoodGate2, "team", "МЧС")
+setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
 
 
 
@@ -14015,7 +14012,6 @@ addEventHandler("iznas3", getRootElement(), iznas3)
 
 
 
-
 function iznas(thePlayer, thePed)
 	local player2=thePed
 	if(player2) then
@@ -14100,6 +14096,46 @@ addEventHandler("blowjob", getRootElement(), blowjob)
 
 
 
+
+
+
+
+
+
+function butilka(thePlayer, name, i, thePed)
+	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
+	
+	if(getElementHealth(thePed) < 20) then
+		outputChatBox(ItemsNamesArr[arr[i][1]])
+		StartAnimation(thePed, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
+		setElementData(thePed, "BottleAnus", ItemsNamesArr[arr[i][1]])
+		AddPlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
+		outputChatBox(getPlayerName(thePlayer).." посадил на бутылку "..getPlayerName(thePed), getRootElement(),255, 255,255,true) 
+		setTimer(function()
+			RemovePlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
+			removeElementData(thePed, "BottleAnus")
+			
+			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+			if(PlayerTeam == "Военные") then
+				if(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
+					SetTeam(thePlayer, "Мирные жители")
+					SetDatabaseAccount(thePlayer, "skin", 48)
+					triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
+					triggerClientEvent(thePlayer, "RemoveGPSMarker", thePlayer, "Посади заключенного на бутылку")
+					SetDatabaseAccount(thePlayer, "ATUT", 3)
+					MissionCompleted(thePlayer, "Полиция +", "ОТСЛУЖИЛ")
+					Respect(thePlayer, "police", 5)
+					outputChatBox("Ты получил военный билет! Теперь ты можешь работать в #4169E1полиции#FFFFFF, вступить в #000000триаду#FFFFFF или #363D5Aколумбийский картель",thePlayer, 255,255,255,true)
+					SpawnedAfterChange(thePlayer)
+				end
+			end
+		end, 6800, 1)
+	else
+		ToolTip(thePlayer, "Игрок должен быть в #CC3300корячке")
+	end
+end
+addEvent("butilka", true)
+addEventHandler("butilka", getRootElement(), butilka)
 
 
 

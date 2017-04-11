@@ -5849,6 +5849,19 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 												end
 											end
 											
+											if(PInv[name][i][1] == "Pissh Gold" 
+											or PInv[name][i][1] == "Pissh") then
+												for id, player in pairs(getElementsByType("player", getRootElement(), true)) do
+													if(player ~= localPlayer) then
+														local x2, y2, z2 = getElementPosition(player)
+														local distance = getDistanceBetweenPoints3D(lx,ly,lz,x2,y2,z2)
+														if(distance < 3) then
+															PText["INVHUD"][#PText["INVHUD"]+1] = {"Посадить "..getPlayerName(player), absoluteX, absoluteY+(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"butilka", localPlayer, localPlayer, name, i, player}}}
+														end
+													end
+												end
+											end
+											
 											local bannedNames = {["hp"] = true, ["date"] = true, ["cost"] = true, ["color"] = true, ["content"] = true, ["name"] = true, ["quality"] = true, ["mass"] = true}
 											for razdelname, razdeldata in pairs(PInv[name][i][4]) do --Для bannedNames запустить еще цикл
 												if(not bannedNames[razdelname]) then
@@ -7006,7 +7019,13 @@ function UpdateDisplayArmas(thePlayer)
 			model = tonumber(model)
 			if(ModelPlayerPosition[model]) then
 				local bone, offx,offy,offz,offrx,offry,offrz = unpack(ModelPlayerPosition[model])
-
+				if(getElementData(thePlayer, "BottleAnus")) then
+					if(model == getElementData(thePlayer, "BottleAnus")) then
+						bone, offx,offy,offz,offrx,offry,offrz = 3, -0.1, 0.1, -0.6, 0, 0, 0
+					end
+				end
+				
+				
 				local x,y,z = getPedBonePosition(thePlayer,bones[bone][1])
 
 
