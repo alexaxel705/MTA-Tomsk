@@ -1491,7 +1491,7 @@ function BuyUpgrade(handl, othercomp)
 		LoadUpgrade(true, handl, othercomp)
 	else
 		upgrades = getVehicleUpgrades(getPedOccupiedVehicle(localPlayer))
-		helpmessage("#009900КУПЛЕНО!")
+		helpmessage("#009900"..Text("КУПЛЕНО!").."")
 		LoadUpgrade()
 	end
 end
@@ -1536,7 +1536,7 @@ end
 
 
 function UpgradeServerPreload() 
-	helpmessage(COLOR["DOLLAR"]["HEX"].."БЕСПЛАТНО")
+	helpmessage(COLOR["DOLLAR"]["HEX"]..Text("БЕСПЛАТНО"))
 	UpdateTuningPerformans(true)
 end
 addEvent("UpgradeServerPreload", true )
@@ -1615,7 +1615,7 @@ end
 
 function PoliceAddMarker(x, y, z, gpsmessage)
 	GPS(x,y,z,gpsmessage)
-	helpmessage("#4682B4Поступил новый вызов!\n #FFFFFFОтправляйся на #FF0000красный маркер#FFFFFF")
+	helpmessage("#4682B4"..Text("Поступил новый вызов!\n #FFFFFFОтправляйся на #FF0000красный маркер"))
 	playSFX("script", 58, math.random(22, 35), false)
 end
 addEvent("PoliceAddMarker", true)
@@ -1805,9 +1805,9 @@ function bankControlUpdate(biz, data)
 	local text = "Денег на счету "..COLOR["DOLLAR"]["HEX"].."$"..m[1].." "
 	local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
 	PText["bank"][#PText["bank"]+1] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
-	PText["bank"][#PText["bank"]+1] = {"пополнить", 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "bank", "Введи сумму", toJSON{biz}}}
-	local textWidth = textWidth+dxGetTextWidth("пополнить ", scale*0.8, "default-bold", true)
-	PText["bank"][#PText["bank"]+1] = {"снять",  660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "withdraw", "Введи сумму", toJSON{biz}}}	
+	PText["bank"][#PText["bank"]+1] = {Text("пополнить"), 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "bank", "Введи сумму", toJSON{biz}}}
+	local textWidth = textWidth+dxGetTextWidth(Text("пополнить").." ", scale*0.8, "default-bold", true)
+	PText["bank"][#PText["bank"]+1] = {Text("снять"),  660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "withdraw", "Введи сумму", toJSON{biz}}}	
 	BANKCTL = m[2]
 	showCursor(true)
 end
@@ -3604,17 +3604,15 @@ end
 
 
 function StartLoad() -- Первый этап загрузки
-	if(HUDPreload()) then
-		setFogDistance(10)
-		setTime(12, 0)
-		setWeather(0)
-		downloadFile("lang/"..PData["LANG"])
-	end
+	setFogDistance(10)
+	setTime(12, 0)
+	setWeather(0)
+	downloadFile("lang/"..PData["LANG"])
 end
 
 function onDownloadFinish(file, success) -- Второй этап загрузки
 	if(file == "lang/"..PData["LANG"]) then
-		PData['loading'] = 10
+		PData['loading'] = 2
 		
 		local hFile = fileOpen("lang/"..PData["LANG"], true)
 
@@ -3631,8 +3629,9 @@ function onDownloadFinish(file, success) -- Второй этап загрузк
 			end
 		end
 		fileClose(hFile)
-
-		GenerateTexture()
+		if(HUDPreload()) then
+			GenerateTexture()
+		end
 	end
 end
 addEventHandler("onClientFileDownloadComplete", root, onDownloadFinish)
@@ -3700,7 +3699,7 @@ function HUDPreload()
 	dxDrawBorderedText("★★★★★★", 0, 0, 0, 0, tocolor(40,40,40,200), NewScale*2, "pricedown", "left", "top")
 	dxSetBlendMode("blend")
 	
-	PData['loading'] = 2
+	PData['loading'] = 4
 	
 	VideoMemory["HUD"]["Cinema"] = dxCreateRenderTarget(screenWidth, screenHeight, true)
 	dxSetRenderTarget(VideoMemory["HUD"]["Cinema"], true)
@@ -3709,7 +3708,7 @@ function HUDPreload()
 	dxDrawRectangle(0,screenHeight-(screenHeight/9),screenWidth, screenHeight/9, tocolor(0,0,0,255))
 	dxSetBlendMode("blend")
 
-	PData['loading'] = 4
+	PData['loading'] = 6
 	
 	VideoMemory["HUD"]["BlackScreen"] = dxCreateRenderTarget(screenWidth, screenHeight, true)
 	dxSetRenderTarget(VideoMemory["HUD"]["BlackScreen"], true)
@@ -3717,7 +3716,7 @@ function HUDPreload()
 	dxDrawRectangle(0,0,screenWidth,screenHeight,tocolor(0,0,0,255))
 	dxSetBlendMode("blend")
 
-	PData['loading'] = 6
+	PData['loading'] = 8
 	
 	VideoMemory["HUD"]["PlayerInv"] = dxCreateRenderTarget((screenWidth)-((80*NewScale)*10), (80*NewScale), true)
 	dxSetRenderTarget(VideoMemory["HUD"]["PlayerInv"], true)
@@ -3745,7 +3744,7 @@ function HUDPreload()
 	dxSetBlendMode("blend")
 
 
-	PData['loading'] = 8
+	PData['loading'] = 10
 	dxSetRenderTarget()
 	return true
 end
@@ -3796,7 +3795,7 @@ addEventHandler("SetLang", localPlayer, SetLang)
 
 
 function CallPhoneInput()
-	CreateButtonInputInt("CallPhoneOutput", "Введи номер или ИД игрока")
+	CreateButtonInputInt("CallPhoneOutput", Text("Введи номер или ИД игрока"))
 end
 addEvent("CallPhoneInput", true)
 addEventHandler("CallPhoneInput", localPlayer, CallPhoneInput)
@@ -4210,6 +4209,7 @@ addEventHandler("helpmessageEvent", localPlayer, helpmessage)
 
 
 function ToolTip(message)
+	message = Text(message)
 	if(message ~= ToolTipText) then
 		playSoundFrontEnd(11)
 		if(isTimer(ToolTipTimers)) then
@@ -6247,27 +6247,27 @@ end
 function GetQuality(quality)
 	local out = ""
 	if(not quality or quality <= 99) then
-		out = "отвратительное"
+		out = Text("отвратительное")
 	elseif(quality <= 199 and quality > 99) then
-		out =  "мерзкое"
+		out =  Text("мерзкое")
 	elseif(quality <= 299 and quality > 199) then
-		out =  "гадкое"
+		out =  Text("гадкое")
 	elseif(quality <= 399 and quality > 299) then
-		out =  "плохое"
+		out =  Text("плохое")
 	elseif(quality <= 499 and quality > 399) then
-		out =  "обычное"
+		out =  Text("обычное")
 	elseif(quality <= 599 and quality > 499) then
-		out =  "хорошее"
+		out =  Text("хорошее")
 	elseif(quality <= 699 and quality > 599) then
-		out =  "очень хорошее"
+		out =  Text("очень хорошее")
 	elseif(quality <= 799 and quality > 699) then
-		out =  "отличное"
+		out =  Text("отличное")
 	elseif(quality <= 899 and quality > 799) then
-		out =  "высокое"
+		out =  Text("высокое")
 	elseif(quality <= 999 and quality > 899) then
-		out =  "великолепное"
+		out =  Text("великолепное")
 	elseif(quality >= 1000) then
-		out =  "превосходное"
+		out =  Text("превосходное")
 	end
 	return GetQualityColor(quality)..out
 end
@@ -6418,7 +6418,7 @@ function UseInventoryItem(name, i)
 		triggerServerEvent("StopFish", localPlayer, localPlayer)
 	end
 	
-	if(name == "backpack") then return ToolTip("Чтобы использовать этот предмет возьми его в руки!") end
+	if(name == "backpack") then return ToolTip("Чтобы использовать этот предмет возьми его в руки") end
 	
 	triggerServerEvent("useinvweapon", localPlayer, localPlayer, i)
 	if(items[text][4] == "useinvweapon") then
@@ -6593,7 +6593,7 @@ function getGroundPositionFish()
 				end
 			end
 			local r,g,b,a = getWaterColor()
-			ToolTip("Подойди к "..RGBToHex(r,g,b).."воде#FFFFFF")
+			ToolTip("Подойди к "..RGBToHex(r,g,b).."воде")
 		end
 	end
 end
@@ -8157,7 +8157,7 @@ function DrawPlayerMessage()
 			if(getTeamVariable("Мирные жители")) then
 				local count=0
 				
-				dxDrawText(SkillName[24],  490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
+				dxDrawText(Text(SkillName[24]),  490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
 				DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, 24), nil, 150)
 				count=count+1
 				
@@ -8170,7 +8170,7 @@ function DrawPlayerMessage()
 							Skill = 161
 						end
 					end
-					dxDrawText(SkillName[Skill],  490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
+					dxDrawText(Text(SkillName[Skill]),  490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
 					DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, Skill), nil, 150)
 				else
 					if(PData["fishpos"]) then
@@ -8178,17 +8178,17 @@ function DrawPlayerMessage()
 					else
 						Skill = 22
 					end
-					dxDrawText(SkillName[Skill],  490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
+					dxDrawText(Text(SkillName[Skill]),  490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
 					DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, Skill), nil, 150)
 				end
 				count=count+1
 				
 				local weapon = getPedWeapon(localPlayer, slot) 
 				if(SkillName[WeaponModel[weapon][2]]) then
-					dxDrawText(SkillName[WeaponModel[weapon][2]], 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
+					dxDrawText(Text(SkillName[WeaponModel[weapon][2]]), 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
 					DrawProgressBar(780*scalex, 840*scaley+((35*scaley)*count), getPedStat(localPlayer, WeaponModel[weapon][2]), nil, 150)
 				end
-				dxDrawBorderedText(ServerDate.monthday.." "..Month[ServerDate.month+1].." "..ServerDate.year+1900, 490*scalex, 960*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*2.4, "default-bold", "left", "top", nil, nil, nil, true)		
+				dxDrawBorderedText(ServerDate.monthday.." "..Text(Month[ServerDate.month+1]).." "..ServerDate.year+1900, 490*scalex, 960*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*2.4, "default-bold", "left", "top", nil, nil, nil, true)		
 				
 
 				dxDrawBorderedText(Day[ServerDate.weekday+1], screenWidth, 960*scaley, 930*scalex, screenHeight, tocolor(200, 200, 200, 255), NewScale*2.4, "default-bold", "right", "top", nil, nil, nil, true)		
@@ -8214,7 +8214,7 @@ function DrawPlayerMessage()
 						key[7] = false
 					end
 				else
-					dxDrawBorderedText("#FF9800Благодарности\n#FFFFFFCrystalMV #69749Abone_attach\n\n#C7843CНад сервером работали#FFFFFF\n800 #194299real_life@sibmail.com#FFFFFF 2006-2011\nTanker #194299tankerktv@mail.ru#FFFFFF 2006-2009\nDark_ALEX #194299dark_alex@sibmail.com#FFFFFF 2009-2017\nMishel' #194299laym101@mail.com#FFFFFF 2017", screenWidth, screenHeight-(280*NewScale), screenWidth-(30*NewScale), screenHeight, tocolor(103,104,107, 255), NewScale*2, "default-bold", "right", "top", false, false, false, true)
+					dxDrawBorderedText("#FF9800"..Text("Благодарности").."\n#FFFFFFCrystalMV #69749Abone_attach\n\n#C7843C"..Text("Над сервером работали").."#FFFFFF\n800 #194299real_life@sibmail.com#FFFFFF 2006-2011\nTanker #194299tankerktv@mail.ru#FFFFFF 2006-2009\nDark_ALEX #194299dark_alex@sibmail.com#FFFFFF 2009-2017\nMishel' #194299laym101@mail.com#FFFFFF 2017", screenWidth, screenHeight-(280*NewScale), screenWidth-(30*NewScale), screenHeight, tocolor(103,104,107, 255), NewScale*2, "default-bold", "right", "top", false, false, false, true)
 					
 					local x2, y2, z2, lx, ly, lz, rz = getCameraMatrix ()
 					setCameraMatrix (x2+0.0005, y2+0.0005, z2+0.00005, lx+0.0005, ly+0.0005, lz)
