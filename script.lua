@@ -4947,7 +4947,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  =  -2252.3, 728.8, 48.3, 0, 0 --
+		local x,y,z,i,d  =  -2147.6, 1017.9, 78.9, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -9822,14 +9822,14 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 		setElementData(thePlayer, "WantedLevel", PlayerPrison)
 	elseif(frname == "Военные" and GetDatabaseAccount(thePlayer, "ATUT") <= 1) then
 		if(GetDatabaseAccount(thePlayer, "ATUT") == 0) then
+			SetDatabaseAccount(thePlayer, "ATUT", 1)
+			spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
 			AddInventoryItem(thePlayer, "АК-47", 1, 0, {})
 			AddInventoryItem(thePlayer, "7.62-мм", 100, 0, {})
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
-			SetDatabaseAccount(thePlayer, "ATUT", 1)
-			spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
 		elseif(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
-			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
 			spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
 		end
 	else
 		if(typespawn == "death") then
@@ -10834,7 +10834,7 @@ function kr(thePlayer, vmodel, pedmodel)
 
 		for name, dat in pairs(arr) do
 			if(dat) then
-				if(#dat > 5) then -- Отсекаем слишком короткие пути
+				if(#dat < 5) then -- Отсекаем слишком короткие пути
 					table.remove(arr, name)
 				end
 			else
@@ -10843,8 +10843,10 @@ function kr(thePlayer, vmodel, pedmodel)
 		end
 		if(#arr > 0) then
 			local minarrindex = math.random(#arr)
-			local bx,by,bz = PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][2], PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][3], PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][4]
-			PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[minarrindex], thePlayer)
+			if(#arr[minarrindex] > 5) then -- Костыль
+				local bx,by,bz = PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][2], PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][3], PathNodes[arr[minarrindex][1][1]][arr[minarrindex][1][2]][4]
+				PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[minarrindex], thePlayer)
+			end
 		end
 	end
 end
@@ -11732,6 +11734,23 @@ addCommandHandler("st", st)
 
 
 
+
+
+function arm(thePlayer)
+	if(GetDatabaseAccount(thePlayer, "ATUT") ~= 2) then
+		SetTeam(thePlayer, "Военные")
+		SetDatabaseAccount(thePlayer, "skin", 312)
+		triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))))
+
+	else
+		ToolTip(thePlayer, "Ты уже отслужил!")
+	end
+end
+addCommandHandler("arm", arm)
+
+
+
+
 local EightTrackStadium = {
 	{-1399, -188.5, 1042.2}, 
 	{-1398.2, -199.6, 1042.1}, 
@@ -12146,7 +12165,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	--[[SetDatabaseAccount(thePlayer, "PrisonTime", 423)
 	SetTeam(thePlayer, "Уголовники")--]]
 	--triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, math.random(-3000,3000), math.random(-3000,3000), math.random(-3000,3000), "Отвези груз")
-end
+	end
 addEvent("saveserver", true)
 addEventHandler("saveserver", root, saveserver)
 
@@ -14664,11 +14683,6 @@ function Respect(thePlayer, Group, count)
 	setElementData(thePlayer, "grove", GetDatabaseAccount(thePlayer, "grove"))
 	setElementData(thePlayer, "ugol", GetDatabaseAccount(thePlayer, "ugol"))
 	setElementData(thePlayer, "ballas", GetDatabaseAccount(thePlayer, "ballas"))
-
-	if(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
-		setElementData(thePlayer, "armies", "true")
-	end
-
 end
 
 

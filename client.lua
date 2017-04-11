@@ -1608,10 +1608,12 @@ addEventHandler("PoliceAddMarker", getRootElement(), PoliceAddMarker)
 
 function GPS(x,y,z,info,after)
 	local GPSM = createMarker(x, y, z, "checkpoint", 5, 255, 50, 50, 170)
-	local px, py, pz = getElementPosition(localPlayer)
-	triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x,y,z)
 	setElementData(GPSM , "type", "GPS")
 	GPSObject[GPSM] = createBlipAttachedTo(GPSM)
+	if(x ~= 228 and y ~= 228 and z ~= 228) then
+		local px, py, pz = getElementPosition(localPlayer)
+		triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x,y,z)
+	end
 	if(info) then setElementData(GPSM, "info", info) end
 	if(after) then setElementData(GPSM, "after", after) end
 	playSFX("script", 217, 0, false)
@@ -7644,18 +7646,21 @@ function DrawPlayerMessage()
 				local x2,y2,z2 = getElementPosition(v)
 				local dist = getDistanceBetweenPoints3D(x,y,z,x2,y2,z2)/2
 				if(dist >= 1000) then
-					dist=math.round((dist/1000), 1).." км\n"
+					dist = math.round((dist/1000), 1).." км"
 				else
-					dist=math.round(dist, 0).." м\n"
+					dist = math.round(dist, 0).." м"
 				end
 				local _,_,rz = getElementRotation(localPlayer)
 				local marrot = GetMarrot(findRotation(x,y,x2,y2),rz)
 				if(x2 ~= 228 and y2 ~= 228 and z2 ~= 228) then
 					if(not PData['Minimize']) then
-						dxDrawImage(screenWidth-(screenWidth/4.5), screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), dxGetTextWidth("↑", scale, "default-bold", false), dxGetFontHeight(scale, "default-bold"), DrawArrow(), marrot)
+						dxDrawImage(screenWidth-dxGetTextWidth(getElementData(v, "info").." #A9A9A9"..dist, scale, "default-bold", true)-(40*NewScale), screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), dxGetTextWidth("↑", scale, "default-bold", false), dxGetFontHeight(scale, "default-bold"), DrawArrow(), marrot)
 					end
+					dist = " #A9A9A9"..dist.."\n"
+				else
+					dist = ""
 				end
-				dxDrawBorderedText(getElementData(v, "info").." #A9A9A9"..dist, screenWidth-(screenWidth/4.5)+dxGetTextWidth("→", scale, "default-bold", false), screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), screenWidth, screenHeight, tocolor(200, 200, 200, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
+				dxDrawBorderedText(getElementData(v, "info")..dist, 0, screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), screenWidth-(10*NewScale), screenHeight, tocolor(200, 200, 200, 255), scale, "default-bold", "right", "top", nil, nil, nil, true)
 				line=line+1
 			end
 			
