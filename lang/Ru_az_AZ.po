@@ -1,13 +1,14 @@
 # Alexey516 <alexaxel705@gmail.com>, 2017
 # Translators:
 # Erkin Sendzher <sanjar.erkin@gmail.com>, 2017
+# Алексей <alexaxel705@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: MTA-Tomsk\n"
 "Report-Msgid-Bugs-To: http://109.227.228.4/\n"
 "POT-Creation-Date: 2011-06-23 11:00+0200\n"
 "PO-Revision-Date: 2012-07-26 13:31+0000\n"
-"Last-Translator: Erkin Sendzher <sanjar.erkin@gmail.com>, 2017\n"
+"Last-Translator: Алексей <alexaxel705@gmail.com>, 2017\n"
 "Language-Team: Azerbaijani (Azerbaijan) (https://www.transifex.com/multi-theft-auto-tomsk/teams/73682/az_AZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,11 +19,275 @@ msgstr ""
 msgid "Регистрация/Вход"
 msgstr "Qeyd ol/Daxil ol"
 
-msgid "Служба: Найди способ нажраться"
-msgstr "Hərbi xidmət: Sərxoş olmaq üçün bir yol tap"
+msgid "Служба - Найди способ нажраться"
+msgstr "Hərbi xidmət - Sərxoş olmaq üçün bir yol tap"
 
 msgid "Посади заключенного на бутылку"
-msgstr ""
+msgstr "Məhbusu butulkanın üstündə otuzdur"
 
 msgid "МИССИЯ ВЫПОЛНЕНА"
-msgstr ""
+msgstr "MİSSİYA BAŞA ÇATDIRILIB"
+
+msgid "Дойди до магазина"
+msgstr "Dükanacan çat"
+
+msgid "Зайди в магазин и купи пачку #596289сигарет"
+msgstr "Dükana gir və #596289sigaret #ffffffpaçkasın al"
+
+msgid "Посети участок"
+msgstr "Polis məntəqəsin ziyarət et"
+
+msgid "Зайди в раздевалку и получи #596289экипировку"
+msgstr "Qarderoba gir və #596289silah #ffffff al"
+
+msgid "Плантация"
+msgstr "Plantasiya"
+
+msgid "Притон"
+msgstr "Priton"
+
+msgid "СЛОМАНО"
+msgstr "QIRILDI"
+
+msgid "ПОТРАЧЕНО"
+msgstr "SƏRF EDİLDİ"
+
+msgid "Игроков"
+msgstr "Oyunçular"
+
+msgid "Благодарности"
+msgstr "Təşəkkürlər"
+
+msgid "Над сервером работали"
+msgstr "Serverin üstündə işləyiblər"
+
+msgid "пинг"
+msgstr "ping"
+
+msgid "место в рейтинге"
+msgstr "reytingdə yer"
+
+msgid "ник"
+msgstr "nik"
+
+msgid "ид"
+msgstr "id"
+
+msgid "Итоги"
+msgstr "Nəticələr"
+
+msgid "Введи номер или ИД игрока"
+msgstr "Oyunçunun nomrəsin və ya ID-sin yaz"
+
+msgid "наше время"
+msgstr "bizim vaxtlarda"
+
+msgid "наши дни"
+msgstr "bizim günlərdə"
+
+msgid "#FFA500Психиатрическая больница"
+msgstr "#FFA500Psixiatrik xəstəxana"
+
+msgid "До освобождения"
+msgstr "Azadlığa gədər"
+
+msgid "До выписки"
+msgstr "Çıxarışa gədər"
+
+msgid "hp"
+msgstr "can"
+
+msgid "Бронежилет"
+msgstr "Zirəh"
+
+msgid "Канистра"
+msgstr "Kanistra"
+
+msgid "Реликвия"
+msgstr "Relikt"
+
+msgid "Подкова"
+msgstr "At nalı"
+
+msgid "Телефон"
+msgstr "Telefon"
+
+msgid "47 Хромосома"
+msgstr "47 Xromosom"
+
+msgid "Рюкзак"
+msgstr "Çanta"
+
+msgid "Чемодан"
+msgstr "Çamadan"
+
+msgid "Пакет"
+msgstr "Paket"
+
+msgid "АК-47"
+msgstr "AK-47"
+
+msgid "Граната"
+msgstr "Qumbara"
+
+msgid "Молотов"
+msgstr "Molotof"
+
+msgid "М16"
+msgstr "M16"
+
+msgid "Кольт 45"
+msgstr "Kolt 45"
+
+msgid "USP-S"
+msgstr "USP-S"
+
+msgid "Deagle"
+msgstr "Deagle"
+
+msgid "Кровь"
+msgstr "Qan"
+
+msgid "Pissh"
+msgstr "Pissh"
+
+msgid "Pissh Gold"
+msgstr "Pissh Gold"
+
+msgid "KBeer"
+msgstr "KBeer"
+
+msgid "KBeer Dark"
+msgstr "KBeer Dark"
+
+msgid "isabella"
+msgstr "isabella"
+
+msgid "Фекалии"
+msgstr "Pox"
+
+msgid "CoK"
+msgstr "CoK"
+
+msgid "Сигарета"
+msgstr "Sigaret"
+
+msgid "Mossberg"
+msgstr "Ov tufəngi Mossberg"
+
+msgid "Sawed-Off"
+msgstr "Kəsilmiş tufəng"
+
+msgid "SPAS-12"
+msgstr "SPAS-12"
+
+msgid "Узи"
+msgstr "Uzi"
+
+msgid "MP5"
+msgstr "MP5"
+
+msgid "Tec-9"
+msgstr "Tec-9"
+
+msgid "ИЖ-12"
+msgstr "İJ-12"
+
+msgid "M40"
+msgstr "M40"
+
+msgid "Dildo XXL"
+msgstr "Yekə dildo"
+
+msgid "Dildo"
+msgstr "Dildo"
+
+msgid "Вибратор"
+msgstr "Vibrator"
+
+msgid "Клюшка"
+msgstr "Kluşka"
+
+msgid "Лопата"
+msgstr "Kürək"
+
+msgid "Бита"
+msgstr "Çomağ"
+
+msgid "Нож"
+msgstr "Bıcağ"
+
+msgid "Катана"
+msgstr "Katana"
+
+msgid "Камера"
+msgstr "Kamera"
+
+msgid "Бензопила"
+msgstr "Matorlu mişar"
+
+msgid "Лазерный прицел"
+msgstr "Lazer nişanı"
+
+msgid "9-мм"
+msgstr "9-mm"
+
+msgid "5.56-мм"
+msgstr "5.56-mm"
+
+msgid "7.62-мм"
+msgstr "7.62-mm"
+
+msgid "18.5-мм"
+msgstr "18.5-mm"
+
+msgid "Кулак"
+msgstr "Yumuruq"
+
+msgid "Конопля"
+msgstr "Cətənək"
+
+msgid "Кока"
+msgstr "Koka"
+
+msgid "Косяк"
+msgstr "Nəşə"
+
+msgid "Спанк"
+msgstr "Spank"
+
+msgid "Удочка"
+msgstr "Qarmağ"
+
+msgid "Рыба"
+msgstr "Balıq"
+
+msgid "Черепаха"
+msgstr "tısbağa"
+
+msgid "Акула"
+msgstr "Köpəkbalığı"
+
+msgid "Дельфин"
+msgstr "Delfin"
+
+msgid "Парашют"
+msgstr "Paraşüt"
+
+msgid "Запаска"
+msgstr "Ehtiyat təkəri"
+
+msgid "Скот"
+msgstr "Mal-qara"
+
+msgid "Сено"
+msgstr "Ot"
+
+msgid "Газета"
+msgstr "Qəzet"
+
+msgid "Деньги"
+msgstr "Pul"
+
+msgid "Кредитка"
+msgstr "Kredit kartı"

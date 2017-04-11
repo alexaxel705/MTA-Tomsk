@@ -1,13 +1,14 @@
 # Alexey516 <alexaxel705@gmail.com>, 2017
 # Translators:
 # Алексей <alexaxel705@gmail.com>, 2017
+# Erkin Sendzher <sanjar.erkin@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: MTA-Tomsk\n"
 "Report-Msgid-Bugs-To: http://109.227.228.4/\n"
 "POT-Creation-Date: 2011-06-23 11:00+0200\n"
 "PO-Revision-Date: 2012-07-26 13:31+0000\n"
-"Last-Translator: Алексей <alexaxel705@gmail.com>, 2017\n"
+"Last-Translator: Erkin Sendzher <sanjar.erkin@gmail.com>, 2017\n"
 "Language-Team: English (https://www.transifex.com/multi-theft-auto-tomsk/teams/73682/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,11 +19,275 @@ msgstr ""
 msgid "Регистрация/Вход"
 msgstr "Registration/Authorization"
 
-msgid "Служба: Найди способ нажраться"
+msgid "Служба - Найди способ нажраться"
 msgstr ""
 
 msgid "Посади заключенного на бутылку"
-msgstr ""
+msgstr "Plant a prisoner on a bottle"
 
 msgid "МИССИЯ ВЫПОЛНЕНА"
+msgstr "MISSION COMPLETE"
+
+msgid "Дойди до магазина"
+msgstr ""
+
+msgid "Зайди в магазин и купи пачку #596289сигарет"
+msgstr ""
+
+msgid "Посети участок"
+msgstr ""
+
+msgid "Зайди в раздевалку и получи #596289экипировку"
+msgstr ""
+
+msgid "Плантация"
+msgstr ""
+
+msgid "Притон"
+msgstr ""
+
+msgid "СЛОМАНО"
+msgstr ""
+
+msgid "ПОТРАЧЕНО"
+msgstr ""
+
+msgid "Игроков"
+msgstr ""
+
+msgid "Благодарности"
+msgstr ""
+
+msgid "Над сервером работали"
+msgstr ""
+
+msgid "пинг"
+msgstr ""
+
+msgid "место в рейтинге"
+msgstr ""
+
+msgid "ник"
+msgstr ""
+
+msgid "ид"
+msgstr ""
+
+msgid "Итоги"
+msgstr ""
+
+msgid "Введи номер или ИД игрока"
+msgstr ""
+
+msgid "наше время"
+msgstr ""
+
+msgid "наши дни"
+msgstr ""
+
+msgid "#FFA500Психиатрическая больница"
+msgstr ""
+
+msgid "До освобождения"
+msgstr ""
+
+msgid "До выписки"
+msgstr ""
+
+msgid "hp"
+msgstr ""
+
+msgid "Бронежилет"
+msgstr ""
+
+msgid "Канистра"
+msgstr ""
+
+msgid "Реликвия"
+msgstr ""
+
+msgid "Подкова"
+msgstr ""
+
+msgid "Телефон"
+msgstr ""
+
+msgid "47 Хромосома"
+msgstr ""
+
+msgid "Рюкзак"
+msgstr ""
+
+msgid "Чемодан"
+msgstr ""
+
+msgid "Пакет"
+msgstr ""
+
+msgid "АК-47"
+msgstr ""
+
+msgid "Граната"
+msgstr ""
+
+msgid "Молотов"
+msgstr ""
+
+msgid "М16"
+msgstr ""
+
+msgid "Кольт 45"
+msgstr ""
+
+msgid "USP-S"
+msgstr ""
+
+msgid "Deagle"
+msgstr ""
+
+msgid "Кровь"
+msgstr ""
+
+msgid "Pissh"
+msgstr ""
+
+msgid "Pissh Gold"
+msgstr ""
+
+msgid "KBeer"
+msgstr ""
+
+msgid "KBeer Dark"
+msgstr ""
+
+msgid "isabella"
+msgstr ""
+
+msgid "Фекалии"
+msgstr ""
+
+msgid "CoK"
+msgstr ""
+
+msgid "Сигарета"
+msgstr ""
+
+msgid "Mossberg"
+msgstr ""
+
+msgid "Sawed-Off"
+msgstr ""
+
+msgid "SPAS-12"
+msgstr ""
+
+msgid "Узи"
+msgstr ""
+
+msgid "MP5"
+msgstr ""
+
+msgid "Tec-9"
+msgstr ""
+
+msgid "ИЖ-12"
+msgstr ""
+
+msgid "M40"
+msgstr ""
+
+msgid "Dildo XXL"
+msgstr ""
+
+msgid "Dildo"
+msgstr ""
+
+msgid "Вибратор"
+msgstr ""
+
+msgid "Клюшка"
+msgstr ""
+
+msgid "Лопата"
+msgstr ""
+
+msgid "Бита"
+msgstr ""
+
+msgid "Нож"
+msgstr ""
+
+msgid "Катана"
+msgstr ""
+
+msgid "Камера"
+msgstr ""
+
+msgid "Бензопила"
+msgstr ""
+
+msgid "Лазерный прицел"
+msgstr ""
+
+msgid "9-мм"
+msgstr ""
+
+msgid "5.56-мм"
+msgstr ""
+
+msgid "7.62-мм"
+msgstr ""
+
+msgid "18.5-мм"
+msgstr ""
+
+msgid "Кулак"
+msgstr ""
+
+msgid "Конопля"
+msgstr ""
+
+msgid "Кока"
+msgstr ""
+
+msgid "Косяк"
+msgstr ""
+
+msgid "Спанк"
+msgstr ""
+
+msgid "Удочка"
+msgstr ""
+
+msgid "Рыба"
+msgstr ""
+
+msgid "Черепаха"
+msgstr ""
+
+msgid "Акула"
+msgstr ""
+
+msgid "Дельфин"
+msgstr ""
+
+msgid "Парашют"
+msgstr ""
+
+msgid "Запаска"
+msgstr ""
+
+msgid "Скот"
+msgstr ""
+
+msgid "Сено"
+msgstr ""
+
+msgid "Газета"
+msgstr ""
+
+msgid "Деньги"
+msgstr ""
+
+msgid "Кредитка"
 msgstr ""

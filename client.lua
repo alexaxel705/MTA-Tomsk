@@ -3596,6 +3596,7 @@ end
 
 function StartUnload()
 	LoginClient()
+	VideoMemory = {["HUD"] = {}}
 	stopSound(GTASound)
 	return true
 end
@@ -3684,13 +3685,13 @@ function HUDPreload()
 	local x,y = 510*scalex, 270*scaley
 	dxDrawRectangle(x,y, 750*NewScale, 500*NewScale, tocolor(0, 0, 0, 180))	
 	dxDrawBorderedText("RPG RealLife (Russian Federation/Tomsk)", 540*scalex, 285*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawBorderedText("ид", x+(15*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawBorderedText("ник", x+(60*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawBorderedText("место в рейтинге", x+(300*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawBorderedText("пинг", x+(710*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
+	dxDrawBorderedText(Text("ид"), x+(15*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
+	dxDrawBorderedText(Text("ник"), x+(60*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
+	dxDrawBorderedText(Text("место в рейтинге"), x+(300*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
+	dxDrawBorderedText(Text("пинг"), x+(710*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawLine(510*scalex, 329*scaley, x+(750*NewScale), 329*scaley, tocolor(120,120,120,255), 1)
 	dxDrawRectangle(475*scalex, 810*scaley, 470*NewScale, 215*NewScale, tocolor(0, 0, 0, 170))
-	dxDrawBorderedText("Итоги", 500*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
+	dxDrawBorderedText(Text("Итоги"), 500*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
 	dxSetBlendMode("blend")
 
 	VideoMemory["HUD"]["WantedBackground"] = dxCreateRenderTarget(dxGetTextWidth("★★★★★★", NewScale*2, "pricedown", false), dxGetFontHeight(NewScale*2, "pricedown"), true)
@@ -3795,7 +3796,7 @@ addEventHandler("SetLang", localPlayer, SetLang)
 
 
 function CallPhoneInput()
-	CreateButtonInputInt("CallPhoneOutput", "Введите номер или ИД игрока")
+	CreateButtonInputInt("CallPhoneOutput", "Введи номер или ИД игрока")
 end
 addEvent("CallPhoneInput", true)
 addEventHandler("CallPhoneInput", localPlayer, CallPhoneInput)
@@ -7426,10 +7427,10 @@ function DrawPlayerInventory()
 					local CRAM = false
 					local CTBACK = tocolor(140,140,140,140)
 					local SystemName = PInv[name][i][1]
-					local DrawText = SystemName
+					local DrawText = Text(SystemName)
 					if(PInv[name][i][4]) then
 						if(PInv[name][i][4]["name"]) then
-							DrawText = PInv[name][i][4]["name"]
+							DrawText = Text(PInv[name][i][4]["name"])
 						end
 					end
 
@@ -8144,7 +8145,7 @@ function DrawPlayerMessage()
 			dxDrawImage(0,0,screenWidth,screenHeight, VideoMemory["HUD"]["TABPanel"])
 
 	
-			dxDrawBorderedText("Игроков: "..#getElementsByType("player"), 0, 285*scaley, 510*scalex+(730*NewScale), 0, tocolor(180, 180, 180, 255), NewScale*1.2, "default-bold", "right", "top", false, false, false, true)
+			dxDrawBorderedText(Text("Игроков")..": "..#getElementsByType("player"), 0, 285*scaley, 510*scalex+(730*NewScale), 0, tocolor(180, 180, 180, 255), NewScale*1.2, "default-bold", "right", "top", false, false, false, true)
 		
 			dxDrawBorderedText(IDF,510*scalex+(15*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
 			dxDrawBorderedText(NF, 510*scalex+(60*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)

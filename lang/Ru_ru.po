@@ -14,11 +14,275 @@ msgstr ""
 msgid "Регистрация/Вход"
 msgstr "Регистрация/Вход"
 
-msgid "Служба: Найди способ нажраться"
-msgstr "Служба: Найди способ нажраться"
+msgid "Служба - Найди способ нажраться"
+msgstr "Служба - Найди способ нажраться"
 
 msgid "Посади заключенного на бутылку"
 msgstr "Посади заключенного на бутылку"
 
 msgid "МИССИЯ ВЫПОЛНЕНА"
 msgstr "МИССИЯ ВЫПОЛНЕНА"
+
+msgid "Дойди до магазина"
+msgstr "Дойди до магазина"
+
+msgid "Зайди в магазин и купи пачку #596289сигарет"
+msgstr "Зайди в магазин и купи пачку #596289сигарет"
+
+msgid "Посети участок"
+msgstr "Посети участок"
+
+msgid "Зайди в раздевалку и получи #596289экипировку"
+msgstr "Зайди в раздевалку и получи #596289экипировку"
+
+msgid "Плантация"
+msgstr "Плантация"
+
+msgid "Притон"
+msgstr "Притон"
+
+msgid "СЛОМАНО"
+msgstr "СЛОМАНО"
+
+msgid "ПОТРАЧЕНО"
+msgstr "ПОТРАЧЕНО"
+
+msgid "Игроков"
+msgstr "Игроков"
+
+msgid "Благодарности"
+msgstr "Благодарности"
+
+msgid "Над сервером работали"
+msgstr "Над сервером работали"
+
+msgid "пинг"
+msgstr "пинг"
+
+msgid "место в рейтинге"
+msgstr "место в рейтинге"
+
+msgid "ник"
+msgstr "ник"
+
+msgid "ид"
+msgstr "ид"
+
+msgid "Итоги"
+msgstr "Итоги"
+
+msgid "Введи номер или ИД игрока"
+msgstr "Введи номер или ИД игрока"
+
+msgid "наше время"
+msgstr "наше время"
+
+msgid "наши дни"
+msgstr "наши дни"
+
+msgid "#FFA500Психиатрическая больница"
+msgstr "#FFA500Психиатрическая больница"
+
+msgid "До освобождения"
+msgstr "До освобождения"
+
+msgid "До выписки"
+msgstr "До выписки"
+
+msgid "hp"
+msgstr "hp"
+
+msgid "Бронежилет"
+msgstr "Бронежилет"
+
+msgid "Канистра"
+msgstr "Канистра"
+
+msgid "Реликвия"
+msgstr "Реликвия"
+
+msgid "Подкова"
+msgstr "Подкова"
+
+msgid "Телефон"
+msgstr "Телефон"
+
+msgid "47 Хромосома"
+msgstr "47 Хромосома"
+
+msgid "Рюкзак"
+msgstr "Рюкзак"
+
+msgid "Чемодан"
+msgstr "Чемодан"
+
+msgid "Пакет"
+msgstr "Пакет"
+
+msgid "АК-47"
+msgstr "АК-47"
+
+msgid "Граната"
+msgstr "Граната"
+
+msgid "Молотов"
+msgstr "Молотов"
+
+msgid "М16"
+msgstr "М16"
+
+msgid "Кольт 45"
+msgstr "Кольт 45"
+
+msgid "USP-S"
+msgstr "USP-S"
+
+msgid "Deagle"
+msgstr "Deagle"
+
+msgid "Кровь"
+msgstr "Кровь"
+
+msgid "Pissh"
+msgstr "Pissh"
+
+msgid "Pissh Gold"
+msgstr "Pissh Gold"
+
+msgid "KBeer"
+msgstr "KBeer"
+
+msgid "KBeer Dark"
+msgstr "KBeer Dark"
+
+msgid "isabella"
+msgstr "isabella"
+
+msgid "Фекалии"
+msgstr "Фекалии"
+
+msgid "CoK"
+msgstr "CoK"
+
+msgid "Сигарета"
+msgstr "Сигарета"
+
+msgid "Mossberg"
+msgstr "Mossberg"
+
+msgid "Sawed-Off"
+msgstr "Sawed-Off"
+
+msgid "SPAS-12"
+msgstr "SPAS-12"
+
+msgid "Узи"
+msgstr "Узи"
+
+msgid "MP5"
+msgstr "MP5"
+
+msgid "Tec-9"
+msgstr "Tec-9"
+
+msgid "ИЖ-12"
+msgstr "ИЖ-12"
+
+msgid "M40"
+msgstr "M40"
+
+msgid "Dildo XXL"
+msgstr "Dildo XXL"
+
+msgid "Dildo"
+msgstr "Dildo"
+
+msgid "Вибратор"
+msgstr "Вибратор"
+
+msgid "Клюшка"
+msgstr "Клюшка"
+
+msgid "Лопата"
+msgstr "Лопата"
+
+msgid "Бита"
+msgstr "Бита"
+
+msgid "Нож"
+msgstr "Нож"
+
+msgid "Катана"
+msgstr "Катана"
+
+msgid "Камера"
+msgstr "Камера"
+
+msgid "Бензопила"
+msgstr "Бензопила"
+
+msgid "Лазерный прицел"
+msgstr "Лазерный прицел"
+
+msgid "9-мм"
+msgstr "9-мм"
+
+msgid "5.56-мм"
+msgstr "5.56-мм"
+
+msgid "7.62-мм"
+msgstr "7.62-мм"
+
+msgid "18.5-мм"
+msgstr "18.5-мм"
+
+msgid "Кулак"
+msgstr "Кулак"
+
+msgid "Конопля"
+msgstr "Конопля"
+
+msgid "Кока"
+msgstr "Кока"
+
+msgid "Косяк"
+msgstr "Косяк"
+
+msgid "Спанк"
+msgstr "Спанк"
+
+msgid "Удочка"
+msgstr "Удочка"
+
+msgid "Рыба"
+msgstr "Рыба"
+
+msgid "Черепаха"
+msgstr "Черепаха"
+
+msgid "Акула"
+msgstr "Акула"
+
+msgid "Дельфин"
+msgstr "Дельфин"
+
+msgid "Парашют"
+msgstr "Парашют"
+
+msgid "Запаска"
+msgstr "Запаска"
+
+msgid "Скот"
+msgstr "Скот"
+
+msgid "Сено"
+msgstr "Сено"
+
+msgid "Газета"
+msgstr "Газета"
+
+msgid "Деньги"
+msgstr "Деньги"
+
+msgid "Кредитка"
+msgstr "Кредитка"
