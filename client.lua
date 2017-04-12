@@ -6216,28 +6216,28 @@ function GetQualityInfo(it)
 	if(not quality) then quality = 0 end
 	if(name) then
 		local text=""
-		text=text.."Цена: $"..GetItemCost(it).."\n"
-		text=text.."Масса: "..GetItemMass(it).."\n"
+		text=text..Text("Цена")..": $"..GetItemCost(it).."\n"
+		text=text..Text("Масса")..": "..GetItemMass(it).."\n"
 		if(items[name][4] == "useinvweapon") then	
 			if(getWeaponProperty(WeaponNamesArr[name], "poor", "damage")) then
-				text=text.."Урон: "..getWeaponProperty(WeaponNamesArr[name], "poor", "damage").."\n"
+				text=text..Text("Урон")..": "..getWeaponProperty(WeaponNamesArr[name], "poor", "damage").."\n"
 			end
 			if(getWeaponProperty(WeaponNamesArr[name], "poor", "weapon_range")) then
-				text=text.."Расстояние: "..getWeaponProperty(WeaponNamesArr[name], "poor", "weapon_range").."\n"
+				text=text..Text("Расстояние")..": "..getWeaponProperty(WeaponNamesArr[name], "poor", "weapon_range").."\n"
 			end
 			if(getWeaponProperty(WeaponNamesArr[name], "poor", "maximum_clip_ammo")) then
-				text=text.."Магазин: "..getWeaponProperty(WeaponNamesArr[name], "poor", "maximum_clip_ammo").."\n"
+				text=text..Text("Магазин")..": "..getWeaponProperty(WeaponNamesArr[name], "poor", "maximum_clip_ammo").."\n"
 			end
 			if(WeaponAmmo[WeaponNamesArr[name]]) then
-				text=text.."Калибр: "..WeaponAmmo[WeaponNamesArr[name]].."\n"
+				text=text..Text("Калибр")..": "..WeaponAmmo[WeaponNamesArr[name]].."\n"
 			end
 		elseif(items[name][4] == "usedrugs") then	
-			text=text.."Здоровье: "..math.floor((10+(quality/10))).."\n"
+			text=text..Text("Здоровье")..": "..math.floor((10+(quality/10))).."\n"
 		elseif(items[name][4] == "usesmoke") then	
-			text=text.."Здоровье: 5\n"
+			text=text..Text("Здоровье")..": 5\n"
 		end
-		text = text.."Качество: "..GetQuality(quality)
-		if(items[name][8]) then text = text.."\n#FFFFFFВыпадает после смерти" end
+		text = text..Text("Качество")..": "..GetQuality(quality)
+		if(items[name][8]) then text = text.."\n#FFFFFF"..Text("Выпадает после смерти") end
 		return text
 	end
 end
@@ -6248,9 +6248,9 @@ function GetItemMass(item)
 	if(not gr) then gr = items[item[1]][5] end
 	
 	if(gr >= 1000) then
-		return (gr/1000).."кг"
+		return (gr/1000)..Text("кг")
 	else
-		return gr.."г"
+		return gr..Text("г")
 	end
 end
 
@@ -6267,29 +6267,29 @@ end
 function GetQuality(quality)
 	local out = ""
 	if(not quality or quality <= 99) then
-		out = Text("отвратительное")
+		out = "отвратительное"
 	elseif(quality <= 199 and quality > 99) then
-		out =  Text("мерзкое")
+		out = "мерзкое"
 	elseif(quality <= 299 and quality > 199) then
-		out =  Text("гадкое")
+		out = "гадкое"
 	elseif(quality <= 399 and quality > 299) then
-		out =  Text("плохое")
+		out = "плохое"
 	elseif(quality <= 499 and quality > 399) then
-		out =  Text("обычное")
+		out = "обычное"
 	elseif(quality <= 599 and quality > 499) then
-		out =  Text("хорошее")
+		out = "хорошее"
 	elseif(quality <= 699 and quality > 599) then
-		out =  Text("очень хорошее")
+		out = "очень хорошее"
 	elseif(quality <= 799 and quality > 699) then
-		out =  Text("отличное")
+		out = "отличное"
 	elseif(quality <= 899 and quality > 799) then
-		out =  Text("высокое")
+		out = "высокое"
 	elseif(quality <= 999 and quality > 899) then
-		out =  Text("великолепное")
+		out =  "великолепное"
 	elseif(quality >= 1000) then
-		out =  Text("превосходное")
+		out = "превосходное"
 	end
-	return GetQualityColor(quality)..out
+	return GetQualityColor(quality)..Text(out)
 end
 
 

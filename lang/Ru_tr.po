@@ -70,6 +70,12 @@ msgstr ""
 msgid "ник"
 msgstr ""
 
+msgid "Масса"
+msgstr ""
+
+msgid "Цена"
+msgstr ""
+
 msgid "ид"
 msgstr ""
 

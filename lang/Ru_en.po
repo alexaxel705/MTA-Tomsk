@@ -71,6 +71,12 @@ msgstr "Place in the ranking"
 msgid "ник"
 msgstr "nick"
 
+msgid "Масса"
+msgstr ""
+
+msgid "Цена"
+msgstr ""
+
 msgid "ид"
 msgstr "id"
 

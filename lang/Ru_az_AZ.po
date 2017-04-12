@@ -70,6 +70,12 @@ msgstr "reytingdə yer"
 msgid "ник"
 msgstr "nik"
 
+msgid "Масса"
+msgstr "Çəki"
+
+msgid "Цена"
+msgstr "Qiymət"
+
 msgid "ид"
 msgstr "id"
 
