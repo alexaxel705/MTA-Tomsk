@@ -1,6 +1,6 @@
 local ids = {}
 local PData = {}
-local SData = {}
+local SData = {['Chat Message'] = {}}
 local Score = {}
 local Vibori = false
 SData["DriverBot"] = {}
@@ -82,6 +82,9 @@ function setCameraOnPlayerJoin()
 		}
 	}
 	setCameraMatrix(source,1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
+	for i, msg in pairs(SData['Chat Message']) do
+		outputChatBox(msg, source, 255, 255, 255,true)
+	end
 	outputChatBox("Нажми "..COLOR["KEY"]["HEX"].."T#FFFFFF чтобы писать в общий чат", source, 255, 255, 255,true)
 	outputChatBox("Нажми "..COLOR["KEY"]["HEX"].."Y#FFFFFF чтобы писать в командный чат", source, 255, 255, 255,true)
 	outputChatBox("Исходный код сервера #2980B9https://github.com/alexaxel705/MTA-Tomsk", source, 255, 255, 255,true)
@@ -4943,7 +4946,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  =  162.8, 1917.5, 18.6, 0, 0 --
+		local x,y,z,i,d  = 592.1, -1250.8, 18.2, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12174,7 +12177,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Деньги", 1000000000, 550, {})
+	--AddInventoryItem(thePlayer, "Деньги", 50000000, 550, {})
 
 	
 	fileDelete("save.txt")
@@ -15433,6 +15436,10 @@ function onPlayerChat(message, messageType, messagenovision)
 					callRemote("http://109.227.228.4/engine/include/MTA/index.php", ResultGet, getPlayerName(source):gsub('#%x%x%x%x%x%x', ''), message, color)
 					PData[source]["AntiFlood"] = setTimer(function() end, 1000, 1)
 					outputChatBox(color..getPlayerName(source):gsub('#%x%x%x%x%x%x', '')..": #EEEEEE"..message, getRootElement(), 255, 255, 255, true)
+					table.insert(SData['Chat Message'], color..getPlayerName(source):gsub('#%x%x%x%x%x%x', '')..": #EEEEEE"..message)
+					if(#SData['Chat Message'] > 10) then
+						table.remove(SData['Chat Message'], 10)
+					end
 				end
 				cancelEvent()
 			else
@@ -15472,7 +15479,7 @@ addEventHandler("onPlayerChat", getRootElement(), onPlayerChat)
 addEventHandler("CliendSideonPlayerChat", getRootElement(), onPlayerChat)
 
 function BurnChatMSG(name, message, nickcolor)
-	outputChatBox("[WEB] "..nickcolor..name..": #FFFFFF"..message, getRootElement(), 255, 255, 255, true)
+	triggerEvent("onPlayerChat", getRootElement(), "[WEB] "..nickcolor..name..": #FFFFFF"..message, 0)
 end
 addEvent("BurnChatMSG", true)
 addEventHandler("BurnChatMSG", getRootElement(), BurnChatMSG)

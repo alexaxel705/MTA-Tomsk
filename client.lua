@@ -1491,7 +1491,7 @@ function BuyUpgrade(handl, othercomp)
 		LoadUpgrade(true, handl, othercomp)
 	else
 		upgrades = getVehicleUpgrades(getPedOccupiedVehicle(localPlayer))
-		helpmessage("#009900"..Text("КУПЛЕНО!").."")
+		helpmessage("#009900"..Text("КУПЛЕНО").."!")
 		LoadUpgrade()
 	end
 end
@@ -4413,7 +4413,7 @@ function targetingActivated(target)
 						if(PTeam == "Полиция") then
 							bindKey ("e", "down", PoliceArrestEvent)
 							if(getElementModel(theVehicle) == 596 or getElementModel(theVehicle) == 597 or getElementModel(theVehicle) == 598 or getElementModel(theVehicle) == 599 or getElementModel(theVehicle) == 523) then
-								helpmessage("Нажми "..COLOR["KEY"]["HEX"].."E#FFFFFF чтобы\nпотребовать остановить автомобиль", 3000)
+								helpmessage("Нажми #A0A0A0E#FFFFFF чтобы\nпотребовать остановить автомобиль", 3000)
 							end
 						end
 					end
@@ -4426,7 +4426,7 @@ function targetingActivated(target)
 
 				local t=""
 				if(getVehiclePlateText(target) == "SELL 228") then
-					t=t.."Нажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы купить #008080"
+					t=t.."Нажми #A0A0A0TAB#FFFFFF чтобы купить #008080"
 				end
 				
 				if(getElementData(target, "owner") == getPlayerName(localPlayer)) then
@@ -4441,7 +4441,7 @@ function targetingActivated(target)
 				or getElementModel(target) ==  1776 or getElementModel(target) ==  1209
 				or getElementModel(target) ==  1302) then
 					toggleControl("enter_exit", false) 
-					ToolTip("Sprunk стоимость #3B7231$20#FFFFFF\nНажми "..COLOR["KEY"]["HEX"].."F#FFFFFF чтобы купить")
+					ToolTip("Sprunk стоимость #3B7231$20#FFFFFF\nНажми #A0A0A0F#FFFFFF чтобы купить")
 					SprunkObject = target
 					bindKey ("f", "down", SprunkFunk)
 				elseif(getElementModel(target) == 1812) then
@@ -4449,15 +4449,15 @@ function targetingActivated(target)
 					PrisonSleep=target
 					bindKey ("e", "down", PrisonSleepEv)
 				elseif(getElementModel(target) == 2525) then
-					ChangeInfo("Нажми #A0A0A0F#FFFFFF чтобы справить нужду\nНажми "..COLOR["KEY"]["HEX"].."E#FFFFFF чтобы чистить говно")
+					ChangeInfo("Нажми #A0A0A0F#FFFFFF чтобы справить нужду\nНажми #A0A0A0E#FFFFFF чтобы чистить говно")
 					PrisonGavno=target
 					bindKey ("e", "down", PrisonGavnoEv)
 					bindKey ("f", "down", PrisonPiss)
 				elseif(getElementModel(target) == 10149 or getElementModel(target) == 10184 or getElementModel(target) == 2930 or getElementModel(target) == 11327 or getElementModel(target) == 975 or getElementModel(target) == 988) then
-					ChangeInfo("Нажми "..COLOR["KEY"]["HEX"].."H#FFFFFF чтобы управлять воротами")
+					ChangeInfo("Нажми #A0A0A0H#FFFFFF чтобы управлять воротами")
 					Targets["theGate"] = target
 				elseif(getElementModel(target) == 17566 or getElementModel(target) == 10671) then
-					ChangeInfo("Нажми "..COLOR["KEY"]["HEX"].."H#FFFFFF чтобы управлять гаражом")
+					ChangeInfo("Нажми #A0A0A0H#FFFFFF чтобы управлять гаражом")
 					Targets["theGate"] = target
 				end
 			elseif(tostring(getElementType(target)) == "ped") then
@@ -4465,7 +4465,7 @@ function targetingActivated(target)
 					local team=getElementData(target, "team")
 					color=getTeamVariable(team)
 					if(team == getTeamName(getPlayerTeam(localPlayer))) then
-						ChangeInfo("Нажми "..COLOR["KEY"]["HEX"].."P #FFFFFFчтобы пригласить в группу")
+						ChangeInfo("Нажми #A0A0A0P #FFFFFFчтобы пригласить в группу")
 					end
 				end
 				Targets["thePed"] = target
@@ -5920,8 +5920,8 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 											DragElementId = i
 											DragElementName = name
 											local FH = dxGetFontHeight(scale*0.6, "default-bold")
-											PText["INVHUD"][#PText["INVHUD"]+1] = {"Использовать", absoluteX, absoluteY, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"UseInventoryItem", localPlayer, name, i}}	
-											PText["INVHUD"][#PText["INVHUD"]+1] = {"Выбросить", absoluteX, absoluteY+FH, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"DropInvItem", localPlayer, name, i}}	
+											PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Использовать"), absoluteX, absoluteY, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"UseInventoryItem", localPlayer, name, i}}	
+											PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Выбросить"), absoluteX, absoluteY-FH, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"DropInvItem", localPlayer, name, i}}	
 
 											local lx, ly, lz = getElementPosition(localPlayer)
 											for id, player in pairs(getElementsByType("player", getRootElement(), true)) do
@@ -5929,7 +5929,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 													local x2, y2, z2 = getElementPosition(player)
 													local distance = getDistanceBetweenPoints3D(lx,ly,lz,x2,y2,z2)
 													if(distance < 3) then
-														PText["INVHUD"][#PText["INVHUD"]+1] = {"Передать "..getPlayerName(player), absoluteX, absoluteY+(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"DropInvItem", localPlayer, name, i, getPlayerName(player)}}	
+														PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Передать").." "..getPlayerName(player), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"DropInvItem", localPlayer, name, i, getPlayerName(player)}}	
 													end
 												end
 											end
@@ -5944,7 +5944,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 														local x2, y2, z2 = getElementPosition(player)
 														local distance = getDistanceBetweenPoints3D(lx,ly,lz,x2,y2,z2)
 														if(distance < 3) then
-															PText["INVHUD"][#PText["INVHUD"]+1] = {"Посадить "..getPlayerName(player), absoluteX, absoluteY+(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"butilka", localPlayer, localPlayer, name, i, player}}}
+															PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Посадить").." "..getPlayerName(player), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"butilka", localPlayer, localPlayer, name, i, player}}}
 														end
 													end
 												end
@@ -5953,7 +5953,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 											local bannedNames = {["hp"] = true, ["date"] = true, ["cost"] = true, ["color"] = true, ["content"] = true, ["name"] = true, ["quality"] = true, ["mass"] = true}
 											for razdelname, razdeldata in pairs(PInv[name][i][4]) do --Для bannedNames запустить еще цикл
 												if(not bannedNames[razdelname]) then
-													PText["INVHUD"][#PText["INVHUD"]+1] = {"Извлечь "..razdelname, absoluteX, absoluteY+(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"RemoveButtonData", localPlayer, name, i, razdelname}}
+													PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Извлечь").." "..razdelname, absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"RemoveButtonData", localPlayer, name, i, razdelname}}
 												end
 											end
 										end
@@ -6345,7 +6345,7 @@ function AddInventoryItem(itemname, count, quality, data)
 	
 	
 	for slot = 1, 10 do
-		local stacked = math.round(count/items[itemname][3], 0)
+		local stacked = math.floor(count/items[itemname][3])
 
 		if(stacked >= 1) then
 			for v = 1, stacked do
@@ -6362,12 +6362,13 @@ function AddInventoryItem(itemname, count, quality, data)
 		
 		if(count == 0) then
 			break
-		elseif(count > 0) then
+		elseif(count >= 0) then
 			local NumberStack = FoundStackedInventoryItem(itemname, quality)
 			if(NumberStack) then
 				if(PInv["player"][NumberStack][2]+count <= items[itemname][3]) then
 					SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], PInv["player"][NumberStack][2]+count, PInv["player"][NumberStack][3], data)
 					count = 0
+					break
 				else
 					count = count - (items[itemname][3]-PInv["player"][NumberStack][2])
 					SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], items[itemname][3], PInv["player"][NumberStack][3], data)
@@ -6725,7 +6726,7 @@ function onWasted(killer, weapon, bodypart)
 		end
 		
 		RemoveInventory()
-		PData["wasted"]="ПОТРАЧЕНО"
+		PData["wasted"]=Text("ПОТРАЧЕНО")
 		if(killer) then
 			if(getElementType(killer) == "ped") then
 				if(getElementData(killer, "attacker") == getPlayerName(localPlayer)) then
@@ -6733,12 +6734,12 @@ function onWasted(killer, weapon, bodypart)
 				end
 				local KTeam = getElementData(killer, "team")				
 				if(KTeam == "Полиция" or KTeam == "ФБР" or KTeam == "Военные") then
-					PData["wasted"]="СЛОМАНО"
+					PData["wasted"]=Text("СЛОМАНО")
 				end
 			elseif(getElementType(killer) == "player") then
 				local KTeam = getTeamName(getPlayerTeam(killer))			
 				if(KTeam == "Полиция" or KTeam == "ФБР" or KTeam == "Военные") then
-					PData["wasted"]="СЛОМАНО"
+					PData["wasted"]=Text("СЛОМАНО")
 				end
 			end
 		end
@@ -6781,6 +6782,7 @@ addEventHandler("onClientPlayerVehicleExit", getRootElement(), PlayerVehicleExit
 
 
 function ChangeInfo(text, ctime)
+	text = Text(text)
 	if(isTimer(PData["ChangeInfoTimer"])) then
 		killTimer(PData["ChangeInfoTimer"])
 	end
@@ -8214,7 +8216,7 @@ function DrawPlayerMessage()
 						key[7] = false
 					end
 				else
-					dxDrawBorderedText("#FF9800"..Text("Благодарности").."\n#FFFFFFCrystalMV #69749Abone_attach\n\n#C7843C"..Text("Над сервером работали").."#FFFFFF\n800 #194299real_life@sibmail.com#FFFFFF 2006-2011\nTanker #194299tankerktv@mail.ru#FFFFFF 2006-2009\nDark_ALEX #194299dark_alex@sibmail.com#FFFFFF 2009-2017\nMishel' #194299laym101@mail.com#FFFFFF 2017", screenWidth, screenHeight-(280*NewScale), screenWidth-(30*NewScale), screenHeight, tocolor(103,104,107, 255), NewScale*2, "default-bold", "right", "top", false, false, false, true)
+					dxDrawBorderedText("#FF9800"..Text("Благодарности").."\n#FFFFFFCrystalMV #69749Abone_attach\n#FFFFFFPioner #69749Aперевод на азербайджанский\n\n#C7843C"..Text("Над сервером работали").."#FFFFFF\n800 #194299real_life@sibmail.com#FFFFFF 2006-2011\nTanker #194299tankerktv@mail.ru#FFFFFF 2006-2009\nDark_ALEX #194299dark_alex@sibmail.com#FFFFFF 2009-2017\nMishel' #194299laym101@mail.com#FFFFFF 2017", screenWidth, screenHeight-(320*NewScale), screenWidth-(30*NewScale), screenHeight, tocolor(103,104,107, 255), NewScale*2, "default-bold", "right", "top", false, false, false, true)
 					
 					local x2, y2, z2, lx, ly, lz, rz = getCameraMatrix ()
 					setCameraMatrix (x2+0.0005, y2+0.0005, z2+0.00005, lx+0.0005, ly+0.0005, lz)
