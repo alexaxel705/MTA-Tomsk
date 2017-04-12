@@ -2,13 +2,14 @@
 # Translators:
 # Алексей <alexaxel705@gmail.com>, 2017
 # Erkin Sendzher <sanjar.erkin@gmail.com>, 2017
+# Nachuj Idi <lukaskliacevic@mail.ru>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: MTA-Tomsk\n"
 "Report-Msgid-Bugs-To: http://109.227.228.4/\n"
 "POT-Creation-Date: 2011-06-23 11:00+0200\n"
 "PO-Revision-Date: 2012-07-26 13:31+0000\n"
-"Last-Translator: Erkin Sendzher <sanjar.erkin@gmail.com>, 2017\n"
+"Last-Translator: Nachuj Idi <lukaskliacevic@mail.ru>, 2017\n"
 "Language-Team: English (https://www.transifex.com/multi-theft-auto-tomsk/teams/73682/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,7 +30,7 @@ msgid "МИССИЯ ВЫПОЛНЕНА"
 msgstr "MISSION COMPLETE"
 
 msgid "Дойди до магазина"
-msgstr ""
+msgstr "Go to the store"
 
 msgid "Зайди в магазин и купи пачку #596289сигарет"
 msgstr ""
@@ -44,46 +45,46 @@ msgid "Плантация"
 msgstr ""
 
 msgid "Притон"
-msgstr ""
+msgstr "Brothel"
 
 msgid "СЛОМАНО"
 msgstr ""
 
 msgid "ПОТРАЧЕНО"
-msgstr ""
+msgstr "WASTED"
 
 msgid "Игроков"
-msgstr ""
+msgstr "Players"
 
 msgid "Благодарности"
 msgstr ""
 
 msgid "Над сервером работали"
-msgstr ""
+msgstr "Above the server worked"
 
 msgid "пинг"
-msgstr ""
+msgstr "ping"
 
 msgid "место в рейтинге"
-msgstr ""
+msgstr "Place in the ranking"
 
 msgid "ник"
-msgstr ""
+msgstr "nick"
 
 msgid "ид"
-msgstr ""
+msgstr "id"
 
 msgid "Итоги"
-msgstr ""
+msgstr "Results"
 
 msgid "Введи номер или ИД игрока"
 msgstr ""
 
 msgid "наше время"
-msgstr ""
+msgstr "Nowadays"
 
 msgid "наши дни"
-msgstr ""
+msgstr "Our days"
 
 msgid "#FFA500Психиатрическая больница"
 msgstr ""
@@ -98,196 +99,518 @@ msgid "hp"
 msgstr ""
 
 msgid "Бронежилет"
-msgstr ""
+msgstr "Armour"
 
 msgid "Канистра"
-msgstr ""
+msgstr "Canister"
 
 msgid "Реликвия"
-msgstr ""
+msgstr "Relic"
 
 msgid "Подкова"
-msgstr ""
+msgstr "Horseshoe"
 
 msgid "Телефон"
-msgstr ""
+msgstr "Phone"
 
 msgid "47 Хромосома"
-msgstr ""
+msgstr "47 Chromosome"
 
 msgid "Рюкзак"
-msgstr ""
+msgstr "Backpack"
 
 msgid "Чемодан"
-msgstr ""
+msgstr "Suitcase"
 
 msgid "Пакет"
-msgstr ""
+msgstr "Package"
 
 msgid "АК-47"
-msgstr ""
+msgstr "AK-47"
 
 msgid "Граната"
-msgstr ""
+msgstr "Grenade"
 
 msgid "Молотов"
-msgstr ""
+msgstr "Molotov"
 
 msgid "М16"
-msgstr ""
+msgstr "M16"
 
 msgid "Кольт 45"
-msgstr ""
+msgstr "Colt 45"
 
 msgid "USP-S"
-msgstr ""
+msgstr "USP-S"
 
 msgid "Deagle"
-msgstr ""
+msgstr "Deagle"
 
 msgid "Кровь"
-msgstr ""
+msgstr "Blood"
 
 msgid "Pissh"
-msgstr ""
+msgstr "Pissh"
 
 msgid "Pissh Gold"
-msgstr ""
+msgstr "Pissh Gold"
 
 msgid "KBeer"
-msgstr ""
+msgstr "KBeer"
 
 msgid "KBeer Dark"
-msgstr ""
+msgstr "KBeer Dark"
 
 msgid "isabella"
-msgstr ""
+msgstr "isabella"
 
 msgid "Фекалии"
-msgstr ""
+msgstr "Shit"
 
 msgid "CoK"
-msgstr ""
+msgstr "CoK"
 
 msgid "Сигарета"
-msgstr ""
+msgstr "Cigarette"
 
 msgid "Mossberg"
-msgstr ""
+msgstr "Shotgun"
 
 msgid "Sawed-Off"
-msgstr ""
+msgstr "Sawed-Off"
 
 msgid "SPAS-12"
-msgstr ""
+msgstr "SPAS-12"
 
 msgid "Узи"
-msgstr ""
+msgstr "Micro SMG"
 
 msgid "MP5"
-msgstr ""
+msgstr "MP5"
 
 msgid "Tec-9"
-msgstr ""
+msgstr "Tec-9"
 
 msgid "ИЖ-12"
-msgstr ""
+msgstr "Rifle"
 
 msgid "M40"
-msgstr ""
+msgstr "M40"
 
 msgid "Dildo XXL"
-msgstr ""
+msgstr "Dildo XXL"
 
 msgid "Dildo"
-msgstr ""
+msgstr "Dildo"
 
 msgid "Вибратор"
-msgstr ""
+msgstr "Vibrator"
 
 msgid "Клюшка"
-msgstr ""
+msgstr "Putter"
 
 msgid "Лопата"
-msgstr ""
+msgstr "Shovel"
 
 msgid "Бита"
-msgstr ""
+msgstr "Baseball bat"
 
 msgid "Нож"
-msgstr ""
+msgstr "Knife"
 
 msgid "Катана"
-msgstr ""
+msgstr "Katana"
 
 msgid "Камера"
-msgstr ""
+msgstr "Camera"
 
 msgid "Бензопила"
-msgstr ""
+msgstr "Chainsaw"
 
 msgid "Лазерный прицел"
-msgstr ""
+msgstr "Laser sight"
 
 msgid "9-мм"
-msgstr ""
+msgstr "9-mm"
 
 msgid "5.56-мм"
-msgstr ""
+msgstr "5.56-mm"
 
 msgid "7.62-мм"
-msgstr ""
+msgstr "7.62-mm"
 
 msgid "18.5-мм"
-msgstr ""
+msgstr "18.5-mm"
 
 msgid "Кулак"
-msgstr ""
+msgstr "Fist"
 
 msgid "Конопля"
-msgstr ""
+msgstr "Hemp"
 
 msgid "Кока"
-msgstr ""
+msgstr "Coca"
 
 msgid "Косяк"
 msgstr ""
 
 msgid "Спанк"
-msgstr ""
+msgstr "Spank"
 
 msgid "Удочка"
-msgstr ""
+msgstr "Fishing rod"
 
 msgid "Рыба"
-msgstr ""
+msgstr "Fish"
 
 msgid "Черепаха"
-msgstr ""
+msgstr "Turtle"
 
 msgid "Акула"
-msgstr ""
+msgstr "Shark"
 
 msgid "Дельфин"
-msgstr ""
+msgstr "Dolphin"
 
 msgid "Парашют"
-msgstr ""
+msgstr "Parachute"
 
 msgid "Запаска"
-msgstr ""
+msgstr "Spare wheel"
 
 msgid "Скот"
-msgstr ""
+msgstr "Cattle"
 
 msgid "Сено"
-msgstr ""
+msgstr "Hay"
 
 msgid "Газета"
-msgstr ""
+msgstr "Newspaper"
 
 msgid "Деньги"
-msgstr ""
+msgstr "Money"
 
 msgid "Кредитка"
+msgstr "Credit card"
+
+msgid "Передать"
+msgstr "Transfer to"
+
+msgid "Посадить"
+msgstr "Plant"
+
+msgid "Извлечь"
+msgstr "Extract"
+
+msgid "Использовать"
+msgstr "Use"
+
+msgid "Выбросить"
+msgstr "Drop"
+
+msgid "Введи количество"
+msgstr "Enter the amount"
+
+msgid "Урон"
+msgstr "Damage"
+
+msgid "Расстояние"
+msgstr "Distance"
+
+msgid "Магазин"
+msgstr "Shop"
+
+msgid "Калибр"
+msgstr "Caliber"
+
+msgid "Здоровье"
+msgstr "Health"
+
+msgid "Вождение"
+msgstr "Driving"
+
+msgid "Мотоциклист"
+msgstr "Motorcyclist"
+
+msgid "Велосипедист"
+msgstr "Bike"
+
+msgid "Летчик"
+msgstr "Pilot"
+
+msgid "Грузоперевозки"
+msgstr "Cargo transportation"
+
+msgid "Рыболов"
+msgstr "Fishermen"
+
+msgid "Рукопашный бой"
+msgstr "Hand-to-hand fight"
+
+msgid "Пистолет"
+msgstr "Pistol"
+
+msgid "Пистолет с глуш."
+msgstr "Pistol with muffler"
+
+msgid "Дигл"
+msgstr "Deagle"
+
+msgid "Дробовик"
+msgstr "Shotgun"
+
+msgid "Sawn-Off"
+msgstr "Sawn-Off"
+
+msgid "SPAZ-12"
+msgstr "SPAZ-12"
+
+msgid "УЗИ"
+msgstr "Micro SMG"
+
+msgid "Винтовка"
+msgstr "Rifle"
+
+msgid "Выносливость"
+msgstr "Endurance"
+
+msgid "Качество"
+msgstr "Quality"
+
+msgid "Выпадает после смерти"
+msgstr "Drops after death"
+
+msgid "кг"
+msgstr "kg"
+
+msgid "г"
+msgstr "g"
+
+msgid "отвратительное"
+msgstr "Disgusting"
+
+msgid "мерзкое"
+msgstr "Vile"
+
+msgid "гадкое"
+msgstr ""
+
+msgid "плохое"
+msgstr "Bad"
+
+msgid "обычное"
+msgstr "Normal"
+
+msgid "хорошее"
+msgstr "Good"
+
+msgid "очень хорошее"
+msgstr "Very good"
+
+msgid "отличное"
+msgstr "Perfect"
+
+msgid "высокое"
+msgstr "High"
+
+msgid "великолепное"
+msgstr "Magnificent"
+
+msgid "превосходное"
+msgstr "Superb"
+
+msgid "Закончилось место в инвентаре"
+msgstr ""
+
+msgid "Чтобы использовать этот предмет возьми его в руки"
+msgstr ""
+
+msgid ""
+"Для сбора урожая удерживай\n"
+"скорость в пределах зеленой зоны"
+msgstr ""
+
+msgid "Мирные жители"
+msgstr "Civilians"
+
+msgid "Уголовники"
+msgstr "Criminals"
+
+msgid "Колумбийский картель"
+msgstr "Colombian Cartel"
+
+msgid "Баллас"
+msgstr "Ballas"
+
+msgid "Гроув-стрит"
+msgstr "Grove Street"
+
+msgid "МЧС"
+msgstr "Doctors"
+
+msgid "Полиция"
+msgstr "Police"
+
+msgid "ЦРУ"
+msgstr "CIA"
+
+msgid "Военные"
+msgstr "Army"
+
+msgid "Триады"
+msgstr "Triads"
+
+msgid "Якудзы"
+msgstr "Yakuza"
+
+msgid "Русская мафия"
+msgstr "Russian Mafia"
+
+msgid "Байкеры"
+msgstr "Bikers"
+
+msgid "Вагос"
+msgstr "Vagos"
+
+msgid "ФБР"
+msgstr "FBI"
+
+msgid "Рифа"
+msgstr "Rifa"
+
+msgid "Деревенщины"
+msgstr "Rustics"
+
+msgid "Ацтекас"
+msgstr "Aztecas"
+
+msgid "Января"
+msgstr "January"
+
+msgid "Февраля"
+msgstr "February"
+
+msgid "Марта"
+msgstr "March"
+
+msgid "Апреля"
+msgstr "April"
+
+msgid "Мая"
+msgstr "May"
+
+msgid "Июня"
+msgstr "June"
+
+msgid "Июля"
+msgstr "July"
+
+msgid "Августа"
+msgstr "Augustus"
+
+msgid "Сентября"
+msgstr "September"
+
+msgid "Октября"
+msgstr "October"
+
+msgid "Ноября"
+msgstr "November"
+
+msgid "Декабря"
+msgstr "December"
+
+msgid "КУПЛЕНО"
+msgstr "PURCHASED"
+
+msgid "БЕСПЛАТНО"
+msgstr "FREE"
+
+msgid ""
+"Поступил новый вызов!\n"
+" #FFFFFFОтправляйся на #FF0000красный маркер"
+msgstr ""
+
+msgid "пополнить"
+msgstr "Replenish"
+
+msgid "снять"
+msgstr "Take off"
+
+msgid "Нажми #A0A0A0P#FFFFFF чтобы припарковать машину"
+msgstr ""
+
+msgid "Карьер «Hunter Quarry»"
+msgstr ""
+
+msgid "Свалка Angel Pine"
+msgstr ""
+
+msgid "Аэропорт Los Santos"
+msgstr ""
+
+msgid "Аэропорт San Fierro"
+msgstr ""
+
+msgid "Аэропорт Las Venturas"
+msgstr ""
+
+msgid "Пожарная станция Los Santos"
+msgstr ""
+
+msgid "Пожарная станция San Fierro"
+msgstr ""
+
+msgid "Пожарная станция Las Venturas №3"
+msgstr ""
+
+msgid "База грузоперевозок"
+msgstr ""
+
+msgid "НПЗ «Green Palms»"
+msgstr ""
+
+msgid "Тренажерный зал"
+msgstr ""
+
+msgid "Больница"
+msgstr ""
+
+msgid "Медицинский центр San Fierro"
+msgstr ""
+
+msgid "Тюнинг"
+msgstr ""
+
+msgid "Закусочная"
+msgstr ""
+
+msgid "Ресторан"
+msgstr ""
+
+msgid "Банк"
+msgstr ""
+
+msgid "Полицейский участок Los Santos"
+msgstr ""
+
+msgid "Полицейский участок Las Venturas"
+msgstr ""
+
+msgid "Полицейский участок San Fierro"
+msgstr ""
+
+msgid "Медицинский центр Fort Caston"
+msgstr ""
+
+msgid "Клуб"
+msgstr ""
+
+msgid "Автосалон «Wang Cars»"
+msgstr ""
+
+msgid "Склад «Redsands West»"
+msgstr ""
+
+msgid "Мотосалон «Dillmore»"
 msgstr ""

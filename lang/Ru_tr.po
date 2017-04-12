@@ -291,3 +291,325 @@ msgstr ""
 
 msgid "Кредитка"
 msgstr ""
+
+msgid "Передать"
+msgstr ""
+
+msgid "Посадить"
+msgstr ""
+
+msgid "Извлечь"
+msgstr ""
+
+msgid "Использовать"
+msgstr ""
+
+msgid "Выбросить"
+msgstr ""
+
+msgid "Введи количество"
+msgstr ""
+
+msgid "Урон"
+msgstr ""
+
+msgid "Расстояние"
+msgstr ""
+
+msgid "Магазин"
+msgstr ""
+
+msgid "Калибр"
+msgstr ""
+
+msgid "Здоровье"
+msgstr ""
+
+msgid "Вождение"
+msgstr ""
+
+msgid "Мотоциклист"
+msgstr ""
+
+msgid "Велосипедист"
+msgstr ""
+
+msgid "Летчик"
+msgstr ""
+
+msgid "Грузоперевозки"
+msgstr ""
+
+msgid "Рыболов"
+msgstr ""
+
+msgid "Рукопашный бой"
+msgstr ""
+
+msgid "Пистолет"
+msgstr ""
+
+msgid "Пистолет с глуш."
+msgstr ""
+
+msgid "Дигл"
+msgstr ""
+
+msgid "Дробовик"
+msgstr ""
+
+msgid "Sawn-Off"
+msgstr ""
+
+msgid "SPAZ-12"
+msgstr ""
+
+msgid "УЗИ"
+msgstr ""
+
+msgid "Винтовка"
+msgstr ""
+
+msgid "Выносливость"
+msgstr ""
+
+msgid "Качество"
+msgstr ""
+
+msgid "Выпадает после смерти"
+msgstr ""
+
+msgid "кг"
+msgstr ""
+
+msgid "г"
+msgstr ""
+
+msgid "отвратительное"
+msgstr ""
+
+msgid "мерзкое"
+msgstr ""
+
+msgid "гадкое"
+msgstr ""
+
+msgid "плохое"
+msgstr ""
+
+msgid "обычное"
+msgstr ""
+
+msgid "хорошее"
+msgstr ""
+
+msgid "очень хорошее"
+msgstr ""
+
+msgid "отличное"
+msgstr ""
+
+msgid "высокое"
+msgstr ""
+
+msgid "великолепное"
+msgstr ""
+
+msgid "превосходное"
+msgstr ""
+
+msgid "Закончилось место в инвентаре"
+msgstr ""
+
+msgid "Чтобы использовать этот предмет возьми его в руки"
+msgstr ""
+
+msgid ""
+"Для сбора урожая удерживай\n"
+"скорость в пределах зеленой зоны"
+msgstr ""
+
+msgid "Мирные жители"
+msgstr ""
+
+msgid "Уголовники"
+msgstr ""
+
+msgid "Колумбийский картель"
+msgstr ""
+
+msgid "Баллас"
+msgstr ""
+
+msgid "Гроув-стрит"
+msgstr ""
+
+msgid "МЧС"
+msgstr ""
+
+msgid "Полиция"
+msgstr ""
+
+msgid "ЦРУ"
+msgstr ""
+
+msgid "Военные"
+msgstr ""
+
+msgid "Триады"
+msgstr ""
+
+msgid "Якудзы"
+msgstr ""
+
+msgid "Русская мафия"
+msgstr ""
+
+msgid "Байкеры"
+msgstr ""
+
+msgid "Вагос"
+msgstr ""
+
+msgid "ФБР"
+msgstr ""
+
+msgid "Рифа"
+msgstr ""
+
+msgid "Деревенщины"
+msgstr ""
+
+msgid "Ацтекас"
+msgstr ""
+
+msgid "Января"
+msgstr ""
+
+msgid "Февраля"
+msgstr ""
+
+msgid "Марта"
+msgstr ""
+
+msgid "Апреля"
+msgstr ""
+
+msgid "Мая"
+msgstr ""
+
+msgid "Июня"
+msgstr ""
+
+msgid "Июля"
+msgstr ""
+
+msgid "Августа"
+msgstr ""
+
+msgid "Сентября"
+msgstr ""
+
+msgid "Октября"
+msgstr ""
+
+msgid "Ноября"
+msgstr ""
+
+msgid "Декабря"
+msgstr ""
+
+msgid "КУПЛЕНО"
+msgstr ""
+
+msgid "БЕСПЛАТНО"
+msgstr ""
+
+msgid ""
+"Поступил новый вызов!\n"
+" #FFFFFFОтправляйся на #FF0000красный маркер"
+msgstr ""
+
+msgid "пополнить"
+msgstr ""
+
+msgid "снять"
+msgstr ""
+
+msgid "Нажми #A0A0A0P#FFFFFF чтобы припарковать машину"
+msgstr ""
+
+msgid "Карьер «Hunter Quarry»"
+msgstr ""
+
+msgid "Свалка Angel Pine"
+msgstr ""
+
+msgid "Аэропорт Los Santos"
+msgstr ""
+
+msgid "Аэропорт San Fierro"
+msgstr ""
+
+msgid "Аэропорт Las Venturas"
+msgstr ""
+
+msgid "Пожарная станция Los Santos"
+msgstr ""
+
+msgid "Пожарная станция San Fierro"
+msgstr ""
+
+msgid "Пожарная станция Las Venturas №3"
+msgstr ""
+
+msgid "База грузоперевозок"
+msgstr ""
+
+msgid "НПЗ «Green Palms»"
+msgstr ""
+
+msgid "Тренажерный зал"
+msgstr ""
+
+msgid "Больница"
+msgstr ""
+
+msgid "Медицинский центр San Fierro"
+msgstr ""
+
+msgid "Тюнинг"
+msgstr ""
+
+msgid "Закусочная"
+msgstr ""
+
+msgid "Ресторан"
+msgstr ""
+
+msgid "Банк"
+msgstr ""
+
+msgid "Полицейский участок Los Santos"
+msgstr ""
+
+msgid "Полицейский участок Las Venturas"
+msgstr ""
+
+msgid "Полицейский участок San Fierro"
+msgstr ""
+
+msgid "Медицинский центр Fort Caston"
+msgstr ""
+
+msgid "Клуб"
+msgstr ""
+
+msgid "Автосалон «Wang Cars»"
+msgstr ""
+
+msgid "Склад «Redsands West»"
+msgstr ""
+
+msgid "Мотосалон «Dillmore»"
+msgstr ""

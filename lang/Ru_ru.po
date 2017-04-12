@@ -286,3 +286,329 @@ msgstr "Деньги"
 
 msgid "Кредитка"
 msgstr "Кредитка"
+
+msgid "Передать"
+msgstr "Передать"
+
+msgid "Посадить"
+msgstr "Посадить"
+
+msgid "Извлечь"
+msgstr "Извлечь"
+
+msgid "Использовать"
+msgstr "Использовать"
+
+msgid "Выбросить"
+msgstr "Выбросить"
+
+msgid "Введи количество"
+msgstr "Введи количество"
+
+msgid "Урон"
+msgstr "Урон"
+
+msgid "Расстояние"
+msgstr "Расстояние"
+
+msgid "Магазин"
+msgstr "Магазин"
+
+msgid "Калибр"
+msgstr "Калибр"
+
+msgid "Здоровье"
+msgstr "Здоровье"
+
+msgid "Вождение"
+msgstr "Вождение"
+
+msgid "Мотоциклист"
+msgstr "Мотоциклист"
+
+msgid "Велосипедист"
+msgstr "Велосипедист"
+
+msgid "Летчик"
+msgstr "Летчик"
+
+msgid "Грузоперевозки"
+msgstr "Грузоперевозки"
+
+msgid "Рыболов"
+msgstr "Рыболов"
+
+msgid "Рукопашный бой"
+msgstr "Рукопашный бой"
+
+msgid "Пистолет"
+msgstr "Пистолет"
+
+msgid "Пистолет с глуш."
+msgstr "Пистолет с глуш."
+
+msgid "Дигл"
+msgstr "Дигл"
+
+msgid "Дробовик"
+msgstr "Дробовик"
+
+msgid "Sawn-Off"
+msgstr "Sawn-Off"
+
+msgid "SPAZ-12"
+msgstr "SPAZ-12"
+
+msgid "УЗИ"
+msgstr "УЗИ"
+
+msgid "Винтовка"
+msgstr "Винтовка"
+
+msgid "Выносливость"
+msgstr "Выносливость"
+
+msgid "Качество"
+msgstr "Качество"
+
+msgid "Выпадает после смерти"
+msgstr "Выпадает после смерти"
+
+msgid "кг"
+msgstr "кг"
+
+msgid "г"
+msgstr "г"
+
+msgid "отвратительное"
+msgstr "отвратительное"
+
+msgid "мерзкое"
+msgstr "мерзкое"
+
+msgid "гадкое"
+msgstr "гадкое"
+
+msgid "плохое"
+msgstr "плохое"
+
+msgid "обычное"
+msgstr "обычное"
+
+msgid "хорошее"
+msgstr "хорошее"
+
+msgid "очень хорошее"
+msgstr "очень хорошее"
+
+msgid "отличное"
+msgstr "отличное"
+
+msgid "высокое"
+msgstr "высокое"
+
+msgid "великолепное"
+msgstr "великолепное"
+
+msgid "превосходное"
+msgstr "превосходное"
+
+msgid "Закончилось место в инвентаре"
+msgstr "Закончилось место в инвентаре"
+
+msgid "Чтобы использовать этот предмет возьми его в руки"
+msgstr "Чтобы использовать этот предмет возьми его в руки"
+
+msgid ""
+"Для сбора урожая удерживай\n"
+"скорость в пределах зеленой зоны"
+msgstr ""
+"Для сбора урожая удерживай\n"
+"скорость в пределах зеленой зоны"
+
+msgid "Мирные жители"
+msgstr "Мирные жители"
+
+msgid "Уголовники"
+msgstr "Уголовники"
+
+msgid "Колумбийский картель"
+msgstr "Колумбийский картель"
+
+msgid "Баллас"
+msgstr "Баллас"
+
+msgid "Гроув-стрит"
+msgstr "Гроув-стрит"
+
+msgid "МЧС"
+msgstr "МЧС"
+
+msgid "Полиция"
+msgstr "Полиция"
+
+msgid "ЦРУ"
+msgstr "ЦРУ"
+
+msgid "Военные"
+msgstr "Военные"
+
+msgid "Триады"
+msgstr "Триады"
+
+msgid "Якудзы"
+msgstr "Якудзы"
+
+msgid "Русская мафия"
+msgstr "Русская мафия"
+
+msgid "Байкеры"
+msgstr "Байкеры"
+
+msgid "Вагос"
+msgstr "Вагос"
+
+msgid "ФБР"
+msgstr "ФБР"
+
+msgid "Рифа"
+msgstr "Рифа"
+
+msgid "Деревенщины"
+msgstr "Деревенщины"
+
+msgid "Ацтекас"
+msgstr "Ацтекас"
+
+msgid "Января"
+msgstr "Января"
+
+msgid "Февраля"
+msgstr "Февраля"
+
+msgid "Марта"
+msgstr "Марта"
+
+msgid "Апреля"
+msgstr "Апреля"
+
+msgid "Мая"
+msgstr "Мая"
+
+msgid "Июня"
+msgstr "Июня"
+
+msgid "Июля"
+msgstr "Июля"
+
+msgid "Августа"
+msgstr "Августа"
+
+msgid "Сентября"
+msgstr "Сентября"
+
+msgid "Октября"
+msgstr "Октября"
+
+msgid "Ноября"
+msgstr "Ноября"
+
+msgid "Декабря"
+msgstr "Декабря"
+
+msgid "КУПЛЕНО"
+msgstr "КУПЛЕНО"
+
+msgid "БЕСПЛАТНО"
+msgstr "БЕСПЛАТНО"
+
+msgid ""
+"Поступил новый вызов!\n"
+" #FFFFFFОтправляйся на #FF0000красный маркер"
+msgstr ""
+"Поступил новый вызов!\n"
+" #FFFFFFОтправляйся на #FF0000красный маркер"
+
+msgid "пополнить"
+msgstr "пополнить"
+
+msgid "снять"
+msgstr "снять"
+
+msgid "Нажми #A0A0A0P#FFFFFF чтобы припарковать машину"
+msgstr "Нажми #A0A0A0P#FFFFFF чтобы припарковать машину"
+
+msgid "Карьер «Hunter Quarry»"
+msgstr "Карьер «Hunter Quarry»"
+
+msgid "Свалка Angel Pine"
+msgstr "Свалка Angel Pine"
+
+msgid "Аэропорт Los Santos"
+msgstr "Аэропорт Los Santos"
+
+msgid "Аэропорт San Fierro"
+msgstr "Аэропорт San Fierro"
+
+msgid "Аэропорт Las Venturas"
+msgstr "Аэропорт Las Venturas"
+
+msgid "Пожарная станция Los Santos"
+msgstr "Пожарная станция Los Santos"
+
+msgid "Пожарная станция San Fierro"
+msgstr "Пожарная станция San Fierro"
+
+msgid "Пожарная станция Las Venturas №3"
+msgstr "Пожарная станция Las Venturas №3"
+
+msgid "База грузоперевозок"
+msgstr "База грузоперевозок"
+
+msgid "НПЗ «Green Palms»"
+msgstr "НПЗ «Green Palms»"
+
+msgid "Тренажерный зал"
+msgstr "Тренажерный зал"
+
+msgid "Больница"
+msgstr "Больница"
+
+msgid "Медицинский центр San Fierro"
+msgstr "Медицинский центр San Fierro"
+
+msgid "Тюнинг"
+msgstr "Тюнинг"
+
+msgid "Закусочная"
+msgstr "Закусочная"
+
+msgid "Ресторан"
+msgstr "Ресторан"
+
+msgid "Банк"
+msgstr "Банк"
+
+msgid "Полицейский участок Los Santos"
+msgstr "Полицейский участок Los Santos"
+
+msgid "Полицейский участок Las Venturas"
+msgstr "Полицейский участок Las Venturas"
+
+msgid "Полицейский участок San Fierro"
+msgstr "Полицейский участок San Fierro"
+
+msgid "Медицинский центр Fort Caston"
+msgstr "Медицинский центр Fort Caston"
+
+msgid "Клуб"
+msgstr "Клуб"
+
+msgid "Автосалон «Wang Cars»"
+msgstr "Автосалон «Wang Cars»"
+
+msgid "Склад «Redsands West»"
+msgstr "Склад «Redsands West»"
+
+msgid "Мотосалон «Dillmore»"
+msgstr "Мотосалон «Dillmore»"
