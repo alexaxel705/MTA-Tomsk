@@ -5306,7 +5306,7 @@ addEventHandler("onClientRender", root,
 				else
 					color=tocolor(200, 200, 200, 255)
 				end
-				dxDrawBorderedText(fract, (110*scalex), -(100*scaley), screenWidth, screenHeight, color, scale/1.4, "default-bold", "center", "center")
+				dxDrawBorderedText(Text(fract), (110*scalex), -(100*scaley), screenWidth, screenHeight, color, scale/1.4, "default-bold", "center", "center")
 							
 				
 				if(getVehiclePlateText(Targets["theVehicle"]) == "SELL 228") then
