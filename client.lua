@@ -3179,7 +3179,7 @@ function checkKey()
 		if(theVehicle) then
 			if(speed == "000") then
 				if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer)) then
-					ChangeInfo("Нажми #A0A0A0P#FFFFFF чтобы припарковать машину", 1000)
+					ChangeInfo(Text("Нажми {key} чтобы припарковать машину"):gsub("{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"), 1000)
 				end
 			end
 		end
@@ -3488,7 +3488,7 @@ function UpdateTabEvent()
 	for slot = TabScroll, #thePlayers do
 		if(TABCurrent < MAXSCROLL) then
 			if(getElementData(thePlayers[slot], "rate")) then
-				RANG=RANG.."#"..getElementData(thePlayers[slot], "rate").."\n"
+				RANG=RANG..getElementData(thePlayers[slot], "rate").."\n"
 			else
 				RANG=RANG.."Не авторизирован".."\n"
 			end
@@ -6801,7 +6801,6 @@ addEventHandler("onClientPlayerVehicleExit", getRootElement(), PlayerVehicleExit
 
 
 function ChangeInfo(text, ctime)
-	text = Text(text)
 	if(isTimer(PData["ChangeInfoTimer"])) then
 		killTimer(PData["ChangeInfoTimer"])
 	end
@@ -6818,6 +6817,7 @@ function ChangeInfo(text, ctime)
 end
 addEvent("ChangeInfo", true)
 addEventHandler("ChangeInfo", localPlayer, ChangeInfo)
+
 
 
 function ChangeInfoAdv(text, ctime)
