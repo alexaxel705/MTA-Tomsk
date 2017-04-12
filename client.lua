@@ -3833,7 +3833,7 @@ addEventHandler("onClientVehicleStartEnter",getRootElement(),stopVehicleEntry)
 
 function CreateBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance, info)
 	PData['blip'][#PData['blip']+1] = createBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance)
-	setElementData(PData['blip'][#PData['blip']], 'info', info)
+	setElementData(PData['blip'][#PData['blip']], 'info', Text(info))
 	return PData['blip'][#PData['blip']]
 end
 
@@ -3885,7 +3885,7 @@ CreateBlip(1096, 1902, 0, 51, 0, 0, 0, 0, 0, 0, 300, "База грузопер�
 CreateBlip(261, 1410, 0, 51, 0, 0, 0, 0, 0, 0, 300, "НПЗ «Green Palms»")
 CreateBlip(-1035, -614, 0, 51, 0, 0, 0, 0, 0, 0, 300, "Easter Bay Chemicals")
 CreateBlip(1760, -2056, 0, 51, 0, 0, 0, 0, 0, 0, 300, "База грузоперевозок")
-CreateBlip(1676, 2325, 0, 51, 0, 0, 0, 0, 0, 0, 300, "Las Venturas [Склад Redsands West]")
+CreateBlip(1676, 2325, 0, 51, 0, 0, 0, 0, 0, 0, 300, "Склад «Redsands West»")
 CreateBlip(2390, 2760, 0, 51, 0, 0, 0, 0, 0, 0, 300, "База грузоперевозок")
 CreateBlip(2220, -1721, 0, 54, 0, 0, 0, 0, 0, 0, 300, "Тренажерный зал")
 CreateBlip(-2271, -156, 0, 54, 0, 0, 0, 0, 0, 0, 300, "Тренажерный зал")
@@ -3911,14 +3911,14 @@ CreateBlip(-1904, 283, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
 CreateBlip(-2425, 1021, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
 CreateBlip(1974, 2162, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
 CreateBlip(720, -456, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
-CreateBlip(-1957, 276, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон Wang Cars")
+CreateBlip(-1957, 276, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон «Wang Cars»")
 CreateBlip(-1657, 1212, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
 CreateBlip(520, 2372, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
 CreateBlip(1943, 2068, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
 CreateBlip(2200, 1389, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
 CreateBlip(553, -1279, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
 CreateBlip(2127, -1139, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
-CreateBlip(701, -519,  0, 55, 0, 0, 0, 0, 0, 0, 300, "Мотосалон Dillmore")
+CreateBlip(701, -519,  0, 55, 0, 0, 0, 0, 0, 0, 300, "Мотосалон «Dillmore»")
 CreateBlip(2693, -1706, 0, 33, 0, 0, 0, 0, 0, 0, 300, "Стадион LS")
 CreateBlip(1097, 1598,  0, 33, 0, 0, 0, 0, 0, 0, 300, "Стадион LV")
 CreateBlip(-1514, 2518, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
@@ -5332,7 +5332,7 @@ addEventHandler("onClientRender", root,
 				else
 					color=tocolor(200, 200, 200, 255)
 				end
-				dxDrawBorderedText(string.gsub(getTeamGroup(ArraySkinInfo[skin][1]), "#%x%x%x%x%x%x", ""), (110*scalex), -(100*scaley), screenWidth, screenHeight, color, scale/1.4, "default-bold", "center", "center")
+				dxDrawBorderedText(Text(getTeamGroup(ArraySkinInfo[skin][1])), (110*scalex), -(100*scaley), screenWidth, screenHeight, color, scale/1.4, "default-bold", "center", "center")
 			elseif(Targets["thePed"]) then
 				local team = getElementData(Targets["thePed"], "team")
 				local color = getTeamVariable(team)
@@ -5346,7 +5346,7 @@ addEventHandler("onClientRender", root,
 					color=tocolor(200, 200, 200, 255)
 				end
 				if(team) then
-					dxDrawBorderedText(string.gsub(getTeamGroup(team), "#%x%x%x%x%x%x", ""), (110*scalex), -(100*scaley), screenWidth, screenHeight, color, scale/1.4, "default-bold", "center", "center")
+					dxDrawBorderedText(Text(getTeamGroup(team)), (110*scalex), -(100*scaley), screenWidth, screenHeight, color, scale/1.4, "default-bold", "center", "center")
 				end
 				
 				CreateTarget(Targets["thePed"])
@@ -5554,19 +5554,38 @@ end
 
 function getTeamGroup(team)
 	if(team == "Мирные жители" or team == "МЧС") then
-		return "#CCCCCCМирные жители"
+		return "Мирные жители"
 	elseif(team == "Вагос" or team == "Якудзы" or team == "Рифа") then
-		return "#A00000Синдикат Локо"
+		return "Синдикат Локо"
 	elseif(team == "Баллас" or team == "Колумбийский картель" or team == "Русская мафия") then
-		return "#B7410EНаркомафия"
+		return "Наркомафия"
 	elseif(team == "Гроув-стрит" or team == "Триады" or team == "Ацтекас") then
-	    return "#4E653DБандиты"
+	    return "Бандиты"
 	elseif(team == "Полиция" or team == "Военные" or team == "ЦРУ" or team == "ФБР") then
-		return "#4169E1Официалы"
+		return "Официалы"
 	elseif(team == "Уголовники" or team == "Байкеры" or team == "Деревенщины") then
-		return "#858585Уголовники"
+		return "Уголовники"
 	end
 end
+
+
+function getTeamGroupColor(team)
+	if(team == "Мирные жители" or team == "МЧС") then
+		return "#CCCCCC"
+	elseif(team == "Вагос" or team == "Якудзы" or team == "Рифа") then
+		return "#A00000"
+	elseif(team == "Баллас" or team == "Колумбийский картель" or team == "Русская мафия") then
+		return "#B7410E"
+	elseif(team == "Гроув-стрит" or team == "Триады" or team == "Ацтекас") then
+	    return "#4E653D"
+	elseif(team == "Полиция" or team == "Военные" or team == "ЦРУ" or team == "ФБР") then
+		return "#4169E1"
+	elseif(team == "Уголовники" or team == "Байкеры" or team == "Деревенщины") then
+		return "#858585"
+	end
+end
+
+
 
 
 function getTeamVariable(team)
@@ -8127,17 +8146,17 @@ function DrawPlayerMessage()
 			for v, key in pairs (RespectMsg) do
 				if(tonumber(v)) then
 					v=tonumber(v)
-					dxDrawBorderedText(SkillName[v], 0, 530*scaley+(FH*(idouble)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
+					dxDrawBorderedText(Text(SkillName[v]), 0, 530*scaley+(FH*(idouble)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
 					DrawProgressBar(screenWidth-160*scalex, 530*scaley+(FH*(idouble)), getPedStat(localPlayer, v), key, 150)
 				else
-					dxDrawBorderedText(getTeamGroup(v), 0, 530*scaley+(FH*(idouble)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
+					dxDrawBorderedText(getTeamGroupColor(v)..Text(getTeamGroup(v)), 0, 530*scaley+(FH*(idouble)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
 					DrawProgressBar(screenWidth-160*scalex, 530*scaley+(FH*(idouble)), 500+(getTeamVariable(v)/2), key, 150)
 				end
 				idouble=idouble+1
 			end
 		else
 			for i, v in pairs (teams) do
-				dxDrawBorderedText(getTeamGroup(v), 0, 530*scaley+(FH*(i-1)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
+				dxDrawBorderedText(getTeamGroupColor(v)..Text(getTeamGroup(v)), 0, 530*scaley+(FH*(i-1)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
 				DrawProgressBar(screenWidth-160*scalex, 530*scaley+(FH*(i-1)), 500+(getTeamVariable(v)/2), nil, 150)
 			end
 		end
@@ -8193,7 +8212,7 @@ function DrawPlayerMessage()
 				dxDrawBorderedText(ServerDate.monthday.." "..Text(Month[ServerDate.month+1]).." "..ServerDate.year+1900, 490*scalex, 960*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*2.4, "default-bold", "left", "top", nil, nil, nil, true)		
 				
 
-				dxDrawBorderedText(Day[ServerDate.weekday+1], screenWidth, 960*scaley, 930*scalex, screenHeight, tocolor(200, 200, 200, 255), NewScale*2.4, "default-bold", "right", "top", nil, nil, nil, true)		
+				dxDrawBorderedText(Text(Day[ServerDate.weekday+1]), screenWidth, 960*scaley, 930*scalex, screenHeight, tocolor(200, 200, 200, 255), NewScale*2.4, "default-bold", "right", "top", nil, nil, nil, true)		
 			end
 		end
 	elseif(PEDChangeSkin == "nowTime") then
