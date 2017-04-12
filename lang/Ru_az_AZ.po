@@ -578,7 +578,7 @@ msgid "База грузоперевозок"
 msgstr "Yük daşıma bazası"
 
 msgid "НПЗ «Green Palms»"
-msgstr ""
+msgstr "NEZ «Green Palms»"
 
 msgid "Тренажерный зал"
 msgstr "Məşg zalı"
@@ -593,7 +593,7 @@ msgid "Тюнинг"
 msgstr "Sazlama"
 
 msgid "Закусочная"
-msgstr ""
+msgstr "Yeməkxana"
 
 msgid "Ресторан"
 msgstr "Restoran"

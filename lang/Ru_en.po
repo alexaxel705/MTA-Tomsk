@@ -21,7 +21,7 @@ msgid "Регистрация/Вход"
 msgstr "Registration/Authorization"
 
 msgid "Служба - Найди способ нажраться"
-msgstr ""
+msgstr "Service - Find a way to get drunk"
 
 msgid "Посади заключенного на бутылку"
 msgstr "Plant a prisoner on a bottle"
@@ -33,22 +33,22 @@ msgid "Дойди до магазина"
 msgstr "Go to the store"
 
 msgid "Зайди в магазин и купи пачку #596289сигарет"
-msgstr ""
+msgstr "Go into the store and buy a pack of #596289cigarettes"
 
 msgid "Посети участок"
-msgstr ""
+msgstr "Visit the site"
 
 msgid "Зайди в раздевалку и получи #596289экипировку"
-msgstr ""
+msgstr "Go into the locker room and get #596289equipment"
 
 msgid "Плантация"
-msgstr ""
+msgstr "Plantation"
 
 msgid "Притон"
 msgstr "Brothel"
 
 msgid "СЛОМАНО"
-msgstr ""
+msgstr "BROKEN"
 
 msgid "ПОТРАЧЕНО"
 msgstr "WASTED"
@@ -87,13 +87,13 @@ msgid "наши дни"
 msgstr "Our days"
 
 msgid "#FFA500Психиатрическая больница"
-msgstr ""
+msgstr "#FFA500Mental Hospital"
 
 msgid "До освобождения"
-msgstr ""
+msgstr "Before Liberation"
 
 msgid "До выписки"
-msgstr ""
+msgstr "Before discharge"
 
 msgid "hp"
 msgstr "hp"
@@ -420,15 +420,17 @@ msgid "превосходное"
 msgstr "Superb"
 
 msgid "Закончилось место в инвентаре"
-msgstr ""
+msgstr "Out of stock in inventory"
 
 msgid "Чтобы использовать этот предмет возьми его в руки"
-msgstr ""
+msgstr "To use this item, pick it up"
 
 msgid ""
 "Для сбора урожая удерживай\n"
 "скорость в пределах зеленой зоны"
 msgstr ""
+"For harvesting, keep\n"
+"speed within the green zone"
 
 msgid "Мирные жители"
 msgstr "Civilians"
@@ -542,6 +544,8 @@ msgid ""
 "Поступил новый вызов!\n"
 " #FFFFFFОтправляйся на #FF0000красный маркер"
 msgstr ""
+"A new challenge has come!\n"
+"#FFFFFFGo to the #FF0000Red marker"
 
 msgid "пополнить"
 msgstr "Replenish"
@@ -550,100 +554,100 @@ msgid "снять"
 msgstr "Take off"
 
 msgid "Карьер «Hunter Quarry»"
-msgstr ""
+msgstr "Quarry «Hunter Quarry»"
 
 msgid "Свалка Angel Pine"
-msgstr ""
+msgstr "Dump Angel Pine"
 
 msgid "Аэропорт Los Santos"
-msgstr ""
+msgstr "Airport Los Santos"
 
 msgid "Аэропорт San Fierro"
-msgstr ""
+msgstr "Airport San Fierro"
 
 msgid "Аэропорт Las Venturas"
-msgstr ""
+msgstr "Airport Las Venturas"
 
 msgid "Пожарная станция Los Santos"
-msgstr ""
+msgstr "Fire station Los Santos"
 
 msgid "Пожарная станция San Fierro"
-msgstr ""
+msgstr "Fire station San Fierro"
 
 msgid "Пожарная станция Las Venturas №3"
-msgstr ""
+msgstr "Fire station Las Venturas №3"
 
 msgid "База грузоперевозок"
-msgstr ""
+msgstr "Base of cargo transportation"
 
 msgid "НПЗ «Green Palms»"
-msgstr ""
+msgstr "Refinery «Green Palms»"
 
 msgid "Тренажерный зал"
-msgstr ""
+msgstr "Gym"
 
 msgid "Больница"
-msgstr ""
+msgstr "Hospital"
 
 msgid "Медицинский центр San Fierro"
-msgstr ""
+msgstr "Medical center of San Fierro"
 
 msgid "Тюнинг"
-msgstr ""
+msgstr "Tuning"
 
 msgid "Закусочная"
-msgstr ""
+msgstr "Snack bar"
 
 msgid "Ресторан"
-msgstr ""
+msgstr "Restaurant"
 
 msgid "Банк"
-msgstr ""
+msgstr "Bank"
 
 msgid "Полицейский участок Los Santos"
-msgstr ""
+msgstr "Police station Los Santos"
 
 msgid "Полицейский участок Las Venturas"
-msgstr ""
+msgstr "Police station Las Venturas"
 
 msgid "Полицейский участок San Fierro"
-msgstr ""
+msgstr "Police station San Fierro"
 
 msgid "Медицинский центр Fort Caston"
-msgstr ""
+msgstr "Fort Caston Medical center"
 
 msgid "Клуб"
-msgstr ""
+msgstr "Club"
 
 msgid "Автосалон «Wang Cars»"
-msgstr ""
+msgstr "Auto show «Wang Cars»"
 
 msgid "Склад «Redsands West»"
-msgstr ""
+msgstr "Stock «Redsands West»"
 
 msgid "Мотосалон «Dillmore»"
-msgstr ""
+msgstr "Moto salon «Dillmore»"
 
 msgid "ВС"
-msgstr ""
+msgstr "Sun"
 
 msgid "ПН"
-msgstr ""
+msgstr "Mon"
 
 msgid "ВТ"
-msgstr ""
+msgstr "Tue"
 
 msgid "СР"
-msgstr ""
+msgstr "Wed"
 
 msgid "ЧТ"
-msgstr ""
+msgstr "Th"
 
 msgid "ПТ"
-msgstr ""
+msgstr "Fri"
 
 msgid "СБ"
-msgstr ""
+msgstr "Sat"
 
 msgid "Нажми {key} чтобы припарковать машину"
-msgstr ""
+msgstr "Click {key} to park the car"
