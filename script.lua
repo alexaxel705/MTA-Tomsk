@@ -15479,7 +15479,11 @@ addEventHandler("onPlayerChat", getRootElement(), onPlayerChat)
 addEventHandler("CliendSideonPlayerChat", getRootElement(), onPlayerChat)
 
 function BurnChatMSG(name, message, nickcolor)
-	triggerEvent("onPlayerChat", getRootElement(), "[WEB] "..nickcolor..name..": #FFFFFF"..message, 0)
+	outputChatBox("[WEB] "..nickcolor..name..": #FFFFFF"..message, getRootElement(), 255, 255, 255, true)
+	table.insert(SData['Chat Message'], "[WEB] "..nickcolor..name..": #FFFFFF"..message)
+	if(#SData['Chat Message'] > 10) then
+		table.remove(SData['Chat Message'], 10)
+	end
 end
 addEvent("BurnChatMSG", true)
 addEventHandler("BurnChatMSG", getRootElement(), BurnChatMSG)
