@@ -383,9 +383,9 @@ if getPlayerName(localPlayer) == "alexaxel705" or getPlayerName(localPlayer) == 
 	bindKey("num_2", "down", minusy) 
 	bindKey("num_7", "down", plusz) 
 	bindKey("num_1", "down", minusz) --]]
-	bindKey("num_3", "down", save) 
 	bindKey("num_1", "down", saveauto) 
 end
+bindKey("num_3", "down", save) -- Для всех
 
 local Day = {
 	[1] = "ВС",
@@ -8216,7 +8216,7 @@ function DrawPlayerMessage()
 						key[7] = false
 					end
 				else
-					dxDrawBorderedText("#FF9800"..Text("Благодарности").."\n#FFFFFFCrystalMV #69749Abone_attach\n#FFFFFFPioner #69749Aперевод на азербайджанский\n\n#C7843C"..Text("Над сервером работали").."#FFFFFF\n800 #194299real_life@sibmail.com#FFFFFF 2006-2011\nTanker #194299tankerktv@mail.ru#FFFFFF 2006-2009\nDark_ALEX #194299dark_alex@sibmail.com#FFFFFF 2009-2017\nMishel' #194299laym101@mail.com#FFFFFF 2017", screenWidth, screenHeight-(320*NewScale), screenWidth-(30*NewScale), screenHeight, tocolor(103,104,107, 255), NewScale*2, "default-bold", "right", "top", false, false, false, true)
+					dxDrawBorderedText("#FF9800"..Text("Благодарности").."\n#FFFFFFCrystalMV #69749Abone_attach\n#FFFFFFPioner #69749Aперевод на азербайджанский\n#FFFFFF*Vk*Ricci #69749Aперевод на английский\n\n#C7843C"..Text("Над сервером работали").."#FFFFFF\n800 #194299real_life@sibmail.com#FFFFFF 2006-2011\nTanker #194299tankerktv@mail.ru#FFFFFF 2006-2009\nDark_ALEX #194299dark_alex@sibmail.com#FFFFFF 2009-2017\nMishel' #194299laym101@mail.com#FFFFFF 2017", screenWidth, screenHeight-(340*NewScale), screenWidth-(30*NewScale), screenHeight, tocolor(103,104,107, 255), NewScale*2, "default-bold", "right", "top", false, false, false, true)
 					
 					local x2, y2, z2, lx, ly, lz, rz = getCameraMatrix ()
 					setCameraMatrix (x2+0.0005, y2+0.0005, z2+0.00005, lx+0.0005, ly+0.0005, lz)

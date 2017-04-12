@@ -81,6 +81,7 @@ function setCameraOnPlayerJoin()
 			['aim_weapon'] = {}
 		}
 	}
+	
 	setCameraMatrix(source,1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
 	for i, msg in pairs(SData['Chat Message']) do
 		outputChatBox(msg, source, 255, 255, 255,true)
@@ -12485,14 +12486,14 @@ function loginPlayer(thePlayer, password)
 			Respect(thePlayer)
 			SpawnedAfterChange(thePlayer)
 			PData[thePlayer]["auth"] = true
-			triggerClientEvent(thePlayer, "AuthComplete", thePlayer)
+			AuthComplete(thePlayer)
 		else
 			outputChatBox("Неверный пароль", thePlayer, 255, 255, 255, true)
 			triggerClientEvent(thePlayer, "LoginWindow", thePlayer)
 		end
 	else
 		PData[thePlayer]["auth"] = true
-		triggerClientEvent(thePlayer, "AuthComplete", thePlayer)
+		AuthComplete(thePlayer)
 		AddDatabaseAccount(thePlayer, password)
 		Respect(thePlayer)
 		triggerClientEvent(thePlayer, "intro", thePlayer)
@@ -12501,6 +12502,19 @@ end
 addEvent("loginPlayerEvent", true)
 addEventHandler("loginPlayerEvent", root, loginPlayer)
 
+
+local PlayersRole = {
+	["alexaxel705"] = "Разработчик",
+	["*Vk*Ricci"] = "Корректор английского языка",
+	["Pioner"] = "Корректор азербайджанского языка",
+}
+
+function AuthComplete(thePlayer)
+	if(PlayersRole[getPlayerName(thePlayer)]) then
+		outputChatBox("* На сервер зашел "..getElementData(source, "color")..getPlayerName(thePlayer).."#FFFFFF [#99CC00"..PlayersRole[getPlayerName(thePlayer)].."#FFFFFF]", getRootElement(), 255,255,255,true)
+	end
+	triggerClientEvent(thePlayer, "AuthComplete", thePlayer)
+end
 
 
 function SaveInventory(thePlayer, arr)
