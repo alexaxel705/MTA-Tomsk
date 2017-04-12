@@ -431,7 +431,19 @@ msgstr ""
 msgid "Уголовники"
 msgstr ""
 
+msgid "Официалы"
+msgstr ""
+
+msgid "Бандиты"
+msgstr ""
+
 msgid "Колумбийский картель"
+msgstr ""
+
+msgid "Синдикат Локо"
+msgstr ""
+
+msgid "Наркомафия"
 msgstr ""
 
 msgid "Баллас"
@@ -532,9 +544,6 @@ msgstr ""
 msgid "снять"
 msgstr ""
 
-msgid "Нажми #A0A0A0P#FFFFFF чтобы припарковать машину"
-msgstr ""
-
 msgid "Карьер «Hunter Quarry»"
 msgstr ""
 
@@ -608,4 +617,28 @@ msgid "Склад «Redsands West»"
 msgstr ""
 
 msgid "Мотосалон «Dillmore»"
+msgstr ""
+
+msgid "ВС"
+msgstr ""
+
+msgid "ПН"
+msgstr ""
+
+msgid "ВТ"
+msgstr ""
+
+msgid "СР"
+msgstr ""
+
+msgid "ЧТ"
+msgstr ""
+
+msgid "ПТ"
+msgstr ""
+
+msgid "СБ"
+msgstr ""
+
+msgid "Нажми {key} чтобы припарковать машину"
 msgstr ""

@@ -293,323 +293,358 @@ msgid "Кредитка"
 msgstr "Kredit kartı"
 
 msgid "Передать"
-msgstr ""
+msgstr "Vermək"
 
 msgid "Посадить"
-msgstr ""
+msgstr "Qoymaq"
 
 msgid "Извлечь"
-msgstr ""
+msgstr "Çıxardmağ"
 
 msgid "Использовать"
-msgstr ""
+msgstr "İşlətmək"
 
 msgid "Выбросить"
-msgstr ""
+msgstr "Tullamaq"
 
 msgid "Введи количество"
-msgstr ""
+msgstr "Miqdarını daxil et"
 
 msgid "Урон"
-msgstr ""
+msgstr "Ziyan"
 
 msgid "Расстояние"
-msgstr ""
+msgstr "Məsafə"
 
 msgid "Магазин"
-msgstr ""
+msgstr "Dükan"
 
 msgid "Калибр"
-msgstr ""
+msgstr "Kalibr"
 
 msgid "Здоровье"
-msgstr ""
+msgstr "Can"
 
 msgid "Вождение"
-msgstr ""
+msgstr "Sürücülük"
 
 msgid "Мотоциклист"
-msgstr ""
+msgstr "Motosikletçi"
 
 msgid "Велосипедист"
-msgstr ""
+msgstr "Velosipedçi"
 
 msgid "Летчик"
-msgstr ""
+msgstr "Pilot"
 
 msgid "Грузоперевозки"
-msgstr ""
+msgstr "Yük daşınması"
 
 msgid "Рыболов"
-msgstr ""
+msgstr "Balıqçı"
 
 msgid "Рукопашный бой"
-msgstr ""
+msgstr "Döyüşmə"
 
 msgid "Пистолет"
-msgstr ""
+msgstr "Pistolet"
 
 msgid "Пистолет с глуш."
-msgstr ""
+msgstr "Səsboğucu ilə pistolet"
 
 msgid "Дигл"
-msgstr ""
+msgstr "Deagle"
 
 msgid "Дробовик"
-msgstr ""
+msgstr "Tüfəng"
 
 msgid "Sawn-Off"
-msgstr ""
+msgstr "Kəs. Tüfəng"
 
 msgid "SPAZ-12"
-msgstr ""
+msgstr "SPAZ-12"
 
 msgid "УЗИ"
-msgstr ""
+msgstr "UZİ"
 
 msgid "Винтовка"
-msgstr ""
+msgstr "Ov tüfəngi"
 
 msgid "Выносливость"
-msgstr ""
+msgstr "Dözümlülük"
 
 msgid "Качество"
-msgstr ""
+msgstr "Keyfiyət"
 
 msgid "Выпадает после смерти"
-msgstr ""
+msgstr "Ölumdən sonra düşür"
 
 msgid "кг"
-msgstr ""
+msgstr "kg"
 
 msgid "г"
-msgstr ""
+msgstr "g"
 
 msgid "отвратительное"
-msgstr ""
+msgstr "nifrətəlayı"
 
 msgid "мерзкое"
-msgstr ""
+msgstr "çirkin"
 
 msgid "гадкое"
-msgstr ""
+msgstr "murdar"
 
 msgid "плохое"
-msgstr ""
+msgstr "pis"
 
 msgid "обычное"
-msgstr ""
+msgstr "sadə"
 
 msgid "хорошее"
-msgstr ""
+msgstr "yaxşı"
 
 msgid "очень хорошее"
-msgstr ""
+msgstr "çox yaxşı"
 
 msgid "отличное"
-msgstr ""
+msgstr "əla"
 
 msgid "высокое"
-msgstr ""
+msgstr "yüksək"
 
 msgid "великолепное"
-msgstr ""
+msgstr "mükəmməl"
 
 msgid "превосходное"
-msgstr ""
+msgstr "mükəmməldən yaxşı"
 
 msgid "Закончилось место в инвентаре"
-msgstr ""
+msgstr "İnventrada yer sona çatdı"
 
 msgid "Чтобы использовать этот предмет возьми его в руки"
-msgstr ""
+msgstr "Bu şeyi istifadə etmək üçün əlivizə alın"
 
 msgid ""
 "Для сбора урожая удерживай\n"
 "скорость в пределах зеленой зоны"
-msgstr ""
+msgstr "Məhsulu yiğmaq üçün sürəti yaşıl zonanın icində saxla"
 
 msgid "Мирные жители"
-msgstr ""
+msgstr "Sakinlər"
 
 msgid "Уголовники"
-msgstr ""
+msgstr "Cinayətkarlar"
+
+msgid "Официалы"
+msgstr "Rəsmilər"
+
+msgid "Бандиты"
+msgstr "Banditlər"
 
 msgid "Колумбийский картель"
-msgstr ""
+msgstr "Kolumbiya karteli"
+
+msgid "Синдикат Локо"
+msgstr "Loko Sindikatı"
+
+msgid "Наркомафия"
+msgstr "Narkomafiya"
 
 msgid "Баллас"
-msgstr ""
+msgstr "Ballas"
 
 msgid "Гроув-стрит"
-msgstr ""
+msgstr "Grove-street"
 
 msgid "МЧС"
-msgstr ""
+msgstr "FHN"
 
 msgid "Полиция"
-msgstr ""
+msgstr "Polis"
 
 msgid "ЦРУ"
-msgstr ""
+msgstr "CIA"
 
 msgid "Военные"
-msgstr ""
+msgstr "Hərbi"
 
 msgid "Триады"
-msgstr ""
+msgstr "Triada"
 
 msgid "Якудзы"
-msgstr ""
+msgstr "Yakudza"
 
 msgid "Русская мафия"
-msgstr ""
+msgstr "Rus mafiyası"
 
 msgid "Байкеры"
-msgstr ""
+msgstr "Baykerlər"
 
 msgid "Вагос"
-msgstr ""
+msgstr "Vagos"
 
 msgid "ФБР"
-msgstr ""
+msgstr "FBI"
 
 msgid "Рифа"
-msgstr ""
+msgstr "Rifa"
 
 msgid "Деревенщины"
-msgstr ""
+msgstr "Kəndçilər"
 
 msgid "Ацтекас"
-msgstr ""
+msgstr "Aztek"
 
 msgid "Января"
-msgstr ""
+msgstr "Yanvar"
 
 msgid "Февраля"
-msgstr ""
+msgstr "Fevral"
 
 msgid "Марта"
-msgstr ""
+msgstr "Mart"
 
 msgid "Апреля"
-msgstr ""
+msgstr "Aprel"
 
 msgid "Мая"
-msgstr ""
+msgstr "May"
 
 msgid "Июня"
-msgstr ""
+msgstr "İyun"
 
 msgid "Июля"
-msgstr ""
+msgstr "İyul"
 
 msgid "Августа"
-msgstr ""
+msgstr "Avgust"
 
 msgid "Сентября"
-msgstr ""
+msgstr "Sentyabr"
 
 msgid "Октября"
-msgstr ""
+msgstr "Oktyabr"
 
 msgid "Ноября"
-msgstr ""
+msgstr "Noyabr"
 
 msgid "Декабря"
-msgstr ""
+msgstr "Dekabr"
 
 msgid "КУПЛЕНО"
-msgstr ""
+msgstr "ALINDI"
 
 msgid "БЕСПЛАТНО"
-msgstr ""
+msgstr "PULSUZ"
 
 msgid ""
 "Поступил новый вызов!\n"
 " #FFFFFFОтправляйся на #FF0000красный маркер"
 msgstr ""
+"Təzə zəng gəldi\n"
+"#FFFFFFGet #FF0000gırmızı markerə"
 
 msgid "пополнить"
-msgstr ""
+msgstr "artır"
 
 msgid "снять"
-msgstr ""
-
-msgid "Нажми #A0A0A0P#FFFFFF чтобы припарковать машину"
-msgstr ""
+msgstr "çıxard"
 
 msgid "Карьер «Hunter Quarry»"
-msgstr ""
+msgstr "«Hunter Quarry» karyeri"
 
 msgid "Свалка Angel Pine"
-msgstr ""
+msgstr "Angel Pine zibilliki"
 
 msgid "Аэропорт Los Santos"
-msgstr ""
+msgstr "Los Santos Hava Limanı"
 
 msgid "Аэропорт San Fierro"
-msgstr ""
+msgstr "San Fierro Hava Limanı"
 
 msgid "Аэропорт Las Venturas"
-msgstr ""
+msgstr "Las Venturas Hava Limanı"
 
 msgid "Пожарная станция Los Santos"
-msgstr ""
+msgstr "Los Santos yanğın deposu"
 
 msgid "Пожарная станция San Fierro"
-msgstr ""
+msgstr "San Fierro yanğın deposu"
 
 msgid "Пожарная станция Las Venturas №3"
-msgstr ""
+msgstr "Las Venturas yanğın deposu №3"
 
 msgid "База грузоперевозок"
-msgstr ""
+msgstr "Yük daşıma bazası"
 
 msgid "НПЗ «Green Palms»"
 msgstr ""
 
 msgid "Тренажерный зал"
-msgstr ""
+msgstr "Məşg zalı"
 
 msgid "Больница"
-msgstr ""
+msgstr "Həstəxana"
 
 msgid "Медицинский центр San Fierro"
-msgstr ""
+msgstr "San Fierro tibb mərkəzi"
 
 msgid "Тюнинг"
-msgstr ""
+msgstr "Sazlama"
 
 msgid "Закусочная"
 msgstr ""
 
 msgid "Ресторан"
-msgstr ""
+msgstr "Restoran"
 
 msgid "Банк"
-msgstr ""
+msgstr "Bank"
 
 msgid "Полицейский участок Los Santos"
-msgstr ""
+msgstr "Los Santos polis məntəqəsi"
 
 msgid "Полицейский участок Las Venturas"
-msgstr ""
+msgstr "Las Venturas polis məntəqəsi"
 
 msgid "Полицейский участок San Fierro"
-msgstr ""
+msgstr "San Fierro polis məntəqəsi"
 
 msgid "Медицинский центр Fort Caston"
-msgstr ""
+msgstr "Fort Caston tibb mərkəzi"
 
 msgid "Клуб"
-msgstr ""
+msgstr "Klub"
 
 msgid "Автосалон «Wang Cars»"
-msgstr ""
+msgstr "«Wang Cars» avtosalonu"
 
 msgid "Склад «Redsands West»"
-msgstr ""
+msgstr "«Redsands West» anbarı"
 
 msgid "Мотосалон «Dillmore»"
-msgstr ""
+msgstr "«Dillmore» motosalonu"
+
+msgid "ВС"
+msgstr "B."
+
+msgid "ПН"
+msgstr "B.E."
+
+msgid "ВТ"
+msgstr "Ç.A."
+
+msgid "СР"
+msgstr "Ç."
+
+msgid "ЧТ"
+msgstr "C.A."
+
+msgid "ПТ"
+msgstr "C."
+
+msgid "СБ"
+msgstr "Ş."
+
+msgid "Нажми {key} чтобы припарковать машину"
+msgstr "Maşını park etmək üçün {key} bas"

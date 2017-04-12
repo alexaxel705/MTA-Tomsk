@@ -57,7 +57,7 @@ msgid "Игроков"
 msgstr "Players"
 
 msgid "Благодарности"
-msgstr ""
+msgstr "Gratitude"
 
 msgid "Над сервером работали"
 msgstr "Above the server worked"
@@ -78,7 +78,7 @@ msgid "Итоги"
 msgstr "Results"
 
 msgid "Введи номер или ИД игрока"
-msgstr ""
+msgstr "Enter number or player ID"
 
 msgid "наше время"
 msgstr "Nowadays"
@@ -96,7 +96,7 @@ msgid "До выписки"
 msgstr ""
 
 msgid "hp"
-msgstr ""
+msgstr "hp"
 
 msgid "Бронежилет"
 msgstr "Armour"
@@ -252,7 +252,7 @@ msgid "Кока"
 msgstr "Coca"
 
 msgid "Косяк"
-msgstr ""
+msgstr "Shoal"
 
 msgid "Спанк"
 msgstr "Spank"
@@ -387,13 +387,13 @@ msgid "г"
 msgstr "g"
 
 msgid "отвратительное"
-msgstr "Disgusting"
+msgstr "Revolting"
 
 msgid "мерзкое"
 msgstr "Vile"
 
 msgid "гадкое"
-msgstr ""
+msgstr "Disgusting"
 
 msgid "плохое"
 msgstr "Bad"
@@ -436,8 +436,20 @@ msgstr "Civilians"
 msgid "Уголовники"
 msgstr "Criminals"
 
+msgid "Официалы"
+msgstr "Police"
+
+msgid "Бандиты"
+msgstr "Bandits"
+
 msgid "Колумбийский картель"
 msgstr "Colombian Cartel"
+
+msgid "Синдикат Локо"
+msgstr "The Loco syndicate"
+
+msgid "Наркомафия"
+msgstr "Drug mafia"
 
 msgid "Баллас"
 msgstr "Ballas"
@@ -537,9 +549,6 @@ msgstr "Replenish"
 msgid "снять"
 msgstr "Take off"
 
-msgid "Нажми #A0A0A0P#FFFFFF чтобы припарковать машину"
-msgstr ""
-
 msgid "Карьер «Hunter Quarry»"
 msgstr ""
 
@@ -613,4 +622,28 @@ msgid "Склад «Redsands West»"
 msgstr ""
 
 msgid "Мотосалон «Dillmore»"
+msgstr ""
+
+msgid "ВС"
+msgstr ""
+
+msgid "ПН"
+msgstr ""
+
+msgid "ВТ"
+msgstr ""
+
+msgid "СР"
+msgstr ""
+
+msgid "ЧТ"
+msgstr ""
+
+msgid "ПТ"
+msgstr ""
+
+msgid "СБ"
+msgstr ""
+
+msgid "Нажми {key} чтобы припарковать машину"
 msgstr ""
