@@ -4950,7 +4950,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 592.1, -1250.8, 18.2, 0, 0 --
+		local x,y,z,i,d  = 1366.5, -1279.7, 13.5, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7231,7 +7231,7 @@ function preLoad(name)
 
 	for zone,arr in pairs(BotSpawnPoint) do
 		for key,val in pairs(arr) do
-			CreateBot(val[1],val[2],val[3],val[4],nil,nil,zone,val[5])
+			CreateRandomBot(val[1],val[2],val[3],val[4],nil,nil,zone,val[5])
 		end
 	end
 	
@@ -7255,7 +7255,7 @@ function preLoad(name)
 		local rot = PedNodes[availzones[rand]][randnode][7]
 		local randrot = math.random(1,2)
 		if(randrot == 1) then rot = rot+180 end
-		CreateBot(randx,randy,randz,rot,nil,nil,availzones[rand])
+		CreateRandomBot(randx,randy,randz,rot,nil,nil,availzones[rand])
 		table.remove(availzones, rand)
 	end
 	
@@ -7276,25 +7276,10 @@ end
 
 
 
-function CreateBot(x,y,z,rz,i,d,zone,ind)
-	local skin = 299
+
+
+function CreateBot(skin,x,y,z,rz,i,d,zone,ind)
 	if(not BotCreated[zone]) then BotCreated[zone] = {} end
-	
-	local team = GetDatabaseZoneNode(zone)
-	if(not team) then team = "Полиция" end
-	
-	skin = BotSkin[team][math.random(#BotSkin[team])]
-	if(BotSkinSpecific[team]) then
-		if(BotSkinSpecific[team][ZonesRegion[zone]]) then
-			if(BotSkinSpecific[team][ZonesRegion[zone]][zone]) then
-				skin = BotSkinSpecific[team][ZonesRegion[zone]][zone][math.random(#BotSkinSpecific[team][ZonesRegion[zone]][zone])]
-			else
-				if(BotSkinSpecific[team][ZonesRegion[zone]]["all"]) then
-					skin = BotSkinSpecific[team][ZonesRegion[zone]]["all"][math.random(#BotSkinSpecific[team][ZonesRegion[zone]]["all"])]
-				end
-			end
-		end
-	end
 	
 	if(not ind) then ind = #BotCreated[zone]+1 end
 	if(not rz) then rz = math.random(0,360) end
@@ -7345,10 +7330,31 @@ function CreateBot(x,y,z,rz,i,d,zone,ind)
 	end
 
 	
-	
 	setElementData(BotCreated[zone][ind], "inv", toJSON(botinv))
 	setElementData(BotCreated[zone][ind], "name", name)
 	return BotCreated[zone][ind]
+end
+
+
+function CreateRandomBot(x,y,z,rz,i,d,zone,ind)
+	local skin = 299
+	
+	local team = GetDatabaseZoneNode(zone)
+	if(not team) then team = "Полиция" end
+	
+	skin = BotSkin[team][math.random(#BotSkin[team])]
+	if(BotSkinSpecific[team]) then
+		if(BotSkinSpecific[team][ZonesRegion[zone]]) then
+			if(BotSkinSpecific[team][ZonesRegion[zone]][zone]) then
+				skin = BotSkinSpecific[team][ZonesRegion[zone]][zone][math.random(#BotSkinSpecific[team][ZonesRegion[zone]][zone])]
+			else
+				if(BotSkinSpecific[team][ZonesRegion[zone]]["all"]) then
+					skin = BotSkinSpecific[team][ZonesRegion[zone]]["all"][math.random(#BotSkinSpecific[team][ZonesRegion[zone]]["all"])]
+				end
+			end
+		end
+	end
+	return CreateBot(skin,x,y,z,rz,i,d,zone,ind)
 end
 
 
@@ -7454,7 +7460,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 				if(zone) then
 					local TINF = fromJSON(getElementData(ped, "TINF"))
 					destroyElement(BotCreated[zone][TINF[1]])
-					CreateBot(TINF[2], TINF[3], TINF[4],TINF[5],i,d,zone,TINF[1])
+					CreateRandomBot(TINF[2], TINF[3], TINF[4],TINF[5],i,d,zone,TINF[1])
 				else
 				    local data = getAllElementData(ped)
 					local x,y,z = getElementPosition(ped)
@@ -9193,7 +9199,7 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 				end
 				if(isPedDead(BotCreated[zone][slot])) then
 					destroyElement(BotCreated[zone][slot])
-					CreateBot(BotSpawnPoint[zone][slot][1], BotSpawnPoint[zone][slot][2], BotSpawnPoint[zone][slot][3], BotSpawnPoint[zone][slot][4],nil,nil, zone, slot)
+					CreateRandomBot(BotSpawnPoint[zone][slot][1], BotSpawnPoint[zone][slot][2], BotSpawnPoint[zone][slot][3], BotSpawnPoint[zone][slot][4],nil,nil, zone, slot)
 				else
 					removeElementData(BotCreated[zone][slot], "SpawnBlock")
 				end
@@ -9204,7 +9210,7 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 					destroyElement(BotBlip[BotCreated[zone][slot]])
 				end
 				destroyElement(BotCreated[zone][slot])
-				CreateBot(BotSpawnPoint[zone][slot][1], BotSpawnPoint[zone][slot][2], BotSpawnPoint[zone][slot][3], BotSpawnPoint[zone][slot][4],nil,nil, zone, slot)
+				CreateRandomBot(BotSpawnPoint[zone][slot][1], BotSpawnPoint[zone][slot][2], BotSpawnPoint[zone][slot][3], BotSpawnPoint[zone][slot][4],nil,nil, zone, slot)
 			end
 		end
 	end
@@ -10814,7 +10820,7 @@ function CreateDriverBot(vmodel, pedmodel, x,y,z,i,d, path,attacker)
 	path = GetCoordsByGPS(path) -- Временное, переделывает ноды в координаты, потом доделать
 	local rotz = findRotation(path[1][1], path[1][2], path[2][1], path[2][2])
 	local v = CreateVehicle(vmodel, x,y,z+VehicleSystem[vmodel][1], 0, 0, rotz)
-	local thePed = createPed(pedmodel, x,y,z)
+	local thePed = CreateBot(pedmodel,x,y,z,0,i,d,getZoneName(x,y,z))
 	SData["DriverBot"][thePed] = path
 	
 	setElementData(thePed, "DynamicBot", toJSON({
@@ -10835,7 +10841,6 @@ function CreateDriverBot(vmodel, pedmodel, x,y,z,i,d, path,attacker)
 	end
 	setElementData(thePed, "SpawnBlock", "true", false)
 	setElementData(thePed, "DestroyAfterStreamOut", "true", false)
-	setElementData(thePed, "team", getTeamName(SkinData[pedmodel][2]))
 	setPedStat(thePed, 160, 1000)
 	setElementData(v, "destroy", "true", false)
 	warpPedIntoVehicle(thePed,v)
@@ -10987,7 +10992,7 @@ function CreateDynamicBot(node, id)
 		end
 		
 		
-		local thePed = createPed(skin, x,y,z,0.0,true)
+		local thePed = CreateBot(skin,x,y,z,0,0,0,getZoneName(x,y,z))
 		
 		SData["DriverBot"][thePed] = "auto"
 		
@@ -10996,7 +11001,6 @@ function CreateDynamicBot(node, id)
 			PathNodes[nextnode2][nextid2][2], PathNodes[nextnode2][nextid2][3], PathNodes[nextnode2][nextid2][4], PathNodes[nextnode2][nextid2][5],
 		}))
 		
-		setElementData(thePed, "team", getTeamName(SkinData[skin][2]))
 		setElementData(thePed, "SpawnBlock", "true", false)
 		setElementData(thePed, "CurNode", toJSON({node, id}), false)
 		setElementData(thePed, "NextNode", toJSON({nextnode2, nextid2}), false)
@@ -11135,7 +11139,7 @@ function CreateClub(x,y,z)
 	
 	
 	for slot = 1, 20 do
-		local ped = CreateBot(488+math.random(-5,3.5), -14+math.random(-4,5), 1000.7, 0, 17, SData["ClubIds"],"Unknown Bar",nil)
+		local ped = CreateRandomBot(488+math.random(-5,3.5), -14+math.random(-4,5), 1000.7, 0, 17, SData["ClubIds"],"Unknown Bar",nil)
 		if(ped) then
 			StartAnimation(ped, "DANCING", DancingArr[math.random(1, #DancingArr)], -1, true)
 		end
@@ -11218,12 +11222,12 @@ CreateEnter(-1605.5, 710.3, 13.9, 270, 0, 0, false, 246.4, 107.3, 1003.2, 0, 10,
 CreateDialogBot(281, 246.5, 120.4, 1003.3,180, 10, 1, "SFPD")
 ped = CreateDialogBot(280, 243.7, 120.2, 1010.2,0, 10, 1, "SFPD BIZ", "HR-менеджер")
 StartAnimation(ped,"INT_OFFICE", "OFF_Sit_Bored_Loop", -1, true)
-CreateBot(268, 125.3, 1004.6,90,10, 1,"Unknown",nil)
+CreateRandomBot(268, 125.3, 1004.6,90,10, 1,"Unknown",nil)
 
 CreateEnter(2287.1, 2432.4, 10.8, 270, 0, 0, false, 238.7, 138.7, 1003, 0, 3, 1, "Полицейский участок Las Venturas", true)
 CreateEnter(2337.2, 2459.3, 15, 270, 0, 0, false, 288.8, 167.1, 1007.3, 0, 3, 1, "Полицейский участок Las Venturas")
-CreateBot(251.4, 194.9, 1008.2,90,3, 1,"Unknown",nil)
-CreateBot(284.8, 172.2, 1007.2,58,3, 1,"Unknown",nil)
+CreateRandomBot(251.4, 194.9, 1008.2,90,3, 1,"Unknown",nil)
+CreateRandomBot(284.8, 172.2, 1007.2,58,3, 1,"Unknown",nil)
 
 CreateDialogBot(282, 232.4, 160.7, 1003,237, 3, 1, "LVPD")
 CreateDialogBot(282, 293.7, 182.1, 1007.2,148, 3, 1, "LVPD")
@@ -11241,14 +11245,14 @@ StartAnimation(ped,"smoking", "m_smklean_loop", -1, true, false,false,true)
 SData["BincoIds"] = 1
 function CreateBinco(x,y,z,rz,types)
 	if(types == "Binco") then
-		CreateBot(201.1, -103.7, 1005.3, 240, 15,SData["BincoIds"],"Unknown",nil)
+		CreateRandomBot(201.1, -103.7, 1005.3, 240, 15,SData["BincoIds"],"Unknown",nil)
 		CreateDialogBot(233, 209, -98.7, 1005.3, 180, 15, SData["BincoIds"], "Binco", "Продавщица")
 		
 		CreateEnter(x,y,z,rz, 0, 0, false, 207.6, -111.3, 1005.1, 0, 15, SData["BincoIds"], types)
 		local p = CreatePickup(217.6, -98.5, 1005.3, 3, 1275, 0, 0, 15, SData["BincoIds"])
 		setElementData(p, "wardrobeShop", types)
 	elseif(types == "Zip") then
-		CreateBot(169.5, -89.5, 1001.8, 90, 18,SData["BincoIds"],"Unknown",nil)
+		CreateRandomBot(169.5, -89.5, 1001.8, 90, 18,SData["BincoIds"],"Unknown",nil)
 		CreateDialogBot(233, 162.4, -81.2, 1001.8, 180, 18, SData["BincoIds"], "Zip", "Продавщица")
 	
 		CreateEnter(x,y,z,rz, 0, 0, false, 161.3, -97.1, 1001.8, 0, 18, SData["BincoIds"], types)
@@ -11259,7 +11263,7 @@ function CreateBinco(x,y,z,rz,types)
 		local p = CreatePickup(208.8, -3.9, 1001.2, 3, 1275, 0, 0, 5, SData["BincoIds"])
 		setElementData(p, "wardrobeShop", types)
 	elseif(types == "ProLaps") then
-		CreateBot(215.4, -131.6, 1003.5,146, 3,SData["BincoIds"],"Unknown",nil)
+		CreateRandomBot(215.4, -131.6, 1003.5,146, 3,SData["BincoIds"],"Unknown",nil)
 		CreateDialogBot(124, 207.1, -127.8, 1003.5, 180, 3, SData["BincoIds"], "ProLaps", "Продавец")
 
 		CreateEnter(x,y,z,rz, 0, 0, false, 206.9, -140.4, 1003.5, 0, 3, SData["BincoIds"], types)
@@ -11427,12 +11431,12 @@ CreateSex(2213.5, 1433.1, 11.1)
 
 SData["Bar"] = 1
 function CreateBar(x,y,z,rz, types)
-	CreateBot(510.1, -83.4, 999,180, 11, SData["Bar"],"Unknown Bar",nil)
-	CreateBot(506.5, -83.4, 999,180, 11, SData["Bar"],"Unknown Bar",nil)
-	CreateBot(510.1, -86.3, 999,0, 11, SData["Bar"],"Unknown Bar",nil)
-	CreateBot(506.5, -86.3, 999,360, 11, SData["Bar"],"Unknown Bar",nil)
-	CreateBot(489.7, -78.7, 998.8,180, 11, SData["Bar"],"Unknown Bar",nil)
-	CreateBot(489.9, -81.7, 998.8,0, 11, SData["Bar"],"Unknown Bar",nil)
+	CreateRandomBot(510.1, -83.4, 999,180, 11, SData["Bar"],"Unknown Bar",nil)
+	CreateRandomBot(506.5, -83.4, 999,180, 11, SData["Bar"],"Unknown Bar",nil)
+	CreateRandomBot(510.1, -86.3, 999,0, 11, SData["Bar"],"Unknown Bar",nil)
+	CreateRandomBot(506.5, -86.3, 999,360, 11, SData["Bar"],"Unknown Bar",nil)
+	CreateRandomBot(489.7, -78.7, 998.8,180, 11, SData["Bar"],"Unknown Bar",nil)
+	CreateRandomBot(489.9, -81.7, 998.8,0, 11, SData["Bar"],"Unknown Bar",nil)
 
 	CreateEnter(x,y,z,rz, 0, 0, false, 502, -67.6, 998.8, 180, 11, SData["Bar"], types)
 
@@ -11458,8 +11462,8 @@ function CreateLiquor(x,y,z)
 
 	CreateDialogBot(44, -223.3, 1404, 27.7, 90, 18, SData["Liquor"], "Liquor Shop", "Продавец")
 	
-	CreateBot(-224.3, 1396.3, 28.4, 90, 18, SData["Liquor"],"Unknown Bar",nil)
-	CreateBot(-227.2, 1396.2, 28.4, 270, 18, SData["Liquor"],"Unknown Bar",nil)
+	CreateRandomBot(-224.3, 1396.3, 28.4, 90, 18, SData["Liquor"],"Unknown Bar",nil)
+	CreateRandomBot(-227.2, 1396.2, 28.4, 270, 18, SData["Liquor"],"Unknown Bar",nil)
 	
 	SData["Liquor"]=SData["Liquor"]+1
 end
@@ -11503,7 +11507,7 @@ CreateBomj(-1739, 1236.3, 7.5)
 SData["Shop"] = 1
 function CreateShop(x,y,z, interior)
 	if(interior == 6) then
-		CreateBot(-28.5, -50, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(-28.5, -50, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -27.4, -58.2, 1003.5, 90, interior, SData["Shop"], "24/7", true)
 
 		local v1 = createObject(1775, -19.03, -57.83, 1003.63, 0, 0, 180,false)
@@ -11515,14 +11519,14 @@ function CreateShop(x,y,z, interior)
 		
 		CreateDialogBot(147, -23, -57.3, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 4) then
-		CreateBot(-27.4, -3.8, 1003.6,180,interior,SData["Shop"],"Unknown",nil)
-		CreateBot(-29.9, -25.3, 1003.6,0,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(-27.4, -3.8, 1003.6,180,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(-29.9, -25.3, 1003.6,0,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -27.3, -31.2, 1003.55, 90, interior, SData["Shop"], "24/7", true)
 
 		CreateDialogBot(147, -30.1, -30.6, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 16) then
-		CreateBot(-24.6, -133.4, 1003.5,0,interior,SData["Shop"],"Unknown",nil)
-		CreateBot(-29, -124.1, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(-24.6, -133.4, 1003.5,0,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(-29, -124.1, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -25.9, -141.3, 1003.55, 90, interior, SData["Shop"], "24/7", true)
 		
 		local v1 = createObject(1775, -15.10, -140.22, 1003.63, 0, 0, 180, false)
@@ -11536,8 +11540,8 @@ function CreateShop(x,y,z, interior)
 		setElementDimension(v3, SData["Shop"])
 		CreateDialogBot(147, -21, -140.3, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 18) then
-		CreateBot(-32.5, -77, 1003.5,180,interior,SData["Shop"],"Unknown",nil)
-		CreateBot(-24.5, -89.7, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(-32.5, -77, 1003.5,180,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(-24.5, -89.7, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -30.95, -91.55, 1003.55, 90, interior, SData["Shop"], "24/7", true)
 
 		local v1 = createObject(1775, -16.11, -91.64, 1003.63, 0, 0, 180, false)
@@ -11549,15 +11553,15 @@ function CreateShop(x,y,z, interior)
 		
 		CreateDialogBot(147, -27, -91.6, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 10) then 
-		CreateBot(7.9, -16.9, 1003.5,0,interior,SData["Shop"],"Unknown",nil)
-		CreateBot(0.4, -28.3, 1003.5,90,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(7.9, -16.9, 1003.5,0,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(0.4, -28.3, 1003.5,90,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, 6, -31.7, 1003.55, 0, interior, SData["Shop"], "24/7", true)
 
 		CreateDialogBot(147, 3, -30.7, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 17) then
-		CreateBot(-14.2, -171.9, 1003.5,145,interior,SData["Shop"],"Unknown",nil)
-		CreateBot(-25.1, -170.6, 1003.5,90,interior,SData["Shop"],"Unknown",nil)
-		CreateBot(-33.6, -171.7, 1003.5,180,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(-14.2, -171.9, 1003.5,145,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(-25.1, -170.6, 1003.5,90,interior,SData["Shop"],"Unknown",nil)
+		CreateRandomBot(-33.6, -171.7, 1003.5,180,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -25.9, -187.87, 1003.55, 0, interior, SData["Shop"], "24/7", true)
 
 		local v1 = createObject(1775, -32.44, -186.69, 1003.63, 0, 0, 180, false)
@@ -12122,7 +12126,12 @@ function seti(thePlayer, command, h)
 end
 addCommandHandler("seti", seti)
 
+
+
+
+
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
+	WarpPedIntoVehicle(thePlayer)
 	local zone = getZoneName(x,y,z)
 	if(savetype == "PedPath") then
 		local angle = findRotation(x,y, x,ry)
@@ -12183,7 +12192,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Деньги", 50000000, 550, {})
+	--AddInventoryItem(thePlayer, "АК-47", 1, 550, {})
 
 	
 	fileDelete("save.txt")
@@ -12197,6 +12206,20 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	end
 addEvent("saveserver", true)
 addEventHandler("saveserver", root, saveserver)
+
+
+
+
+function WarpPedIntoVehicle(thePlayer)
+
+	removePedFromVehicle(thePlayer)
+	--setElementCollisionsEnabled(thePlayer, false)
+	--StartAnimation(thePlayer, "ped", "car_getout_lhs", 1500, false, false, false, false)
+end
+addEvent("WarpPedIntoVehicle", true)
+addEventHandler("WarpPedIntoVehicle", root, WarpPedIntoVehicle)
+
+
 
 
 -- 1257 автобусная остановка
@@ -13973,45 +13996,47 @@ end
 
 local wanktimers = {}
 function iznas2(thePlayer, thePed)
-	if(thePed) then
-		if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
-			if(isTimer(wanktimers[thePlayer])) then
-				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
-			else
-				setElementCollisionsEnabled(thePed, false)
-				local x, y, z = getElementPosition(thePlayer)
-				local rx,ry,rz = getElementRotation(thePlayer)
-				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
-				setElementPosition(thePed, x2, y2, z2)
-				setElementRotation(thePed,rx,ry,rz+180, "default", true)
-				StartAnimation(thePlayer, "SEX", "SEX_2_Fail_P", 6800, true, false, false, false, true)
-				StartAnimation(thePed, "SEX", "SEX_2_Fail_W", 6800, true, false, false, false, true)
-				UnBindAllKey(thePlayer)
-				UnBindAllKey(thePed)
-				Pain(thePlayer)
-				Pain(thePed)
-				setTimer(function()
-					BindAllKey(thePlayer)
-					BindAllKey(thePed)
-					Koryachka(thePed)
-					setElementCollisionsEnabled(thePed, true)
-					if(isPlayerBolezn(thePlayer, "СПИД") or isPlayerBolezn(thePed, "СПИД")) then
-						addPlayerBolezn(thePed, "СПИД", 1)
-						addPlayerBolezn(thePlayer, "СПИД", 1)
-					else
-						local randSpid = math.random(1,10)
-						if(randSpid == 1) then
+	if(not isTimer(ActionTimer[thePlayer])) then
+		if(thePed) then
+			if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
+				if(isTimer(wanktimers[thePlayer])) then
+					outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
+				else
+					setElementCollisionsEnabled(thePed, false)
+					local x, y, z = getElementPosition(thePlayer)
+					local rx,ry,rz = getElementRotation(thePlayer)
+					local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
+					setElementPosition(thePed, x2, y2, z2)
+					setElementRotation(thePed,rx,ry,rz+180, "default", true)
+					StartAnimation(thePlayer, "SEX", "SEX_2_Fail_P", 6800, true, false, false, false, true)
+					StartAnimation(thePed, "SEX", "SEX_2_Fail_W", 6800, true, false, false, false, true)
+					UnBindAllKey(thePlayer)
+					UnBindAllKey(thePed)
+					Pain(thePlayer)
+					Pain(thePed)
+					ActionTimer[thePlayer] = setTimer(function()
+						BindAllKey(thePlayer)
+						BindAllKey(thePed)
+						Koryachka(thePed)
+						setElementCollisionsEnabled(thePed, true)
+						if(isPlayerBolezn(thePlayer, "СПИД") or isPlayerBolezn(thePed, "СПИД")) then
 							addPlayerBolezn(thePed, "СПИД", 1)
 							addPlayerBolezn(thePlayer, "СПИД", 1)
-						elseif(randSpid == 2) then
-							triggerClientEvent(thePed, "bloodfoot", thePed, true)
-							addPlayerBolezn(thePed, "Порванный анус", 1)
-							outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
+						else
+							local randSpid = math.random(1,10)
+							if(randSpid == 1) then
+								addPlayerBolezn(thePed, "СПИД", 1)
+								addPlayerBolezn(thePlayer, "СПИД", 1)
+							elseif(randSpid == 2) then
+								triggerClientEvent(thePed, "bloodfoot", thePed, true)
+								addPlayerBolezn(thePed, "Порванный анус", 1)
+								outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
+							end
 						end
-					end
 
-				end, 5800, 1)
-				wanktimers[thePlayer] = setTimer(function() end, 1000, 1) -- 240000
+					end, 5800, 1)
+					wanktimers[thePlayer] = setTimer(function() end, 1000, 1) -- 240000
+				end
 			end
 		end
 	end
@@ -14021,33 +14046,35 @@ addEventHandler("iznas2", getRootElement(), iznas2)
 
 
 function iznas3(thePlayer, thePed)
-	if(thePed) then
-		if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
-			if(isTimer(wanktimers[thePlayer])) then
-				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
-			else
-				setElementCollisionsEnabled(thePed, false)
-				local x, y, z = getElementPosition(thePlayer)
-				local rx,ry,rz = getElementRotation(thePlayer)
-				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
-				setElementPosition(thePed, x2, y2, z2)
-				setElementRotation(thePed,rx,ry,rz+180, "default", true)
-				StartAnimation(thePlayer, "SEX", "SEX_3_Fail_P", 6800, true, false, false, false, true)
-				StartAnimation(thePed, "SEX", "SEX_3_Fail_W", 6800, true, false, false, false, true)
-				UnBindAllKey(thePlayer)
-				UnBindAllKey(thePed)
-				Pain(thePlayer)
-				Pain(thePed)
-				setTimer(function()
-					BindAllKey(thePlayer)
-					BindAllKey(thePed)
-					Koryachka(thePed)
-					setElementCollisionsEnabled(thePed, true)
-					triggerClientEvent(thePed, "bloodfoot", thePed, true)
-					addPlayerBolezn(thePed, "Порванный анус", 1)
-					outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
-				end, 5800, 1)
-				wanktimers[thePlayer] = setTimer(function() end, 1000, 1) -- 240000
+	if(not isTimer(ActionTimer[thePlayer])) then
+		if(thePed) then
+			if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
+				if(isTimer(wanktimers[thePlayer])) then
+					outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
+				else
+					setElementCollisionsEnabled(thePed, false)
+					local x, y, z = getElementPosition(thePlayer)
+					local rx,ry,rz = getElementRotation(thePlayer)
+					local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
+					setElementPosition(thePed, x2, y2, z2)
+					setElementRotation(thePed,rx,ry,rz+180, "default", true)
+					StartAnimation(thePlayer, "SEX", "SEX_3_Fail_P", 6800, true, false, false, false, true)
+					StartAnimation(thePed, "SEX", "SEX_3_Fail_W", 6800, true, false, false, false, true)
+					UnBindAllKey(thePlayer)
+					UnBindAllKey(thePed)
+					Pain(thePlayer)
+					Pain(thePed)
+					ActionTimer[thePlayer] = setTimer(function()
+						BindAllKey(thePlayer)
+						BindAllKey(thePed)
+						Koryachka(thePed)
+						setElementCollisionsEnabled(thePed, true)
+						triggerClientEvent(thePed, "bloodfoot", thePed, true)
+						addPlayerBolezn(thePed, "Порванный анус", 1)
+						outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
+					end, 5800, 1)
+					wanktimers[thePlayer] = setTimer(function() end, 1000, 1) -- 240000
+				end
 			end
 		end
 	end
@@ -14058,45 +14085,47 @@ addEventHandler("iznas3", getRootElement(), iznas3)
 
 
 function iznas(thePlayer, thePed)
-	if(thePed) then
-		if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
-			if(isTimer(wanktimers[thePlayer])) then
-				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
-			else
-				setElementCollisionsEnabled(thePed, false)
-				local x, y, z = getElementPosition(thePlayer)
-				local rx,ry,rz = getElementRotation(thePlayer)
-				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
-				setElementPosition(thePed, x2, y2, z2)
-				setElementRotation(thePed,rx,ry,rz+180, "default", true)
-				StartAnimation(thePlayer, "SEX", "SEX_1_Cum_P", 6800, true, false, false, false, true)
-				StartAnimation(thePed, "SEX", "SEX_1_Cum_W", 6800, true, false, false, false, true)
-				UnBindAllKey(thePlayer)
-				UnBindAllKey(thePed)
-				Pain(thePlayer)
-				Pain(thePed)
-				setTimer(function()
-					BindAllKey(thePlayer)
-					BindAllKey(thePed)
-					Koryachka(thePed)
-					setElementCollisionsEnabled(thePed, true)
-					if(isPlayerBolezn(thePlayer, "СПИД") or isPlayerBolezn(thePed, "СПИД")) then
-						addPlayerBolezn(thePed, "СПИД", 1)
-						addPlayerBolezn(thePlayer, "СПИД", 1)
-					else
-						local randSpid = math.random(1,10)
-						if(randSpid == 1) then
+	if(not isTimer(ActionTimer[thePlayer])) then
+		if(thePed) then
+			if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
+				if(isTimer(wanktimers[thePlayer])) then
+					outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
+				else
+					setElementCollisionsEnabled(thePed, false)
+					local x, y, z = getElementPosition(thePlayer)
+					local rx,ry,rz = getElementRotation(thePlayer)
+					local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
+					setElementPosition(thePed, x2, y2, z2)
+					setElementRotation(thePed,rx,ry,rz+180, "default", true)
+					StartAnimation(thePlayer, "SEX", "SEX_1_Cum_P", 6800, true, false, false, false, true)
+					StartAnimation(thePed, "SEX", "SEX_1_Cum_W", 6800, true, false, false, false, true)
+					UnBindAllKey(thePlayer)
+					UnBindAllKey(thePed)
+					Pain(thePlayer)
+					Pain(thePed)
+					ActionTimer[thePlayer] = setTimer(function()
+						BindAllKey(thePlayer)
+						BindAllKey(thePed)
+						Koryachka(thePed)
+						setElementCollisionsEnabled(thePed, true)
+						if(isPlayerBolezn(thePlayer, "СПИД") or isPlayerBolezn(thePed, "СПИД")) then
 							addPlayerBolezn(thePed, "СПИД", 1)
 							addPlayerBolezn(thePlayer, "СПИД", 1)
-						elseif(randSpid == 2) then
-							triggerClientEvent(thePed, "bloodfoot", thePed, true)
-							addPlayerBolezn(thePed, "Порванный анус", 1)
-							outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
+						else
+							local randSpid = math.random(1,10)
+							if(randSpid == 1) then
+								addPlayerBolezn(thePed, "СПИД", 1)
+								addPlayerBolezn(thePlayer, "СПИД", 1)
+							elseif(randSpid == 2) then
+								triggerClientEvent(thePed, "bloodfoot", thePed, true)
+								addPlayerBolezn(thePed, "Порванный анус", 1)
+								outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
+							end
 						end
-					end
 
-				end, 5800, 1)
-				wanktimers[thePlayer] = setTimer(function() end, 1000, 1) -- 240000
+					end, 5800, 1)
+					wanktimers[thePlayer] = setTimer(function() end, 1000, 1) -- 240000
+				end
 			end
 		end
 	end
@@ -14107,31 +14136,33 @@ addEventHandler("iznas", getRootElement(), iznas)
 
 
 function blowjob(thePlayer, thePed)
-	if(thePed) then
-		if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
-			if(isTimer(wanktimers[thePlayer])) then
-				outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
-			else
-				setElementCollisionsEnabled(thePed, false)
-				local x, y, z = getElementPosition(thePlayer)
-				local rx,ry,rz = getElementRotation(thePlayer)
-				local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
-				setElementPosition(thePed, x2, y2, z2)
-				setElementRotation(thePed,rx,ry,rz+180, "default", true)
-				StartAnimation(thePlayer, "BLOWJOBZ", "BJ_STAND_START_P", 6800, true, false, false, false, true)
-				StartAnimation(thePed, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
-				UnBindAllKey(thePlayer)
-				UnBindAllKey(thePed)
-				Pain(thePlayer)
-				Pain(thePed)
-				
-				setTimer(function()
-					BindAllKey(thePlayer)
-					BindAllKey(thePed)
-					Koryachka(thePed)
-					setElementCollisionsEnabled(thePed, true)
-				end, 6800, 1)
-				wanktimers[thePlayer] = setTimer(function() end, 1000, 1)
+	if(not isTimer(ActionTimer[thePlayer])) then
+		if(thePed) then
+			if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
+				if(isTimer(wanktimers[thePlayer])) then
+					outputChatBox("#FF0033Не встает!", thePlayer, 255,255,255,true)
+				else
+					setElementCollisionsEnabled(thePed, false)
+					local x, y, z = getElementPosition(thePlayer)
+					local rx,ry,rz = getElementRotation(thePlayer)
+					local x2, y2, z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
+					setElementPosition(thePed, x2, y2, z2)
+					setElementRotation(thePed,rx,ry,rz+180, "default", true)
+					StartAnimation(thePlayer, "BLOWJOBZ", "BJ_STAND_START_P", 6800, true, false, false, false, true)
+					StartAnimation(thePed, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
+					UnBindAllKey(thePlayer)
+					UnBindAllKey(thePed)
+					Pain(thePlayer)
+					Pain(thePed)
+					
+					ActionTimer[thePlayer] = setTimer(function()
+						BindAllKey(thePlayer)
+						BindAllKey(thePed)
+						Koryachka(thePed)
+						setElementCollisionsEnabled(thePed, true)
+					end, 6800, 1)
+					wanktimers[thePlayer] = setTimer(function() end, 1000, 1)
+				end
 			end
 		end
 	end
@@ -14148,36 +14179,38 @@ addEventHandler("blowjob", getRootElement(), blowjob)
 
 
 function butilka(thePlayer, name, i, thePed)
-	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
-	
-	if(getElementHealth(thePed) < 20) then
-		StartAnimation(thePed, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
-		setElementData(thePed, "BottleAnus", ItemsNamesArr[arr[i][1]])
-		AddPlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
-		outputChatBox(getPlayerName(thePlayer).." посадил на бутылку "..getPlayerName(thePed), getRootElement(),255, 255,255,true) 
-		setTimer(function()
-			Koryachka(thePed)
-			RemovePlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
-			removeElementData(thePed, "BottleAnus")
-			
-			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-			local PedTeam = getTeamName(getPlayerTeam(thePed))
-			if(PlayerTeam == "Военные" and PedTeam == "Уголовники") then
-				if(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
-					SetTeam(thePlayer, "Мирные жители")
-					SetDatabaseAccount(thePlayer, "skin", 48)
-					triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
-					triggerClientEvent(thePlayer, "RemoveGPSMarker", thePlayer, "Посади заключенного на бутылку")
-					SetDatabaseAccount(thePlayer, "ATUT", 3)
-					MissionCompleted(thePlayer, "Полиция +", "ОТСЛУЖИЛ")
-					Respect(thePlayer, "police", 5)
-					outputChatBox("Ты получил военный билет! Теперь ты можешь работать в #4169E1полиции#FFFFFF, вступить в #000000триаду#FFFFFF или #363D5Aколумбийский картель",thePlayer, 255,255,255,true)
-					SpawnedAfterChange(thePlayer)
+	if(not isTimer(ActionTimer[thePlayer])) then
+		local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
+		
+		if(getElementHealth(thePed) < 20) then
+			StartAnimation(thePed, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
+			setElementData(thePed, "BottleAnus", ItemsNamesArr[arr[i][1]])
+			AddPlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
+			outputChatBox(getPlayerName(thePlayer).." посадил на бутылку "..getPlayerName(thePed), getRootElement(),255, 255,255,true) 
+			ActionTimer[thePlayer] = setTimer(function()
+				Koryachka(thePed)
+				RemovePlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
+				removeElementData(thePed, "BottleAnus")
+				
+				local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+				local PedTeam = getTeamName(getPlayerTeam(thePed))
+				if(PlayerTeam == "Военные" and PedTeam == "Уголовники") then
+					if(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
+						SetTeam(thePlayer, "Мирные жители")
+						SetDatabaseAccount(thePlayer, "skin", 48)
+						triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
+						triggerClientEvent(thePlayer, "RemoveGPSMarker", thePlayer, "Посади заключенного на бутылку")
+						SetDatabaseAccount(thePlayer, "ATUT", 3)
+						MissionCompleted(thePlayer, "Полиция +", "ОТСЛУЖИЛ")
+						Respect(thePlayer, "police", 5)
+						outputChatBox("Ты получил военный билет! Теперь ты можешь работать в #4169E1полиции#FFFFFF, вступить в #000000триаду#FFFFFF или #363D5Aколумбийский картель",thePlayer, 255,255,255,true)
+						SpawnedAfterChange(thePlayer)
+					end
 				end
-			end
-		end, 6800, 1)
-	else
-		ToolTip(thePlayer, "Игрок должен быть в #CC3300корячке")
+			end, 6800, 1)
+		else
+			ToolTip(thePlayer, "Игрок должен быть в #CC3300корячке")
+		end
 	end
 end
 addEvent("butilka", true)
@@ -14188,9 +14221,9 @@ addEventHandler("butilka", getRootElement(), butilka)
 
 
 function razd(thePlayer, player2)
-	if(player2) then
-		if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
-			if(not isTimer(ActionTimer[thePlayer])) then
+	if(not isTimer(ActionTimer[thePlayer])) then
+		if(player2) then
+			if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
 				StartAnimation(thePlayer, "BOMBER","BOM_Plant_Crouch_Out", false,false,false,false)
 				ActionTimer[thePlayer] = setTimer(function()
 					local arr = fromJSON(GetDatabaseAccount(thePlayer, "wardrobe"))

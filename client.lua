@@ -20,10 +20,10 @@ local COLOR = {
 local ZonesDisplay = {}
 local ClosedZones = false
 local DestroyedBlip = {}
-local SkinList,SwitchButtonL,SwitchButtonR,SwitchButtonAccept,PEDChangeSkin=false
-local SkinFlag=true
-local PlayersMessage={}
-local PlayersAction={}
+local SkinList,SwitchButtonL,SwitchButtonR,SwitchButtonAccept,PEDChangeSkin = false
+local SkinFlag = true
+local PlayersMessage = {}
+local PlayersAction = {}
 local HomeEditor = false
 local RobAction = false
 local StreamData = {}
@@ -58,25 +58,25 @@ local scale = ((screenWidth/1920)+(screenHeight/1080))
 local NewScale = ((screenWidth/1920)+(screenHeight/1080))/2
 local scalex = (screenWidth/1920)
 local scaley = (screenHeight/1080)
-local PrisonSleep=false
-local PrisonGavno=false
+local PrisonSleep = false
+local PrisonGavno = false
 local dialogActionTimer = false
 local dialogTimer = false
 local dialogViewTimer = false
 local dialogTitle = false
-local PlayerChangeSkinTeam=""
-local PlayerChangeSkinTeamRang=""
-local PlayerChangeSkinTeamRespect=""
-local PlayerChangeSkinTeamRespectNextLevel=""
+local PlayerChangeSkinTeam = ""
+local PlayerChangeSkinTeamRang = ""
+local PlayerChangeSkinTeamRespect = ""
+local PlayerChangeSkinTeamRespectNextLevel = ""
 local OriginalArr = false
-local RespectTempFileTimers=false
+local RespectTempFileTimers = false
 local GTASound = false
-local PlayerZone="Blueberry Acres"
-local PlayerZoneTrue="Red County"
-local tuningList=false
+local PlayerZone = "Blueberry Acres"
+local PlayerZoneTrue = "Red County"
+local tuningList = false
 local ToC1, ToC2, ToC3, ToC4 = false, false, false, false
 local RepairButton = false
-local upgrades=false
+local upgrades = false
 local TCButton = {}
 local TCButton2 = {}
 local ServerDate = getRealTime(getElementData(root, "ServerTime"))
@@ -89,8 +89,8 @@ local BANKCTL = false
 local BIZCTL = false
 local MovePlayerTo = {} -- x,y,z,rz,mode [silent, fast],action,args
 local Targets = {}
-local MyHouseBlip={}
-local SpawnPoints={}
+local MyHouseBlip = {}
+local SpawnPoints = {}
 local StaminaTimer = false
 local initializedInv = false
 local InventoryWindows = false
@@ -109,10 +109,10 @@ local PInv = {["player"] = {}, ["shop"] = {}, ["backpack"] = {}, ["trunk"] = {}}
 local InventoryMass = 0
 local MaxMass = 0
 local MassColor = tocolor(255,255,255,255)
-local SleepTimer=false
-local ArrestTimerEvent=false
-local DrugsTimer=false
-local SpunkTimer=false
+local SleepTimer = false
+local ArrestTimerEvent = false
+local DrugsTimer = false
+local SpunkTimer = false
 local GPSObject = {}
 local speed = "000"
 local VehicleSpeed = 0
@@ -419,80 +419,78 @@ function Set(list)
 end
 
 
---Путь к картинке, Описание, Стаки, Используемый или нет, вес, цена, {связанные предметы}, Выпадаемый
+--Путь к картинке, Описание, Стаки, Используемый или нет, вес, цена, {связанные предметы}, Выпадаемый, Объединяемый
 local items = {
-	["hp"] = {"invobject/unknown.png", "", 100, false, 0, 0, false, false}, 
-	["Бронежилет"] = {false, "Военый бронежилет", 1, "usearmor", 4650, 2520, false, false}, 
-	["Канистра"] = {false, "Десяти литровая канистра с бензином", 1, "usekanistra", 10350, 1000, false, false}, 
-	["Реликвия"] = {false, "Древняя статуэтка неизвестного происхождения", 1, false, 760, 10000, false, false}, 
-	["Подкова"] = {false, "Старая подкова, антиквариат", 1, false, 350, 5000, false, false}, 
-	["Телефон"] = {false, "Телефон", 1, "usecellphone", 350, 1500, false, false}, 
-	["47 Хромосома"] = {"invobject/chroma.png", "47 Хромосома игрока", 1, false, 100, 5000, false, false}, 
-	["Рюкзак"] = {false, "Обычный рюкзак", 1, "SetupBackpack", 2500, 5000, false, false}, 
-	["Чемодан"] = {false, "Обычный чемодан", 1, "SetupBackpack", 1000, 1000, false, false}, 
-	["Пакет"] = {false, "Обычный пакет", 1, "SetupBackpack", 10, 1, false, false}, 
-	["АК-47"] = {false, "Автомат Калашникова\nСтрана: СССР", 1, "useinvweapon", 4300, 4500, false, false}, 
-	["Граната"] = {false, "Обычная граната", 25, "useinvweapon", 600, 1700, false, false}, 
-	["Молотов"] = {false, "Коктейль молотова", 25, "useinvweapon", 800, 2200, false, false}, 
-	["М16"] = {false, "Автомат М16\nСтрана: США", 1, "useinvweapon", 2880, 6000, false, false}, 
-	["Кольт 45"] = {false, "Кольт 45 9-мм", 1, "useinvweapon", 1120, 1000, false, false}, 
-	["USP-S"] = {false, "Пистолет USP-S", 1, "useinvweapon", 1043, 1500, false, false}, 
-	["Deagle"] = {false, "Пистолет Deagle", 1, "useinvweapon", 1950, 5500, false, false}, 
-	["Кровь"] = {false, "Используется для лечения больных", 5, false, 450, 800, false, false}, 
-	["Pissh"] = {false, "Шотландское пиво Pissh темное", 1, "usedrink", 450, 140, false, false}, 
-	["Pissh Gold"] = {false, "Шотландское пиво Pissh светлое", 1, "usedrink", 430, 120, false, false}, 
-	["KBeer"] = {false, "3 Литра светлого немецкого пива KBeer", 1, "usedrink", 3084, 615, false, false}, 
-	["KBeer Dark"] = {false, "3 Литра темного немецкого пива KBeer", 1, "usedrink", 3084, 735, false, false}, 
-	["isabella"] = {false, "Вино", 1, "usedrink", 1043, 515, false, false}, 
-	["Фекалии"] = {"invobject/crap.png", "Для одних - обычное говно\nДля других - сладкий хлебушек", 10, "eatcrap", 150, 0, false, false}, 
-	["CoK"] = {false, "Пачка сигарет CoK", 1, "usesmoke", 5, 20, false}, 
-	["Сигарета"] = {false, "Просто сигарета", 20, "usesmoke", 0.2, 1, {["сигареты"] = {"CoK"}}, false}, 
-	["Mossberg"] = {false, "Дробовик Mossberg 500", 1, "useinvweapon", 3300, 4700, false, false}, 
-	["Sawed-Off"] = {false, "Дробовик Sawed-Off", 1, "useinvweapon", 2500, 5500, false, false}, 
-	["SPAS-12"] = {false, "Дробовик SPAS-12", 1, "useinvweapon", 4400, 6500, false, false}, 
-	["Узи"] = {false, "Микро Узи", 1, "useinvweapon", 2650, 1750, false, false}, 
-	["MP5"] = {false, "Просто MP5", 1, "useinvweapon", 2660, 2000, false, false}, 
-	["Tec-9"] = {false, "Просто Tec-9", 1, "useinvweapon", 1400, 1500, false, false}, 
-	["ИЖ-12"] = {false, "Просто ИЖ-12", 1, "useinvweapon", 3100, 6500, false, false}, 
-	["M40"] = {false, "Просто M40", 1, "useinvweapon", 6570, 10000, false, false}, 
-	["Dildo XXL"] = {false, "Просто Dildo XXL", 1, "useinvweapon", 760, 4350, false, false}, 
-	["Dildo"] = {false, "Просто Dildo", 1, "useinvweapon", 540, 1600, false, false}, 
-	["Вибратор"] = {false, "Просто Vibrator", 1, "useinvweapon", 1100, 3000, false, false}, 
-	["Клюшка"] = {false, "Клюшка для гольфа", 1, "useinvweapon", 2500, 4000, false, false}, 
-	["Лопата"] = {false, "Обычная лопата", 1, "useinvweapon", 1500, 800, false, false}, 
-	["Бита"] = {false, "Бейсбольная бита", 1, "useinvweapon", 3000, 2000, false, false}, 
-	["Нож"] = {false, "Охотничий нож", 1, "useinvweapon", 160, 450, false, false}, 
-	["Катана"] = {false, "Катана настоящего якудзы", 1, "useinvweapon", 750, 1350, false, false}, 
-	["Камера"] = {false, "Обычная любительская фотокамера", 1, "useinvweapon", 570, 12000, false, false}, 
-	["Бензопила"] = {false, "Просто бензопила", 1, "useinvweapon", 12500, 7700, false, false}, 
+	["hp"] = {"invobject/unknown.png", "", 100, false, 0, 0, false, false, false}, 
+	["Бронежилет"] = {false, "Военый бронежилет", 1, "usearmor", 4650, 2520, false, false, true},
+	["Канистра"] = {false, "Десяти литровая канистра с бензином", 1, "usekanistra", 10350, 1000, false, false, false},
+	["Реликвия"] = {false, "Древняя статуэтка неизвестного происхождения", 1, false, 760, 10000, false, false, false},
+	["Подкова"] = {false, "Старая подкова, антиквариат", 1, false, 350, 5000, false, false, false},
+	["Телефон"] = {false, "Телефон", 1, "usecellphone", 350, 1500, false, false, false},
+	["47 Хромосома"] = {"invobject/chroma.png", "47 Хромосома игрока", 1, false, 100, 5000, false, false, false},
+	["Рюкзак"] = {false, "Обычный рюкзак", 1, "SetupBackpack", 2500, 5000, false, true, false},
+	["Чемодан"] = {false, "Обычный чемодан", 1, "SetupBackpack", 1000, 1000, false, true, false},
+	["Пакет"] = {false, "Обычный пакет", 1, "SetupBackpack", 10, 1, false, true, false},
+	["АК-47"] = {false, "Автомат Калашникова\nСтрана: СССР", 1, "useinvweapon", 4300, 4500, false, false, true},
+	["Граната"] = {false, "Обычная граната", 25, "useinvweapon", 600, 1700, false, false, true},
+	["Молотов"] = {false, "Коктейль молотова", 25, "useinvweapon", 800, 2200, false, false, true},
+	["М16"] = {false, "Автомат М16\nСтрана: США", 1, "useinvweapon", 2880, 6000, false, false, true},
+	["Кольт 45"] = {false, "Кольт 45 9-мм", 1, "useinvweapon", 1120, 1000, false, false, true},
+	["USP-S"] = {false, "Пистолет USP-S", 1, "useinvweapon", 1043, 1500, false, false, true},
+	["Deagle"] = {false, "Пистолет Deagle", 1, "useinvweapon", 1950, 5500, false, false, true},
+	["Кровь"] = {false, "Используется для лечения больных", 5, false, 450, 800, false, false, true},
+	["Pissh"] = {false, "Шотландское пиво Pissh темное", 1, "usedrink", 450, 140, false, false, false},
+	["Pissh Gold"] = {false, "Шотландское пиво Pissh светлое", 1, "usedrink", 430, 120, false, false, false},
+	["KBeer"] = {false, "3 Литра светлого немецкого пива KBeer", 1, "usedrink", 3084, 615, false, false, false},
+	["KBeer Dark"] = {false, "3 Литра темного немецкого пива KBeer", 1, "usedrink", 3084, 735, false, false, false}, 
+	["isabella"] = {false, "Вино", 1, "usedrink", 1043, 515, false, false, false},
+	["Фекалии"] = {"invobject/crap.png", "Для одних - обычное говно\nДля других - сладкий хлебушек", 10, "eatcrap", 150, 0, false, false, true},
+	["CoK"] = {false, "Пачка сигарет CoK", 1, "usesmoke", 5, 20, false, false},
+	["Сигарета"] = {false, "Просто сигарета", 20, "usesmoke", 0.2, 1, {["сигареты"] = {"CoK"}}, false, false}, 
+	["Mossberg"] = {false, "Дробовик Mossberg 500", 1, "useinvweapon", 3300, 4700, false, false, true},
+	["Sawed-Off"] = {false, "Дробовик Sawed-Off", 1, "useinvweapon", 2500, 5500, false, false, true},
+	["SPAS-12"] = {false, "Дробовик SPAS-12", 1, "useinvweapon", 4400, 6500, false, false, true},
+	["Узи"] = {false, "Микро Узи", 1, "useinvweapon", 2650, 1750, false, false, true},
+	["MP5"] = {false, "Просто MP5", 1, "useinvweapon", 2660, 2000, false, false, true},
+	["Tec-9"] = {false, "Просто Tec-9", 1, "useinvweapon", 1400, 1500, false, false, true}, 
+	["ИЖ-12"] = {false, "Просто ИЖ-12", 1, "useinvweapon", 3100, 6500, false, false, true},
+	["M40"] = {false, "Просто M40", 1, "useinvweapon", 6570, 10000, false, false, true},
+	["Dildo XXL"] = {false, "Просто Dildo XXL", 1, "useinvweapon", 760, 4350, false, false, true},
+	["Dildo"] = {false, "Просто Dildo", 1, "useinvweapon", 540, 1600, false, false, true},
+	["Вибратор"] = {false, "Просто Vibrator", 1, "useinvweapon", 1100, 3000, false, false, true},
+	["Клюшка"] = {false, "Клюшка для гольфа", 1, "useinvweapon", 2500, 4000, false, false, true},
+	["Лопата"] = {false, "Обычная лопата", 1, "useinvweapon", 1500, 800, false, false, true},
+	["Бита"] = {false, "Бейсбольная бита", 1, "useinvweapon", 3000, 2000, false, false, true},
+	["Нож"] = {false, "Охотничий нож", 1, "useinvweapon", 160, 450, false, false, true},
+	["Катана"] = {false, "Катана настоящего якудзы", 1, "useinvweapon", 750, 1350, false, false, true},
+	["Камера"] = {false, "Обычная любительская фотокамера", 1, "useinvweapon", 570, 12000, false, false, true},
+	["Бензопила"] = {false, "Просто бензопила", 1, "useinvweapon", 12500, 7700, false, false, true},
 
-	["Лазерный прицел"] = {"invobject/laser.png", "Лазерный прицел", 1, false, 420, 6800, {["лазер"] = {"M40", "АК-47", "М16", "ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg", "Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false}, 
+	["Лазерный прицел"] = {"invobject/laser.png", "Лазерный прицел", 1, false, 420, 6800, {["лазер"] = {"M40", "АК-47", "М16", "ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg", "Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false},
 
-	["9-мм"] = {false, "В настоящий момент используются во: \nВсех пистолетах, узи", 250, false, 6, 5, {["патроны"] = {"Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false}, 
-	["5.56-мм"] = {false, "В настоящий момент используются в М16", 250, false, 3, 7, {["патроны"] = {"М16"}}, false}, 
-	["7.62-мм"] = {false, "В настоящий момент используются для снайперской винтовки, АК-47", 250, false, 7, 10, {["патроны"] = {"M40", "АК-47"}}, false}, 
-	["18.5-мм"] = {false, "В настоящий момент используются во всех дробовиках и винтовке ИЖ-12", 250, false, 13, 25, {["патроны"] = {"ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg"}}, false}, 
-	["Кулак"] = {false, nil, 1, "useinvweapon", 0, 0, false, false}, 
+	["9-мм"] = {false, "В настоящий момент используются во: \nВсех пистолетах, узи", 250, false, 6, 5, {["патроны"] = {"Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, true},
+	["5.56-мм"] = {false, "В настоящий момент используются в М16", 250, false, 3, 7, {["патроны"] = {"М16"}}, false, true},
+	["7.62-мм"] = {false, "В настоящий момент используются для снайперской винтовки, АК-47", 250, false, 7, 10, {["патроны"] = {"M40", "АК-47"}}, false, true},
+	["18.5-мм"] = {false, "В настоящий момент используются во всех дробовиках и винтовке ИЖ-12", 250, false, 13, 25, {["патроны"] = {"ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg"}}, false, true}, 
+	["Кулак"] = {false, nil, 1, "useinvweapon", 0, 0, false, false, false},
 
-	["Конопля"] = {false, "Сырые листья конопли, могут быть посажены на землю или траву.\nТак же используются для получения шмали.", 100, "CreateCanabis", 260, 10, false, true}, 
-	["Кока"] = {false, "Кока приобрела широкую известность как сырьё для изготовления кокаина — наркотика из класса стимуляторов", 25, "CreateCoka", 625, 25, false, true}, 
-	["Косяк"] = {false, "Косяк, вызывает зависимость, восстанавливает жизни", 20, "usedrugs", 1, 500, false, true}, 
-	["Спанк"] = {false, "Спанк, вызывает зависимость", 10, "usedrugs", 100, 1000, false, true}, 
-	["Удочка"] = {false, "Рыболовная удочка", 1, "useinvweapon", 400, 700, false, false}, 
-	["Рыба"] = {false, "Рыба", 1, false, 0, 0, false, false}, 
-	["Черепаха"] = {false, "Морская черепаха", 1, false, 0, 15700, false, false}, 
-	["Акула"] = {false, "Морская акула", 1, false, 0, 9800, false, false}, 
-	["Дельфин"] = {false, "Морской дельфин", 1, false, 0, 5300, false, false}, 
-	["Парашют"] = {false, "Парашют", 1, "useinvweapon", 400, 700, false, false}, 
+	["Конопля"] = {false, "Сырые листья конопли, могут быть посажены на землю или траву.\nТак же используются для получения шмали.", 100, "CreateCanabis", 260, 10, false, true, false}, 
+	["Кока"] = {false, "Кока приобрела широкую известность как сырьё для изготовления кокаина — наркотика из класса стимуляторов", 25, "CreateCoka", 625, 25, false, true, false},
+	["Косяк"] = {false, "Косяк, вызывает зависимость, восстанавливает жизни", 20, "usedrugs", 1, 500, false, true, true},
+	["Спанк"] = {false, "Спанк, вызывает зависимость", 10, "usedrugs", 100, 1000, false, true, true},
+	["Удочка"] = {false, "Рыболовная удочка", 1, "useinvweapon", 400, 700, false, false, true},
+	["Рыба"] = {false, "Рыба", 1, false, 0, 0, false, false, false},
+	["Черепаха"] = {false, "Морская черепаха", 1, false, 0, 15700, false, false, false},
+	["Акула"] = {false, "Морская акула", 1, false, 0, 9800, false, false, false},
+	["Дельфин"] = {false, "Морской дельфин", 1, false, 0, 5300, false, false, false},
+	["Парашют"] = {false, "Парашют", 1, "useinvweapon", 400, 700, false, true, true},
 	
-	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, false},  
-	["Скот"] = {false, "Скот", 1, false, 90000, 5, false, false}, 
-	["Сено"] = {false, "Сено", 10, false, 2500, 5, false, false}, 
-	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false}, 
-	["Деньги"] = {false, "Деньги", 99999999, false, 0.1, 1, false, true}, 
-	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false}, 
-	
-	--Путь к картинке, Описание, Стаки, Используемый или нет, вес, цена, {связанные предметы}
+	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, false, true},
+	["Скот"] = {false, "Скот", 1, false, 90000, 5, false, false, false},
+	["Сено"] = {false, "Сено", 10, false, 2500, 5, false, false, false}, 
+	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false},
+	["Деньги"] = {false, "Деньги", 99999999, false, 0.1, 1, false, false, false},
+	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false, false}, 
 }
 
 
@@ -1831,7 +1829,7 @@ function SetGPS(arr)
 		PData['gps'][id] = createRadarArea(k[1]-10, k[2]-10, 20,20, 210,0,0,255)
 		setElementData(PData['gps'][id], "coord", toJSON({k[1],k[2],k[3]}))
 	end
-	InformTitle("На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу "..COLOR["KEY"]["HEX"].."P#FFFFFF для автоматического перемещения")
+	InformTitle(Text("На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу {key} для автоматического перемещения"):gsub("{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"))
 end
 addEvent("SetGPS", true)
 addEventHandler("SetGPS", localPlayer, SetGPS)
@@ -3227,7 +3225,8 @@ function checkKey()
 			end
 			PData["Target"][k] = {arr[1], arr[2], arr[3]}
 			if(WardrobeObject[k]) then
-				ToolTip("Нажми "..COLOR["KEY"]["HEX"].."F#FFFFFF чтобы переодеться")
+				ToolTip(Text("Нажми {key} чтобы переодеться"):gsub("{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"))
+			
 			end
 		end
 	end
@@ -4034,7 +4033,7 @@ function intro()
 	showCursor(false)
 	
 	setTimer(function() MyVoice("gg", md5("наше время")) end, 1000, 1)
-	local prints = "наше время"
+	local prints = Text("наше время")
 	local i = 1
 	setTimer(function()
 		local text = string.sub(prints, 0, i*2)
@@ -4047,7 +4046,7 @@ function intro()
 		if(i == 16) then
 			setTimer(function() MyVoice("gg", md5("наши дни")) end, 1000, 1)
 			
-			prints = "наши дни"
+			prints = Text("наши дни")
 			i=1
 			setTimer(function()
 				local text = string.sub(prints, 0, i*2)
@@ -4210,7 +4209,6 @@ addEventHandler("helpmessageEvent", localPlayer, helpmessage)
 
 
 function ToolTip(message)
-	message = Text(message)
 	if(message ~= ToolTipText) then
 		playSoundFrontEnd(11)
 		if(isTimer(ToolTipTimers)) then
@@ -4280,6 +4278,28 @@ addEvent("TrunkWindow", true)
 addEventHandler("TrunkWindow", localPlayer, TrunkWindow)
 
 
+
+
+
+
+
+
+function CarJack()
+	triggerServerEvent("WarpPedIntoVehicle", localPlayer, getVehicleOccupant(Targets["theVehicle"])) 
+
+end
+addEvent("CarJack", true)
+addEventHandler("CarJack", localPlayer, CarJack)
+
+
+
+
+
+
+
+
+
+
 function PrisonSleepEv()
 	local x,y,z = getElementPosition(PrisonSleep)
 	local rx,ry,rz = getElementRotation(PrisonSleep)
@@ -4290,7 +4310,8 @@ function PrisonSleepEv()
 		SleepSound("script",  39, math.random(0,114), false)
 	end, 5000, 0)
 	
-	PText["HUD"][2] = {"Нажми ПРОБЕЛ чтобы встать", screenWidth, screenHeight-(150*scalex), 0, 0, tocolor(255, 255, 255, 255), scale*2, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
+	PText["HUD"][2] = {Text("Нажми {key} чтобы встать"):gsub("{key}", COLOR["KEY"]["HEX"].."Space#FFFFFF"), screenWidth, screenHeight-(150*scalex), 0, 0, tocolor(255, 255, 255, 255), scale*2, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
+
 end
 
 function PrisonGavnoEv()
@@ -4400,11 +4421,11 @@ function targetingActivated(target)
 				if(distance < 2) then
 
 					if(getElementHealth(target) < 20) then
-						message=message.."Нажми #A0A0A0F2#FFFFFF чтобы поднять игрока\n"	
+						message = message.."Нажми #A0A0A0F2#FFFFFF чтобы поднять игрока\n"	
 					end
 				end
 				if(CallPolice) then
-					message=message.."Нажми #A0A0A0F3#FFFFFF чтобы позвонить в полицию\n"	
+					message = message.."Нажми #A0A0A0F3#FFFFFF чтобы позвонить в полицию\n"	
 				end
 				ChangeInfo(message)
 			elseif(tostring(getElementType(target)) == "vehicle") then
@@ -4427,7 +4448,7 @@ function targetingActivated(target)
 
 				local t=""
 				if(getVehiclePlateText(target) == "SELL 228") then
-					t=t.."Нажми #A0A0A0TAB#FFFFFF чтобы купить #008080"
+					t=t..Text("Нажми {key} чтобы купить"):gsub("{key}", COLOR["KEY"]["HEX"].."TAB#FFFFFF")
 				end
 				
 				if(getElementData(target, "owner") == getPlayerName(localPlayer)) then
@@ -4442,11 +4463,12 @@ function targetingActivated(target)
 				or getElementModel(target) ==  1776 or getElementModel(target) ==  1209
 				or getElementModel(target) ==  1302) then
 					toggleControl("enter_exit", false) 
-					ToolTip("Sprunk стоимость #3B7231$20#FFFFFF\nНажми #A0A0A0F#FFFFFF чтобы купить")
+					ToolTip(Text("Sprunk стоимость #3B7231$20#FFFFFF\nНажми {key} чтобы купить"):gsub("{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"))
 					SprunkObject = target
 					bindKey ("f", "down", SprunkFunk)
 				elseif(getElementModel(target) == 1812) then
-					ChangeInfo("Нажми #A0A0A0E#FFFFFF чтобы лечь")
+				
+					ChangeInfo(Text("Нажми {key} чтобы лечь"):gsub("{key}", COLOR["KEY"]["HEX"].."E#FFFFFF"))
 					PrisonSleep=target
 					bindKey ("e", "down", PrisonSleepEv)
 				elseif(getElementModel(target) == 2525) then
@@ -5048,8 +5070,15 @@ function CreateTarget(el)
 	if(dist < 30) then
 		local types = getElementType(el)
 		local AllBones = false
-		if(types == "vehicle") then AllBones = getVehicleComponents(el)
-		elseif(types == "ped" or types == "player") then AllBones = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 51, 52, 53, 54} end
+		if(types == "vehicle") then 
+			AllBones = getVehicleComponents(el)
+			local driver = getVehicleOccupant(el)
+			if(getElementType(driver) == "ped") then
+				PData["MultipleAction"]["f"] = {"CarJack", false, false, false}
+			end
+		elseif(types == "ped" or types == "player") then 
+			AllBones = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 51, 52, 53, 54} 
+		end
 		
 		local minx, maxx, miny, maxy = screenWidth, 0, screenHeight, 0
 		
@@ -5069,7 +5098,6 @@ function CreateTarget(el)
 							end
 						end
 					end
-
 				elseif(types == "ped" or types == "player") then 
 					x,y,z = getPedBonePosition(el, AllBones[bones]) 
 				end
@@ -5150,9 +5178,7 @@ local SlowTahometer = 0
 
 addEventHandler("onClientRender", root,
 	function()
-		PData["MultipleAction"] = {}
 		
-			
 		if(NewsPaper[1]) then
 			if(NewsPaper[2]) then
 				dxDrawImage(screenWidth/6, screenHeight/6, screenWidth/1.5, screenHeight/1.5, NewsPaper[1], 0, 0, 0, tocolor(255,255,255,255), true)
@@ -5477,6 +5503,7 @@ addEventHandler("onClientRender", root,
 				end
 			end
 		end
+		
 	end
 )
 
@@ -5797,7 +5824,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 											local quality = PInv[DragElementName][DragElementId][3]
 											local data = PInv[DragElementName][DragElementId][4]
 											if(items[text][3] > 1) then
-												CreateButtonInputInt("buyshopitem", "Введи количество", toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
+												CreateButtonInputInt("buyshopitem", Text("Введи количество"), toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
 												StopDrag(name, i)
 											else
 												triggerServerEvent("buyshopitem", localPlayer, localPlayer, 1, toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
@@ -5812,7 +5839,30 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 											StopDrag(name, i) -- Оставить фокус на ячейке
 										break
 										elseif(DragElementName == "player" or DragElementName == "backpack") then
-											if(PInv[DragElementName][DragElementId][1] == PInv[name][i][1]) then
+											if(PInv[DragElementName][DragElementId][1] == PInv[name][i][1]) then			
+												if(DragElementId == i and DragElementName == name) then
+													StopDrag(name, i)
+													break
+												end
+
+												local TIText = PInv[DragElementName][DragElementId][1]
+		
+												if(items[TIText][9]) then -- Объединяемые предметы
+													if(GetQualityInfo(PInv[DragElementName][DragElementId]) == GetQualityInfo(PInv[name][i])) then
+														
+														if(PInv[name][i][3]+100 < 1000) then
+															PInv[name][i][3] = PInv[name][i][3]+100
+															SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
+															ToolTip("Качество предмета повысилось")
+															StopDrag(name, i)
+															break
+														else
+															ToolTip("У этого предмета уже максимальное качество")
+														end
+														
+													end
+												end
+												
 												local DragQuality = PInv[DragElementName][DragElementId][3]
 												local ButQuality = PInv[name][i][3]
 												if(GetQuality(DragQuality) == GetQuality(ButQuality)) then
@@ -5949,7 +5999,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 													local x2, y2, z2 = getElementPosition(player)
 													local distance = getDistanceBetweenPoints3D(lx,ly,lz,x2,y2,z2)
 													if(distance < 3) then
-														PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Передать").." "..getPlayerName(player), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"DropInvItem", localPlayer, name, i, getPlayerName(player)}}	
+														PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Передать {name}"):gsub("{name}", getPlayerName(player)), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"DropInvItem", localPlayer, name, i, getPlayerName(player)}}	
 													end
 												end
 											end
@@ -5964,7 +6014,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 														local x2, y2, z2 = getElementPosition(player)
 														local distance = getDistanceBetweenPoints3D(lx,ly,lz,x2,y2,z2)
 														if(distance < 3) then
-															PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Посадить").." "..getPlayerName(player), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"butilka", localPlayer, localPlayer, name, i, player}}}
+															PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Посадить {name}"):gsub("{name}", getPlayerName(player)), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"butilka", localPlayer, localPlayer, name, i, player}}}
 														end
 													end
 												end
@@ -5973,7 +6023,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 											local bannedNames = {["hp"] = true, ["date"] = true, ["cost"] = true, ["color"] = true, ["content"] = true, ["name"] = true, ["quality"] = true, ["mass"] = true}
 											for razdelname, razdeldata in pairs(PInv[name][i][4]) do --Для bannedNames запустить еще цикл
 												if(not bannedNames[razdelname]) then
-													PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Извлечь").." "..razdelname, absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"RemoveButtonData", localPlayer, name, i, razdelname}}
+													PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Извлечь {item}"):gsub("{item}", razdelname), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"RemoveButtonData", localPlayer, name, i, razdelname}}
 												end
 											end
 										end
@@ -6168,7 +6218,7 @@ function onMyMouseDoubleClick(button, absoluteX, absoluteY, worldX, worldY,  wor
 							local quality = PInv[name][i][3]
 							local data = PInv[name][i][4]
 							if(items[text][3] > 1) then
-								CreateButtonInputInt("buyshopitem", "Введи количество", toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
+								CreateButtonInputInt("buyshopitem", Text("Введи количество"), toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
 							else
 								triggerServerEvent("buyshopitem", localPlayer, localPlayer, 1, toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
 							end
@@ -6365,8 +6415,7 @@ function AddInventoryItem(itemname, count, quality, data)
 	
 	
 	for slot = 1, 10 do
-		local stacked = math.floor(count/items[itemname][3])
-
+		local stacked = math.round(count/items[itemname][3], 0)
 		if(stacked >= 1) then
 			for v = 1, stacked do
 				AddInventoryItemNewStack(itemname, items[itemname][3], quality, data)
@@ -6427,7 +6476,7 @@ function AddInventoryItemNewStack(itemname, count, quality, data)
 			return true
 		end
 	end
-	ToolTip("Закончилось место в инвентаре")
+	ToolTip(Text("Закончилось место в инвентаре"))
 end
 
 
@@ -6439,7 +6488,7 @@ function UseInventoryItem(name, i)
 		triggerServerEvent("StopFish", localPlayer, localPlayer)
 	end
 	
-	if(name == "backpack") then return ToolTip("Чтобы использовать этот предмет возьми его в руки") end
+	if(name == "backpack") then return ToolTip(Text("Чтобы использовать этот предмет возьми его в руки")) end
 	
 	triggerServerEvent("useinvweapon", localPlayer, localPlayer, i)
 	if(items[text][4] == "useinvweapon") then
@@ -7399,7 +7448,7 @@ function DrawPlayerInventory()
 	
 
 	if(PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer) and not isPlayerMapForced()) then
-			titleText = "Информация"
+			titleText = Text("Информация")
 			qualityInfo = ""
 			if(InventoryWindows) then
 				dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
@@ -7408,7 +7457,7 @@ function DrawPlayerInventory()
 				else
 					dxDrawBorderedText(getPlayerName(localPlayer), 660*scalex, 325*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
 					local Birthday = getRealTime(getElementData(localPlayer, "Birthday"))
-					qualityInfo = "Дата рождения: "..Birthday.monthday.."."..Birthday.month+(1).."."..Birthday.year+(1882).." ("..ServerDate.year-(Birthday.year-18).." лет)\nФракция: "..getTeamName(getPlayerTeam(localPlayer)).."\nРабота: "..getElementData(localPlayer, "job")
+					qualityInfo = Text("Дата рождения")..": "..Birthday.monthday.."."..Birthday.month+(1).."."..Birthday.year+(1882).." ("..ServerDate.year-(Birthday.year-18).." лет)\nФракция: "..getTeamName(getPlayerTeam(localPlayer)).."\nРабота: "..getElementData(localPlayer, "job")
 				end
 				
 				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(50*scaley), 640*scalex+(949*scalex), 360*scaley+(50*scaley), tocolor(120,120,120,255), 1)	
@@ -7416,7 +7465,7 @@ function DrawPlayerInventory()
 				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(320*scaley), 640*scalex+(949*scalex), 360*scaley+(320*scaley), tocolor(120,120,120,255), 1)
 				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(372*scaley), 640*scalex+(949*scalex), 360*scaley+(372*scaley), tocolor(120,120,120,255), 1)
 				
-				dxDrawBorderedText(InventoryMass.."/"..MaxMass.."кг", screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
+				dxDrawBorderedText(InventoryMass.."/"..MaxMass..Text("кг"), screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
 			elseif(TradeWindows) then			
 				dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
 				dxDrawBorderedText("Продажа", 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
@@ -7426,7 +7475,7 @@ function DrawPlayerInventory()
 				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(320*scaley), 640*scalex+(949*scalex), 360*scaley+(320*scaley), tocolor(120,120,120,255), 1)
 				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(372*scaley), 640*scalex+(949*scalex), 360*scaley+(372*scaley), tocolor(120,120,120,255), 1)
 				
-				dxDrawBorderedText(InventoryMass.."/"..MaxMass.."кг", screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
+				dxDrawBorderedText(InventoryMass.."/"..MaxMass..Text("кг"), screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
 			elseif(TrunkWindows) then			
 				dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
 				dxDrawBorderedText("Багажник "..getVehicleName(TrunkWindows), 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
@@ -7468,11 +7517,21 @@ function DrawPlayerInventory()
 					if(DragElementId) then
 						local TIText = PInv[DragElementName][DragElementId][1]
 						if(TIText) then
-							if(items[TIText][7]) then --Связанные предметы
+							if(items[TIText][7]) then -- Связанные предметы
 								for razdelname,razdel in pairs(items[TIText][7]) do
 									for _, IT in pairs(razdel) do
 										if IT == SystemName then
 											dxDrawRectangle(sx, sy, h, w,  tocolor(0,255,0,50))
+										end
+									end
+								end
+							end
+							
+							if(items[TIText][9]) then -- Объединяемые предметы
+								if(DragElementId ~= i and DragElementName == name) then
+									if(TIText == SystemName) then
+										if(GetQualityInfo(PInv[DragElementName][DragElementId]) == GetQualityInfo(PInv[name][i])) then
+											dxDrawRectangle(sx, sy, h, w,  tocolor(255,153,0,50))
 										end
 									end
 								end
@@ -7613,14 +7672,15 @@ function DrawPlayerMessage()
 	
 	for key, arr in pairs(PData["MultipleAction"]) do
 		local text = arr[2]
-		
-		font = "sans"
-		tw = dxGetTextWidth(text, NewScale*1.8, font, true)
-		th = dxGetFontHeight(NewScale*1.8, font)
+		if(text) then
+			font = "sans"
+			tw = dxGetTextWidth(text, NewScale*1.8, font, true)
+			th = dxGetFontHeight(NewScale*1.8, font)
 
-		dxDrawBorderedText(text.." ["..key.."]", arr[3]-tw/2, arr[4]-th/2, screenWidth, screenHeight, tocolor(255, 153, 0 , 255), NewScale*1.8, font, "left", nil, nil, nil, nil, true)		
+			dxDrawBorderedText(text.." ["..key.."]", arr[3]-tw/2, arr[4]-th/2, screenWidth, screenHeight, tocolor(255, 153, 0 , 255), NewScale*1.8, font, "left", nil, nil, nil, nil, true)		
+		end
 	end
-	
+	PData["MultipleAction"] = {}
 		
 	if(PEDChangeSkin == "play" and initializedInv and not isPlayerMapForced()) then
 		if(tuningList) then
@@ -7775,9 +7835,9 @@ function DrawPlayerMessage()
 				local x2,y2,z2 = getElementPosition(v)
 				local dist = getDistanceBetweenPoints3D(x,y,z,x2,y2,z2)/2
 				if(dist >= 1000) then
-					dist = math.round((dist/1000), 1).." км"
+					dist = math.round((dist/1000), 1).." "..Text("км")
 				else
-					dist = math.round(dist, 0).." м"
+					dist = math.round(dist, 0).." "..Text("м")
 				end
 				local _,_,rz = getElementRotation(localPlayer)
 				local marrot = GetMarrot(findRotation(x,y,x2,y2),rz)
@@ -8107,7 +8167,7 @@ function DrawPlayerMessage()
 					end
 
 					dxDrawText(speed, sx,sy+(15*scaley),sx,sy+(15*scaley), tocolor(120,120,120,255), scale*1.25, "default-bold", "center", "center")
-					dxDrawText("КМ/Ч", sx,sy+(45*scaley),sx,sy+(45*scaley), tocolor(120,120,120,255), scale/1.5, "default-bold", "center", "center")
+					dxDrawText(Text("КМ/Ч"), sx,sy+(45*scaley),sx,sy+(45*scaley), tocolor(120,120,120,255), scale/1.5, "default-bold", "center", "center")
 				end
 				
 				local hardtruck = theVehicle
