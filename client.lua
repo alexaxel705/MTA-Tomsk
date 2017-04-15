@@ -5843,8 +5843,8 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 											SetInventoryItem(name, i, tmp[1], tmp[2], tmp[3], toJSON(tmp[4]))
 											SetInventoryItem(DragElementName, DragElementId, tmp2[1], tmp2[2], tmp2[3], toJSON(tmp2[4]))
 											StopDrag(name, i) -- Оставить фокус на ячейке
-										break
-										elseif(DragElementName == "player" or DragElementName == "backpack") then
+											break
+										elseif(DragElementName == "player") then
 											if(PInv[DragElementName][DragElementId][1] == PInv[name][i][1]) then			
 												if(DragElementId == i and DragElementName == name) then
 													StopDrag(name, i)
@@ -5904,6 +5904,88 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 													end
 												end
 												if(Data == false) then
+													ReplaceInventoryItem(DragElementName, DragElementId, name, i)
+												else
+													AddButtonData(name, i, DragElementName,DragElementId,Data)
+												end
+											end
+											StopDrag(name, i)
+											if(DragElementId <= 10 or i <= 10) then
+												triggerServerEvent("useinvweapon", localPlayer, localPlayer)
+											end
+											break
+										elseif(DragElementName == "backpack") then
+											if(PInv[DragElementName][DragElementId][1] == PInv[name][i][1]) then			
+												if(DragElementId == i and DragElementName == name) then
+													StopDrag(name, i)
+													break
+												end
+
+												local TIText = PInv[DragElementName][DragElementId][1]
+		
+												if(items[TIText][9]) then -- Объединяемые предметы
+													if(GetQuality(PInv[DragElementName][DragElementId][3]) == GetQuality(PInv[name][i][3])) then
+														
+														if(PInv[name][i][3]+100 < 1000) then
+															PInv[name][i][3] = PInv[name][i][3]+100
+															SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
+															ToolTip("Качество предмета повысилось")
+															
+															PData['ExpText'][#PData['ExpText']+1] = {"Улучшено", absoluteX, absoluteY}
+															StopDrag(name, i)
+															break
+														else
+															ToolTip("У этого предмета уже максимальное качество")
+														end
+														
+													end
+												end
+												
+												local DragQuality = PInv[DragElementName][DragElementId][3]
+												local ButQuality = PInv[name][i][3]
+												if(GetQuality(DragQuality) == GetQuality(ButQuality)) then
+													if(DragElementId ~= i) then
+														if(items[PInv[name][i][1]][3] >= PInv[name][i][2]+PInv[DragElementName][DragElementId][2]) then
+															SetInventoryItem(name, i, PInv[name][i][1],PInv[name][i][2]+PInv[DragElementName][DragElementId][2],ButQuality, toJSON(PInv[name][i][4]))
+															SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
+														else
+															local count = items[PInv[name][i][1]][3]-PInv[name][i][2]
+															local dragcount = PInv[DragElementName][DragElementId][2]-count
+															local butcount = PInv[name][i][2]+count
+															SetInventoryItem(name, i, PInv[name][i][1],butcount,ButQuality,toJSON(PInv[name][i][4]))
+															SetInventoryItem(DragElementName, DragElementId, PInv[name][i][1],dragcount,DragQuality,toJSON(PInv[name][i][4]))
+														end
+													end
+												else
+													if(PInv[name][i][4]) then
+														if(PInv[name][i][4]["content"]) then
+															StopDrag(name, i)
+															break
+														end
+													end
+													ReplaceInventoryItem(DragElementName, DragElementId, name, i)
+												end
+											else
+												local Data = false --Связанные предметы
+												local TIText = PInv[DragElementName][DragElementId][1]
+												if(TIText) then
+													if(items[TIText][7]) then
+														for razdelname,razdel in pairs(items[TIText][7]) do
+															for _, IT in pairs(razdel) do
+																if IT == PInv[name][i][1] then
+																	Data = razdelname
+																end
+															end
+														end
+													end
+												end
+												if(Data == false) then
+													if(PInv[name][i][4]) then
+														if(PInv[name][i][4]["content"]) then
+															StopDrag(name, i)
+															break
+														end
+													end
 													ReplaceInventoryItem(DragElementName, DragElementId, name, i)
 												else
 													AddButtonData(name, i, DragElementName,DragElementId,Data)
@@ -6102,6 +6184,13 @@ addEventHandler("onClientClick", getRootElement(), addLabelOnClick)
 
 
 function DropInvItem(name, id, komu)
+	if(backpackid) then
+		if(backpackid == id) then
+			if(name == "player") then
+				return false
+			end
+		end
+	end
 	if(name == "backpack") then
 		triggerServerEvent("dropinvitem", localPlayer, localPlayer, name, id, backpackid, komu)
 	elseif(name == "trunk") then
@@ -6165,6 +6254,19 @@ addEventHandler("RemoveButtonData", localPlayer, RemoveButtonData)
 
 
 function ReplaceInventoryItem(name1, item1, name2, item2)
+	if(backpackid) then
+		if(name1 == "player") then
+			if(item1 == backpackid) then
+				return false
+			end
+		end
+		
+		if(name2 == "player") then
+			if(item2 == backpackid) then
+				return false
+			end
+		end
+	end
 	local inv = PInv[name1][item1][1]
 	local count = PInv[name1][item1][2]
 	local quality = PInv[name1][item1][3]
