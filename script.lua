@@ -87,11 +87,6 @@ function setCameraOnPlayerJoin()
 	for i, msg in pairs(SData['Chat Message']) do
 		outputChatBox(msg, source, 255, 255, 255,true)
 	end
-	outputChatBox("Нажми "..COLOR["KEY"]["HEX"].."T#FFFFFF чтобы писать в общий чат", source, 255, 255, 255,true)
-	outputChatBox("Нажми "..COLOR["KEY"]["HEX"].."Y#FFFFFF чтобы писать в командный чат", source, 255, 255, 255,true)
-	outputChatBox("Исходный код сервера #2980B9https://github.com/alexaxel705/MTA-Tomsk", source, 255, 255, 255,true)
-	outputChatBox("Группа ВКонтакте #2980B9http://vk.com/mtatomsk", source, 255, 255, 255,true)
-	outputChatBox("11.04.2017 Добавлена возможность служить в армии /arm, добавлена возможность садить игроков в корячке на бутылку", source, 255, 255, 255,true)
 end
 addEventHandler("onPlayerJoin", getRootElement(), setCameraOnPlayerJoin)
 
@@ -107,6 +102,23 @@ local Lang = {
 }
 
 local LangArr = {}
+
+
+
+function Text(thePlayer, text, repl)
+	if(LangArr[PData[thePlayer]['lang']][text]) then
+		if(LangArr[PData[thePlayer]['lang']][text] ~= "") then
+			text = LangArr[PData[thePlayer]['lang']][text]
+		end
+	end
+	if(repl) then
+		for i, dat in pairs(repl) do
+			text = string.gsub(text, dat[1], dat[2])
+		end
+	end
+	return text
+end
+
 
 
 for lng, name in pairs(Lang) do
@@ -12517,7 +12529,7 @@ function loginPlayer(thePlayer, password)
 			AuthComplete(thePlayer)
 		else
 			outputChatBox("Неверный пароль", thePlayer, 255, 255, 255, true)
-			triggerClientEvent(thePlayer, "LoginWindow", thePlayer)
+			triggerClientEvent(thePlayer, "LoginWindow", thePlayer, true)
 		end
 	else
 		PData[thePlayer]["auth"] = true

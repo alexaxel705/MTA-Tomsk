@@ -3605,7 +3605,7 @@ end
 
 
 function StartUnload()
-	LoginClient()
+	LoginClient(false)
 	VideoMemory = {["HUD"] = {}}
 	stopSound(GTASound)
 	return true
@@ -3766,15 +3766,24 @@ end
 
 
 
-function LoginClient()
-	CreateButtonInputInt("loginPlayerEvent", Text("Регистрация/Вход"))
-	showCursor(true)
-	
-	PText["INVHUD"][10] = {"Русский", 100*NewScale, 500*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Русский"}}}
-	PText["INVHUD"][11] = {"English", 100*NewScale, 540*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "English"}}}
-	PText["INVHUD"][12] = {"Portuguese", 100*NewScale, 580*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Portuguese"}}}
-	PText["INVHUD"][13] = {"Azerbaijani", 100*NewScale, 620*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Azerbaijani"}}}
-	PText["INVHUD"][14] = {"Turkish", 100*NewScale, 660*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Turkish"}}}
+function LoginClient(open)
+	if(open) then
+		CreateButtonInputInt("loginPlayerEvent", Text("Регистрация/Вход"))
+		showCursor(true)
+		
+		outputChatBox(Text("Нажми {key} чтобы писать в общий чат", {{"{key}", COLOR["KEY"]["HEX"].."T#FFFFFF"}}),  255, 255, 255,true)
+		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
+		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
+		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
+		
+		PText["INVHUD"][10] = {"Русский", 100*NewScale, 500*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Русский"}}}
+		PText["INVHUD"][11] = {"English", 100*NewScale, 540*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "English"}}}
+		PText["INVHUD"][12] = {"Portuguese", 100*NewScale, 580*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Portuguese"}}}
+		PText["INVHUD"][13] = {"Azerbaijani", 100*NewScale, 620*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Azerbaijani"}}}
+		PText["INVHUD"][14] = {"Turkish", 100*NewScale, 660*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Turkish"}}}
+	else
+		PText["HUD"][8] = nil
+	end
 end
 addEvent("LoginWindow", true)
 addEventHandler("LoginWindow", localPlayer, LoginClient)
@@ -5202,7 +5211,7 @@ addEventHandler("onClientRender", root,
 			
 			if(PData['loading'] == 100) then
 				PData['loading'] = nil
-				LoginClient()
+				LoginClient(true)
 				PlaySFXSound(10)
 			end
 		end
@@ -9546,7 +9555,7 @@ addEventHandler("onClientPlayerQuit", getRootElement(), onQuitGame)
 
 function SwitchNick()
 	RemoveInventory()
-	LoginClient()
+	LoginClient(true)
 end
 
 addEventHandler("onClientPlayerChangeNick", getLocalPlayer(), SwitchNick)
