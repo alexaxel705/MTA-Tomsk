@@ -298,13 +298,13 @@ msgstr ""
 msgid "Кредитка"
 msgstr ""
 
-msgid "Передать"
+msgid "Передать {name}"
 msgstr ""
 
-msgid "Посадить"
+msgid "Посадить {name}"
 msgstr ""
 
-msgid "Извлечь"
+msgid "Извлечь {item}"
 msgstr ""
 
 msgid "Использовать"
@@ -385,10 +385,22 @@ msgstr ""
 msgid "Выпадает после смерти"
 msgstr ""
 
+msgid "Чтобы использовать этот предмет возьми его в руки"
+msgstr ""
+
 msgid "кг"
 msgstr ""
 
 msgid "г"
+msgstr ""
+
+msgid "км"
+msgstr ""
+
+msgid "м"
+msgstr ""
+
+msgid "КМ/Ч"
 msgstr ""
 
 msgid "отвратительное"
@@ -425,9 +437,6 @@ msgid "превосходное"
 msgstr ""
 
 msgid "Закончилось место в инвентаре"
-msgstr ""
-
-msgid "Чтобы использовать этот предмет возьми его в руки"
 msgstr ""
 
 msgid ""
@@ -651,4 +660,32 @@ msgid "СБ"
 msgstr ""
 
 msgid "Нажми {key} чтобы припарковать машину"
+msgstr ""
+
+msgid "Нажми {key} чтобы переодеться"
+msgstr ""
+
+msgid "Нажми {key} чтобы встать"
+msgstr ""
+
+msgid "Нажми {key} чтобы купить"
+msgstr ""
+
+msgid ""
+"Sprunk стоимость #3B7231$20#FFFFFF\n"
+"Нажми {key} чтобы купить"
+msgstr ""
+
+msgid "Нажми {key} чтобы лечь"
+msgstr ""
+
+msgid "Информация"
+msgstr ""
+
+msgid "Дата рождения"
+msgstr ""
+
+msgid ""
+"На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу "
+"{key} для автоматического перемещения"
 msgstr ""

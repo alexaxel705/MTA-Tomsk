@@ -298,14 +298,14 @@ msgstr "Pul"
 msgid "Кредитка"
 msgstr "Kredit kartı"
 
-msgid "Передать"
-msgstr "Vermək"
+msgid "Передать {name}"
+msgstr "{name}-ə ver"
 
-msgid "Посадить"
-msgstr "Qoymaq"
+msgid "Посадить {name}"
+msgstr "{name}-i otuzdur"
 
-msgid "Извлечь"
-msgstr "Çıxardmağ"
+msgid "Извлечь {item}"
+msgstr "{item} çıxard"
 
 msgid "Использовать"
 msgstr "İşlətmək"
@@ -385,11 +385,23 @@ msgstr "Keyfiyət"
 msgid "Выпадает после смерти"
 msgstr "Ölumdən sonra düşür"
 
+msgid "Чтобы использовать этот предмет возьми его в руки"
+msgstr "Bu şeyi istifadə etmək üçün əlivizə alın"
+
 msgid "кг"
 msgstr "kg"
 
 msgid "г"
 msgstr "g"
+
+msgid "км"
+msgstr "km"
+
+msgid "м"
+msgstr "m"
+
+msgid "КМ/Ч"
+msgstr "KM/S"
 
 msgid "отвратительное"
 msgstr "nifrətəlayı"
@@ -426,9 +438,6 @@ msgstr "mükəmməldən yaxşı"
 
 msgid "Закончилось место в инвентаре"
 msgstr "İnventrada yer sona çatdı"
-
-msgid "Чтобы использовать этот предмет возьми его в руки"
-msgstr "Bu şeyi istifadə etmək üçün əlivizə alın"
 
 msgid ""
 "Для сбора урожая удерживай\n"
@@ -654,3 +663,35 @@ msgstr "Ş."
 
 msgid "Нажми {key} чтобы припарковать машину"
 msgstr "Maşını park etmək üçün {key} bas"
+
+msgid "Нажми {key} чтобы переодеться"
+msgstr "Paltarıvı dəyişmək üçün {key} bas"
+
+msgid "Нажми {key} чтобы встать"
+msgstr "Durmak üçün {key} bas"
+
+msgid "Нажми {key} чтобы купить"
+msgstr "Almaq üçün {key} bas"
+
+msgid ""
+"Sprunk стоимость #3B7231$20#FFFFFF\n"
+"Нажми {key} чтобы купить"
+msgstr ""
+"Sprunk qiyməti #3B7231$20#FFFFFF\n"
+"Almaq üçün {key} bas"
+
+msgid "Нажми {key} чтобы лечь"
+msgstr "Uzanmaq üçün {key} bas"
+
+msgid "Информация"
+msgstr "Məlumat"
+
+msgid "Дата рождения"
+msgstr "Təvəllüd"
+
+msgid ""
+"На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу "
+"{key} для автоматического перемещения"
+msgstr ""
+"#4682B4xəriyəyə#FFFFFF #ff0000nöqtə#FFFFFF əlavə olunub! Avtopilotu qurmaq "
+"üçün {key} bas"

@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Регистрация/Вход"
-msgstr "Registration/Authorization"
+msgstr "Registration/Log in"
 
 msgid "Служба - Найди способ нажраться"
 msgstr "Service - Find a way to get drunk"
@@ -48,7 +48,7 @@ msgid "Притон"
 msgstr "Brothel"
 
 msgid "СЛОМАНО"
-msgstr "BROKEN"
+msgstr "BUSTED"
 
 msgid "ПОТРАЧЕНО"
 msgstr "WASTED"
@@ -72,10 +72,10 @@ msgid "ник"
 msgstr "nick"
 
 msgid "Масса"
-msgstr ""
+msgstr "Mass"
 
 msgid "Цена"
-msgstr ""
+msgstr "Cost"
 
 msgid "ид"
 msgstr "id"
@@ -299,14 +299,14 @@ msgstr "Money"
 msgid "Кредитка"
 msgstr "Credit card"
 
-msgid "Передать"
-msgstr "Transfer to"
+msgid "Передать {name}"
+msgstr ""
 
-msgid "Посадить"
-msgstr "Plant"
+msgid "Посадить {name}"
+msgstr ""
 
-msgid "Извлечь"
-msgstr "Extract"
+msgid "Извлечь {item}"
+msgstr ""
 
 msgid "Использовать"
 msgstr "Use"
@@ -324,7 +324,7 @@ msgid "Расстояние"
 msgstr "Distance"
 
 msgid "Магазин"
-msgstr "Shop"
+msgstr "Bandoleer"
 
 msgid "Калибр"
 msgstr "Caliber"
@@ -386,11 +386,23 @@ msgstr "Quality"
 msgid "Выпадает после смерти"
 msgstr "Drops after death"
 
+msgid "Чтобы использовать этот предмет возьми его в руки"
+msgstr "To use this item, pick it up"
+
 msgid "кг"
 msgstr "kg"
 
 msgid "г"
 msgstr "g"
+
+msgid "км"
+msgstr "km"
+
+msgid "м"
+msgstr "m"
+
+msgid "КМ/Ч"
+msgstr "KM/H"
 
 msgid "отвратительное"
 msgstr "Revolting"
@@ -427,9 +439,6 @@ msgstr "Superb"
 
 msgid "Закончилось место в инвентаре"
 msgstr "Out of stock in inventory"
-
-msgid "Чтобы использовать этот предмет возьми его в руки"
-msgstr "To use this item, pick it up"
 
 msgid ""
 "Для сбора урожая удерживай\n"
@@ -657,3 +666,31 @@ msgstr "Sat"
 
 msgid "Нажми {key} чтобы припарковать машину"
 msgstr "Click {key} to park the car"
+
+msgid "Нажми {key} чтобы переодеться"
+msgstr ""
+
+msgid "Нажми {key} чтобы встать"
+msgstr ""
+
+msgid "Нажми {key} чтобы купить"
+msgstr ""
+
+msgid ""
+"Sprunk стоимость #3B7231$20#FFFFFF\n"
+"Нажми {key} чтобы купить"
+msgstr ""
+
+msgid "Нажми {key} чтобы лечь"
+msgstr ""
+
+msgid "Информация"
+msgstr "Information"
+
+msgid "Дата рождения"
+msgstr ""
+
+msgid ""
+"На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу "
+"{key} для автоматического перемещения"
+msgstr ""
