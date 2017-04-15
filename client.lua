@@ -155,6 +155,22 @@ local LainOSCursorLoadData = {
 local BindedKeys = {} --[key] = {TriggerServerEvent(unpack)}
 
 
+
+function Text(text, repl)
+	if(LangArr[text]) then
+		if(LangArr[text] ~= "") then
+			text = LangArr[text]
+		end
+	end
+	if(repl) then
+		for i, dat in pairs(repl) do
+			text = string.gsub(text, dat[1], dat[2])
+		end
+	end
+	return text
+end
+
+
 local trafficlight = {
 	["0"] = "west",
 	["1"] = "west",
@@ -734,15 +750,6 @@ addEvent("SetZoneDisplay", true)
 addEventHandler("SetZoneDisplay", getRootElement(), SetZoneDisplay)
 
 
-
-function Text(text)
-	if(LangArr[text]) then
-		if(LangArr[text] ~= "") then
-			return LangArr[text]
-		end
-	end
-	return text
-end
 
 
 function UpdateZones(zones)
@@ -1829,7 +1836,8 @@ function SetGPS(arr)
 		PData['gps'][id] = createRadarArea(k[1]-10, k[2]-10, 20,20, 210,0,0,255)
 		setElementData(PData['gps'][id], "coord", toJSON({k[1],k[2],k[3]}))
 	end
-	InformTitle(Text("На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу {key} для автоматического перемещения"):gsub("{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"))
+	local text = Text("На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу {key} для автоматического перемещения", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}})
+	InformTitle(text)
 end
 addEvent("SetGPS", true)
 addEventHandler("SetGPS", localPlayer, SetGPS)
@@ -3180,7 +3188,7 @@ function checkKey()
 		if(theVehicle) then
 			if(speed == "000") then
 				if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer)) then
-					ChangeInfo(Text("Нажми {key} чтобы припарковать машину"):gsub("{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"), 1000)
+					ChangeInfo(Text("Нажми {key} чтобы припарковать машину", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}}), 1000)
 				end
 			end
 		end
@@ -3227,7 +3235,7 @@ function checkKey()
 			end
 			PData["Target"][k] = {arr[1], arr[2], arr[3]}
 			if(WardrobeObject[k]) then
-				ToolTip(Text("Нажми {key} чтобы переодеться"):gsub("{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"))
+				ToolTip(Text("Нажми {key} чтобы переодеться", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
 			
 			end
 		end
@@ -3618,11 +3626,14 @@ function onDownloadFinish(file, success) -- Второй этап загрузк
 		
 		local hFile = fileOpen("lang/"..PData["LANG"], true)
 
-		local ft = fileRead(hFile, 2500)
+		local ft = fileRead(hFile, 5500)
 		while not fileIsEOF(hFile) do
-			ft = ft .. fileRead(hFile, 2500)
+			ft = ft .. fileRead(hFile, 5500)
 		end
 		
+		ft = string.gsub(ft, 'msgid ""\n', 'msgid ')
+		ft = string.gsub(ft, 'msgstr ""\n', 'msgstr ')
+		ft = string.gsub(ft, '"\n"', '')
 		LangArr = {}
 		local Lines = split(ft, "\n")
 		for i = 1, #Lines do
@@ -4312,7 +4323,7 @@ function PrisonSleepEv()
 		SleepSound("script",  39, math.random(0,114), false)
 	end, 5000, 0)
 	
-	PText["HUD"][2] = {Text("Нажми {key} чтобы встать"):gsub("{key}", COLOR["KEY"]["HEX"].."Space#FFFFFF"), screenWidth, screenHeight-(150*scalex), 0, 0, tocolor(255, 255, 255, 255), scale*2, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
+	PText["HUD"][2] = {Text("Нажми {key} чтобы встать", {{"{key}", COLOR["KEY"]["HEX"].."Space#FFFFFF"}}), screenWidth, screenHeight-(150*scalex), 0, 0, tocolor(255, 255, 255, 255), scale*2, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
 
 end
 
@@ -4450,7 +4461,7 @@ function targetingActivated(target)
 
 				local t=""
 				if(getVehiclePlateText(target) == "SELL 228") then
-					t=t..Text("Нажми {key} чтобы купить"):gsub("{key}", COLOR["KEY"]["HEX"].."TAB#FFFFFF")
+					t=t..Text("Нажми {key} чтобы купить", {{"{key}", COLOR["KEY"]["HEX"].."TAB#FFFFFF"}})
 				end
 				
 				if(getElementData(target, "owner") == getPlayerName(localPlayer)) then
@@ -4465,12 +4476,12 @@ function targetingActivated(target)
 				or getElementModel(target) ==  1776 or getElementModel(target) ==  1209
 				or getElementModel(target) ==  1302) then
 					toggleControl("enter_exit", false) 
-					ToolTip(Text("Sprunk стоимость #3B7231$20#FFFFFF\nНажми {key} чтобы купить"):gsub("{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"))
+					ToolTip(Text("Sprunk стоимость #3B7231$20#FFFFFF").."\n"..Text("Нажми {key} чтобы купить", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
 					SprunkObject = target
 					bindKey ("f", "down", SprunkFunk)
 				elseif(getElementModel(target) == 1812) then
 				
-					ChangeInfo(Text("Нажми {key} чтобы лечь"):gsub("{key}", COLOR["KEY"]["HEX"].."E#FFFFFF"))
+					ChangeInfo(Text("Нажми {key} чтобы лечь", {{"{key}", COLOR["KEY"]["HEX"].."E#FFFFFF"}}))
 					PrisonSleep=target
 					bindKey ("e", "down", PrisonSleepEv)
 				elseif(getElementModel(target) == 2525) then
@@ -4512,8 +4523,6 @@ function getPositionFromElementOffset(element,offX,offY,offZ)
     return x, y, z                               -- Return the transformed point
 end
  
-
-
 
  
 
@@ -6089,7 +6098,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 													local x2, y2, z2 = getElementPosition(player)
 													local distance = getDistanceBetweenPoints3D(lx,ly,lz,x2,y2,z2)
 													if(distance < 3) then
-														PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Передать {name}"):gsub("{name}", getPlayerName(player)), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"DropInvItem", localPlayer, name, i, getPlayerName(player)}}	
+														PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Передать {name}", {{"{name}", getPlayerName(player)}}), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"DropInvItem", localPlayer, name, i, getPlayerName(player)}}	
 													end
 												end
 											end
@@ -6100,12 +6109,10 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 											or PInv[name][i][1] == "KBeer Dark"
 											or PInv[name][i][1] == "isabella") then
 												for id, player in pairs(getElementsByType("player", getRootElement(), true)) do
-													if(player ~= localPlayer) then
-														local x2, y2, z2 = getElementPosition(player)
-														local distance = getDistanceBetweenPoints3D(lx,ly,lz,x2,y2,z2)
-														if(distance < 3) then
-															PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Посадить {name}"):gsub("{name}", getPlayerName(player)), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"butilka", localPlayer, localPlayer, name, i, player}}}
-														end
+													local x2, y2, z2 = getElementPosition(player)
+													local distance = getDistanceBetweenPoints3D(lx,ly,lz,x2,y2,z2)
+													if(distance < 3) then
+														PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Посадить {name}", {{"{name}", getPlayerName(player)}}), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"butilka", localPlayer, localPlayer, name, i, player}}}
 													end
 												end
 											end
@@ -6113,7 +6120,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 											local bannedNames = {["hp"] = true, ["date"] = true, ["cost"] = true, ["color"] = true, ["content"] = true, ["name"] = true, ["quality"] = true, ["mass"] = true}
 											for razdelname, razdeldata in pairs(PInv[name][i][4]) do --Для bannedNames запустить еще цикл
 												if(not bannedNames[razdelname]) then
-													PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Извлечь {item}"):gsub("{item}", razdelname), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"RemoveButtonData", localPlayer, name, i, razdelname}}
+													PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Извлечь {item}", {{"{item}", razdelname}}), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"RemoveButtonData", localPlayer, name, i, razdelname}}
 												end
 											end
 										end
