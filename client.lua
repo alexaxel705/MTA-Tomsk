@@ -3126,7 +3126,9 @@ function updateWorld()
 							else -- Для неизвестных значков
 								setBlipIcon(arr[1], arr[2])
 								SetZoneDisplay(getElementData(arr[1], "info"))
-							--	PData['ExpText'][#PData['ExpText']+1] = {"Открыта новая зона! "..getElementData(arr[1], "info")}
+								--[[local x,y,z = getPedBonePosition(localPlayer, 8)
+								sx,sy = getScreenFromWorldPosition(x,y,z)
+								PData['ExpText'][#PData['ExpText']+1] = {"Открыта новая зона! "..getElementData(arr[1], "info"), sx,sy}--]]
 							end
 						end
 					end
@@ -5399,15 +5401,19 @@ addEventHandler("onClientRender", root,
 			end
 			
 			for i, arr in pairs(PData['ExpText']) do
-				if(not arr[2]) then 
-					arr[2] = 0.1
-					arr[3] = 255
+				if(not arr[4]) then 
+					arr[4] = 0
+					arr[5] = 255
 				end
-				local x,y,z = getPedBonePosition(localPlayer, 5)
-				create3dtext(arr[1], x,y,z+arr[2], scale*0.7, 60, tocolor(255,200,0, arr[3]), "sans")
-				arr[2] = arr[2]+0.002
-				arr[3] = arr[3]-1
-				if(arr[3] <= 0) then
+				
+				font = "sans"
+				tw = dxGetTextWidth(arr[1], NewScale*1.8, font, true)
+				th = dxGetFontHeight(NewScale*1.8, font)
+
+				dxDrawBorderedText(arr[1], (arr[2]-tw/2), (arr[3]-th/2)+arr[4], screenWidth, screenHeight, tocolor(255, 153, 0 , 255), NewScale*1.8, font, "left", nil, nil, nil, nil, true)
+				arr[4] = arr[4]-0.3
+				arr[5] = arr[5]-1
+				if(arr[5] <= 0) then
 					PData['ExpText'][i] = nil
 				end
 			end
@@ -5848,12 +5854,14 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 												local TIText = PInv[DragElementName][DragElementId][1]
 		
 												if(items[TIText][9]) then -- Объединяемые предметы
-													if(GetQualityInfo(PInv[DragElementName][DragElementId]) == GetQualityInfo(PInv[name][i])) then
+													if(GetQuality(PInv[DragElementName][DragElementId][3]) == GetQuality(PInv[name][i][3])) then
 														
 														if(PInv[name][i][3]+100 < 1000) then
 															PInv[name][i][3] = PInv[name][i][3]+100
 															SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
 															ToolTip("Качество предмета повысилось")
+															
+															PData['ExpText'][#PData['ExpText']+1] = {"Улучшено", absoluteX, absoluteY}
 															StopDrag(name, i)
 															break
 														else
@@ -6270,7 +6278,10 @@ function GetQualityInfo(it)
 		text=text..Text("Масса")..": "..GetItemMass(it).."\n"
 		if(items[name][4] == "useinvweapon") then	
 			if(getWeaponProperty(WeaponNamesArr[name], "poor", "damage")) then
-				text=text..Text("Урон")..": "..getWeaponProperty(WeaponNamesArr[name], "poor", "damage").."\n"
+				text=text..Text("Урон")..": "..
+				math.round(getOriginalWeaponProperty(WeaponNamesArr[name], "poor", "damage")*(quality/500), 0)-(2).." - "..
+				math.round(getOriginalWeaponProperty(WeaponNamesArr[name], "poor", "damage")*(quality/500), 0)+(2)..
+				"\n"
 			end
 			if(getWeaponProperty(WeaponNamesArr[name], "poor", "weapon_range")) then
 				text=text..Text("Расстояние")..": "..getWeaponProperty(WeaponNamesArr[name], "poor", "weapon_range").."\n"
@@ -7530,7 +7541,7 @@ function DrawPlayerInventory()
 							if(items[TIText][9]) then -- Объединяемые предметы
 								if(DragElementId ~= i and DragElementName == name) then
 									if(TIText == SystemName) then
-										if(GetQualityInfo(PInv[DragElementName][DragElementId]) == GetQualityInfo(PInv[name][i])) then
+										if(GetQuality(PInv[DragElementName][DragElementId][3]) == GetQuality(PInv[name][i][3])) then
 											dxDrawRectangle(sx, sy, h, w,  tocolor(255,153,0,50))
 										end
 									end

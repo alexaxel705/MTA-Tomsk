@@ -6899,6 +6899,8 @@ function useinvweapon(thePlayer, slot)
 			else
 				giveWeapon(thePlayer, WM, ammo, true)
 			end
+			local damage = getOriginalWeaponProperty(WM, "poor", "damage")
+			setWeaponProperty(WM, "poor", "damage", damage*(arr[PData[thePlayer]["WeaponSlot"]][3]/500))
 		end
 	elseif(arr[PData[thePlayer]["WeaponSlot"]][1]) then
 		local model = ItemsNamesArr[arr[PData[thePlayer]["WeaponSlot"]][1]]
@@ -12131,7 +12133,6 @@ addCommandHandler("seti", seti)
 
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
-	WarpPedIntoVehicle(thePlayer)
 	local zone = getZoneName(x,y,z)
 	if(savetype == "PedPath") then
 		local angle = findRotation(x,y, x,ry)
@@ -12192,7 +12193,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "АК-47", 1, 550, {})
+	--AddInventoryItem(thePlayer, "7.62-мм", 1000, 550, {})
 
 	
 	fileDelete("save.txt")
@@ -12322,9 +12323,8 @@ function saved(thePlayer, command, h)
 	for i,node in ipairs(PlayerNodes) do
 		--local arr = fromJSON(xmlNodeGetAttribute(node, "inv"))
 		
-		--xmlNodeSetAttribute(node, "zone", toJSON(StandartClosedMap))
+		xmlNodeSetAttribute(node, "zone", toJSON(StandartClosedMap))
 		xmlNodeSetAttribute(node, "inv", StandartInventory)
-		xmlNodeSetAttribute(node, "money", nil)
 		--[[for i, v in pairs(arr) do
 			if(v[1]) then
 				if(v[1] == "Redwood") then
