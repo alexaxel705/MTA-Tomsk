@@ -3660,6 +3660,121 @@ addVehicleUpgrade(tmpv, 1181)
 addVehicleUpgrade(tmpv, 1183)
 
 
+
+-- veh, x,y,z,rz
+local Parkings = { -- Доработать потом, добавить спауны взорванных не припаркованных тачек, призовые тачки тоже сюда парковать
+	["Los Santos"] = {
+		["LS North Parking"] = {
+			[1] = {false, 306.9, -1481.8, 23.6, 235}, 
+			[2] = {false, 303.9, -1486.5, 23.6, 235}, 
+			[3] = {false, 300.9, -1491.1, 23.6, 235}, 
+			[4] = {false, 297.7, -1535.9, 23.6, 55}, 
+			[5] = {false, 294.3, -1540, 23.6, 55}, 
+			[6] = {false, 291.1, -1544.6, 23.6, 55}, 
+			[7] = {false, 279, -1536, 23.6, 235}, 
+			[8] = {false, 282.1, -1531.6, 23.6, 235}, 
+			[9] = {false, 285.6, -1527.3, 23.6, 235}, 
+			[10] = {false, 288.8, -1522.7, 23.6, 235}, 
+			[11] = {false, 291.7, -1518.2, 23.6, 235}, 
+			[12] = {false, 295.1, -1513.9, 23.6, 235}, 
+			[13] = {false, 298.3, -1509.3, 23.6, 235}, 
+			[14] = {false, 301.4, -1504.8, 23.6, 235}, 
+			[15] = {false, 304.2, -1500.4, 23.6, 235}, 
+		},
+	}, 
+	["San Fierro"] = {
+		["SF West Parking"] = {
+			[1] = {false, -1835.4, 1288, 30.9, 21}, 
+			[2] = {false, -1829.6, 1289.5, 30.9, 21}, 
+			[3] = {false, -1824, 1291.6, 30.9, 21}, 
+			[4] = {false, -1817.1, 1293.6, 30.9, 2}, 
+			[5] = {false, -1811.2, 1293.5, 30.9, 2}, 
+			[6] = {false, -1804.7, 1294, 30.9, 357}, 
+			[7] = {false, -1799, 1293.5, 30.9, 357}, 
+			[8] = {false, -1793.1, 1292.9, 30.9, 357}, 
+			[9] = {false, -1779.4, 1310.6, 30.9, 177}, 
+			[10] = {false, -1785.2, 1311.4, 30.9, 177}, 
+			[11] = {false, -1791.1, 1311.5, 30.9, 177}, 
+			[12] = {false, -1797, 1312.1, 30.9, 177}, 
+			[14] = {false, -1802.9, 1312.5, 30.9, 186}, 
+			[15] = {false, -1810.6, 1311.9, 30.9, 186}, 
+			[16] = {false, -1816.3, 1311.3, 30.9, 186}, 
+			[17] = {false, -1822.1, 1310.7, 30.9, 186}, 
+			[18] = {false, -1831, 1308.8, 30.9, 200}, 
+			[19] = {false, -1836.4, 1307, 30.9, 200}, 
+			[20] = {false, -1842.1, 1304.8, 30.9, 200}, 
+			[21] = {false, -1847.5, 1302.6, 30.9, 200}, 
+			[22] = {false, -1853.2, 1300.5, 30.9, 200}, 
+			
+			[23] = {false, -1835.4, 1288, 40.1, 21}, 
+			[24] = {false, -1829.6, 1289.5, 40.1, 21}, 
+			[25] = {false, -1824, 1291.6, 40.1, 21}, 
+			[26] = {false, -1817.1, 1293.6, 40.1, 2}, 
+			[27] = {false, -1811.2, 1293.5, 40.1, 2}, 
+			[28] = {false, -1804.7, 1294, 40.1, 357}, 
+			[29] = {false, -1799, 1293.5, 40.1, 357}, 
+			[30] = {false, -1793.1, 1292.9, 40.1, 357}, 
+			[31] = {false, -1779.4, 1310.6, 40.1, 177}, 
+			[32] = {false, -1785.2, 1311.4, 40.1, 177}, 
+			[33] = {false, -1791.1, 1311.5, 40.1, 177}, 
+			[34] = {false, -1797, 1312.1, 40.1, 177}, 
+			[35] = {false, -1802.9, 1312.5, 40.1, 186}, 
+			[36] = {false, -1810.6, 1311.9, 40.1, 186}, 
+			[37] = {false, -1816.3, 1311.3, 40.1, 186}, 
+			[38] = {false, -1822.1, 1310.7, 40.1, 186}, 
+			[39] = {false, -1831, 1308.8, 40.1, 200}, 
+			[40] = {false, -1836.4, 1307, 40.1, 200}, 
+			[41] = {false, -1842.1, 1304.8, 40.1, 200}, 
+			[42] = {false, -1847.5, 1302.6, 40.1, 200}, 
+			[43] = {false, -1853.2, 1300.5, 40.1, 200}, 
+				
+			[44] = {false, -1835.4, 1288, 49.4, 21}, 
+			[45] = {false, -1829.6, 1289.5, 49.4, 21}, 
+			[46] = {false, -1824, 1291.6, 49.4, 21}, 
+			[47] = {false, -1817.1, 1293.6, 49.4, 2}, 
+			[48] = {false, -1811.2, 1293.5, 49.4, 2}, 
+			[49] = {false, -1804.7, 1294, 49.4, 357}, 
+			[50] = {false, -1799, 1293.5, 49.4, 357}, 
+			[51] = {false, -1793.1, 1292.9, 49.4, 357}, 
+			[52] = {false, -1779.4, 1310.6, 49.4, 177}, 
+			[53] = {false, -1785.2, 1311.4, 49.4, 177}, 
+			[54] = {false, -1791.1, 1311.5, 49.4, 177}, 
+			[55] = {false, -1797, 1312.1, 49.4, 177}, 
+			[56] = {false, -1802.9, 1312.5, 49.4, 186}, 
+			[57] = {false, -1810.6, 1311.9, 49.4, 186}, 
+			[58] = {false, -1816.3, 1311.3, 49.4, 186}, 
+			[59] = {false, -1822.1, 1310.7, 49.4, 186}, 
+			[60] = {false, -1831, 1308.8, 49.4, 200}, 
+			[61] = {false, -1836.4, 1307, 49.4, 200}, 
+			[62] = {false, -1842.1, 1304.8, 49.4, 200}, 
+			[63] = {false, -1847.5, 1302.6, 49.4, 200}, 
+			[64] = {false, -1853.2, 1300.5, 49.4, 200}, 
+			
+			[65] = {false, -1835.4, 1288, 58.7, 21}, 
+			[66] = {false, -1829.6, 1289.5, 58.7, 21}, 
+			[67] = {false, -1824, 1291.6, 58.7, 21}, 
+			[68] = {false, -1817.1, 1293.6, 58.7, 2}, 
+			[69] = {false, -1811.2, 1293.5, 58.7, 2}, 
+			[70] = {false, -1804.7, 1294, 58.7, 357}, 
+			[71] = {false, -1799, 1293.5, 58.7, 357}, 
+			[72] = {false, -1793.1, 1292.9, 58.7, 357}, 
+			[73] = {false, -1779.4, 1310.6, 58.7, 177}, 
+			[74] = {false, -1785.2, 1311.4, 58.7, 177}, 
+			[75] = {false, -1791.1, 1311.5, 58.7, 177}, 
+			[76] = {false, -1797, 1312.1, 58.7, 177}, 
+			[77] = {false, -1802.9, 1312.5, 58.7, 186}, 
+			[78] = {false, -1810.6, 1311.9, 58.7, 186}, 
+			[79] = {false, -1816.3, 1311.3, 58.7, 186}, 
+			[80] = {false, -1822.1, 1310.7, 58.7, 186}, 
+			[81] = {false, -1831, 1308.8, 58.7, 200}, 
+			[82] = {false, -1836.4, 1307, 58.7, 200}, 
+			[83] = {false, -1842.1, 1304.8, 58.7, 200}, 
+			[84] = {false, -1847.5, 1302.6, 58.7, 200}, 
+			[85] = {false, -1853.2, 1300.5, 58.7, 200}, 
+		}, 
+	}
+}
+
 -- theVehicle, model, x,y,z,rx,ry,rz, plateNumber, {характеристики}, "название"
 local NonRandVeh = {
 -- San Fierro
@@ -4962,7 +5077,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 1366.5, -1279.7, 13.5, 0, 0 --
+		local x,y,z,i,d  = 539.8, -1244.2, 16.6, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6076,6 +6191,48 @@ CreateCluckin(2101.9, 2228.8, 11) -- LV
 CreateCluckin(-2672.2, 258.1, 4.6) -- SF
 CreateCluckin(-2155.3, -2460.1, 30.8) -- SF
 CreateCluckin(-1816.5, 618.0, 35.1) -- SF
+
+
+
+
+SData["Barber"] = 1
+function CreateBarber(x,y,z,types)
+	if(types == 2) then
+		CreateEnter(x,y,z, 0, 0, 0, false, 411.6, -23, 1001.8, 0, 2, SData["Barber"], "Barber Shop")
+	elseif(types == 3) then
+		CreateEnter(x,y,z, 0, 0, 0, false, 418.6, -84.4, 1001.8, 0, 3, SData["Barber"], "Barber Shop")
+	elseif(types == 12) then
+		CreateEnter(x,y,z, 0, 0, 0, false, 412, -54.4, 1001.9, 0, 12, SData["Barber"], "Barber Shop")
+	end
+	SData["Barber"] = SData["Barber"]+1
+end
+
+CreateBarber(2070.6, -1793.8, 13.5, 2) -- LS
+CreateBarber(824, -1588.3, 13.5, 3) -- LS
+CreateBarber(672.1, -496.9, 16.3, 12) -- LS
+CreateBarber(2080.3, 2122.9, 10.8, 12) -- LV
+CreateBarber(-1449.8, 2591.9, 55.8, 12) -- LV
+
+
+
+SData["Tatto"] = 1
+function CreateTatto(x,y,z,types)
+	if(types == 16) then
+		CreateEnter(x,y,z, 0, 0, 0, false, -204.4, -27.3, 1002.3, 0, 16, SData["Tatto"], "Tatoo parlour")
+	elseif(types == 17) then
+		CreateEnter(x,y,z, 0, 0, 0, false, -204.3, -8.9, 1002.3, 0, 17, SData["Tatto"], "Tatoo parlour")
+	elseif(types == 3) then
+		CreateEnter(x,y,z, 0, 0, 0, false, -204.3, -44.3, 1002.3, 0, 3, SData["Tatto"], "Tatoo parlour")
+	end
+	SData["Tatto"] = SData["Tatto"]+1
+end
+
+CreateTatto(2068.6, -1779.8, 13.6, 16) -- LS
+CreateTatto(2094.7, 2122.9, 10.8, 3) -- LV
+CreateTatto(-2491, -38.9, 25.6, 17) -- SF
+
+
+
 
 
 
@@ -12205,7 +12362,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Деньги", 1000, 550, {})
+	AddInventoryItem(thePlayer, "Деньги", 1000, 550, {})
 
 	
 	fileDelete("save.txt")
@@ -12257,65 +12414,6 @@ end
 addCommandHandler("inform", info)
 
 
-local Brakess = {
-["Brembo 27"] = "Wilwood 140mm",
-["Brembo 70"] = "Wilwood 150mm",
-["Brembo 75"] = "Wilwood 155mm",
-["Brembo 19"] = "Wilwood 170mm",
-["Brembo 77"] = "Wilwood 175mm",
-["Brembo 68"] = "Wilwood 180mm",
-["Brembo 73"] = "Wilwood 185mm",
-["Brembo 8"] = "Wilwood 187mm",
-["Brembo 32"] = "Wilwood 190mm",
-["Brembo 54"] = "Wilwood 200mm",
-["Brembo 17"] = "Wilwood 210mm",
-["Brembo 7"] = "Wilwood 230mm",
-["Brembo 78"] = "Wilwood 240mm",
-["Brembo 13"] = "Wilwood 245mm",
-["Brembo 35"] = "Wilwood 260mm",
-["Brembo 27"] = "Wilwood 120mm",
-["Brembo 24"] = "Wilwood 270mm",
-["Brembo 67"] = "Wilwood 275mm",
-["Brembo 38"] = "Wilwood 340mm",
-["Brembo 76"] = "Endless 150mm",
-["Brembo 41"] = "Endless 153mm",
-["Brembo 74"] = "Endless 155mm",
-["Brembo 30"] = "Endless 160mm",
-["Brembo 22"] = "Endless 165mm",
-["Brembo 72"] = "Endless 170mm",
-["Brembo 42"] = "Endless 175mm",
-["Brembo 34"] = "Endless 180mm",
-["Brembo 29"] = "Endless 185mm",
-["Brembo 49"] = "Endless 190mm",
-["Brembo 3"] = "Endless 193mm",
-["Brembo 53"] = "Endless 195mm",
-["Brembo 51"] = "Endless 200mm",
-["Brembo 31"] = "Endless 205mm",
-["Brembo 46"] = "Endless 210mm",
-["Brembo 59"] = "Endless 215mm",
-["Brembo 65"] = "Endless 220mm",
-["Brembo 66"] = "Endless 230mm",
-["Brembo 26"] = "Endless 231mm",
-["Brembo 16"] = "Endless 232mm",
-["Brembo 39"] = "Endless 233mm",
-["Brembo 80"] = "Endless 234mm",
-["Brembo 45"] = "Endless 235mm",
-["Brembo 55"] = "Endless 245mm",
-["Brembo 63"] = "Endless 250mm",
-["Brembo 60"] = "Endless 255mm",
-["Brembo 20"] = "Endless 260mm",
-["Brembo 40"] = "Endless 265mm", 
-["Brembo 56"] = "Endless 275mm",
-["Brembo 11"] = "Brembo 170mm",
-["Brembo 28"] = "Brembo 190mm",
-["Brembo 50"] = "Brembo 205mm",
-["Brembo 48"] = "Brembo 210mm",
-["Brembo 1"] = "Brembo 230mm",
-["Brembo 44"] = "Brembo 245mm",
-["Brembo 6"] = "Brembo 260mm",
-["Brembo 47"] = "Brembo 270mm",
-["Brembo 36"] = "Brembo 300mm"
-}
 
 function GetVehiclePower(mass, acceleration) return math.ceil(mass/(140)*(acceleration)) end
 function saved(thePlayer, command, h)
@@ -14348,11 +14446,45 @@ function respawnExplodedVehicle()
 	end
 
 	if(not getElementData(source, "destroy")) then 
+		if(getElementData(source, "owner")) then
+			if(not ReparkEv(source)) then
+				local owner = getPlayerFromName(getElementData(source, "owner"))
+				local x,y,z = getElementPosition(source)
+				local zone = getZoneName(x,y,z, true)
+				local park = GetRandomParking(zone)
+				if(park) then
+					Parkings[zone][park[1]][park[2]][1] = source
+					setVehicleRespawnPosition(source, park[3], park[4], park[5]+VehicleSystem[getElementModel(source)][1], 0, 0, park[6])
+					if(owner) then
+						triggerClientEvent(owner, "AddGPSMarker", owner, park[3], park[4], park[5], "Забери свой транспорт")
+						ToolTip(owner, "Ваш транспорт доставлен на парковку")
+					end
+				end
+			end
+		end
 		setTimer(respawnVehicle, 10000, 1, source)
 	end
 end
 
 
+function GetRandomParking(city)
+	if(Parkings[city]) then
+		local randpark = {}
+		for name, dat in pairs(Parkings[city]) do
+			for i, dat2 in pairs(dat) do
+				if(not dat2[1]) then
+					randpark[#randpark+1] = {name, i, dat2[2], dat2[3], dat2[4], dat2[5]}
+				end
+			end
+		end
+		if(#randpark > 1) then
+			return randpark[math.random(#randpark)]
+		end
+	end
+	return false
+end
+
+outputChatBox(#Parkings["San Fierro"])
 
 function respawnVehicleAfterDead()
 	removeElementData(source, "Fuel")
