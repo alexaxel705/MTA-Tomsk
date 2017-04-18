@@ -650,6 +650,9 @@ local ColorArray = {"000000","F5F5F5",
 local SpawnAction = {}
 function PlayerSpawn()
 	if(source == localPlayer) then
+		if(InventoryWindows) then
+			SetupBackpack()
+		end
 		triggerEvent("onClientElementStreamIn", localPlayer)
 		local x,y,z = getElementPosition(localPlayer)
 		local zone = getZoneName(x,y,z)
