@@ -650,7 +650,7 @@
     <h648 x="1183.4" y="-1099" z="28.3" price="450000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h648>
     <h649 x="1142.1" y="-1092.9" z="28.2" price="450000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 10"></h649>
     <h650 x="1141.8" y="-1070" z="31.8" price="450000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 12"></h650>
-	<h651 x="2015.1" y="-1732.6" z="14.2" price="350000" locked="1"></h651>
+    <h651 x="2015.1" y="-1732.6" z="14.2" price="350000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h651>
     <h652 x="2016" y="-1717.1" z="14.1" price="350000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h652>
     <h653 x="2017.9" y="-1703.2" z="14.2" price="350000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h653>
     <h654 x="2013" y="-1656.3" z="13.8" price="350000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h654>
