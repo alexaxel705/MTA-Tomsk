@@ -650,9 +650,6 @@ local ColorArray = {"000000","F5F5F5",
 local SpawnAction = {}
 function PlayerSpawn()
 	if(source == localPlayer) then
-		if(InventoryWindows) then
-			SetupBackpack()
-		end
 		triggerEvent("onClientElementStreamIn", localPlayer)
 		local x,y,z = getElementPosition(localPlayer)
 		local zone = getZoneName(x,y,z)
@@ -6930,6 +6927,11 @@ addEventHandler("normalspeed", localPlayer, normalspeed)
 
 function onWasted(killer, weapon, bodypart)
 	if(source == localPlayer) then 
+		if(InventoryWindows) then
+			SetupBackpack()
+		end
+	
+	
 		if(PData["fishpos"]) then
 			triggerServerEvent("StopFish", localPlayer, localPlayer)
 		end
@@ -6945,7 +6947,7 @@ function onWasted(killer, weapon, bodypart)
 		end
 		
 		RemoveInventory()
-		PData["wasted"]=Text("ПОТРАЧЕНО")
+		PData["wasted"] = Text("ПОТРАЧЕНО")
 		if(killer) then
 			if(getElementType(killer) == "ped") then
 				if(getElementData(killer, "attacker") == getPlayerName(localPlayer)) then
@@ -6953,12 +6955,12 @@ function onWasted(killer, weapon, bodypart)
 				end
 				local KTeam = getElementData(killer, "team")				
 				if(KTeam == "Полиция" or KTeam == "ФБР" or KTeam == "Военные") then
-					PData["wasted"]=Text("СЛОМАНО")
+					PData["wasted"] = Text("СЛОМАНО")
 				end
 			elseif(getElementType(killer) == "player") then
 				local KTeam = getTeamName(getPlayerTeam(killer))			
 				if(KTeam == "Полиция" or KTeam == "ФБР" or KTeam == "Военные") then
-					PData["wasted"]=Text("СЛОМАНО")
+					PData["wasted"] = Text("СЛОМАНО")
 				end
 			end
 		end

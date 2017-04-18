@@ -5076,7 +5076,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 1103.4, -1092.5, 28.5, 0, 0 --
+		local x,y,z,i,d  = -2799.9, -212.8, 6, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -9254,7 +9254,7 @@ function ZoneInfo(zone)
 		if(GetDatabaseAccount(source, "Prison") == "AREA51") then
 			if(zone ~= "Restricted Area") then
 				local ptime = GetDatabaseAccount(source, "PrisonTime")
-				SetDatabaseAccount(source, "PrisonTime", 0)
+				SetDatabaseAccount(source, "PrisonTime", nil)
 				SetDatabaseAccount(source, "Prison", nil)
 				MissionCompleted(source, "", "СБЕЖАЛ")
 				SetTeam(source, "Мирные жители")
@@ -9267,7 +9267,7 @@ function ZoneInfo(zone)
 		else
 			if(getElementDimension(source) ~= 1) then
 				local ptime = GetDatabaseAccount(source, "PrisonTime")
-				SetDatabaseAccount(source, "PrisonTime", 0)
+				SetDatabaseAccount(source, "PrisonTime", nil)
 				SetDatabaseAccount(source, "Prison", nil)
 				MissionCompleted(source, "", "СБЕЖАЛ")
 				SetTeam(source, "Мирные жители")
@@ -10010,19 +10010,10 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 	local About = fromJSON(GetDatabaseAccount(thePlayer, "about"))
 	setElementData(thePlayer, "Birthday", About["Birthday"])
 	
-	if(frname == "Уголовники") then
-		if(GetDatabaseAccount(thePlayer, "prisoninv") == 0) then --Игрок который только сел
-			SetDatabaseAccount(thePlayer, "prisoninv", GetDatabaseAccount(thePlayer, "inv"))
-		end
-		setElementData(thePlayer, "inv", StandartInventory) -- Уже сидящий
-	else
-		if(GetDatabaseAccount(thePlayer, "prisoninv") == 0) then -- Обычный игрок
-			setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "inv"))
-		else --Отсидевший игрок
-			SetDatabaseAccount(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
-			setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
-			SetDatabaseAccount(thePlayer, "prisoninv", nil)
-		end
+	
+	
+	if(GetDatabaseAccount(thePlayer, "PrisonTime") == 0) then -- Обычный игрок
+		setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "inv"))
 	end
 
 
@@ -11817,8 +11808,11 @@ function PrisonEvent(hour, minutes)
 	local players = getPlayersInTeam(getTeamFromName("Уголовники"))
 	PrisonMessage="#858585Распорядок дня\n#DCDCDC"..PrisonMessage
 	for playerKey, playerValue in ipairs (players) do
-		if(GetDatabaseAccount(playerValue, "PrisonTime") < 1) then
-			SetDatabaseAccount(playerValue, "PrisonTime", 0)
+		if(GetDatabaseAccount(playerValue, "PrisonTime") < 1) then 
+			SetDatabaseAccount(playerValue, "inv", GetDatabaseAccount(playerValue, "prisoninv"))
+			setElementData(playerValue, "inv", GetDatabaseAccount(playerValue, "prisoninv"))
+			SetDatabaseAccount(playerValue, "prisoninv", nil)
+			SetDatabaseAccount(playerValue, "PrisonTime", nil)
 			SetDatabaseAccount(playerValue, "Prison", nil)
 			SetTeam(playerValue, "Мирные жители")
 			SpawnedAfterChange(playerValue)
@@ -13408,6 +13402,8 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 							AddPlayerMoney(source, -(GetDatabaseAccount(source, "wanted")*100))
 						end
 						SetDatabaseAccount(source, "PrisonTime", GetDatabaseAccount(source, "wanted")*20)
+						SetDatabaseAccount(source, "prisoninv", GetDatabaseAccount(source, "inv"))
+						setElementData(source, "inv", StandartInventory)
 						local x,y,z = GetPlayerLocation(source)
 						local zone = getZoneName(x,y,z,true)
 						SetDatabaseAccount(source, "Prison", PrisonVariable[zone])
@@ -13431,6 +13427,9 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 							AddPlayerMoney(source, -(GetDatabaseAccount(source, "wanted")*100))
 						end
 						SetDatabaseAccount(source, "PrisonTime", GetDatabaseAccount(source, "wanted")*20)
+						
+						SetDatabaseAccount(source, "prisoninv", GetDatabaseAccount(source, "inv"))
+						setElementData(source, "inv", StandartInventory)
 						local x,y,z = GetPlayerLocation(source)
 						local zone = getZoneName(x,y,z,true)
 						SetDatabaseAccount(source, "Prison", PrisonVariable[zone])
