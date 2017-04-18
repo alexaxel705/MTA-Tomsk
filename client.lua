@@ -6551,8 +6551,11 @@ addEventHandler("InformTitle", localPlayer, InformTitle)
 
 
 function AddInventoryItem(itemname, count, quality, data)
-	InformTitle("В #4682B4инвентарь#FFFFFF добавлен предмет "..COLOR["KEY"]["HEX"]..itemname.."#FFFFFF, нажми #C00000i#FFFFFF чтобы посмотреть")
 	if(not data) then data = toJSON({}) end
+	
+	if count > 0 then 
+		InformTitle(Text("В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы посмотреть", {{"{item}", COLOR["KEY"]["HEX"]..itemname.."#FFFFFF"}, {"{key}", "#C00000i#FFFFFF"}}))
+	end
 	
 	
 	for slot = 1, 10 do

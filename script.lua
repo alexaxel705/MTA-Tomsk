@@ -225,7 +225,6 @@ local raceGlobalTimer = false
 local MPTimer = false
 local EndRaceInfoTimer = false
 local RaceArray = false
-local RacePrice = false
 local PlayersEnteredPickup = {}
 local Threes = {}
 local ActionTimer = {}
@@ -4777,7 +4776,7 @@ setElementDimension(ArmourPickup, 1)
 
 local PoliceLSStreetGates = createObject(11327, 1587.5, -1638, 14.9, 0,0,90)
 setElementData(PoliceLSStreetGates, "gates", toJSON({1587.5, -1638, 17, 0,-60,0}))
-setElementData(PoliceLSStreetGates, "team",  toJSON({{"Военные", "Полиция", "ФБР"}}))
+setElementData(PoliceLSStreetGates, "team",  toJSON({"Военные", "Полиция", "ФБР"}))
 
 
 
@@ -4789,11 +4788,11 @@ setElementData(CIAGATES, "team", toJSON({"ЦРУ"}))
 
 local Zone51GateMCHS = createObject(975, 245.8, 1842.1, 9, 0,0,0)
 setElementData(Zone51GateMCHS, "gates", toJSON({244, 1842.1, 9, 0,0,0}))
-setElementData(Zone51GateMCHS, "team",  toJSON({{"МЧС", "Военные", "Полиция", "ФБР"}}))
+setElementData(Zone51GateMCHS, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
 
 local Zone51GateMCHS2 = createObject(975, 256, 1845.2, 9, 0,0,90)
 setElementData(Zone51GateMCHS2, "gates", toJSON({256, 1839, 9, 0,0,0}))
-setElementData(Zone51GateMCHS2, "team",  toJSON({{"МЧС", "Военные", "Полиция", "ФБР"}}))
+setElementData(Zone51GateMCHS2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
 
 
 local CrackDoor1 = createObject(18553,2522.5, -1301.9, 1048.5)
@@ -5077,7 +5076,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 539.8, -1244.2, 16.6, 0, 0 --
+		local x,y,z,i,d  = 1427, -1730, 12.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5123,6 +5122,11 @@ local ReplaceVehicleAnimation = {
 		["OFF_Sit_Watch"] = {["DisableCollision"] = true},
 		["OFF_Sit_Type_Loop"] = {["DisableCollision"] = true},
 		["OFF_Sit_Crash"] = {["DisableCollision"] = true},
+	}, 
+	["FOOD"] = {
+		["EAT_Vomit_P"] = {
+			["theVehicle"] = {false}
+		}
 	}
 }
 
@@ -5136,7 +5140,11 @@ function StartAnimation(thePlayer, block, anim, times, loop, updatePosition, int
 			if(ReplaceVehicleAnimation[block][anim]["theVehicle"]) then
 				local theVehicle = getPedOccupiedVehicle(thePlayer)
 				if(theVehicle) then
-					block, anim, times, loop, updatePosition, interruptable, freezeLastFrame = ReplaceVehicleAnimation[block][anim]["theVehicle"][1], ReplaceVehicleAnimation[block][anim]["theVehicle"][2], ReplaceVehicleAnimation[block][anim]["theVehicle"][3], ReplaceVehicleAnimation[block][anim]["theVehicle"][4], ReplaceVehicleAnimation[block][anim]["theVehicle"][5], ReplaceVehicleAnimation[block][anim]["theVehicle"][6], ReplaceVehicleAnimation[block][anim]["theVehicle"][7]
+					if(ReplaceVehicleAnimation[block][anim]["theVehicle"][1]) then -- Для блокировки анимации в автомобиле
+						block, anim, times, loop, updatePosition, interruptable, freezeLastFrame = ReplaceVehicleAnimation[block][anim]["theVehicle"][1], ReplaceVehicleAnimation[block][anim]["theVehicle"][2], ReplaceVehicleAnimation[block][anim]["theVehicle"][3], ReplaceVehicleAnimation[block][anim]["theVehicle"][4], ReplaceVehicleAnimation[block][anim]["theVehicle"][5], ReplaceVehicleAnimation[block][anim]["theVehicle"][6], ReplaceVehicleAnimation[block][anim]["theVehicle"][7]
+					else
+						return false
+					end
 				end
 			end
 		end
@@ -9916,20 +9924,22 @@ addEventHandler("BuyCar", root, BuyCar)
 
 function el(thePlayer, command, h)
 	local HouseNodes = xmlNodeGetChildren(HouseNode)
+	local out = ""
 	for i,node in ipairs(HouseNodes) do
 		if(getPlayerName(thePlayer) == xmlNodeGetValue(node)) then
 			if(xmlNodeGetAttribute(node, "dolg")) then
 				if(AddPlayerMoney(thePlayer, -xmlNodeGetAttribute(node, "dolg"))) then
-					outputChatBox("Ты заплатил "..COLOR["DOLLAR"]["HEX"].."$"..xmlNodeGetAttribute(node, "dolg").."#FFFFFF за электричество", thePlayer,255,255,255,true)
+					out = out.."Ты заплатил "..COLOR["DOLLAR"]["HEX"].."$"..xmlNodeGetAttribute(node, "dolg").."#FFFFFF за квитанцию\n"
 					AddBizMoney("ELSF", xmlNodeGetAttribute(node, "dolg"))			
 					xmlNodeSetAttribute(node, "dolg", nil)
 					setElementData(getElementByID(xmlNodeGetName(node)), "price", GetHousePrice(node))
 				end
 			else
-				outputChatBox("У тебя нет долгов за электричество!", thePlayer)
+				out = "У тебя нет квитанций!"
 			end
 		end
 	end
+	ToolTip(thePlayer, out)
 end
 addCommandHandler("el", el)
 
@@ -10176,7 +10186,6 @@ local Soviet = {"Никогда не заводи машину во время �
 "Сбежав с принудительного #A0A0A0психиатрического#FFFFFF лечения вы получите x2 розыск",
 "Сдавшись #4169E1полиции#FFFFFF мирным путем срок сокращают в 2 раза",
 "Вовремя платите по счетам за электричество, иначе у вас конфискуют имущество", 
---"Команда #A0A0A0/patch#FFFFFF позволяет загрузить дополнительный контент из версии PS2",
 "Занимаясь бегом можно повысить максимальное здоровье и выносливость, умирая максимальное здоровье падает",
 "Рейтинг игроков обновляется каждые 00:00 по игровому времени",
 "Снятую с игроков одежду можно использовать в личном гардеробе",
@@ -10248,13 +10257,13 @@ function moneyPickupHit(thePlayer)
 		PlayersEnteredPickup[thePlayer] = source
 	elseif(getElementData(source, "type") == "enter") then
 		PlayersEnteredPickup[thePlayer] = source
-		local text = "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы войти"
+		local text = Text(thePlayer, "Нажми {key} чтобы войти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}})
 		if(getElementData(source, "house")) then
 			local x,y,z = getElementPosition(source)
 			local ZName = getZoneName(x,y,z)
 			if(getElementData(source, "owner") == "") then
 				MissionCompleted(thePlayer, "$"..getElementData(source, "price"), ZName.." "..getElementData(source, "zone"))
-				text = text.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы купить дом"
+				text = text.."\n"..Text(thePlayer, "Нажми {key} чтобы купить дом", {{"{key}", COLOR["KEY"]["HEX"].."TAB#FFFFFF"}})
 			end
 		end
 		ToolTip(thePlayer, text)
@@ -12362,9 +12371,8 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	AddInventoryItem(thePlayer, "Деньги", 1000, 550, {})
+	--AddInventoryItem(thePlayer, "Деньги", 1000, 550, {})
 
-	
 	fileDelete("save.txt")
 	local hFile = fileCreate("save.txt")
 	fileWrite(hFile, datess) -- write a text line
@@ -13824,7 +13832,7 @@ function MarkerHit(hitElement, Dimension)
 				TrailersPositions[bd[1]][bd[2]][1] = false
 				CreateTrailer(FoundRandomEmptyTruckLocation())
 			elseif(getElementData(source, "type") == "PetrolFuelMarker") then
-				ToolTip(thePlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы начать заправку")
+				ToolTip(thePlayer, Text(thePlayer, "Нажми {key} чтобы начать заправку", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
 				PetrolFuelMarker[thePlayer] = source
 			elseif(getElementData(source, "type") == "SPRAY") then
 				local g = getElementData(source, "id")
@@ -13832,7 +13840,7 @@ function MarkerHit(hitElement, Dimension)
 				setTimer(function()
 					if(AddPlayerMoney(thePlayer, -100)) then
 						fixVehicle(theVehicle)
-						MissionCompleted(thePlayer, "$100", "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА")
+						MissionCompleted(thePlayer, "$100", Text(thePlayer, "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА"))
 						setVehicleColor(theVehicle, math.random(0,127), math.random(0,127), math.random(0,127), math.random(0,127))
 						AddBizMoney("SPRAYSA", 100)
 					end
@@ -13887,17 +13895,18 @@ function MarkerHit(hitElement, Dimension)
 			ToolTip(thePlayer, text)
 			PlayersEnteredPickup[thePlayer] = source
 		elseif(getElementData(source, "type") == "GExit") then
-			ToolTip(thePlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы выйти")
+			ToolTip(thePlayer, Text(thePlayer, "Нажми {key} чтобы выйти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
+			
 			PlayersEnteredPickup[thePlayer] = source
 		elseif(getElementData(source, "type") == "FIRE") then
 			setPedOnFire(thePlayer, true)
 		elseif(getElementData(source, "type") == "enter") then
 		local r,g,b,a = getMarkerColor(source)
-		local text = "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы войти"
+		local text = Text(thePlayer, "Нажми {key} чтобы войти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}})
 		if(r == 255 and g == 255) then
 			PlayersEnteredPickup[thePlayer] = source
 		else
-			text = COLOR["REDDOLLAR"]["HEX"].."ЗАКРЫТО НА РЕМОНТ"
+			text = COLOR["REDDOLLAR"]["HEX"].. Text(thePlayer, "ЗАКРЫТО НА РЕМОНТ")
 		end
 		
 		if(getElementData(source, "house")) then
@@ -14477,14 +14486,13 @@ function GetRandomParking(city)
 				end
 			end
 		end
-		if(#randpark > 1) then
+		if(#randpark > 0) then
 			return randpark[math.random(#randpark)]
 		end
 	end
 	return false
 end
 
-outputChatBox(#Parkings["San Fierro"])
 
 function respawnVehicleAfterDead()
 	removeElementData(source, "Fuel")
@@ -15297,12 +15305,7 @@ function CreateRaceMarker(thePlayer, array, checkpoint)
 			EndRaceInfoTimer=setTimer(function()
 				if(EndRaceTimeout == 0) then 
 					if(racePlayerFinish[1]) then 
-						RacePrice=PriceAuto[math.random(1, #PriceAuto)]
-						local v = CreateVehicle(RacePrice, RaceArray[#RaceArray-2], RaceArray[#RaceArray-1], RaceArray[#RaceArray]+2, 0,0,0, racePlayerFinish[1])
-						setElementData(v, "owner", racePlayerFinish[1])
-						outputChatBox("Победитель: #CC9966"..racePlayerFinish[1], getRootElement(), 255,255,255, true)
-						triggerClientEvent(getPlayerFromName(racePlayerFinish[1]), "AddGPSMarker", getPlayerFromName(racePlayerFinish[1]), RaceArray[#RaceArray-2], RaceArray[#RaceArray-1], RaceArray[#RaceArray], "Приз")
-						outputChatBox("Забери свой приз на красном маркере!" ,getPlayerFromName(racePlayerFinish[1]),255,255,255,true)
+						RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]), zone)
 					end
 					if(racePlayerFinish[2]) then outputChatBox("Второе место: #CC9966"..racePlayerFinish[2], getRootElement(), 255,255,255, true) end
 					if(racePlayerFinish[3]) then outputChatBox("Третье место: #CC9966"..racePlayerFinish[3], getRootElement(), 255,255,255, true) end
@@ -15320,6 +15323,23 @@ function CreateRaceMarker(thePlayer, array, checkpoint)
 		elseif(#racePlayerFinish == 3) then AddPlayerMoney(getPlayerFromName(racePlayerFinish[3]), math.floor(raceMoney(RaceArray)/3), "МИССИЯ ВЫПОЛНЕНА!")
 		end
 	end
+end
+
+
+
+function RacePriceGeneration(thePlayer, zone)
+	local park = GetRandomParking(zone)
+	if(park) then
+				
+		local RacePrice = PriceAuto[math.random(1, #PriceAuto)]
+		local v = CreateVehicle(RacePrice, park[3], park[4], park[5]+VehicleSystem[RacePrice][1], 0,0,park[6], getPlayerName(thePlayer))
+		
+		Parkings[zone][park[1]][park[2]][1] = v
+		setElementData(v, "owner", getPlayerName(thePlayer))
+		outputChatBox("Победитель: #CC9966"..getPlayerName(thePlayer), getRootElement(), 255,255,255, true)
+		triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, park[3], park[4], park[5], "Приз")
+		outputChatBox("Забери свой приз на красном маркере!", thePlayer, 255,255,255,true)
+	end		
 end
 
 
