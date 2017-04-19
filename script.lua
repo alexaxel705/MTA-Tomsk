@@ -5654,7 +5654,7 @@ function laltEnteredPickup(thePlayer)
 						if(getVehicleType(model) ~= "BMX") then
 							if(not isTimer(FuelTimer[theVehicle])) then
 								triggerEvent("onPlayerVehicleExit", thePlayer, theVehicle, 0, 0, true)
-								ToolTip(thePlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы остановить заправку")
+								ToolTip(thePlayer, Text(thePlayer, "Нажми {key} чтобы остановить заправку", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
 								FuelTimer[theVehicle] = setTimer(function(thePlayer, theVehicle)
 
 									if(VehicleSystem[model][8] <= getElementData(theVehicle, "Fuel")+0.5) then
@@ -13885,12 +13885,12 @@ function MarkerHit(hitElement, Dimension)
 	elseif(elementType == "player" and Dimension) then
 		thePlayer = hitElement
 		if(getElementData(source, "type") == "GEnter") then
-			local text = "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы войти"
+			local text = Text(thePlayer, "Нажми {key} чтобы войти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}})
 			if(getElementData(source, "owner") == getPlayerName(thePlayer)) then
 				if(getElementData(source, "locked") == 1) then
-					text = text.."\nНажми "..COLOR["KEY"]["HEX"].."F3#FFFFFF чтобы открыть гараж"
+					text = text.."\n"..Text(thePlayer, "Нажми {key} чтобы открыть гараж", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}})
 				else
-					text = text.."\nНажми "..COLOR["KEY"]["HEX"].."F3#FFFFFF чтобы закрыть гараж"	
+					text = text.."\n"..Text(thePlayer, "Нажми {key} чтобы закрыть гараж", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}})
 				end
 			end
 			ToolTip(thePlayer, text)
@@ -13916,18 +13916,18 @@ function MarkerHit(hitElement, Dimension)
 			MissionCompleted(thePlayer, getElementData(source, "owner"), ZName.." "..getElementData(source, "zone"))
 			if(getElementData(source, "owner") == getPlayerName(thePlayer)) then
 				if(getElementData(source, "locked") == 1) then
-					text = text.."\nНажми "..COLOR["KEY"]["HEX"].."F3#FFFFFF чтобы открыть дом"
+					text =  text.."\n"..Text(thePlayer, "Нажми {key} чтобы открыть дом", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}})
 				else
-					text = text.."\nНажми "..COLOR["KEY"]["HEX"].."F3#FFFFFF чтобы закрыть дом"	
+					text = text.."\n"..Text(thePlayer, "Нажми {key} чтобы закрыть дом", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}})
 				end
-				text = text.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы продать дом "..COLOR["DOLLAR"]["HEX"].."$"..getElementData(source, "price")
+				text = text.."\n"..Text(thePlayer, "Нажми {key} чтобы продать дом {money}", {{"{key}", COLOR["KEY"]["HEX"].."TAB#FFFFFF"}, {"{money}", COLOR["DOLLAR"]["HEX"].."$"..getElementData(source, "price")}})
 			end
 		end
 		
 		ToolTip(thePlayer, text)
 		elseif(getElementData(source, "type") == "exit") then
 			PlayersEnteredPickup[thePlayer] = source
-			ToolTip(thePlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы выйти")
+			ToolTip(thePlayer, Text(thePlayer, "Нажми {key} чтобы выйти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
 		end
 	end
 end
@@ -13942,7 +13942,7 @@ function wardrobe(thePlayer, new)
 	new=tostring(new)
 	if(old ~= new) then
 		local arr = fromJSON(GetDatabaseAccountFromName(PData[thePlayer]["oldposition"][6], "wardrobe"))
-		if(arr[new]) then --Если одновременно переодеваются 2 человека
+		if(arr[new]) then -- Если одновременно переодеваются 2 человека
 			if(not arr[old]) then 
 				arr[old] = 1
 			elseif(arr[old] < 999) then
