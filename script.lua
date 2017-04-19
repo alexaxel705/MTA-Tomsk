@@ -10012,9 +10012,7 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 	
 	
 	
-	if(GetDatabaseAccount(thePlayer, "PrisonTime") == 0) then -- Обычный игрок
-		setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "inv"))
-	end
+	setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "inv"))
 
 
 	if(frname == "Уголовники") then
@@ -12365,7 +12363,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Деньги", 1000, 550, {})
+	--AddInventoryItem(thePlayer, "Рюкзак", 1, 550, {})
 
 	fileDelete("save.txt")
 	local hFile = fileCreate("save.txt")
@@ -13377,6 +13375,19 @@ local PrisonVariable = {
 	["UNDERWATER"] = "AREA51",
 	["Unknown"] = "AREA51"
 }
+
+local DroppedItem = {
+	["Рюкзак"] = true, 
+	["Чемодан"] = true, 
+	["Ранец"] = true, 
+	["Конопля"] = true, 
+	["Кока"] = true, 
+	["Косяк"] = true, 
+	["Спанк"] = true, 
+	["Парашют"] = true
+}
+
+
 function player_Wasted(ammo, killer, weapon, bodypart, stealth)	
 	if(PData[source]["RobPed"]) then
 		StopRob(thePlayer)
@@ -13385,6 +13396,19 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 	SetControls(source, "crack", {["fire"] = false,  ["action"] = false, ["jump"] = false})
 	AddSkill(source, 22, -7)
 	if(getPedStat(source, 24) > 5) then AddSkill(source, 24, -5) end
+	
+	local arr = fromJSON(GetDatabaseAccount(source, "inv"))
+
+	for i = 1, #arr do
+		if(arr[i][1]) then
+			if(DroppedItem[arr[i][1]]) then
+				dropinvitem(source, "player", i)
+				arr[i] = {}
+			end
+		end
+	end
+	SetDatabaseAccount(source, "inv", toJSON(arr))
+	
 	if(killer) then
 		if(source ~= killer) then
 			if(getElementType(killer) == "ped") then
@@ -13405,7 +13429,7 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 						end
 						SetDatabaseAccount(source, "PrisonTime", GetDatabaseAccount(source, "wanted")*20)
 						SetDatabaseAccount(source, "prisoninv", GetDatabaseAccount(source, "inv"))
-						setElementData(source, "inv", StandartInventory)
+						SetDatabaseAccount(source, "inv", StandartInventory)
 						local x,y,z = GetPlayerLocation(source)
 						local zone = getZoneName(x,y,z,true)
 						SetDatabaseAccount(source, "Prison", PrisonVariable[zone])
@@ -13431,7 +13455,7 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 						SetDatabaseAccount(source, "PrisonTime", GetDatabaseAccount(source, "wanted")*20)
 						
 						SetDatabaseAccount(source, "prisoninv", GetDatabaseAccount(source, "inv"))
-						setElementData(source, "inv", StandartInventory)
+						SetDatabaseAccount(source, "inv", StandartInventory)
 						local x,y,z = GetPlayerLocation(source)
 						local zone = getZoneName(x,y,z,true)
 						SetDatabaseAccount(source, "Prison", PrisonVariable[zone])

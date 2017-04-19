@@ -6943,14 +6943,6 @@ function onWasted(killer, weapon, bodypart)
 		if(PData["drx"]) then PData["drx"], PData["dry"], PData["drz"] = false, false, false end
 		setGameSpeed(0.5)
 		
-		for i = 1, #PInv["player"] do
-			if(PInv["player"][i][1]) then
-				if(items[PInv["player"][i][1]][8]) then
-					DropInvItem("player", i)
-				end
-			end
-		end
-		
 		RemoveInventory()
 		PData["wasted"] = Text("ПОТРАЧЕНО")
 		if(killer) then
