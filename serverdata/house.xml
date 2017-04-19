@@ -1,617 +1,617 @@
 <house>
-	<h0 x="-219.7" y="2767" z="62.7" price="35000" locked="1" owner="" type="Маленькая комната" int="Abandonded AC Woter"></h0>
-	<h1 x="-150.2" y="2688.6" z="62.4" price="35000" locked="1" owner="" type="Маленькая комната" int="Denise&apos;s Place"></h1>
-	<h2 x="-169.1" y="2707.2" z="62.5" price="35000" locked="1" owner="" type="Маленькая комната" int="OG Loc&apos;s House"></h2>
-	<h3 x="-161" y="2728.1" z="62.2" price="20000" locked="1" owner="" type="Маленькая комната" int="Big bear apartament"></h3>
-	<h4 x="-155.9" y="2758.5" z="62.6" price="30000" locked="1" owner="" type="Трейлер" int="Angel Pine Trailer"></h4>
-	<h5 x="-164.9" y="2763.6" z="62.7" price="15000" locked="1" owner="" type="Трейлер" int="Angel Pine Trailer"></h5>
-	<h6 x="-165" y="2768.3" z="62.7" price="15000" locked="1" owner="" type="Трейлер" int="Angel Pine Trailer"></h6>
-	<h7 x="-201.8" y="2772.3" z="62.2" price="35000" locked="1" owner="" type="Маленькая комната" int="OG Loc&apos;s House"></h7>
-	<h8 x="-232.5" y="2807.6" z="62.1" price="50000" locked="1" owner="" type="Маленькая комната" int="Katie&apos;s Place"></h8>
-	<h9 x="-258" y="2782.3" z="62.7" price="40000" locked="1" owner="" type="Маленькая комната" int="BDups Crack Palace"></h9>
-	<h10 x="-268.7" y="2769.5" z="61.9" price="30000" locked="1" owner="" type="Маленькая комната" int="Katie&apos;s Place"></h10>
-	<h11 x="-287.2" y="2758" z="62.5" price="50000" locked="1" owner="" type="Маленькая комната" int="Katie&apos;s Place"></h11>
-	<h12 x="-275.4" y="2736.4" z="62.8" price="60000" locked="1" owner="" type="Маленькая комната" int="Big bear apartament"></h12>
-	<h13 x="-279.5" y="2721.8" z="62.8" price="75000" locked="1" owner="" type="Маленькая комната" int="Big bear apartament"></h13>
-	<h14 x="-311.5" y="2726.8" z="63.1" price="75000" locked="1" owner="" type="Маленькая комната" int="BDups Crack Palace"></h14>
-	<h15 x="-404.7" y="2257.9" z="42.9" price="5000" locked="1" owner="" type="Маленькая комната" int="Denise&apos;s Place" dolg="2746"></h15>
-	<h16 x="-375.8" y="2260.5" z="43.1" price="30000" locked="1" owner="" type="Маленькая комната" int="Millie&apos;s Bedroom" dolg="12255"></h16>
-	<h17 x="-357.9" y="2239.3" z="42.5" price="15000" locked="1" owner="" type="Маленькая комната" int="Denise&apos;s Place"></h17>
-	<h18 x="-356.8" y="2235" z="42.5" price="40000" locked="1" owner="" type="Маленькая комната" int="OG Loc&apos;s House"></h18>
-	<h19 x="-624.5" y="2709.9" z="72.4" price="35000" locked="1" owner="" type="Трейлер" int="Angel Pine Trailer"></h19>
-	<h20 x="-582" y="2713" z="72" price="50000" locked="1" owner="" type="Трейлер" int="Angel Pine Trailer" dolg="8150"></h20>
-	<h21 x="-604" y="2716.7" z="72.7" price="100000" locked="1" owner="" type="Маленькая комната" int="BDups Crack Palace"></h21>
-	<h22 x="263.5" y="2895.6" z="10.5" price="35000" locked="1" owner="" type="Маленькая комната" int="Safe House 4" dolg="3757"></h22>
-	<h23 x="-673.2" y="2705.6" z="70.7" price="25000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h23>
-	<h24 x="-641.4" y="2715.6" z="72.6" price="25000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h24>
-	<h25 x="-1450.2" y="2691" z="56.2" price="50000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h25>
-	<h26 x="-1465.9" y="2693" z="56.3" price="65000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h26>
-	<h27 x="-1482.5" y="2702.7" z="56.3" price="40000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h27>
-	<h28 x="-1491.5" y="2686" z="55.9" price="60000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h28>
-	<h29 x="-1511.9" y="2695.9" z="56.1" price="50000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h29>
-	<h30 x="-1529.8" y="2686.2" z="55.8" price="40000" locked="1" type="Маленькая комната" int="Safe House 10"></h30>
-	<h31 x="-1550.4" y="2699.8" z="56.3" price="60000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h31>
-	<h32 x="-1565.1" y="2711.9" z="55.9" price="35000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h32>
-	<h33 x="-1577.6" y="2686.9" z="55.8" price="30000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h33>
-	<h34 x="-1589.8" y="2706.5" z="56.2" price="40000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h34>
-	<h35 x="-1604.2" y="2689.7" z="55.3" price="150000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h35>
-	<h36 x="-1587" y="2650.1" z="55.9" price="25000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h36>
-	<h37 x="-1563.6" y="2651.2" z="55.9" price="35000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h37>
-	<h38 x="-1568.2" y="2630.3" z="55.8" price="30000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h38>
-	<h39 x="-1669.6" y="2597.5" z="81.4" price="65000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h39>
-	<h40 x="-1670.2" y="2546.4" z="85.2" price="50000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h40>
-	<h41 x="-1668.2" y="2486.4" z="87.2" price="60000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h41>
-	<h42 x="-1512.5" y="2646.8" z="56.2" price="50000" locked="1" type="Маленькая комната" int="Safe House 10"></h42>
-	<h43 x="-1532.6" y="2656.6" z="56.3" price="100000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h43>
-	<h44 x="-1459.7" y="2653.5" z="55.8" price="25000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h44>
-	<h45 x="-1445.1" y="2653.2" z="56.3" price="75000" locked="1" type="Маленькая комната" int="Safe House 4"></h45>
-	<h46 x="-1446.6" y="2637.3" z="56.3" price="100000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h46>
-	<h47 x="-1445.3" y="2562.3" z="56" price="15000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h47>
-	<h48 x="-1450" y="2562.3" z="56" price="15000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h48>
-	<h49 x="-1476.2" y="2563.2" z="56.2" price="30000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h49>
-	<h50 x="-1478.6" y="2547.4" z="56.3" price="35000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h50>
-	<h51 x="-911" y="2686" z="42.4" price="200000" locked="1" Garage="[ [ [ -901.4, 2695.5, 42.4, 48.9, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room" dolg="39200"></h51>
-	<h52 x="-258.2" y="1043.9" z="20.9" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 21" dolg="42500"></h52>
-	<h53 x="-247.8" y="1001.1" z="20.9" price="300000" locked="1" Garage="[ [ [ -240.2, 995.3, 19.7, 359.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h53>
-	<h54 x="-278.9" y="1003.1" z="20.9" price="290000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h54>
-	<h55 x="-234.3" y="1051.9" z="19.9" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer" dolg="40200"></h55>
-	<h56 x="827.8" y="-858" z="70.3" price="10000000" locked="1" type="Дом 1 этаж (богатый)" int="Safe House 228"></h56>
-	<h57 x="700.3" y="-1060.3" z="49.4" price="5000000" locked="1" Garage="[ [ [ 691.2000000000001, -1075.7, 49.4, 55.9, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Burglary House 3"></h57>
-	<h58 x="724.7" y="-999.4" z="52.7" price="7500000" locked="1" Garage="[ [ [ 729.1, -996.9, 52.7, 54.8, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Burglary House 3"></h58>
-	<h59 x="836" y="-894.8" z="68.8" price="3500000" locked="1" Garage="[ [ [ 840.6, -898.1, 68.8, 320.8, 1 ], [ 831.4, -891.5, 68.8, 326.1, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 10" dolg="507500"></h59>
-	<h60 x="1497" y="-687.9" z="95.6" price="99999999" locked="1" Garage="[ [ [ 1520.2, -689, 94.8, 93.3, 1 ], [ 1520.2, -694.6, 94.8, 87, 0 ] ] ]" type="Дом 2 этаж (богатый)" int="Safe House 18"></h60>
-	<h61 x="-258.8" y="1083.1" z="20.9" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6" dolg="37625"></h61>
-	<h62 x="-260.3" y="1120" z="20.9" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h62>
-	<h63 x="-258.2" y="1151.1" z="20.9" price="500000" locked="1" Garage="[ [ [ -252.5, 1158.8, 19.7, 89.09999999999999, 0 ] ] ]" dolg="1500" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h63>
-	<h64 x="-258.2" y="1168.9" z="20.9" price="450000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h64>
-	<h65 x="-298.3" y="1115.7" z="20.9" price="450000" locked="1" Garage="[ [ [ -306, 1121.5, 19.7, 183.9, 0 ] ] ]" dolg="450" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h65>
-	<h66 x="-328.2" y="1118.8" z="20.9" price="500000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 13"></h66>
-	<h67 x="2514.3" y="-1691.6" z="14" price="450000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h67>
-	<h68 x="2524.7" y="-1658.6" z="15.8" price="400000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h68>
-	<h69 x="2513.7" y="-1650.2" z="14.4" price="430000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h69>
-	<h70 x="2498.5" y="-1642.3" z="14.1" price="440000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h70>
-	<h71 x="2469.5" y="-1646.4" z="13.8" price="500000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h71>
-	<h72 x="2451.9" y="-1641.4" z="14.1" price="550000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h72>
-	<h73 x="1692.5" y="-1458.7" z="13.7" price="300000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h73>
-	<h74 x="1685.4" y="-1464.5" z="13.7" price="320000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h74>
-	<h75 x="1675.7" y="-1462.3" z="13.6" price="300000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h75>
-	<h76 x="2200" y="-37.4" z="28.2" price="600000" locked="1" Garage="[ [ [ 2187.1, -46.5, 27.5, 267.6, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h76>
-	<h77 x="2197.3" y="-60.7" z="28.2" price="400000" locked="1" Garage="[ [ [ 2197.3, -66, 27.5, 266.1, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h77>
-	<h78 x="2203.1" y="-89.3" z="28.2" price="380000" locked="1" Garage="[ [ [ 2185.8, -80.2, 27.5, 270.8, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h78>
-	<h79 x="2245.5" y="-122.3" z="28.2" price="360000" locked="1" Garage="[ [ [ 2254.6, -135.1, 27.5, 359.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h79>
-	<h80 x="2272.4" y="-119.1" z="28.2" price="350000" locked="1" Garage="[ [ [ 2263.2, -136.5, 27.5, 355, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 9" dolg="38675"></h80>
-	<h81 x="2293.8" y="-125" z="28.2" price="300000" locked="1" Garage="[ [ [ 2298.9, -125, 27.5, 6.6, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h81>
-	<h82 x="2322.3" y="-125" z="28.2" price="100000" locked="1" Garage="[ [ [ 2327.6, -125, 27.5, 0.6, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h82>
-	<h83 x="2313.9" y="-125" z="28.2" price="100000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h83>
-	<h84 x="2367.4" y="-49.1" z="28.2" price="200000" locked="1" Garage="[ [ [ 2358.2, -66.40000000000001, 27.5, 359.5, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h84>
-	<h85 x="2384" y="-55" z="28.2" price="80000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h85>
-	<h86 x="2392.4" y="-55" z="28.2" price="80000" locked="1" Garage="[ [ [ 2397.6, -55, 27.5, 1.1, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h86>
-	<h87 x="2415.5" y="-52.3" z="28.2" price="160000" locked="1" Garage="[ [ [ 2424.6, -65.09999999999999, 27.5, 2.7, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room" dolg="124480"></h87>
-	<h88 x="2438.8" y="-55" z="28.2" price="130000" locked="1" Garage="[ [ [ 2444.1, -55, 27.5, 1.1, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8" dolg="53105"></h88>
-	<h89 x="2245.5" y="-1.7" z="28.2" price="200000" locked="1" Garage="[ [ [ 2240.2, -1.7, 27.5, 180.2, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h89>
-	<h90 x="2254" y="-1.7" z="28.2" price="200000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h90>
-	<h91 x="2270.5" y="-7.7" z="28.2" price="500000" locked="1" Garage="[ [ [ 2279.6, 9.800000000000001, 27.5, 182.4, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h91>
-	<h92 x="2203.9" y="62.2" z="28.4" price="350000" locked="1" Garage="[ [ [ 2205.9, 54.3, 27.8, 266.1, 1 ], [ 2205.9, 58.1, 27.8, 263, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h92>
-	<h93 x="2203.9" y="106.1" z="28.4" price="200000" locked="1" Garage="[ [ [ 2205.9, 110.4, 27.8, 262.3, 1 ], [ 2205.9, 114.2, 27.8, 260.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h93>
-	<h94 x="2484.5" y="-28.4" z="28.4" price="250000" locked="1" Garage="[ [ [ 2480.2, -26.4, 27.8, 356.5, 1 ], [ 2476.5, -26.4, 27.8, 358.7, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h94>
-	<h95 x="2513.3" y="-28.4" z="28.4" price="250000" locked="1" Garage="[ [ [ 2521.3, -26.4, 27.8, 357.4, 0 ], [ 2517.5, -26.4, 27.8, 358.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h95>
-	<h96 x="2551.2" y="-5.5" z="27.7" price="150000" locked="1" Garage="[ [ [ 2557, 2.1, 26.5, 89.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h96>
-	<h97 x="2549.2" y="25.1" z="27.7" price="350000" locked="1" Garage="[ [ [ 2557, 14.1, 27.1, 89.8, 0 ], [ 2557, 9.699999999999999, 27.1, 89.8, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h97>
-	<h98 x="2551.2" y="57.3" z="27.7" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h98>
-	<h99 x="2557" y="87.9" z="27.7" price="250000" locked="1" Garage="[ [ [ 2554.4, 81.5, 26.5, 87, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 13"></h99>
-	<h100 x="2536.2" y="129" z="27.7" price="250000" locked="1" Garage="[ [ [ 2528.6, 134.8, 26.5, 178.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h100>
-	<h101 x="2518.4" y="129" z="27.7" price="200000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h101>
-	<h102 x="2480.6" y="127" z="27.7" price="350000" locked="1" Garage="[ [ [ 2491.5, 134.8, 27.1, 179.4, 0 ], [ 2495.9, 134.8, 27.1, 177.9, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h102>
-	<h103 x="2462.7" y="134.8" z="27.7" price="350000" locked="1" Garage="[ [ [ 2469.2, 132.1, 26.5, 177.9, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h103>
-	<h104 x="2443.9" y="92.3" z="28.4" price="210000" locked="1" Garage="[ [ [ 2445.8, 84.2, 27.8, 267.8, 1 ], [ 2445.8, 87.90000000000001, 27.8, 268.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 12" dolg="166320"></h104>
-	<h105 x="2443.4" y="61.8" z="28.4" price="200000" locked="1" Garage="[ [ [ 2447.7, 59.8, 27.8, 183.2, 1 ], [ 2451.4, 59.8, 27.8, 181.6, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h105>
-	<h106 x="2413.5" y="61.8" z="28.4" price="380000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h106>
-	<h107 x="2398.4" y="111.8" z="28.4" price="300000" locked="1" Garage="[ [ [ 2402.6, 109.8, 27.8, 179.6, 1 ], [ 2406.5, 109.8, 27.8, 179.6, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h107>
-	<h108 x="2364" y="116.1" z="28.4" price="340000" locked="1" Garage="[ [ [ 2362, 124.4, 27.8, 96.3, 1 ], [ 2362, 120.5, 27.8, 90, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h108>
-	<h109 x="2364" y="142" z="28.4" price="330000" locked="1" type="Дом 1 этаж (нормальный)" int="Ryder House"></h109>
-	<h110 x="2364" y="166.1" z="28.4" price="310000" locked="1" Garage="[ [ [ 2362, 174, 27.8, 90.90000000000001, 1 ], [ 2362, 170.2, 27.8, 89.40000000000001, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h110>
-	<h111 x="2364" y="187.2" z="28.4" price="300000" locked="1" Garage="[ [ [ 2362, 182.9, 27.8, 85.59999999999999, 0 ], [ 2362, 179.3, 27.8, 85.59999999999999, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h111>
-	<h112 x="2324.1" y="191.2" z="28.4" price="330000" locked="1" Garage="[ [ [ 2325.8, 195.2, 27.8, 269.8, 0 ], [ 2326.2, 199.1, 27.7, 270.8, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h112>
-	<h113 x="2323.9" y="162.2" z="28.4" price="340000" locked="1" Garage="[ [ [ 2325.8, 158, 27.8, 267.1, 1 ], [ 2325.9, 154.1, 27.8, 273.4, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 13"></h113>
-	<h114 x="2323.9" y="136.3" z="28.4" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h114>
-	<h115 x="2323.9" y="116.1" z="28.4" price="310000" locked="1" Garage="[ [ [ 2325.9, 120.3, 27.8, 269.9, 1 ], [ 2325.8, 124.1, 27.8, 272.4, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h115>
-	<h116 x="2373.8" y="71.1" z="28.4" price="250000" locked="1" Garage="[ [ [ 2375.8, 75.40000000000001, 27.8, 262.6, 1 ], [ 2375.8, 79.3, 27.8, 270.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h116>
-	<h117 x="2373.9" y="42.3" z="28.4" price="175000" locked="1" Garage="[ [ [ 2375.9, 34.2, 27.8, 269.5, 1 ], [ 2375.8, 37.9, 27.8, 271.1, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h117>
-	<h118 x="2373.8" y="21.9" z="28.4" price="150000" locked="1" Garage="[ [ [ 2375.9, 26.2, 27.8, 263.2, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h118>
-	<h119 x="2373.9" y="-8.6" z="28.4" price="175000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h119>
-	<h120 x="2417" y="17.9" z="27.7" price="150000" locked="1" Garage="[ [ [ 2414.3, 11.3, 26.5, 80.90000000000001, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h120>
-	<h121 x="2411.2" y="-5.5" z="27.7" price="145000" locked="1" Garage="[ [ [ 2417, 2, 26.5, 88.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h121>
-	<h122 x="2448.5" y="-11" z="27.7" price="165000" locked="1" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h122>
-	<h123 x="2446.6" y="19" z="27.7" price="163000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h123>
-	<h124 x="2236.4" y="168.3" z="28.2" price="322800" locked="1" Garage="[ [ [ 2231.4, 168.3, 27.5, 180.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h124>
-	<h125 x="2258" y="168.3" z="28.2" price="250000" locked="1" Garage="[ [ [ 2252.7, 168.3, 27.5, 181, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21" dolg="85625"></h125>
-	<h126 x="2285.8" y="161.8" z="28.4" price="290000" locked="1" Garage="[ [ [ 2290.2, 159.8, 27.8, 187.3, 1 ], [ 2294, 159.8, 27.8, 184.2, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Ryder House"></h126>
-	<h127 x="2488.4" y="11.8" z="28.4" price="130000" locked="1" Garage="[ [ [ 2492.7, 9.800000000000001, 27.8, 179.4, 0 ], [ 2496.6, 9.800000000000001, 27.8, 179.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h127>
-	<h128 x="2509.4" y="11.8" z="28.4" price="150000" locked="1" Garage="[ [ [ 2501.6, 9.800000000000001, 27.8, 178.8, 0 ], [ 2505.3, 9.800000000000001, 27.8, 174.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h128>
-	<h129 x="2518.6" y="58.4" z="27.7" price="200000" locked="1" Garage="[ [ [ 2510.8, 69.3, 27.1, 270, 0 ], [ 2510.8, 73.90000000000001, 27.1, 270, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h129>
-	<h130 x="2510.1" y="88.6" z="27.7" price="200000" locked="1" Garage="[ [ [ 2503.5, 91.3, 26.5, 359.9, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h130>
-	<h131 x="2479.4" y="94.4" z="27.7" price="340000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 13"></h131>
-	<h132 x="2481.2" y="64.4" z="27.7" price="320000" locked="1" Garage="[ [ [ 2487, 72, 26.5, 90.09999999999999, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h132>
-	<h133 x="2249.3" y="111.8" z="28.4" price="450000" locked="1" Garage="[ [ [ 2253.4, 109.8, 27.8, 183.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h133>
-	<h134 x="2269.5" y="111.8" z="28.4" price="460000" locked="1" Garage="[ [ [ 2261.4, 109.8, 27.8, 176.9, 1 ], [ 2265.2, 109.8, 27.8, 177.5, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h134>
-	<h135 x="1885.9" y="-1113.7" z="26.3" price="80000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den" dolg="15680"></h135>
-	<h136 x="1906" y="-1113" z="26.7" price="65000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1" dolg="8736"></h136>
-	<h137 x="1921.3" y="-1115.3" z="27.1" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h137>
-	<h138 x="1939.1" y="-1114.5" z="27.5" price="165000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h138>
-	<h139 x="1955.1" y="-1115.3" z="27.8" price="42000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="29799"></h139>
-	<h140 x="1959.6" y="-1070" z="24.8" price="10000" locked="1" type="Маленькая комната" int="BDups Crack Palace" dolg="1290"></h140>
-	<h141 x="1954.4" y="-1075" z="24.8" price="15000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h141>
-	<h142 x="1939.3" y="-1066.4" z="24.4" price="8000" locked="1" type="Маленькая комната" int="Safe House 10"></h142>
-	<h143 x="1934" y="-1071.6" z="24.4" price="7500" locked="1" type="Маленькая комната" int="Big bear apartament"></h143>
-	<h144 x="1916.9" y="-1064.8" z="24.1" price="5000" locked="1" type="Маленькая комната" int="Safe House 10"></h144>
-	<h145 x="1912.6" y="-1070.7" z="24.2" price="4500" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h145>
-	<h146 x="1896" y="-1064.9" z="23.9" price="2000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h146>
-	<h147 x="1891.8" y="-1070.5" z="23.9" price="3400" locked="1" type="Маленькая комната" int="BDups Crack Palace" dolg="2362"></h147>
-	<h148 x="2000.1" y="-1114.1" z="27.1" price="65000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den" dolg="8256"></h148>
-	<h149 x="2022.9" y="-1120.3" z="26.4" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" dolg="33418"></h149>
-	<h150 x="2045.5" y="-1116.6" z="26.4" price="100000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den" dolg="94300"></h150>
-	<h151 x="2094" y="-1122.7" z="27.7" price="120000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" dolg="18180"></h151>
-	<h152 x="2095.4" y="-1145.2" z="26.6" price="90000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="88470"></h152>
-	<h153 x="2092.2" y="-1166.5" z="26.6" price="50000" locked="1" Garage="[ [ [ 2092.2, -1171.1, 25.6, 91.2, 0 ] ] ]" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h153>
-	<h154 x="2091.6" y="-1184.3" z="27.1" price="130000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="16445"></h154>
-	<h155 x="1556.1" y="2658.6" z="10.8" price="800000" locked="1" Garage="[ [ [ 1548.7, 2661.9, 10.8, 358.7, 0 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 12"></h155>
-	<h156 x="1573.1" y="2657.9" z="10.8" price="760000" locked="1" Garage="[ [ [ 1566.2, 2664.4, 10.8, 358.1, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 4"></h156>
-	<h157 x="1554.5" y="2610.6" z="10.8" price="780000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h157>
-	<h158 x="1535.1" y="2610" z="10.8" price="670000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h158>
-	<h159 x="1515.9" y="2610.2" z="11.3" price="1100000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h159>
-	<h160 x="168.2" y="-1768.7" z="4.5" price="550000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h160>
-	<h161 x="192.8" y="-1769.4" z="4.3" price="240000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h161>
-	<h162 x="206.9" y="-1769.2" z="4.4" price="330000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h162>
-	<h163 x="280.9" y="-1767.1" z="4.5" price="420000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h163>
-	<h164 x="295.3" y="-1764.1" z="4.9" price="430000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19" dolg="47085"></h164>
-	<h165 x="305.4" y="-1770.2" z="4.5" price="150000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14" dolg="64575"></h165>
-	<h166 x="315.8" y="-1769.6" z="4.6" price="540000" locked="1" Garage="[ [ [ 322.7, -1769.4, 4.7, 182.3, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 4" dolg="105840"></h166>
-	<h167 x="-2632.4" y="2410.7" z="14" price="440000" locked="1" type="Дом 2 этажа (нормальный)" int="Colonel Fuhrberger&apos;s House"></h167>
-	<h168 x="-2634.8" y="2401.7" z="11.2" price="480000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h168>
-	<h169 x="-2632.5" y="2374.9" z="9" price="500000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 12"></h169>
-	<h170 x="-2627.4" y="2359.5" z="9" price="500000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 5"></h170>
-	<h171 x="-2636.3" y="2351" z="8.5" price="500000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h171>
-	<h172 x="-2627.6" y="2318.6" z="8.3" price="300000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h172>
-	<h173 x="-2627.6" y="2309.9" z="8.3" price="300000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 12"></h173>
-	<h174 x="-2627.6" y="2292" z="8.3" price="400000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 10"></h174>
-	<h175 x="-2627.6" y="2283.4" z="8.3" price="400000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h175>
-	<h176 x="-2597.3" y="2364.6" z="9.9" price="650000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 5"></h176>
-	<h177 x="-2597.3" y="2357.1" z="9.9" price="650000" locked="1" type="Дом 2 этажа (нормальный)" int="Colonel Fuhrberger&apos;s House"></h177>
-	<h178 x="-2583.7" y="2307.9" z="7" price="700000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 5"></h178>
-	<h179 x="-2583.1" y="2300.2" z="7" price="700000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h179>
-	<h180 x="-2552.1" y="2266.5" z="5.5" price="860000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h180>
-	<h181 x="-2523.9" y="2238.8" z="5.4" price="700000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h181>
-	<h182 x="-2437.5" y="2354.9" z="5.4" price="670000" locked="1" Garage="[ [ [ -2427.3, 2349.6, 5, 187.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h182>
-	<h183 x="-2398.1" y="2408.9" z="8.9" price="250000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 4"></h183>
-	<h184 x="-2421.7" y="2406.6" z="13" price="300000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h184>
-	<h185 x="-2479.8" y="2450" z="17.3" price="450000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h185>
-	<h186 x="-2472.4" y="2451.3" z="17.3" price="450000" locked="1" Garage="[ [ [ -2439.4, 2451, 13.8, 268.4, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h186>
-	<h187 x="-2424.7" y="2449" z="13.1" price="600000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h187>
-	<h188 x="-2386.2" y="2447.5" z="10.2" price="400000" locked="1" dolg="108800" type="Дом 2 этажа (нормальный)" int="Johnson House"></h188>
-	<h189 x="-2379.2" y="2444.6" z="10.2" price="400000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 12"></h189>
-	<h190 x="-2348.3" y="2423.6" z="7.3" price="550000" locked="1" type="Дом 2 этажа (нормальный)" int="Johnson House"></h190>
-	<h191 x="-2422.3" y="2490.7" z="13.2" price="80000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h191>
-	<h192 x="-2446.2" y="2490.7" z="15.5" price="75000" locked="1" type="Маленькая комната" int="Safe House 4"></h192>
-	<h193 x="-2446.9" y="2512.2" z="15.7" price="60000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h193>
-	<h194 x="-2463.7" y="2490.6" z="17" price="30000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h194>
-	<h195 x="-2463.3" y="2485.9" z="17" price="30000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h195>
-	<h196 x="-2478.3" y="2488.9" z="18.2" price="55000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h196>
-	<h197 x="-2479" y="2510.1" z="18" price="60000" locked="1" type="Маленькая комната" int="Safe House 10"></h197>
-	<h198 x="1440.7" y="-926.1" z="39.6" price="800000" locked="1" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h198>
-	<h199 x="1411.1" y="-920.9" z="38.4" price="830000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h199>
-	<h200 x="1421.9" y="-886.2" z="50.7" price="700000" locked="1" Garage="[ [ [ 1431, -886.2, 50.7, 359.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h200>
-	<h201 x="1468.6" y="-906.1" z="54.8" price="860000" locked="1" Garage="[ [ [ 1463.9, -906.2, 54.8, 358.6, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Burglary House 3"></h201>
-	<h202 x="1535.7" y="-885.2" z="57.7" price="400000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h202>
-	<h203 x="1540.3" y="-851.4" z="64.3" price="600000" locked="1" Garage="[ [ [ 1540.9, -841.7, 64.3, 88.3, 0 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h203>
-	<h204 x="1535" y="-800.2" z="72.8" price="760000" locked="1" Garage="[ [ [ 1535.1, -813.6, 72.2, 88.2, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 13" dolg="151240"></h204>
-	<h205 x="1527.8" y="-772.6" z="80.6" price="800000" locked="1" Garage="[ [ [ 1518.3, -763.1, 79.90000000000001, 126.4, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8" dolg="766800"></h205>
-	<h206 x="1332.1" y="-633.5" z="109.1" price="10000000" locked="1" Garage="[ [ [ 1353.2, -626.2000000000001, 109.1, 18, 1 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 228"></h206>
-	<h207 x="1442.6" y="-628.8" z="95.7" price="5400000" locked="1" Garage="[ [ [ 1460.4, -629, 95.7, 178.9, 1 ] ] ]" type="Дом 1 этаж (богатый)" int="Burglary House 3"></h207>
-	<h208 x="1298.5" y="-798" z="84.1" price="99999999" locked="1" Garage="[ [ [ 1243, -800.9, 84.09999999999999, 179.9, 0 ], [ 1249.1, -800.9, 84.09999999999999, 183, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 5" dolg="11199776"></h208>
-	<h209 x="1112.6" y="-742.1" z="100.1" price="530000" locked="1" Garage="[ [ [ 1113, -732.3, 100.1, 88.3, 0 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 4" dolg="453415"></h209>
-	<h210 x="1093.9" y="-807.1" z="107.4" price="400000" locked="1" type="Дом 1 этаж (богатый)" int="Safe House 228" dolg="137000"></h210>
-	<h211 x="1034.7" y="-813" z="101.9" price="650000" locked="1" Garage="[ [ [ 1030.5, -814.7, 101.9, 22.3, 1 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 11"></h211>
-	<h212 x="1016.9" y="-763.4" z="112.6" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h212>
-	<h213 x="989.8" y="-828.7" z="95.5" price="450000" locked="1" Garage="[ [ [ 980.9, -833.5, 95.5, 29.8, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 14"></h213>
-	<h214 x="937.9" y="-848.7" z="93.6" price="300000" locked="1" Garage="[ [ [ 946.2, -844.8, 93.59999999999999, 20.7, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place" dolg="40950"></h214>
-	<h215 x="923.7" y="-853" z="93.5" price="500000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6" dolg="355750"></h215>
-	<h216 x="910.4" y="-817.6" z="103.1" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h216>
-	<h217 x="858.5" y="-828.5" z="89.5" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6" dolg="212500"></h217>
-	<h218 x="977.4" y="-771.7" z="112.2" price="700000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h218>
-	<h219 x="1095" y="-647.9" z="113.6" price="10000000" locked="1" Garage="[ [ [ 1086.5, -649.6, 113.6, 359.9, 1 ], [ 1082.4, -649.6, 113.6, 359.3, 1 ] ] ]" type="Дом 2 этаж (богатый)" int="Safe House 18"></h219>
-	<h220 x="1045.2" y="-642.9" z="120.1" price="800000" locked="1" Garage="[ [ [ 1050.6, -642, 120.1, 189, 1 ], [ 1039.6, -643.9, 120.1, 189, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 4" dolg="135600"></h220>
-	<h221 x="980.5" y="-677.2" z="122" price="1500000" locked="1" Garage="[ [ [ 1013.7, -663.1, 121.1, 26.9, 0 ], [ 1008.8, -666.1, 121.1, 25.3, 0 ] ] ]" type="Дом 2 этаж (богатый)" int="Burglary House 15" dolg="310500"></h221>
-	<h222 x="946.3" y="-710.7" z="122.6" price="9000000" locked="1" type="Дом 1 этаж (богатый)" int="Safe House 228"></h222>
-	<h223 x="897.9" y="-677.2" z="116.9" price="1000000" locked="1" type="Дом 1 этаж (богатый)" int="Burglary House 3" dolg="115000"></h223>
-	<h224 x="867.5" y="-717.6" z="105.7" price="1200000" locked="1" Garage="[ [ [ 863.2000000000001, -715.5, 105.7, 334.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h224>
-	<h225 x="891.2" y="-783.1" z="101.3" price="350000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 4"></h225>
-	<h226 x="848" y="-745.5" z="95" price="430000" locked="1" Garage="[ [ [ 845.1, -758.8, 85.3, 131, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h226>
-	<h227 x="808.3" y="-759.3" z="76.5" price="400000" locked="1" Garage="[ [ [ 810.5, -768.8, 76.5, 283.6, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h227>
-	<h228 x="785.9" y="-828.6" z="70.3" price="340000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h228>
-	<h229 x="672.9" y="-1020.5" z="55.8" price="400000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h229>
-	<h230 x="648" y="-1059" z="52.6" price="400000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9" dolg="40200"></h230>
-	<h231 x="612.2" y="-1085.9" z="58.8" price="500000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h231>
-	<h232 x="646" y="-1117.4" z="44.2" price="450000" locked="1" type="Дом 1 этаж (богатый)" int="Safe House 228"></h232>
-	<h233 x="1111.5" y="-976.4" z="42.8" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h233>
-	<h234 x="-75.3" y="-1598.2" z="2.6" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h234>
-	<h235 x="-91.2" y="-1592.6" z="3" price="25000" locked="1" type="Маленькая комната" int="Katie&apos;s Place" dolg="22728"></h235>
-	<h236 x="-102.4" y="-1575.9" z="2.6" price="12000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h236>
-	<h237 x="-89.2" y="-1564.5" z="3" price="18000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h237>
-	<h238 x="-68.7" y="-1545.7" z="3" price="22000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="7040"></h238>
-	<h239 x="-55.9" y="-1555.7" z="2.6" price="9000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h239>
-	<h240 x="-65.1" y="-1573.9" z="2.6" price="6000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h240>
-	<h241 x="-76.2" y="-1581.1" z="3.4" price="7000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h241>
-	<h242 x="-44.4" y="-1563.2" z="2.6" price="13000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h242>
-	<h243 x="-396.2" y="-425.1" z="16.3" price="200000" locked="1" type="Маленькая комната" int="Safe House 4"></h243>
-	<h244 x="-427.6" y="-392.7" z="16.6" price="190000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="20330"></h244>
-	<h245 x="-576.8" y="-1031.9" z="23.8" price="30000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="4440"></h245>
-	<h246 x="-582.6" y="-1040.2" z="23.6" price="31000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h246>
-	<h247 x="-588.8" y="-1048.5" z="23.3" price="30000" locked="1" type="Маленькая комната" int="Safe House 10"></h247>
-	<h248 x="-594.8" y="-1056.9" z="23.4" price="30000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h248>
-	<h249 x="-601.2" y="-1065.4" z="23.4" price="29000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h249>
-	<h250 x="-607.6" y="-1073.9" z="23.5" price="30000" locked="1" type="Маленькая комната" int="BDups Crack Palace" dolg="27660"></h250>
-	<h251 x="2581.5" y="-969.3" z="81.4" price="18000" locked="1" type="Маленькая комната" int="Safe House 10" dolg="16677"></h251>
-	<h252 x="2582.9" y="-953.3" z="81.4" price="15000" locked="1" type="Маленькая комната" int="Big bear apartament"></h252>
-	<h253 x="2552" y="-958.4" z="82.6" price="22000" locked="1" type="Маленькая комната" int="Big bear apartament"></h253>
-	<h254 x="2531.1" y="-963.3" z="82.4" price="20000" locked="1" type="Маленькая комната" int="Safe House 10"></h254>
-	<h255 x="2517.9" y="-965.4" z="82.3" price="15000" locked="1" type="Маленькая комната" int="Big bear apartament"></h255>
-	<h256 x="2499.4" y="-947" z="82.5" price="13000" locked="1" type="Маленькая комната" int="Safe House 10"></h256>
-	<h257 x="2492.1" y="-965.7" z="82.5" price="14000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h257>
-	<h258 x="2472.4" y="-962" z="80.5" price="17000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h258>
-	<h259 x="2459.5" y="-947.7" z="80.1" price="19000" locked="1" type="Маленькая комната" int="Safe House 10" dolg="6273"></h259>
-	<h260 x="2454.2" y="-965" z="80.1" price="16000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House" dolg="8392"></h260>
-	<h261 x="300.3" y="-1154.5" z="81.4" price="25000000" locked="1" Garage="[ [ [ 281, -1157.9, 80.90000000000001, 219.6, 0 ], [ 284.7, -1154.1, 80.90000000000001, 218.7, 1 ] ] ]" type="Дом 2 этаж (богатый)" int="Burglary House 11" dolg="2762500"></h261>
-	<h262 x="251.5" y="-1220.2" z="76.1" price="9000000" locked="1" type="Дом 2 этаж (богатый)" int="Burglary House 15" dolg="963000"></h262>
-	<h263 x="219.2" y="-1249.8" z="78.3" price="7000000" locked="1" type="Дом 2 этаж (богатый)" int="Burglary House 11"></h263>
-	<h264 x="189.6" y="-1308.1" z="70.2" price="9000000" locked="1" Garage="[ [ [ 166.4, -1337.7, 69.90000000000001, 176.8, 0 ], [ 172.2, -1337.6, 70, 180.5, 0 ] ] ]" dolg="3897000" type="Дом 2 этаж (богатый)" int="Burglary House 11"></h264>
-	<h265 x="253.2" y="-1270" z="74.4" price="6000000" locked="1" Garage="[ [ [ 277.6, -1257.1, 73.90000000000001, 306.4, 0 ], [ 274.2, -1252.3, 73.90000000000001, 303.3, 0 ] ] ]" dolg="249000" type="Дом 2 этаж (богатый)" int="Modern safe house"></h265>
-	<h266 x="352.4" y="-1198" z="76.5" price="900000" locked="1" Garage="[ [ [ 348.8, -1200.9, 76.5, 43.3, 1 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 228"></h266>
-	<h267 x="565.9" y="-1113.3" z="62.8" price="450000" locked="1" Garage="[ [ [ 567.5, -1129.6, 50.7, 211.7, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 11"></h267>
-	<h268 x="580.6" y="-1149.7" z="53.2" price="650000" locked="1" type="Дом 1 этаж (нормальный)" int="Ryder House"></h268>
-	<h269 x="558.8" y="-1161.1" z="54.4" price="400000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h269>
-	<h270 x="534.9" y="-1174.1" z="58.8" price="760000" locked="1" type="Дом 1 этаж (нормальный)" int="Ryder House"></h270>
-	<h271 x="559.1" y="-1076.4" z="72.9" price="650000" locked="1" Garage="[ [ [ 567.8, -1071.9, 72.90000000000001, 28.9, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h271>
-	<h272 x="496.8" y="-1095" z="82.4" price="900000" locked="1" Garage="[ [ [ 479.7, -1094.5, 82.40000000000001, 358.3, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 228"></h272>
-	<h273 x="470.7" y="-1163.6" z="67.2" price="850000" locked="1" type="Дом 1 этаж (нормальный)" int="Ryder House"></h273>
-	<h274 x="416.8" y="-1154.1" z="76.7" price="400000" locked="1" Garage="[ [ [ 408.8, -1148.8, 76.7, 147, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 10" dolg="44800"></h274>
-	<h275 x="553.1" y="-1200.2" z="44.8" price="600000" locked="1" Garage="[ [ [ 543.7, -1204, 44.8, 17.1, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Burglary House 3" dolg="102000"></h275>
-	<h276 x="432.1" y="-1253.9" z="51.6" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22" dolg="194625"></h276>
-	<h277 x="398.2" y="-1271.4" z="50" price="400000" locked="1" Garage="[ [ [ 407.5, -1267.3, 50, 17, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 11"></h277>
-	<h278 x="355.1" y="-1281.2" z="53.7" price="130000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h278>
-	<h279 x="298.8" y="-1338.5" z="53.4" price="1600000" locked="1" type="Дом 2 этаж (богатый)" int="Safe House 18" dolg="329600"></h279>
-	<h280 x="254.5" y="-1367.2" z="53.1" price="25000000" locked="1" Garage="[ [ [ 248.2, -1361.4, 53.1, 307.9, 0 ], [ 245.8, -1358, 53.1, 304.7, 0 ] ] ]" dolg="6800000" type="Дом 2 этаж (богатый)" int="Safe House 18"></h280>
-	<h281 x="228.1" y="-1405.5" z="51.6" price="10000000" locked="1" type="Дом 1 этаж (богатый)" int="Burglary House 3" dolg="1105000"></h281>
-	<h282 x="161.5" y="-1455.9" z="32.8" price="90000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h282>
-	<h283 x="142.1" y="-1470" z="25.2" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22" dolg="34750"></h283>
-	<h284 x="-2789.2" y="-181.4" z="10.1" price="250000" locked="1" Garage="[ [ [ -2793.1, -184.1, 7.2, 89.90000000000001, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h284>
-	<h285 x="-2786.8" y="-175.4" z="10.1" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h285>
-	<h286 x="-2790.3" y="-168.3" z="7.2" price="240000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 13"></h286>
-	<h287 x="-2791.9" y="-160.5" z="10.1" price="270000" locked="1" Garage="[ [ [ -2793.1, -158.2, 7.2, 86.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Ryder House"></h287>
-	<h288 x="-2792.8" y="-153.1" z="7.6" price="234000" locked="1" Garage="[ [ [ -2793.1, -149.4, 7.2, 92.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h288>
-	<h289 x="-2791.6" y="-146" z="7.9" price="246000" locked="1" Garage="[ [ [ -2793.1, -140.8, 7.2, 91.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Ryder House"></h289>
-	<h290 x="-2791.8" y="-134.5" z="10.1" price="252000" locked="1" Garage="[ [ [ -2793.1, -136.7, 7.2, 89.3, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h290>
-	<h291 x="-2793.1" y="-127.2" z="7.2" price="236000" locked="1" Garage="[ [ [ -2793.1, -121, 7.2, 88.3, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h291>
-	<h292 x="-2786.8" y="-118.3" z="10.1" price="255000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h292>
-	<h293 x="-2790.3" y="-111.2" z="7.2" price="235000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h293>
-	<h294 x="-2791.6" y="-107.4" z="7.9" price="245000" locked="1" Garage="[ [ [ -2793.1, -102.4, 7.2, 89.59999999999999, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 13" dolg="2666"></h294>
-	<h295 x="-2791.8" y="-94.8" z="10.1" price="252000" locked="1" Garage="[ [ [ -2793.1, -92.3, 7.2, 91.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h295>
-	<h296 x="-2786.8" y="-89.7" z="10.1" price="248000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h296>
-	<h297 x="-2790.3" y="-82.6" z="7.2" price="239000" locked="1" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h297>
-	<h298 x="-2725.7" y="-92.5" z="7.2" price="240000" locked="1" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h298>
-	<h299 x="-2728.2" y="-98.5" z="7.2" price="235000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h299>
-	<h300 x="-2724.7" y="-105.6" z="4.3" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h300>
-	<h301 x="-2723" y="-113.4" z="7.2" price="240000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h301>
-	<h302 x="-2722.1" y="-120.7" z="4.8" price="230000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h302>
-	<h303 x="-2723.3" y="-127.9" z="5" price="260000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h303>
-	<h304 x="-2723.1" y="-139.4" z="7.2" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h304>
-	<h305 x="-2721.8" y="-146.7" z="4.3" price="243000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h305>
-	<h306 x="-2728.2" y="-155.6" z="7.2" price="240000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h306>
-	<h307 x="-2724.7" y="-162.6" z="4.3" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h307>
-	<h308 x="-2723.3" y="-166.5" z="5" price="235000" locked="1" dolg="25048" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h308>
-	<h309 x="-2723.1" y="-179.1" z="7.2" price="240000" locked="1" dolg="15600" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h309>
-	<h310 x="-2728.2" y="-184.2" z="7.2" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6" dolg="2385"></h310>
-	<h311 x="-2724.7" y="-191.2" z="4.3" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h311>
-	<h312 x="2148.9" y="-1484.9" z="26.6" price="87000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place" dolg="66134"></h312>
-	<h313 x="2146.8" y="-1470.5" z="26" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h313>
-	<h314 x="2152.2" y="-1446.3" z="26.1" price="50000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="35550"></h314>
-	<h315 x="2149.8" y="-1433.8" z="26.1" price="53000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" dolg="47996"></h315>
-	<h316 x="2150.9" y="-1419.1" z="25.9" price="70000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1" dolg="10535"></h316>
-	<h317 x="2151.2" y="-1400.7" z="26.1" price="75000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h317>
-	<h318 x="2196.2" y="-1404.1" z="25.9" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h318>
-	<h319 x="2188.6" y="-1419.2" z="26.2" price="60000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h319>
-	<h320 x="2194.4" y="-1442.9" z="26.1" price="50000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h320>
-	<h321 x="2191.1" y="-1455.8" z="26" price="60000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="54000"></h321>
-	<h322 x="2190.5" y="-1470.4" z="25.9" price="80000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den" dolg="34920"></h322>
-	<h323 x="2190.3" y="-1487.6" z="26.1" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h323>
-	<h324 x="-2069.3" y="-2495.1" z="31.1" price="42000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h324>
-	<h325 x="-2087.1" y="-2510.6" z="31.1" price="41000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h325>
-	<h326 x="-2101.1" y="-2532.7" z="31.1" price="50000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h326>
-	<h327 x="-2058.1" y="-2503.6" z="31.1" price="67000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h327>
-	<h328 x="-2075.3" y="-2526.2" z="31.1" price="55000" locked="1" type="Маленькая комната" int="Safe House 4"></h328>
-	<h329 x="-2082" y="-2548.3" z="30.8" price="45000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h329>
-	<h330 x="-2045.1" y="-2522.4" z="31.1" price="47800" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h330>
-	<h331 x="-2053" y="-2544.7" z="31.1" price="54000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h331>
-	<h332 x="-2068.8" y="-2561.7" z="31.1" price="46000" locked="1" type="Маленькая комната" int="Big bear apartament"></h332>
-	<h333 x="-2067.7" y="-2536.8" z="30.8" price="39000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h333>
-	<h334 x="-2042.5" y="-2558.7" z="30.8" price="35000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h334>
-	<h335 x="-2031.3" y="-2538.9" z="31.1" price="42000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h335>
-	<h336 x="1364.5" y="1896.7" z="11.5" price="95000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2" dolg="10528"></h336>
-	<h337 x="1364" y="1931.6" z="11.5" price="88000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h337>
-	<h338 x="1336.4" y="1931.4" z="11.5" price="112000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3" dolg="106344"></h338>
-	<h339 x="1309.3" y="1931.2" z="11.5" price="109000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 21" dolg="18306"></h339>
-	<h340 x="2826.1" y="2140.7" z="10.8" price="50000" locked="1" type="Маленькая комната" int="Katie&apos;s Place" dolg="4100"></h340>
-	<h341 x="2818.5" y="2140.8" z="10.8" price="50000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h341>
-	<h342 x="2818.5" y="2134.5" z="10.8" price="45000" locked="1" type="Маленькая комната" int="Safe House 10" dolg="1232"></h342>
-	<h343 x="2826.1" y="2134.5" z="10.8" price="45000" locked="1" type="Маленькая комната" int="Big bear apartament"></h343>
-	<h344 x="2818.5" y="2134.5" z="14.7" price="43000" locked="1" type="Маленькая комната" int="Safe House 4"></h344>
-	<h345 x="2826.1" y="2134.4" z="14.7" price="43000" locked="1" type="Маленькая комната" int="Abandonded AC Woter" dolg="19005"></h345>
-	<h346 x="2818.5" y="2140.8" z="14.7" price="47000" locked="1" type="Маленькая комната" int="Safe House 10"></h346>
-	<h347 x="2826.1" y="2140.8" z="14.7" price="47000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h347>
-	<h348 x="2532.3" y="750.1" z="10.8" price="50000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h348>
-	<h349 x="2532.3" y="742.5" z="10.8" price="50000" locked="1" type="Маленькая комната" int="Big bear apartament"></h349>
-	<h350 x="2526.1" y="750.1" z="10.8" price="45000" locked="1" type="Маленькая комната" int="Safe House 10"></h350>
-	<h351 x="2526" y="742.5" z="10.8" price="45000" locked="1" type="Маленькая комната" int="Safe House 4"></h351>
-	<h352 x="2526" y="742.5" z="14.7" price="41000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h352>
-	<h353 x="2526.1" y="750.1" z="14.7" price="41000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h353>
-	<h354 x="2532.3" y="742.6" z="14.7" price="47000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h354>
-	<h355 x="2532.4" y="750.1" z="14.7" price="47000" locked="1" type="Маленькая комната" int="Safe House 4"></h355>
-	<h356 x="751.7" y="375.3" z="23.4" price="15000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h356>
-	<h357 x="758.9" y="375.1" z="23.4" price="40000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h357>
-	<h358 x="783.2" y="377.5" z="21.3" price="25000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h358>
-	<h359 x="787.6" y="375.8" z="21.3" price="25000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h359>
-	<h360 x="808.1" y="372.3" z="19.5" price="20000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h360>
-	<h361 x="805.4" y="358.4" z="19.8" price="21000" locked="1" type="Маленькая комната" int="Safe House 4"></h361>
-	<h362 x="783.9" y="352.6" z="19.6" price="30000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h362>
-	<h363 x="772.9" y="348.2" z="20.2" price="27000" locked="1" type="Маленькая комната" int="Safe House 4"></h363>
-	<h364 x="748.4" y="350.9" z="20.6" price="23000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h364>
-	<h365 x="1684.5" y="2046.6" z="11.5" price="110000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2" dolg="86295"></h365>
-	<h366 x="1680.4" y="2069.2" z="11.4" price="130000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 13" dolg="48880"></h366>
-	<h367 x="1685.4" y="2093.8" z="11.5" price="125000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h367>
-	<h368 x="1684.5" y="2123.4" z="11.5" price="105000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h368>
-	<h369 x="1641.8" y="2044.9" z="11.3" price="107000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h369>
-	<h370 x="1640.2" y="2075.7" z="11.3" price="114000" locked="1" type="Дом 1 этаж (нормальный)" int="Ryder House"></h370>
-	<h371 x="1640.4" y="2102.9" z="11.3" price="114000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h371>
-	<h372 x="1645.4" y="2127.4" z="11.2" price="130000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h372>
-	<h373 x="1641.3" y="2149.7" z="11.3" price="100000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h373>
-	<h374 x="207.1" y="-112.3" z="4.9" price="8000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h374>
-	<h375 x="201.5" y="-118.2" z="4.9" price="7000" locked="1" type="Маленькая комната" int="Big bear apartament"></h375>
-	<h376 x="201.5" y="-97" z="4.9" price="7500" locked="1" type="Маленькая комната" int="Big bear apartament"></h376>
-	<h377 x="189.4" y="-97" z="4.9" price="8000" locked="1" type="Маленькая комната" int="Safe House 4"></h377>
-	<h378 x="178.3" y="-97" z="4.9" price="7000" locked="1" type="Маленькая комната" int="Safe House 4"></h378>
-	<h379 x="166.3" y="-97" z="4.9" price="7500" locked="1" type="Маленькая комната" int="Safe House 10"></h379>
-	<h380 x="160.6" y="-102.6" z="4.9" price="8000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h380>
-	<h381 x="160.6" y="-112.6" z="4.9" price="8000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h381>
-	<h382 x="166.3" y="-118.2" z="4.9" price="7500" locked="1" type="Маленькая комната" int="Safe House 4"></h382>
-	<h383 x="178.3" y="-118.2" z="4.9" price="7000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h383>
-	<h384 x="201.4" y="-120.2" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h384>
-	<h385 x="209.1" y="-112.6" z="1.6" price="10500" locked="1" type="Маленькая комната" int="Safe House 10" dolg="2605"></h385>
-	<h386 x="201.4" y="-95" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h386>
-	<h387 x="166.3" y="-95" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h387>
-	<h388 x="158.6" y="-102.6" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="1695"></h388>
-	<h389 x="158.6" y="-112.6" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h389>
-	<h390 x="166.3" y="-120.2" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Safe House 10"></h390>
-	<h391 x="178.3" y="-120.2" z="1.5" price="10000" locked="1" type="Маленькая комната" int="Safe House 10" dolg="2340"></h391>
-	<h392 x="189.4" y="-120.2" z="1.5" price="10000" locked="1" type="Маленькая комната" int="Safe House 4"></h392>
-	<h393 x="201.4" y="-120.2" z="1.6" price="10000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h393>
-	<h394 x="2756.3" y="-1182.8" z="69.4" price="300000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h394>
-	<h395 x="2750.4" y="-1205.7" z="67.5" price="198000" locked="1" type="Маленькая комната" int="Safe House 4"></h395>
-	<h396 x="2750.4" y="-1222.2" z="64.6" price="201000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h396>
-	<h397 x="2750.4" y="-1238.8" z="61.5" price="202000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h397>
-	<h398 x="2776" y="-1245.4" z="49.6" price="500000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h398>
-	<h399 x="2797.9" y="-1245.4" z="47.4" price="610000" locked="1" type="Маленькая комната" int="Big bear apartament"></h399>
-	<h400 x="2809.5" y="-1281" z="43.9" price="550000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h400>
-	<h401 x="2809.5" y="-1303" z="38.9" price="510000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h401>
-	<h402 x="2809.5" y="-1324.9" z="33.9" price="632000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h402>
-	<h403 x="2808" y="-1354" z="27.2" price="250000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h403>
-	<h404 x="2808" y="-1369.5" z="23.6" price="250000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h404>
-	<h405 x="2756.3" y="-1302.5" z="53.1" price="230000" locked="1" type="Маленькая комната" int="Big bear apartament"></h405>
-	<h406 x="2755.8" y="-1276.5" z="56.6" price="210000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h406>
-	<h407 x="2782.2" y="-1281.3" z="44.4" price="520000" locked="1" type="Маленькая комната" int="Safe House 4"></h407>
-	<h408 x="2782.2" y="-1306.3" z="38.9" price="530000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h408>
-	<h409 x="2781.9" y="-1333.5" z="32.4" price="486000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h409>
-	<h410 x="2781.9" y="-1358.6" z="26.4" price="467000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h410>
-	<h411 x="746.4" y="305" z="20.2" price="33000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h411>
-	<h412 x="719.1" y="300.6" z="20.4" price="26000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h412>
-	<h413 x="705.4" y="292.1" z="20.4" price="18000" locked="1" type="Маленькая комната" int="Safe House 10"></h413>
-	<h414 x="723.7" y="269.7" z="22.5" price="16000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h414>
-	<h415 x="748.2" y="257.1" z="27.1" price="27000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h415>
-	<h416 x="747.1" y="278.2" z="27.2" price="30000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="10605"></h416>
-	<h417 x="2413.9" y="-1646.8" z="14" price="525000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h417>
-	<h418 x="2393.2" y="-1646" z="13.9" price="510000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h418>
-	<h419 x="2362.9" y="-1643.1" z="14.4" price="450000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h419>
-	<h420 x="2409" y="-1674.9" z="14.4" price="560000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h420>
-	<h421 x="2384.6" y="-1675.8" z="15.2" price="610000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h421>
-	<h422 x="2368.3" y="-1675.3" z="14.2" price="580000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h422>
-	<h423 x="2282.3" y="-1641.2" z="15.9" price="565000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h423>
-	<h424 x="2257.1" y="-1644" z="15.8" price="500000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h424>
-	<h425 x="2244.5" y="-1637.6" z="16.2" price="670000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h425>
-	<h426 x="2695.4" y="-2020.5" z="14" price="250000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h426>
-	<h427 x="2673.3" y="-2020.3" z="14.2" price="230000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h427>
-	<h428 x="2650.7" y="-2021.8" z="14.2" price="375000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h428>
-	<h429 x="2635.6" y="-2012.9" z="14.1" price="350000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h429>
-	<h430 x="2637.1" y="-1991.7" z="14.3" price="340000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h430>
-	<h431 x="2652.8" y="-1989.4" z="14" price="265000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h431>
-	<h432 x="2672.7" y="-1989.5" z="14.3" price="275000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h432>
-	<h433 x="2696.4" y="-1990.4" z="14.2" price="245000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h433>
-	<h434 x="745.7" y="-591.1" z="18" price="340000" locked="1" Garage="[ [ [ 758.5, -582, 17.3, 92.3, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Ryder House"></h434>
-	<h435 x="736.7" y="-556.8" z="18" price="200000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House" dolg="34000"></h435>
-	<h436 x="745.1" y="-556.8" z="18" price="200000" locked="1" Garage="[ [ [ 750.4, -556.8, 17.3, 349.2, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 16" dolg="34000"></h436>
-	<h437 x="766.6" y="-556.8" z="18" price="310000" locked="1" Garage="[ [ [ 772, -556.8, 17.3, 350.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3" dolg="110050"></h437>
-	<h438 x="818.3" y="-509.3" z="18" price="350000" locked="1" Garage="[ [ [ 827.5, -492, 17.3, 182.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 22" dolg="332325"></h438>
-	<h439 x="795.2" y="-506.2" z="18" price="364000" locked="1" Garage="[ [ [ 786, -493.3, 17.3, 168.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h439>
-	<h440 x="776.7" y="-503.5" z="18" price="215000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h440>
-	<h441 x="768.2" y="-503.5" z="18" price="215000" locked="1" Garage="[ [ [ 763, -503.5, 17.3, 177.8, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h441>
-	<h442 x="743.3" y="-509.3" z="18" price="289000" locked="1" Garage="[ [ [ 752.4, -492, 17.3, 173.7, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h442>
-	<h443 x="252.9" y="-121.3" z="3.5" price="495000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h443>
-	<h444 x="252.9" y="-92.4" z="3.5" price="540000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20" dolg="60480"></h444>
-	<h445 x="271.6" y="-48.8" z="2.8" price="600000" locked="1" Garage="[ [ [ 278.3, -51.4, 1.6, 178.2, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h445>
-	<h446 x="295" y="-54.5" z="2.8" price="595000" locked="1" Garage="[ [ [ 287.6, -48.8, 1.6, 180.7, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h446>
-	<h447 x="312.7" y="-92.4" z="3.5" price="597000" locked="1" Garage="[ [ [ 314.7, -88, 2.9, 271.9, 0 ], [ 314.7, -84.3, 2.9, 269.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h447>
-	<h448 x="312.7" y="-121.3" z="3.5" price="585000" locked="1" Garage="[ [ [ 314.7, -129.3, 2.9, 268.7, 0 ], [ 314.7, -125.5, 2.9, 268.1, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h448>
-	<h449 x="2700.2" y="-1200.1" z="69" price="20000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h449>
-	<h450 x="2700.2" y="-1203.1" z="68.2" price="20000" locked="1" type="Маленькая комната" int="Big bear apartament"></h450>
-	<h451 x="2700.2" y="-1207.6" z="67.3" price="20000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h451>
-	<h452 x="2700.2" y="-1211.8" z="66.1" price="20000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h452>
-	<h453 x="2700.2" y="-1216.3" z="64.7" price="20000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h453>
-	<h454 x="2700.2" y="-1220.6" z="63.4" price="20000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h454>
-	<h455 x="2700.2" y="-1224.8" z="62.1" price="20000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h455>
-	<h456 x="2700.2" y="-1229.3" z="60.8" price="20000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h456>
-	<h457 x="2700.2" y="-1233.5" z="59.6" price="20000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h457>
-	<h458 x="2700.2" y="-1238" z="58.2" price="20000" locked="1" type="Маленькая комната" int="Big bear apartament"></h458>
-	<h459 x="2690.5" y="-1238" z="57.5" price="20000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h459>
-	<h460 x="2690.6" y="-1233.5" z="58.9" price="20000" locked="1" type="Маленькая комната" int="Safe House 4"></h460>
-	<h461 x="2326.9" y="-1682" z="14.9" price="725000" locked="1" Garage="[ [ [ 2324.8, -1677.3, 14.4, 271.5, 0 ] ] ]" type="Дом 1 этаж (бедный)" int="The Crack Den"></h461>
-	<h462 x="2385.4" y="-1711.7" z="14.2" price="740000" locked="1" Garage="[ [ [ 2390, -1709.5, 13.6, 180.3, 0 ] ] ]" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h462>
-	<h463 x="2326.8" y="-1716.7" z="14.2" price="450000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h463>
-	<h464 x="2308.9" y="-1714.3" z="15" price="325000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" dolg="274752"></h464>
-	<h465 x="-2662" y="876.3" z="79.8" price="800000" locked="1" Garage="[ [ [ -2679.9, 865, 76.3, 3.8, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 14" dolg="779200"></h465>
-	<h466 x="-2670" y="927.4" z="79.7" price="760000" locked="1" type="Дом 2 этажа (нормальный)" int="Colonel Fuhrberger&apos;s House"></h466>
-	<h467 x="-2641.2" y="935.7" z="72" price="520000" locked="1" type="Дом 2 этаж (богатый)" int="Modern safe house" dolg="48100"></h467>
-	<h468 x="-881.4" y="1562.6" z="26.2" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h468>
-	<h469 x="-883.9" y="1552.7" z="26.1" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h469>
-	<h470 x="-905.6" y="1542.8" z="26.1" price="60000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h470>
-	<h471 x="-884.3" y="1538.3" z="26" price="30000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h471>
-	<h472 x="-879.7" y="1538.7" z="26" price="30000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h472>
-	<h473 x="-881.8" y="1531.7" z="26.1" price="40000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h473>
-	<h474 x="-905.4" y="1528.6" z="26.1" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h474>
-	<h475 x="-881.7" y="1513.7" z="26" price="33000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h475>
-	<h476 x="-886.4" y="1514.1" z="26" price="33000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h476>
-	<h477 x="-906.5" y="1514.6" z="26.3" price="75000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h477>
-	<h478 x="253.3" y="-22.3" z="1.6" price="295000" locked="1" type="Маленькая комната" int="Safe House 4"></h478>
-	<h479 x="248.7" y="-33.2" z="1.6" price="430000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h479>
-	<h480 x="709.9" y="1194.8" z="13.4" price="96500" locked="1" type="Маленькая комната" int="Safe House 10"></h480>
-	<h481 x="710.4" y="1208.1" z="13.8" price="88000" locked="1" dolg="3652" type="Маленькая комната" int="Big bear apartament"></h481>
-	<h482 x="876.2" y="-1512.9" z="14.3" price="235000" locked="1" Garage="[ [ [ 876, -1505.1, 12.5, 93.7, 1 ] ] ]" type="Маленькая комната" int="Safe House 10" dolg="26325"></h482>
-	<h483 x="739.1" y="-1428.8" z="13.9" price="150000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h483>
-	<h484 x="725.6" y="-1440.4" z="13.5" price="125000" locked="1" type="Маленькая комната" int="Abandonded AC Woter" dolg="39432"></h484>
-	<h485 x="725.7" y="-1451" z="17.7" price="140000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h485>
-	<h486 x="2808" y="-1175.9" z="25.4" price="730000" locked="1" Garage="[ [ [ 2824.6, -1170.1, 25.2, 270.6, 0 ], [ 2824.6, -1165, 25.3, 269, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h486>
-	<h487 x="2808.1" y="-1190.9" z="25.3" price="725000" locked="1" Garage="[ [ [ 2824.6, -1201.5, 25.2, 270.6, 0 ], [ 2824.6, -1196.2, 25.2, 266.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3" dolg="317836"></h487>
-	<h488 x="2579.6" y="-1033.2" z="69.6" price="35000" locked="1" type="Маленькая комната" int="Big bear apartament"></h488>
-	<h489 x="2562.1" y="-1034.3" z="69.9" price="40000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h489>
-	<h490 x="2549.2" y="-1032.3" z="69.6" price="38000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h490>
-	<h491 x="2526.8" y="-1033.5" z="69.6" price="32000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h491>
-	<h492 x="2512.8" y="-1027.2" z="70.1" price="41000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House" dolg="6760"></h492>
-	<h493 x="2491.4" y="-1012.3" z="65.4" price="45000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h493>
-	<h494 x="2462.3" y="-1011.1" z="60.1" price="42000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="10626"></h494>
-	<h495 x="2439.9" y="-1010.9" z="54.3" price="34000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom" dolg="3621"></h495>
-	<h496 x="2389.2" y="-1037.1" z="53.5" price="30000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h496>
-	<h497 x="2370.2" y="-1034.6" z="54.4" price="35000" locked="1" type="Маленькая комната" int="BDups Crack Palace" dolg="26945"></h497>
-	<h498 x="2373" y="-1051.4" z="54.1" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h498>
-	<h499 x="2362.7" y="-1046.4" z="54.3" price="15000" locked="1" type="Трейлер" int="Angel Pine Trailer" dolg="7896"></h499>
-	<h500 x="2355.5" y="-1038.6" z="54.3" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h500>
-	<h501 x="2351" y="-1039.8" z="54.3" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer" dolg="4365"></h501>
-	<h502 x="2355.8" y="-1058.8" z="54.1" price="11000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h502>
-	<h503 x="2348.1" y="-1047.5" z="53.9" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer" dolg="3200"></h503>
-	<h504 x="2335.1" y="-1046" z="52.6" price="25000" locked="1" type="Маленькая комната" int="Denise&apos;s Place" dolg="23280"></h504>
-	<h505 x="2330.2" y="-1060.9" z="52.5" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h505>
-	<h506 x="2325.4" y="-1061" z="52.5" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h506>
-	<h507 x="2319.8" y="-1053.3" z="52.5" price="13000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h507>
-	<h508 x="2297.6" y="-1053" z="49.9" price="17000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h508>
-	<h509 x="2284.1" y="-1046.1" z="49.9" price="18000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h509>
-	<h510 x="2307" y="-1679.2" z="14.3" price="450000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h510>
-	<h511 x="2067.1" y="-1731.6" z="14.2" price="350000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h511>
-	<h512 x="2066.2" y="-1717.1" z="14.1" price="325000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h512>
-	<h513 x="2065.1" y="-1703.5" z="14.1" price="750000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h513>
-	<h514 x="2066.8" y="-1656.5" z="14.1" price="335000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h514>
-	<h515 x="2067.6" y="-1643.7" z="14.1" price="360000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h515>
-	<h516 x="2067.7" y="-1628.9" z="14.2" price="360000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h516>
-	<h517 x="-2099.6" y="897.4" z="76.7" price="350000" locked="1" dolg="14525" type="Маленькая комната" int="Abandonded AC Woter"></h517>
-	<h518 x="-2075.1" y="898.6" z="64.1" price="300000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h518>
-	<h519 x="-2084.7" y="898.6" z="64.1" price="300000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h519>
-	<h520 x="-2034.3" y="901.5" z="50.5" price="290000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h520>
-	<h521 x="-2116.8" y="927.8" z="86.1" price="400000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h521>
-	<h522 x="-2059" y="889.4" z="61.9" price="300000" locked="1" type="Маленькая комната" int="Safe House 4"></h522>
-	<h523 x="-1802.6" y="2037.7" z="9.6" price="100000" locked="1" type="Маленькая комната" int="Big bear apartament"></h523>
-	<h524 x="-1827.1" y="2042.3" z="8.7" price="96000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h524>
-	<h525 x="-1500" y="1960.1" z="49" price="235000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h525>
-	<h526 x="2457.8" y="-1054.6" z="60" price="66000" locked="1" type="Маленькая комната" int="Katie&apos;s Place" dolg="7095"></h526>
-	<h527 x="2479.7" y="-1064" z="67" price="65000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h527>
-	<h528 x="2499.7" y="-1065.6" z="70.2" price="40000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h528>
-	<h529 x="2526.1" y="-1060.7" z="70" price="35000" locked="1" type="Маленькая комната" int="BDups Crack Palace" dolg="13770"></h529>
-	<h530 x="2534.5" y="-1063.4" z="69.6" price="30000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h530>
-	<h531 x="2576.7" y="-1070.7" z="69.8" price="30000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="12900"></h531>
-	<h532 x="2572.3" y="-1091.8" z="67.2" price="32000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h532>
-	<h533 x="2519" y="-1113" z="56.6" price="55000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h533>
-	<h534 x="2470.6" y="-1105.3" z="44.5" price="30000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h534>
-	<h535 x="2457" y="-1102.5" z="43.9" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h535>
-	<h536 x="2438.6" y="-1105.8" z="43.1" price="34000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h536>
-	<h537 x="2407.8" y="-1107" z="40.3" price="34000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h537>
-	<h538 x="2374" y="-1138.9" z="29.1" price="40000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1" dolg="29820"></h538>
-	<h539 x="2394.9" y="-1133.5" z="30.7" price="84000" locked="1" Garage="[ [ [ 2399.7, -1131.3, 30.1, 181.5, 1 ] ] ]" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h539>
-	<h540 x="2427.4" y="-1135.8" z="34.7" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h540>
-	<h541 x="2488.1" y="-1135.2" z="39.6" price="34000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h541>
-	<h542 x="2510.6" y="-1132.7" z="41.6" price="25000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="12636"></h542>
-	<h543 x="-2075.8" y="-2312.8" z="31.1" price="235000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h543>
-	<h544 x="1519.1" y="-1453.9" z="14.2" price="525000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14" dolg="52662"></h544>
-	<h545 x="2313" y="-1259.4" z="23.9" price="45000" locked="1" type="Гараж" dolg="4928"></h545>
-	<h546 x="2313" y="-1265" z="23.9" price="45000" locked="1" type="Гараж" dolg="25124"></h546>
-	<h547 x="2313" y="-1270.6" z="23.9" price="45000" locked="1" type="Гараж" dolg="4422"></h547>
-	<h548 x="2313" y="-1276" z="23.9" price="45000" locked="1" type="Гараж" dolg="4422"></h548>
-	<h549 x="1596.4" y="2147.5" z="11.5" price="140000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h549>
-	<h550 x="1595.5" y="2123.3" z="11.5" price="125000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h550>
-	<h551 x="1596.4" y="2093.7" z="11.3" price="127500" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h551>
-	<h552 x="1595" y="2071.1" z="11.3" price="110000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h552>
-	<h553 x="1595.5" y="2038.4" z="11.5" price="120000" locked="1" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h553>
-	<h554 x="1554.4" y="2074.1" z="11.4" price="123000" locked="1" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place" dolg="10187"></h554>
-	<h555 x="1550.3" y="2096.4" z="11.5" price="110000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19" dolg="11715"></h555>
-	<h556 x="1549.4" y="2125.6" z="11.5" price="115000" locked="1" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h556>
-	<h557 x="1488.6" y="360.9" z="19.4" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1" dolg="4708"></h557>
-	<h558 x="1469.7" y="351.5" z="18.9" price="40000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h558>
-	<h559 x="1461.1" y="342.5" z="19" price="43000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1" dolg="17157"></h559>
-	<h560 x="1434.9" y="334.9" z="18.9" price="35000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h560>
-	<h561 x="1415.9" y="324.6" z="18.8" price="38000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h561>
-	<h562 x="1403.2" y="333.9" z="18.9" price="39000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h562>
-	<h563 x="1409.4" y="346.9" z="19.3" price="33000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h563>
-	<h564 x="1413.1" y="363.1" z="19.2" price="32000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h564>
-	<h565 x="1419.5" y="389.5" z="19.3" price="36000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h565>
-	<h566 x="1451.7" y="375.8" z="19.4" price="32000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="4048"></h566>
-	<h567 x="1475.3" y="372.7" z="19.7" price="35000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" dolg="4267"></h567>
-	<h568 x="1447.4" y="361.8" z="18.9" price="33000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h568>
-	<h569 x="1428.6" y="356.5" z="18.9" price="36000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h569>
-	<h570 x="1465.8" y="364.2" z="19.3" price="30000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h570>
-	<h571 x="-2710.8" y="967.5" z="54.5" price="430000" locked="1" type="Дом 1 этаж (богатый)" int="Burglary House 3"></h571>
-	<h572 x="-2655.5" y="985.8" z="65" price="670000" locked="1" type="Дом 2 этаж (богатый)" int="Burglary House 11"></h572>
-	<h573 x="-2720.9" y="923.9" z="67.6" price="480000" locked="1" type="Дом 2 этаж (богатый)" int="Safe House 18"></h573>
-	<h574 x="-2706.6" y="864.5" z="70.7" price="550000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 10"></h574>
-	<h575 x="-2737.6" y="866.3" z="64.6" price="120000" locked="1" type="Маленькая комната" int="Safe House 4"></h575>
-	<h576 x="-2736.9" y="846.6" z="59.3" price="140000" locked="1" type="Маленькая комната" int="Safe House 10"></h576>
-	<h577 x="-2737.8" y="836.7" z="56.3" price="117000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h577>
-	<h578 x="-2737.3" y="823" z="53.7" price="110000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h578>
-	<h579 x="-2726.8" y="823" z="53.7" price="125000" locked="1" type="Маленькая комната" int="Safe House 10"></h579>
-	<h580 x="-2700.4" y="820.9" z="50" price="250000" locked="1" type="Дом 2 этажа (нормальный)" int="Johnson House"></h580>
-	<h581 x="-2667" y="820.3" z="50" price="135000" locked="1" type="Маленькая комната" int="Safe House 10"></h581>
-	<h582 x="-2652.6" y="820.3" z="50" price="125000" locked="1" type="Маленькая комната" int="Safe House 4"></h582>
-	<h583 x="-2642" y="820.3" z="50" price="110000" locked="1" type="Маленькая комната" int="Safe House 4"></h583>
-	<h584 x="-2618.8" y="830.9" z="50" price="132000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h584>
-	<h585 x="-2620.6" y="832.9" z="52.1" price="80000" locked="1" type="Маленькая комната" int="Safe House 4"></h585>
-	<h586 x="-2619.7" y="845.2" z="50.6" price="110000" locked="1" type="Маленькая комната" int="Safe House 4"></h586>
-	<h587 x="-2620.7" y="855.1" z="53.6" price="120000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h587>
-	<h588 x="-2620" y="874.8" z="58.9" price="115000" locked="1" type="Маленькая комната" int="Safe House 10"></h588>
-	<h589 x="-2620.2" y="883.1" z="63.3" price="109000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h589>
-	<h590 x="-2657.4" y="848.6" z="64" price="420000" locked="1" type="Дом 2 этажа (нормальный)" int="Johnson House"></h590>
-	<h591 x="653.6" y="-1714.1" z="14.8" price="330000" locked="0" type="Дом 1 этаж (нормальный)" int="Safe House 3" dolg="330"></h591>
-	<h592 x="652.7" y="-1694" z="14.5" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h592>
-	<h593 x="657.2" y="-1652.7" z="15.4" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h593>
-	<h594 x="656" y="-1635.9" z="15.9" price="200000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h594>
-	<h595 x="653.2" y="-1619.8" z="15" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h595>
-	<h596 x="660.4" y="-1599.8" z="15" price="280000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h596>
-	<h597 x="692.9" y="-1602.8" z="15" price="360000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h597>
-	<h598 x="697.3" y="-1627" z="3.7" price="220000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h598>
-	<h599 x="693.8" y="-1645.8" z="4.1" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h599>
-	<h600 x="694.8" y="-1690.7" z="4.3" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h600>
-	<h601 x="693.5" y="-1705.8" z="3.8" price="230000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h601>
-	<h602 x="769.2" y="-1745.9" z="13.1" price="330000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h602>
-	<h603 x="769.1" y="-1726.2" z="13.4" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h603>
-	<h604 x="769.2" y="-1696.6" z="5.2" price="270000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h604>
-	<h605 x="768.1" y="-1655.8" z="5.6" price="370000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h605>
-	<h606 x="766.9" y="-1605.8" z="13.8" price="280000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h606>
-	<h607 x="790.9" y="-1661.1" z="13.5" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h607>
-	<h608 x="794.9" y="-1692.1" z="14.5" price="270000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h608>
-	<h609 x="794" y="-1707.5" z="14" price="260000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h609>
-	<h610 x="797.2" y="-1729.3" z="13.5" price="290000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h610>
-	<h611 x="791.5" y="-1753.2" z="13.5" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h611>
-	<h612 x="-923.7" y="-497" z="26.8" price="85000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h612>
+    <h0 x="-219.7" y="2767" z="62.7" price="35000" locked="1" owner="" type="Маленькая комната" int="Abandonded AC Woter"></h0>
+    <h1 x="-150.2" y="2688.6" z="62.4" price="35000" locked="1" owner="" type="Маленькая комната" int="Denise&apos;s Place"></h1>
+    <h2 x="-169.1" y="2707.2" z="62.5" price="35000" locked="1" owner="" type="Маленькая комната" int="OG Loc&apos;s House"></h2>
+    <h3 x="-161" y="2728.1" z="62.2" price="20000" locked="1" owner="" type="Маленькая комната" int="Big bear apartament"></h3>
+    <h4 x="-155.9" y="2758.5" z="62.6" price="30000" locked="1" owner="" type="Трейлер" int="Angel Pine Trailer"></h4>
+    <h5 x="-164.9" y="2763.6" z="62.7" price="15000" locked="1" owner="" type="Трейлер" int="Angel Pine Trailer"></h5>
+    <h6 x="-165" y="2768.3" z="62.7" price="15000" locked="1" owner="" type="Трейлер" int="Angel Pine Trailer"></h6>
+    <h7 x="-201.8" y="2772.3" z="62.2" price="35000" locked="1" owner="" type="Маленькая комната" int="OG Loc&apos;s House"></h7>
+    <h8 x="-232.5" y="2807.6" z="62.1" price="50000" locked="1" owner="" type="Маленькая комната" int="Katie&apos;s Place"></h8>
+    <h9 x="-258" y="2782.3" z="62.7" price="40000" locked="1" owner="" type="Маленькая комната" int="BDups Crack Palace"></h9>
+    <h10 x="-268.7" y="2769.5" z="61.9" price="30000" locked="1" owner="" type="Маленькая комната" int="Katie&apos;s Place"></h10>
+    <h11 x="-287.2" y="2758" z="62.5" price="50000" locked="1" owner="" type="Маленькая комната" int="Katie&apos;s Place"></h11>
+    <h12 x="-275.4" y="2736.4" z="62.8" price="60000" locked="1" owner="" type="Маленькая комната" int="Big bear apartament"></h12>
+    <h13 x="-279.5" y="2721.8" z="62.8" price="75000" locked="1" owner="" type="Маленькая комната" int="Big bear apartament"></h13>
+    <h14 x="-311.5" y="2726.8" z="63.1" price="75000" locked="1" owner="" type="Маленькая комната" int="BDups Crack Palace"></h14>
+    <h15 x="-404.7" y="2257.9" z="42.9" price="5000" locked="1" owner="" type="Маленькая комната" int="Denise&apos;s Place" dolg="2746"></h15>
+    <h16 x="-375.8" y="2260.5" z="43.1" price="30000" locked="1" owner="" type="Маленькая комната" int="Millie&apos;s Bedroom" dolg="12255"></h16>
+    <h17 x="-357.9" y="2239.3" z="42.5" price="15000" locked="1" owner="" type="Маленькая комната" int="Denise&apos;s Place"></h17>
+    <h18 x="-356.8" y="2235" z="42.5" price="40000" locked="1" owner="" type="Маленькая комната" int="OG Loc&apos;s House"></h18>
+    <h19 x="-624.5" y="2709.9" z="72.4" price="35000" locked="1" owner="" type="Трейлер" int="Angel Pine Trailer"></h19>
+    <h20 x="-582" y="2713" z="72" price="50000" locked="1" owner="" type="Трейлер" int="Angel Pine Trailer" dolg="8150"></h20>
+    <h21 x="-604" y="2716.7" z="72.7" price="100000" locked="1" owner="" type="Маленькая комната" int="BDups Crack Palace"></h21>
+    <h22 x="263.5" y="2895.6" z="10.5" price="35000" locked="1" owner="" type="Маленькая комната" int="Safe House 4" dolg="3757"></h22>
+    <h23 x="-673.2" y="2705.6" z="70.7" price="25000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h23>
+    <h24 x="-641.4" y="2715.6" z="72.6" price="25000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h24>
+    <h25 x="-1450.2" y="2691" z="56.2" price="50000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h25>
+    <h26 x="-1465.9" y="2693" z="56.3" price="65000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h26>
+    <h27 x="-1482.5" y="2702.7" z="56.3" price="40000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h27>
+    <h28 x="-1491.5" y="2686" z="55.9" price="60000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h28>
+    <h29 x="-1511.9" y="2695.9" z="56.1" price="50000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h29>
+    <h30 x="-1529.8" y="2686.2" z="55.8" price="40000" locked="1" type="Маленькая комната" int="Safe House 10"></h30>
+    <h31 x="-1550.4" y="2699.8" z="56.3" price="60000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h31>
+    <h32 x="-1565.1" y="2711.9" z="55.9" price="35000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h32>
+    <h33 x="-1577.6" y="2686.9" z="55.8" price="30000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h33>
+    <h34 x="-1589.8" y="2706.5" z="56.2" price="40000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h34>
+    <h35 x="-1604.2" y="2689.7" z="55.3" price="150000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h35>
+    <h36 x="-1587" y="2650.1" z="55.9" price="25000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h36>
+    <h37 x="-1563.6" y="2651.2" z="55.9" price="35000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h37>
+    <h38 x="-1568.2" y="2630.3" z="55.8" price="30000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h38>
+    <h39 x="-1669.6" y="2597.5" z="81.4" price="65000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h39>
+    <h40 x="-1670.2" y="2546.4" z="85.2" price="50000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h40>
+    <h41 x="-1668.2" y="2486.4" z="87.2" price="60000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h41>
+    <h42 x="-1512.5" y="2646.8" z="56.2" price="50000" locked="1" type="Маленькая комната" int="Safe House 10"></h42>
+    <h43 x="-1532.6" y="2656.6" z="56.3" price="100000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h43>
+    <h44 x="-1459.7" y="2653.5" z="55.8" price="25000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h44>
+    <h45 x="-1445.1" y="2653.2" z="56.3" price="75000" locked="1" type="Маленькая комната" int="Safe House 4"></h45>
+    <h46 x="-1446.6" y="2637.3" z="56.3" price="100000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h46>
+    <h47 x="-1445.3" y="2562.3" z="56" price="15000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h47>
+    <h48 x="-1450" y="2562.3" z="56" price="15000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h48>
+    <h49 x="-1476.2" y="2563.2" z="56.2" price="30000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h49>
+    <h50 x="-1478.6" y="2547.4" z="56.3" price="35000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h50>
+    <h51 x="-911" y="2686" z="42.4" price="200000" locked="1" Garage="[ [ [ -901.4, 2695.5, 42.4, 48.9, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room" dolg="39200"></h51>
+    <h52 x="-258.2" y="1043.9" z="20.9" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 21" dolg="42500"></h52>
+    <h53 x="-247.8" y="1001.1" z="20.9" price="300000" locked="1" Garage="[ [ [ -240.2, 995.3, 19.7, 359.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h53>
+    <h54 x="-278.9" y="1003.1" z="20.9" price="290000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h54>
+    <h55 x="-234.3" y="1051.9" z="19.9" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer" dolg="40200"></h55>
+    <h56 x="827.8" y="-858" z="70.3" price="10000000" locked="1" type="Дом 1 этаж (богатый)" int="Safe House 228"></h56>
+    <h57 x="700.3" y="-1060.3" z="49.4" price="5000000" locked="1" Garage="[ [ [ 691.2000000000001, -1075.7, 49.4, 55.9, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Burglary House 3"></h57>
+    <h58 x="724.7" y="-999.4" z="52.7" price="7500000" locked="1" Garage="[ [ [ 729.1, -996.9, 52.7, 54.8, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Burglary House 3"></h58>
+    <h59 x="836" y="-894.8" z="68.8" price="3500000" locked="1" Garage="[ [ [ 840.6, -898.1, 68.8, 320.8, 1 ], [ 831.4, -891.5, 68.8, 326.1, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 10" dolg="507500"></h59>
+    <h60 x="1497" y="-687.9" z="95.6" price="99999999" locked="1" Garage="[ [ [ 1520.2, -689, 94.8, 93.3, 1 ], [ 1520.2, -694.6, 94.8, 87, 0 ] ] ]" type="Дом 2 этаж (богатый)" int="Safe House 18"></h60>
+    <h61 x="-258.8" y="1083.1" z="20.9" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6" dolg="37625"></h61>
+    <h62 x="-260.3" y="1120" z="20.9" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h62>
+    <h63 x="-258.2" y="1151.1" z="20.9" price="500000" locked="1" Garage="[ [ [ -252.5, 1158.8, 19.7, 89.09999999999999, 0 ] ] ]" dolg="1500" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h63>
+    <h64 x="-258.2" y="1168.9" z="20.9" price="450000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h64>
+    <h65 x="-298.3" y="1115.7" z="20.9" price="450000" locked="1" Garage="[ [ [ -306, 1121.5, 19.7, 183.9, 0 ] ] ]" dolg="450" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h65>
+    <h66 x="-328.2" y="1118.8" z="20.9" price="500000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 13"></h66>
+    <h67 x="2514.3" y="-1691.6" z="14" price="450000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h67>
+    <h68 x="2524.7" y="-1658.6" z="15.8" price="400000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h68>
+    <h69 x="2513.7" y="-1650.2" z="14.4" price="430000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h69>
+    <h70 x="2498.5" y="-1642.3" z="14.1" price="440000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h70>
+    <h71 x="2469.5" y="-1646.4" z="13.8" price="500000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h71>
+    <h72 x="2451.9" y="-1641.4" z="14.1" price="550000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h72>
+    <h73 x="1692.5" y="-1458.7" z="13.7" price="300000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h73>
+    <h74 x="1685.4" y="-1464.5" z="13.7" price="320000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h74>
+    <h75 x="1675.7" y="-1462.3" z="13.6" price="300000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h75>
+    <h76 x="2200" y="-37.4" z="28.2" price="600000" locked="1" Garage="[ [ [ 2187.1, -46.5, 27.5, 267.6, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h76>
+    <h77 x="2197.3" y="-60.7" z="28.2" price="400000" locked="1" Garage="[ [ [ 2197.3, -66, 27.5, 266.1, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h77>
+    <h78 x="2203.1" y="-89.3" z="28.2" price="380000" locked="1" Garage="[ [ [ 2185.8, -80.2, 27.5, 270.8, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h78>
+    <h79 x="2245.5" y="-122.3" z="28.2" price="360000" locked="1" Garage="[ [ [ 2254.6, -135.1, 27.5, 359.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h79>
+    <h80 x="2272.4" y="-119.1" z="28.2" price="350000" locked="1" Garage="[ [ [ 2263.2, -136.5, 27.5, 355, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 9" dolg="38675"></h80>
+    <h81 x="2293.8" y="-125" z="28.2" price="300000" locked="1" Garage="[ [ [ 2298.9, -125, 27.5, 6.6, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h81>
+    <h82 x="2322.3" y="-125" z="28.2" price="100000" locked="1" Garage="[ [ [ 2327.6, -125, 27.5, 0.6, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h82>
+    <h83 x="2313.9" y="-125" z="28.2" price="100000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h83>
+    <h84 x="2367.4" y="-49.1" z="28.2" price="200000" locked="1" Garage="[ [ [ 2358.2, -66.40000000000001, 27.5, 359.5, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h84>
+    <h85 x="2384" y="-55" z="28.2" price="80000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h85>
+    <h86 x="2392.4" y="-55" z="28.2" price="80000" locked="1" Garage="[ [ [ 2397.6, -55, 27.5, 1.1, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h86>
+    <h87 x="2415.5" y="-52.3" z="28.2" price="160000" locked="1" Garage="[ [ [ 2424.6, -65.09999999999999, 27.5, 2.7, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room" dolg="124480"></h87>
+    <h88 x="2438.8" y="-55" z="28.2" price="130000" locked="1" Garage="[ [ [ 2444.1, -55, 27.5, 1.1, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8" dolg="53105"></h88>
+    <h89 x="2245.5" y="-1.7" z="28.2" price="200000" locked="1" Garage="[ [ [ 2240.2, -1.7, 27.5, 180.2, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h89>
+    <h90 x="2254" y="-1.7" z="28.2" price="200000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h90>
+    <h91 x="2270.5" y="-7.7" z="28.2" price="500000" locked="1" Garage="[ [ [ 2279.6, 9.800000000000001, 27.5, 182.4, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h91>
+    <h92 x="2203.9" y="62.2" z="28.4" price="350000" locked="1" Garage="[ [ [ 2205.9, 54.3, 27.8, 266.1, 1 ], [ 2205.9, 58.1, 27.8, 263, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h92>
+    <h93 x="2203.9" y="106.1" z="28.4" price="200000" locked="1" Garage="[ [ [ 2205.9, 110.4, 27.8, 262.3, 1 ], [ 2205.9, 114.2, 27.8, 260.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h93>
+    <h94 x="2484.5" y="-28.4" z="28.4" price="250000" locked="1" Garage="[ [ [ 2480.2, -26.4, 27.8, 356.5, 1 ], [ 2476.5, -26.4, 27.8, 358.7, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h94>
+    <h95 x="2513.3" y="-28.4" z="28.4" price="250000" locked="1" Garage="[ [ [ 2521.3, -26.4, 27.8, 357.4, 0 ], [ 2517.5, -26.4, 27.8, 358.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h95>
+    <h96 x="2551.2" y="-5.5" z="27.7" price="150000" locked="1" Garage="[ [ [ 2557, 2.1, 26.5, 89.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h96>
+    <h97 x="2549.2" y="25.1" z="27.7" price="350000" locked="1" Garage="[ [ [ 2557, 14.1, 27.1, 89.8, 0 ], [ 2557, 9.699999999999999, 27.1, 89.8, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h97>
+    <h98 x="2551.2" y="57.3" z="27.7" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h98>
+    <h99 x="2557" y="87.9" z="27.7" price="250000" locked="1" Garage="[ [ [ 2554.4, 81.5, 26.5, 87, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 13"></h99>
+    <h100 x="2536.2" y="129" z="27.7" price="250000" locked="1" Garage="[ [ [ 2528.6, 134.8, 26.5, 178.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h100>
+    <h101 x="2518.4" y="129" z="27.7" price="200000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h101>
+    <h102 x="2480.6" y="127" z="27.7" price="350000" locked="1" Garage="[ [ [ 2491.5, 134.8, 27.1, 179.4, 0 ], [ 2495.9, 134.8, 27.1, 177.9, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h102>
+    <h103 x="2462.7" y="134.8" z="27.7" price="350000" locked="1" Garage="[ [ [ 2469.2, 132.1, 26.5, 177.9, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h103>
+    <h104 x="2443.9" y="92.3" z="28.4" price="210000" locked="1" Garage="[ [ [ 2445.8, 84.2, 27.8, 267.8, 1 ], [ 2445.8, 87.90000000000001, 27.8, 268.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 12" dolg="166320"></h104>
+    <h105 x="2443.4" y="61.8" z="28.4" price="200000" locked="1" Garage="[ [ [ 2447.7, 59.8, 27.8, 183.2, 1 ], [ 2451.4, 59.8, 27.8, 181.6, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h105>
+    <h106 x="2413.5" y="61.8" z="28.4" price="380000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h106>
+    <h107 x="2398.4" y="111.8" z="28.4" price="300000" locked="1" Garage="[ [ [ 2402.6, 109.8, 27.8, 179.6, 1 ], [ 2406.5, 109.8, 27.8, 179.6, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h107>
+    <h108 x="2364" y="116.1" z="28.4" price="340000" locked="1" Garage="[ [ [ 2362, 124.4, 27.8, 96.3, 1 ], [ 2362, 120.5, 27.8, 90, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h108>
+    <h109 x="2364" y="142" z="28.4" price="330000" locked="1" type="Дом 1 этаж (нормальный)" int="Ryder House"></h109>
+    <h110 x="2364" y="166.1" z="28.4" price="310000" locked="1" Garage="[ [ [ 2362, 174, 27.8, 90.90000000000001, 1 ], [ 2362, 170.2, 27.8, 89.40000000000001, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h110>
+    <h111 x="2364" y="187.2" z="28.4" price="300000" locked="1" Garage="[ [ [ 2362, 182.9, 27.8, 85.59999999999999, 0 ], [ 2362, 179.3, 27.8, 85.59999999999999, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h111>
+    <h112 x="2324.1" y="191.2" z="28.4" price="330000" locked="1" Garage="[ [ [ 2325.8, 195.2, 27.8, 269.8, 0 ], [ 2326.2, 199.1, 27.7, 270.8, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h112>
+    <h113 x="2323.9" y="162.2" z="28.4" price="340000" locked="1" Garage="[ [ [ 2325.8, 158, 27.8, 267.1, 1 ], [ 2325.9, 154.1, 27.8, 273.4, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 13"></h113>
+    <h114 x="2323.9" y="136.3" z="28.4" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h114>
+    <h115 x="2323.9" y="116.1" z="28.4" price="310000" locked="1" Garage="[ [ [ 2325.9, 120.3, 27.8, 269.9, 1 ], [ 2325.8, 124.1, 27.8, 272.4, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h115>
+    <h116 x="2373.8" y="71.1" z="28.4" price="250000" locked="1" Garage="[ [ [ 2375.8, 75.40000000000001, 27.8, 262.6, 1 ], [ 2375.8, 79.3, 27.8, 270.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h116>
+    <h117 x="2373.9" y="42.3" z="28.4" price="175000" locked="1" Garage="[ [ [ 2375.9, 34.2, 27.8, 269.5, 1 ], [ 2375.8, 37.9, 27.8, 271.1, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h117>
+    <h118 x="2373.8" y="21.9" z="28.4" price="150000" locked="1" Garage="[ [ [ 2375.9, 26.2, 27.8, 263.2, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h118>
+    <h119 x="2373.9" y="-8.6" z="28.4" price="175000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h119>
+    <h120 x="2417" y="17.9" z="27.7" price="150000" locked="1" Garage="[ [ [ 2414.3, 11.3, 26.5, 80.90000000000001, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h120>
+    <h121 x="2411.2" y="-5.5" z="27.7" price="145000" locked="1" Garage="[ [ [ 2417, 2, 26.5, 88.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h121>
+    <h122 x="2448.5" y="-11" z="27.7" price="165000" locked="1" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h122>
+    <h123 x="2446.6" y="19" z="27.7" price="163000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h123>
+    <h124 x="2236.4" y="168.3" z="28.2" price="322800" locked="1" Garage="[ [ [ 2231.4, 168.3, 27.5, 180.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h124>
+    <h125 x="2258" y="168.3" z="28.2" price="250000" locked="1" Garage="[ [ [ 2252.7, 168.3, 27.5, 181, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21" dolg="85625"></h125>
+    <h126 x="2285.8" y="161.8" z="28.4" price="290000" locked="1" Garage="[ [ [ 2290.2, 159.8, 27.8, 187.3, 1 ], [ 2294, 159.8, 27.8, 184.2, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Ryder House"></h126>
+    <h127 x="2488.4" y="11.8" z="28.4" price="130000" locked="1" Garage="[ [ [ 2492.7, 9.800000000000001, 27.8, 179.4, 0 ], [ 2496.6, 9.800000000000001, 27.8, 179.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h127>
+    <h128 x="2509.4" y="11.8" z="28.4" price="150000" locked="1" Garage="[ [ [ 2501.6, 9.800000000000001, 27.8, 178.8, 0 ], [ 2505.3, 9.800000000000001, 27.8, 174.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h128>
+    <h129 x="2518.6" y="58.4" z="27.7" price="200000" locked="1" Garage="[ [ [ 2510.8, 69.3, 27.1, 270, 0 ], [ 2510.8, 73.90000000000001, 27.1, 270, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h129>
+    <h130 x="2510.1" y="88.6" z="27.7" price="200000" locked="1" Garage="[ [ [ 2503.5, 91.3, 26.5, 359.9, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h130>
+    <h131 x="2479.4" y="94.4" z="27.7" price="340000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 13"></h131>
+    <h132 x="2481.2" y="64.4" z="27.7" price="320000" locked="1" Garage="[ [ [ 2487, 72, 26.5, 90.09999999999999, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h132>
+    <h133 x="2249.3" y="111.8" z="28.4" price="450000" locked="1" Garage="[ [ [ 2253.4, 109.8, 27.8, 183.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h133>
+    <h134 x="2269.5" y="111.8" z="28.4" price="460000" locked="1" Garage="[ [ [ 2261.4, 109.8, 27.8, 176.9, 1 ], [ 2265.2, 109.8, 27.8, 177.5, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h134>
+    <h135 x="1885.9" y="-1113.7" z="26.3" price="80000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den" dolg="15680"></h135>
+    <h136 x="1906" y="-1113" z="26.7" price="65000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1" dolg="8736"></h136>
+    <h137 x="1921.3" y="-1115.3" z="27.1" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h137>
+    <h138 x="1939.1" y="-1114.5" z="27.5" price="165000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h138>
+    <h139 x="1955.1" y="-1115.3" z="27.8" price="42000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="29799"></h139>
+    <h140 x="1959.6" y="-1070" z="24.8" price="10000" locked="1" type="Маленькая комната" int="BDups Crack Palace" dolg="1290"></h140>
+    <h141 x="1954.4" y="-1075" z="24.8" price="15000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h141>
+    <h142 x="1939.3" y="-1066.4" z="24.4" price="8000" locked="1" type="Маленькая комната" int="Safe House 10"></h142>
+    <h143 x="1934" y="-1071.6" z="24.4" price="7500" locked="1" type="Маленькая комната" int="Big bear apartament"></h143>
+    <h144 x="1916.9" y="-1064.8" z="24.1" price="5000" locked="1" type="Маленькая комната" int="Safe House 10"></h144>
+    <h145 x="1912.6" y="-1070.7" z="24.2" price="4500" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h145>
+    <h146 x="1896" y="-1064.9" z="23.9" price="2000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h146>
+    <h147 x="1891.8" y="-1070.5" z="23.9" price="3400" locked="1" type="Маленькая комната" int="BDups Crack Palace" dolg="2362"></h147>
+    <h148 x="2000.1" y="-1114.1" z="27.1" price="65000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den" dolg="8256"></h148>
+    <h149 x="2022.9" y="-1120.3" z="26.4" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" dolg="33418"></h149>
+    <h150 x="2045.5" y="-1116.6" z="26.4" price="100000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den" dolg="94300"></h150>
+    <h151 x="2094" y="-1122.7" z="27.7" price="120000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" dolg="18180"></h151>
+    <h152 x="2095.4" y="-1145.2" z="26.6" price="90000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="88470"></h152>
+    <h153 x="2092.2" y="-1166.5" z="26.6" price="50000" locked="1" Garage="[ [ [ 2092.2, -1171.1, 25.6, 91.2, 0 ] ] ]" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h153>
+    <h154 x="2091.6" y="-1184.3" z="27.1" price="130000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="16445"></h154>
+    <h155 x="1556.1" y="2658.6" z="10.8" price="800000" locked="1" Garage="[ [ [ 1548.7, 2661.9, 10.8, 358.7, 0 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 12"></h155>
+    <h156 x="1573.1" y="2657.9" z="10.8" price="760000" locked="1" Garage="[ [ [ 1566.2, 2664.4, 10.8, 358.1, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 4"></h156>
+    <h157 x="1554.5" y="2610.6" z="10.8" price="780000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h157>
+    <h158 x="1535.1" y="2610" z="10.8" price="670000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h158>
+    <h159 x="1515.9" y="2610.2" z="11.3" price="1100000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h159>
+    <h160 x="168.2" y="-1768.7" z="4.5" price="550000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h160>
+    <h161 x="192.8" y="-1769.4" z="4.3" price="240000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h161>
+    <h162 x="206.9" y="-1769.2" z="4.4" price="330000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h162>
+    <h163 x="280.9" y="-1767.1" z="4.5" price="420000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h163>
+    <h164 x="295.3" y="-1764.1" z="4.9" price="430000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19" dolg="47085"></h164>
+    <h165 x="305.4" y="-1770.2" z="4.5" price="150000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14" dolg="64575"></h165>
+    <h166 x="315.8" y="-1769.6" z="4.6" price="540000" locked="1" Garage="[ [ [ 322.7, -1769.4, 4.7, 182.3, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 4" dolg="105840"></h166>
+    <h167 x="-2632.4" y="2410.7" z="14" price="440000" locked="1" type="Дом 2 этажа (нормальный)" int="Colonel Fuhrberger&apos;s House"></h167>
+    <h168 x="-2634.8" y="2401.7" z="11.2" price="480000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h168>
+    <h169 x="-2632.5" y="2374.9" z="9" price="500000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 12"></h169>
+    <h170 x="-2627.4" y="2359.5" z="9" price="500000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 5"></h170>
+    <h171 x="-2636.3" y="2351" z="8.5" price="500000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h171>
+    <h172 x="-2627.6" y="2318.6" z="8.3" price="300000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h172>
+    <h173 x="-2627.6" y="2309.9" z="8.3" price="300000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 12"></h173>
+    <h174 x="-2627.6" y="2292" z="8.3" price="400000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 10"></h174>
+    <h175 x="-2627.6" y="2283.4" z="8.3" price="400000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h175>
+    <h176 x="-2597.3" y="2364.6" z="9.9" price="650000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 5"></h176>
+    <h177 x="-2597.3" y="2357.1" z="9.9" price="650000" locked="1" type="Дом 2 этажа (нормальный)" int="Colonel Fuhrberger&apos;s House"></h177>
+    <h178 x="-2583.7" y="2307.9" z="7" price="700000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 5"></h178>
+    <h179 x="-2583.1" y="2300.2" z="7" price="700000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h179>
+    <h180 x="-2552.1" y="2266.5" z="5.5" price="860000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h180>
+    <h181 x="-2523.9" y="2238.8" z="5.4" price="700000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h181>
+    <h182 x="-2437.5" y="2354.9" z="5.4" price="670000" locked="1" Garage="[ [ [ -2427.3, 2349.6, 5, 187.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h182>
+    <h183 x="-2398.1" y="2408.9" z="8.9" price="250000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 4"></h183>
+    <h184 x="-2421.7" y="2406.6" z="13" price="300000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h184>
+    <h185 x="-2479.8" y="2450" z="17.3" price="450000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h185>
+    <h186 x="-2472.4" y="2451.3" z="17.3" price="450000" locked="1" Garage="[ [ [ -2439.4, 2451, 13.8, 268.4, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h186>
+    <h187 x="-2424.7" y="2449" z="13.1" price="600000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 6"></h187>
+    <h188 x="-2386.2" y="2447.5" z="10.2" price="400000" locked="1" dolg="108800" type="Дом 2 этажа (нормальный)" int="Johnson House"></h188>
+    <h189 x="-2379.2" y="2444.6" z="10.2" price="400000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 12"></h189>
+    <h190 x="-2348.3" y="2423.6" z="7.3" price="550000" locked="1" type="Дом 2 этажа (нормальный)" int="Johnson House"></h190>
+    <h191 x="-2422.3" y="2490.7" z="13.2" price="80000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h191>
+    <h192 x="-2446.2" y="2490.7" z="15.5" price="75000" locked="1" type="Маленькая комната" int="Safe House 4"></h192>
+    <h193 x="-2446.9" y="2512.2" z="15.7" price="60000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h193>
+    <h194 x="-2463.7" y="2490.6" z="17" price="30000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h194>
+    <h195 x="-2463.3" y="2485.9" z="17" price="30000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h195>
+    <h196 x="-2478.3" y="2488.9" z="18.2" price="55000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h196>
+    <h197 x="-2479" y="2510.1" z="18" price="60000" locked="1" type="Маленькая комната" int="Safe House 10"></h197>
+    <h198 x="1440.7" y="-926.1" z="39.6" price="800000" locked="1" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h198>
+    <h199 x="1411.1" y="-920.9" z="38.4" price="830000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h199>
+    <h200 x="1421.9" y="-886.2" z="50.7" price="700000" locked="1" Garage="[ [ [ 1431, -886.2, 50.7, 359.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h200>
+    <h201 x="1468.6" y="-906.1" z="54.8" price="860000" locked="1" Garage="[ [ [ 1463.9, -906.2, 54.8, 358.6, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Burglary House 3"></h201>
+    <h202 x="1535.7" y="-885.2" z="57.7" price="400000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h202>
+    <h203 x="1540.3" y="-851.4" z="64.3" price="600000" locked="1" Garage="[ [ [ 1540.9, -841.7, 64.3, 88.3, 0 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h203>
+    <h204 x="1535" y="-800.2" z="72.8" price="760000" locked="1" Garage="[ [ [ 1535.1, -813.6, 72.2, 88.2, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 13" dolg="151240"></h204>
+    <h205 x="1527.8" y="-772.6" z="80.6" price="800000" locked="1" Garage="[ [ [ 1518.3, -763.1, 79.90000000000001, 126.4, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8" dolg="766800"></h205>
+    <h206 x="1332.1" y="-633.5" z="109.1" price="10000000" locked="1" Garage="[ [ [ 1353.2, -626.2000000000001, 109.1, 18, 1 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 228"></h206>
+    <h207 x="1442.6" y="-628.8" z="95.7" price="5400000" locked="1" Garage="[ [ [ 1460.4, -629, 95.7, 178.9, 1 ] ] ]" type="Дом 1 этаж (богатый)" int="Burglary House 3"></h207>
+    <h208 x="1298.5" y="-798" z="84.1" price="99999999" locked="1" Garage="[ [ [ 1243, -800.9, 84.09999999999999, 179.9, 0 ], [ 1249.1, -800.9, 84.09999999999999, 183, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 5" dolg="11199776"></h208>
+    <h209 x="1112.6" y="-742.1" z="100.1" price="530000" locked="1" Garage="[ [ [ 1113, -732.3, 100.1, 88.3, 0 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 4" dolg="453415"></h209>
+    <h210 x="1093.9" y="-807.1" z="107.4" price="400000" locked="1" type="Дом 1 этаж (богатый)" int="Safe House 228" dolg="137000"></h210>
+    <h211 x="1034.7" y="-813" z="101.9" price="650000" locked="1" Garage="[ [ [ 1030.5, -814.7, 101.9, 22.3, 1 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 11"></h211>
+    <h212 x="1016.9" y="-763.4" z="112.6" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h212>
+    <h213 x="989.8" y="-828.7" z="95.5" price="450000" locked="1" Garage="[ [ [ 980.9, -833.5, 95.5, 29.8, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 14"></h213>
+    <h214 x="937.9" y="-848.7" z="93.6" price="300000" locked="1" Garage="[ [ [ 946.2, -844.8, 93.59999999999999, 20.7, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place" dolg="40950"></h214>
+    <h215 x="923.7" y="-853" z="93.5" price="500000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6" dolg="355750"></h215>
+    <h216 x="910.4" y="-817.6" z="103.1" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h216>
+    <h217 x="858.5" y="-828.5" z="89.5" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6" dolg="212500"></h217>
+    <h218 x="977.4" y="-771.7" z="112.2" price="700000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h218>
+    <h219 x="1095" y="-647.9" z="113.6" price="10000000" locked="1" Garage="[ [ [ 1086.5, -649.6, 113.6, 359.9, 1 ], [ 1082.4, -649.6, 113.6, 359.3, 1 ] ] ]" type="Дом 2 этаж (богатый)" int="Safe House 18"></h219>
+    <h220 x="1045.2" y="-642.9" z="120.1" price="800000" locked="1" Garage="[ [ [ 1050.6, -642, 120.1, 189, 1 ], [ 1039.6, -643.9, 120.1, 189, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 4" dolg="135600"></h220>
+    <h221 x="980.5" y="-677.2" z="122" price="1500000" locked="1" Garage="[ [ [ 1013.7, -663.1, 121.1, 26.9, 0 ], [ 1008.8, -666.1, 121.1, 25.3, 0 ] ] ]" type="Дом 2 этаж (богатый)" int="Burglary House 15" dolg="310500"></h221>
+    <h222 x="946.3" y="-710.7" z="122.6" price="9000000" locked="1" type="Дом 1 этаж (богатый)" int="Safe House 228"></h222>
+    <h223 x="897.9" y="-677.2" z="116.9" price="1000000" locked="1" type="Дом 1 этаж (богатый)" int="Burglary House 3" dolg="115000"></h223>
+    <h224 x="867.5" y="-717.6" z="105.7" price="1200000" locked="1" Garage="[ [ [ 863.2000000000001, -715.5, 105.7, 334.7, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h224>
+    <h225 x="891.2" y="-783.1" z="101.3" price="350000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 4"></h225>
+    <h226 x="848" y="-745.5" z="95" price="430000" locked="1" Garage="[ [ [ 845.1, -758.8, 85.3, 131, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h226>
+    <h227 x="808.3" y="-759.3" z="76.5" price="400000" locked="1" Garage="[ [ [ 810.5, -768.8, 76.5, 283.6, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h227>
+    <h228 x="785.9" y="-828.6" z="70.3" price="340000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h228>
+    <h229 x="672.9" y="-1020.5" z="55.8" price="400000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h229>
+    <h230 x="648" y="-1059" z="52.6" price="400000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9" dolg="40200"></h230>
+    <h231 x="612.2" y="-1085.9" z="58.8" price="500000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h231>
+    <h232 x="646" y="-1117.4" z="44.2" price="450000" locked="1" type="Дом 1 этаж (богатый)" int="Safe House 228"></h232>
+    <h233 x="1111.5" y="-976.4" z="42.8" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h233>
+    <h234 x="-75.3" y="-1598.2" z="2.6" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h234>
+    <h235 x="-91.2" y="-1592.6" z="3" price="25000" locked="1" type="Маленькая комната" int="Katie&apos;s Place" dolg="22728"></h235>
+    <h236 x="-102.4" y="-1575.9" z="2.6" price="12000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h236>
+    <h237 x="-89.2" y="-1564.5" z="3" price="18000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h237>
+    <h238 x="-68.7" y="-1545.7" z="3" price="22000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="7040"></h238>
+    <h239 x="-55.9" y="-1555.7" z="2.6" price="9000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h239>
+    <h240 x="-65.1" y="-1573.9" z="2.6" price="6000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h240>
+    <h241 x="-76.2" y="-1581.1" z="3.4" price="7000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h241>
+    <h242 x="-44.4" y="-1563.2" z="2.6" price="13000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h242>
+    <h243 x="-396.2" y="-425.1" z="16.3" price="200000" locked="1" type="Маленькая комната" int="Safe House 4"></h243>
+    <h244 x="-427.6" y="-392.7" z="16.6" price="190000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="20330"></h244>
+    <h245 x="-576.8" y="-1031.9" z="23.8" price="30000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="4440"></h245>
+    <h246 x="-582.6" y="-1040.2" z="23.6" price="31000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h246>
+    <h247 x="-588.8" y="-1048.5" z="23.3" price="30000" locked="1" type="Маленькая комната" int="Safe House 10"></h247>
+    <h248 x="-594.8" y="-1056.9" z="23.4" price="30000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h248>
+    <h249 x="-601.2" y="-1065.4" z="23.4" price="29000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h249>
+    <h250 x="-607.6" y="-1073.9" z="23.5" price="30000" locked="1" type="Маленькая комната" int="BDups Crack Palace" dolg="27660"></h250>
+    <h251 x="2581.5" y="-969.3" z="81.4" price="18000" locked="1" type="Маленькая комната" int="Safe House 10" dolg="16677"></h251>
+    <h252 x="2582.9" y="-953.3" z="81.4" price="15000" locked="1" type="Маленькая комната" int="Big bear apartament"></h252>
+    <h253 x="2552" y="-958.4" z="82.6" price="22000" locked="1" type="Маленькая комната" int="Big bear apartament"></h253>
+    <h254 x="2531.1" y="-963.3" z="82.4" price="20000" locked="1" type="Маленькая комната" int="Safe House 10"></h254>
+    <h255 x="2517.9" y="-965.4" z="82.3" price="15000" locked="1" type="Маленькая комната" int="Big bear apartament"></h255>
+    <h256 x="2499.4" y="-947" z="82.5" price="13000" locked="1" type="Маленькая комната" int="Safe House 10"></h256>
+    <h257 x="2492.1" y="-965.7" z="82.5" price="14000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h257>
+    <h258 x="2472.4" y="-962" z="80.5" price="17000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h258>
+    <h259 x="2459.5" y="-947.7" z="80.1" price="19000" locked="1" type="Маленькая комната" int="Safe House 10" dolg="6273"></h259>
+    <h260 x="2454.2" y="-965" z="80.1" price="16000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House" dolg="8392"></h260>
+    <h261 x="300.3" y="-1154.5" z="81.4" price="25000000" locked="1" Garage="[ [ [ 281, -1157.9, 80.90000000000001, 219.6, 0 ], [ 284.7, -1154.1, 80.90000000000001, 218.7, 1 ] ] ]" type="Дом 2 этаж (богатый)" int="Burglary House 11" dolg="2762500"></h261>
+    <h262 x="251.5" y="-1220.2" z="76.1" price="9000000" locked="1" type="Дом 2 этаж (богатый)" int="Burglary House 15" dolg="963000"></h262>
+    <h263 x="219.2" y="-1249.8" z="78.3" price="7000000" locked="1" type="Дом 2 этаж (богатый)" int="Burglary House 11"></h263>
+    <h264 x="189.6" y="-1308.1" z="70.2" price="9000000" locked="1" Garage="[ [ [ 166.4, -1337.7, 69.90000000000001, 176.8, 0 ], [ 172.2, -1337.6, 70, 180.5, 0 ] ] ]" dolg="3897000" type="Дом 2 этаж (богатый)" int="Burglary House 11"></h264>
+    <h265 x="253.2" y="-1270" z="74.4" price="6000000" locked="1" Garage="[ [ [ 277.6, -1257.1, 73.90000000000001, 306.4, 0 ], [ 274.2, -1252.3, 73.90000000000001, 303.3, 0 ] ] ]" dolg="249000" type="Дом 2 этаж (богатый)" int="Modern safe house"></h265>
+    <h266 x="352.4" y="-1198" z="76.5" price="900000" locked="1" Garage="[ [ [ 348.8, -1200.9, 76.5, 43.3, 1 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 228"></h266>
+    <h267 x="565.9" y="-1113.3" z="62.8" price="450000" locked="1" Garage="[ [ [ 567.5, -1129.6, 50.7, 211.7, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 11"></h267>
+    <h268 x="580.6" y="-1149.7" z="53.2" price="650000" locked="1" type="Дом 1 этаж (нормальный)" int="Ryder House"></h268>
+    <h269 x="558.8" y="-1161.1" z="54.4" price="400000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h269>
+    <h270 x="534.9" y="-1174.1" z="58.8" price="760000" locked="1" type="Дом 1 этаж (нормальный)" int="Ryder House"></h270>
+    <h271 x="559.1" y="-1076.4" z="72.9" price="650000" locked="1" Garage="[ [ [ 567.8, -1071.9, 72.90000000000001, 28.9, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 14"></h271>
+    <h272 x="496.8" y="-1095" z="82.4" price="900000" locked="1" Garage="[ [ [ 479.7, -1094.5, 82.40000000000001, 358.3, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 228"></h272>
+    <h273 x="470.7" y="-1163.6" z="67.2" price="850000" locked="1" type="Дом 1 этаж (нормальный)" int="Ryder House"></h273>
+    <h274 x="416.8" y="-1154.1" z="76.7" price="400000" locked="1" Garage="[ [ [ 408.8, -1148.8, 76.7, 147, 1 ] ] ]" type="Дом 2 этажа (нормальный)" int="Burglary House 10" dolg="44800"></h274>
+    <h275 x="553.1" y="-1200.2" z="44.8" price="600000" locked="1" Garage="[ [ [ 543.7, -1204, 44.8, 17.1, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Burglary House 3" dolg="102000"></h275>
+    <h276 x="432.1" y="-1253.9" z="51.6" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22" dolg="194625"></h276>
+    <h277 x="398.2" y="-1271.4" z="50" price="400000" locked="1" Garage="[ [ [ 407.5, -1267.3, 50, 17, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 11"></h277>
+    <h278 x="355.1" y="-1281.2" z="53.7" price="130000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h278>
+    <h279 x="298.8" y="-1338.5" z="53.4" price="1600000" locked="1" type="Дом 2 этаж (богатый)" int="Safe House 18" dolg="329600"></h279>
+    <h280 x="254.5" y="-1367.2" z="53.1" price="25000000" locked="1" Garage="[ [ [ 248.2, -1361.4, 53.1, 307.9, 0 ], [ 245.8, -1358, 53.1, 304.7, 0 ] ] ]" dolg="6800000" type="Дом 2 этаж (богатый)" int="Safe House 18"></h280>
+    <h281 x="228.1" y="-1405.5" z="51.6" price="10000000" locked="1" type="Дом 1 этаж (богатый)" int="Burglary House 3" dolg="1105000"></h281>
+    <h282 x="161.5" y="-1455.9" z="32.8" price="90000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h282>
+    <h283 x="142.1" y="-1470" z="25.2" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22" dolg="34750"></h283>
+    <h284 x="-2789.2" y="-181.4" z="10.1" price="250000" locked="1" Garage="[ [ [ -2793.1, -184.1, 7.2, 89.90000000000001, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h284>
+    <h285 x="-2786.8" y="-175.4" z="10.1" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h285>
+    <h286 x="-2790.3" y="-168.3" z="7.2" price="240000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 13"></h286>
+    <h287 x="-2791.9" y="-160.5" z="10.1" price="270000" locked="1" Garage="[ [ [ -2793.1, -158.2, 7.2, 86.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Ryder House"></h287>
+    <h288 x="-2792.8" y="-153.1" z="7.6" price="234000" locked="1" Garage="[ [ [ -2793.1, -149.4, 7.2, 92.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h288>
+    <h289 x="-2791.6" y="-146" z="7.9" price="246000" locked="1" Garage="[ [ [ -2793.1, -140.8, 7.2, 91.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Ryder House"></h289>
+    <h290 x="-2791.8" y="-134.5" z="10.1" price="252000" locked="1" Garage="[ [ [ -2793.1, -136.7, 7.2, 89.3, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h290>
+    <h291 x="-2793.1" y="-127.2" z="7.2" price="236000" locked="1" Garage="[ [ [ -2793.1, -121, 7.2, 88.3, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h291>
+    <h292 x="-2786.8" y="-118.3" z="10.1" price="255000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h292>
+    <h293 x="-2790.3" y="-111.2" z="7.2" price="235000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h293>
+    <h294 x="-2791.6" y="-107.4" z="7.9" price="245000" locked="1" Garage="[ [ [ -2793.1, -102.4, 7.2, 89.59999999999999, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 13" dolg="2666"></h294>
+    <h295 x="-2791.8" y="-94.8" z="10.1" price="252000" locked="1" Garage="[ [ [ -2793.1, -92.3, 7.2, 91.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h295>
+    <h296 x="-2786.8" y="-89.7" z="10.1" price="248000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h296>
+    <h297 x="-2790.3" y="-82.6" z="7.2" price="239000" locked="1" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h297>
+    <h298 x="-2725.7" y="-92.5" z="7.2" price="240000" locked="1" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h298>
+    <h299 x="-2728.2" y="-98.5" z="7.2" price="235000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h299>
+    <h300 x="-2724.7" y="-105.6" z="4.3" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h300>
+    <h301 x="-2723" y="-113.4" z="7.2" price="240000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h301>
+    <h302 x="-2722.1" y="-120.7" z="4.8" price="230000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h302>
+    <h303 x="-2723.3" y="-127.9" z="5" price="260000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h303>
+    <h304 x="-2723.1" y="-139.4" z="7.2" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h304>
+    <h305 x="-2721.8" y="-146.7" z="4.3" price="243000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h305>
+    <h306 x="-2728.2" y="-155.6" z="7.2" price="240000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h306>
+    <h307 x="-2724.7" y="-162.6" z="4.3" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h307>
+    <h308 x="-2723.3" y="-166.5" z="5" price="235000" locked="1" dolg="25048" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h308>
+    <h309 x="-2723.1" y="-179.1" z="7.2" price="240000" locked="1" dolg="15600" type="Дом 1 этаж (нормальный)" int="Burglary House 7"></h309>
+    <h310 x="-2728.2" y="-184.2" z="7.2" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6" dolg="2385"></h310>
+    <h311 x="-2724.7" y="-191.2" z="4.3" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h311>
+    <h312 x="2148.9" y="-1484.9" z="26.6" price="87000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place" dolg="66134"></h312>
+    <h313 x="2146.8" y="-1470.5" z="26" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h313>
+    <h314 x="2152.2" y="-1446.3" z="26.1" price="50000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="35550"></h314>
+    <h315 x="2149.8" y="-1433.8" z="26.1" price="53000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" dolg="47996"></h315>
+    <h316 x="2150.9" y="-1419.1" z="25.9" price="70000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1" dolg="10535"></h316>
+    <h317 x="2151.2" y="-1400.7" z="26.1" price="75000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h317>
+    <h318 x="2196.2" y="-1404.1" z="25.9" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h318>
+    <h319 x="2188.6" y="-1419.2" z="26.2" price="60000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h319>
+    <h320 x="2194.4" y="-1442.9" z="26.1" price="50000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h320>
+    <h321 x="2191.1" y="-1455.8" z="26" price="60000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="54000"></h321>
+    <h322 x="2190.5" y="-1470.4" z="25.9" price="80000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den" dolg="34920"></h322>
+    <h323 x="2190.3" y="-1487.6" z="26.1" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h323>
+    <h324 x="-2069.3" y="-2495.1" z="31.1" price="42000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h324>
+    <h325 x="-2087.1" y="-2510.6" z="31.1" price="41000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h325>
+    <h326 x="-2101.1" y="-2532.7" z="31.1" price="50000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h326>
+    <h327 x="-2058.1" y="-2503.6" z="31.1" price="67000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h327>
+    <h328 x="-2075.3" y="-2526.2" z="31.1" price="55000" locked="1" type="Маленькая комната" int="Safe House 4"></h328>
+    <h329 x="-2082" y="-2548.3" z="30.8" price="45000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h329>
+    <h330 x="-2045.1" y="-2522.4" z="31.1" price="47800" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h330>
+    <h331 x="-2053" y="-2544.7" z="31.1" price="54000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h331>
+    <h332 x="-2068.8" y="-2561.7" z="31.1" price="46000" locked="1" type="Маленькая комната" int="Big bear apartament"></h332>
+    <h333 x="-2067.7" y="-2536.8" z="30.8" price="39000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h333>
+    <h334 x="-2042.5" y="-2558.7" z="30.8" price="35000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h334>
+    <h335 x="-2031.3" y="-2538.9" z="31.1" price="42000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h335>
+    <h336 x="1364.5" y="1896.7" z="11.5" price="95000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2" dolg="10528"></h336>
+    <h337 x="1364" y="1931.6" z="11.5" price="88000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h337>
+    <h338 x="1336.4" y="1931.4" z="11.5" price="112000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3" dolg="106344"></h338>
+    <h339 x="1309.3" y="1931.2" z="11.5" price="109000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 21" dolg="18306"></h339>
+    <h340 x="2826.1" y="2140.7" z="10.8" price="50000" locked="1" type="Маленькая комната" int="Katie&apos;s Place" dolg="4100"></h340>
+    <h341 x="2818.5" y="2140.8" z="10.8" price="50000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h341>
+    <h342 x="2818.5" y="2134.5" z="10.8" price="45000" locked="1" type="Маленькая комната" int="Safe House 10" dolg="1232"></h342>
+    <h343 x="2826.1" y="2134.5" z="10.8" price="45000" locked="1" type="Маленькая комната" int="Big bear apartament"></h343>
+    <h344 x="2818.5" y="2134.5" z="14.7" price="43000" locked="1" type="Маленькая комната" int="Safe House 4"></h344>
+    <h345 x="2826.1" y="2134.4" z="14.7" price="43000" locked="1" type="Маленькая комната" int="Abandonded AC Woter" dolg="19005"></h345>
+    <h346 x="2818.5" y="2140.8" z="14.7" price="47000" locked="1" type="Маленькая комната" int="Safe House 10"></h346>
+    <h347 x="2826.1" y="2140.8" z="14.7" price="47000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h347>
+    <h348 x="2532.3" y="750.1" z="10.8" price="50000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h348>
+    <h349 x="2532.3" y="742.5" z="10.8" price="50000" locked="1" type="Маленькая комната" int="Big bear apartament"></h349>
+    <h350 x="2526.1" y="750.1" z="10.8" price="45000" locked="1" type="Маленькая комната" int="Safe House 10"></h350>
+    <h351 x="2526" y="742.5" z="10.8" price="45000" locked="1" type="Маленькая комната" int="Safe House 4"></h351>
+    <h352 x="2526" y="742.5" z="14.7" price="41000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h352>
+    <h353 x="2526.1" y="750.1" z="14.7" price="41000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h353>
+    <h354 x="2532.3" y="742.6" z="14.7" price="47000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h354>
+    <h355 x="2532.4" y="750.1" z="14.7" price="47000" locked="1" type="Маленькая комната" int="Safe House 4"></h355>
+    <h356 x="751.7" y="375.3" z="23.4" price="15000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h356>
+    <h357 x="758.9" y="375.1" z="23.4" price="40000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h357>
+    <h358 x="783.2" y="377.5" z="21.3" price="25000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h358>
+    <h359 x="787.6" y="375.8" z="21.3" price="25000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h359>
+    <h360 x="808.1" y="372.3" z="19.5" price="20000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h360>
+    <h361 x="805.4" y="358.4" z="19.8" price="21000" locked="1" type="Маленькая комната" int="Safe House 4"></h361>
+    <h362 x="783.9" y="352.6" z="19.6" price="30000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h362>
+    <h363 x="772.9" y="348.2" z="20.2" price="27000" locked="1" type="Маленькая комната" int="Safe House 4"></h363>
+    <h364 x="748.4" y="350.9" z="20.6" price="23000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h364>
+    <h365 x="1684.5" y="2046.6" z="11.5" price="110000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2" dolg="86295"></h365>
+    <h366 x="1680.4" y="2069.2" z="11.4" price="130000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 13" dolg="48880"></h366>
+    <h367 x="1685.4" y="2093.8" z="11.5" price="125000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h367>
+    <h368 x="1684.5" y="2123.4" z="11.5" price="105000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h368>
+    <h369 x="1641.8" y="2044.9" z="11.3" price="107000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h369>
+    <h370 x="1640.2" y="2075.7" z="11.3" price="114000" locked="1" type="Дом 1 этаж (нормальный)" int="Ryder House"></h370>
+    <h371 x="1640.4" y="2102.9" z="11.3" price="114000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h371>
+    <h372 x="1645.4" y="2127.4" z="11.2" price="130000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h372>
+    <h373 x="1641.3" y="2149.7" z="11.3" price="100000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h373>
+    <h374 x="207.1" y="-112.3" z="4.9" price="8000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h374>
+    <h375 x="201.5" y="-118.2" z="4.9" price="7000" locked="1" type="Маленькая комната" int="Big bear apartament"></h375>
+    <h376 x="201.5" y="-97" z="4.9" price="7500" locked="1" type="Маленькая комната" int="Big bear apartament"></h376>
+    <h377 x="189.4" y="-97" z="4.9" price="8000" locked="1" type="Маленькая комната" int="Safe House 4"></h377>
+    <h378 x="178.3" y="-97" z="4.9" price="7000" locked="1" type="Маленькая комната" int="Safe House 4"></h378>
+    <h379 x="166.3" y="-97" z="4.9" price="7500" locked="1" type="Маленькая комната" int="Safe House 10"></h379>
+    <h380 x="160.6" y="-102.6" z="4.9" price="8000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h380>
+    <h381 x="160.6" y="-112.6" z="4.9" price="8000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h381>
+    <h382 x="166.3" y="-118.2" z="4.9" price="7500" locked="1" type="Маленькая комната" int="Safe House 4"></h382>
+    <h383 x="178.3" y="-118.2" z="4.9" price="7000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h383>
+    <h384 x="201.4" y="-120.2" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h384>
+    <h385 x="209.1" y="-112.6" z="1.6" price="10500" locked="1" type="Маленькая комната" int="Safe House 10" dolg="2605"></h385>
+    <h386 x="201.4" y="-95" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h386>
+    <h387 x="166.3" y="-95" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h387>
+    <h388 x="158.6" y="-102.6" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="1695"></h388>
+    <h389 x="158.6" y="-112.6" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h389>
+    <h390 x="166.3" y="-120.2" z="1.6" price="10000" locked="1" type="Маленькая комната" int="Safe House 10"></h390>
+    <h391 x="178.3" y="-120.2" z="1.5" price="10000" locked="1" type="Маленькая комната" int="Safe House 10" dolg="2340"></h391>
+    <h392 x="189.4" y="-120.2" z="1.5" price="10000" locked="1" type="Маленькая комната" int="Safe House 4"></h392>
+    <h393 x="201.4" y="-120.2" z="1.6" price="10000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h393>
+    <h394 x="2756.3" y="-1182.8" z="69.4" price="300000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h394>
+    <h395 x="2750.4" y="-1205.7" z="67.5" price="198000" locked="1" type="Маленькая комната" int="Safe House 4"></h395>
+    <h396 x="2750.4" y="-1222.2" z="64.6" price="201000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h396>
+    <h397 x="2750.4" y="-1238.8" z="61.5" price="202000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h397>
+    <h398 x="2776" y="-1245.4" z="49.6" price="500000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h398>
+    <h399 x="2797.9" y="-1245.4" z="47.4" price="610000" locked="1" type="Маленькая комната" int="Big bear apartament"></h399>
+    <h400 x="2809.5" y="-1281" z="43.9" price="550000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h400>
+    <h401 x="2809.5" y="-1303" z="38.9" price="510000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h401>
+    <h402 x="2809.5" y="-1324.9" z="33.9" price="632000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h402>
+    <h403 x="2808" y="-1354" z="27.2" price="250000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h403>
+    <h404 x="2808" y="-1369.5" z="23.6" price="250000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h404>
+    <h405 x="2756.3" y="-1302.5" z="53.1" price="230000" locked="1" type="Маленькая комната" int="Big bear apartament"></h405>
+    <h406 x="2755.8" y="-1276.5" z="56.6" price="210000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h406>
+    <h407 x="2782.2" y="-1281.3" z="44.4" price="520000" locked="1" type="Маленькая комната" int="Safe House 4"></h407>
+    <h408 x="2782.2" y="-1306.3" z="38.9" price="530000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h408>
+    <h409 x="2781.9" y="-1333.5" z="32.4" price="486000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h409>
+    <h410 x="2781.9" y="-1358.6" z="26.4" price="467000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h410>
+    <h411 x="746.4" y="305" z="20.2" price="33000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h411>
+    <h412 x="719.1" y="300.6" z="20.4" price="26000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h412>
+    <h413 x="705.4" y="292.1" z="20.4" price="18000" locked="1" type="Маленькая комната" int="Safe House 10"></h413>
+    <h414 x="723.7" y="269.7" z="22.5" price="16000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h414>
+    <h415 x="748.2" y="257.1" z="27.1" price="27000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h415>
+    <h416 x="747.1" y="278.2" z="27.2" price="30000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="10605"></h416>
+    <h417 x="2413.9" y="-1646.8" z="14" price="525000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h417>
+    <h418 x="2393.2" y="-1646" z="13.9" price="510000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h418>
+    <h419 x="2362.9" y="-1643.1" z="14.4" price="450000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h419>
+    <h420 x="2409" y="-1674.9" z="14.4" price="560000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h420>
+    <h421 x="2384.6" y="-1675.8" z="15.2" price="610000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h421>
+    <h422 x="2368.3" y="-1675.3" z="14.2" price="580000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h422>
+    <h423 x="2282.3" y="-1641.2" z="15.9" price="565000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h423>
+    <h424 x="2257.1" y="-1644" z="15.8" price="500000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h424>
+    <h425 x="2244.5" y="-1637.6" z="16.2" price="670000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h425>
+    <h426 x="2695.4" y="-2020.5" z="14" price="250000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h426>
+    <h427 x="2673.3" y="-2020.3" z="14.2" price="230000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h427>
+    <h428 x="2650.7" y="-2021.8" z="14.2" price="375000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h428>
+    <h429 x="2635.6" y="-2012.9" z="14.1" price="350000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h429>
+    <h430 x="2637.1" y="-1991.7" z="14.3" price="340000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h430>
+    <h431 x="2652.8" y="-1989.4" z="14" price="265000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h431>
+    <h432 x="2672.7" y="-1989.5" z="14.3" price="275000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h432>
+    <h433 x="2696.4" y="-1990.4" z="14.2" price="245000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h433>
+    <h434 x="745.7" y="-591.1" z="18" price="340000" locked="1" Garage="[ [ [ 758.5, -582, 17.3, 92.3, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Ryder House"></h434>
+    <h435 x="736.7" y="-556.8" z="18" price="200000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House" dolg="34000"></h435>
+    <h436 x="745.1" y="-556.8" z="18" price="200000" locked="1" Garage="[ [ [ 750.4, -556.8, 17.3, 349.2, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 16" dolg="34000"></h436>
+    <h437 x="766.6" y="-556.8" z="18" price="310000" locked="1" Garage="[ [ [ 772, -556.8, 17.3, 350.8, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3" dolg="110050"></h437>
+    <h438 x="818.3" y="-509.3" z="18" price="350000" locked="1" Garage="[ [ [ 827.5, -492, 17.3, 182.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 22" dolg="332325"></h438>
+    <h439 x="795.2" y="-506.2" z="18" price="364000" locked="1" Garage="[ [ [ 786, -493.3, 17.3, 168.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h439>
+    <h440 x="776.7" y="-503.5" z="18" price="215000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 9"></h440>
+    <h441 x="768.2" y="-503.5" z="18" price="215000" locked="1" Garage="[ [ [ 763, -503.5, 17.3, 177.8, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h441>
+    <h442 x="743.3" y="-509.3" z="18" price="289000" locked="1" Garage="[ [ [ 752.4, -492, 17.3, 173.7, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h442>
+    <h443 x="252.9" y="-121.3" z="3.5" price="495000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h443>
+    <h444 x="252.9" y="-92.4" z="3.5" price="540000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20" dolg="60480"></h444>
+    <h445 x="271.6" y="-48.8" z="2.8" price="600000" locked="1" Garage="[ [ [ 278.3, -51.4, 1.6, 178.2, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h445>
+    <h446 x="295" y="-54.5" z="2.8" price="595000" locked="1" Garage="[ [ [ 287.6, -48.8, 1.6, 180.7, 1 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h446>
+    <h447 x="312.7" y="-92.4" z="3.5" price="597000" locked="1" Garage="[ [ [ 314.7, -88, 2.9, 271.9, 0 ], [ 314.7, -84.3, 2.9, 269.4, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h447>
+    <h448 x="312.7" y="-121.3" z="3.5" price="585000" locked="1" Garage="[ [ [ 314.7, -129.3, 2.9, 268.7, 0 ], [ 314.7, -125.5, 2.9, 268.1, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 21"></h448>
+    <h449 x="2700.2" y="-1200.1" z="69" price="20000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h449>
+    <h450 x="2700.2" y="-1203.1" z="68.2" price="20000" locked="1" type="Маленькая комната" int="Big bear apartament"></h450>
+    <h451 x="2700.2" y="-1207.6" z="67.3" price="20000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h451>
+    <h452 x="2700.2" y="-1211.8" z="66.1" price="20000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h452>
+    <h453 x="2700.2" y="-1216.3" z="64.7" price="20000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h453>
+    <h454 x="2700.2" y="-1220.6" z="63.4" price="20000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h454>
+    <h455 x="2700.2" y="-1224.8" z="62.1" price="20000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h455>
+    <h456 x="2700.2" y="-1229.3" z="60.8" price="20000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h456>
+    <h457 x="2700.2" y="-1233.5" z="59.6" price="20000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h457>
+    <h458 x="2700.2" y="-1238" z="58.2" price="20000" locked="1" type="Маленькая комната" int="Big bear apartament"></h458>
+    <h459 x="2690.5" y="-1238" z="57.5" price="20000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h459>
+    <h460 x="2690.6" y="-1233.5" z="58.9" price="20000" locked="1" type="Маленькая комната" int="Safe House 4"></h460>
+    <h461 x="2326.9" y="-1682" z="14.9" price="725000" locked="1" Garage="[ [ [ 2324.8, -1677.3, 14.4, 271.5, 0 ] ] ]" type="Дом 1 этаж (бедный)" int="The Crack Den"></h461>
+    <h462 x="2385.4" y="-1711.7" z="14.2" price="740000" locked="1" Garage="[ [ [ 2390, -1709.5, 13.6, 180.3, 0 ] ] ]" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h462>
+    <h463 x="2326.8" y="-1716.7" z="14.2" price="450000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h463>
+    <h464 x="2308.9" y="-1714.3" z="15" price="325000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" dolg="274752"></h464>
+    <h465 x="-2662" y="876.3" z="79.8" price="800000" locked="1" Garage="[ [ [ -2679.9, 865, 76.3, 3.8, 0 ] ] ]" type="Дом 1 этаж (богатый)" int="Safe House 14" dolg="779200"></h465>
+    <h466 x="-2670" y="927.4" z="79.7" price="760000" locked="1" type="Дом 2 этажа (нормальный)" int="Colonel Fuhrberger&apos;s House"></h466>
+    <h467 x="-2641.2" y="935.7" z="72" price="520000" locked="1" type="Дом 2 этаж (богатый)" int="Modern safe house" dolg="48100"></h467>
+    <h468 x="-881.4" y="1562.6" z="26.2" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h468>
+    <h469 x="-883.9" y="1552.7" z="26.1" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h469>
+    <h470 x="-905.6" y="1542.8" z="26.1" price="60000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h470>
+    <h471 x="-884.3" y="1538.3" z="26" price="30000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h471>
+    <h472 x="-879.7" y="1538.7" z="26" price="30000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h472>
+    <h473 x="-881.8" y="1531.7" z="26.1" price="40000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h473>
+    <h474 x="-905.4" y="1528.6" z="26.1" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h474>
+    <h475 x="-881.7" y="1513.7" z="26" price="33000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h475>
+    <h476 x="-886.4" y="1514.1" z="26" price="33000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h476>
+    <h477 x="-906.5" y="1514.6" z="26.3" price="75000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h477>
+    <h478 x="253.3" y="-22.3" z="1.6" price="295000" locked="1" type="Маленькая комната" int="Safe House 4"></h478>
+    <h479 x="248.7" y="-33.2" z="1.6" price="430000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h479>
+    <h480 x="709.9" y="1194.8" z="13.4" price="96500" locked="1" type="Маленькая комната" int="Safe House 10"></h480>
+    <h481 x="710.4" y="1208.1" z="13.8" price="88000" locked="1" dolg="3652" type="Маленькая комната" int="Big bear apartament"></h481>
+    <h482 x="876.2" y="-1512.9" z="14.3" price="235000" locked="1" Garage="[ [ [ 876, -1505.1, 12.5, 93.7, 1 ] ] ]" type="Маленькая комната" int="Safe House 10" dolg="26325"></h482>
+    <h483 x="739.1" y="-1428.8" z="13.9" price="150000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h483>
+    <h484 x="725.6" y="-1440.4" z="13.5" price="125000" locked="1" type="Маленькая комната" int="Abandonded AC Woter" dolg="39432"></h484>
+    <h485 x="725.7" y="-1451" z="17.7" price="140000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h485>
+    <h486 x="2808" y="-1175.9" z="25.4" price="730000" locked="1" Garage="[ [ [ 2824.6, -1170.1, 25.2, 270.6, 0 ], [ 2824.6, -1165, 25.3, 269, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h486>
+    <h487 x="2808.1" y="-1190.9" z="25.3" price="725000" locked="1" Garage="[ [ [ 2824.6, -1201.5, 25.2, 270.6, 0 ], [ 2824.6, -1196.2, 25.2, 266.5, 0 ] ] ]" type="Дом 1 этаж (нормальный)" int="Safe House 3" dolg="317836"></h487>
+    <h488 x="2579.6" y="-1033.2" z="69.6" price="35000" locked="1" type="Маленькая комната" int="Big bear apartament"></h488>
+    <h489 x="2562.1" y="-1034.3" z="69.9" price="40000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h489>
+    <h490 x="2549.2" y="-1032.3" z="69.6" price="38000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h490>
+    <h491 x="2526.8" y="-1033.5" z="69.6" price="32000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h491>
+    <h492 x="2512.8" y="-1027.2" z="70.1" price="41000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House" dolg="6760"></h492>
+    <h493 x="2491.4" y="-1012.3" z="65.4" price="45000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h493>
+    <h494 x="2462.3" y="-1011.1" z="60.1" price="42000" locked="1" type="Маленькая комната" int="Safe House 4" dolg="10626"></h494>
+    <h495 x="2439.9" y="-1010.9" z="54.3" price="34000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom" dolg="3621"></h495>
+    <h496 x="2389.2" y="-1037.1" z="53.5" price="30000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h496>
+    <h497 x="2370.2" y="-1034.6" z="54.4" price="35000" locked="1" type="Маленькая комната" int="BDups Crack Palace" dolg="26945"></h497>
+    <h498 x="2373" y="-1051.4" z="54.1" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h498>
+    <h499 x="2362.7" y="-1046.4" z="54.3" price="15000" locked="1" type="Трейлер" int="Angel Pine Trailer" dolg="7896"></h499>
+    <h500 x="2355.5" y="-1038.6" z="54.3" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h500>
+    <h501 x="2351" y="-1039.8" z="54.3" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer" dolg="4365"></h501>
+    <h502 x="2355.8" y="-1058.8" z="54.1" price="11000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h502>
+    <h503 x="2348.1" y="-1047.5" z="53.9" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer" dolg="3200"></h503>
+    <h504 x="2335.1" y="-1046" z="52.6" price="25000" locked="1" type="Маленькая комната" int="Denise&apos;s Place" dolg="23280"></h504>
+    <h505 x="2330.2" y="-1060.9" z="52.5" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h505>
+    <h506 x="2325.4" y="-1061" z="52.5" price="10000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h506>
+    <h507 x="2319.8" y="-1053.3" z="52.5" price="13000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h507>
+    <h508 x="2297.6" y="-1053" z="49.9" price="17000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h508>
+    <h509 x="2284.1" y="-1046.1" z="49.9" price="18000" locked="1" type="Маленькая комната" int="OG Loc&apos;s House"></h509>
+    <h510 x="2307" y="-1679.2" z="14.3" price="450000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h510>
+    <h511 x="2067.1" y="-1731.6" z="14.2" price="350000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h511>
+    <h512 x="2066.2" y="-1717.1" z="14.1" price="325000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h512>
+    <h513 x="2065.1" y="-1703.5" z="14.1" price="750000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h513>
+    <h514 x="2066.8" y="-1656.5" z="14.1" price="335000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h514>
+    <h515 x="2067.6" y="-1643.7" z="14.1" price="360000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h515>
+    <h516 x="2067.7" y="-1628.9" z="14.2" price="360000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h516>
+    <h517 x="-2099.6" y="897.4" z="76.7" price="350000" locked="1" dolg="14525" type="Маленькая комната" int="Abandonded AC Woter"></h517>
+    <h518 x="-2075.1" y="898.6" z="64.1" price="300000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h518>
+    <h519 x="-2084.7" y="898.6" z="64.1" price="300000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h519>
+    <h520 x="-2034.3" y="901.5" z="50.5" price="290000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h520>
+    <h521 x="-2116.8" y="927.8" z="86.1" price="400000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h521>
+    <h522 x="-2059" y="889.4" z="61.9" price="300000" locked="1" type="Маленькая комната" int="Safe House 4"></h522>
+    <h523 x="-1802.6" y="2037.7" z="9.6" price="100000" locked="1" type="Маленькая комната" int="Big bear apartament"></h523>
+    <h524 x="-1827.1" y="2042.3" z="8.7" price="96000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h524>
+    <h525 x="-1500" y="1960.1" z="49" price="235000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h525>
+    <h526 x="2457.8" y="-1054.6" z="60" price="66000" locked="1" type="Маленькая комната" int="Katie&apos;s Place" dolg="7095"></h526>
+    <h527 x="2479.7" y="-1064" z="67" price="65000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h527>
+    <h528 x="2499.7" y="-1065.6" z="70.2" price="40000" locked="1" type="Маленькая комната" int="Denise&apos;s Place"></h528>
+    <h529 x="2526.1" y="-1060.7" z="70" price="35000" locked="1" type="Маленькая комната" int="BDups Crack Palace" dolg="13770"></h529>
+    <h530 x="2534.5" y="-1063.4" z="69.6" price="30000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h530>
+    <h531 x="2576.7" y="-1070.7" z="69.8" price="30000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="12900"></h531>
+    <h532 x="2572.3" y="-1091.8" z="67.2" price="32000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h532>
+    <h533 x="2519" y="-1113" z="56.6" price="55000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h533>
+    <h534 x="2470.6" y="-1105.3" z="44.5" price="30000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h534>
+    <h535 x="2457" y="-1102.5" z="43.9" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h535>
+    <h536 x="2438.6" y="-1105.8" z="43.1" price="34000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h536>
+    <h537 x="2407.8" y="-1107" z="40.3" price="34000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h537>
+    <h538 x="2374" y="-1138.9" z="29.1" price="40000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1" dolg="29820"></h538>
+    <h539 x="2394.9" y="-1133.5" z="30.7" price="84000" locked="1" Garage="[ [ [ 2399.7, -1131.3, 30.1, 181.5, 1 ] ] ]" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h539>
+    <h540 x="2427.4" y="-1135.8" z="34.7" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h540>
+    <h541 x="2488.1" y="-1135.2" z="39.6" price="34000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h541>
+    <h542 x="2510.6" y="-1132.7" z="41.6" price="25000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="12636"></h542>
+    <h543 x="-2075.8" y="-2312.8" z="31.1" price="235000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h543>
+    <h544 x="1519.1" y="-1453.9" z="14.2" price="525000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 14" dolg="52662"></h544>
+    <h545 x="2313" y="-1259.4" z="23.9" price="45000" locked="1" type="Гараж" dolg="4928"></h545>
+    <h546 x="2313" y="-1265" z="23.9" price="45000" locked="1" type="Гараж" dolg="25124"></h546>
+    <h547 x="2313" y="-1270.6" z="23.9" price="45000" locked="1" type="Гараж" dolg="4422"></h547>
+    <h548 x="2313" y="-1276" z="23.9" price="45000" locked="1" type="Гараж" dolg="4422"></h548>
+    <h549 x="1596.4" y="2147.5" z="11.5" price="140000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h549>
+    <h550 x="1595.5" y="2123.3" z="11.5" price="125000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h550>
+    <h551 x="1596.4" y="2093.7" z="11.3" price="127500" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 2"></h551>
+    <h552 x="1595" y="2071.1" z="11.3" price="110000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h552>
+    <h553 x="1595.5" y="2038.4" z="11.5" price="120000" locked="1" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h553>
+    <h554 x="1554.4" y="2074.1" z="11.4" price="123000" locked="1" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place" dolg="10187"></h554>
+    <h555 x="1550.3" y="2096.4" z="11.5" price="110000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19" dolg="11715"></h555>
+    <h556 x="1549.4" y="2125.6" z="11.5" price="115000" locked="1" type="Дом 1 этаж (нормальный)" int="Budget Inn Motel Room"></h556>
+    <h557 x="1488.6" y="360.9" z="19.4" price="45000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1" dolg="4708"></h557>
+    <h558 x="1469.7" y="351.5" z="18.9" price="40000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h558>
+    <h559 x="1461.1" y="342.5" z="19" price="43000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1" dolg="17157"></h559>
+    <h560 x="1434.9" y="334.9" z="18.9" price="35000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h560>
+    <h561 x="1415.9" y="324.6" z="18.8" price="38000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h561>
+    <h562 x="1403.2" y="333.9" z="18.9" price="39000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h562>
+    <h563 x="1409.4" y="346.9" z="19.3" price="33000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h563>
+    <h564 x="1413.1" y="363.1" z="19.2" price="32000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h564>
+    <h565 x="1419.5" y="389.5" z="19.3" price="36000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h565>
+    <h566 x="1451.7" y="375.8" z="19.4" price="32000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house" dolg="4048"></h566>
+    <h567 x="1475.3" y="372.7" z="19.7" price="35000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" dolg="4267"></h567>
+    <h568 x="1447.4" y="361.8" z="18.9" price="33000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h568>
+    <h569 x="1428.6" y="356.5" z="18.9" price="36000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h569>
+    <h570 x="1465.8" y="364.2" z="19.3" price="30000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h570>
+    <h571 x="-2710.8" y="967.5" z="54.5" price="430000" locked="1" type="Дом 1 этаж (богатый)" int="Burglary House 3"></h571>
+    <h572 x="-2655.5" y="985.8" z="65" price="670000" locked="1" type="Дом 2 этаж (богатый)" int="Burglary House 11"></h572>
+    <h573 x="-2720.9" y="923.9" z="67.6" price="480000" locked="1" type="Дом 2 этаж (богатый)" int="Safe House 18"></h573>
+    <h574 x="-2706.6" y="864.5" z="70.7" price="550000" locked="1" type="Дом 2 этажа (нормальный)" int="Burglary House 10"></h574>
+    <h575 x="-2737.6" y="866.3" z="64.6" price="120000" locked="1" type="Маленькая комната" int="Safe House 4"></h575>
+    <h576 x="-2736.9" y="846.6" z="59.3" price="140000" locked="1" type="Маленькая комната" int="Safe House 10"></h576>
+    <h577 x="-2737.8" y="836.7" z="56.3" price="117000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h577>
+    <h578 x="-2737.3" y="823" z="53.7" price="110000" locked="1" type="Маленькая комната" int="Katie&apos;s Place"></h578>
+    <h579 x="-2726.8" y="823" z="53.7" price="125000" locked="1" type="Маленькая комната" int="Safe House 10"></h579>
+    <h580 x="-2700.4" y="820.9" z="50" price="250000" locked="1" type="Дом 2 этажа (нормальный)" int="Johnson House"></h580>
+    <h581 x="-2667" y="820.3" z="50" price="135000" locked="1" type="Маленькая комната" int="Safe House 10"></h581>
+    <h582 x="-2652.6" y="820.3" z="50" price="125000" locked="1" type="Маленькая комната" int="Safe House 4"></h582>
+    <h583 x="-2642" y="820.3" z="50" price="110000" locked="1" type="Маленькая комната" int="Safe House 4"></h583>
+    <h584 x="-2618.8" y="830.9" z="50" price="132000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h584>
+    <h585 x="-2620.6" y="832.9" z="52.1" price="80000" locked="1" type="Маленькая комната" int="Safe House 4"></h585>
+    <h586 x="-2619.7" y="845.2" z="50.6" price="110000" locked="1" type="Маленькая комната" int="Safe House 4"></h586>
+    <h587 x="-2620.7" y="855.1" z="53.6" price="120000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h587>
+    <h588 x="-2620" y="874.8" z="58.9" price="115000" locked="1" type="Маленькая комната" int="Safe House 10"></h588>
+    <h589 x="-2620.2" y="883.1" z="63.3" price="109000" locked="1" type="Маленькая комната" int="Millie&apos;s Bedroom"></h589>
+    <h590 x="-2657.4" y="848.6" z="64" price="420000" locked="1" type="Дом 2 этажа (нормальный)" int="Johnson House"></h590>
+    <h591 x="653.6" y="-1714.1" z="14.8" price="330000" locked="0" type="Дом 1 этаж (нормальный)" int="Safe House 3" dolg="330"></h591>
+    <h592 x="652.7" y="-1694" z="14.5" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h592>
+    <h593 x="657.2" y="-1652.7" z="15.4" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h593>
+    <h594 x="656" y="-1635.9" z="15.9" price="200000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h594>
+    <h595 x="653.2" y="-1619.8" z="15" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h595>
+    <h596 x="660.4" y="-1599.8" z="15" price="280000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 16"></h596>
+    <h597 x="692.9" y="-1602.8" z="15" price="360000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h597>
+    <h598 x="697.3" y="-1627" z="3.7" price="220000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h598>
+    <h599 x="693.8" y="-1645.8" z="4.1" price="350000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 20"></h599>
+    <h600 x="694.8" y="-1690.7" z="4.3" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h600>
+    <h601 x="693.5" y="-1705.8" z="3.8" price="230000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 12"></h601>
+    <h602 x="769.2" y="-1745.9" z="13.1" price="330000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h602>
+    <h603 x="769.1" y="-1726.2" z="13.4" price="250000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 22"></h603>
+    <h604 x="769.2" y="-1696.6" z="5.2" price="270000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h604>
+    <h605 x="768.1" y="-1655.8" z="5.6" price="370000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h605>
+    <h606 x="766.9" y="-1605.8" z="13.8" price="280000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 8"></h606>
+    <h607 x="790.9" y="-1661.1" z="13.5" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Sweet&apos;s House"></h607>
+    <h608 x="794.9" y="-1692.1" z="14.5" price="270000" locked="1" type="Дом 1 этаж (нормальный)" int="Burglary House 19"></h608>
+    <h609 x="794" y="-1707.5" z="14" price="260000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h609>
+    <h610 x="797.2" y="-1729.3" z="13.5" price="290000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 3"></h610>
+    <h611 x="791.5" y="-1753.2" z="13.5" price="300000" locked="1" type="Дом 1 этаж (нормальный)" int="Safe House 6"></h611>
+    <h612 x="-923.7" y="-497" z="26.8" price="85000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h612>
     <h613 x="-940.5" y="-491.2" z="26.4" price="77000" locked="1" type="Маленькая комната" int="Safe House 10"></h613>
     <h614 x="-960.7" y="-507.7" z="26.2" price="80000" locked="1" type="Маленькая комната" int="BDups Crack Palace"></h614>
     <h615 x="-938.8" y="-517.9" z="26.1" price="74000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h615>
@@ -621,7 +621,7 @@
     <h619 x="-924.5" y="-536.3" z="26.1" price="65000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h619>
     <h620 x="-940.2" y="-536.8" z="26.8" price="82000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h620>
     <h621 x="-950.9" y="-530.7" z="26" price="93000" locked="1" type="Маленькая комната" int="Abandonded AC Woter"></h621>
-	<h622 x="1296.3" y="191" z="20.5" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h622>
+    <h622 x="1296.3" y="191" z="20.5" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h622>
     <h623 x="1300.4" y="193.3" z="20.5" price="50000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h623>
     <h624 x="1303.6" y="186.1" z="20.5" price="65000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h624>
     <h625 x="1295.4" y="174.6" z="20.9" price="80000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h625>
@@ -697,23 +697,23 @@
     <h695 x="-2793.6" y="110.9" z="7.2" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h695>
     <h696 x="-2791" y="127" z="7.2" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h696>
     <h697 x="-2792.1" y="130.7" z="7.9" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h697>
-	<h698 x="-2455" y="-135.8" z="26.2" price="560000" locked="1"></h698>
-<h699 x="345.7" y="-1297.8" z="50.8" price="760000" locked="1"></h699>
-<h700 x="-2699.4" y="137" z="4.3" price="250000" locked="1"></h700>
-<h701 x="-2691.2" y="123.7" z="4.3" price="250000" locked="1"></h701>
-<h702 x="-2687.1" y="115.6" z="7.2" price="250000" locked="1"></h702>
-<h703 x="-2691.1" y="102.3" z="4.3" price="250000" locked="1"></h703>
-<h704 x="-2689.5" y="96.3" z="7.2" price="250000" locked="1"></h704>
-<h705 x="-2689.5" y="74.7" z="7.2" price="250000" locked="1"></h705>
-<h706 x="-2690.9" y="64.5" z="4.3" price="250000" locked="1"></h706>
-<h707 x="-2689.4" y="57" z="7.2" price="250000" locked="1"></h707>
-<h708 x="-2639.7" y="168.7" z="7.2" price="270000" locked="1"></h708>
-<h709 x="-2627.8" y="168.7" z="5" price="230000" locked="1"></h709>
-<h710 x="-2621.9" y="168.6" z="7.2" price="240000" locked="1"></h710>
-<h711 x="-2158.8" y="753.7" z="69.5" price="340000" locked="1"></h711>
-<h712 x="-2158.4" y="786.2" z="69.5" price="370000" locked="1"></h712>
-<h713 x="-2127" y="773.7" z="69.6" price="320000" locked="1"></h713>
-<h714 x="-2126.7" y="755.6" z="69.6" price="300000" locked="1"></h714>
-<h715 x="-2112.4" y="746" z="69.6" price="330000" locked="1"></h715>
-<h716 x="-2094.2" y="745.9" z="69.6" price="350000" locked="1"></h716>
+    <h698 x="-2455" y="-135.8" z="26.2" price="560000" locked="1" type="Дом 2 этажа (нормальный)" int="Johnson House"></h698>
+    <h699 x="345.7" y="-1297.8" z="50.8" price="760000" locked="1" type="Дом 1 этаж (нормальный)" int="Wu Zi Mu&apos;s Betting place"></h699>
+    <h700 x="-2687.9" y="137.1" z="4.3" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h700>
+    <h701 x="-2691.2" y="123.7" z="4.3" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h701>
+    <h702 x="-2687.1" y="115.6" z="7.2" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h702>
+    <h703 x="-2691.1" y="102.3" z="4.3" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h703>
+    <h704 x="-2689.5" y="96.3" z="7.2" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h704>
+    <h705 x="-2689.5" y="74.7" z="7.2" price="250000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h705>
+    <h706 x="-2690.9" y="64.5" z="4.3" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h706>
+    <h707 x="-2689.4" y="57" z="7.2" price="250000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h707>
+    <h708 x="-2639.7" y="168.7" z="7.2" price="270000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h708>
+    <h709 x="-2627.8" y="168.7" z="5" price="230000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h709>
+    <h710 x="-2621.9" y="168.6" z="7.2" price="240000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h710>
+    <h711 x="-2158.8" y="753.7" z="69.5" price="340000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h711>
+    <h712 x="-2158.4" y="786.2" z="69.5" price="370000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h712>
+    <h713 x="-2127" y="773.7" z="69.6" price="320000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h713>
+    <h714 x="-2126.7" y="755.6" z="69.6" price="300000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h714>
+    <h715 x="-2112.4" y="746" z="69.6" price="330000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h715>
+    <h716 x="-2094.2" y="745.9" z="69.6" price="350000" locked="1" type="Дом 2 этажа (бедный)" int="Michelle&apos;s Place"></h716>
 </house>
