@@ -506,6 +506,9 @@ msgstr ""
 msgid "Ацтекас"
 msgstr ""
 
+msgid "Частная собственность"
+msgstr ""
+
 msgid "Января"
 msgstr ""
 
@@ -667,9 +670,7 @@ msgstr ""
 msgid "Нажми {key} чтобы купить"
 msgstr ""
 
-msgid ""
-"Sprunk стоимость #3B7231$20#FFFFFF\n"
-"Нажми {key} чтобы купить"
+msgid "Sprunk стоимость #3B7231$20#FFFFFF"
 msgstr ""
 
 msgid "Нажми {key} чтобы лечь"
@@ -684,4 +685,39 @@ msgstr ""
 msgid ""
 "На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу "
 "{key} для автоматического перемещения"
+msgstr ""
+
+msgid "Группа ВКонтакте {link}"
+msgstr ""
+
+msgid "Исходный код сервера {link}"
+msgstr ""
+
+msgid "Нажми {key} чтобы писать в общий чат"
+msgstr ""
+
+msgid "Нажми {key} чтобы писать в командный чат"
+msgstr ""
+
+msgid "Нажми {key} чтобы войти"
+msgstr ""
+
+msgid "Нажми {key} чтобы выйти"
+msgstr ""
+
+msgid "Нажми {key} чтобы купить дом"
+msgstr ""
+
+msgid "ЗАКРЫТО НА РЕМОНТ"
+msgstr ""
+
+msgid "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА"
+msgstr ""
+
+msgid "Нажми {key} чтобы начать заправку"
+msgstr ""
+
+msgid ""
+"В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы "
+"посмотреть"
 msgstr ""

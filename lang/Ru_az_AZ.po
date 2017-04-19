@@ -377,7 +377,7 @@ msgid "Винтовка"
 msgstr "Ov tüfəngi"
 
 msgid "Выносливость"
-msgstr "Dözümlülük"
+msgstr "Dözümlük"
 
 msgid "Качество"
 msgstr "Keyfiyət"
@@ -509,6 +509,9 @@ msgstr "Kəndçilər"
 
 msgid "Ацтекас"
 msgstr "Aztek"
+
+msgid "Частная собственность"
+msgstr "Xüsusi Mülkiyyət"
 
 msgid "Января"
 msgstr "Yanvar"
@@ -673,12 +676,8 @@ msgstr "Durmak üçün {key} bas"
 msgid "Нажми {key} чтобы купить"
 msgstr "Almaq üçün {key} bas"
 
-msgid ""
-"Sprunk стоимость #3B7231$20#FFFFFF\n"
-"Нажми {key} чтобы купить"
-msgstr ""
-"Sprunk qiyməti #3B7231$20#FFFFFF\n"
-"Almaq üçün {key} bas"
+msgid "Sprunk стоимость #3B7231$20#FFFFFF"
+msgstr "Sprunk qiyməti #3B7231$20#FFFFFF"
 
 msgid "Нажми {key} чтобы лечь"
 msgstr "Uzanmaq üçün {key} bas"
@@ -695,3 +694,39 @@ msgid ""
 msgstr ""
 "#4682B4xəriyəyə#FFFFFF #ff0000nöqtə#FFFFFF əlavə olunub! Avtopilotu qurmaq "
 "üçün {key} bas"
+
+msgid "Группа ВКонтакте {link}"
+msgstr "Vkontakte gruppu {link}"
+
+msgid "Исходный код сервера {link}"
+msgstr "Serverin ana kodu {link}"
+
+msgid "Нажми {key} чтобы писать в общий чат"
+msgstr "Ümumi çata yazmaq üçün {key} bas"
+
+msgid "Нажми {key} чтобы писать в командный чат"
+msgstr "Komandanın çatına yazmaq üçün {key} bas"
+
+msgid "Нажми {key} чтобы войти"
+msgstr "Girmək üçün {key} bas"
+
+msgid "Нажми {key} чтобы выйти"
+msgstr "Çıxmaq üçün {key} bas"
+
+msgid "Нажми {key} чтобы купить дом"
+msgstr "Evi almaq üçün {key} bas"
+
+msgid "ЗАКРЫТО НА РЕМОНТ"
+msgstr "TƏMİRƏ BAĞLANIB"
+
+msgid "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА"
+msgstr "TƏZƏ MOTOR VƏ RƏNG"
+
+msgid "Нажми {key} чтобы начать заправку"
+msgstr "Yanacağ doldurması üçün {key} bas"
+
+msgid ""
+"В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы "
+"посмотреть"
+msgstr ""
+"#4682B4inventara#FFFFFF {item} obyekti əlavə olunub, baxmaq üçün {key} bas"
