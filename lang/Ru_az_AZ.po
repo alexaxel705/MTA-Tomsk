@@ -64,6 +64,9 @@ msgstr "Serverin üstündə işləyiblər"
 msgid "пинг"
 msgstr "ping"
 
+msgid "Не авторизирован"
+msgstr "Girməyib"
+
 msgid "место в рейтинге"
 msgstr "reytingdə yer"
 
@@ -716,6 +719,21 @@ msgstr "Çıxmaq üçün {key} bas"
 msgid "Нажми {key} чтобы купить дом"
 msgstr "Evi almaq üçün {key} bas"
 
+msgid "Нажми {key} чтобы открыть дом"
+msgstr "Evi açmaq üçün {key} bas"
+
+msgid "Нажми {key} чтобы закрыть дом"
+msgstr "Evi bağlamaq üçün {key} bas"
+
+msgid "Нажми {key} чтобы продать дом {money}"
+msgstr "Evi satmaq üçün {key} bas {money}"
+
+msgid "Нажми {key} чтобы открыть гараж"
+msgstr "Qarajı açmaq üçün {key} bas"
+
+msgid "Нажми {key} чтобы закрыть гараж"
+msgstr "Qarajı bağlamaq üçün {key} bas"
+
 msgid "ЗАКРЫТО НА РЕМОНТ"
 msgstr "TƏMİRƏ BAĞLANIB"
 
@@ -724,6 +742,9 @@ msgstr "TƏZƏ MOTOR VƏ RƏNG"
 
 msgid "Нажми {key} чтобы начать заправку"
 msgstr "Yanacağ doldurması üçün {key} bas"
+
+msgid "Нажми {key} чтобы остановить заправку"
+msgstr "Yanacağ doldurması saxlamaq üçün {key} bas"
 
 msgid ""
 "В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы "

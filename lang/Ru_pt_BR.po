@@ -60,6 +60,9 @@ msgstr ""
 msgid "пинг"
 msgstr ""
 
+msgid "Не авторизирован"
+msgstr ""
+
 msgid "место в рейтинге"
 msgstr ""
 
@@ -708,6 +711,21 @@ msgstr ""
 msgid "Нажми {key} чтобы купить дом"
 msgstr ""
 
+msgid "Нажми {key} чтобы открыть дом"
+msgstr ""
+
+msgid "Нажми {key} чтобы закрыть дом"
+msgstr ""
+
+msgid "Нажми {key} чтобы продать дом {money}"
+msgstr ""
+
+msgid "Нажми {key} чтобы открыть гараж"
+msgstr ""
+
+msgid "Нажми {key} чтобы закрыть гараж"
+msgstr ""
+
 msgid "ЗАКРЫТО НА РЕМОНТ"
 msgstr ""
 
@@ -715,6 +733,9 @@ msgid "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА"
 msgstr ""
 
 msgid "Нажми {key} чтобы начать заправку"
+msgstr ""
+
+msgid "Нажми {key} чтобы остановить заправку"
 msgstr ""
 
 msgid ""

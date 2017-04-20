@@ -65,6 +65,9 @@ msgstr "Above the server worked"
 msgid "пинг"
 msgstr "ping"
 
+msgid "Не авторизирован"
+msgstr "Not autorized"
+
 msgid "место в рейтинге"
 msgstr "Place in the ranking"
 
@@ -300,13 +303,13 @@ msgid "Кредитка"
 msgstr "Credit card"
 
 msgid "Передать {name}"
-msgstr ""
+msgstr "Give to {name}"
 
 msgid "Посадить {name}"
 msgstr ""
 
 msgid "Извлечь {item}"
-msgstr ""
+msgstr "Extract {item}"
 
 msgid "Использовать"
 msgstr "Use"
@@ -671,19 +674,19 @@ msgid "Нажми {key} чтобы припарковать машину"
 msgstr "Click {key} to park the car"
 
 msgid "Нажми {key} чтобы переодеться"
-msgstr ""
+msgstr "Press {key} to change clothes"
 
 msgid "Нажми {key} чтобы встать"
-msgstr ""
+msgstr "Press {key} to get up"
 
 msgid "Нажми {key} чтобы купить"
-msgstr ""
+msgstr "Press {key} to buy"
 
 msgid "Sprunk стоимость #3B7231$20#FFFFFF"
 msgstr ""
 
 msgid "Нажми {key} чтобы лечь"
-msgstr ""
+msgstr "Press {key} to lay"
 
 msgid "Информация"
 msgstr "Information"
@@ -697,34 +700,52 @@ msgid ""
 msgstr ""
 
 msgid "Группа ВКонтакте {link}"
-msgstr ""
+msgstr "Vkontake group {link}"
 
 msgid "Исходный код сервера {link}"
-msgstr ""
+msgstr "Source of server {link}"
 
 msgid "Нажми {key} чтобы писать в общий чат"
-msgstr ""
+msgstr "Press {key} to write in global chat"
 
 msgid "Нажми {key} чтобы писать в командный чат"
-msgstr ""
+msgstr "Press {key} to write in command chat"
 
 msgid "Нажми {key} чтобы войти"
-msgstr ""
+msgstr "Press {key} to enter"
 
 msgid "Нажми {key} чтобы выйти"
-msgstr ""
+msgstr "Press {key} to exit"
 
 msgid "Нажми {key} чтобы купить дом"
-msgstr ""
+msgstr "Press {key} to buy house"
+
+msgid "Нажми {key} чтобы открыть дом"
+msgstr "Press {key} to open the house"
+
+msgid "Нажми {key} чтобы закрыть дом"
+msgstr "Press {key} to close house"
+
+msgid "Нажми {key} чтобы продать дом {money}"
+msgstr "Press {key} to sell house {money}"
+
+msgid "Нажми {key} чтобы открыть гараж"
+msgstr "Press {key} to open the garage"
+
+msgid "Нажми {key} чтобы закрыть гараж"
+msgstr "Press {key} to close the garage"
 
 msgid "ЗАКРЫТО НА РЕМОНТ"
 msgstr ""
 
 msgid "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА"
-msgstr ""
+msgstr "NEW ENGINE AND PAINT"
 
 msgid "Нажми {key} чтобы начать заправку"
-msgstr ""
+msgstr "Press {key} to start fueling"
+
+msgid "Нажми {key} чтобы остановить заправку"
+msgstr "Press {key} to stop fueling"
 
 msgid ""
 "В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы "
