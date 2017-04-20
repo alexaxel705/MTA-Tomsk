@@ -5127,6 +5127,11 @@ local ReplaceVehicleAnimation = {
 		["EAT_Vomit_P"] = {
 			["theVehicle"] = {false}
 		}
+	},
+	["ped"] = {
+		["cower"] = {
+			["theVehicle"] = {false}
+		}
 	}
 }
 
@@ -9010,20 +9015,18 @@ function PedDamage(ped, weapon, bodypart, loss)
 	
 	
 	if(Team) then
-		if(not theVehicle) then
-			if(SkinData[getElementModel(ped)][4]) then
-				giveWeapon(ped, SkinData[getElementModel(ped)][4], 9999, true)
+		if(SkinData[getElementModel(ped)][4]) then
+			giveWeapon(ped, SkinData[getElementModel(ped)][4], 9999, true)
+			setElementData(ped, "sprint", "true")
+		else
+			local rand = math.random(1,3)
+			if(rand == 1) then
+				StartAnimation(ped, "ped", "cower",1000,true,true,true)
+			elseif(rand == 2) then
 				setElementData(ped, "sprint", "true")
-			else
-				local rand = math.random(1,3)
-				if(rand == 1) then
-					StartAnimation(ped, "ped", "cower",1000,true,true,true)
-				elseif(rand == 2) then
-					setElementData(ped, "sprint", "true")
-				elseif(rand == 3) then
-					setElementData(ped, "attacker", nil)
-					setElementData(ped, "sprint", "true")
-				end
+			elseif(rand == 3) then
+				setElementData(ped, "attacker", nil)
+				setElementData(ped, "sprint", "true")
 			end
 		end
 	end

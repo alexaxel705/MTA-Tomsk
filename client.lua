@@ -4328,7 +4328,6 @@ addEventHandler("TrunkWindow", localPlayer, TrunkWindow)
 
 function CarJack()
 	triggerServerEvent("WarpPedIntoVehicle", localPlayer, getVehicleOccupant(Targets["theVehicle"])) 
-
 end
 addEvent("CarJack", true)
 addEventHandler("CarJack", localPlayer, CarJack)
@@ -5109,13 +5108,17 @@ function CreateTarget(el)
 	local dist = getDistanceBetweenPoints3D(ex,ey,ez,px,py,pz)
 	if(dist < 30) then
 		local types = getElementType(el)
+		if(dist < 2) then
+			if(types == "vehicle") then 
+				local driver = getVehicleOccupant(el)
+				if(getElementType(driver) == "ped") then
+					PData["MultipleAction"]["f"] = {"CarJack", false, false, false}
+				end
+			end
+		end
 		local AllBones = false
 		if(types == "vehicle") then 
 			AllBones = getVehicleComponents(el)
-			local driver = getVehicleOccupant(el)
-			if(getElementType(driver) == "ped") then
-				PData["MultipleAction"]["f"] = {"CarJack", false, false, false}
-			end
 		elseif(types == "ped" or types == "player") then 
 			AllBones = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 51, 52, 53, 54} 
 		end
