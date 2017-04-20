@@ -1551,7 +1551,7 @@ addEventHandler("UpgradeServerPreload", getRootElement(), UpgradeServerPreload)
 
 
 function TuningExit()
-	local theVehicle=getPedOccupiedVehicle(localPlayer)
+	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	setVehicleColor(theVehicle ,ToC1, ToC2, ToC3, ToC4)
 	showCursor(false)
 	if(RepairButton) then guiSetVisible(RepairButton, false) end
@@ -1563,7 +1563,7 @@ function TuningExit()
 		destroyElement(TCButton2[slot])
 	end
 	OriginVehicleUpgrade(theVehicle)
-	triggerServerEvent("ExitTuning", localPlayer)
+	triggerServerEvent("ExitTuning", localPlayer, theVehicle)
 	PText["tuning"] = {}
 end
 
@@ -7606,7 +7606,11 @@ function DrawPlayerInventory()
 				else
 					dxDrawBorderedText(getPlayerName(localPlayer), 660*scalex, 325*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
 					local Birthday = getRealTime(getElementData(localPlayer, "Birthday"))
-					qualityInfo = Text("Дата рождения")..": "..Birthday.monthday.."."..Birthday.month+(1).."."..Birthday.year+(1882).." ("..ServerDate.year-(Birthday.year-18).." лет)\nФракция: "..getTeamName(getPlayerTeam(localPlayer)).."\nРабота: "..getElementData(localPlayer, "job")
+					qualityInfo = Text("Дата рождения")..
+					": "..Birthday.monthday.."."..Birthday.month+(1).."."..Birthday.year+(1882)..
+					" ("..Text("{age} лет", {{"{age}", ServerDate.year-(Birthday.year-18)}})..
+					")\n"..Text("Фракция")..": "..Text(getTeamName(getPlayerTeam(localPlayer)))..
+					"\n"..Text("Работа")..": "..Text(getElementData(localPlayer, "job"))
 				end
 				
 				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(50*scaley), 640*scalex+(949*scalex), 360*scaley+(50*scaley), tocolor(120,120,120,255), 1)	

@@ -5076,7 +5076,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -2699, -65, 3.3, 0, 0 --
+		local x,y,z,i,d  =  523.5, -141.5, 36.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -14038,32 +14038,37 @@ addEventHandler("SetPlayerModel", getRootElement(), SetPlayerModel)
 function OpenTuning(thePlayer,x,y,z,rz)
 	local theVehicle = getPedOccupiedVehicle(thePlayer)
 	if(theVehicle) then
-		if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
-			setPlayerHudComponentVisible(thePlayer, "radar", false)
-			PData[thePlayer]["oldposition"] = {x,y,z,rz}
-			PData[thePlayer]["theVehicleTuning"] = theVehicle
-			PData[thePlayer]["theVehicleTuningHandl"] = getElementData(theVehicle, "handl")
-			
-			setElementDimension(theVehicle, getPlayerID(thePlayer)+2000)
-			setElementDimension(thePlayer, getPlayerID(thePlayer)+2000)
-			
-			setElementInterior(thePlayer, 2, 616.8 , -74.8, 997+VehicleSystem[getElementModel(theVehicle)][1])
-			setElementInterior(theVehicle, 2, 616.8, -74.8, 997+VehicleSystem[getElementModel(theVehicle)][1])
+		if(getPedOccupiedVehicleSeat(thePlayer) == 0) then
+			if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
+				setPlayerHudComponentVisible(thePlayer, "radar", false)
+				PData[thePlayer]["oldposition"] = {x,y,z,rz}
+				PData[thePlayer]["theVehicleTuning"] = theVehicle
+				PData[thePlayer]["theVehicleTuningHandl"] = getElementData(theVehicle, "handl")
+				local d = getPlayerID(thePlayer)+2000
+				setElementDimension(theVehicle, d)
+				local occupants = getVehicleOccupants(theVehicle) or {}
+				for seat, occupant in pairs(occupants) do
+					setElementDimension(occupant, d)
+					setElementInterior(occupant, 2, 616.8 , -74.8, 997+VehicleSystem[getElementModel(theVehicle)][1])
+				end
+				
+				setElementInterior(theVehicle, 2, 616.8, -74.8, 997+VehicleSystem[getElementModel(theVehicle)][1])
 
 
-			setElementRotation(theVehicle, 0,0,90)
+				setElementRotation(theVehicle, 0,0,90)
 
-			local vehh = getVehicleHandling(theVehicle)
+				local vehh = getVehicleHandling(theVehicle)
 
-			triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 5)
-			local othercomp = toJSON(VComp)
-			if(getElementHealth(theVehicle) == 1000) then
-				triggerClientEvent(thePlayer, "CameraTuning", thePlayer, 0, getElementData(theVehicle, "handl"), othercomp)
+				triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 5)
+				local othercomp = toJSON(VComp)
+				if(getElementHealth(theVehicle) == 1000) then
+					triggerClientEvent(thePlayer, "CameraTuning", thePlayer, 0, getElementData(theVehicle, "handl"), othercomp)
+				else
+					triggerClientEvent(thePlayer, "CameraTuning", thePlayer, (vehh["mass"]/5)+(1000-getElementHealth(theVehicle)), getElementData(theVehicle, "handl"), othercomp)
+				end
 			else
-				triggerClientEvent(thePlayer, "CameraTuning", thePlayer, (vehh["mass"]/5)+(1000-getElementHealth(theVehicle)), getElementData(theVehicle, "handl"), othercomp)
+				triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Тюнинговать можно только автомобили!")
 			end
-		else
-			triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Тюнинговать можно только автомобили!")
 		end
 	end
 end
@@ -16156,12 +16161,18 @@ addEvent("repairVeh", true)
 addEventHandler("repairVeh", root, repairVeh)
 
 
-function ExitTuning()
-	setElementDimension(source, 0)
-	setElementDimension(getPedOccupiedVehicle(source), 0)
-	setElementInterior(source, 0)
-	setElementInterior(getPedOccupiedVehicle(source), 0, PData[source]["oldposition"][1], PData[source]["oldposition"][2], PData[source]["oldposition"][3])
-	setElementRotation(getPedOccupiedVehicle(source), 0,0, PData[source]["oldposition"][4])
+function ExitTuning(theVehicle)
+	setElementDimension(theVehicle, 0)
+	setElementInterior(theVehicle, 0, PData[source]["oldposition"][1], PData[source]["oldposition"][2], PData[source]["oldposition"][3])
+	setElementRotation(theVehicle, 0, 0, PData[source]["oldposition"][4])
+
+	local occupants = getVehicleOccupants(theVehicle) or {}
+	for seat, occupant in pairs(occupants) do
+		setElementDimension(occupant, 0)
+		setElementInterior(occupant, 0, PData[source]["oldposition"][1], PData[source]["oldposition"][2], PData[source]["oldposition"][3])
+	end
+	
+	
 	PData[source]["oldposition"] = nil
 	PData[source]["theVehicleTuningHandl"] = nil
 	PData[source]["theVehicleTuning"] = nil
