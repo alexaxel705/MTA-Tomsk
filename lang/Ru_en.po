@@ -694,6 +694,15 @@ msgstr "Information"
 msgid "Дата рождения"
 msgstr ""
 
+msgid "Фракция"
+msgstr ""
+
+msgid "Работа"
+msgstr ""
+
+msgid "{age} лет"
+msgstr ""
+
 msgid ""
 "На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу "
 "{key} для автоматического перемещения"
