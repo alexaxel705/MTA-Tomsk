@@ -1322,7 +1322,7 @@ BotSkin["Колумбийский картель"] = {222,95,30,242,179}
 
 
 
--- Старухи
+-- Старухи, итд
 local BotSkinSpecific = {
 	["Полиция"] = {
 		["Las Venturas"] = {
@@ -4260,6 +4260,7 @@ function SpawnAllVehicle()
 		if(getElementData(RandomVehicles[#RandomVehicles], "trunk")) then
 			local arr = fromJSON(getElementData(RandomVehicles[#RandomVehicles], "trunk"))
 			if(arr[1]) then arr[1] = {"Запаска", 1, math.random(250,550), {}} end
+			if(arr[2]) then arr[2] = {"Огнетушитель", 1, math.random(250,550), {}} end
 			setElementData(RandomVehicles[#RandomVehicles], "trunk", toJSON(arr))
 		end
 	end
@@ -4289,6 +4290,7 @@ function SpawnAllVehicle()
 					if(getElementData(k[1], "trunk")) then
 						local arr = fromJSON(getElementData(k[1], "trunk"))
 						if(arr[1]) then arr[1] = {"Запаска", 1, math.random(250,550), {}} end
+						if(arr[2]) then arr[2] = {"Огнетушитель", 1, math.random(250,550), {}} end
 						setElementData(k[1], "trunk", toJSON(arr))
 					end
 				end
@@ -5076,7 +5078,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -1834.6, -217.1, 17.2, 0, 0 --
+		local x,y,z,i,d  = -2511, -207.9, 24.5, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6940,6 +6942,7 @@ WeaponNamesArr["Лопата"] = 6
 WeaponNamesArr["Бита"] = 5
 WeaponNamesArr["Парашют"] = 46
 WeaponNamesArr["Камера"] = 43
+WeaponNamesArr["Огнетушитель"] = 42
 WeaponNamesArr["Бензопила"] = 9
 
 local ItemsNamesArr = {
@@ -12200,7 +12203,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Рюкзак", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Огнетушитель", 1, 550, {})
 
 	fileDelete("save.txt")
 	local hFile = fileCreate("save.txt")

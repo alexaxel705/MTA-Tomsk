@@ -244,6 +244,7 @@ local TexturesPosition = {
 	["Газета"] = {0.8,0.2,0.75, 0.8,0.2,0, 0,70, 200},
 	["Деньги"] = {0.2,0.2,0.35, -0.05,-0.05,0, 0,70, 200},
 	["Кредитка"] = {-0.3,0.7,0.6, 0,0,0, 0,70, 200},
+	["Огнетушитель"] = {0.35,0.9,-0.1, 0.35,0,-0.1, 8,70, 110}, 
 	--["Пропуск"] = {0,-0.6,-0.6, 0,0,0, 0,70, 200}, -- Object 1581
 }
 
@@ -310,6 +311,7 @@ local PreloadTextures = {
 	["Газета"] = createObject(2674, 4355, 4000, 4020),
 	["Деньги"] = createObject(1212, 4360, 4000, 4020),
 	["Кредитка"] = createObject(1581, 4365, 4000, 4020),
+	["Огнетушитель"] = createObject(366, 4370, 4000, 4020),
 }
 
 local CreateTextureStage = false
@@ -480,6 +482,7 @@ local items = {
 	["Нож"] = {false, "Охотничий нож", 1, "useinvweapon", 160, 450, false, false, true},
 	["Катана"] = {false, "Катана настоящего якудзы", 1, "useinvweapon", 750, 1350, false, false, true},
 	["Камера"] = {false, "Обычная любительская фотокамера", 1, "useinvweapon", 570, 12000, false, false, true},
+	["Огнетушитель"] = {false, "Обычный огнетушитель", 1, "useinvweapon", 5000, 150, false, false, true},
 	["Бензопила"] = {false, "Просто бензопила", 1, "useinvweapon", 12500, 7700, false, false, true},
 
 	["Лазерный прицел"] = {"invobject/laser.png", "Лазерный прицел", 1, false, 420, 6800, {["лазер"] = {"M40", "АК-47", "М16", "ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg", "Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false},
@@ -560,6 +563,7 @@ local WeaponNamesArr = {
 	["Бита"] = 5,
 	["Лопата"] = 6,
 	["Камера"] = 43,
+	["Огнетушитель"] = 42,
 	["Бензопила"] = 9,
 	["Нож"] = 4,
 	["Катана"] = 8, 
@@ -1410,10 +1414,10 @@ function UpdateTuningPerformans(NewDat)
 	end
 	local sx,sy = (screenWidth/2.55), screenHeight-(150*scaley)
 	
-	PText["tuning"]["topspeed"] = {"Макс скорость "..TopSpeed.." км/ч", sx, sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
-	PText["tuning"]["power"] = {"Мощность "..Power.." лс.", sx+(300*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
-	PText["tuning"]["acceleration"] = {"Ускорение ("..Trans.." АКПП) ("..Acceleration..")", sx+(600*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
-	PText["tuning"]["brakes"] = {"Тормоза "..Brake, sx+(900*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
+	PText["tuning"]["topspeed"] = {Text("Макс скорость").." "..TopSpeed.." "..Text("КМ/Ч"), sx, sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
+	PText["tuning"]["power"] = {Text("Мощность").." "..Power.." "..Text("Л.С."), sx+(300*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
+	PText["tuning"]["acceleration"] = {Text("Ускорение").." ("..Trans.." АКПП) ("..Acceleration..")", sx+(600*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
+	PText["tuning"]["brakes"] = {Text("Тормоза").." "..Brake, sx+(900*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
 end
 
 
@@ -1445,13 +1449,12 @@ function TuningListOpen(num, page)
 	local x,y = 30*scalex, (screenHeight/4)
 	local count = 0
 	
-	local upgr = {}
 	for i = (Tun["page"]*15)-14, Tun["page"]*15 do
 		if(Upgrading[num]["data"][i]) then
 			count=count+1
 			local color = tocolor(150, 150, 150, 255)
 			local dat = nil
-			local advtext=""
+			local advtext = ""
 
 			if(LatencyUpgrade(Upgrading[num]["data"][i][2])) then
 				color = tocolor(98, 125, 152, 255)
@@ -3553,7 +3556,7 @@ function updateCamera()
 		if(theVehicle) then -- Костыль 
 			local x,y,z = getElementPosition(theVehicle)
 			local gz = getGroundPosition(x,y,z)
-			local material = GetGroundMaterial(x,y,z+50,gz)
+			local material = GetGroundMaterial(x,y,z+50,gz-3)
 
 			if(material == 1337) then
 				if(not isElementFrozen(theVehicle)) then
@@ -4963,11 +4966,11 @@ function playerPressedKey(button, press)
 				if(TuningSelector+1 <= #PText["tuning"]) then
 					PText["tuning"][TuningSelector][6] = tocolor(98, 125, 152, 255)
 					PText["tuning"][TuningSelector+1][6] = tocolor(201, 219, 244, 255)
-					TuningSelector=TuningSelector+1
+					TuningSelector = TuningSelector+1
 				else
 					PText["tuning"][TuningSelector][6] = tocolor(98, 125, 152, 255)
 					PText["tuning"][1][6] = tocolor(201, 219, 244, 255)
-					TuningSelector=1
+					TuningSelector = 1
 					TuningListOpen(false, 1)
 				end
 				if(PText["tuning"][TuningSelector][20][5]) then UpgradePreload(nil, PText["tuning"][TuningSelector][20][3], PText["tuning"][TuningSelector][20][4], PText["tuning"][TuningSelector][20][5]) end
@@ -4976,11 +4979,11 @@ function playerPressedKey(button, press)
 				if(TuningSelector-1 >= 1) then
 					PText["tuning"][TuningSelector][6] = tocolor(98, 125, 152, 255)
 					PText["tuning"][TuningSelector-1][6] = tocolor(201, 219, 244, 255)
-					TuningSelector=TuningSelector-1
+					TuningSelector = TuningSelector-1
 				else
 					PText["tuning"][TuningSelector][6] = tocolor(98, 125, 152, 255)
 					PText["tuning"][#PText["tuning"]][6] = tocolor(201, 219, 244, 255)
-					TuningSelector=#PText["tuning"]
+					TuningSelector = #PText["tuning"]
 					TuningListOpen(false, -1)
 				end
 				if(PText["tuning"][TuningSelector][20][5]) then UpgradePreload(nil, PText["tuning"][TuningSelector][20][3], PText["tuning"][TuningSelector][20][4], PText["tuning"][TuningSelector][20][5]) end
@@ -8595,11 +8598,12 @@ end
 
 --[Имя] = {id модели, {scale, vehx, vehy, vehz, vehrx, vehry, vehrz}}
 local itemsData = {
-	["Запаска"] = {1025, {0.6, 0, 0, 0, 180, 90, 0}},
-	["АК-47"] = {355, {0.7, -0.1, -0.15, -0.05, 270, 0, 30}},
+	["Запаска"] = {1025, {0.6, 0, 0, 0, 180, 90, 0}}, 
+	["АК-47"] = {355, {0.7, -0.1, -0.15, -0.05, 270, 0, 30}}, 
 	["М16"] = {356, {0.7, -0.1, -0.15, -0.05, 270, 0, 30}},	
-	["Пакет"] = {2663, {1, 0, 0, 0, 90, 180, 0}},
-	["Сено"] = {1453, {0.6, 0, 0, 0, 90, 90, 90}}
+	["Пакет"] = {2663, {1, 0, 0, 0, 90, 180, 0}}, 
+	["Сено"] = {1453, {0.6, 0, 0, 0, 90, 90, 90}}, 
+	["Огнетушитель"] = {366, {0.7, -0.1, -0.15, -0.05, 270, 0, 30}}, 
 }
 
 
