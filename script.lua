@@ -2669,7 +2669,7 @@ local VComp = {
 
 
 	
---Высота от земли, Двигатель, турбо, трансмиссия, подвеска, тормоза, резина, бензобак, год выпуска, прекращение выпуска (CYear - наши дни), завод (Export - Неизвестные)
+-- Высота от земли, Двигатель, турбо, трансмиссия, подвеска, тормоза, резина, бензобак, год выпуска, прекращение выпуска (CYear - наши дни), завод (Export - Неизвестные)
 local NowTime = getRealTime()
 local CYear = NowTime.year+1900
 local VehicleSystem = {
@@ -5076,7 +5076,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  =  -2644.1, 285.9, 3.2, 0, 0 --
+		local x,y,z,i,d  = -1834.6, -217.1, 17.2, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
