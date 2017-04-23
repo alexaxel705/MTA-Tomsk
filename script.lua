@@ -3249,7 +3249,7 @@ local ItemsTrade = {
 local CarsForSaleModel = {
 	["HARD TRUCK"] = {515, 514, 403, 499, 524, 609, 498, 455, 414, 456, 440},
 	["WANG CARS"] = {560, 561, 565, 558, 562, 559, 429},
-	["LS2"] = {412, 534, 535, 536, 566, 567, 575, 576, 545, 466, 555, 462, 467},
+	["Coutt And Schutz"] = {412, 534, 535, 536, 566, 567, 575, 576, 545, 466, 555, 462, 467},
 	["SF ELITE"] = {415, 451, 411, 477, 506, 541, 603},
 	["Mr. Grant's"] = {510, 509, 481, 462, 471, 468}, -- Переделать под аренду
 	["GROTTI"] = {401, 404, 410, 540, 585, 436, 439, 458, 475, 418, 589, 550, 479, 547, 546, 551, 491, 496, 507, 516, 517, 526, 527, 529, 492},
@@ -3278,7 +3278,7 @@ local CarsForSale = {
 		[6] = {false, -1952.8, 258.8, 40, 0,0,259},
 		[7] = {false, -1954.7, 302.7, 40, 0,0,180}
 	},
-	["LS2"] = {
+	["Coutt And Schutz"] = {
 		[1] = {false, 2120, -1124, 24.4, 0, 0, 270},
 		[2] = {false, 2120, -1128, 24.4, 0, 0, 270},
 		[3] = {false, 2120, -1132, 24.3, 0, 0, 270},
@@ -3421,6 +3421,9 @@ local TrailersVaritans = {
 	},
 }
 
+
+
+local BrokenVehicleHandlingPrototype = {404, 604, 467, 401, 543, 478, 474} -- Запчасти с перечисленных авто используются рандомно в б\у авто
 function SpawnCarForSale(update)
 	if(update) then
 		for CompanyName, models in pairs(CarsForSale) do
@@ -3436,18 +3439,27 @@ function SpawnCarForSale(update)
 	local VCL = {}
 	for CompanyName, models in pairs(CarsForSaleModel) do
 		for i, model in pairs(models) do
+			local block = false
 			if(VehicleSystem[model][9][2] <= ServerDate.year+1900) then -- Начало производства авто 
 				if(VehicleSystem[model][9][2] == ServerDate.year+1900) then -- Производство текущего года
 					if(VehicleSystem[model][9][1] > ServerDate.month) then -- Зависимость от месяца
-						break
+						block = true
 					end
 				end
 				if(VehicleSystem[model][10][2] >= ServerDate.year+1900) then -- Конец производства авто 
 					if(VehicleSystem[model][10][2] == ServerDate.year+1900) then -- Производство текущего года
 						if(VehicleSystem[model][10][1] < ServerDate.month) then -- Зависимость от месяца
-							break
+							if(CompanyName ~= "LV Trash" and CompanyName ~= "Coutt And Schutz") then -- Для рынка б\у авто
+								block = true
+							end
 						end
 					end
+				else
+					if(CompanyName ~= "LV Trash" and CompanyName ~= "Coutt And Schutz") then -- Для рынка б\у авто
+						block = true
+					end
+				end
+				if(not block) then
 					if(not VCL[CompanyName]) then VCL[CompanyName] = {} end
 					VCL[CompanyName][#VCL[CompanyName]+1] = model
 				end
@@ -3465,14 +3477,38 @@ function SpawnCarForSale(update)
 				end
 
 				arr[1] = CreateVehicle(model, arr[2], arr[3], arr[4]+VehicleSystem[model][1], arr[5], arr[6], arr[7], "SELL 228", true, var, var)
-				setElementData(arr[1], "year", ServerDate.year+1900)
+
+				if(CompanyName == "LV Trash" or CompanyName == "Coutt And Schutz") then -- Для рынка б\у авто
+				  local HT = getVehicleHandling(arr[1]) 
+					for slot = 0, 5 do 
+						setVehicleDoorState(arr[1], slot, math.random(0,3))
+					end
+					local maxyear = VehicleSystem[model][10][2]
+					if(maxyear > ServerDate.year+1900) then maxyear = ServerDate.year+1900 end
+				
+					setElementData(arr[1], "year", math.random(VehicleSystem[model][9][2], maxyear))
+					setElementData(arr[1], "price", math.round((HT["monetary"]/2)+math.random(-2000, 2000), 0))
+					
+					local comp = { -- Выдаем случайные запчасти
+						VehicleSystem[BrokenVehicleHandlingPrototype[math.random(#BrokenVehicleHandlingPrototype)]][2], 
+						VehicleSystem[BrokenVehicleHandlingPrototype[math.random(#BrokenVehicleHandlingPrototype)]][3], 
+						VehicleSystem[BrokenVehicleHandlingPrototype[math.random(#BrokenVehicleHandlingPrototype)]][4], 
+						VehicleSystem[BrokenVehicleHandlingPrototype[math.random(#BrokenVehicleHandlingPrototype)]][5], 
+						VehicleSystem[BrokenVehicleHandlingPrototype[math.random(#BrokenVehicleHandlingPrototype)]][6], 
+						VehicleSystem[BrokenVehicleHandlingPrototype[math.random(#BrokenVehicleHandlingPrototype)]][7]
+					}
+					UpdateVehicleHandling(arr[1], comp)
+				else
+					setElementData(arr[1], "year", ServerDate.year+1900)
+				end
+				
 			end
 		end
 	end
 	
 	
 end
-
+outputChatBox()
 
 --SF Airport 
 CreateVehicle(476, -1374.1, -503.1, 14.9, 0, 0, 249)
@@ -5078,7 +5114,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -2511, -207.9, 24.5, 0, 0 --
+		local x,y,z,i,d  =  2128, -1138.2, 25.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -9884,14 +9920,19 @@ function BuyCar(theVehicle)
 	local model = getElementModel(theVehicle)
 
 	if(getElementData(theVehicle, "price")) then
-		local Seller = getPlayerFromName(getElementData(theVehicle, "seller"))
-		if(Seller ~= source) then
-			if(AddPlayerMoney(source, -tonumber(getElementData(theVehicle, "price")))) then
-				if(Seller) then
-					AddPlayerMoney(Seller, tonumber(getElementData(theVehicle, "price")))
-					MissionCompleted(Seller, "", "ТРАНСПОРТ ПРОДАН!")
+		if(AddPlayerMoney(source, -tonumber(getElementData(theVehicle, "price")))) then
+			local Seller = getElementData(theVehicle, "seller")
+			if(Seller) then
+				Seller = getPlayerFromName(Seller)
+				if(Seller ~= source) then
+					if(Seller) then
+						AddPlayerMoney(Seller, tonumber(getElementData(theVehicle, "price")))
+						MissionCompleted(Seller, "", "ТРАНСПОРТ ПРОДАН!")
+					end
 				end
 			end
+		else
+			return false
 		end
 	else
 		local vmodelH = getOriginalHandling(model)
