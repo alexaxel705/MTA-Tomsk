@@ -1336,7 +1336,7 @@ function LoadUpgrade(Update, handl, othercomp)
 			end
 			local handl = fromJSON(handl)
 			Upgrading[1]["data"][1] = {handl[1].." [Установлен]", "Engines", "Установлено"}
-			if(handl[2] ~= "") then Upgrading[2]["data"][1] = {handl[2].." [Установлено]", "Turbo", "Установлен"} end
+			if(handl[2] ~= "") then Upgrading[2]["data"][1] = {handl[2].." [Установлено]", "Turbo", "Установлено"} end
 			Upgrading[3]["data"][1] = {handl[3].." [Установлена]", "Transmission", "Установлено"}
 			Upgrading[4]["data"][1] = {handl[4].." [Установлена]", "Suspension", "Установлено"}
 			Upgrading[5]["data"][1] = {handl[5].." [Установлены]", "Brakes", "Установлено"}
@@ -3685,14 +3685,13 @@ addEventHandler("onClientFileDownloadComplete", root, onDownloadFinish)
 
 function GenerateTexture() -- Третий этап загрузки
 	PData['loading'] = 10+(92-(92/getArrSize(TexturesPosition))*getArrSize(PreloadTextures))
-	
 	local LoadTexture = false
 
 	for name, _ in pairs(PreloadTextures) do
 		LoadTexture = name
 		break
 	end
-		 
+	
 	if(LoadTexture) then
 		if(LoadTexture == "Рыба" or LoadTexture == "Деньги" or LoadTexture == "Газета") then
 			setSkyGradient(0,0,255,0,0,255)

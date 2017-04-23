@@ -2667,7 +2667,6 @@ local VComp = {
 
 
 
-
 	
 -- Высота от земли, Двигатель, турбо, трансмиссия, подвеска, тормоза, резина, бензобак, год выпуска, прекращение выпуска (CYear - наши дни), завод (Export - Неизвестные)
 local NowTime = getRealTime()
@@ -4629,6 +4628,7 @@ function UpgradePreload(thePlayer, name, upgr)
 		comp[ModificationVehicle[upgr]] = name
 		UpdateVehicleHandling(PData[thePlayer]["theVehicleTuning"], comp)
 		triggerClientEvent(thePlayer, "UpgradeServerPreload", thePlayer)
+		PData[thePlayer]["ShowUpgrade"] = {upgr, name}
 	else
 		UpdateVehicleHandling(PData[thePlayer]["theVehicleTuning"], comp)
 	end
@@ -12245,7 +12245,8 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 		end
 	end
 	--AddInventoryItem(thePlayer, "Огнетушитель", 1, 550, {})
-
+	--RacePriceGeneration(thePlayer, zone)
+	
 	fileDelete("save.txt")
 	local hFile = fileCreate("save.txt")
 	fileWrite(hFile, datess) -- write a text line
@@ -13941,11 +13942,12 @@ function OpenTuning(thePlayer,x,y,z,rz)
 				local vehh = getVehicleHandling(theVehicle)
 
 				triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 5)
-				local othercomp = toJSON(VComp)
+				local parts = GetPlayerVehiclePart(thePlayer, theVehicle)
+				
 				if(getElementHealth(theVehicle) == 1000) then
-					triggerClientEvent(thePlayer, "CameraTuning", thePlayer, 0, getElementData(theVehicle, "handl"), othercomp)
+					triggerClientEvent(thePlayer, "CameraTuning", thePlayer, 0, getElementData(theVehicle, "handl"), toJSON(parts))
 				else
-					triggerClientEvent(thePlayer, "CameraTuning", thePlayer, (vehh["mass"]/5)+(1000-getElementHealth(theVehicle)), getElementData(theVehicle, "handl"), othercomp)
+					triggerClientEvent(thePlayer, "CameraTuning", thePlayer, (vehh["mass"]/5)+(1000-getElementHealth(theVehicle)), getElementData(theVehicle, "handl"), toJSON(parts))
 				end
 			else
 				triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Тюнинговать можно только автомобили!")
@@ -13955,6 +13957,62 @@ function OpenTuning(thePlayer,x,y,z,rz)
 end
 addEvent("OpenTuning", true)
 addEventHandler("OpenTuning", getRootElement(), OpenTuning)
+
+
+
+function AddPlayerVehiclePart(thePlayer, types, name)
+	local parts = GetDatabaseAccount(thePlayer, "tuning")
+	if(parts == 0) then parts = {} 
+	else parts = fromJSON(parts) end
+	
+	if(not parts[types]) then parts[types] = {} end
+	
+	if(not parts[types][name]) then 
+		parts[types][name] = 1
+	else
+		parts[types][name] = parts[types][name]+1
+	end
+	
+	SetDatabaseAccount(thePlayer, "tuning", toJSON(parts))
+end
+
+
+
+
+function RemovePlayerVehiclePart(thePlayer, types, name)
+	local parts = GetDatabaseAccount(thePlayer, "tuning")
+	if(parts == 0) then parts = {} 
+	else parts = fromJSON(parts) end
+
+	if(parts[types]) then 
+		if(parts[types][name]) then
+			if(parts[types][name] == 1) then
+				parts[types][name] = nil
+				if(getArrSize(parts[types]) == 0) then
+					parts[types] = nil
+				end
+			else
+				parts[types][name] = parts[types][name]-1
+			end
+		end
+	end
+	
+	SetDatabaseAccount(thePlayer, "tuning", toJSON(parts))
+end
+
+
+function GetPlayerVehiclePart(thePlayer, theVehicle)
+	local parts = GetDatabaseAccount(thePlayer, "tuning")
+	if(parts == 0) then parts = {} 
+	else parts = fromJSON(parts) end
+	
+	for partsname, data in pairs(parts) do
+		for name, dat in pairs(data) do
+			parts[partsname][name] = VComp[partsname][name]
+		end
+	end
+	return parts
+end
 
 
 
@@ -15238,19 +15296,36 @@ end
 
 
 
+
+
+local AutomobileVComp = table.copy(VComp)
+for nameparts, data in pairs(AutomobileVComp) do
+	for name, types in pairs(data) do
+		if(types[1] == "Automobile") then
+			AutomobileVComp[#AutomobileVComp+1] = {nameparts, name}
+		end
+	end
+end
+
 function RacePriceGeneration(thePlayer, zone)
-	local park = GetRandomParking(zone)
-	if(park) then
-				
-		local RacePrice = PriceAuto[math.random(1, #PriceAuto)]
-		local v = CreateVehicle(RacePrice, park[3], park[4], park[5]+VehicleSystem[RacePrice][1], 0,0,park[6], getPlayerName(thePlayer))
-		
-		Parkings[zone][park[1]][park[2]][1] = v
-		setElementData(v, "owner", getPlayerName(thePlayer))
-		outputChatBox("Победитель: #CC9966"..getPlayerName(thePlayer), getRootElement(), 255,255,255, true)
-		triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, park[3], park[4], park[5], "Приз")
-		outputChatBox("Забери свой приз на красном маркере!", thePlayer, 255,255,255,true)
-	end		
+	local Prices = math.random(1,10)
+	if(Prices == 1) then
+		local park = GetRandomParking(zone)
+		if(park) then
+			local RacePrice = PriceAuto[math.random(1, #PriceAuto)]
+			local v = CreateVehicle(RacePrice, park[3], park[4], park[5]+VehicleSystem[RacePrice][1], 0,0,park[6], getPlayerName(thePlayer))
+			
+			Parkings[zone][park[1]][park[2]][1] = v
+			setElementData(v, "owner", getPlayerName(thePlayer))
+			outputChatBox("Победитель: #CC9966"..getPlayerName(thePlayer), getRootElement(), 255,255,255, true)
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, park[3], park[4], park[5], "Приз")
+			outputChatBox("Забери свой приз на красном маркере!", thePlayer, 255,255,255,true)
+		end
+	else
+		local parts = AutomobileVComp[math.random(#AutomobileVComp)]
+		AddPlayerVehiclePart(thePlayer, parts[1], parts[2])
+		outputChatBox("Ты выиграл #FF0000"..parts[1].." "..parts[2], thePlayer, 255,255,255,true)
+	end
 end
 
 
@@ -16053,7 +16128,7 @@ function ExitTuning(theVehicle)
 		setElementInterior(occupant, 0, PData[source]["oldposition"][1], PData[source]["oldposition"][2], PData[source]["oldposition"][3])
 	end
 	
-	
+	PData[source]["ShowUpgrade"] = nil
 	PData[source]["oldposition"] = nil
 	PData[source]["theVehicleTuningHandl"] = nil
 	PData[source]["theVehicleTuning"] = nil
@@ -16085,8 +16160,9 @@ function VehicleUpgrade(upgrade, count)
 					end
 				end	
 				
-				local othercomp = toJSON(VComp)
-				triggerClientEvent(source, "BuyUpgrade", source, PData[source]["theVehicleTuningHandl"], othercomp)
+				RemovePlayerVehiclePart(source, PData[source]["ShowUpgrade"][1], PData[source]["ShowUpgrade"][2])
+				local parts = GetPlayerVehiclePart(source, theVehicle)
+				triggerClientEvent(source, "BuyUpgrade", source, PData[source]["theVehicleTuningHandl"], toJSON(parts))
 		elseif(upgrade == 8) then
 			local vehh = getVehicleHandling(theVehicle)
 			if(getElementData(theVehicle, "siren")) then
