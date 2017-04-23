@@ -3508,7 +3508,7 @@ function SpawnCarForSale(update)
 	
 	
 end
-outputChatBox()
+
 
 --SF Airport 
 CreateVehicle(476, -1374.1, -503.1, 14.9, 0, 0, 249)
