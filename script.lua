@@ -7621,7 +7621,6 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 					else
 						setElementData(pic, "arr", toJSON({FoundWName(dropWeapon), 1, math.random(0,600), {}}))
 					end
-					
 					setElementDimension(pic, getElementDimension(source))
 					setElementInterior(pic, getElementInterior(source))
 					setTimer(function(pic)
@@ -7640,7 +7639,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 					if(randmoney > 0) then
 						for i = 1, randmoney do
 							local p = createPickup(x+((math.random(-1000,1000))/1000), y+((math.random(-1000,1000)/1000)), z, 3, 1212)
-							setElementData(p, "ammount", amount)
+							setElementData(p, "arr", toJSON({"Деньги", amount, 550, {}}))
 						end
 					end
 				elseif(PTeam == "Баллас" or PTeam == "Колумбийский картель" or PTeam == "Русская мафия") then
@@ -10236,14 +10235,14 @@ setTimer(function() DatSoviet() end, 600000, 0)
 
 
 function moneyPickupHit(thePlayer)
-   local money = getElementData(source, "ammount")
-	if money then
-		AddPlayerMoney(thePlayer, tonumber(money))
-		destroyElement(source)
-	elseif(getElementData(source, "arr")) then
-		local arr = fromJSON(getElementData(source, "arr"))
-		ToolTip(thePlayer, "Подобрать "..COLOR["KEY"]["HEX"].."TAB#FFFFFF \n#4682B4"..arr[1].." #FFFFFF"..arr[2].." шт")
+	if(getElementData(source, "arr")) then
 		PlayersPickups[thePlayer] = source
+		if(getPickupRespawnInterval(source) == 0) then
+			local arr = fromJSON(getElementData(source, "arr"))
+			ToolTip(thePlayer, "Подобрать "..COLOR["KEY"]["HEX"].."TAB#FFFFFF \n#4682B4"..arr[1].." #FFFFFF"..arr[2].." шт")
+		else
+			TABEvent(thePlayer) -- Сразу подбираем, для выпадаемых с ботов денег
+		end
 	elseif(getElementData(source, "biz")) then
 		local name = "нет\nЦена: $"..getElementData(source, "price")
 		local advtext = ""

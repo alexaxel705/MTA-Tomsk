@@ -508,7 +508,7 @@ local items = {
 	["Скот"] = {false, "Скот", 1, false, 90000, 5, false, false, false},
 	["Сено"] = {false, "Сено", 10, false, 2500, 5, false, false, false}, 
 	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false},
-	["Деньги"] = {false, "Деньги", 99999999, false, 0.1, 1, false, false, false},
+	["Деньги"] = {false, "Деньги", 99999999, false, 0.01, 1, false, false, false},
 	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false, false}, 
 }
 
@@ -8794,7 +8794,6 @@ end
 
 
 
-
 function StreamIn()
 	if(CreateTextureStage) then
 		if(CreateTextureStage[2] == 3) then
@@ -8853,6 +8852,16 @@ function StreamIn()
 			ObjectInStream[source] = {}
 			ObjectInStream[source]["fire"] = createEffect("fire", x,y,z+0.7,x,y,z+2,500)
 			ObjectInStream[source]["light"] = createLight(0, x,y,z+0.7, 6, 255, 165, 0, nil, nil, nil, true)
+		end
+	elseif(getElementType(source) == "pickup") then
+		if(getElementData(source, "arr")) then
+			local arr = fromJSON(getElementData(source, "arr"))
+			local r,g,b = hex2rgb(GetQualityColor(arr[3]):sub(2,7))
+			local x,y,z = getElementPosition(source)
+			ObjectInStream[source] = {}
+			ObjectInStream[source]["light"] = createMarker(x,y,z,"corona",1, r,g,b,30)
+			setElementInterior(ObjectInStream[source]["light"], getElementInterior(source))
+			setElementDimension(ObjectInStream[source]["light"], getElementDimension(source))
 		end
 	elseif(getElementType(source) == "ped") then
 		StreamData[source] = {["armas"] = {}, ["UpdateRequest"] = true}
@@ -9020,13 +9029,13 @@ function StreamOut()
 		StreamData[source] = nil
 	end
 
-	if getElementType(source) == "object" then
+	if(getElementType(source) == "object" or getElementType(source) == "pickup")then
 		if(ObjectInStream[source]) then
 			for _, object in pairs(ObjectInStream[source]) do
 				destroyElement(object)
 			end
 		end
-	elseif getElementType(source) == "vehicle" then
+	elseif(getElementType(source) == "vehicle") then
 		if(VehiclesInStream[source]) then
 			for _, object in pairs(VehiclesInStream[source]) do
 				if(isElement(object)) then
