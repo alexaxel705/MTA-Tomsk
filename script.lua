@@ -9041,12 +9041,20 @@ function PedDamage(ped, weapon, bodypart, loss)
 					end
 				end
 			end
-		end
-		if(PData[source]["RobPed"]) then
-			if(ped == PData[source]["RobPed"]) then
-				AddRobPresure(PData[source]["RobPed"], math.floor(loss))
-			else
-				AddRobPresure(PData[source]["RobPed"], math.floor(loss/2.5))
+			
+			if(PData[source]["RobPed"]) then
+				if(ped == PData[source]["RobPed"]) then
+					AddRobPresure(PData[source]["RobPed"], math.floor(loss))
+				else
+					AddRobPresure(PData[source]["RobPed"], math.floor(loss/2.5))
+				end
+			end
+			
+			local PedZone = getElementData(ped, "zone")
+			if(PedZone) then
+				if(GetDatabaseZoneNode(PedZone)) then
+					cap(source, PedZone)
+				end
 			end
 		end
 	end
@@ -9083,12 +9091,6 @@ function PedDamage(ped, weapon, bodypart, loss)
 			if(loss*11 > 100) then
 				killPed(ped, source, weapon, bodypart, true) 
 			end
-		end
-	end
-	local PedZone = getElementData(ped, "zone")
-	if(PedZone) then
-		if(GetDatabaseZoneNode(PedZone)) then
-			cap(source, PedZone)
 		end
 	end
 end

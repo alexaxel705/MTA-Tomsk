@@ -4582,8 +4582,10 @@ function handleVehicleDamage(attacker, weapon, loss, x, y, z, tyre)
 	if(attacker) then
 		if(getElementType(attacker) == "vehicle") then
 			local acc = getVehicleOccupant(attacker)
-			if(getElementType(acc) == "player") then
-				attacker = acc
+			if(acc) then
+				if(getElementType(acc) == "player") then
+					attacker = acc
+				end
 			end
 		end
 		if(attacker == localPlayer) then
@@ -6751,16 +6753,20 @@ function PedDamage(attacker, weapon, bodypart, loss)
 		end
 		
 		if(attacker == localPlayer) then
-			triggerServerEvent("PedDamage", localPlayer, source, weapon, bodypart, loss)
+			triggerServerEvent("PedDamage", attacker, source, weapon, bodypart, loss)
 			for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
 				if(source ~= thePed) then
 					local team = getElementData(thePed, "team")
 					if(team) then
 						if(getTeamName(getTeamFromName(team)) ~= "Мирные жители") then
-							triggerServerEvent("PedDamage", localPlayer, thePed, nil, nil, loss)
+							triggerServerEvent("PedDamage", attacker, thePed, nil, nil, loss)
 						end
 					end
 				end
+			end
+		elseif(getElementType(attacker) == "ped") then
+			if(isElementSyncer(source)) then
+				triggerServerEvent("PedDamage", attacker, source, weapon, bodypart, loss)
 			end
 		end
 	end
@@ -9006,16 +9012,6 @@ end
 addEventHandler("onClientTrailerDetach", getRootElement(), deAttach)
 
 
-
-function outputLoss(loss, attacker)
-	if(attacker == localPlayer) then
-		local model = getElementModel(source)
-		if(model == 1583 or model == 1584 or model == 1585) then
-			
-		end
-	end
-end
-addEventHandler("onClientObjectDamage", root, outputLoss)
 
 
 function StreamOut()
