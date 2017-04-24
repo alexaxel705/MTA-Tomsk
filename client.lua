@@ -3162,7 +3162,7 @@ function updateWorld()
 								if(not DestroyedBlip[index]) then DestroyedBlip[index] = {} end
 								DestroyedBlip[index][#DestroyedBlip[index]+1] = {theBlips, arr[1]}
 								ClosedZones[index] = createRadarArea(arr[2]-40, arr[3]-40, 80, 80, 0, 0, 0,0)
-								add[#add+1] = {arr[2]-40, arr[3]-40, 80, 80, index}
+								add[index] = {arr[2]-40, arr[3]-40, 80, 80, index}
 							else -- Для неизвестных значков
 								setBlipIcon(arr[1], arr[2])
 								SetZoneDisplay(getElementData(arr[1], "info"))
@@ -3569,8 +3569,8 @@ function updateCamera()
 			local x,y,z = getElementPosition(theVehicle)
 			local gz = getGroundPosition(x,y,z)
 			local material = GetGroundMaterial(x,y,z+50,gz-3)
-
-			if(material == 1337) then
+			local material2 = GetGroundMaterial(x+2,y,z+50,gz-3)
+			if(material == 1337 and material2 == 1337) then -- Костыль
 				if(not isElementFrozen(theVehicle)) then
 					setElementFrozen(theVehicle, true)
 				end
@@ -6934,9 +6934,9 @@ function dxDrawBorderedText(text, left, top, right, bottom, color, scale, font, 
 	if(text) then
 		local r,g,b = bitExtract(color, 0, 8), bitExtract(color, 8, 8), bitExtract(color, 16, 8)
 		if(r+g+b >= 100) then r = 0 g = 0 b = 0 else r = 255 g = 255 b = 255 end
-		local textb=string.gsub(text, "#%x%x%x%x%x%x", "")
-		local locsca=math.floor(scale)
-		if (locsca == 0) then locsca=1 end
+		local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
+		local locsca = math.floor(scale)
+		if (locsca == 0) then locsca = 1 end
 		for oX = -locsca, locsca do 
 			for oY = -locsca, locsca do 
 				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false,subPixelPositioning)
@@ -8215,15 +8215,13 @@ function DrawPlayerMessage()
 						
 						dxDrawImage(posx, posy, dxGetTextWidth("★★★★★★", scale, "pricedown", false), dxGetFontHeight(scale, "pricedown"), VideoMemory["HUD"]["WantedBackground"])
 						dxDrawImage(posx+(tw*((6-wanted)/6)), posy, dxGetTextWidth("★★★★★★", scale, "pricedown", false), dxGetFontHeight(scale, "pricedown"), DrawWanted(wanted))
+				
 					end
 				else
 					dxDrawBorderedText(wanted, posx, posy, screenWidth, screenHeight, tocolor(200, 200, 200, 180), scale, "default-bold", "left", "top", nil, nil, nil, true)
 				end
 			end
 
-		
-
-		
 			if(PlayerZone == "Restricted Area") then
 				for key,thePlayer in pairs(getElementsByType "player") do
 					local team = getPlayerTeam(thePlayer)

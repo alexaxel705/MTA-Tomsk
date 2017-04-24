@@ -4645,7 +4645,9 @@ addEventHandler("UpgradePreload", root, UpgradePreload)
 function SaveClosedZones(thePlayer, removed, add)
 	local zones = fromJSON(GetDatabaseAccount(thePlayer, "zone"))
 	local added = fromJSON(add)
-	for key, arr in pairs(added) do zones[#zones+1] = arr end
+	for key, arr in pairs(added) do 
+		zones[key] = arr 
+	end
 	zones[removed] = nil
 	SetDatabaseAccount(thePlayer, "zone", toJSON(zones))
 end
@@ -12332,7 +12334,7 @@ function saved(thePlayer, command, h)
 		--local arr = fromJSON(xmlNodeGetAttribute(node, "inv"))
 		
 		xmlNodeSetAttribute(node, "zone", toJSON(StandartClosedMap))
-		xmlNodeSetAttribute(node, "inv", StandartInventory)
+		--xmlNodeSetAttribute(node, "inv", StandartInventory)
 		--[[for i, v in pairs(arr) do
 			if(v[1]) then
 				if(v[1] == "Redwood") then
