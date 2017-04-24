@@ -5114,7 +5114,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  =  2128, -1138.2, 25.4, 0, 0 --
+		local x,y,z,i,d  = -2270.6, -155.9, 35.3, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5412,11 +5412,8 @@ CreateEnter(-2624.6, 1412.65, 7.1, 180, 0, 0, false, -2636.7, 1402.5, 906.5, 0, 
 
 
 CreateEnter(2229.9, -1721.2, 13.6, 270, 0, 0, false, 772.3, -5.1, 1000.7, 0, 5, 0) -- Качалка LS
-
-
-
-
 CreateEnter(-2270.6, -155.9, 35.3, 0, 0, 0, false, 774.1, -50.5, 1000.6, 0, 6, 0) -- Качалка SF
+CreateDialogBot(49, 774.4, -16.5, 1000.6, 180, 6, 0, "SF Kung FU", "Мастер Kung FU")
 CreateEnter(1968.8, 2295.8, 16.5, 0, 0, 0, false, 773.9, -78.8, 1000.7, 0, 7, 0) -- Качалка LV
 
 
@@ -7714,6 +7711,18 @@ local Dialogs = {
 			[1] = {
 				["text"] = "Я по делу",
 				["action"] = {"StartLookBiz", {"FARMFR", "otdelK"}}
+			},
+			[2] = {
+				["text"] = "[промолчать]"
+			}
+		}
+	},
+	["SF Kung FU"] = {
+		[1] = {
+			["dialog"] = {"Здравствуйте"},
+			[1] = {
+				["text"] = "Я хочу научиться Kung FU",
+				["action"] = {"fightstyle", {6}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -12182,8 +12191,6 @@ addCommandHandler("seti", seti)
 
 
 
-
-
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	local zone = getZoneName(x,y,z)
 	if(savetype == "PedPath") then
@@ -12261,6 +12268,14 @@ addEvent("saveserver", true)
 addEventHandler("saveserver", root, saveserver)
 
 
+
+
+
+function fightstyle(thePlayer, thePed, id)
+	setPedFightingStyle(thePlayer, tonumber(id))
+end
+addEvent("fightstyle", true)
+addEventHandler("fightstyle", root, fightstyle)
 
 
 function WarpPedIntoVehicle(thePlayer)
@@ -14554,25 +14569,39 @@ addEvent("FireVehicle", true)
 addEventHandler("FireVehicle", getRootElement(), FireVehicle)
 
 
-
+local AllFires = {}
 function CreateFire(arr)
 	arr = fromJSON(arr)
 	for v, k in pairs(arr) do
-		local obj = createObject(1362, k[1],k[2],k[3]-0.7)
-		local mar = createMarker(k[1], k[2], k[3], "checkpoint", 1, 0,0,0,0)
-		setElementVisibleTo(mar, root, false)
-		setElementData(mar, "type", "FIRE")
-		setTimer(function(obj, mar) 
+		local fireId = #AllFires+1
+		AllFires[fireId] = {}
+		AllFires[fireId]["obj"] = createObject(1362, k[1],k[2],k[3]-0.55)
+		setElementData(AllFires[fireId]["obj"], "fireid", fireId)
+		
+		AllFires[fireId]["mar"] = createMarker(k[1], k[2], k[3], "checkpoint", 1, 0,0,0,0)
+		setElementVisibleTo(AllFires[fireId]["mar"], root, false)
+		setElementData(AllFires[fireId]["mar"], "type", "FIRE")
+		
+		AllFires[fireId]["timer"] = setTimer(function(obj, mar) 
 			destroyElement(obj)
 			destroyElement(mar)
-		end, 120000, 1, obj, mar)
+		end, 120000, 1, AllFires[fireId]["obj"], AllFires[fireId]["mar"])
 	end
 end
 addEvent("CreateFire", true)
 addEventHandler("CreateFire", getRootElement(), CreateFire)
 
 
-
+function RemoveFire(thePlayer, fire)
+	if(isElement(fire)) then
+		local fireId = getElementData(fire, "fireid")
+		killTimer(AllFires[fireId]["timer"])
+		destroyElement(AllFires[fireId]["obj"])
+		destroyElement(AllFires[fireId]["mar"])
+	end
+end
+addEvent("RemoveFire", true)
+addEventHandler("RemoveFire", getRootElement(), RemoveFire)
 
 
 
@@ -15283,7 +15312,7 @@ function CreateRaceMarker(thePlayer, array, checkpoint)
 				else
 					for slot = 1, #MPPlayerList do
 						if(getPlayerFromName(MPPlayerList[slot])) then
-							triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "ChangeInfoAdv", getPlayerFromName(MPPlayerList[slot]), "Завершение гонки через "..EndRaceTimeout)
+							triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "ChangeInfoAdv", getPlayerFromName(MPPlayerList[slot]), "Завершение гонки через "..EndRaceTimeout, 2000)
 						end
 					end
 				end

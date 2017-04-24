@@ -3614,7 +3614,6 @@ end
 
 
 
-
 --[[
 local vehicleIDS = {
     602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585, 405, 587,
@@ -4846,21 +4845,28 @@ function onClientPlayerWeaponFireFunc(weapon, ammo, ammoInClip, hitX, hitY, hitZ
 	    if(weapon == 43 and getElementModel(source) == 60) then
 			triggerServerEvent("doTakeScreenShot", localPlayer)
 		end
-		if WeaponAmmo[weapon] then
-			for key, k in pairs(PInv["player"][usableslot][4]) do
-				if(k[1] == WeaponAmmo[weapon]) then
-					RemoveInventoryItemID(usableslot, key)
-					break
-				end
-			end --Для патронов
-			
-			if(PInv["player"][usableslot][1] == WeaponAmmo[weapon]) then
-				RemoveInventoryItemID(usableslot)
-			end-- Для гранат
-			
-		end
-		if(getPedTotalAmmo(localPlayer) == 0) then
-			triggerServerEvent("useinvweapon", localPlayer, localPlayer)
+		
+		if(weapon == 42) then
+			if(getElementModel(hitElement) == 1362) then
+				triggerServerEvent("RemoveFire", localPlayer, localPlayer, hitElement)
+			end
+		else
+			if WeaponAmmo[weapon] then
+				for key, k in pairs(PInv["player"][usableslot][4]) do
+					if(k[1] == WeaponAmmo[weapon]) then
+						RemoveInventoryItemID(usableslot, key)
+						break
+					end
+				end --Для патронов
+				
+				if(PInv["player"][usableslot][1] == WeaponAmmo[weapon]) then
+					RemoveInventoryItemID(usableslot)
+				end-- Для гранат
+				
+			end
+			if(getPedTotalAmmo(localPlayer) == 0) then
+				triggerServerEvent("useinvweapon", localPlayer, localPlayer)
+			end
 		end
 	end
 end
@@ -6759,7 +6765,7 @@ function PedDamage(attacker, weapon, bodypart, loss)
 					local team = getElementData(thePed, "team")
 					if(team) then
 						if(getTeamName(getTeamFromName(team)) ~= "Мирные жители") then
-							triggerServerEvent("PedDamage", attacker, thePed, nil, nil, loss)
+							triggerServerEvent("PedDamage", attacker, thePed, weapon, 0, 0)
 						end
 					end
 				end
@@ -8568,8 +8574,6 @@ function DrawPlayerMessage()
 	end
 end
 addEventHandler("onClientHUDRender", getRootElement(), DrawPlayerMessage)
-
-
 
 
 
