@@ -12555,6 +12555,7 @@ local PlayersRole = {
 	["alexaxel705"] = "Разработчик",
 	["*Vk*Ricci"] = "Корректор английского языка",
 	["Pioner"] = "Корректор азербайджанского языка",
+	["Fucker"] = "Контент менеджер",
 }
 
 function AuthComplete(thePlayer)
