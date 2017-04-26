@@ -2676,7 +2676,7 @@ local VehicleSystem = {
 	[520] = {1.93, "IAE V2600", "", "A1 200", "Macpherson V2", "Brembo 2", "Hankook", 300, {11, 2006}, {0, CYear}, "Mammoth"},
 	[552] = {0.69, "LPE D 1.3 L", "", "R5 160", "Macpherson V3", "Endless 193mm", "ANNAITE", 86, {7, 1998}, {6, CYear}, "Vapid"},
 	[584] = {2, "Trailer", "", "R5 120", "Macpherson TR", "Brembo 4", "ANNAITE TR", 126, {1, 1930}, {5, CYear}, "Export"},
-	[521] = {0.57, "HRD 1000 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 5", 16, {7, 1985}, {5, CYear}, "Export"},
+	[521] = {0.67, "HRD 1000 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 5", 16, {7, 1985}, {5, CYear}, "Export"},
 	[553] = {2.3, "IAE V2700", "", "A1 200", "Macpherson V91", "Brembo 33", "Hankook", 833, {2, 1936}, {1, 1942}, "Export"},
 	[585] = {0.59, "HLR GL 1.8 L v2", "", "R5 165", "Macpherson V7", "Wilwood 230mm", "КАМА-505", 60, {0, 1990}, {2, 1993}, "Albany"},
 	[437] = {1.14, "LPE D 2.2 L", "", "R5 160", "Macpherson V8", "Wilwood 187mm", "Michelin 8", 316, {5, 1986}, {1, 1994}, "Export"},
@@ -2684,9 +2684,9 @@ local VehicleSystem = {
 	[469] = {1.03, "RR 600", "", "A1 200", "Macpherson V10", "Brembo 10", "Hankook", 83, {7, 1946}, {9, 1974}, "Export"},
 	[485] = {0.66, "HLR E GLE", "", "R3 160", "Macpherson V11", "Brembo 170mm", "Michelin 10", 33, {3, 1930}, {11, CYear}, "Export"},
 	[501] = {0.43, "RR 100", "", "A1 75", "Macpherson V12", "Brembo 12", "Michelin 11", 3, {2, 1992}, {8, CYear}, "RC"},
-	[522] = {0.57, "HRD 1200 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 12", 13, {2, 1984}, {7, 2002}, "Export"},
+	[522] = {0.67, "HRD 1200 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 12", 13, {2, 1984}, {7, 2002}, "Export"},
 	[554] = {1.08, "TF 1.3 L", "", "R5 170", "Macpherson V13", "Wilwood 245mm", "Michelin 13", 100, {6, 1988}, {2, 1999}, "Export"},
-	[586] = {0.52, "HRD 750 CC", "", "R4 190", "Macpherson V14", "Brembo 14", "Michelin 14", 26, {3, 1941}, {3, CYear}, "Western Motorcycle Company"},
+	[586] = {0.62, "HRD 750 CC", "", "R4 190", "Macpherson V14", "Brembo 14", "Michelin 14", 26, {3, 1941}, {3, CYear}, "Western Motorcycle Company"},
 	[523] = {0.57, "HRD 950 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 15", 16, {4, 1976}, {10, CYear}, "Export"},
 	[406] = {2.52, "MT 2", "", "R4 110", "Macpherson V15", "Brembo 15", "Michelin 16", 666, {1, 1974}, {8, CYear}, "DUDE"},
 	[422] = {0.99, "HLR D 1.8 L", "", "A5 165", "Macpherson V153", "Brembo 245mm", "Michelin 117", 56, {1, 1983}, {1, 1988}, "Vapid"},
@@ -2769,7 +2769,7 @@ local VehicleSystem = {
 	[413] = {1.09, "RST D 1.3 L", "", "R5 160", "Macpherson V83", "Endless 193mm", "Matador 66", 86, {11, 1986}, {6, 1993}, "Brute"},
 	[601] = {0.76, "SFP D 1.7 L v2", "", "A5 110", "Macpherson V84", "Wilwood 200mm", "Michelin 67", 166, {7, 1982}, {6, 1999}, "Export"},
 	[445] = {0.83, "HLR GT 2.0 L", "", "F5 165", "Macpherson V85", "Endless 245mm", "Michelin 68", 55, {1, 1982}, {0, 1993}, "Dundreary"},
-	[461] = {0.58, "HRD 1000 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 69", 16, {7, 1992}, {0, CYear}, "Shitzu"},
+	[461] = {0.68, "HRD 1000 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 69", 16, {7, 1992}, {0, CYear}, "Shitzu"},
 	[477] = {0.76, "ODL 2.0 L v2", "", "R5 200", "Macpherson V86", "Endless 275mm", "Michelin 70", 46, {10, 1989}, {11, 1995}, "Export"},
 	[493] = {1.29, "BE 1000 CC", "", "R5 190", "Macpherson V87", "Brembo 57", "Michelin 71", 100, {0, 1990}, {11, CYear}, "Grotti"},
 	[509] = {0.51, "BMX 2", "", "R5 120", "Macpherson V88", "Ferodo GT", "Michelin 69", 3, {3, 1970}, {7, CYear}, "Export"},
@@ -2785,7 +2785,7 @@ local VehicleSystem = {
 	[571] = {0.28, "LPE 1.2 L", "", "R4 90", "Macpherson V165", "Wilwood 340mm", "Michelin 125", 10, {4, 1970}, {2, CYear}, "Export"},
 	[430] = {0.8, "BE 200 CC", "", "R5 190", "Macpherson V9", "Brembo 18", "Michelin 75", 73, {10, 1980}, {8, CYear}, "Export"},
 	[446] = {1.01, "BE 300 CC", "", "R5 190", "Macpherson V97", "Brembo 57", "Michelin 76", 73, {9, 1989}, {1, CYear}, "Shitzu"},
-	[462] = {0.6, "HRD 110 CC", "", "R3 190", "Macpherson V98", "Brembo 62", "Michelin 12", 11, {8, 1973}, {10, CYear}, "Pegassi"},
+	[462] = {0.7, "HRD 110 CC", "", "R3 190", "Macpherson V98", "Brembo 62", "Michelin 12", 11, {8, 1973}, {10, CYear}, "Pegassi"},
 	[478] = {1, "TRBD 1.7 L", "", "A4 150", "Macpherson V99", "Brembo 205mm", "Michelin 77", 61, {8, 1955}, {1, 1960}, "Export"},
 	[494] = {0.9, "TF GLE 4.0 L", "", "R5 220", "Macpherson V21", "Endless 260mm", "Yokohama", 53, {7, 1978}, {9, 1988}, "Export"},
 	[510] = {0.61, "BMX 1", "", "R4 140", "Macpherson V88", "Ferodo GT", "Michelin 69", 3, {5, 1992}, {0, CYear}, "Export"},
@@ -2801,7 +2801,7 @@ local VehicleSystem = {
 	[415] = {0.77, "SAF 2.0 L v2", "", "R5 230", "Macpherson V167", "Wilwood 275mm", "Michelin 126", 40, {4, 1984}, {0, 1996}, "Grotti"},
 	[431] = {1.1, "TRBD 2.0 L", "", "R4 130", "Macpherson V154", "Wilwood 155mm", "Michelin 118", 183, {11, 1979}, {8, CYear}, "Brute"},
 	[447] = {1.03, "RR 500", "", "A1 200", "Macpherson V10", "Brembo 10", "Hankook", 100, {7, 1946}, {8, 1974}, "Export"},
-	[463] = {0.55, "HRD 750 CC", "", "R4 190", "Macpherson V14", "Brembo 14", "Michelin 87", 26, {8, 1968}, {1, CYear}, "Western Motorcycle Company"},
+	[463] = {0.63, "HRD 750 CC", "", "R4 190", "Macpherson V14", "Brembo 14", "Michelin 87", 26, {8, 1968}, {1, CYear}, "Western Motorcycle Company"},
 	[479] = {0.8, "RST GLE 2.0 L", "", "F4 165", "Macpherson V111", "Endless 175mm", "Michelin 88", 50, {5, 1984}, {4, 1988}, "Dundreary"},
 	[495] = {1.35, "2JZ GTE 3.2 L", "", "A5 170", "Macpherson V112", "Brembo 230mm", "Michelin 34", 66, {8, 2007}, {0, CYear}, "Export"},
 	[511] = {2.5, "IAE V700", "", "A1 200", "Macpherson V113", "Brembo 2", "Hankook", 333, {4, 1965}, {2, CYear}, "Export"},
@@ -2841,7 +2841,7 @@ local VehicleSystem = {
 	[578] = {1.63, "HLR D 2.0 L", "", "R5 110", "Macpherson V22", "Wilwood 120mm", "Michelin 105", 183, {1, 1984}, {6, CYear}, "Export"},
 	[610] = {1.4, "TESLA 2", "", "R3 160", "Macpherson V138", "Brembo 170mm", "Michelin 106", 13, {2, 1930}, {5, CYear}, "Export"},
 	[611] = {1.4, "TESLA 1", "", "R3 160", "Macpherson V11", "Brembo 170mm", "Michelin 10", 33, {5, 1930}, {11, CYear}, "Export"},
-	[581] = {0.59, "HRD 950 CC", "", "R5 190", "Macpherson V140", "Brembo 5", "Michelin 108", 16, {11, 1975}, {5, 1981}, "Nagasaki"},
+	[581] = {0.69, "HRD 950 CC", "", "R5 190", "Macpherson V140", "Brembo 5", "Michelin 108", 16, {11, 1975}, {5, 1981}, "Nagasaki"},
 	[591] = {2, "Trailer", "", "R5 120", "Macpherson TR", "Brembo 4", "ANNAITE TR", 126, {3, 1930}, {0, CYear}, "Export"},
 	[405] = {0.87, "SFP GLE 1.8 L v3", "", "R5 165", "Macpherson V6", "Brembo 260mm", "Michelin 6", 53, {8, 1990}, {7, 1999}, "Übermacht"},
 	[515] = {2.02, "TF D 2.0 L v2", "", "R5 120", "Macpherson V143", "Brembo 4", "Michelin 110", 166, {10, 1992}, {11, CYear}, "Export"},
@@ -2881,7 +2881,7 @@ local VehicleSystem = {
 	[583] = {0.54, "RST 1.2 L", "", "R4 170", "Macpherson V172", "Endless 195mm", "Michelin 131", 26, {0, 1950}, {2, CYear}, "Export"},
 	[436] = {0.73, "LPE 2.0 L v2", "", "F4 160", "Macpherson V173", "Endless 234mm", "Michelin 132", 46, {2, 1982}, {9, 2006}, "Export"},
 	[452] = {0.51, "BE 400 CC", "", "R5 190", "Macpherson V174", "Brembo 81", "Michelin 133", 73, {3, 1994}, {0, CYear}, "Pegassi"},
-	[468] = {0.67, "HRD 900 CC", "", "R5 190", "Macpherson V5", "Brembo 62", "Michelin 69", 16, {2, 1989}, {8, 1999}, "Maibatsu Corporation"},
+	[468] = {0.77, "HRD 900 CC", "", "R5 190", "Macpherson V5", "Brembo 62", "Michelin 69", 16, {2, 1989}, {8, 1999}, "Maibatsu Corporation"},
 	[484] = {0.54, "BE 900 CC", "", "R5 190", "Macpherson V175", "Brembo 82", "Michelin 134", 166, {9, 1965}, {10, 1987}, "Dinka"},
 	[573] = {1.65, "MT 3", "", "A5 110", "Macpherson V109", "Wilwood 212mm", "Michelin 85", 333, {2, 2002}, {8, CYear}, "MTL"},
 }
@@ -5116,7 +5116,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 1959.2, -1812.6, 12.4, 0, 0 --
+		local x,y,z,i,d  = 2643.9, -2028.8, 12.5, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -13943,6 +13943,8 @@ function OpenTuning(thePlayer,x,y,z,rz)
 	if(theVehicle) then
 		if(getPedOccupiedVehicleSeat(thePlayer) == 0) then
 			if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
+				setElementFrozen(theVehicle, true)
+				
 				setPlayerHudComponentVisible(thePlayer, "radar", false)
 				PData[thePlayer]["oldposition"] = {x,y,z,rz}
 				PData[thePlayer]["theVehicleTuning"] = theVehicle
@@ -13951,10 +13953,10 @@ function OpenTuning(thePlayer,x,y,z,rz)
 				setElementDimension(theVehicle, d)
 				local occupants = getVehicleOccupants(theVehicle) or {}
 				for seat, occupant in pairs(occupants) do
+					setElementFrozen(occupant, true)
 					setElementDimension(occupant, d)
 					setElementInterior(occupant, 2, 616.8 , -74.8, 997+VehicleSystem[getElementModel(theVehicle)][1])
 				end
-				
 				setElementInterior(theVehicle, 2, 616.8, -74.8, 997+VehicleSystem[getElementModel(theVehicle)][1])
 
 
@@ -16154,13 +16156,14 @@ addEventHandler("repairVeh", root, repairVeh)
 
 function ExitTuning(theVehicle)
 	setElementDimension(theVehicle, 0)
-	setElementInterior(theVehicle, 0, PData[source]["oldposition"][1], PData[source]["oldposition"][2], PData[source]["oldposition"][3])
+	setElementInterior(theVehicle, 0, PData[source]["oldposition"][1], PData[source]["oldposition"][2], PData[source]["oldposition"][3]+VehicleSystem[getElementModel(theVehicle)][1])
 	setElementRotation(theVehicle, 0, 0, PData[source]["oldposition"][4])
 
 	local occupants = getVehicleOccupants(theVehicle) or {}
 	for seat, occupant in pairs(occupants) do
 		setElementDimension(occupant, 0)
 		setElementInterior(occupant, 0, PData[source]["oldposition"][1], PData[source]["oldposition"][2], PData[source]["oldposition"][3])
+		setElementFrozen(occupant, false)
 	end
 	
 	PData[source]["ShowUpgrade"] = nil
@@ -16170,6 +16173,7 @@ function ExitTuning(theVehicle)
 	fadeCamera(source, true)
 	setPlayerHudComponentVisible(source, "radar", true)
 	setCameraTarget(source, source)
+	setElementFrozen(theVehicle, false)
 end
 addEvent("ExitTuning", true)
 addEventHandler("ExitTuning", root, ExitTuning)

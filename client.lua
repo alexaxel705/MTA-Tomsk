@@ -1720,10 +1720,10 @@ function MarkerHit(hitPlayer, Dimension)
 					setPedCanBeKnockedOffBike(localPlayer, false)
 					local x,y,z = getElementPosition(theVehicle)
 					local _,_,rz = getElementRotation(theVehicle)
-					triggerServerEvent("OpenTuning", localPlayer, localPlayer, x,y,z,rz)
-					 PData["MarkerTrigger"] = true
+					triggerServerEvent("OpenTuning", localPlayer, localPlayer, x,y,getGroundPosition(x,y,z),rz)
+					PData["MarkerTrigger"] = true
 				else
-					 PData["MarkerTrigger"] = nil
+					PData["MarkerTrigger"] = nil
 				end
 			end
 		elseif(getElementData(source, "type") == "SPRAY") then
