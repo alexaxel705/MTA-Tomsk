@@ -2801,7 +2801,7 @@ local VehicleSystem = {
 	[415] = {0.77, "SAF 2.0 L v2", "", "R5 230", "Macpherson V167", "Wilwood 275mm", "Michelin 126", 40, {4, 1984}, {0, 1996}, "Grotti"},
 	[431] = {1.1, "TRBD 2.0 L", "", "R4 130", "Macpherson V154", "Wilwood 155mm", "Michelin 118", 183, {11, 1979}, {8, CYear}, "Brute"},
 	[447] = {1.03, "RR 500", "", "A1 200", "Macpherson V10", "Brembo 10", "Hankook", 100, {7, 1946}, {8, 1974}, "Export"},
-	[463] = {0.63, "HRD 750 CC", "", "R4 190", "Macpherson V14", "Brembo 14", "Michelin 87", 26, {8, 1968}, {1, CYear}, "Western Motorcycle Company"},
+	[463] = {0.67, "HRD 750 CC", "", "R4 190", "Macpherson V14", "Brembo 14", "Michelin 87", 26, {8, 1968}, {1, CYear}, "Western Motorcycle Company"},
 	[479] = {0.8, "RST GLE 2.0 L", "", "F4 165", "Macpherson V111", "Endless 175mm", "Michelin 88", 50, {5, 1984}, {4, 1988}, "Dundreary"},
 	[495] = {1.35, "2JZ GTE 3.2 L", "", "A5 170", "Macpherson V112", "Brembo 230mm", "Michelin 34", 66, {8, 2007}, {0, CYear}, "Export"},
 	[511] = {2.5, "IAE V700", "", "A1 200", "Macpherson V113", "Brembo 2", "Hankook", 333, {4, 1965}, {2, CYear}, "Export"},
@@ -2834,7 +2834,7 @@ local VehicleSystem = {
 	[433] = {1.44, "HLR D 1.1 L", "", "A5 180", "Macpherson V29", "Wilwood 150mm", "Michelin 101", 350, {0, 1982}, {5, CYear}, "DUDE"},
 	[449] = {1.46, "TR 3", "", "R5 150", "Macpherson V134", "Brembo 71", "Michelin 102", 63, {4, 1869}, {1, CYear}, "Export"},
 	[465] = {0.45, "RR 100", "", "A1 75", "Macpherson V12", "Brembo 12", "Michelin 11", 3, {11, 1992}, {8, CYear}, "RC"},
-	[481] = {0.52, "BMX 3", "", "R5 120", "Macpherson V135", "Ferodo GT", "Michelin 69", 3, {1, 1971}, {0, CYear}, "Export"},
+	[481] = {0.72, "BMX 3", "", "R5 120", "Macpherson V135", "Ferodo GT", "Michelin 69", 3, {1, 1971}, {0, CYear}, "Export"},
 	[497] = {1.18, "RR 1000", "", "A1 200", "Macpherson V10", "Brembo 10", "Hankook", 150, {10, 1962}, {5, CYear}, "Buckingham"},
 	[514] = {1.6, "TF D 2.0 L v3", "", "R5 120", "Macpherson V136", "Brembo 4", "Michelin 103", 126, {8, 1966}, {0, 2005}, "Export"},
 	[546] = {0.71, "LPE 2.0 L", "", "R5 160", "Macpherson V137", "Endless 180mm", "Michelin 104", 60, {0, 1986}, {7, 1991}, "Karin"},
@@ -5116,7 +5116,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 2643.9, -2028.8, 12.5, 0, 0 --
+		local x,y,z,i,d  = 2334.3, -1679, 12.6, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5662,7 +5662,7 @@ function laltEnteredPickup(thePlayer)
 				if(getDistanceBetweenPoints3D(x, y, z, xd,yd,zd) < size) then
 					if(getElementData(PetrolFuelMarker[thePlayer], "type") == "siren") then
 						triggerEvent("VehicleUpgrade", thePlayer, 8, 35000)
-					elseif(getElementData(PetrolFuelMarker[thePlayer], "type") == "GEnter") then
+					elseif(getElementData(PetrolFuelMarker[thePlayer], "type") == "GEnter") then -- Переделать потом на клиентскую часть
 						if(getElementData(PetrolFuelMarker[thePlayer], "locked")) then
 							if(getElementData(PetrolFuelMarker[thePlayer], "locked") == 1) then
 								triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Дверь закрыта!")
@@ -5963,7 +5963,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 		setElementDimension(o, d)
 		Garages[house][n] = {}
 		Garages[house][n]["enter"] = createMarker(x,y,z, "corona", 2, 255, 10, 10, 150)
-		setElementData(Garages[house][n]["enter"], "type", "GEnter", false)
+		setElementData(Garages[house][n]["enter"], "type", "GEnter")
 		setElementData(Garages[house][n]["enter"], "x", 611, false)
 		setElementData(Garages[house][n]["enter"], "y", -72.3, false)
 		setElementData(Garages[house][n]["enter"], "z", 998, false)
@@ -5978,7 +5978,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 		Garages[house][n]["exit"] = createMarker(610, -76.5, 997.5, "corona", 2, 255, 10, 10, 150)
 		setElementInterior(Garages[house][n]["exit"], 2)
 		setElementDimension(Garages[house][n]["exit"], d)
-		setElementData(Garages[house][n]["exit"], "type", "GExit", false)
+		setElementData(Garages[house][n]["exit"], "type", "GExit")
 		setElementData(Garages[house][n]["exit"], "x", x, false)
 		setElementData(Garages[house][n]["exit"], "y", y, false)
 		setElementData(Garages[house][n]["exit"], "z", z, false)
@@ -5994,7 +5994,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 	
 		Garages[house][n] = {}
 		Garages[house][n]["enter"] = createMarker(x,y,z, "corona", 5, 255, 10, 10, 150)
-		setElementData(Garages[house][n]["enter"], "type", "GEnter", false)
+		setElementData(Garages[house][n]["enter"], "type", "GEnter")
 		setElementData(Garages[house][n]["enter"], "x", 610.7, false)
 		setElementData(Garages[house][n]["enter"], "y", -120.8, false)
 		setElementData(Garages[house][n]["enter"], "z", 998, false)
@@ -6009,7 +6009,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 		Garages[house][n]["exit"] = createMarker(609.9, -126, 998, "corona", 5, 255, 10, 10, 150)
 		setElementInterior(Garages[house][n]["exit"], 3)
 		setElementDimension(Garages[house][n]["exit"], d)
-		setElementData(Garages[house][n]["exit"], "type", "GExit", false)
+		setElementData(Garages[house][n]["exit"], "type", "GExit")
 		setElementData(Garages[house][n]["exit"], "x", x, false)
 		setElementData(Garages[house][n]["exit"], "y", y, false)
 		setElementData(Garages[house][n]["exit"], "z", z, false)
@@ -6025,7 +6025,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 	
 		Garages[house][n] = {}
 		Garages[house][n]["enter"] = createMarker(x,y,z, "corona", 5, 255, 10, 10, 150)
-		setElementData(Garages[house][n]["enter"], "type", "GEnter", false)
+		setElementData(Garages[house][n]["enter"], "type", "GEnter")
 		setElementData(Garages[house][n]["enter"], "x", 610.7, false)
 		setElementData(Garages[house][n]["enter"], "y", -120.8, false)
 		setElementData(Garages[house][n]["enter"], "z", 998, false)
@@ -6040,7 +6040,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 		Garages[house][n]["exit"] = createMarker(302.4, 300.4, 999.1, "corona", 5, 255, 10, 10, 150)
 		setElementInterior(Garages[house][n]["exit"], 4)
 		setElementDimension(Garages[house][n]["exit"], d)
-		setElementData(Garages[house][n]["exit"], "type", "GExit", false)
+		setElementData(Garages[house][n]["exit"], "type", "GExit")
 		setElementData(Garages[house][n]["exit"], "x", x, false)
 		setElementData(Garages[house][n]["exit"], "y", y, false)
 		setElementData(Garages[house][n]["exit"], "z", z, false)
@@ -6077,7 +6077,7 @@ function EnterGarage(thePlayer, house, n, gx,gy,gz,grz)
 	else -- Выход из гаража
 		local x = getElementData(theVehicle, "gx")
 		local y = getElementData(theVehicle, "gy")
-		local z = getElementData(theVehicle, "gz")
+		local z = getElementData(theVehicle, "gz")+VehicleSystem[getElementModel(theVehicle)][1]
 		local rz = getElementData(theVehicle, "grz")
 		setTimer(function() 
 			BindAllKey(thePlayer)
@@ -6094,6 +6094,8 @@ function EnterGarage(thePlayer, house, n, gx,gy,gz,grz)
 	fadeCamera(thePlayer, false, 1, 0, 0, 0)
 	UnBindAllKey(thePlayer)
 end
+addEvent("EnterGarage", true)
+addEventHandler("EnterGarage", root, EnterGarage)
 
 
 

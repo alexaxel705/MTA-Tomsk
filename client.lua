@@ -1726,6 +1726,16 @@ function MarkerHit(hitPlayer, Dimension)
 					PData["MarkerTrigger"] = nil
 				end
 			end
+		elseif(getElementData(source, "type") == "GEnter") then
+			local theVehicle = getPedOccupiedVehicle(localPlayer)
+			if(theVehicle) then
+				setPedCanBeKnockedOffBike(localPlayer, false)
+			end
+		elseif(getElementData(source, "type") == "GExit") then
+			local theVehicle = getPedOccupiedVehicle(localPlayer)
+			if(theVehicle) then
+				setPedCanBeKnockedOffBike(localPlayer, false)
+			end
 		elseif(getElementData(source, "type") == "SPRAY") then
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			if(theVehicle) then
