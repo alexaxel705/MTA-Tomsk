@@ -5116,7 +5116,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -2270.6, -155.9, 35.3, 0, 0 --
+		local x,y,z,i,d  = 1959.2, -1812.6, 12.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7457,7 +7457,7 @@ function preLoad(name)
 		end
 	end
 	
-	local CountRandomBot = 360
+	local CountRandomBot = 460
 	local availzones = {}
 	for name, dat in pairs(PedNodes) do
 		for _, dat2 in pairs(dat) do
@@ -11841,6 +11841,9 @@ CreateShop(-2420.2, 969.9, 45.3, 16) -- SF
 CreateShop(2380.7, -1213.6, 27.4, 6) -- LS
 CreateShop(-2106, -2480.7, 30.6, 16) -- LS
 CreateShop(2292.3, -1722.7, 13.5, 4) -- LS
+CreateShop(2502.1, -1319.9, 34.1, 17) -- LS
+
+
 
 
 
