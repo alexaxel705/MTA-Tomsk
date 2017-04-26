@@ -12263,7 +12263,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 		end
 	end
 	--AddInventoryItem(thePlayer, "Огнетушитель", 1, 550, {})
-	--RacePriceGeneration(thePlayer, zone)
+	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
 	local hFile = fileCreate("save.txt")
@@ -13989,7 +13989,6 @@ function OpenTuning(thePlayer,x,y,z,rz)
 	if(theVehicle) then
 		if(getPedOccupiedVehicleSeat(thePlayer) == 0) then
 			if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
-				setElementFrozen(theVehicle, true)
 				
 				setPlayerHudComponentVisible(thePlayer, "radar", false)
 				PData[thePlayer]["oldposition"] = {x,y,z,rz}
@@ -13999,7 +13998,6 @@ function OpenTuning(thePlayer,x,y,z,rz)
 				setElementDimension(theVehicle, d)
 				local occupants = getVehicleOccupants(theVehicle) or {}
 				for seat, occupant in pairs(occupants) do
-					setElementFrozen(occupant, true)
 					setElementDimension(occupant, d)
 					setElementInterior(occupant, 2, 616.8 , -74.8, 997+VehicleSystem[getElementModel(theVehicle)][1])
 				end
@@ -15357,10 +15355,17 @@ function CreateRaceMarker(thePlayer, array, checkpoint)
 			EndRaceInfoTimer=setTimer(function()
 				if(EndRaceTimeout == 0) then 
 					if(racePlayerFinish[1]) then 
-						RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]), zone)
+						RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
+						outputChatBox("Победитель: #CC9966"..getPlayerName(thePlayer), getRootElement(), 255,255,255, true)
 					end
-					if(racePlayerFinish[2]) then outputChatBox("Второе место: #CC9966"..racePlayerFinish[2], getRootElement(), 255,255,255, true) end
-					if(racePlayerFinish[3]) then outputChatBox("Третье место: #CC9966"..racePlayerFinish[3], getRootElement(), 255,255,255, true) end
+					if(racePlayerFinish[2]) then 
+						RacePriceGeneration(getPlayerFromName(racePlayerFinish[2]))
+						outputChatBox("Второе место: #CC9966"..racePlayerFinish[2], getRootElement(), 255,255,255, true) 
+					end
+					if(racePlayerFinish[3]) then 
+						RacePriceGeneration(getPlayerFromName(racePlayerFinish[3]))
+						outputChatBox("Третье место: #CC9966"..racePlayerFinish[3], getRootElement(), 255,255,255, true) 
+					end
 					endRace()
 				else
 					for slot = 1, #MPPlayerList do
@@ -15390,7 +15395,9 @@ for nameparts, data in pairs(AutomobileVComp) do
 	end
 end
 
-function RacePriceGeneration(thePlayer, zone)
+function RacePriceGeneration(thePlayer)
+	local x,y,z = getElementPosition(thePlayer)
+	local zone = getZoneName(x,y,z,true)
 	local Prices = math.random(1,10)
 	if(Prices == 1) then
 		local park = GetRandomParking(zone)
@@ -15400,7 +15407,6 @@ function RacePriceGeneration(thePlayer, zone)
 			
 			Parkings[zone][park[1]][park[2]][1] = v
 			setElementData(v, "owner", getPlayerName(thePlayer))
-			outputChatBox("Победитель: #CC9966"..getPlayerName(thePlayer), getRootElement(), 255,255,255, true)
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, park[3], park[4], park[5], "Приз")
 			outputChatBox("Забери свой приз на красном маркере!", thePlayer, 255,255,255,true)
 		end
@@ -16209,7 +16215,6 @@ function ExitTuning(theVehicle)
 	for seat, occupant in pairs(occupants) do
 		setElementDimension(occupant, 0)
 		setElementInterior(occupant, 0, PData[source]["oldposition"][1], PData[source]["oldposition"][2], PData[source]["oldposition"][3])
-		setElementFrozen(occupant, false)
 	end
 	
 	PData[source]["ShowUpgrade"] = nil
@@ -16219,7 +16224,6 @@ function ExitTuning(theVehicle)
 	fadeCamera(source, true)
 	setPlayerHudComponentVisible(source, "radar", true)
 	setCameraTarget(source, source)
-	setElementFrozen(theVehicle, false)
 end
 addEvent("ExitTuning", true)
 addEventHandler("ExitTuning", root, ExitTuning)
