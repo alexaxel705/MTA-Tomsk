@@ -1555,6 +1555,7 @@ addEventHandler("UpgradeServerPreload", getRootElement(), UpgradeServerPreload)
 
 function TuningExit()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
+	PData["Handling"] = getVehicleHandling(theVehicle)
 	setVehicleColor(theVehicle ,ToC1, ToC2, ToC3, ToC4)
 	showCursor(false)
 	if(RepairButton) then guiSetVisible(RepairButton, false) end
@@ -4158,18 +4159,18 @@ addEventHandler("intro", localPlayer, intro)
 
 
 
-function getVehicleOneGear(theVehicle)
-	return (math.sqrt(3300*getVehicleHandlingProperty(theVehicle, "engineAcceleration")/getVehicleHandlingProperty(theVehicle, "dragCoeff"))*1.18)/getVehicleHandlingProperty(theVehicle, "numberOfGears")
+function getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears) -- engineAcceleration, dragCoeff, numberOfGears
+	return (math.sqrt(3300*engineAcceleration/dragCoeff)*1.18)/numberOfGears
 end
 
 
-function getVehicleGear(theVehicle)
-	local onegear = getVehicleOneGear(theVehicle)
+function getVehicleGear(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
+	local onegear = getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears)
 	local result
-	for Gear = 0, getVehicleHandlingProperty(theVehicle, "numberOfGears"), 1 do
+	for Gear = 0, numberOfGears, 1 do
 		if(getVehicleCurrentGear(theVehicle) > 0) then
 			if(onegear*Gear <= VehicleSpeed) then
-				if((Gear+1) <= getVehicleHandlingProperty(theVehicle, "numberOfGears")) then
+				if((Gear+1) <= numberOfGears) then
 					result=(Gear+1)
 				end
 			end
@@ -4182,10 +4183,10 @@ end
 
 
 
-function getVehicleRPM(theVehicle)
-	local onegear = getVehicleOneGear(theVehicle)
-	local MaxRPM = GetVehicleMaxRPM(theVehicle)
-	local Gear = getVehicleGear(theVehicle)
+function getVehicleRPM(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
+	local onegear = getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears)
+	local MaxRPM = GetVehicleMaxRPM(engineAcceleration)
+	local Gear = getVehicleGear(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
 	if(getKeyState("w") and getKeyState("s") or getKeyState("w") and getKeyState("space")) then
 		RPM = MaxRPM/onegear*(onegear-((onegear*Gear)-onegear))
 	else
@@ -4208,8 +4209,8 @@ function getVehicleRPM(theVehicle)
 end
 
 
-function GetVehicleMaxRPM(theVehicle)
-	return (((10*(getVehicleHandlingProperty(theVehicle, "engineAcceleration")))*1.5))*40
+function GetVehicleMaxRPM(engineAcceleration)
+	return (((10*(engineAcceleration))*1.5))*40
 end
 
 
@@ -7030,6 +7031,7 @@ function PlayerVehicleEnter(theVehicle, seat)
 		Targets["theVehicle"] = nil
 		if(seat == 0) then
 			PData["drx"], PData["dry"], PData["drz"] = getElementPosition(theVehicle)
+			PData["Handling"] = getVehicleHandling(theVehicle)
 			local name = getVehicleName(theVehicle)
 			if(getElementData(theVehicle, "name")) then
 				name = getElementData(theVehicle, "name")
@@ -7048,6 +7050,7 @@ function PlayerVehicleExit(theVehicle, seat)
 		ChangeInfo() 
 		if(seat == 0) then
 			PData["drx"], PData["dry"], PData["drz"] = false, false, false
+			PData["Handling"] = false
 		end
 	end
 end
@@ -8304,7 +8307,7 @@ function DrawPlayerMessage()
 					speed = "0"..speed
 				end
 
-				local MaxRPM = GetVehicleMaxRPM(theVehicle)
+				local MaxRPM = GetVehicleMaxRPM(PData["Handling"]["engineAcceleration"])
 				local RPMMeter = false
 				local RPMDate = false 
 				
@@ -8340,7 +8343,7 @@ function DrawPlayerMessage()
 					RPMDate = 20000
 				end
 				if(RPMDate) then
-					local RPM = (225*(getVehicleRPM(theVehicle)/RPMDate))
+					local RPM = (225*(getVehicleRPM(theVehicle, PData["Handling"]["engineAcceleration"], PData["Handling"]["dragCoeff"], PData["Handling"]["numberOfGears"])/RPMDate))
 					local RedRPMZone = 225*((MaxRPM/RPMDate))
 					if(SlowTahometer < RPM) then
 						SlowTahometer=SlowTahometer+(RPM-SlowTahometer)/20
@@ -8364,7 +8367,7 @@ function DrawPlayerMessage()
 					dxDrawCircle(sx,sy, 87*TS, 1*TS, 0.8, 120, 345, tocolor(255,255,255,255))
 					
 					dxDrawCircle(sx,sy, 30*TS, 35*TS, 1, 0, 360, tocolor(0,0,0,20))
-					dxDrawText(getVehicleGear(theVehicle), sx,sy-(30*scaley),sx,sy-(30*scaley), tocolor(255,255,255,255), scale*2.5, "default-bold", "center", "center")
+					dxDrawText(getVehicleGear(theVehicle, PData["Handling"]["engineAcceleration"], PData["Handling"]["dragCoeff"], PData["Handling"]["numberOfGears"]), sx,sy-(30*scaley),sx,sy-(30*scaley), tocolor(255,255,255,255), scale*2.5, "default-bold", "center", "center")
 
 					if(getElementData(theVehicle, "Fuel")) then
 						local handlingTable = getOriginalHandling(getElementModel(theVehicle))

@@ -1,6 +1,6 @@
 local ids = {}
 local PData = {}
-local SData = {['Chat Message'] = {}}
+local SData = {['Chat Message'] = {}, ["VehAccData"] = {}}
 local Score = {}
 local Vibori = false
 SData["DriverBot"] = {}
@@ -13160,20 +13160,16 @@ end
 
 
 
-
---[[ -- Доработать спидометр
-local AccelerationData = {}
 function Acceleration(thePlayer)
-	if(not AccelerationData[thePlayer]) then
+	if(not SData["VehAccData"][thePlayer]) then
 		local theVehicle = getPedOccupiedVehicle(thePlayer)
 		if(theVehicle) then
 			if(getPedOccupiedVehicleSeat(thePlayer) == 0) then
 				local HT = getVehicleHandling(theVehicle)
-				AccelerationData[thePlayer] = {theVehicle, HT}
-				setVehicleHandling(theVehicle, "engineAcceleration", 45)
+				SData["VehAccData"][thePlayer] = {theVehicle, HT}
+				setVehicleHandling(theVehicle, "engineAcceleration", HT["engineAcceleration"]*2)
 				PData[thePlayer]["AccelerationTimer"] = setTimer(function()
-					setElementHealth(theVehicle, getElementHealth(theVehicle)-1)
-					outputChatBox(getElementHealth(theVehicle))
+					setElementHealth(theVehicle, getElementHealth(theVehicle)-5)
 				end, 50, 0, theVehicle)
 			end
 		end
@@ -13185,21 +13181,21 @@ addEventHandler("Acceleration", root, Acceleration)
 
 
 function AccelerationDown(thePlayer)
-	if(AccelerationData[thePlayer]) then
-		setVehicleHandling(AccelerationData[thePlayer][1], "engineAcceleration", AccelerationData[thePlayer][2]["engineAcceleration"])
-		AccelerationData[thePlayer] = nil
+	if(SData["VehAccData"][thePlayer]) then
+		setVehicleHandling(SData["VehAccData"][thePlayer][1], "engineAcceleration", SData["VehAccData"][thePlayer][2]["engineAcceleration"])
+		SData["VehAccData"][thePlayer] = nil
 		killTimer(PData[thePlayer]["AccelerationTimer"])
 	end
 end 
 addEvent("AccelerationDown", true)
 addEventHandler("AccelerationDown", root, AccelerationDown)
---]]
+
 
 
 
 function BindAllKey(thePlayer)
-	--bindKey(thePlayer, "lshift", "down", Acceleration) 
-	--bindKey(thePlayer, "lshift", "up", AccelerationDown) 
+	bindKey(thePlayer, "lshift", "down", Acceleration) 
+	bindKey(thePlayer, "lshift", "up", AccelerationDown) 
 	bindKey(thePlayer, "tab", "down", TABEvent) 
 	bindKey(thePlayer, 'F2', 'down', spiz)
 	bindKey(thePlayer, 'F3', 'down', lockhouse)
@@ -15232,6 +15228,9 @@ function turnEngineOff(theVehicle, leftSeat, jackerPlayer, unbindkey)
 			end
 		end
 		
+		if(SData["VehAccData"][source]) then
+			AccelerationDown(source)
+		end
 		
 		if leftSeat == 0 then
 			if(getVehicleType(getElementModel(theVehicle)) ~= "BMX" and getVehicleType(getElementModel(theVehicle)) ~= "Train") then
