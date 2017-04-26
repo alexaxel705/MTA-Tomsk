@@ -6100,6 +6100,9 @@ addEventHandler("EnterGarage", root, EnterGarage)
 
 
 
+
+
+
 function CreateShmal()
 	if(not isTimer(ShmalTimer[source])) then
 		local cannabis = FoundItemsCount(source, "Конопля")
@@ -13155,7 +13158,47 @@ function callbackup(thePlayer)
 end
 
 
+
+
+--[[ -- Доработать спидометр
+local AccelerationData = {}
+function Acceleration(thePlayer)
+	if(not AccelerationData[thePlayer]) then
+		local theVehicle = getPedOccupiedVehicle(thePlayer)
+		if(theVehicle) then
+			if(getPedOccupiedVehicleSeat(thePlayer) == 0) then
+				local HT = getVehicleHandling(theVehicle)
+				AccelerationData[thePlayer] = {theVehicle, HT}
+				setVehicleHandling(theVehicle, "engineAcceleration", 45)
+				PData[thePlayer]["AccelerationTimer"] = setTimer(function()
+					setElementHealth(theVehicle, getElementHealth(theVehicle)-1)
+					outputChatBox(getElementHealth(theVehicle))
+				end, 50, 0, theVehicle)
+			end
+		end
+	end
+end 
+addEvent("Acceleration", true)
+addEventHandler("Acceleration", root, Acceleration)
+
+
+
+function AccelerationDown(thePlayer)
+	if(AccelerationData[thePlayer]) then
+		setVehicleHandling(AccelerationData[thePlayer][1], "engineAcceleration", AccelerationData[thePlayer][2]["engineAcceleration"])
+		AccelerationData[thePlayer] = nil
+		killTimer(PData[thePlayer]["AccelerationTimer"])
+	end
+end 
+addEvent("AccelerationDown", true)
+addEventHandler("AccelerationDown", root, AccelerationDown)
+--]]
+
+
+
 function BindAllKey(thePlayer)
+	--bindKey(thePlayer, "lshift", "down", Acceleration) 
+	--bindKey(thePlayer, "lshift", "up", AccelerationDown) 
 	bindKey(thePlayer, "tab", "down", TABEvent) 
 	bindKey(thePlayer, 'F2', 'down', spiz)
 	bindKey(thePlayer, 'F3', 'down', lockhouse)
@@ -13171,6 +13214,7 @@ function BindAllKey(thePlayer)
 end
 
 function UnBindAllKey(thePlayer)
+	unbindKey(thePlayer, "lshift", "down", Acceleration) 
 	unbindKey(thePlayer, "tab", "down", TABEvent) 
 	unbindKey(thePlayer, 'F2', 'down', spiz)
 	unbindKey(thePlayer, 'F3', 'down', lockhouse)
