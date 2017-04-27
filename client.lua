@@ -38,6 +38,7 @@ local PData = {
 	['drdist'] = 0,
 	['stamina'] = 8,
 	['LVLUPSTAMINA'] = 10,
+	['rage'] = 0, 
 	['ShakeLVL'] = 0, 
 	['TARR'] = {}, -- Target, по центру, ниже, выше
 	['MultipleAction'] = {},
@@ -4681,10 +4682,7 @@ addEventHandler("onMyClientScreenShot", resourceRoot,
  
  
 
-local size = 1.2
-local modo = 0.01
 local score = 0
-local screenScore = 0
 local tick
 local idleTime
 local multTime
@@ -4952,6 +4950,25 @@ function playerPressedKey(button, press)
 			end
 		end
 	end
+	
+	if(getPedOccupiedVehicle(localPlayer)) then
+		if(getPedOccupiedVehicleSeat(localPlayer) == 0) then
+			if(button == "lshift") then
+				if(PData['rage'] > 0) then
+					if(press) then
+						triggerServerEvent("Acceleration", localPlayer, localPlayer)
+						PData['ragetimer'] = setTimer(function() 
+							AddRage(-10)
+						end, 50, 0)
+					else
+						triggerServerEvent("AccelerationDown", localPlayer, localPlayer)
+						killTimer(PData['ragetimer'])
+					end
+				end
+			end
+		end
+	end
+	
 	
     if (press) then
 		if(BindedKeys[button]) then
@@ -5770,9 +5787,11 @@ end
 addEvent("driftCarCrashed", true)
 addEventHandler("driftCarCrashed", getRootElement(), function()
 	if score ~= 0 then
+		if(score > 100) then
+			AddRage(score/20)
+		end
 		score = 0
 		mult = 1
-		triggerServerEvent("onVehicleDriftEnd", localPlayer, score)
 	end
 end)
 
@@ -8263,19 +8282,15 @@ function DrawPlayerMessage()
 
 		
 			if(theVehicle) then
-				if size > 1.3 then 
-					modo = -0.01 
-				elseif size < 1.2 then 
-					modo = 0.01 
-				end
-				size = size + modo
 				
 				tick = getTickCount()
 				local angulo,velocidad = angle()
 				
 				local tempBool = tick - (idleTime or 0) < 750
 				if not tempBool and score ~= 0 then
-					triggerServerEvent("onVehicleDriftEnd", localPlayer, score)
+					if(score > 100) then
+						AddRage(score/20)
+					end
 					score = 0
 				end
 				
@@ -8286,17 +8301,15 @@ function DrawPlayerMessage()
 						score = math.floor(angulo*velocidad)*mult
 					end
 
-					screenScore = score
 					idleTime = tick
 				end
 				
 
-				--[[if tick - (idleTime or 0) < 3000 then
-					if(screenScore > 0) then
-						dxDrawBorderedText("ЗАНОС", x1,y1,x2,y2, tocolor(255,232,25,200), 2.2, "sans","center","top", false,true,false)
-						dxDrawBorderedText(string.format("\n%d",screenScore),  x1,y1-10,x2,y2, tocolor(255,232,25,200), size, "pricedown","center","top", false,true,false)
+				if tick - (idleTime or 0) < 3000 then
+					if(score > 100) then
+						dxDrawBorderedText("Дрифт +"..math.round(score/100, 0), 0, 910*NewScale, screenWidth-230*NewScale, 0, tocolor(255,232,25,200), NewScale*2, "default-bold", "right", "top", false,true,false)
 					end
-				end--]]
+				end
 
 
 				
@@ -8346,9 +8359,9 @@ function DrawPlayerMessage()
 					local RPM = (225*(getVehicleRPM(theVehicle, PData["Handling"]["engineAcceleration"], PData["Handling"]["dragCoeff"], PData["Handling"]["numberOfGears"])/RPMDate))
 					local RedRPMZone = 225*((MaxRPM/RPMDate))
 					if(SlowTahometer < RPM) then
-						SlowTahometer=SlowTahometer+(RPM-SlowTahometer)/20
+						SlowTahometer = SlowTahometer+(RPM-SlowTahometer)/20
 					elseif(SlowTahometer > RPM) then
-						SlowTahometer=SlowTahometer-(SlowTahometer-RPM)/20
+						SlowTahometer = SlowTahometer-(SlowTahometer-RPM)/20
 					end
 					sx = screenWidth-(150*scalex)
 					sy = screenHeight-(247*scaley)
@@ -8362,6 +8375,10 @@ function DrawPlayerMessage()
 						dxDrawCircle(sx,sy, 120*TS, 5*TS, 4, 120, 157, tocolor(100,100,100,200))
 						dxDrawCircle(sx,sy, 120*TS, 5*TS, 4, 120, 120+(3.7*getVehicleNitroCount(theVehicle)), tocolor(40,200,255,160))
 					end
+					
+					dxDrawCircle(sx,sy, 120*TS, 9*TS, 1, 158, 345, tocolor(0,0,0,20)) -- тут
+					dxDrawCircle(sx,sy, 120*TS, 5*TS, 4, 160, 344, tocolor(100,100,100,200))
+					dxDrawCircle(sx,sy, 120*TS, 5*TS, 4, 160, 160+(184*(PData['rage']/1000)), tocolor(255,200,40,160))
 					
 					dxDrawCircle(sx,sy, 90*TS, 2*TS, RPMMeter, 120, 345, tocolor(255,255,255,255), nil, true)
 					dxDrawCircle(sx,sy, 87*TS, 1*TS, 0.8, 120, 345, tocolor(255,255,255,255))
@@ -8616,7 +8633,20 @@ end
 
 
 
-
+function AddRage(count)
+	if(count < 0) then
+		count = count+(count*((1000-getPedStat(localPlayer, 160))/200))
+	end
+	if(PData['rage']+count < 0) then
+		killTimer(PData['ragetimer'])
+		triggerServerEvent("AccelerationDown", localPlayer, localPlayer)
+		PData['rage'] = 0
+	elseif(PData['rage'] + count > 1000) then
+		PData['rage'] = 1000
+	else
+		PData['rage'] = PData['rage'] + count
+	end
+end
 
 
 function GetMarrot(angle, rz)

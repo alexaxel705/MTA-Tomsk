@@ -12262,7 +12262,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Огнетушитель", 1, 550, {})
+	AddInventoryItem(thePlayer, "Деньги", 1000000, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
@@ -12611,19 +12611,6 @@ addEventHandler("buyshopitem", root, buyshopitem)
 
 
 
-
-
-
-function onVehicleDriftEnd(Score)
---[[if(Score >= 1000) then
-		Score=math.floor(Score/1000)
-		for slot = 1, Score do
-			AddSkill(source, 160)
-		end
-	end--]]
-end
-addEvent("onVehicleDriftEnd", true)
-addEventHandler("onVehicleDriftEnd", root, onVehicleDriftEnd)
 
 
 
@@ -13168,9 +13155,6 @@ function Acceleration(thePlayer)
 				local HT = getVehicleHandling(theVehicle)
 				SData["VehAccData"][thePlayer] = {theVehicle, HT}
 				setVehicleHandling(theVehicle, "engineAcceleration", HT["engineAcceleration"]*2)
-				PData[thePlayer]["AccelerationTimer"] = setTimer(function()
-					setElementHealth(theVehicle, getElementHealth(theVehicle)-5)
-				end, 50, 0, theVehicle)
 			end
 		end
 	end
@@ -13184,7 +13168,6 @@ function AccelerationDown(thePlayer)
 	if(SData["VehAccData"][thePlayer]) then
 		setVehicleHandling(SData["VehAccData"][thePlayer][1], "engineAcceleration", SData["VehAccData"][thePlayer][2]["engineAcceleration"])
 		SData["VehAccData"][thePlayer] = nil
-		killTimer(PData[thePlayer]["AccelerationTimer"])
 	end
 end 
 addEvent("AccelerationDown", true)
@@ -13194,8 +13177,6 @@ addEventHandler("AccelerationDown", root, AccelerationDown)
 
 
 function BindAllKey(thePlayer)
-	bindKey(thePlayer, "lshift", "down", Acceleration) 
-	bindKey(thePlayer, "lshift", "up", AccelerationDown) 
 	bindKey(thePlayer, "tab", "down", TABEvent) 
 	bindKey(thePlayer, 'F2', 'down', spiz)
 	bindKey(thePlayer, 'F3', 'down', lockhouse)
@@ -13211,7 +13192,6 @@ function BindAllKey(thePlayer)
 end
 
 function UnBindAllKey(thePlayer)
-	unbindKey(thePlayer, "lshift", "down", Acceleration) 
 	unbindKey(thePlayer, "tab", "down", TABEvent) 
 	unbindKey(thePlayer, 'F2', 'down', spiz)
 	unbindKey(thePlayer, 'F3', 'down', lockhouse)
