@@ -15710,7 +15710,7 @@ function onPlayerChat(message, messageType, messagenovision)
 					outputChatBox(color..getPlayerName(source):gsub('#%x%x%x%x%x%x', '')..": #EEEEEE"..message, getRootElement(), 255, 255, 255, true)
 					table.insert(SData['Chat Message'], color..getPlayerName(source):gsub('#%x%x%x%x%x%x', '')..": #EEEEEE"..message)
 					if(#SData['Chat Message'] > 10) then
-						table.remove(SData['Chat Message'], 10)
+						table.remove(SData['Chat Message'], 1)
 					end
 				end
 				cancelEvent()
@@ -15754,7 +15754,7 @@ function BurnChatMSG(name, message, nickcolor)
 	outputChatBox("[WEB] "..nickcolor..name..": #FFFFFF"..message, getRootElement(), 255, 255, 255, true)
 	table.insert(SData['Chat Message'], "[WEB] "..nickcolor..name..": #FFFFFF"..message)
 	if(#SData['Chat Message'] > 10) then
-		table.remove(SData['Chat Message'], 10)
+		table.remove(SData['Chat Message'], 1)
 	end
 end
 addEvent("BurnChatMSG", true)
