@@ -4959,7 +4959,7 @@ function playerPressedKey(button, press)
 					if(press) then
 						triggerServerEvent("Acceleration", localPlayer, localPlayer)
 						PData['ragetimer'] = setTimer(function() 
-							AddRage(-10)
+							AddRage(-5)
 						end, 50, 0)
 					else
 						triggerServerEvent("AccelerationDown", localPlayer, localPlayer)
@@ -5132,8 +5132,6 @@ function playerPressedKey(button, press)
     end
 end
 addEventHandler("onClientKey", root, playerPressedKey)
-
-
 
 
 
@@ -5789,7 +5787,7 @@ addEvent("driftCarCrashed", true)
 addEventHandler("driftCarCrashed", getRootElement(), function()
 	if score ~= 0 then
 		if(score > 100) then
-			AddRage(score/20)
+			AddRage(score/30)
 		end
 		score = 0
 		mult = 1
@@ -8294,7 +8292,7 @@ function DrawPlayerMessage()
 				local tempBool = tick - (idleTime or 0) < 750
 				if not tempBool and score ~= 0 then
 					if(score > 100) then
-						AddRage(score/20)
+						AddRage(score/30)
 					end
 					score = 0
 				end
@@ -8320,6 +8318,56 @@ function DrawPlayerMessage()
 				
 				local vx, vy, vz = getElementVelocity(theVehicle)
 				VehicleSpeed = (vx^2 + vy^2 + vz^2)^(0.5)*156
+				
+				if(VehicleSpeed > 100) then
+					if(not isTimer(PData["VehicleBonus"])) then
+						local _,_,rz = getElementRotation(theVehicle)
+						
+						local vx,vy,vz = getVehicleComponentPosition(theVehicle, "wheel_lf_dummy", "world")
+						local x,y,z =  getPointInFrontOfPoint(vx, vy, vz, rz-180, 1)
+						--dxDrawLine3D(vx,vy,vz, x,y,z)
+						local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vx,vy,vz+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
+						if(hitElement) then
+							local _, _, brz = getElementRotation(hitElement)
+							if(brz-rz >= 40 or brz-rz <= -40) then
+								PData["VehicleBonus"] = getElementHealth(theVehicle)
+							end
+						else
+							if(PData["VehicleBonus"]) then
+								if(getElementHealth(theVehicle) == PData["VehicleBonus"]) then
+									AddRage(math.round(VehicleSpeed-100, 0))
+									RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
+									PData["VehicleBonus"] = setTimer(function() end, 1500, 1)
+								else
+									PData["VehicleBonus"] = nil
+								end
+							end
+						end
+						
+						vx,vy,vz = getVehicleComponentPosition(theVehicle, "wheel_rf_dummy", "world")
+						x,y,z =  getPointInFrontOfPoint(vx, vy, vz, rz, 1)
+						--dxDrawLine3D(vx,vy,vz, x,y,z)
+						_,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vx,vy,vz+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
+						if(hitElement) then
+							local _, _, brz = getElementRotation(hitElement)
+							if(brz-rz >= 40 or brz-rz <= -40) then
+								PData["VehicleBonus"] = getElementHealth(theVehicle)
+							end
+						else
+							if(PData["VehicleBonus"]) then
+								if(getElementHealth(theVehicle) == PData["VehicleBonus"]) then
+									AddRage(math.round(VehicleSpeed-100, 0))
+									RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
+									PData["VehicleBonus"] = setTimer(function() end, 1500, 1)
+								else
+									PData["VehicleBonus"] = nil
+								end
+							end
+						end
+					end
+				end
+		
+				
 				speed = tostring(math.floor(VehicleSpeed))
 				for i = #speed, 2 do
 					speed = "0"..speed

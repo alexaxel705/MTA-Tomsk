@@ -9053,7 +9053,7 @@ function PedDamage(ped, weapon, bodypart, loss)
 					local rand = math.random(4)
 					if(rand == 4) then
 						setPedHeadless(ped, true)
-						killPed(ped, source, weapon, 9) 
+						killPed(ped, source, weapon, 9)
 					end
 				end
 			end
