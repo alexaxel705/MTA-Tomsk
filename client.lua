@@ -8320,7 +8320,7 @@ function DrawPlayerMessage()
 				VehicleSpeed = (vx^2 + vy^2 + vz^2)^(0.5)*156
 				
 				
-				if(not isTimer(PData["VehicleBonus"])) then
+				if(not isTimer(PData["VehicleBonus"]) and getVehicleType(theVehicle) == "Automobile") then
 					if(not isVehicleOnGround(theVehicle)) then
 						if(not PData["jump"]) then PData["jump"] = 0 end
 						PData["jump"] = PData["jump"]+0.5
@@ -8335,7 +8335,6 @@ function DrawPlayerMessage()
 							PData["jump"] = nil
 						end
 					end
-				
 					if(VehicleSpeed > 100) then
 						local _,_,rz = getElementRotation(theVehicle)
 						
