@@ -12262,7 +12262,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	AddInventoryItem(thePlayer, "Деньги", 1000000, 550, {})
+	--AddInventoryItem(thePlayer, "Деньги", 1000000, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")

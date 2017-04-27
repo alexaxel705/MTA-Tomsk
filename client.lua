@@ -134,6 +134,7 @@ HUD:
 	6 - helpmessage
 	7 - helpmessage
 	8 - input
+	9 - очки ярости
 	
 	10 - Russian
 	11 - English
@@ -3826,11 +3827,11 @@ function LoginClient(open)
 		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
 		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
 		
-		PText["INVHUD"][10] = {"Русский", 100*NewScale, 500*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Русский"}}}
-		PText["INVHUD"][11] = {"English", 100*NewScale, 540*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "English"}}}
-		PText["INVHUD"][12] = {"Portuguese", 100*NewScale, 580*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Portuguese"}}}
-		PText["INVHUD"][13] = {"Azerbaijani", 100*NewScale, 620*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Azerbaijani"}}}
-		PText["INVHUD"][14] = {"Turkish", 100*NewScale, 660*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0,  {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Turkish"}}}
+		PText["INVHUD"][10] = {"Русский", 100*NewScale, 500*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Русский"}}}
+		PText["INVHUD"][11] = {"English", 100*NewScale, 540*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "English"}}}
+		PText["INVHUD"][12] = {"Portuguese", 100*NewScale, 580*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Portuguese"}}}
+		PText["INVHUD"][13] = {"Azerbaijani", 100*NewScale, 620*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Azerbaijani"}}}
+		PText["INVHUD"][14] = {"Turkish", 100*NewScale, 660*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Turkish"}}}
 	else
 		PText["HUD"][8] = nil
 	end
@@ -6634,7 +6635,11 @@ function AddInventoryItem(itemname, count, quality, data)
 	if(not data) then data = toJSON({}) end
 	
 	if count > 0 then 
-		InformTitle(Text("В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы посмотреть", {{"{item}", COLOR["KEY"]["HEX"]..itemname.."#FFFFFF"}, {"{key}", "#C00000i#FFFFFF"}}))
+		if(itemname == "Деньги") then
+		
+		else
+			InformTitle(Text("В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы посмотреть", {{"{item}", COLOR["KEY"]["HEX"]..itemname.."#FFFFFF"}, {"{key}", "#C00000i#FFFFFF"}}))
+		end
 	end
 	
 	
@@ -8305,9 +8310,9 @@ function DrawPlayerMessage()
 				end
 				
 
-				if tick - (idleTime or 0) < 3000 then
+				if tick - (idleTime or 0) < 50 then
 					if(score > 100) then
-						dxDrawBorderedText("Дрифт +"..math.round(score/100, 0), 0, 910*NewScale, screenWidth-230*NewScale, 0, tocolor(255,232,25,200), NewScale*2, "default-bold", "right", "top", false,true,false)
+						RageInfo("Занос +"..math.round(score/100, 0))
 					end
 				end
 
@@ -8632,6 +8637,13 @@ end
 
 
 
+function RageInfo(info)
+	if(isTimer(PData['rageinfotimer'])) then killTimer(PData['rageinfotimer']) end
+	PText["HUD"][9] = {info, 0, 910*NewScale, screenWidth-230*NewScale, 0, tocolor(255,232,25,200), NewScale*2, "default-bold", "right", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
+	PData['rageinfotimer'] = setTimer(function() 
+		PText["HUD"][9] = nil
+	end, 1500, 1)
+end
 
 function AddRage(count)
 	if(count < 0) then
