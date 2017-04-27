@@ -489,10 +489,10 @@ local items = {
 
 	["Лазерный прицел"] = {"invobject/laser.png", "Лазерный прицел", 1, false, 420, 6800, {["лазер"] = {"M40", "АК-47", "М16", "ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg", "Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false},
 
-	["9-мм"] = {false, "В настоящий момент используются во: \nВсех пистолетах, узи", 250, false, 6, 5, {["патроны"] = {"Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, true},
-	["5.56-мм"] = {false, "В настоящий момент используются в М16", 250, false, 3, 7, {["патроны"] = {"М16"}}, false, true},
-	["7.62-мм"] = {false, "В настоящий момент используются для снайперской винтовки, АК-47", 250, false, 7, 10, {["патроны"] = {"M40", "АК-47"}}, false, true},
-	["18.5-мм"] = {false, "В настоящий момент используются во всех дробовиках и винтовке ИЖ-12", 250, false, 13, 25, {["патроны"] = {"ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg"}}, false, true}, 
+	["9-мм"] = {false, "В настоящий момент используются во: \nВсех пистолетах, узи", 250, false, 6, 5, {["патроны"] = {"Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false},
+	["5.56-мм"] = {false, "В настоящий момент используются в М16", 250, false, 3, 7, {["патроны"] = {"М16"}}, false, false},
+	["7.62-мм"] = {false, "В настоящий момент используются для снайперской винтовки, АК-47", 250, false, 7, 10, {["патроны"] = {"M40", "АК-47"}}, false, false},
+	["18.5-мм"] = {false, "В настоящий момент используются во всех дробовиках и винтовке ИЖ-12", 250, false, 13, 25, {["патроны"] = {"ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg"}}, false, false}, 
 	["Кулак"] = {false, nil, 1, "useinvweapon", 0, 0, false, false, false},
 
 	["Конопля"] = {false, "Сырые листья конопли, могут быть посажены на землю или траву.\nТак же используются для получения шмали.", 100, "CreateCanabis", 260, 10, false, true, false}, 
@@ -4255,7 +4255,7 @@ function helpmessage(message, job, money, removetarget, cinema)
 	end
 	
 	
-	PText["HUD"][5] = {Text(message), screenWidth, screenHeight-(350*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
+	PText["HUD"][5] = {Text(message), screenWidth, screenHeight-(300*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*3, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
 
 	if(job) then
 		PText["HUD"][6] = {"#744D02"..Text(job), screenWidth, screenHeight/2-dxGetFontHeight(NewScale*6, "sans")/2, 0, 0, tocolor(255, 255, 255, 255), NewScale*6, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
@@ -8324,55 +8324,73 @@ function DrawPlayerMessage()
 				VehicleSpeed = (vx^2 + vy^2 + vz^2)^(0.5)*156
 				
 				
-				if(not isTimer(PData["VehicleBonus"]) and getVehicleType(theVehicle) == "Automobile") then
+				if(not isTimer(PData["VehicleBonus"])) then
 					if(not isVehicleOnGround(theVehicle)) then
-						if(not PData["jump"]) then PData["jump"] = 0 end
-						PData["jump"] = PData["jump"]+0.5
-						if(PData["jump"] >= 20) then
-							RageInfo("Отрыв от земли +"..math.round(PData["jump"], 0))
+						if(not PData["jump"]) then 
+							PData["jump"] = {0, false, false, false} 
+							PData["jump"][2], PData["jump"][3], PData["jump"][4] = getElementPosition(theVehicle)
+						end
+						PData["jump"][1] = PData["jump"][1]+0.5
+						if(PData["jump"][1] >= 20) then
+							RageInfo("Отрыв от земли +"..math.round(PData["jump"][1], 0))
 						end
 					else
 						if(PData["jump"]) then
-							if(PData["jump"] >= 20) then
-								AddRage(math.round(PData["jump"], 0))
+							if(PData["jump"][1] >= 20) then
+								AddRage(math.round(PData["jump"][1], 0))
+								local x,y,z = getElementPosition(theVehicle)
+								local jumph = math.floor(PData["jump"][4]-z, 1)
+								if(jumph < 0) then jumph = jumph-jumph-jumph end
+								if(jumph > 10) then
+									helpmessage("Дистанция: "..math.floor(getDistanceBetweenPoints2D(PData["jump"][2], PData["jump"][3], x,y), 1).."м Высота: "..jumph.."м")
+								end
 							end
 							PData["jump"] = nil
 						end
 					end
 					if(VehicleSpeed > 100) then
-						local _,_,rz = getElementRotation(theVehicle)
-						
-						local vx,vy,vz = getVehicleComponentPosition(theVehicle, "wheel_lf_dummy", "world")
-						local x,y,z =  getPointInFrontOfPoint(vx, vy, vz, rz-180, 1)
-						--dxDrawLine3D(vx,vy,vz, x,y,z)
-						local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vx,vy,vz+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
-						if(hitElement) then
-							local _, _, brz = getElementRotation(hitElement)
-							if(brz-rz >= 40 or brz-rz <= -40) then
-								AddRage(math.round(VehicleSpeed-100, 0))
-								RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
-								PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-							else
-								AddRage(math.round(VehicleSpeed-100, 0))
-								RageInfo("Обгон +"..math.round(VehicleSpeed-100, 0))
-								PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-							end
+						local vxl,vyl,vzl, vxr, vyr, vzr = false
+						if(getVehicleType(theVehicle) == "Automobile") then
+							vxl, vyl, vzl = getVehicleComponentPosition(theVehicle, "wheel_lf_dummy", "world")
+							vxr, vyr, vzr = getVehicleComponentPosition(theVehicle, "wheel_rf_dummy", "world")
+						elseif(getVehicleType(theVehicle) == "Bike") then
+							vxl, vyl, vzl = getVehicleComponentPosition(theVehicle, "wheel_front", "world")
+							vxr, vyr, vzr = getVehicleComponentPosition(theVehicle, "wheel_front", "world")
 						end
 						
-						vx,vy,vz = getVehicleComponentPosition(theVehicle, "wheel_rf_dummy", "world")
-						x,y,z =  getPointInFrontOfPoint(vx, vy, vz, rz, 1)
-						--dxDrawLine3D(vx,vy,vz, x,y,z)
-						_,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vx,vy,vz+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
-						if(hitElement) then
-							local _, _, brz = getElementRotation(hitElement)
-							if(brz-rz >= 40 or brz-rz <= -40) then
-								AddRage(math.round(VehicleSpeed-100, 0))
-								RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
-								PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-							else
-								AddRage(math.round(VehicleSpeed-100, 0))
-								RageInfo("Обгон +"..math.round(VehicleSpeed-100, 0))
-								PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+						if(vxr) then
+							local _,_,rz = getElementRotation(theVehicle)
+							
+							local x,y,z =  getPointInFrontOfPoint(vxl, vyl, vzl, rz-180, 1)
+							--dxDrawLine3D(vxl,vyl,vzl, x,y,z)
+							local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxl,vyl,vzl+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
+							if(hitElement) then
+								local _, _, brz = getElementRotation(hitElement)
+								if(brz-rz >= 40 or brz-rz <= -40) then
+									AddRage(math.round(VehicleSpeed-100, 0))
+									RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
+									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+								else
+									AddRage(math.round(VehicleSpeed-100, 0))
+									RageInfo("Обгон +"..math.round(VehicleSpeed-100, 0))
+									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+								end
+							end
+							
+							x,y,z =  getPointInFrontOfPoint(vxr, vyr, vzr, rz, 1)
+							--dxDrawLine3D(vxr, vyr, vzr, x,y,z)
+							_,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxr, vyr, vzr+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
+							if(hitElement) then
+								local _, _, brz = getElementRotation(hitElement)
+								if(brz-rz >= 40 or brz-rz <= -40) then
+									AddRage(math.round(VehicleSpeed-100, 0))
+									RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
+									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+								else
+									AddRage(math.round(VehicleSpeed-100, 0))
+									RageInfo("Обгон +"..math.round(VehicleSpeed-100, 0))
+									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+								end
 							end
 						end
 					end

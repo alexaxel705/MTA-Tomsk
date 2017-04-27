@@ -12567,9 +12567,11 @@ end
 
 
 function SaveInventory(thePlayer, arr)
-	SetDatabaseAccount(thePlayer, "inv", arr)
-	setElementData(thePlayer, "inv", arr)
-	setPlayerMoney(thePlayer, GetPlayerMoney(thePlayer))
+	if(not isPedDead(thePlayer)) then
+		SetDatabaseAccount(thePlayer, "inv", arr)
+		setElementData(thePlayer, "inv", arr)
+		setPlayerMoney(thePlayer, GetPlayerMoney(thePlayer))
+	end
 end
 addEvent("SaveInventory", true)
 addEventHandler("SaveInventory", root, SaveInventory)
