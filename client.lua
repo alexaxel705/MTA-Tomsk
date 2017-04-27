@@ -4959,7 +4959,7 @@ function playerPressedKey(button, press)
 					if(press) then
 						triggerServerEvent("Acceleration", localPlayer, localPlayer)
 						PData['ragetimer'] = setTimer(function() 
-							AddRage(-5)
+							AddRage(-4)
 						end, 50, 0)
 					else
 						triggerServerEvent("AccelerationDown", localPlayer, localPlayer)
@@ -6631,18 +6631,18 @@ addEventHandler("InformTitle", localPlayer, InformTitle)
 
 function AddInventoryItem(itemname, count, quality, data)
 	if(not data) then data = toJSON({}) end
-	
+	local stacked = false
 	if count > 0 then 
-		if(itemname == "Деньги") then
-		
-		else
+		stacked = math.round(count/items[itemname][3], 0)
+		if(itemname ~= "Деньги") then
 			InformTitle(Text("В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы посмотреть", {{"{item}", COLOR["KEY"]["HEX"]..itemname.."#FFFFFF"}, {"{key}", "#C00000i#FFFFFF"}}))
 		end
+	else
+		stacked = math.ceil(count/items[itemname][3])
 	end
 	
 	
 	for slot = 1, 10 do
-		local stacked = math.round(count/items[itemname][3], 0)
 		if(stacked >= 1) then
 			for v = 1, stacked do
 				AddInventoryItemNewStack(itemname, items[itemname][3], quality, data)
@@ -6651,14 +6651,15 @@ function AddInventoryItem(itemname, count, quality, data)
 		elseif(stacked <= -1) then
 			for v = stacked-stacked-stacked, 1 do
 				local NumberStack = FoundFullStackedInventoryItem(itemname, quality)
-				RemoveInventorySlot("player", NumberStack)
-				count = count + items[itemname][3]
+				if(NumberStack) then
+					RemoveInventorySlot("player", NumberStack)
+					count = count + items[itemname][3]
+				end
 			end
 		end
-		
 		if(count == 0) then
 			break
-		elseif(count >= 0) then
+		elseif(count > 0) then
 			local NumberStack = FoundStackedInventoryItem(itemname, quality)
 			if(NumberStack) then
 				if(PInv["player"][NumberStack][2]+count <= items[itemname][3]) then
@@ -6679,7 +6680,7 @@ function AddInventoryItem(itemname, count, quality, data)
 			local NumberStack = FoundStackedInventoryItem(itemname, quality)
 			if(not NumberStack) then NumberStack = FoundFullStackedInventoryItem(itemname, quality) end
 			if(NumberStack) then
-				if(PInv["player"][NumberStack][2]+count < 0) then
+				if(PInv["player"][NumberStack][2]+count <= 0) then
 					count = count + PInv["player"][NumberStack][2]
 					RemoveInventorySlot("player", NumberStack)
 				else
@@ -7818,7 +7819,9 @@ function DrawPlayerInventory()
 							
 							if(name == "player" or name == "backpack" or name == "trunk") then
 								if(items[SystemName][3] > 1) then
-									dxDrawBorderedText(PInv[name][i][2].." шт", sx, sy, sx+(76*NewScale), sy, tocolor(255, 255, 255, 255), scale/2, "default-bold", "right", "top", false, false, false, false)
+									local sht = {"", " шт"}
+									if(SystemName == "Деньги") then sht = {"$", ""} end
+									dxDrawBorderedText(sht[1]..PInv[name][i][2]..sht[2], sx, sy, sx+(76*NewScale), sy, tocolor(255, 255, 255, 255), scale/2, "default-bold", "right", "top", false, false, false, false)
 								end
 							elseif(name == "shop") then
 								dxDrawBorderedText("$"..GetItemCost(PInv[name][i]), sx, sy, sx+(76*NewScale), sy, tocolor(100, 255, 100, 255), scale/2.5, "pricedown", "right", "top", false, false, false, false)
@@ -7864,7 +7867,9 @@ function DrawPlayerInventory()
 				
 				if(DragElementName ~= "shop") then
 					if(items[PInv[DragElementName][DragElementId][1]][3] > 1) then
-						dxDrawBorderedText(PInv[DragElementName][DragElementId][2].." шт", DragX, DragY, DragX+(76*NewScale), DragY, tocolor(255, 255, 255, 255), scale/2, "default-bold", "right", "top", false, false, true, true)
+						local sht = {"", " шт"}
+						if(PInv[DragElementName][DragElementId][1] == "Деньги") then sht = {"$", ""} end
+						dxDrawBorderedText(sht[1]..PInv[DragElementName][DragElementId][2]..sht[2], DragX, DragY, DragX+(76*NewScale), DragY, tocolor(255, 255, 255, 255), scale/2, "default-bold", "right", "top", false, false, true, true)
 					end
 				else
 					dxDrawBorderedText("$"..GetItemCost(PInv[DragElementName][DragElementId]), DragX, DragY, DragX+(76*NewScale), DragY, tocolor(100, 255, 100, 255), scale/2.5, "pricedown", "right", "top", false, false, true, true)
@@ -8285,7 +8290,6 @@ function DrawPlayerMessage()
 
 		
 			if(theVehicle) then
-				
 				tick = getTickCount()
 				local angulo,velocidad = angle()
 				
