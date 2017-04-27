@@ -5786,7 +5786,7 @@ end
 addEvent("driftCarCrashed", true)
 addEventHandler("driftCarCrashed", getRootElement(), function()
 	if score ~= 0 then
-		if(score > 100) then
+		if(score > 500) then
 			AddRage(score/30)
 		end
 		score = 0
@@ -8309,7 +8309,7 @@ function DrawPlayerMessage()
 				
 
 				if tick - (idleTime or 0) < 50 then
-					if(score > 100) then
+					if(score > 500) then
 						RageInfo("Занос +"..math.round(score/100, 0))
 					end
 				end
@@ -8319,8 +8319,24 @@ function DrawPlayerMessage()
 				local vx, vy, vz = getElementVelocity(theVehicle)
 				VehicleSpeed = (vx^2 + vy^2 + vz^2)^(0.5)*156
 				
-				if(VehicleSpeed > 100) then
-					if(not isTimer(PData["VehicleBonus"])) then
+				
+				if(not isTimer(PData["VehicleBonus"])) then
+					if(not isVehicleOnGround(theVehicle)) then
+						if(not PData["jump"]) then PData["jump"] = 0 end
+						PData["jump"] = PData["jump"]+0.5
+						if(PData["jump"] >= 20) then
+							RageInfo("Отрыв от земли +"..math.round(PData["jump"], 0))
+						end
+					else
+						if(PData["jump"]) then
+							if(PData["jump"] >= 20) then
+								AddRage(math.round(PData["jump"], 0))
+							end
+							PData["jump"] = nil
+						end
+					end
+				
+					if(VehicleSpeed > 100) then
 						local _,_,rz = getElementRotation(theVehicle)
 						
 						local vx,vy,vz = getVehicleComponentPosition(theVehicle, "wheel_lf_dummy", "world")
@@ -8330,17 +8346,13 @@ function DrawPlayerMessage()
 						if(hitElement) then
 							local _, _, brz = getElementRotation(hitElement)
 							if(brz-rz >= 40 or brz-rz <= -40) then
-								PData["VehicleBonus"] = getElementHealth(theVehicle)
-							end
-						else
-							if(PData["VehicleBonus"]) then
-								if(getElementHealth(theVehicle) == PData["VehicleBonus"]) then
-									AddRage(math.round(VehicleSpeed-100, 0))
-									RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
-									PData["VehicleBonus"] = setTimer(function() end, 1500, 1)
-								else
-									PData["VehicleBonus"] = nil
-								end
+								AddRage(math.round(VehicleSpeed-100, 0))
+								RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
+								PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+							else
+								AddRage(math.round(VehicleSpeed-100, 0))
+								RageInfo("Обгон +"..math.round(VehicleSpeed-100, 0))
+								PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 							end
 						end
 						
@@ -8351,22 +8363,18 @@ function DrawPlayerMessage()
 						if(hitElement) then
 							local _, _, brz = getElementRotation(hitElement)
 							if(brz-rz >= 40 or brz-rz <= -40) then
-								PData["VehicleBonus"] = getElementHealth(theVehicle)
-							end
-						else
-							if(PData["VehicleBonus"]) then
-								if(getElementHealth(theVehicle) == PData["VehicleBonus"]) then
-									AddRage(math.round(VehicleSpeed-100, 0))
-									RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
-									PData["VehicleBonus"] = setTimer(function() end, 1500, 1)
-								else
-									PData["VehicleBonus"] = nil
-								end
+								AddRage(math.round(VehicleSpeed-100, 0))
+								RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
+								PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+							else
+								AddRage(math.round(VehicleSpeed-100, 0))
+								RageInfo("Обгон +"..math.round(VehicleSpeed-100, 0))
+								PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 							end
 						end
 					end
 				end
-		
+				
 				
 				speed = tostring(math.floor(VehicleSpeed))
 				for i = #speed, 2 do
@@ -8690,7 +8698,7 @@ function RageInfo(info)
 	PText["HUD"][9] = {info, 0, 910*NewScale, screenWidth-230*NewScale, 0, tocolor(255,232,25,200), NewScale*2, "default-bold", "right", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
 	PData['rageinfotimer'] = setTimer(function() 
 		PText["HUD"][9] = nil
-	end, 1500, 1)
+	end, 2000, 1)
 end
 
 function AddRage(count)
