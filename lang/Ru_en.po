@@ -306,7 +306,7 @@ msgid "Передать {name}"
 msgstr "Give to {name}"
 
 msgid "Посадить {name}"
-msgstr ""
+msgstr "Plant {name}"
 
 msgid "Извлечь {item}"
 msgstr "Extract {item}"
@@ -406,6 +406,21 @@ msgstr "m"
 
 msgid "КМ/Ч"
 msgstr "KM/H"
+
+msgid "Л.С."
+msgstr "H.P."
+
+msgid "Макс скорость"
+msgstr "Max speed"
+
+msgid "Мощность"
+msgstr "Horsepower"
+
+msgid "Ускорение"
+msgstr "Acceleration"
+
+msgid "Тормоза"
+msgstr "Brakes"
 
 msgid "отвратительное"
 msgstr "Revolting"
@@ -517,7 +532,7 @@ msgid "Ацтекас"
 msgstr "Aztecas"
 
 msgid "Частная собственность"
-msgstr ""
+msgstr "Private property"
 
 msgid "Января"
 msgstr "January"
@@ -683,7 +698,7 @@ msgid "Нажми {key} чтобы купить"
 msgstr "Press {key} to buy"
 
 msgid "Sprunk стоимость #3B7231$20#FFFFFF"
-msgstr ""
+msgstr "Sprunk value #3B7231$20#FFFFFF"
 
 msgid "Нажми {key} чтобы лечь"
 msgstr "Press {key} to lay"
@@ -692,21 +707,23 @@ msgid "Информация"
 msgstr "Information"
 
 msgid "Дата рождения"
-msgstr ""
+msgstr "Date of birth"
 
 msgid "Фракция"
-msgstr ""
+msgstr "Organisation"
 
 msgid "Работа"
-msgstr ""
+msgstr "Job"
 
 msgid "{age} лет"
-msgstr ""
+msgstr "{age} years"
 
 msgid ""
 "На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу "
 "{key} для автоматического перемещения"
 msgstr ""
+"On #4682B4map#FFFFFF added #ff0000point#FFFFFF!\n"
+"use the key {key} to automatically move"
 
 msgid "Группа ВКонтакте {link}"
 msgstr "Vkontake group {link}"
@@ -745,7 +762,7 @@ msgid "Нажми {key} чтобы закрыть гараж"
 msgstr "Press {key} to close the garage"
 
 msgid "ЗАКРЫТО НА РЕМОНТ"
-msgstr ""
+msgstr "CLOSED FOR REPAIR"
 
 msgid "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА"
 msgstr "NEW ENGINE AND PAINT"
@@ -759,4 +776,15 @@ msgstr "Press {key} to stop fueling"
 msgid ""
 "В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы "
 "посмотреть"
+msgstr ""
+"In #4682B4inventory#FFFFFF item {item},\n"
+"added press {key} to view"
+
+msgid "Обгон +{points}"
+msgstr ""
+
+msgid "Опасное вождение +{points}"
+msgstr ""
+
+msgid "Отрыв от земли +{points}"
 msgstr ""

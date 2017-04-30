@@ -406,6 +406,21 @@ msgstr ""
 msgid "КМ/Ч"
 msgstr ""
 
+msgid "Л.С."
+msgstr ""
+
+msgid "Макс скорость"
+msgstr ""
+
+msgid "Мощность"
+msgstr ""
+
+msgid "Ускорение"
+msgstr ""
+
+msgid "Тормоза"
+msgstr ""
+
 msgid "отвратительное"
 msgstr ""
 
@@ -754,4 +769,13 @@ msgstr ""
 msgid ""
 "В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы "
 "посмотреть"
+msgstr ""
+
+msgid "Обгон +{points}"
+msgstr ""
+
+msgid "Опасное вождение +{points}"
+msgstr ""
+
+msgid "Отрыв от земли +{points}"
 msgstr ""

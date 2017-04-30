@@ -406,6 +406,21 @@ msgstr "m"
 msgid "КМ/Ч"
 msgstr "KM/S"
 
+msgid "Л.С."
+msgstr "L.S."
+
+msgid "Макс скорость"
+msgstr "Maks sürət"
+
+msgid "Мощность"
+msgstr "At gücü"
+
+msgid "Ускорение"
+msgstr "sürətlənmə"
+
+msgid "Тормоза"
+msgstr "Tormozlar"
+
 msgid "отвратительное"
 msgstr "nifrətəlayı"
 
@@ -760,3 +775,12 @@ msgid ""
 "посмотреть"
 msgstr ""
 "#4682B4inventara#FFFFFF {item} obyekti əlavə olunub, baxmaq üçün {key} bas"
+
+msgid "Обгон +{points}"
+msgstr ""
+
+msgid "Опасное вождение +{points}"
+msgstr ""
+
+msgid "Отрыв от земли +{points}"
+msgstr ""
