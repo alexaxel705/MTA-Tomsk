@@ -5116,7 +5116,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -2452.1, 504.3, 30.1, 0, 0 --
+		local x,y,z,i,d  = -1900, -1272.5, 38.5, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7014,6 +7014,7 @@ function FoundWName(id)
 		if(k == id) then
 			return v
 		end
+
 	end
 end
 

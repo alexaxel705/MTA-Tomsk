@@ -8332,7 +8332,7 @@ function DrawPlayerMessage()
 						end
 						PData["jump"][1] = PData["jump"][1]+0.5
 						if(PData["jump"][1] >= 20) then
-							RageInfo("Отрыв от земли +"..math.round(PData["jump"][1], 0))
+							RageInfo(Text("Отрыв от земли +{points}", {{"{points}", math.round(PData["jump"][1], 0)}}))
 						end
 					else
 						if(PData["jump"]) then
@@ -8368,11 +8368,11 @@ function DrawPlayerMessage()
 								local _, _, brz = getElementRotation(hitElement)
 								if(brz-rz >= 40 or brz-rz <= -40) then
 									AddRage(math.round(VehicleSpeed-100, 0))
-									RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
+									RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
 									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 								else
 									AddRage(math.round(VehicleSpeed-100, 0))
-									RageInfo("Обгон +"..math.round(VehicleSpeed-100, 0))
+									RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
 									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 								end
 							end
@@ -8384,11 +8384,11 @@ function DrawPlayerMessage()
 								local _, _, brz = getElementRotation(hitElement)
 								if(brz-rz >= 40 or brz-rz <= -40) then
 									AddRage(math.round(VehicleSpeed-100, 0))
-									RageInfo("Опасное вождение +"..math.round(VehicleSpeed-100, 0))
+									RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
 									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 								else
 									AddRage(math.round(VehicleSpeed-100, 0))
-									RageInfo("Обгон +"..math.round(VehicleSpeed-100, 0))
+									RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
 									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 								end
 							end
