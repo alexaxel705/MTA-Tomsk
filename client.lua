@@ -8325,31 +8325,35 @@ function DrawPlayerMessage()
 				
 				
 				if(not isTimer(PData["VehicleBonus"])) then
-					if(not isVehicleOnGround(theVehicle)) then
-						if(not PData["jump"]) then 
-							PData["jump"] = {0, false, false, false} 
-							PData["jump"][2], PData["jump"][3], PData["jump"][4] = getElementPosition(theVehicle)
-						end
-						PData["jump"][1] = PData["jump"][1]+0.5
-						if(PData["jump"][1] >= 20) then
-							RageInfo(Text("Отрыв от земли +{points}", {{"{points}", math.round(PData["jump"][1], 0)}}))
-						end
-					else
-						if(PData["jump"]) then
-							if(PData["jump"][1] >= 20) then
-								AddRage(math.round(PData["jump"][1], 0))
-								local x,y,z = getElementPosition(theVehicle)
-								local jumph = math.floor(PData["jump"][4]-z, 1)
-								if(jumph < 0) then jumph = jumph-jumph-jumph end
-								if(jumph > 10) then
-									helpmessage("Дистанция: "..math.floor(getDistanceBetweenPoints2D(PData["jump"][2], PData["jump"][3], x,y), 1).."м Высота: "..jumph.."м")
-								end
+					if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
+						if(not isVehicleOnGround(theVehicle)) then
+							if(not PData["jump"]) then 
+								PData["jump"] = {0, false, false, false} 
+								PData["jump"][2], PData["jump"][3], PData["jump"][4] = getElementPosition(theVehicle)
 							end
-							PData["jump"] = nil
+							PData["jump"][1] = PData["jump"][1]+0.5
+							if(PData["jump"][1] >= 20) then
+								RageInfo(Text("Отрыв от земли +{points}", {{"{points}", math.round(PData["jump"][1], 0)}}))
+							end
+						else
+							if(PData["jump"]) then
+								if(PData["jump"][1] >= 20) then
+									AddRage(math.round(PData["jump"][1], 0))
+									local x,y,z = getElementPosition(theVehicle)
+									local jumph = math.floor(PData["jump"][4]-z, 1)
+									if(jumph < 0) then jumph = jumph-jumph-jumph end
+									if(jumph > 10) then
+										helpmessage("Дистанция: "..math.floor(getDistanceBetweenPoints2D(PData["jump"][2], PData["jump"][3], x,y), 1).."м Высота: "..jumph.."м")
+									end
+								end
+								PData["jump"] = nil
+							end
 						end
 					end
+					
 					if(VehicleSpeed > 100) then
 						local vxl,vyl,vzl, vxr, vyr, vzr = false
+						local vxc, vyc, vzc = getElementPosition(theVehicle)
 						if(getVehicleType(theVehicle) == "Automobile") then
 							vxl, vyl, vzl = getVehicleComponentPosition(theVehicle, "wheel_lf_dummy", "world")
 							vxr, vyr, vzr = getVehicleComponentPosition(theVehicle, "wheel_rf_dummy", "world")
@@ -8361,9 +8365,28 @@ function DrawPlayerMessage()
 						if(vxr) then
 							local _,_,rz = getElementRotation(theVehicle)
 							
-							local x,y,z =  getPointInFrontOfPoint(vxl, vyl, vzl, rz-180, 1)
+							local x,y,z = getPointInFrontOfPoint(vxc, vyc, vzc, rz-270, 30)
+							--dxDrawLine3D(vxc, vyc, vzc, x,y,z)
+							local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxc, vyc, vzc,x,y,z, false, true, false, false, false, false, false, false, theVehicle,false,false)
+							if(hitElement) then
+								if(not PData["VehicleBonus3"]) then PData["VehicleBonus3"] = 0 end
+								PData["VehicleBonus3"] = PData["VehicleBonus3"] + 0.2
+								if(PData["VehicleBonus3"] > 1) then 
+									RageInfo(Text("Преследование +{points}", {{"{points}", math.round(PData["VehicleBonus3"], 0)}}))
+								end
+							else
+								if(PData["VehicleBonus3"]) then
+									if(PData["VehicleBonus3"] > 1) then 
+										AddRage(math.round(PData["VehicleBonus3"], 0))
+										PData["VehicleBonus3"] = nil
+									end
+								end
+							end
+							
+							
+							x,y,z =  getPointInFrontOfPoint(vxl, vyl, vzl, rz-180, 1)
 							--dxDrawLine3D(vxl,vyl,vzl, x,y,z)
-							local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxl,vyl,vzl+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
+							_,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxl,vyl,vzl+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
 							if(hitElement) then
 								local _, _, brz = getElementRotation(hitElement)
 								if(brz-rz >= 40 or brz-rz <= -40) then
@@ -8376,6 +8399,8 @@ function DrawPlayerMessage()
 									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 								end
 							end
+							
+					
 							
 							x,y,z =  getPointInFrontOfPoint(vxr, vyr, vzr, rz, 1)
 							--dxDrawLine3D(vxr, vyr, vzr, x,y,z)

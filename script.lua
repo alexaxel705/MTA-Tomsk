@@ -5116,7 +5116,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -1900, -1272.5, 38.5, 0, 0 --
+		local x,y,z,i,d  = 2820.4, -2051.8, 9.9, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5148,6 +5148,7 @@ end
 local ReplaceVehicleAnimation = {
 	["smoking"] = {
 		["M_smklean_loop"] = {
+
 			["theVehicle"] = {"ped", "Smoke_in_car", false, false, false, false, false}
 		}
 	},
@@ -9283,6 +9284,7 @@ function buybiz(thePlayer, biz)
 			end
 		end
 	end
+
 end
 
 
