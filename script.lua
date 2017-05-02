@@ -5116,7 +5116,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 2202.4, -2165.7, 12.4, 0, 0 --
+		local x,y,z,i,d  = 476.4, -414.7, 27.6, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7276,7 +7276,7 @@ function preLoad(name)
 	setGarageOpen(4, true)
 	setGarageOpen(24, true)
 	setGarageOpen(46, true)
-	setGameSpeed(1)
+	setGameSpeed(1.2)
 	setMinuteDuration(1000)
 	local players = getElementsByType("player") -- Даем ID
 	for theKey,thePlayer in ipairs(players) do 
@@ -11260,7 +11260,18 @@ function InitDynamicBot()
 	return true
 end
 
+function UpdateBotRequest(thePlayer, thePed)
+	local dat = getElementData(thePed, "NextNode")
+	if(dat) then
+		local oldnode = fromJSON(dat)
+		local nextnode, nextid = oldnode[1], oldnode[2]
+		setElementPosition(thePed, PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4])
+	end
+	triggerClientEvent(thePlayer, "UpdateBotRequest", thePlayer, thePed)
 
+end
+addEvent("UpdateBotRequest", true)
+addEventHandler("UpdateBotRequest", root, UpdateBotRequest)
 
 
 

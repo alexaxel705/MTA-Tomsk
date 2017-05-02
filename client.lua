@@ -3575,6 +3575,11 @@ end
 
 
 
+function UpdateBotRequest(thePed)
+	StreamData[thePed]["UpdateRequest"] = false
+end
+addEvent("UpdateBotRequest", true)
+addEventHandler("UpdateBotRequest", root, UpdateBotRequest)
 
 
 
@@ -3592,12 +3597,9 @@ function updateCamera()
 			local material = GetGroundMaterial(x,y,z+50,gz-3)
 			local material2 = GetGroundMaterial(x+2,y,z+50,gz-3)
 			if(material == 1337 and material2 == 1337) then -- Костыль
-				if(not isElementFrozen(theVehicle)) then
-					setElementFrozen(theVehicle, true)
-				end
-			else
-				if(isElementFrozen(theVehicle)) then
-					setElementFrozen(theVehicle, false)
+				if(not StreamData[thePed]["UpdateRequest"]) then
+					StreamData[thePed]["UpdateRequest"] = true
+					triggerServerEvent("UpdateBotRequest", localPlayer, localPlayer, thePed)
 				end
 			end
 		end
@@ -7003,7 +7005,7 @@ function normalspeed(h,m,weather)
 	RespawnTimer=nil
 	setWeather(weather)
 	setWindVelocity(0,0,0)
-	setGameSpeed(1)
+	setGameSpeed(1.2)
 	setTime(h, m)
 end
 addEvent("normalspeed", true )
