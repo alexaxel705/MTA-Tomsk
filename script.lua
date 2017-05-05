@@ -11227,7 +11227,6 @@ function SetNextDynamicNode(thePed, forced)
 				setElementData(thePed, "NextNode", toJSON({nextnode2, nextid2}), false)
 				if(not SData["PlayerElementSync"][thePed] or forced) then
 					if(theVehicle) then
-					outputChatBox("перевел")
 						local model = getElementModel(theVehicle)
 						local rotz = findRotation(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3])
 						
