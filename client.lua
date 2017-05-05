@@ -3575,12 +3575,6 @@ end
 
 
 
-function UpdateBotRequest(thePed)
-	StreamData[thePed]["UpdateRequest"] = false
-end
-addEvent("UpdateBotRequest", true)
-addEventHandler("UpdateBotRequest", root, UpdateBotRequest)
-
 
 
 function updateCamera()
@@ -3597,8 +3591,8 @@ function updateCamera()
 			local material = GetGroundMaterial(x,y,z+50,gz-3)
 			local material2 = GetGroundMaterial(x+2,y,z+50,gz-3)
 			if(material == 1337 and material2 == 1337) then -- Костыль
-				if(not StreamData[thePed]["UpdateRequest"]) then
-					StreamData[thePed]["UpdateRequest"] = true
+				if(StreamData[thePed]["UpdateRequest"]) then
+					StreamData[thePed]["UpdateRequest"] = false
 					triggerServerEvent("UpdateBotRequest", localPlayer, localPlayer, thePed)
 				end
 			end

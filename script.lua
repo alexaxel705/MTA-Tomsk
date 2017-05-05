@@ -5166,7 +5166,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  =2097.2, 1370.7, 9.7, 0, 0 --
+		local x,y,z,i,d  = -2558.2, -2193.2, 28.7, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -11201,6 +11201,7 @@ local trafficlight = {
 function SetNextDynamicNode(thePed, forced)
 	if(thePed) then
 		local dat = getElementData(thePed, "CurNode")
+		local theVehicle = getPedOccupiedVehicle(thePed)
 		if(dat) then
 			local arr = fromJSON(dat)
 			local node, id = arr[1], arr[2]
@@ -11224,8 +11225,17 @@ function SetNextDynamicNode(thePed, forced)
 				PathNodes[nextnode][nextid][1] = false
 				setElementData(thePed, "CurNode", toJSON({nextnode, nextid}), false)
 				setElementData(thePed, "NextNode", toJSON({nextnode2, nextid2}), false)
-				if(not SData["PlayerElementSync"][thePed] and not forced) then
-					setElementPosition(thePed, PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4])
+				if(not SData["PlayerElementSync"][thePed] or forced) then
+					if(theVehicle) then
+					outputChatBox("перевел")
+						local model = getElementModel(theVehicle)
+						local rotz = findRotation(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3])
+						
+						setElementPosition(theVehicle, PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4]+VehicleSystem[model][1])
+						setElementRotation(theVehicle, 0,0,rotz)
+					else
+						setElementPosition(thePed, PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4])
+					end
 				end
 			else
 				TimersAgain[thePed] = true
@@ -11312,7 +11322,6 @@ end
 
 function UpdateBotRequest(thePlayer, thePed)
 	SetNextDynamicNode(thePed, true)
-	triggerClientEvent(thePlayer, "UpdateBotRequest", thePlayer, thePed)
 end
 addEvent("UpdateBotRequest", true)
 addEventHandler("UpdateBotRequest", root, UpdateBotRequest)
@@ -13473,7 +13482,7 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 					Respect(killer, "ugol", 3)
 					Respect(killer, "police", -3)	
 					Respect(killer, "civilian", -3)
-					WantedLevel(killer, 2)
+					WantedLevel(killer, 1)
 				elseif(PTeam == "Деревенщины") then
 					Respect(killer, "ugol", -1)
 				elseif(PTeam == "Уголовники" and KTeam == "Уголовники") then
