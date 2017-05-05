@@ -3715,6 +3715,41 @@ local Parkings = { -- Доработать потом, добавить спау
 			[14] = {false, 301.4, -1504.8, 23.6, 235}, 
 			[15] = {false, 304.2, -1500.4, 23.6, 235}, 
 		},
+		["LS West Parking"] = {
+			[1] = {false, 2454.2, 1327.3, 9.8, 0}, 
+			[2] = {false, 2451, 1327.5, 9.8, 0}, 
+			[3] = {false, 2447.8, 1327.5, 9.8, 0}, 
+			
+			[4] = {false, 2452.1, 1336.4, 9.8, 0}, 
+			[5] = {false, 2455.3, 1336.4, 9.8, 0}, 
+			[6] = {false, 2458.5, 1336.4, 9.8, 0},  
+			[7] = {false, 2461.7, 1336.4, 9.8, 0}, 
+			[8] = {false, 2464.9, 1336.4, 9.8, 0}, 
+			
+			[9] = {false, 2452.1, 1345.7, 9.8, 0}, 
+			[10] = {false, 2455.3, 1345.7, 9.8, 0}, 
+			[11] = {false, 2458.5, 1345.7, 9.8, 0},  
+			[12] = {false, 2461.7, 1345.7, 9.8, 0}, 
+			[13] = {false, 2464.9, 1345.7, 9.8, 0}, 
+			
+			[14] = {false, 2452.1, 1357.6, 9.8, 0}, 
+			[15] = {false, 2455.3, 1357.6, 9.8, 0}, 
+			[16] = {false, 2458.5, 1357.6, 9.8, 0},  
+			[17] = {false, 2461.7, 1357.6, 9.8, 0}, 
+			[18] = {false, 2464.9, 1357.6, 9.8, 0}, 
+			[19] = {false, 2468.1, 1357.6, 9.8, 0},
+			[20] = {false, 2471.3, 1357.6, 9.8, 0}, 
+			[21] = {false, 2474.5, 1357.6, 9.8, 0},
+			
+			[22] = {false, 2441.5, 1332.6, 9.8, 90},
+			[23] = {false, 2441.5, 1335.9, 9.8, 90},
+			[24] = {false, 2441.5, 1339, 9.8, 90},
+			[25] = {false, 2441.5, 1342.3, 9.8, 90},
+			[26] = {false, 2441.5, 1345.5, 9.8, 90},
+			[27] = {false, 2441.5, 1348.6, 9.8, 90},
+			[28] = {false, 2441.5, 1351.8, 9.8, 90}, 
+			[29] = {false, 2441.5, 1355.1, 9.8, 90},
+		}
 	}, 
 	["San Fierro"] = {
 		["SF West Parking"] = {
@@ -3808,6 +3843,21 @@ local Parkings = { -- Доработать потом, добавить спау
 		}, 
 	}
 }
+
+--[[
+for name, dat in pairs(Parkings) do
+	for name2, dat2 in pairs(dat) do
+		for name3, dat3 in pairs(dat2) do
+			local randz = dat3[5]
+			if(math.random(0,1) == 1) then
+				randz = randz+180
+			end
+			CreateVehicle(475, dat3[2], dat3[3], dat3[4]+VehicleSystem[475][1], 0, 0, randz)
+		end
+	end
+
+end--]]
+
 
 -- theVehicle, model, x,y,z,rx,ry,rz, plateNumber, {характеристики}, "название"
 local NonRandVeh = {
@@ -5116,7 +5166,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 476.4, -414.7, 27.6, 0, 0 --
+		local x,y,z,i,d  =2097.2, 1370.7, 9.7, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -11148,7 +11198,7 @@ local trafficlight = {
 	["4"] = "north"
 }
 
-function SetNextDynamicNode(thePed)
+function SetNextDynamicNode(thePed, forced)
 	if(thePed) then
 		local dat = getElementData(thePed, "CurNode")
 		if(dat) then
@@ -11174,7 +11224,7 @@ function SetNextDynamicNode(thePed)
 				PathNodes[nextnode][nextid][1] = false
 				setElementData(thePed, "CurNode", toJSON({nextnode, nextid}), false)
 				setElementData(thePed, "NextNode", toJSON({nextnode2, nextid2}), false)
-				if(not SData["PlayerElementSync"][thePed]) then
+				if(not SData["PlayerElementSync"][thePed] and not forced) then
 					setElementPosition(thePed, PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4])
 				end
 			else
@@ -11261,14 +11311,8 @@ function InitDynamicBot()
 end
 
 function UpdateBotRequest(thePlayer, thePed)
-	local dat = getElementData(thePed, "NextNode")
-	if(dat) then
-		local oldnode = fromJSON(dat)
-		local nextnode, nextid = oldnode[1], oldnode[2]
-		setElementPosition(thePed, PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4])
-	end
+	SetNextDynamicNode(thePed, true)
 	triggerClientEvent(thePlayer, "UpdateBotRequest", thePlayer, thePed)
-
 end
 addEvent("UpdateBotRequest", true)
 addEventHandler("UpdateBotRequest", root, UpdateBotRequest)
@@ -14491,7 +14535,12 @@ function respawnExplodedVehicle()
 				local park = GetRandomParking(zone)
 				if(park) then
 					Parkings[zone][park[1]][park[2]][1] = source
-					setVehicleRespawnPosition(source, park[3], park[4], park[5]+VehicleSystem[getElementModel(source)][1], 0, 0, park[6])
+					local randz = park[6]
+					if(math.random(0,1) == 1) then
+						randz = randz+180
+					end
+					
+					setVehicleRespawnPosition(source, park[3], park[4], park[5]+VehicleSystem[getElementModel(source)][1], 0, 0, randz)
 					if(owner) then
 						triggerClientEvent(owner, "AddGPSMarker", owner, park[3], park[4], park[5], "Забери свой транспорт")
 						ToolTip(owner, "Ваш транспорт доставлен на парковку")
@@ -14505,6 +14554,9 @@ end
 
 
 function GetRandomParking(city)
+	if(city == "Red County" or city == "Flint County") then city = "Los Santos"
+	elseif(city == "Tierra Robada" or city == "Bone County") then city = "Las Venturas"
+	elseif(city == "Unknown" or city == "Whetstone") then city = "San Fierro" end
 	if(Parkings[city]) then
 		local randpark = {}
 		for name, dat in pairs(Parkings[city]) do
