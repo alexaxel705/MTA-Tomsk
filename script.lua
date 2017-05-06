@@ -5166,7 +5166,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -2558.2, -2193.2, 28.7, 0, 0 --
+		local x,y,z,i,d  = -2430.4, -2285.7, 13.2, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -13222,6 +13222,9 @@ function Acceleration(thePlayer)
 				local HT = getVehicleHandling(theVehicle)
 				SData["VehAccData"][thePlayer] = {theVehicle, HT}
 				setVehicleHandling(theVehicle, "engineAcceleration", HT["engineAcceleration"]*2)
+				if(HT["driveType"] == "rwd") then
+					setVehicleHandling(theVehicle, "centerOfMass", {0,-1,0})
+				end
 			end
 		end
 	end
@@ -13233,7 +13236,9 @@ addEventHandler("Acceleration", root, Acceleration)
 
 function AccelerationDown(thePlayer)
 	if(SData["VehAccData"][thePlayer]) then
-		setVehicleHandling(SData["VehAccData"][thePlayer][1], "engineAcceleration", SData["VehAccData"][thePlayer][2]["engineAcceleration"])
+		for name, val in pairs(SData["VehAccData"][thePlayer][2]) do
+			setVehicleHandling(SData["VehAccData"][thePlayer][1], name, val)
+		end
 		SData["VehAccData"][thePlayer] = nil
 	end
 end 
