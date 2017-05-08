@@ -8320,6 +8320,47 @@ function DrawPlayerMessage()
 				VehicleSpeed = (vx^2 + vy^2 + vz^2)^(0.5)*156
 				
 				
+				speed = tostring(math.floor(VehicleSpeed))
+				for i = #speed, 2 do
+					speed = "0"..speed
+				end
+
+				local MaxRPM = GetVehicleMaxRPM(PData["Handling"]["engineAcceleration"])
+				local RPMMeter = false
+				local RPMDate = false 
+				
+				if(MaxRPM <= 4000) then
+					RPMMeter = 45
+					RPMDate = 4000
+				elseif(MaxRPM > 4000 and MaxRPM <= 6000) then
+					RPMMeter = 37.5
+					RPMDate = 6000
+				elseif(MaxRPM > 6000 and MaxRPM <= 7000) then
+					RPMMeter = 32.1
+					RPMDate = 7000
+				elseif(MaxRPM > 7000 and MaxRPM <= 8000) then
+					RPMMeter = 28
+					RPMDate = 8000
+				elseif(MaxRPM > 8000 and MaxRPM <= 10000) then
+					RPMMeter = 22.5
+					RPMDate = 10000
+				elseif(MaxRPM > 10000 and MaxRPM <= 12000) then
+					RPMMeter = 18.7
+					RPMDate = 12000
+				elseif(MaxRPM > 12000 and MaxRPM <= 14000) then
+					RPMMeter = 16
+					RPMDate = 14000
+				elseif(MaxRPM > 14000 and MaxRPM <= 16000) then
+					RPMMeter = 14
+					RPMDate = 16000
+				elseif(MaxRPM > 16000 and MaxRPM <= 18000) then
+					RPMMeter = 12.5
+					RPMDate = 18000
+				elseif(MaxRPM > 18000 and MaxRPM <= 20000) then
+					RPMMeter = 11.2
+					RPMDate = 20000
+				end
+				
 				if(not isTimer(PData["VehicleBonus"])) then
 					if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
 						if(not isVehicleOnGround(theVehicle)) then
@@ -8347,7 +8388,22 @@ function DrawPlayerMessage()
 						end
 					end
 					
-					if(VehicleSpeed > 100) then
+					
+					
+					if(VehicleSpeed <= 6) then
+						if(MaxRPM <= getVehicleRPM(theVehicle, PData["Handling"]["engineAcceleration"], PData["Handling"]["dragCoeff"], PData["Handling"]["numberOfGears"])) then
+							if(not PData["burnout"]) then PData["burnout"] = 0 end
+							PData["burnout"] = PData["burnout"]+(MaxRPM/25000)
+							if(PData["burnout"] >= 5) then
+								AddRage(MaxRPM/25000)
+								RageInfo(Text("Бернаут +{points}", {{"{points}", math.round(PData["burnout"], 0)}}))
+							end
+						else
+							if(PData["burnout"]) then
+								PData["burnout"] = nil
+							end
+						end
+					elseif(VehicleSpeed > 100) then
 						local vxl,vyl,vzl, vxr, vyr, vzr = false
 						local vxc, vyc, vzc = getElementPosition(theVehicle)
 						if(getVehicleType(theVehicle) == "Automobile") then
@@ -8418,46 +8474,6 @@ function DrawPlayerMessage()
 				end
 				
 				
-				speed = tostring(math.floor(VehicleSpeed))
-				for i = #speed, 2 do
-					speed = "0"..speed
-				end
-
-				local MaxRPM = GetVehicleMaxRPM(PData["Handling"]["engineAcceleration"])
-				local RPMMeter = false
-				local RPMDate = false 
-				
-				if(MaxRPM <= 4000) then
-					RPMMeter = 45
-					RPMDate = 4000
-				elseif(MaxRPM > 4000 and MaxRPM <= 6000) then
-					RPMMeter = 37.5
-					RPMDate = 6000
-				elseif(MaxRPM > 6000 and MaxRPM <= 7000) then
-					RPMMeter = 32.1
-					RPMDate = 7000
-				elseif(MaxRPM > 7000 and MaxRPM <= 8000) then
-					RPMMeter = 28
-					RPMDate = 8000
-				elseif(MaxRPM > 8000 and MaxRPM <= 10000) then
-					RPMMeter = 22.5
-					RPMDate = 10000
-				elseif(MaxRPM > 10000 and MaxRPM <= 12000) then
-					RPMMeter = 18.7
-					RPMDate = 12000
-				elseif(MaxRPM > 12000 and MaxRPM <= 14000) then
-					RPMMeter = 16
-					RPMDate = 14000
-				elseif(MaxRPM > 14000 and MaxRPM <= 16000) then
-					RPMMeter = 14
-					RPMDate = 16000
-				elseif(MaxRPM > 16000 and MaxRPM <= 18000) then
-					RPMMeter = 12.5
-					RPMDate = 18000
-				elseif(MaxRPM > 18000 and MaxRPM <= 20000) then
-					RPMMeter = 11.2
-					RPMDate = 20000
-				end
 				if(RPMDate) then
 					local RPM = (225*(getVehicleRPM(theVehicle, PData["Handling"]["engineAcceleration"], PData["Handling"]["dragCoeff"], PData["Handling"]["numberOfGears"])/RPMDate))
 					local RedRPMZone = 225*((MaxRPM/RPMDate))
