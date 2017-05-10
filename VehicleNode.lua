@@ -45739,10 +45739,6 @@ function CreateVehicleNodeMarker(zone)
 			if(PathNodes[zone]) then
 				triggerClientEvent(source, "InfoPath", source, zone, toJSON(PathNodes[zone]))
 			end
-			
-			if(PedNodes[zone]) then
-				triggerClientEvent(source, "InfoPathPed", source, zone, toJSON(PedNodes[zone]))
-			end
 		end
 	end
 end

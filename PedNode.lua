@@ -100,6 +100,7 @@ PedNodes = {
 	["Ocean Flats"] = {
 		[1] = {-2818, -221, 6.2, -2815, 276, 6.2, 0}, 
 		[2] = {-2699, -65, 3.3, -2613, -61, 3.3, 0}, 
+		[3] = {-2698, -80, 3.3, -2662, -76, 3.3, 0}, 
 	}, 	
 	["City Hall"] = {
 		[1] = {-2818, 277, 6.2, -2815, 298, 6.2, 0}, 
@@ -145,6 +146,19 @@ PedNodes = {
 		[1] = {2215, 50, 25.5, 2218, 136, 25.5, 0}, 
 		[2] = {2231, 147, 25.5, 2288, 151, 25.5, 0}, 
 	}, 
+	["Little Mexico"] = {
+		[1] = {1759, -1726, 12.5, 1812, -1723, 12.5, 0}, 
+	},
 }
 
+
+
+
+function ZonesGroundPosition(zone)
+	if(PedNodes[zone]) then
+		triggerClientEvent(source, "InfoPathPed", source, zone, toJSON(PedNodes[zone]))
+	end
+end
+addEvent("ZonesGroundPosition", true)
+addEventHandler("ZonesGroundPosition", root, ZonesGroundPosition)
 

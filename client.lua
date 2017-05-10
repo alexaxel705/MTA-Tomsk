@@ -17,6 +17,7 @@ local COLOR = {
 	}
 }
 
+local GroundMaterial = {}
 local ZonesDisplay = {}
 local ClosedZones = false
 local DestroyedBlip = {}
@@ -751,6 +752,9 @@ function SetZoneDisplay(zone)
 		ZonesDisplay[#ZonesDisplay+1] = {zone, 0, false}
 	end
 	triggerServerEvent("CreateVehicleNodeMarker", localPlayer, zone)
+	if(not GroundMaterial[zone]) then
+		triggerServerEvent("ZonesGroundPosition", localPlayer, zone)
+	end
 end
 addEvent("SetZoneDisplay", true)
 addEventHandler("SetZoneDisplay", getRootElement(), SetZoneDisplay)
@@ -1591,7 +1595,17 @@ end
 
 
 function GetGroundMaterial(x,y,z,gz)
-    local _,_,_,_,_,_,_,_,material = processLineOfSight(x,y,z,x,y,gz-1, true,false,false,false,false,true,true,true,localPlayer, true)
+	x, y = math.round(x, 0), math.round(y, 0)
+	local material = false
+	local zone = getZoneName(x,y,z,false)
+	if(GroundMaterial[zone]) then
+		if(GroundMaterial[zone][x]) then
+			if(GroundMaterial[zone][x][y]) then
+				material = GroundMaterial[zone][x][y]
+			end
+		end
+	end
+	if(not material) then _,_,_,_,_,_,_,_,material = processLineOfSight(x,y,z,x,y,gz-1, true,false,false,false,false,true,true,true,localPlayer, true) end
 	if(not material) then material = 1337 end
 	return material
 end
@@ -3329,27 +3343,10 @@ local BannedMaterial = {
 	[76] = true
 }
 
-local IgnoreMaterial = { -- Костыль, убрать после того как сделаешь систему материалов
+local IgnoreMaterial = {
 	["Unknown"] = true,
 	["Unknown Bar"] = true,	
-	["Redsands West"] = true,	
-	["Las Venturas Airport"] = true,
-	["Temple"] = true,
-	["Market Station"] = true,
-	["Market"] = true,
-	["Verona Beach"] = true,
-	["Yellow Bell Station"] = true,
-	["Prickle Pine"] = true,
-	["Whitewood Estates"] = true,
-	["Starfish Casino"] = true,
-	["Julius Thruway North"] = true,
-	["Prickle Pine"] = true,
-	["The Emerald Isle"] = true,
-	["Greenglass College"] = true,
-	["Missionary Hill"] = true,
 }
-
-
 
 
 function BotCheckPath(x,y,z,x2,y2,z2,zone)
@@ -4792,12 +4789,21 @@ addEventHandler("InfoPath", localPlayer, InfoPath)
 
 		
 function InfoPathPed(zone, arr)
-	local arr = fromJSON(arr)
-	for name, dat2 in pairs(arr) do
-		PData['changezone'][#PData['changezone']+1] = {
-			[1] = {dat2[1], dat2[2], dat2[3], zone}, 
-			[2] = {dat2[4], dat2[5], dat2[6]}
-		}
+	if(not GroundMaterial[zone]) then
+		local arr = fromJSON(arr)
+		GroundMaterial[zone] = {}
+		for name, dat2 in pairs(arr) do
+			for slotx = dat2[1], dat2[4] do
+				if(not GroundMaterial[zone][slotx]) then GroundMaterial[zone][slotx] = {} end
+				for sloty = dat2[2], dat2[5] do
+					GroundMaterial[zone][slotx][sloty] = 4
+				end
+			end
+			PData['changezone'][#PData['changezone']+1] = {
+				[1] = {dat2[1], dat2[2], dat2[3], zone}, 
+				[2] = {dat2[4], dat2[5], dat2[6]}
+			}
+		end
 	end
 end
 addEvent("InfoPathPed", true)
@@ -9049,6 +9055,11 @@ function StreamIn()
 			setElementDimension(ObjectInStream[source]["light"], getElementDimension(source))
 		end
 	elseif(getElementType(source) == "ped") then
+		local x,y,z = getElementPosition(source)
+		local zone = getZoneName(x,y,z,false)
+		if(not GroundMaterial[zone]) then
+			triggerServerEvent("ZonesGroundPosition", localPlayer, zone)
+		end
 		StreamData[source] = {["armas"] = {}, ["UpdateRequest"] = true}
 		UpdateArmas(source)
 		
