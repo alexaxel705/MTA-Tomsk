@@ -159,6 +159,13 @@ local BindedKeys = {} --[key] = {TriggerServerEvent(unpack)}
 
 
 
+function MinusToPlus(var)
+	if(var < 0) then
+		var = var-var-var
+	end
+	return var
+end
+
 function Text(text, repl)
 	if(LangArr[text]) then
 		if(LangArr[text] ~= "") then
@@ -3266,6 +3273,7 @@ function checkKey()
 		end
 		if(theVehicle) then
 			if(speed == "000") then
+				resetTimer(PData["ClearDriving"])
 				if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer)) then
 					ChangeInfo(Text("Нажми {key} чтобы припарковать машину", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}}), 1000)
 				end
@@ -3796,7 +3804,7 @@ function HUDPreload()
 	local x = 0
 	local y = 0
 	for i = 1, 10 do 
-		local CRAM = tocolor(120,120,120,255)
+		local CRAM = tocolor(81,81,105,255)
 		dxDrawLine(x, y, x, y+(80*NewScale), CRAM, 1)
 		dxDrawLine(x+(80*NewScale), y, x+(80*NewScale), y+(80*NewScale), CRAM, 1)
 		dxDrawLine(x, y, x+(80*NewScale), y, CRAM, 1)
@@ -4261,7 +4269,7 @@ function helpmessage(message, job, money, removetarget, cinema)
 	end
 	
 	
-	PText["HUD"][5] = {Text(message), screenWidth, screenHeight-(300*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*3, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
+	PText["HUD"][5] = {Text(message), screenWidth, screenHeight-(300*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2.3, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
 
 	if(job) then
 		PText["HUD"][6] = {"#744D02"..Text(job), screenWidth, screenHeight/2-dxGetFontHeight(NewScale*6, "sans")/2, 0, 0, tocolor(255, 255, 255, 255), NewScale*6, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
@@ -5800,10 +5808,8 @@ end
 
 addEvent("driftCarCrashed", true)
 addEventHandler("driftCarCrashed", getRootElement(), function()
+	resetTimer(PData["ClearDriving"])
 	if score ~= 0 then
-		if(score > 500) then
-			AddRage(score/30)
-		end
 		score = 0
 		mult = 1
 	end
@@ -5910,7 +5916,7 @@ function CreateButtonInputInt(func, text, args)
 	if(PText["HUD"][8]) then
 		PText["HUD"][8] = nil
 	else
-		PText["HUD"][8] = {text, screenWidth, screenHeight-(650*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
+		PText["HUD"][8] = {text, screenWidth, screenHeight-(650*scalex), 0, 0, tocolor(0, 0, 0, 255), NewScale*2, "default-bold", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
 
 		BindedKeys["enter"] = {"ServerCall", localPlayer, {func, localPlayer, localPlayer, "", args}}
 	end
@@ -7746,7 +7752,7 @@ function DrawPlayerInventory()
 					local h,w = el[3], el[4]
 					
 					local CRAM = false
-					local CTBACK = tocolor(140,140,140,140)
+					local CTBACK = tocolor(81,81,105,140)
 					local SystemName = PInv[name][i][1]
 					local DrawText = Text(SystemName)
 					if(PInv[name][i][4]) then
@@ -7870,7 +7876,7 @@ function DrawPlayerInventory()
 					end
 				end
 				
-				local CTBACK = tocolor(140,140,140, 140)
+				local CTBACK = tocolor(81,81,105, 140)
 				if(PInv[DragElementName][DragElementId][3]) then
 					local r2,g2,b2 = hex2rgb(GetQualityColor(PInv[DragElementName][DragElementId][3]):sub(2,7))
 					if(PInv[DragElementName][DragElementId][4]["quality"]) then
@@ -7911,8 +7917,6 @@ function DrawPlayerInventory()
 
 	end	
 end
-
-
 
 
 
@@ -8315,9 +8319,6 @@ function DrawPlayerMessage()
 				
 				local tempBool = tick - (idleTime or 0) < 750
 				if not tempBool and score ~= 0 then
-					if(score > 100) then
-						AddRage(score/30)
-					end
 					score = 0
 				end
 				
@@ -8334,6 +8335,7 @@ function DrawPlayerMessage()
 
 				if tick - (idleTime or 0) < 50 then
 					if(score > 500) then
+						AddRage(1)
 						RageInfo("Занос +"..math.round(score/100, 0))
 					end
 				end
@@ -8384,17 +8386,27 @@ function DrawPlayerMessage()
 					RPMMeter = 11.2
 					RPMDate = 20000
 				end
-				
+			
 				if(not isTimer(PData["VehicleBonus"])) then
 					if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
 						if(not isVehicleOnGround(theVehicle)) then
 							if(not PData["jump"]) then 
-								PData["jump"] = {0, false, false, false} 
+								PData["jump"] = {0} 
 								PData["jump"][2], PData["jump"][3], PData["jump"][4] = getElementPosition(theVehicle)
+								PData["jump"][5], PData["jump"][6], PData["jump"][7] = getElementRotation(theVehicle)
+								PData["jump"][8], PData["jump"][9], PData["jump"][10] = 0, 0, 0
 							end
 							PData["jump"][1] = PData["jump"][1]+0.5
 							if(PData["jump"][1] >= 20) then
 								RageInfo(Text("Отрыв от земли +{points}", {{"{points}", math.round(PData["jump"][1], 0)}}))
+								
+								local rx,ry,rz = getElementRotation(theVehicle)
+								PData["jump"][8] = math.round(PData["jump"][8]+MinusToPlus(math.sin(rx-PData["jump"][5])), 0)
+								PData["jump"][9] = math.round(PData["jump"][9]+MinusToPlus(math.sin(ry-PData["jump"][6])), 0)
+								PData["jump"][10] = math.round(PData["jump"][10]+MinusToPlus(math.sin(rz-PData["jump"][7])), 0)
+								
+								PData["jump"][5], PData["jump"][6], PData["jump"][7] = getElementRotation(theVehicle)
+								
 							end
 						else
 							if(PData["jump"]) then
@@ -8404,7 +8416,11 @@ function DrawPlayerMessage()
 									local jumph = math.floor(PData["jump"][4]-z, 1)
 									if(jumph < 0) then jumph = jumph-jumph-jumph end
 									if(jumph > 10) then
-										helpmessage("Дистанция: "..math.floor(getDistanceBetweenPoints2D(PData["jump"][2], PData["jump"][3], x,y), 1).."м Высота: "..jumph.."м")
+										local salto = (math.round(PData["jump"][8]/360, 0))+(math.round(PData["jump"][9]/360, 0))+(math.round(PData["jump"][10]/360, 0))
+										helpmessage("Дистанция: "..math.floor(getDistanceBetweenPoints2D(PData["jump"][2], PData["jump"][3], x,y), 1)..
+										"м Высота: "..jumph.."м "..
+										"Переворотов: "..salto..
+										" Вращение: "..PData["jump"][8]+PData["jump"][9]+PData["jump"][10].."°")
 									end
 								end
 								PData["jump"] = nil
@@ -8714,15 +8730,15 @@ function DrawPlayerMessage()
 	end
 
 	if(PText["HUD"][8]) then
-		dxDrawRectangle(screenWidth/2-(150*scaley), screenHeight-(660*scalex), 300*NewScale, 150*NewScale, tocolor(100, 100, 100, 180))	
+		dxDrawRectangle(screenWidth/2-(150*scaley), screenHeight-(660*scalex), 300*NewScale, 150*NewScale, tocolor(233, 165, 58, 180))	
 		if(BindedKeys["enter"][3][1] == "loginPlayerEvent") then
 			local text = ""
 			for _ = 1, #BindedKeys["enter"][3][4] do
 				text = text.."*"
 			end
-			dxDrawBorderedText(text.."|", screenWidth/2-(120*scaley), screenHeight-(580*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
+			dxDrawBorderedText(text.."|", screenWidth/2-(120*scaley), screenHeight-(580*scalex), 0, 0, tocolor(0, 0, 0, 255), NewScale*2, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
 		else
-			dxDrawBorderedText(BindedKeys["enter"][3][4].."|", screenWidth/2-(120*scaley), screenHeight-(580*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
+			dxDrawBorderedText(BindedKeys["enter"][3][4].."|", screenWidth/2-(120*scaley), screenHeight-(580*scalex), 0, 0, tocolor(0, 0, 0, 255), NewScale*2, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
 		end
 	end
 	
@@ -9128,13 +9144,20 @@ addEventHandler("onClientElementStreamIn", getRootElement(), StreamIn)
 --Для работы дальнобойщиком без прицепа
 
 function ClientVehicleEnter(thePlayer, seat)
-	if(seat == 0) then
-		if(getElementModel(source) == 532 or getElementModel(source) == 531) then
-			onAttach(source)
-		end
-		if(getElementData(source, "type")) then
-			if(getElementData(source, "type") == "jobtruck") then
-				triggerEvent("onClientTrailerAttach", source)
+	if(thePlayer == localPlayer) then
+		if(seat == 0) then
+			PData["ClearDriving"] = setTimer(function() 
+				AddRage(150)
+				RageInfo("Чистое вождение +150")
+			end, 25000, 0)
+
+			if(getElementModel(source) == 532 or getElementModel(source) == 531) then
+				onAttach(source)
+			end
+			if(getElementData(source, "type")) then
+				if(getElementData(source, "type") == "jobtruck") then
+					triggerEvent("onClientTrailerAttach", source)
+				end
 			end
 		end
 	end
@@ -9142,13 +9165,16 @@ end
 addEventHandler("onClientVehicleEnter", getRootElement(), ClientVehicleEnter)
 
 function ClientVehicleExit(thePlayer, seat)
-	if(seat == 0) then
-		if(getElementModel(source) == 532 or getElementModel(source) == 531) then
-			deAttach(source)
-		end
-		if(getElementData(source, "type")) then
-			if(getElementData(source, "type") == "jobtruck") then
-				triggerEvent("onClientTrailerDetach", source, source)
+	if(thePlayer == localPlayer) then
+		if(seat == 0) then
+			killTimer(PData["ClearDriving"])
+			if(getElementModel(source) == 532 or getElementModel(source) == 531) then
+				deAttach(source)
+			end
+			if(getElementData(source, "type")) then
+				if(getElementData(source, "type") == "jobtruck") then
+					triggerEvent("onClientTrailerDetach", source, source)
+				end
 			end
 		end
 	end
