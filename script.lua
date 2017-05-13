@@ -5091,7 +5091,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 972, -1135, 23.8, 0, 0 --
+		local x,y,z,i,d  = 2033, -1143.6, 23.6, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7433,7 +7433,7 @@ function preLoad(name)
 	
 
 	
-	local CountRandomBot = 1360
+	local CountRandomBot = 1000
 	local availzones = {}
 	for name, dat in pairs(PedNodes) do
 		for _, dat2 in pairs(dat) do
@@ -7447,7 +7447,7 @@ function preLoad(name)
 		local rand = math.random(#availzones)
 		local randx = math.random(availzones[rand][1], availzones[rand][4])
 		local randy = math.random(availzones[rand][2], availzones[rand][5])
-		local randz = availzones[rand][3]+1 -- Доработать потом. найти координату между точками
+		local randz = GetZCoord(randx, randy, availzones[rand])+0.6
 		
 		local rot = availzones[rand][7]
 		local randrot = math.random(1,2)
@@ -7461,7 +7461,21 @@ end
 addEventHandler("onResourceStart", getResourceRootElement(), preLoad)
 
 
-
+function GetZCoord(x,y,dat)
+	local z = dat[6]
+	if(dat[7] >= 135 and dat[7] <= 225 or dat[7] <= 45 or dat[7] >= 315) then
+		local razy = dat[5]-y
+		local maxy = dat[5]-dat[2]
+		local razz = dat[6]-dat[3]
+		z = z-(razz*(razy/maxy))
+	else
+		local razx = dat[4]-x
+		local maxx = dat[4]-dat[1]
+		local razz = dat[6]-dat[3]
+		z = z-(razz*(razx/maxx))
+	end
+	return z
+end
 
 function GetDatabaseZoneNode(zone)
 	for i,node in ipairs(xmlNodeGetChildren(ZoneNode)) do

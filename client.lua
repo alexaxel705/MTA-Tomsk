@@ -3352,7 +3352,8 @@ local BannedMaterial = {
 	[0] = true, 
 	[1] = true, 
 	[75] = true, 
-	[76] = true
+	[76] = true,
+	[118] = true,
 }
 
 local IgnoreMaterial = {
