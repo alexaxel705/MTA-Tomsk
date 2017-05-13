@@ -5091,7 +5091,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 1791, -1728.9, 12.4, 0, 0 --
+		local x,y,z,i,d  = 972, -1135, 23.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7433,27 +7433,26 @@ function preLoad(name)
 	
 
 	
-	local CountRandomBot = 460
+	local CountRandomBot = 1360
 	local availzones = {}
 	for name, dat in pairs(PedNodes) do
 		for _, dat2 in pairs(dat) do
 			for slot = 1, dat2[4]-dat2[1]+dat2[5]-dat2[2] do
-				availzones[#availzones+1] = name
+				availzones[#availzones+1] = dat2
 			end
 		end
 	end
 	
 	for slot = 1, CountRandomBot do
 		local rand = math.random(#availzones)
-		local randnode = math.random(#PedNodes[availzones[rand]])
-		local randx = math.random(PedNodes[availzones[rand]][randnode][1], PedNodes[availzones[rand]][randnode][4])
-		local randy = math.random(PedNodes[availzones[rand]][randnode][2], PedNodes[availzones[rand]][randnode][5])
-		local randz = PedNodes[availzones[rand]][randnode][3]+1 -- Доработать потом. найти координату между точками
+		local randx = math.random(availzones[rand][1], availzones[rand][4])
+		local randy = math.random(availzones[rand][2], availzones[rand][5])
+		local randz = availzones[rand][3]+1 -- Доработать потом. найти координату между точками
 		
-		local rot = PedNodes[availzones[rand]][randnode][7]
+		local rot = availzones[rand][7]
 		local randrot = math.random(1,2)
 		if(randrot == 1) then rot = rot+180 end
-		CreateRandomBot(randx,randy,randz,rot,nil,nil,availzones[rand])
+		CreateRandomBot(randx,randy,randz,rot,nil,nil, getZoneName(randx,randy,randz, false))
 		table.remove(availzones, rand)
 	end
 	
@@ -9433,7 +9432,7 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 					local rot = rand[4]
 					local randrot = math.random(1,2)
 					if(randrot == 1) then rot = rot+180 end
-					CreateRandomBot(rand[1], rand[2], rand[3],rot,nil,nil,zone, slot)
+					CreateRandomBot(rand[1], rand[2], rand[3]+1,rot,nil,nil,zone, slot)
 					table.remove(availzones, randnum)
 				end
 			end
@@ -9460,7 +9459,7 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 					local rot = rand[4]
 					local randrot = math.random(1,2)
 					if(randrot == 1) then rot = rot+180 end
-					CreateRandomBot(rand[1], rand[2], rand[3],rot,nil,nil,zone, slot)
+					CreateRandomBot(rand[1], rand[2], rand[3]+1,rot,nil,nil,zone, slot)
 					table.remove(availzones, randnum)
 				end
 			end
@@ -10509,23 +10508,26 @@ function worldtime()
 				local ped = BotCreated[zone][slot]
 				if(isElement(ped)) then
 					local vx,vy,vz = getElementPosition(ped)
-					if(zone == getZoneName(vx,vy,vz) and not isPedDead(ped)) then
-						if(not isElement(BotBlip[ped])) then
-							BotBlip[ped] = createBlipAttachedTo(ped, 0, 2, r,g,b)
-							setElementVisibleTo(BotBlip[ped], root, false)
-							for v,k in pairs(PlayerInZone) do
-								setElementVisibleTo(BotBlip[ped], k, true)
+					local team = getElementData(ped, "team")
+					if(team == GetDatabaseZoneNode(zone)) then
+						if(zone == getZoneName(vx,vy,vz) and not isPedDead(ped)) then
+							if(not isElement(BotBlip[ped])) then
+								BotBlip[ped] = createBlipAttachedTo(ped, 0, 2, r,g,b)
+								setElementVisibleTo(BotBlip[ped], root, false)
+								for v,k in pairs(PlayerInZone) do
+									setElementVisibleTo(BotBlip[ped], k, true)
+								end
+							else
+								setElementVisibleTo(BotBlip[ped], root, false)
+								for v,k in pairs(PlayerInZone) do
+									setElementVisibleTo(BotBlip[ped], k, true)
+								end
 							end
+							TotalBot = TotalBot + 1
 						else
-							setElementVisibleTo(BotBlip[ped], root, false)
-							for v,k in pairs(PlayerInZone) do
-								setElementVisibleTo(BotBlip[ped], k, true)
+							if(isElement(BotBlip[ped])) then
+								destroyElement(BotBlip[ped])
 							end
-						end
-						TotalBot=TotalBot+1
-					else
-						if(isElement(BotBlip[ped])) then
-							destroyElement(BotBlip[ped])
 						end
 					end
 				end

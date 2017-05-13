@@ -397,6 +397,17 @@ function saveauto()
 	
 end
 
+
+function cursor() 
+    if isCursorShowing(thePlayer) then
+		showCursor(false)
+	else
+		showCursor(true)
+    end
+
+end
+
+
 if getPlayerName(localPlayer) == "alexaxel705" or getPlayerName(localPlayer) == "Mishel'"  then
 	--[[bindKey("num_6", "down", plusx) 
 	bindKey("num_4", "down", minusx) 
@@ -405,6 +416,7 @@ if getPlayerName(localPlayer) == "alexaxel705" or getPlayerName(localPlayer) == 
 	bindKey("num_7", "down", plusz) 
 	bindKey("num_1", "down", minusz) --]]
 	bindKey("num_1", "down", saveauto) 
+	bindKey("lctrl", "down", cursor) 
 end
 bindKey("num_3", "down", save) -- Для всех
 
@@ -4792,14 +4804,14 @@ function InfoPathPed(zone, arr)
 	if(not GroundMaterial[zone]) then
 		local arr = fromJSON(arr)
 		GroundMaterial[zone] = {}
-		for name, dat2 in pairs(arr) do
+		for i, dat2 in pairs(arr) do
 			for slotx = dat2[1], dat2[4] do
 				if(not GroundMaterial[zone][slotx]) then GroundMaterial[zone][slotx] = {} end
 				for sloty = dat2[2], dat2[5] do
 					GroundMaterial[zone][slotx][sloty] = 4
 				end
 			end
-			PData['changezone'][#PData['changezone']+1] = {
+			PData['changezone'][zone.." "..i] = {
 				[1] = {dat2[1], dat2[2], dat2[3], zone}, 
 				[2] = {dat2[4], dat2[5], dat2[6]}
 			}
@@ -8146,6 +8158,11 @@ function DrawPlayerMessage()
 					dxDrawLine3D(wx,wy,wz, point2[1], point2[2], point2[3], color, 25)
 
 					dxDrawLine3D(point2[1], point2[2], point2[3], arr[1][1], arr[1][2], arr[1][3], color, 25)
+					
+					
+					local nx, ny = ((arr[1][1]-arr[2][1])/2), ((arr[1][2]-arr[2][2])/2)
+					create3dtext('[ '..i..' ] ', arr[1][1]-nx, arr[1][2]-ny, arr[1][3]+2, scale, 60, tocolor(228, 70, 70, 180), "default-bold")
+
 				end
 				
 				local material = GetGroundMaterial(x,y,z,z-2)
