@@ -230,6 +230,7 @@ local Threes = {}
 local ActionTimer = {}
 local ThreesPickup = {}
 local StandartInventory = toJSON({{},{},{},{},{},{},{},{},{},{}})
+local Collections = toJSON({[953] = {}, [954] = {}, [1276] = {}})
 local PlayersPickups = {}
 local PriceAuto = {434, 461, 494, 495, 502, 503, 504, 521, 522, 568, 573, 581, 429, 587, 602}
 local VehicleBand = {} -- Заспауненые автомобили фракций
@@ -269,7 +270,7 @@ function getArrSize(arr)
 	return i
 end
 
-local StandartClosedMap = {
+local StandartClosedMap = toJSON({
 ["236"] = {600, -1600, 200, 200},
 ["136"] = {-800, -2200, 200, 200},
 ["436"] = {-2800, -200, 200, 200},
@@ -1140,8 +1141,7 @@ local StandartClosedMap = {
 ["441"] = {-1800, -200, 200, 200},
 ["541"] = {-400, 400, 200, 200},
 ["241"] = {1600, -1600, 200, 200},
-
-}
+})
 
 
 
@@ -5091,7 +5091,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 162.1, -1557.2, 10.4, 0, 0 --
+		local x,y,z,i,d  =  2074.8, -1612.7, 12.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12384,7 +12384,8 @@ function saved(thePlayer, command, h)
 	for i,node in ipairs(PlayerNodes) do
 		--local arr = fromJSON(xmlNodeGetAttribute(node, "inv"))
 		
-		xmlNodeSetAttribute(node, "zone", toJSON(StandartClosedMap))
+		--xmlNodeSetAttribute(node, "zone", StandartClosedMap)
+		xmlNodeSetAttribute(node, "Collections", Collections)
 		--xmlNodeSetAttribute(node, "inv", StandartInventory)
 		--[[for i, v in pairs(arr) do
 			if(v[1]) then
@@ -12530,12 +12531,13 @@ function AddDatabaseAccount(thePlayer, password)
 	xmlNodeSetValue(NewNode, getPlayerName(thePlayer))
 	xmlNodeSetAttribute(NewNode, "inv", StandartInventory)
 	setElementData(thePlayer, "inv", StandartInventory)
+	xmlNodeSetAttribute(NewNode, "Collections", Collections)
 	xmlNodeSetAttribute(NewNode, "prisoninv", StandartInventory)
 	xmlNodeSetAttribute(NewNode, "PrisonTime", 500)
 	xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
 	xmlNodeSetAttribute(NewNode, "password", md5(password))
 	xmlNodeSetAttribute(NewNode, "skill", toJSON({[24] = 569}))
-	xmlNodeSetAttribute(NewNode, "zone", toJSON(StandartClosedMap))
+	xmlNodeSetAttribute(NewNode, "zone", StandartClosedMap)
 	xmlNodeSetAttribute(NewNode, "wardrobe", toJSON({[252] = 999, [145] = 999}))
 	xmlNodeSetAttribute(NewNode, "bolezni", toJSON({["CHROMA"] = 1}))
 	xmlNodeSetAttribute(NewNode, "skin", 213)
@@ -12601,11 +12603,33 @@ local PlayersRole = {
 	["Fucker"] = "Контент менеджер",
 }
 
+
+
+function AddCollections(thePlayer, model, id)
+	local dat = fromJSON(GetDatabaseAccount(thePlayer, "Collections"))
+	dat[tostring(model)][id] = true
+	SetDatabaseAccount(thePlayer, "Collections", toJSON(dat))
+	
+	local CollectionNames = {
+		[954] = {"Подков", 50}, 
+		[953] = {"Ракушек", 50},
+		[1276] = {"Скрытых пакетов", 100}
+	}
+	MissionCompleted(thePlayer, "#169AFA"..CollectionNames[model][1].." "..getArrSize(dat[tostring(model)]).." из "..CollectionNames[model][2])
+end
+addEvent("AddCollections", true)
+addEventHandler("AddCollections", root, AddCollections)
+
+
+
+
+
+
 function AuthComplete(thePlayer)
 	if(PlayersRole[getPlayerName(thePlayer)]) then
 		outputChatBox("* На сервер зашел "..getElementData(source, "color")..getPlayerName(thePlayer).."#FFFFFF [#99CC00"..PlayersRole[getPlayerName(thePlayer)].."#FFFFFF]", getRootElement(), 255,255,255,true)
 	end
-	triggerClientEvent(thePlayer, "AuthComplete", thePlayer)
+	triggerClientEvent(thePlayer, "AuthComplete", thePlayer, GetDatabaseAccount(thePlayer, "Collections"))
 end
 
 
