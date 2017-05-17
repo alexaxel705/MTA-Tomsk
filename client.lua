@@ -237,7 +237,7 @@ local TexturesPosition = {
 	["Канистра"] = {0,-0.6,-0.12, 0,0,-0.12, 0,70, 250}, 
 	["Телефон"] = {0,0.5,0, 0,0,0, 0,70, 250}, 
 	["Подкова"] = {0,0.9,0.04, 0,0,0.04, 0,70, 250}, 
-	["Реликвия"] = {0,1,0.04, 0,0,0.04, 0,70, 250}, 
+	["Реликвия"] = {0,1,0.03, 0,0,0.03, 0,70, 250}, 
 	["Запаска"] = {1.5,0,0, 0,0,0, 0,70, 150}, 
 	["CoK"] = {0.14,0.18,0.28, 0.14,0.18,-0.28, 100,70, 250}, 
 	["Сигарета"] = {0.31,0.01,0.08, 0,0.01,0.08, 290,70, 130}, 
@@ -889,7 +889,7 @@ if getPlayerName(localPlayer) == "alexaxel705" or getPlayerName(localPlayer) == 
 	bindKey("num_7", "down", plusz) 
 	bindKey("num_1", "down", minusz) --]]
 	bindKey("num_1", "down", saveauto) 
-	bindKey("mouse2", "down", cursor) 
+	bindKey("F2", "down", cursor) 
 end
 bindKey("num_3", "down", save) -- Для всех
 
@@ -3859,6 +3859,7 @@ end)
 local BannedMaterial = {
 	[0] = true, 
 	[1] = true, 
+	[9] = true, 
 	[75] = true, 
 	[76] = true,
 	[118] = true,
@@ -8556,14 +8557,13 @@ function DrawPlayerMessage()
 			for name, dat in pairs(PData["DisplayCollection"]) do
 				dxDrawCircle(cposx+(30*NewScale), cposy+(20*NewScale), 0, 40*NewScale, 1, 0, 360, tocolor(70,74,70,15))
 				dxDrawCircle(cposx+(30*NewScale), cposy+(20*NewScale), 40*NewScale, 5*NewScale, 1, 0, 360, tocolor(20,24,20,15))
-				if(dat[2] ~= dat[1]) then
-					dxDrawCircle(cposx+(30*NewScale), cposy+(20*NewScale), 40*NewScale, 5*NewScale, 1, 0, (360/dat[1])*dat[2], tocolor(247,214,109,15))
-				end
-				dxDrawImage(cposx, cposy, 60*NewScale, 40*NewScale, items[name][1])
+
+				dxDrawImage(cposx, cposy-(5*NewScale), 60*NewScale, 40*NewScale, items[name][1])
+				dxDrawBorderedText(dat[1]-dat[2].."/"..dat[2], cposx+(165*NewScale), cposy+(35*NewScale), 0, 0, tocolor(255, 255, 255, 255), NewScale*1.5, "default-bold", "center", "top", nil, nil, nil, true)
 				cposy = cposy-(100*NewScale)
 			end
 			
-			
+
 			
 			DrawPlayerInventory()
 			

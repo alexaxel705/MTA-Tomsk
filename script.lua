@@ -1644,14 +1644,14 @@ local TeamVehicle = {
 	["Байкеры"] = {{468,"METAL228"}, {463,"METAL228"}, {586 ,"METAL228"}},
 	--{для всех}, {такси}, {эксклюзивы}, {полиция}
 	["Полиция"] = {
-		["Los Santos"] = {{596, "POLS 228"}, {523}}, 
-		["Red County"] = {{599, "PORC"}, {523}}, 
-		["Whetstone"] = {{599, "POWS 228"}, {523}}, 
-		["Flint County"] = {{599, "POFC 228"}, {523}}, 
-		["San Fierro"] = {{597, "POSF 228"}, {523}}, 
-		["Bone County"] = {{598, "POBC 228"}, {523}}, 
-		["Tierra Robada"] = {{598, "POTR 228"}, {523}}, 
-		["Las Venturas"] = {{598, "POLV 228"}, {523}}, 
+		["Los Santos"] = {{596, "POLS 228"}, {523, "PBKE 228"}}, 
+		["Red County"] = {{599, "PORC"}, {523, "PBKE 228"}}, 
+		["Whetstone"] = {{599, "POWS 228"}, {523, "PBKE 228"}}, 
+		["Flint County"] = {{599, "POFC 228"}, {523, "PBKE 228"}}, 
+		["San Fierro"] = {{597, "POSF 228"}, {523, "PBKE 228"}}, 
+		["Bone County"] = {{598, "POBC 228"}, {523, "PBKE 228"}}, 
+		["Tierra Robada"] = {{598, "POTR 228"}, {523, "PBKE 228"}}, 
+		["Las Venturas"] = {{598, "POLV 228"}, {523, "PBKE 228"}}, 
 	},
 	["Мирные жители"] = {
 		["Los Santos"] = {{404},{419},{439},{496},{475}, {420}, {603}, {467},{436},{585},{462},{602},{458},{526},{527},{529},{566},{540},{547},{546},{466},{491},{507},{516},{426}}, -- Phoenix эксклюзив 
@@ -5133,7 +5133,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = -2109.3, 86.2, 34.2, 0, 0 --
+		local x,y,z,i,d  = 2038.9, 1464.4, 9.7, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7600,7 +7600,7 @@ function CreateRandomBot(x,y,z,rz,i,d,zone,ind)
 	if(not team) then team = "Полиция" end
 	
 
-	local rand = math.random(1,3)
+	local rand = math.random(1,4)
 	if(rand > 1) then
 		team = "Мирные жители"
 	end
@@ -12646,10 +12646,10 @@ function loginPlayer(thePlayer, password)
 		end
 	else
 		PData[thePlayer]["auth"] = true
-		AuthComplete(thePlayer)
 		AddDatabaseAccount(thePlayer, password)
 		Respect(thePlayer)
 		triggerClientEvent(thePlayer, "intro", thePlayer)
+		AuthComplete(thePlayer)
 	end
 end
 addEvent("loginPlayerEvent", true)
