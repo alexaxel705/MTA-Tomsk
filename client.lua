@@ -889,7 +889,7 @@ if getPlayerName(localPlayer) == "alexaxel705" or getPlayerName(localPlayer) == 
 	bindKey("num_7", "down", plusz) 
 	bindKey("num_1", "down", minusz) --]]
 	bindKey("num_1", "down", saveauto) 
-	bindKey("lctrl", "down", cursor) 
+	bindKey("mouse2", "down", cursor) 
 end
 bindKey("num_3", "down", save) -- Для всех
 
@@ -7547,6 +7547,11 @@ addEventHandler("normalspeed", localPlayer, normalspeed)
 
 function onWasted(killer, weapon, bodypart)
 	if(source == localPlayer) then 
+		if(getPedOccupiedVehicle(localPlayer)) then
+			ClientVehicleExit(localPlayer, getPedOccupiedVehicleSeat(localPlayer))
+		end
+		
+		
 		if(InventoryWindows) then
 			SetupBackpack()
 		end
@@ -7555,8 +7560,8 @@ function onWasted(killer, weapon, bodypart)
 		if(PData["fishpos"]) then
 			triggerServerEvent("StopFish", localPlayer, localPlayer)
 		end
-		if(PData["drx"]) then PData["drx"], PData["dry"], PData["drz"] = false, false, false end
-		setGameSpeed(0.5)
+		
+		setGameSpeed(0.7)
 		
 		RemoveInventory()
 		PData["wasted"] = Text("ПОТРАЧЕНО")

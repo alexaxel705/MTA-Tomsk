@@ -1324,41 +1324,73 @@ BotSkin["Колумбийский картель"] = {222,95,30,242,179}
 
 -- Старухи, итд
 local BotSkinSpecific = {
-	["Полиция"] = {
+	["Мирные жители"] = {
 		["Las Venturas"] = {
 			["Starfish Casino"] = {27,153,260},
 			["Yellow Bell Golf Course"] = {36,37}, 
-			["The Four Dragons Casino"] = {82,83,84,85,141,150,147,233, 282},
-			["The Strip"] = {82,83,84,85,141,150,147,233, 282},
+			["The Four Dragons Casino"] = {82,83,84,85,141,150,147,233},
+			["The Strip"] = {82,83,84,85,141,150,147,233},
 			["Greenglass College"] = {23, 56, 60, 72, 93, 141, 150, 181, 190, 188, 193, 195, 211, 226},
-			["all"] = {7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,90,92,99,236,56, 282, 282, 282}
+			["all"] = {7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,90,92,99,236,56}
 		},
 		["Tierra Robada"] = {
-			["all"] = {38,89, 198, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56,128, 283, 283, 283}
+			["all"] = {38,89, 198, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56,128}
 		},
 		["Bone County"] = {
-			["all"] = {39,129, 198, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56,128, 283, 283, 283}
+			["all"] = {39,129, 198, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56,128}
 		},
 		["San Fierro"] = {
-			["all"] = {196, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,92,99,236,56, 281, 281, 284, 284}
+			["all"] = {196, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,92,99,236,56}
 		},
 		["Red County"] = {
-			["all"] = {130,199, 201, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56, 288, 288, 288}
+			["all"] = {130,199, 201, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56}
 		},
 		["Whetstone"] = {
-			["all"] = {218, 201, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56, 288, 288, 288}
+			["all"] = {218, 201, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56}
 		},
 		["Flint County"] = {
-			["all"] = {197, 201, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56, 288, 288, 288}
+			["all"] = {197, 201, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56}
 		},
 		["Los Santos"] = {
-			["all"] = {10, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,90,92,99,236,56, 280, 280, 280}
+			["all"] = {10, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,90,92,99,236,56}
 		},
 		["Unknown"] = {
-			["all"] = {10,38,39,89,129,130,196,197,199,218, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56, 280, 281, 282, 283, 284, 288}
+			["all"] = {10,38,39,89,129,130,196,197,199,218, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56}
 		},
 		["Unknown Bar"] = {
 			["Unknown Bar"] = {102,103,104, 105,106,107, 108,109,110, 173,174,175, 159,160,161,162, 117,118,120, 121,122,123, 114,115,116, 181,247,248,100, 111,112,113, 222,95,30,242,179}
+		}
+	},
+	["Полиция"] = {
+		["Las Venturas"] = {
+			["all"] = {282}
+		},
+		["Tierra Robada"] = {
+			["all"] = {283}
+		},
+		["Bone County"] = {
+			["all"] = {283}
+		},
+		["San Fierro"] = {
+			["all"] = {284}
+		},
+		["Red County"] = {
+			["all"] = {288}
+		},
+		["Whetstone"] = {
+			["all"] = {288}
+		},
+		["Flint County"] = {
+			["all"] = {288}
+		},
+		["Los Santos"] = {
+			["all"] = {280}
+		},
+		["Unknown"] = {
+			["all"] = {280, 281, 282, 283, 284, 288}
+		},
+		["Unknown Bar"] = {
+			["Unknown Bar"] = {280, 281, 282, 283, 284, 288}
 		}
 	}
 }
@@ -1612,20 +1644,30 @@ local TeamVehicle = {
 	["Байкеры"] = {{468,"METAL228"}, {463,"METAL228"}, {586 ,"METAL228"}},
 	--{для всех}, {такси}, {эксклюзивы}, {полиция}
 	["Полиция"] = {
-		["Los Santos"] = {{404},{419},{439},{496},{475}, {420}, {603}, {467},{436},{585},{462},{602},{458},{526},{527},{529},{566},{540},{547},{546},{466},{491},{507},{516},{426}, {596, "POLS 228"}}, -- Phoenix эксклюзив 
-		["Red County"] = {{404},{419},{439},{496},{475}, {477}, {478},{489},{554},{483},{468}, {599, "PORC"}}, -- ZR-350 эксклюзив
-		["Whetstone"] = {{404},{419},{439},{496},{475}, {506}, {478},{483},{489},{554},{468}, {599, "POWS 228"}}, -- Super GT эксклюзив
-		["Flint County"] = {{404},{419},{439},{496},{475}, {402}, {478},{483},{489},{554},{468}, {599, "POFC 228"}}, -- Buffalo эксклюзив
-		["San Fierro"] = {{404},{419},{439},{496},{475}, {415}, {438},{579},{554},{468},{550},{580},{405},{421},{426},{445},{507},{540},{551},{418}, {597, "POSF 228"}}, -- Cheetah эксклюзив
-		["Bone County"] = {{404},{419},{439},{496},{475}, {480}, {549},{554},{500},{586},{505},{518},{542},{543},{604},{605},{508}, {598, "POBC 228"}}, -- Comet эксклюзив
-		["Tierra Robada"] = {{404},{419},{439},{496},{475}, {533}, {549},{500},{586},{505},{518},{542},{543},{604},{605},{508}, {598, "POTR 228"}}, -- Feltzer эксклюзив
-		["Las Venturas"] = {{404},{419},{439},{496},{475}, {420}, {541}, {400},{555},{587},{589},{463},{561},{560},{559},{558},{562},{400},{565},{575}, {598, "POLV 228"}}, -- Bullet эксклюзив
+		["Los Santos"] = {{596, "POLS 228"}, {523}}, 
+		["Red County"] = {{599, "PORC"}, {523}}, 
+		["Whetstone"] = {{599, "POWS 228"}, {523}}, 
+		["Flint County"] = {{599, "POFC 228"}, {523}}, 
+		["San Fierro"] = {{597, "POSF 228"}, {523}}, 
+		["Bone County"] = {{598, "POBC 228"}, {523}}, 
+		["Tierra Robada"] = {{598, "POTR 228"}, {523}}, 
+		["Las Venturas"] = {{598, "POLV 228"}, {523}}, 
+	},
+	["Мирные жители"] = {
+		["Los Santos"] = {{404},{419},{439},{496},{475}, {420}, {603}, {467},{436},{585},{462},{602},{458},{526},{527},{529},{566},{540},{547},{546},{466},{491},{507},{516},{426}}, -- Phoenix эксклюзив 
+		["Red County"] = {{404},{419},{439},{496},{475}, {477}, {478},{489},{554},{483},{468}}, -- ZR-350 эксклюзив
+		["Whetstone"] = {{404},{419},{439},{496},{475}, {506}, {478},{483},{489},{554},{468}}, -- Super GT эксклюзив
+		["Flint County"] = {{404},{419},{439},{496},{475}, {402}, {478},{483},{489},{554},{468}}, -- Buffalo эксклюзив
+		["San Fierro"] = {{404},{419},{439},{496},{475}, {415}, {438},{579},{554},{468},{550},{580},{405},{421},{426},{445},{507},{540},{551},{418}}, -- Cheetah эксклюзив
+		["Bone County"] = {{404},{419},{439},{496},{475}, {480}, {549},{554},{500},{586},{505},{518},{542},{543},{604},{605},{508}}, -- Comet эксклюзив
+		["Tierra Robada"] = {{404},{419},{439},{496},{475}, {533}, {549},{500},{586},{505},{518},{542},{543},{604},{605},{508}}, -- Feltzer эксклюзив
+		["Las Venturas"] = {{404},{419},{439},{496},{475}, {420}, {541}, {400},{555},{587},{589},{463},{561},{560},{559},{558},{562},{400},{565},{575}}, -- Bullet эксклюзив
 		["Unknown"] = {{404},{419},{439},{496},{475}}
 	},
 	["Вагос"] = {{474,"VAGOS228",{6, 6, 0, 0}}, {467,"VAGOS228",{6, 6, 0, 0}}, {576 ,"VAGOS228",{6, 6, 0, 0}}},
 	["Колумбийский картель"] = {{422,"COKA 228",{116, 116, 116, 116},{2, 2}}, {440,"COKA 228",{116, 116, 116, 116},{1, 1}}, {600 ,"COKA 228",{116, 116, 116, 116},{2, 2}}, {543 ,"COKA 228",{116, 116, 116, 116},{4, 4}}},
 	["Русская мафия"] = {{560,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {445,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {581,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {409,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}},
-	["Триады"] = {{560,"TRIA 228",{0,0,0,0}}, {445,"TRIA 228",{0,0,0,0}}, {414,"TRIA 228",{83,83,83,83},{5,5}}, {487,"TRIA 228",{0,0,0,0}}},
+	["Триады"] = {{560,"TRIA 228",{0,0,0,0}}, {445,"TRIA 228",{0,0,0,0}}, {414,"TRIA 228",{83,83,83,83},{5,5}}},
 	["Якудзы"] = {{439,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {482,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {467,"YAZA 228",{177,15,11, 255,255,255}, {0, 0}, "createYakuza"}},
 	["Рифа"] = {{536,"RIFA 228",{94, 94, 0, 0}}, {439,"RIFA 228",{94, 94, 0, 0}}, {475 ,"RIFA 228",{94, 94, 0, 0}}},
 	["Деревенщины"] = {{478,"KOLHZ228",{61, 61, 0, 0}}, {543 ,"KOLHZ228",{61, 61, 0, 0}}, {531,"KOLHZ228",{61, 61, 0, 0}}}
@@ -2687,7 +2729,7 @@ local VehicleSystem = {
 	[522] = {0.67, "HRD 1200 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 12", 13, {2, 1984}, {7, 2002}, "Export"},
 	[554] = {1.08, "TF 1.3 L", "", "R5 170", "Macpherson V13", "Wilwood 245mm", "Michelin 13", 100, {6, 1988}, {2, 1999}, "Export"},
 	[586] = {0.62, "HRD 750 CC", "", "R4 190", "Macpherson V14", "Brembo 14", "Michelin 14", 26, {3, 1941}, {3, CYear}, "Western Motorcycle Company"},
-	[523] = {0.57, "HRD 950 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 15", 16, {4, 1976}, {10, CYear}, "Export"},
+	[523] = {0.57, "HRD 950 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 15", 16, {4, 1966}, {10, CYear}, "Export"},
 	[406] = {2.52, "MT 2", "", "R4 110", "Macpherson V15", "Brembo 15", "Michelin 16", 666, {1, 1974}, {8, CYear}, "DUDE"},
 	[422] = {0.99, "HLR D 1.8 L", "", "A5 165", "Macpherson V153", "Brembo 245mm", "Michelin 117", 56, {1, 1983}, {1, 1988}, "Vapid"},
 	[438] = {1, "SFP 1.5 L", "", "R4 160", "Macpherson V17", "Wilwood 210mm", "Michelin 17", 58, {4, 1947}, {0, 1982}, "Export"},
@@ -4339,7 +4381,7 @@ function SpawnAllVehicle()
 	end
 	for _,k in pairs(RandVeh) do
 		local region = getZoneName(k[1], k[2], k[3], true)
-		local vehinfo = NewTeamVehicle["Полиция"][region][math.random(#NewTeamVehicle["Полиция"][region])]
+		local vehinfo = NewTeamVehicle["Мирные жители"][region][math.random(#NewTeamVehicle["Мирные жители"][region])]
 		RandomVehicles[#RandomVehicles+1] = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6], vehinfo[2], true)
 		
 		if(getElementData(RandomVehicles[#RandomVehicles], "trunk")) then
@@ -5091,7 +5133,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = int[2], int[3], int[4],int[1],0
 
-		local x,y,z,i,d  = 2009.7, -1637.9, 13.5, 0, 0 --
+		local x,y,z,i,d  = -2109.3, 86.2, 34.2, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7323,17 +7365,22 @@ function preLoad(name)
 				local VehicleCount = 1
 				for v,k in pairs(VehicleSpawnPoint[name]) do
 					local vehinfo = false
-					if(zoneowner == "Полиция") then
+					if(zoneowner == "Полиция" or zoneowner == "Мирные жители") then
 						local region = getZoneName(k[1], k[2], k[3], true)
-						vehinfo = NewTeamVehicle[zoneowner][region][math.random(#NewTeamVehicle[zoneowner][region])]
+						vehinfo = NewTeamVehicle["Мирные жители"][region][math.random(#NewTeamVehicle["Мирные жители"][region])]
 					else
 						if(not NewTeamVehicle[zoneowner][VehicleCount]) then
 							VehicleCount = 1
 						end
 						vehinfo = NewTeamVehicle[zoneowner][VehicleCount]
 					end
-
-					local theVehicle = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6], vehinfo[2], true)
+					
+					local theVehicle = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6])
+					
+					if(vehinfo[2]) then
+						setVehiclePlateText(theVehicle, vehinfo[2])
+					end
+					
 					if(vehinfo[3]) then
 						if(#vehinfo[3] == 4) then
 							setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4])
@@ -7552,7 +7599,16 @@ function CreateRandomBot(x,y,z,rz,i,d,zone,ind)
 	local team = GetDatabaseZoneNode(zone)
 	if(not team) then team = "Полиция" end
 	
-	skin = BotSkin[team][math.random(#BotSkin[team])]
+
+	local rand = math.random(1,3)
+	if(rand > 1) then
+		team = "Мирные жители"
+	end
+	
+	if(BotSkin[team]) then
+		skin = BotSkin[team][math.random(#BotSkin[team])]
+	end
+	
 	if(BotSkinSpecific[team]) then
 		if(BotSkinSpecific[team][ZonesRegion[zone]]) then
 			if(BotSkinSpecific[team][ZonesRegion[zone]][zone]) then
@@ -7566,13 +7622,6 @@ function CreateRandomBot(x,y,z,rz,i,d,zone,ind)
 	end
 	return CreateBot(skin,x,y,z,rz,i,d,zone,ind)
 end
-
-
-
-
-
-
-
 
 
 
@@ -10559,7 +10608,7 @@ function worldtime()
 					advinfo = advinfo.."#FFFFFFУничтожь вражескую технику "..#VehicleBand[zone]-TotalVehicle.."/"..#VehicleBand[zone].."\n"
 				end
 				if(TotalBot > 0) then
-					advinfo = advinfo.."#FFFFFFУбей врагов "..#BotCreated[zone]-TotalBot.."/"..#BotCreated[zone].."\n"
+					advinfo = advinfo.."#FFFFFFУбей врагов "..TotalBot.."\n"
 				end
 				for playerKey, playerValue in ipairs (PlayerInZone) do
 					triggerClientEvent(playerValue, "ChangeInfoAdv", playerValue, advinfo, 2000)
@@ -11249,21 +11298,7 @@ function CreateDynamicBot(node, id)
 		local nextnode2, nextid2 = unpack(FoundNextRandomNode(nextnode, nextid))
 		
 		
-		skin = BotSkin["Полиция"][math.random(#BotSkin["Полиция"])]
-		if(BotSkinSpecific["Полиция"]) then
-			if(BotSkinSpecific["Полиция"][ZonesRegion[node]]) then
-				if(BotSkinSpecific["Полиция"][ZonesRegion[node]][node]) then
-					skin = BotSkinSpecific["Полиция"][ZonesRegion[node]][node][math.random(#BotSkinSpecific["Полиция"][ZonesRegion[node]][node])]
-				else
-					if(BotSkinSpecific["Полиция"][ZonesRegion[node]]["all"]) then
-						skin = BotSkinSpecific["Полиция"][ZonesRegion[node]]["all"][math.random(#BotSkinSpecific["Полиция"][ZonesRegion[node]]["all"])]
-					end
-				end
-			end
-		end
-		
-		
-		local thePed = CreateBot(skin,x,y,z,0,0,0,getZoneName(x,y,z))
+		local thePed = CreateRandomBot(x,y,z,0,0,0,getZoneName(x,y,z))
 		
 		SData["DriverBot"][thePed] = "auto"
 		
@@ -11344,18 +11379,43 @@ function PlayerElementSync(thePlayer, obj, state)
 						local arr = fromJSON(getElementData(obj, "CurNode"))
 						local node, id = arr[1], arr[2]
 						local nextnode, nextid = unpack(FoundNextRandomNode(node, id))
-						local model = table.copy(NewTeamVehicle["Полиция"][ZonesRegion[node]])
-						if(VehicleRegionSpecific[node]) then
-							for _, k in pairs(VehicleRegionSpecific[node]) do
-								model[#model+1] = {k}
-							end
+						local team = getElementData(obj, "team")
+
+						
+																		
+						local vehinfo = false
+						if(team == "Полиция" or team == "Мирные жители") then
+							local region = getZoneName(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4], true)
+							vehinfo = NewTeamVehicle[team][region][math.random(#NewTeamVehicle[team][region])]
+						else
+							vehinfo = NewTeamVehicle[team][math.random(#NewTeamVehicle[team])]
 						end
-						model = model[math.random(#model)][1]
-						local x,y,z = PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4]+VehicleSystem[model][1]
+						
+						local x,y,z = PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4]+VehicleSystem[vehinfo[1]][1]
 						local x2,y2,z2 = PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4]
 						local rotz = findRotation(x,y, x2,y2)
 						
-						local theVehicle = CreateVehicle(model, x, y, z, 0, 0, rotz)
+						local theVehicle = CreateVehicle(vehinfo[1], x, y, z, 0, 0, rotz)
+									
+						if(vehinfo[2]) then
+							setVehiclePlateText(theVehicle, vehinfo[2])
+						end
+						
+						if(vehinfo[3]) then
+							if(#vehinfo[3] == 4) then
+								setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4])
+							else
+								setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4], vehinfo[3][5], vehinfo[3][6])
+							end
+						end
+						if(vehinfo[4]) then 
+							setVehicleVariant(theVehicle, vehinfo[4][1], vehinfo[4][2], vehinfo[4][3], vehinfo[4][4])
+						end
+						if(vehinfo[5]) then 
+							triggerEvent(vehinfo[5], theVehicle)
+						end
+						
+						
 						setElementData(theVehicle, "destroy", "true", false)
 						warpPedIntoVehicle(obj,theVehicle)
 					end
@@ -12615,7 +12675,7 @@ function AddCollections(thePlayer, model, id)
 		[953] = {"Ракушек", 50},
 		[1276] = {"Скрытых пакетов", 100}
 	}
-	MissionCompleted(thePlayer, "#169AFA"..CollectionNames[model][1].." "..getArrSize(dat[tostring(model)]).." из "..CollectionNames[model][2])
+	MissionCompleted(thePlayer, "#169AFA"..CollectionNames[model][1].." найдено "..getArrSize(dat[tostring(model)]).." из "..CollectionNames[model][2])
 end
 addEvent("AddCollections", true)
 addEventHandler("AddCollections", root, AddCollections)
