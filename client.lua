@@ -8559,7 +8559,7 @@ function DrawPlayerMessage()
 				dxDrawCircle(cposx+(30*NewScale), cposy+(20*NewScale), 40*NewScale, 5*NewScale, 1, 0, 360, tocolor(20,24,20,15))
 
 				dxDrawImage(cposx, cposy-(5*NewScale), 60*NewScale, 40*NewScale, items[name][1])
-				dxDrawBorderedText(dat[1]-dat[2].."/"..dat[2], cposx+(165*NewScale), cposy+(35*NewScale), 0, 0, tocolor(255, 255, 255, 255), NewScale*1.5, "default-bold", "center", "top", nil, nil, nil, true)
+				dxDrawBorderedText(dat[1]-dat[2].."/"..dat[1], cposx+(165*NewScale), cposy+(35*NewScale), 0, 0, tocolor(255, 255, 255, 255), NewScale*1.5, "default-bold", "center", "top", nil, nil, nil, true)
 				cposy = cposy-(100*NewScale)
 			end
 			
