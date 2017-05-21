@@ -119,6 +119,7 @@ local SpunkTimer = false
 local GPSObject = {}
 local speed = "000"
 local VehicleSpeed = 0
+local SlowTahometer = 0
 local screenSource = dxCreateScreenSource(screenWidth, screenHeight)
 local ScreenGenSource = dxCreateScreenSource(screenWidth/10, screenHeight/10)
 local IDF, NF, RANG, PING = false
@@ -3651,6 +3652,70 @@ local VehTypeSkill = {
 }
 
 
+
+
+
+
+function getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears) -- engineAcceleration, dragCoeff, numberOfGears
+	return (math.sqrt(3300*engineAcceleration/dragCoeff)*1.18)/numberOfGears
+end
+
+
+function getVehicleGear(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
+	local onegear = getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears)
+	local result
+	for Gear = 0, numberOfGears, 1 do
+		if(getVehicleCurrentGear(theVehicle) > 0) then
+			if(onegear*Gear <= VehicleSpeed) then
+				if((Gear+1) <= numberOfGears) then
+					result=(Gear+1)
+				end
+			end
+		else
+			result=0
+		end
+	end
+    return result
+end
+
+
+
+function getVehicleRPM(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
+	local onegear = getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears)
+	local MaxRPM = GetVehicleMaxRPM(engineAcceleration)
+	local Gear = getVehicleGear(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
+	local crpm = 0
+	if(getKeyState("w") and getKeyState("s") or getKeyState("w") and getKeyState("space")) then
+		crpm = MaxRPM/onegear*(onegear-((onegear*Gear)-onegear))
+	else
+		if(Gear > 0) then
+			crpm = MaxRPM/onegear*(onegear-((onegear*Gear)-VehicleSpeed))
+		else
+			crpm = MaxRPM/onegear*((VehicleSpeed-onegear*Gear))
+		end
+	end
+	if getVehicleEngineState(theVehicle) == true then
+		if(crpm < 800) then 
+			crpm = 800
+		else
+			if(crpm > MaxRPM) then crpm = MaxRPM end -- Костыль
+		end
+	end
+    return crpm
+end
+
+
+function GetVehicleMaxRPM(engineAcceleration)
+	return (((10*(engineAcceleration))*1.5))*40
+end
+
+
+
+
+
+
+
+
 function updateWorld()
 	UpdateBot()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
@@ -3663,6 +3728,167 @@ function updateWorld()
 				local VehType = getVehicleType(theVehicle)
 				PData["drdist"] = 0
 				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 10)
+			end
+			
+			if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
+				if(not isVehicleOnGround(theVehicle)) then
+					if(not PData["jump"]) then 
+						PData["jump"] = {0} 
+						PData["jump"][2], PData["jump"][3], PData["jump"][4] = getElementPosition(theVehicle)
+						PData["jump"][5], PData["jump"][6], PData["jump"][7] = getElementRotation(theVehicle)
+						PData["jump"][8], PData["jump"][9], PData["jump"][10] = 0, 0, 0
+					end
+					PData["jump"][1] = PData["jump"][1]+0.5
+					if(PData["jump"][1] >= 20) then
+						RageInfo(Text("Отрыв от земли +{points}", {{"{points}", math.round(PData["jump"][1], 0)}}))
+						
+						local rx,ry,rz = getElementRotation(theVehicle)
+						PData["jump"][8] = math.round(PData["jump"][8]+MinusToPlus(math.sin(rx-PData["jump"][5])), 0)
+						PData["jump"][9] = math.round(PData["jump"][9]+MinusToPlus(math.sin(ry-PData["jump"][6])), 0)
+						PData["jump"][10] = math.round(PData["jump"][10]+MinusToPlus(math.sin(rz-PData["jump"][7])), 0)
+						
+						PData["jump"][5], PData["jump"][6], PData["jump"][7] = getElementRotation(theVehicle)
+						
+					end
+				else
+					if(PData["jump"]) then
+						if(PData["jump"][1] >= 20) then
+							AddRage(math.round(PData["jump"][1], 0))
+							local x,y,z = getElementPosition(theVehicle)
+							local jumph = math.floor(PData["jump"][4]-z, 1)
+							if(jumph < 0) then jumph = jumph-jumph-jumph end
+							if(jumph > 10) then
+								local salto = (math.round(PData["jump"][8]/360, 0))+(math.round(PData["jump"][9]/360, 0))+(math.round(PData["jump"][10]/360, 0))
+								helpmessage("Дистанция: "..math.floor(getDistanceBetweenPoints2D(PData["jump"][2], PData["jump"][3], x,y), 1)..
+								"м Высота: "..jumph.."м "..
+								"Переворотов: "..salto..
+								" Вращение: "..PData["jump"][8]+PData["jump"][9]+PData["jump"][10].."°")
+							end
+						end
+						PData["jump"] = nil
+					end
+				end
+			end
+				
+				
+			if(VehicleSpeed > 100) then
+				local vxl,vyl,vzl, vxr, vyr, vzr = false
+				local vxc, vyc, vzc = getElementPosition(theVehicle)
+				if(getVehicleType(theVehicle) == "Automobile") then
+					vxl, vyl, vzl = getVehicleComponentPosition(theVehicle, "wheel_lf_dummy", "world")
+					vxr, vyr, vzr = getVehicleComponentPosition(theVehicle, "wheel_rf_dummy", "world")
+				elseif(getVehicleType(theVehicle) == "Bike") then
+					vxl, vyl, vzl = getVehicleComponentPosition(theVehicle, "wheel_front", "world")
+					vxr, vyr, vzr = getVehicleComponentPosition(theVehicle, "wheel_front", "world")
+				end
+				
+				if(vxr) then
+					local _,_,rz = getElementRotation(theVehicle)
+					
+					local x,y,z = getPointInFrontOfPoint(vxc, vyc, vzc, rz-270, 30)
+					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxc, vyc, vzc,x,y,z, false, true, false, false, false, false, false, false, theVehicle,false,false)
+					if(hitElement) then
+						if(not PData["VehicleBonus3"]) then PData["VehicleBonus3"] = 0 end
+						PData["VehicleBonus3"] = PData["VehicleBonus3"] + 0.2
+						if(PData["VehicleBonus3"] > 1) then 
+							RageInfo(Text("Преследование +{points}", {{"{points}", math.round(PData["VehicleBonus3"], 0)}}))
+						end
+					else
+						if(PData["VehicleBonus3"]) then
+							if(PData["VehicleBonus3"] > 1) then 
+								AddRage(math.round(PData["VehicleBonus3"], 0))
+								PData["VehicleBonus3"] = nil
+							end
+						end
+					end
+					
+					
+					x,y,z = getPointInFrontOfPoint(vxl, vyl, vzl, rz-180, 1)
+					_,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxl,vyl,vzl+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
+					if(hitElement) then
+						local occ = getVehicleOccupant(hitElement)
+						if(occ) then
+							if(getElementType(occ) == "ped") then
+								local _, _, brz = getElementRotation(hitElement)
+								if(brz-rz >= 40 or brz-rz <= -40) then
+									if(not isTimer(PData["VehicleBonus"])) then
+										AddRage(math.round(VehicleSpeed-100, 0))
+										RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
+										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+									end
+									
+									setPedControlState(occ, "horn", true)
+									setTimer(function() 
+										if(getPedControlState(occ, "horn")) then
+											setPedControlState(occ, "horn", false)
+										else
+											setPedControlState(occ, "horn", true)
+										end
+									end, math.random(100,500), 5)
+								else
+									if(not isTimer(PData["VehicleBonus"])) then
+										AddRage(math.round(VehicleSpeed-100, 0))
+										RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
+										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+									end
+									
+									setPedControlState(occ, "horn", true)
+									setTimer(function() 
+										if(getPedControlState(occ, "horn")) then
+											setPedControlState(occ, "horn", false)
+										else
+											setPedControlState(occ, "horn", true)
+										end
+									end, math.random(100,500), 5)
+								end
+							end
+						end
+					end
+					
+			
+					
+					x,y,z = getPointInFrontOfPoint(vxr, vyr, vzr, rz, 1)
+					_,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxr, vyr, vzr+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
+					if(hitElement) then
+						local occ = getVehicleOccupant(hitElement)
+						if(occ) then
+							if(getElementType(occ) == "ped") then
+								local _, _, brz = getElementRotation(hitElement)
+								if(brz-rz >= 40 or brz-rz <= -40) then
+									if(not isTimer(PData["VehicleBonus"])) then
+										AddRage(math.round(VehicleSpeed-100, 0))
+										RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
+										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+									end
+									
+									setPedControlState(occ, "horn", true)
+									setTimer(function() 
+										if(getPedControlState(occ, "horn")) then
+											setPedControlState(occ, "horn", false)
+										else
+											setPedControlState(occ, "horn", true)
+										end
+									end, math.random(100,500), 5)
+								else	
+									if(not isTimer(PData["VehicleBonus"])) then
+										AddRage(math.round(VehicleSpeed-100, 0))
+										RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
+										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
+									end
+									
+									setPedControlState(occ, "horn", true)
+									setTimer(function() 
+										if(getPedControlState(occ, "horn")) then
+											setPedControlState(occ, "horn", false)
+										else
+											setPedControlState(occ, "horn", true)
+										end
+									end, math.random(100,500), 5)
+								end
+							end
+						end
+					end
+				end
 			end
 		end
 	end
@@ -4689,66 +4915,6 @@ addEventHandler("intro", localPlayer, intro)
 
 
 
-
-function getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears) -- engineAcceleration, dragCoeff, numberOfGears
-	return (math.sqrt(3300*engineAcceleration/dragCoeff)*1.18)/numberOfGears
-end
-
-
-function getVehicleGear(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
-	local onegear = getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears)
-	local result
-	for Gear = 0, numberOfGears, 1 do
-		if(getVehicleCurrentGear(theVehicle) > 0) then
-			if(onegear*Gear <= VehicleSpeed) then
-				if((Gear+1) <= numberOfGears) then
-					result=(Gear+1)
-				end
-			end
-		else
-			result=0
-		end
-	end
-    return result
-end
-
-
-
-function getVehicleRPM(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
-	local onegear = getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears)
-	local MaxRPM = GetVehicleMaxRPM(engineAcceleration)
-	local Gear = getVehicleGear(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
-	if(getKeyState("w") and getKeyState("s") or getKeyState("w") and getKeyState("space")) then
-		RPM = MaxRPM/onegear*(onegear-((onegear*Gear)-onegear))
-	else
-		if(Gear > 0) then
-			RPM = MaxRPM/onegear*(onegear-((onegear*Gear)-VehicleSpeed))
-		else
-			RPM = MaxRPM/onegear*((VehicleSpeed-onegear*Gear))
-		end
-	end
-	if getVehicleEngineState(theVehicle) == true then
-		if(RPM < 800) then 
-			RPM = 800
-		else
-			if(RPM > MaxRPM) then RPM = MaxRPM end -- Костыль
-		end
-	else
-		RPM = 0
-	end
-    return RPM
-end
-
-
-function GetVehicleMaxRPM(engineAcceleration)
-	return (((10*(engineAcceleration))*1.5))*40
-end
-
-
-
-
-
-
 function RespectMessage(group, count) 
 	if(PData["wasted"]) then
 		SpawnAction[#SpawnAction+1] = {"RespectMessage", localPlayer, group, count}
@@ -5715,8 +5881,10 @@ function CreateTarget(el)
 		if(dist < 2) then
 			if(types == "vehicle") then 
 				local driver = getVehicleOccupant(el)
-				if(getElementType(driver) == "ped") then
-					PData["MultipleAction"]["f"] = {"CarJack", false, false, false}
+				if(driver) then
+					if(getElementType(driver) == "ped") then
+						PData["MultipleAction"]["f"] = {"CarJack", false, false, false}
+					end
 				end
 			end
 		end
@@ -5819,7 +5987,6 @@ addEvent("ShakeLevel", true)
 addEventHandler("ShakeLevel", localPlayer, ShakeLevel)
 
 
-local SlowTahometer = 0
 
 
 
@@ -8873,11 +9040,9 @@ function DrawPlayerMessage()
 					end
 				end
 
-
 				
 				local vx, vy, vz = getElementVelocity(theVehicle)
 				VehicleSpeed = (vx^2 + vy^2 + vz^2)^(0.5)*156
-				
 				
 				speed = tostring(math.floor(VehicleSpeed))
 				for i = #speed, 2 do
@@ -8919,133 +9084,6 @@ function DrawPlayerMessage()
 					RPMMeter = 11.2
 					RPMDate = 20000
 				end
-			
-				if(not isTimer(PData["VehicleBonus"])) then
-					if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
-						if(not isVehicleOnGround(theVehicle)) then
-							if(not PData["jump"]) then 
-								PData["jump"] = {0} 
-								PData["jump"][2], PData["jump"][3], PData["jump"][4] = getElementPosition(theVehicle)
-								PData["jump"][5], PData["jump"][6], PData["jump"][7] = getElementRotation(theVehicle)
-								PData["jump"][8], PData["jump"][9], PData["jump"][10] = 0, 0, 0
-							end
-							PData["jump"][1] = PData["jump"][1]+0.5
-							if(PData["jump"][1] >= 20) then
-								RageInfo(Text("Отрыв от земли +{points}", {{"{points}", math.round(PData["jump"][1], 0)}}))
-								
-								local rx,ry,rz = getElementRotation(theVehicle)
-								PData["jump"][8] = math.round(PData["jump"][8]+MinusToPlus(math.sin(rx-PData["jump"][5])), 0)
-								PData["jump"][9] = math.round(PData["jump"][9]+MinusToPlus(math.sin(ry-PData["jump"][6])), 0)
-								PData["jump"][10] = math.round(PData["jump"][10]+MinusToPlus(math.sin(rz-PData["jump"][7])), 0)
-								
-								PData["jump"][5], PData["jump"][6], PData["jump"][7] = getElementRotation(theVehicle)
-								
-							end
-						else
-							if(PData["jump"]) then
-								if(PData["jump"][1] >= 20) then
-									AddRage(math.round(PData["jump"][1], 0))
-									local x,y,z = getElementPosition(theVehicle)
-									local jumph = math.floor(PData["jump"][4]-z, 1)
-									if(jumph < 0) then jumph = jumph-jumph-jumph end
-									if(jumph > 10) then
-										local salto = (math.round(PData["jump"][8]/360, 0))+(math.round(PData["jump"][9]/360, 0))+(math.round(PData["jump"][10]/360, 0))
-										helpmessage("Дистанция: "..math.floor(getDistanceBetweenPoints2D(PData["jump"][2], PData["jump"][3], x,y), 1)..
-										"м Высота: "..jumph.."м "..
-										"Переворотов: "..salto..
-										" Вращение: "..PData["jump"][8]+PData["jump"][9]+PData["jump"][10].."°")
-									end
-								end
-								PData["jump"] = nil
-							end
-						end
-					end
-					
-					
-					
-					if(VehicleSpeed <= 6) then
-						if(MaxRPM <= getVehicleRPM(theVehicle, PData["Handling"]["engineAcceleration"], PData["Handling"]["dragCoeff"], PData["Handling"]["numberOfGears"])) then
-							if(not PData["burnout"]) then PData["burnout"] = 0 end
-							PData["burnout"] = PData["burnout"]+(MaxRPM/25000)
-							if(PData["burnout"] >= 5) then
-								AddRage(MaxRPM/25000)
-								RageInfo(Text("Бернаут +{points}", {{"{points}", math.round(PData["burnout"], 0)}}))
-							end
-						else
-							if(PData["burnout"]) then
-								PData["burnout"] = nil
-							end
-						end
-					elseif(VehicleSpeed > 100) then
-						local vxl,vyl,vzl, vxr, vyr, vzr = false
-						local vxc, vyc, vzc = getElementPosition(theVehicle)
-						if(getVehicleType(theVehicle) == "Automobile") then
-							vxl, vyl, vzl = getVehicleComponentPosition(theVehicle, "wheel_lf_dummy", "world")
-							vxr, vyr, vzr = getVehicleComponentPosition(theVehicle, "wheel_rf_dummy", "world")
-						elseif(getVehicleType(theVehicle) == "Bike") then
-							vxl, vyl, vzl = getVehicleComponentPosition(theVehicle, "wheel_front", "world")
-							vxr, vyr, vzr = getVehicleComponentPosition(theVehicle, "wheel_front", "world")
-						end
-						
-						if(vxr) then
-							local _,_,rz = getElementRotation(theVehicle)
-							
-							local x,y,z = getPointInFrontOfPoint(vxc, vyc, vzc, rz-270, 30)
-							--dxDrawLine3D(vxc, vyc, vzc, x,y,z)
-							local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxc, vyc, vzc,x,y,z, false, true, false, false, false, false, false, false, theVehicle,false,false)
-							if(hitElement) then
-								if(not PData["VehicleBonus3"]) then PData["VehicleBonus3"] = 0 end
-								PData["VehicleBonus3"] = PData["VehicleBonus3"] + 0.2
-								if(PData["VehicleBonus3"] > 1) then 
-									RageInfo(Text("Преследование +{points}", {{"{points}", math.round(PData["VehicleBonus3"], 0)}}))
-								end
-							else
-								if(PData["VehicleBonus3"]) then
-									if(PData["VehicleBonus3"] > 1) then 
-										AddRage(math.round(PData["VehicleBonus3"], 0))
-										PData["VehicleBonus3"] = nil
-									end
-								end
-							end
-							
-							
-							x,y,z =  getPointInFrontOfPoint(vxl, vyl, vzl, rz-180, 1)
-							--dxDrawLine3D(vxl,vyl,vzl, x,y,z)
-							_,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxl,vyl,vzl+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
-							if(hitElement) then
-								local _, _, brz = getElementRotation(hitElement)
-								if(brz-rz >= 40 or brz-rz <= -40) then
-									AddRage(math.round(VehicleSpeed-100, 0))
-									RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
-									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-								else
-									AddRage(math.round(VehicleSpeed-100, 0))
-									RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
-									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-								end
-							end
-							
-					
-							
-							x,y,z =  getPointInFrontOfPoint(vxr, vyr, vzr, rz, 1)
-							--dxDrawLine3D(vxr, vyr, vzr, x,y,z)
-							_,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxr, vyr, vzr+0.5,x,y,z+0.5, false, true, false, false, false, false, false, false, theVehicle,false,false)
-							if(hitElement) then
-								local _, _, brz = getElementRotation(hitElement)
-								if(brz-rz >= 40 or brz-rz <= -40) then
-									AddRage(math.round(VehicleSpeed-100, 0))
-									RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
-									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-								else
-									AddRage(math.round(VehicleSpeed-100, 0))
-									RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
-									PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-								end
-							end
-						end
-					end
-				end
-				
 				
 				if(RPMDate) then
 					local RPM = (225*(getVehicleRPM(theVehicle, PData["Handling"]["engineAcceleration"], PData["Handling"]["dragCoeff"], PData["Handling"]["numberOfGears"])/RPMDate))
