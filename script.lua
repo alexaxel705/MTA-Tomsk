@@ -3271,7 +3271,7 @@ createObject(11393, -2043.5166015625, 161.337890625, 29.320350646973, 0,0,0)
 
 
 local ItemsTrade = {
-	["24/7"] = {{"Газета", "Trade", 450, {}}, {"Пакет", "Trade", 750, {["content"] = {{},{},{},{},{},{},{},{}}}}, {"CoK", "Trade", 450, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"Pissh", "Trade", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Trade", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Trade", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Канистра", "Trade", 450, {}}},
+	["24/7"] = {{"Газета", "Trade", 450, {}}, {"Пакет", "Trade", 750, {["content"] = {{},{},{},{},{},{},{},{}}}}, {"CoK", "Trade", 450, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"Pissh", "Trade", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Trade", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Trade", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Канистра", "Trade", 450, {}}, {"Спрей", "Trade", 450, {}}},
 	["Zip"] = {{"Чемодан", "Trade", 550, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{}}}}},
 	["ProLaps"] = {{"Бита", "Trade", 450, {}},{"Клюшка", "Trade", 450, {}}, {"Парашют", "Trade", 250, {}}},
 	["Binco"] = {{"Рюкзак", "Trade", 450, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}}}},
@@ -7157,6 +7157,7 @@ WeaponNamesArr["Бита"] = 5
 WeaponNamesArr["Парашют"] = 46
 WeaponNamesArr["Камера"] = 43
 WeaponNamesArr["Огнетушитель"] = 42
+WeaponNamesArr["Спрей"] = 41
 WeaponNamesArr["Бензопила"] = 9
 
 local ItemsNamesArr = {
@@ -12530,7 +12531,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Ракушка", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Спрей", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")

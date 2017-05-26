@@ -256,7 +256,8 @@ local TexturesPosition = {
 	["Газета"] = {0.8,0.2,0.75, 0.8,0.2,0, 0,70, 200},
 	["Деньги"] = {0.2,0.2,0.35, -0.05,-0.05,0, 0,70, 200},
 	["Кредитка"] = {-0.3,0.7,0.6, 0,0,0, 0,70, 200},
-	["Огнетушитель"] = {0.35,0.9,-0.1, 0.35,0,-0.1, 8,70, 110}, 
+	["Огнетушитель"] = {0.35,0.9,-0.06, 0.35,0,-0.06, 8,70, 110}, 
+	["Спрей"] = {0.05,-0.35,-0.05, 0.05,-0.05,-0.05, 0,70, 250}, 
 	["Ракушка"] = {0,1.2,0, 0,0,0, 0,70, 250}, 
 	--["Пропуск"] = {0,-0.6,-0.6, 0,0,0, 0,70, 200}, -- Object 1581
 }
@@ -325,7 +326,8 @@ local PreloadTextures = {
 	["Деньги"] = createObject(1212, 4360, 4000, 4020),
 	["Кредитка"] = createObject(1581, 4365, 4000, 4020),
 	["Огнетушитель"] = createObject(366, 4370, 4000, 4020),
-	["Ракушка"] = createObject(953, 4375, 4000, 4020),
+	["Спрей"] = createObject(365, 4375, 4000, 4020),
+	["Ракушка"] = createObject(953, 4380, 4000, 4020),
 }
 
 local CreateTextureStage = false
@@ -973,6 +975,7 @@ local items = {
 	["Катана"] = {false, "Катана настоящего якудзы", 1, "useinvweapon", 750, 1350, false, false, true},
 	["Камера"] = {false, "Обычная любительская фотокамера", 1, "useinvweapon", 570, 12000, false, false, true},
 	["Огнетушитель"] = {false, "Обычный огнетушитель", 1, "useinvweapon", 5000, 150, false, false, true},
+	["Спрей"] = {false, "Обычный спрей", 1, "useinvweapon", 340, 250, false, false, true},
 	["Бензопила"] = {false, "Просто бензопила", 1, "useinvweapon", 12500, 7700, false, false, true},
 
 	["Лазерный прицел"] = {"invobject/laser.png", "Лазерный прицел", 1, false, 420, 6800, {["лазер"] = {"M40", "АК-47", "М16", "ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg", "Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false},
@@ -1054,6 +1057,7 @@ local WeaponNamesArr = {
 	["Лопата"] = 6,
 	["Камера"] = 43,
 	["Огнетушитель"] = 42,
+	["Спрей"] = 41,
 	["Бензопила"] = 9,
 	["Нож"] = 4,
 	["Катана"] = 8, 
@@ -5516,7 +5520,9 @@ addEventHandler("InfoPathPed", localPlayer, InfoPathPed)
 function ShowInfoKey()
 	if(ShowInfo) then
 		ShowInfo = false
+		setDevelopmentMode(false)
 	else
+		setDevelopmentMode(true)
 		ShowInfo = true
 		GPS(math.random(-3000,3000), math.random(-3000,3000), math.random(-3000,3000), "Случайная точка ")
 	end
@@ -5561,12 +5567,12 @@ end
 
 
 
-
 function onClientPlayerWeaponFireFunc(weapon, ammo, ammoInClip, hitX, hitY, hitZ, hitElement)
 	if source == localPlayer then
 	    if(weapon == 43 and getElementModel(source) == 60) then
 			triggerServerEvent("doTakeScreenShot", localPlayer)
 		end
+		
 		
 		if(weapon == 42) then
 			if(getElementModel(hitElement) == 1362) then
