@@ -10572,23 +10572,25 @@ function worldtime()
 					local vx,vy,vz = getElementPosition(ped)
 					local team = getElementData(ped, "team")
 					if(team == GetDatabaseZoneNode(zone)) then
-						if(zone == getZoneName(vx,vy,vz) and not isPedDead(ped)) then
-							if(not isElement(BotBlip[ped])) then
-								BotBlip[ped] = createBlipAttachedTo(ped, 0, 2, r,g,b)
-								setElementVisibleTo(BotBlip[ped], root, false)
-								for v,k in pairs(PlayerInZone) do
-									setElementVisibleTo(BotBlip[ped], k, true)
+						if(not getElementData(ped, "NextNode")) then
+							if(zone == getZoneName(vx,vy,vz, false) and not isPedDead(ped)) then
+								if(not isElement(BotBlip[ped])) then
+									BotBlip[ped] = createBlipAttachedTo(ped, 0, 2, r,g,b)
+									setElementVisibleTo(BotBlip[ped], root, false)
+									for v,k in pairs(PlayerInZone) do
+										setElementVisibleTo(BotBlip[ped], k, true)
+									end
+								else
+									setElementVisibleTo(BotBlip[ped], root, false)
+									for v,k in pairs(PlayerInZone) do
+										setElementVisibleTo(BotBlip[ped], k, true)
+									end
 								end
+								TotalBot = TotalBot + 1
 							else
-								setElementVisibleTo(BotBlip[ped], root, false)
-								for v,k in pairs(PlayerInZone) do
-									setElementVisibleTo(BotBlip[ped], k, true)
+								if(isElement(BotBlip[ped])) then
+									destroyElement(BotBlip[ped])
 								end
-							end
-							TotalBot = TotalBot + 1
-						else
-							if(isElement(BotBlip[ped])) then
-								destroyElement(BotBlip[ped])
 							end
 						end
 					end
@@ -11163,33 +11165,36 @@ end
 
 
 function kr(thePlayer, vmodel, pedmodel)
-	local x,y,z = getElementPosition(thePlayer)
-	local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
-	if(i == 0 and d == 0) then
-		local arr = {
-			["west"] = NEWGPSFound(x-120,y,z, x,y,z), 
-			["east"] = NEWGPSFound(x+120,y,z, x,y,z), 
-			["south"] = NEWGPSFound(x,y+120,z, x,y,z), 
-			["north"] = NEWGPSFound(x,y-120,z, x,y,z)
-		}
+	if(not isTimer(PData[thePlayer]["PoliceTimer"])) then
+		local x,y,z = getElementPosition(thePlayer)
+		local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
+		if(i == 0 and d == 0) then
+			local arr = {
+				["west"] = NEWGPSFound(x-120,y,z, x,y,z), 
+				["east"] = NEWGPSFound(x+120,y,z, x,y,z), 
+				["south"] = NEWGPSFound(x,y+120,z, x,y,z), 
+				["north"] = NEWGPSFound(x,y-120,z, x,y,z)
+			}
 
-		for name, dat in pairs(arr) do
-			if(dat) then
-				if(#dat < 5) then -- Отсекаем слишком короткие пути
+			for name, dat in pairs(arr) do
+				if(dat) then
+					if(#dat < 5) then -- Отсекаем слишком короткие пути
+						arr[name] = nil
+					end
+				else
 					arr[name] = nil
 				end
-			else
-				arr[name] = nil
 			end
-		end
-		if(getArrSize(arr) > 0) then
-			local ind = 0
-			local minarrindex = math.random(getArrSize(arr))
-			for name, dat in pairs(arr) do
-				ind = ind+1
-				if(ind == minarrindex) then
-					local bx,by,bz = PathNodes[arr[name][1][1]][arr[name][1][2]][2], PathNodes[arr[name][1][1]][arr[name][1][2]][3], PathNodes[arr[name][1][1]][arr[name][1][2]][4]
-					PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[name], thePlayer)
+			if(getArrSize(arr) > 0) then
+				local ind = 0
+				local minarrindex = math.random(getArrSize(arr))
+				for name, dat in pairs(arr) do
+					ind = ind+1
+					if(ind == minarrindex) then
+						local bx,by,bz = PathNodes[arr[name][1][1]][arr[name][1][2]][2], PathNodes[arr[name][1][1]][arr[name][1][2]][3], PathNodes[arr[name][1][1]][arr[name][1][2]][4]
+						PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[name], thePlayer)
+						PData[thePlayer]["PoliceTimer"] = setTimer(function(thePlayer) end, 10000, 1, thePlayer)
+					end
 				end
 			end
 		end
