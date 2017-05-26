@@ -14912,7 +14912,7 @@ function CreateFire(arr)
 	for v, k in pairs(arr) do
 		local fireId = #AllFires+1
 		AllFires[fireId] = {}
-		AllFires[fireId]["obj"] = createObject(1362, k[1],k[2],k[3]-0.55)
+		AllFires[fireId]["obj"] = createObject(1362, k[1],k[2],k[3]-0.6)
 		setElementData(AllFires[fireId]["obj"], "fireid", fireId)
 		
 		AllFires[fireId]["mar"] = createMarker(k[1], k[2], k[3], "checkpoint", 1, 0,0,0,0)

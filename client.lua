@@ -5566,18 +5566,29 @@ function park()
 end
 
 
-
 function onClientPlayerWeaponFireFunc(weapon, ammo, ammoInClip, hitX, hitY, hitZ, hitElement)
 	if source == localPlayer then
-	    if(weapon == 43 and getElementModel(source) == 60) then
-			triggerServerEvent("doTakeScreenShot", localPlayer)
+		if(not hitElement) then
+			local col = createObject(16635, hitX, hitY, hitZ)
+			for _, v in pairs(getElementsByType("colshape", getRootElement(), true)) do
+				if(isElementWithinColShape(col, v)) then
+					hitElement = getElementAttachedTo(v)
+				end
+			end
+			destroyElement(col)
 		end
 		
 		
-		if(weapon == 42) then
+		if(weapon == 41) then
+			if(getElementModel(hitElement) == 1526) then
+				ToolTip("Доделаю потом")
+			end
+		elseif(weapon == 42) then
 			if(getElementModel(hitElement) == 1362) then
 				triggerServerEvent("RemoveFire", localPlayer, localPlayer, hitElement)
 			end
+		elseif(weapon == 43 and getElementModel(source) == 60) then
+			triggerServerEvent("doTakeScreenShot", localPlayer)
 		else
 			if WeaponAmmo[weapon] then
 				for key, k in pairs(PInv["player"][usableslot][4]) do
@@ -9654,6 +9665,14 @@ function StreamIn()
 			ObjectInStream[source] = {}
 			ObjectInStream[source]["fire"] = createEffect("fire", x,y,z+0.7,x,y,z+2,500)
 			ObjectInStream[source]["light"] = createLight(0, x,y,z+0.7, 6, 255, 165, 0, nil, nil, nil, true)
+			ObjectInStream[source]["collision"] = createColSphere(x,y,z+1, 1)
+			attachElements(ObjectInStream[source]["collision"], source)
+			setElementAttachedOffsets(ObjectInStream[source]["collision"], 0,0,1)
+		elseif(getElementModel(source) == 1526) then
+			ObjectInStream[source] = {}
+			local x,y,z = getElementPosition(source)
+			ObjectInStream[source]["collision"] = createColSphere(x,y,z, 1)
+			attachElements(ObjectInStream[source]["collision"], source)
 		end
 	elseif(getElementType(source) == "pickup") then
 		if(getElementData(source, "arr")) then
