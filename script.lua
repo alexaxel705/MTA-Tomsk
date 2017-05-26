@@ -7888,7 +7888,9 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 					setElementInterior(ped, i)
 					setElementDimension(ped, d)
 					for k, v in pairs (data) do
-						setElementData(ped, k, v)
+						if(k ~= "attacker") then
+							setElementData(ped, k, v)
+						end
 					end
 				end
 			end
