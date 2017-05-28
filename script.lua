@@ -4320,7 +4320,6 @@ local RandVeh = {
 	{2038.5, 1579, 9.7, 0, 0, 180},
 	{2361.9, 2079.3, 9.7, 0, 0, 0},
 	{1351.9, 1949.4, 10.5, 0, 0, 270},
-	{2275.6, -1968.5, 12.4, 0, 0, 90},
 	{1463.7, 2773, 9.7, 0, 0, 0},
 	{-896.7, 2005.8, 59.9, 0, 0, 313},
 	{-911.5, 2022.3, 59.9, 0, 0, 313},
@@ -5292,7 +5291,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 1079, -1292.2, 17, 0, 0 --
+		local x,y,z,i,d  = 2193.8, -1644.6, 14.3, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7154,6 +7153,7 @@ WeaponNamesArr["Удочка"] = 7
 WeaponNamesArr["Клюшка"] = 2
 WeaponNamesArr["Лопата"] = 6
 WeaponNamesArr["Бита"] = 5
+WeaponNamesArr["Дубинка"] = 3
 WeaponNamesArr["Парашют"] = 46
 WeaponNamesArr["Камера"] = 43
 WeaponNamesArr["Огнетушитель"] = 42
@@ -12531,7 +12531,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Спрей", 1, 550, {})
+	AddInventoryItem(thePlayer, "Дубинка", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
