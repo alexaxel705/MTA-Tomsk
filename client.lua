@@ -327,7 +327,6 @@ local PreloadTextures = {
 	["Скот"] = createObject(11470, 4345, 4000, 4000),
 	["Сено"] = createObject(1453, 4350, 4000, 4020),
 	["Газета"] = createObject(2674, 4355, 4000, 4020),
-	["Деньги"] = createObject(1212, 4360, 4000, 4020),
 	["Кредитка"] = createObject(1581, 4365, 4000, 4020),
 	["Огнетушитель"] = createObject(366, 4370, 4000, 4020),
 	["Спрей"] = createObject(365, 4375, 4000, 4020),
@@ -336,6 +335,7 @@ local PreloadTextures = {
 	["Огнемет"] = createObject(361, 4390, 4000, 4000),
 	["Базука"] = createObject(359, 4395, 4000, 4000),
 	["Ракета"] = createObject(345, 4400, 4000, 4000),
+	["Деньги"] = createObject(1212, 4410, 4000, 4020),
 }
 
 local CreateTextureStage = false
@@ -3513,9 +3513,8 @@ function UpdateBot()
 				end
 			end
 		else
-			local zone = getElementData(thePed, "zone")
-			local dialogrz = getElementData(thePed, "dialogrz") --Костыль
-			if(zone and not dialogrz) then
+			local dialogrz = getElementData(thePed, "dialogrz")
+			if(not dialogrz) then
 				if(isElementSyncer(thePed)) then
 					if(attacker) then
 						local x,y,z = getPedBonePosition(GetElementAttacker(thePed), ActualBones[math.random(#ActualBones)])
@@ -3536,9 +3535,7 @@ function UpdateBot()
 								end
 							end
 						end
-						if(zone ~= "Unknown Bar") then
-							MovePlayerTo[thePed] = FoundBotPath(thePed, zone) -- обычное поведение
-						end
+						MovePlayerTo[thePed] = FoundBotPath(thePed) -- обычное поведение
 					end
 				end
 			end
@@ -4138,7 +4135,6 @@ local BannedMaterial = {
 
 local IgnoreMaterial = {
 	["Unknown"] = true,
-	["Unknown Bar"] = true,	
 }
 
 
@@ -4165,10 +4161,11 @@ end
 
 
 
-function FoundBotPath(ped, zone)
+function FoundBotPath(ped)
 	local arr = {}
 	local x,y,z = getElementPosition(ped)
 	local x2,y2,z2 = getPositionInFront(ped, 8)
+	local zone = getZoneName(x,y,z, false)
 	
 	if(getElementData(ped, "GROUP")) then
 		local thePlayer = getPlayerFromName(getElementData(ped, "GROUP"))
@@ -4202,8 +4199,9 @@ function FoundBotPath(ped, zone)
 			if(BotCheckPath(x,y,z, x5,y5,z5,zone)) then -- В крайнем случае идем назад
 				return {x5,y5,z5,0,"silent"}
 			else
-				arr = fromJSON(getElementData(ped, "TINF"))
-				arr[5] = "silent"
+				local arrtmp = fromJSON(getElementData(ped, "TINF"))
+				
+				arr = {arrtmp[3], arrtmp[4], arrtmp[5], arrtmp[6], "silent"}
 				return arr --Если нет путей
 			end
 		end

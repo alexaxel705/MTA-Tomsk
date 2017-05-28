@@ -1977,7 +1977,7 @@ local SkinData = {
 	[284] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Патрульный"}},
 	[285] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"SWAT"}},
 	[286] = {128, Teams['ФБР'], "Мужчина", 22, nil, {"ФБР"}},
-	[287] = {0, Teams['Военные'], "Мужчина", nil, nil, {"Военный"}},
+	[287] = {0, Teams['Военные'], "Мужчина", 31, nil, {"Военный"}},
 	[288] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Шериф"}},
 	[290] = {118, Teams['Мирные жители'], "Мужчина"},
 	[291] = {118, Teams['Мирные жители'], "Мужчина"},
@@ -3277,8 +3277,8 @@ local ItemsTrade = {
 	["Binco"] = {{"Рюкзак", "Trade", 450, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}}}},
 	["AMMO1"] = {{"Deagle", "Trade", 450, {}}, {"MP5", "Trade", 450, {}}, {"АК-47", "Trade", 450, {}}, {"М16", "Trade", 450, {}}, {"M40", "Trade", 450, {}}, {"ИЖ-12", "Trade", 450, {}}, {"9-мм", "Trade", 450, {}}, {"5.56-мм", "Trade", 450, {}}, {"7.62-мм", "Trade", 450, {}}, {"18.5-мм", "Trade", 450, {}},{"Граната", "Trade", 550, {}}, {"Молотов", "Trade", 550, {}}, {"Бронежилет", "Trade", 650, {}}, {"Лазерный прицел", "Trade", 350, {}}},
 	["AMMO2"] = {{"USP-S", "Trade", 450, {}}, {"Tec-9", "Trade", 450, {}}, {"АК-47", "Trade", 450, {}}, {"М16", "Trade", 450, {}}, {"M40", "Trade", 450, {}}, {"ИЖ-12", "Trade", 450, {}}, {"9-мм", "Trade", 450, {}}, {"5.56-мм", "Trade", 450, {}}, {"7.62-мм", "Trade", 450, {}}, {"18.5-мм", "Trade", 450, {}}, {"Бронежилет", "Trade", 450, {}}, {"Лазерный прицел", "Trade", 450, {}}},
-	["AMMO3"] = {{"Кольт 45", "Trade", 450, {}}, {"Узи", "Trade", 450, {}}, {"Mossberg", "Trade", 450, {}}, {"Sawed-Off", "Trade", 450, {}}, {"SPAS-12", "Trade", 450, {}}, {"ИЖ-12", "Trade", 450, {}}, {"9-мм", "Trade", 450, {}}, {"5.56-мм", "Trade", 450, {}}, {"7.62-мм", "Trade", 450, {}}, {"18.5-мм", "Trade", 450, {}}, {"Бронежилет", "Trade", 550, {}}, {"Лазерный прицел", "Trade", 350, {}}},
-	["AMMO4"] = {{"Кольт 45", "Trade", 450, {}}, {"Узи", "Trade", 450, {}}, {"АК-47", "Trade", 450, {}}, {"М16", "Trade", 450, {}}, {"Mossberg", "Trade", 450, {}}, {"Sawed-Off", "Trade", 450, {}}, {"SPAS-12", "Trade", 450, {}}, {"ИЖ-12", "Trade", 450, {}}, {"9-мм", "Trade", 450, {}}, {"5.56-мм", "Trade", 450, {}}, {"7.62-мм", "Trade", 450, {}}, {"18.5-мм", "Trade", 450, {}}, {"Бронежилет", "Trade", 550, {}}, {"Лазерный прицел", "Trade", 350, {}}},
+	["AMMO3"] = {{"Кольт 45", "Trade", 450, {}}, {"Огнемет", "Trade", 450, {}}, {"Узи", "Trade", 450, {}}, {"Mossberg", "Trade", 450, {}}, {"Sawed-Off", "Trade", 450, {}}, {"SPAS-12", "Trade", 450, {}}, {"ИЖ-12", "Trade", 450, {}}, {"9-мм", "Trade", 450, {}}, {"5.56-мм", "Trade", 450, {}}, {"7.62-мм", "Trade", 450, {}}, {"18.5-мм", "Trade", 450, {}}, {"Бронежилет", "Trade", 550, {}}, {"Лазерный прицел", "Trade", 350, {}}},
+	["AMMO4"] = {{"Кольт 45", "Trade", 450, {}}, {"Базука", "Trade", 450, {}}, {"Узи", "Trade", 450, {}}, {"АК-47", "Trade", 450, {}}, {"М16", "Trade", 450, {}}, {"Mossberg", "Trade", 450, {}}, {"Sawed-Off", "Trade", 450, {}}, {"SPAS-12", "Trade", 450, {}}, {"ИЖ-12", "Trade", 450, {}}, {"9-мм", "Trade", 450, {}}, {"5.56-мм", "Trade", 450, {}}, {"7.62-мм", "Trade", 450, {}}, {"18.5-мм", "Trade", 450, {}}, {"Ракета", "Trade", 450, {}}, {"Бронежилет", "Trade", 550, {}}, {"Лазерный прицел", "Trade", 350, {}}},
 	["Electronics Shop"] = {{"Телефон", "Trade", 650, {}}, {"Камера", "Trade", 450, {}}, {"Бензопила", "Trade", 450, {}}},
 	["Sex Shop"] = {{"Dildo XXL", "Trade", 450, {}}, {"Dildo", "Trade", 450, {}}, {"Вибратор", "Trade", 450, {}}},
 	["Bait Shop"] = {{"Нож", "Trade", 250, {}}, {"Удочка", "Trade", 150, {}}, {"Лопата", "Trade", 450, {}}},
@@ -5291,7 +5291,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2193.8, -1644.6, 14.3, 0, 0 --
+		local x,y,z,i,d  = 233.4, -269.9, 0.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7706,8 +7706,7 @@ function CreateBot(skin,x,y,z,rz,i,d,zone,ind)
 	if(not ind) then ind = #BotCreated[zone]+1 end
 	if(not rz) then rz = math.random(0,360) end
 	BotCreated[zone][ind] = createPed(skin, x, y, z, rz)
-	setElementData(BotCreated[zone][ind], "zone", zone)
-	setElementData(BotCreated[zone][ind], "TINF", toJSON({ind,x,y,z,rz}))
+	setElementData(BotCreated[zone][ind], "TINF", toJSON({zone,ind,x,y,z,rz}))
 	setElementData(BotCreated[zone][ind], "team", getTeamName(SkinData[skin][2]))
 
 	setPedWalkingStyle(BotCreated[zone][ind], SkinData[skin][1])
@@ -7878,25 +7877,27 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 			if(getElementData(ped, "SpawnBlock")) then
 				destroyElement(ped)
 			else
-				local zone = getElementData(ped, "zone")
+				local TINF = getElementData(ped, "TINF")
 				local i, d = getElementInterior(ped), getElementDimension(ped)
-				if(zone) then
-					local TINF = fromJSON(getElementData(ped, "TINF"))
-					destroyElement(BotCreated[zone][TINF[1]])
-					CreateRandomBot(TINF[2], TINF[3], TINF[4],TINF[5],i,d,zone,TINF[1])
-				else
-				    local data = getAllElementData(ped)
-					local x,y,z = getElementPosition(ped)
-					local _,_,rz = getElementRotation(ped)
-					local model = getElementModel(ped)
-					destroyElement(ped)
-					ped = createPed(model,x,y,z,rz)
-					setElementInterior(ped, i)
-					setElementDimension(ped, d)
-					for k, v in pairs (data) do
-						if(k ~= "attacker") then
-							setElementData(ped, k, v)
+				if(TINF) then
+					TINF = fromJSON(TINF)
+					if(tostring(TINF)) then
+						local data = getAllElementData(ped)
+						local x,y,z = getElementPosition(ped)
+						local _,_,rz = getElementRotation(ped)
+						local model = getElementModel(ped)
+						destroyElement(ped)
+						ped = createPed(model,x,y,z,rz)
+						setElementInterior(ped, i)
+						setElementDimension(ped, d)
+						for k, v in pairs (data) do
+							if(k ~= "attacker") then
+								setElementData(ped, k, v)
+							end
 						end
+					else
+						destroyElement(BotCreated[zone][TINF[2]])
+						CreateRandomBot(TINF[3], TINF[4], TINF[5],TINF[6],i,d,TINF[1],TINF[2])
 					end
 				end
 			end
@@ -9277,8 +9278,10 @@ function PedDamage(ped, weapon, bodypart, loss)
 	
 	if(Team) then
 		if(SkinData[getElementModel(ped)][4]) then
-			giveWeapon(ped, SkinData[getElementModel(ped)][4], 9999, true)
-			setElementData(ped, "sprint", "true")
+			if(getPedWeapon(ped) == 0) then
+				giveWeapon(ped, SkinData[getElementModel(ped)][4], 9999, true)
+				setElementData(ped, "sprint", "true")
+			end
 		else
 			local rand = math.random(1,3)
 			if(rand == 1) then
@@ -10485,7 +10488,8 @@ local Soviet = {"Никогда не заводи машину во время �
 "Рейтинг игроков обновляется каждые 00:00 по игровому времени",
 "Снятую с игроков одежду можно использовать в личном гардеробе",
 "У мирных жителей можно узнать много полезной информации",
-"В барах и на улице можно встретить членов различных бандитских группировок, поговорив с которыми есть возможность вступить в банду"
+"В барах и на улице можно встретить членов различных бандитских группировок, поговорив с которыми есть возможность вступить в банду",
+"Используй клавишу #A0A0A0F12#FFFFFF чтобы скрыть интерфейс",
 }
 function DatSoviet() outputChatBox("#4682B4* Совет#FFFFFF "..Soviet[math.random(1,#Soviet)],getRootElement(), 255, 255, 255, true) end
 setTimer(function() DatSoviet() end, 600000, 0)
@@ -12566,6 +12570,7 @@ addEventHandler("fightstyle", root, fightstyle)
 function WarpPedIntoVehicle(thePlayer)
 
 	removePedFromVehicle(thePlayer)
+	local x,y,z = getElementPosition(thePlayer)
 	--setElementCollisionsEnabled(thePlayer, false)
 	--StartAnimation(thePlayer, "ped", "car_getout_lhs", 1500, false, false, false, false)
 end
