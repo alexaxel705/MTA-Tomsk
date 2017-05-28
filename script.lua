@@ -7128,37 +7128,40 @@ addEventHandler("usedrugs", root, usedrugs)
 
 
 
-WeaponNamesArr = {}
-WeaponNamesArr["АК-47"] = 30
-WeaponNamesArr["Граната"] = 16
-WeaponNamesArr["Молотов"] = 18
-WeaponNamesArr["Кольт 45"] = 22
-WeaponNamesArr["USP-S"] = 23
-WeaponNamesArr["Deagle"] = 24
-WeaponNamesArr["М16"] = 31
-WeaponNamesArr["Mossberg"] = 25
-WeaponNamesArr["Sawed-Off"] = 26
-WeaponNamesArr["SPAS-12"] = 27
-WeaponNamesArr["Узи"] = 28
-WeaponNamesArr["MP5"] = 29
-WeaponNamesArr["Tec-9"] = 32
-WeaponNamesArr["ИЖ-12"] = 33
-WeaponNamesArr["M40"] = 34
-WeaponNamesArr["Dildo XXL"] = 10
-WeaponNamesArr["Dildo"] = 11
-WeaponNamesArr["Вибратор"] = 12
-WeaponNamesArr["Нож"] = 4
-WeaponNamesArr["Катана"] = 8
-WeaponNamesArr["Удочка"] = 7
-WeaponNamesArr["Клюшка"] = 2
-WeaponNamesArr["Лопата"] = 6
-WeaponNamesArr["Бита"] = 5
-WeaponNamesArr["Дубинка"] = 3
-WeaponNamesArr["Парашют"] = 46
-WeaponNamesArr["Камера"] = 43
-WeaponNamesArr["Огнетушитель"] = 42
-WeaponNamesArr["Спрей"] = 41
-WeaponNamesArr["Бензопила"] = 9
+WeaponNamesArr = {
+	["АК-47"] = 30, 
+	["Граната"] = 16, 
+	["Молотов"] = 18, 
+	["Кольт 45"] = 22, 
+	["USP-S"] = 23, 
+	["Deagle"] = 24, 
+	["М16"] = 31, 
+	["Mossberg"] = 25, 
+	["Sawed-Off"] = 26, 
+	["SPAS-12"] = 27, 
+	["Узи"] = 28, 
+	["MP5"] = 29, 
+	["Tec-9"] = 32, 
+	["ИЖ-12"] = 33, 
+	["M40"] = 34, 
+	["Dildo XXL"] = 10, 
+	["Dildo"] = 11, 
+	["Вибратор"] = 12, 
+	["Нож"] = 4, 
+	["Катана"] = 8, 
+	["Удочка"] = 7, 
+	["Клюшка"] = 2, 
+	["Лопата"] = 6, 
+	["Бита"] = 5, 
+	["Дубинка"] = 3, 
+	["Парашют"] = 46, 
+	["Камера"] = 43, 
+	["Огнетушитель"] = 42, 
+	["Спрей"] = 41, 
+	["Базука"] = 35, 
+	["Огнемет"] = 37, 
+	["Бензопила"] = 9, 
+}
 
 local ItemsNamesArr = {
 	["Телефон"] = 330,
@@ -7220,20 +7223,22 @@ end
 
 
 
-local WeaponAmmo={}
-WeaponAmmo["М16"] = "5.56-мм"
-WeaponAmmo["АК-47"] = "7.62-мм"
-WeaponAmmo["Кольт 45"] = "9-мм"
-WeaponAmmo["Deagle"] = "9-мм"
-WeaponAmmo["USP-S"] = "9-мм"
-WeaponAmmo["Mossberg"] = "18.5-мм"
-WeaponAmmo["Sawed-Off"] = "18.5-мм"
-WeaponAmmo["SPAS-12"] = "18.5-мм"
-WeaponAmmo["Узи"] = "9-мм"
-WeaponAmmo["MP5"] = "9-мм"
-WeaponAmmo["Tec-9"] = "9-мм"
-WeaponAmmo["ИЖ-12"] = "18.5-мм"
-WeaponAmmo["M40"] = "7.62-мм"
+local WeaponAmmo = {
+	["М16"] = "5.56-мм", 
+	["АК-47"] = "7.62-мм", 
+	["Кольт 45"] = "9-мм", 
+	["Базука"] = "Ракета", 
+	["Deagle"] = "9-мм", 
+	["USP-S"] = "9-мм", 
+	["Mossberg"] = "18.5-мм", 
+	["Sawed-Off"] = "18.5-мм", 
+	["SPAS-12"] = "18.5-мм", 
+	["Узи"] = "9-мм", 
+	["MP5"] = "9-мм", 
+	["Tec-9"] = "9-мм", 
+	["ИЖ-12"] = "18.5-мм", 
+	["M40"] = "7.62-мм", 
+}
 
 
 
@@ -12531,7 +12536,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	AddInventoryItem(thePlayer, "Дубинка", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Ракета", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")

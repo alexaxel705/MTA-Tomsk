@@ -258,8 +258,11 @@ local TexturesPosition = {
 	["Деньги"] = {0.2,0.2,0.35, -0.05,-0.05,0, 0,70, 200},
 	["Кредитка"] = {-0.3,0.7,0.6, 0,0,0, 0,70, 200},
 	["Огнетушитель"] = {0.35,0.9,-0.06, 0.35,0,-0.06, 8,70, 110}, 
+	["Базука"] = {0.25,0.9,0.02, 0.25,0,0.02, 8,70, 110}, 
 	["Спрей"] = {0.05,-0.35,-0.05, 0.05,-0.05,-0.05, 0,70, 250}, 
+	["Огнемет"] = {0.45,0.9,0.12, 0.45,0,0.12, 8,70, 110}, 
 	["Ракушка"] = {0,1.2,0, 0,0,0, 0,70, 250}, 
+	["Ракета"] = {0.8,0,0, 0.4,0,0, 0,70, 250}, 
 	--["Пропуск"] = {0,-0.6,-0.6, 0,0,0, 0,70, 200}, -- Object 1581
 }
 
@@ -330,6 +333,9 @@ local PreloadTextures = {
 	["Спрей"] = createObject(365, 4375, 4000, 4020),
 	["Ракушка"] = createObject(953, 4380, 4000, 4020),
 	["Дубинка"] = createObject(334, 4385, 4000, 4000),
+	["Огнемет"] = createObject(361, 4390, 4000, 4000),
+	["Базука"] = createObject(359, 4395, 4000, 4000),
+	["Ракета"] = createObject(345, 4400, 4000, 4000),
 }
 
 local CreateTextureStage = false
@@ -944,6 +950,7 @@ local items = {
 	["Чемодан"] = {false, "Обычный чемодан", 1, "SetupBackpack", 1000, 1000, false, true, false},
 	["Пакет"] = {false, "Обычный пакет", 1, "SetupBackpack", 10, 1, false, true, false},
 	["АК-47"] = {false, "Автомат Калашникова\nСтрана: СССР", 1, "useinvweapon", 4300, 4500, false, false, true},
+	["Базука"] = {false, "Просто базука", 1, "useinvweapon", 10000, 24500, false, false, true},
 	["Граната"] = {false, "Обычная граната", 25, "useinvweapon", 600, 1700, false, false, true},
 	["Молотов"] = {false, "Коктейль молотова", 25, "useinvweapon", 800, 2200, false, false, true},
 	["М16"] = {false, "Автомат М16\nСтрана: США", 1, "useinvweapon", 2880, 6000, false, false, true},
@@ -979,6 +986,7 @@ local items = {
 	["Камера"] = {false, "Обычная любительская фотокамера", 1, "useinvweapon", 570, 12000, false, false, true},
 	["Огнетушитель"] = {false, "Обычный огнетушитель", 1, "useinvweapon", 5000, 150, false, false, true},
 	["Спрей"] = {false, "Обычный спрей", 1, "useinvweapon", 340, 250, false, false, true},
+	["Огнемет"] = {false, "Обычный огнемет", 1, "useinvweapon", 3340, 9250, false, false, true},
 	["Бензопила"] = {false, "Просто бензопила", 1, "useinvweapon", 12500, 7700, false, false, true},
 
 	["Лазерный прицел"] = {"invobject/laser.png", "Лазерный прицел", 1, false, 420, 6800, {["лазер"] = {"M40", "АК-47", "М16", "ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg", "Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false},
@@ -987,6 +995,8 @@ local items = {
 	["5.56-мм"] = {false, "В настоящий момент используются в М16", 250, false, 3, 7, {["патроны"] = {"М16"}}, false, false},
 	["7.62-мм"] = {false, "В настоящий момент используются для снайперской винтовки, АК-47", 250, false, 7, 10, {["патроны"] = {"M40", "АК-47"}}, false, false},
 	["18.5-мм"] = {false, "В настоящий момент используются во всех дробовиках и винтовке ИЖ-12", 250, false, 13, 25, {["патроны"] = {"ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg"}}, false, false}, 
+	["Ракета"] = {false, "Используется для обычной базуки", 250, false, 1200, 500, {["патроны"] = {"Базука"}}, false, false},
+
 	["Кулак"] = {false, nil, 1, "useinvweapon", 0, 0, false, false, false},
 
 	["Конопля"] = {false, "Сырые листья конопли, могут быть посажены на землю или траву.\nТак же используются для получения шмали.", 100, "CreateCanabis", 260, 10, false, true, false}, 
@@ -1025,7 +1035,8 @@ local WeaponAmmo = {
 	[32] = "9-мм",
 	[33] = "18.5-мм",
 	[34] = "7.62-мм",
-	[46] = "Парашют"
+	[35] = "Ракета", 
+	[46] = "Парашют",
 }
 
 
@@ -1062,6 +1073,8 @@ local WeaponNamesArr = {
 	["Камера"] = 43,
 	["Огнетушитель"] = 42,
 	["Спрей"] = 41,
+	["Базука"] = 35,
+	["Огнемет"] = 37,
 	["Бензопила"] = 9,
 	["Нож"] = 4,
 	["Катана"] = 8, 
@@ -1170,10 +1183,7 @@ function PlayerSpawn()
 		PInv["player"] = fromJSON(getElementData(localPlayer, "inv"))
 		SetupInventory() 
 		PData["wasted"]=nil
-		setPlayerHudComponentVisible("all", true)
-		setPlayerHudComponentVisible("wanted", false)
-		setPlayerHudComponentVisible("area_name", false)
-		setPlayerHudComponentVisible("vehicle_name", false)
+		SetPlayerHudComponentVisible("all", true)
 		
 		for i = 1, #SpawnAction do
 			triggerEvent(unpack(SpawnAction[i]))
@@ -2186,6 +2196,29 @@ function openmap()
 	end
 end
 
+
+function hideinv()
+	if(PData["HideInventory"]) then
+		PData["HideInventory"] = nil
+		SetPlayerHudComponentVisible("all", true)
+	else
+		PData["HideInventory"] = true
+		SetPlayerHudComponentVisible("all", false)
+	end
+end
+
+
+
+function SetPlayerHudComponentVisible(component, show)
+	setPlayerHudComponentVisible(component, show)
+	if(component == "all") then
+		if(show) then
+			setPlayerHudComponentVisible("wanted", false)
+			setPlayerHudComponentVisible("area_name", false)
+			setPlayerHudComponentVisible("vehicle_name", false)
+		end
+	end
+end
 
 
 
@@ -4483,7 +4516,7 @@ function GenerateTexture() -- Третий этап загрузки
 		PEDChangeSkin = "intro"
 		showChat(true)
 		fadeCamera(true, 2.0)
-		setPlayerHudComponentVisible("all", false)
+		SetPlayerHudComponentVisible("all", false)
 
 		setCameraMatrix(1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
 		PData['loading'] = 100
@@ -8652,7 +8685,7 @@ function DrawPlayerMessage()
 	end
 	PData["MultipleAction"] = {}
 		
-	if(PEDChangeSkin == "play" and initializedInv and not isPlayerMapForced()) then
+	if(PEDChangeSkin == "play" and initializedInv and not isPlayerMapForced() and not PData["HideInventory"]) then
 		if(tuningList) then
 			sx,sy = (screenWidth/2.55), screenHeight-(150*scaley)
 		
@@ -10487,7 +10520,6 @@ addEventHandler("onClientResourceStart",  getRootElement(),
 			setTimer(updateWorld, 50, 0)
 			GameSky("Red County")
 			bindKey("M", "down", openmap)
-			bindKey("F11", "down", openmap)
 			bindKey("tab", "down", OpenTAB)
 			bindKey("tab", "up", CloseTAB)
 			bindKey("h", "down", opengate)
@@ -10511,6 +10543,8 @@ addEventHandler("onClientResourceStart",  getRootElement(),
 			bindKey("p", "down", autoMove)
 			bindKey("r", "down", reload)
 			bindKey("F1", "down", ShowInfoKey)
+			bindKey("F11", "down", openmap)
+			bindKey("F12", "down", hideinv)
 			StartLoad()
 		end
 	end
