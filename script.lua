@@ -5111,8 +5111,6 @@ local InteriorsClass = {
 	}
 }
 
--- Начинать делать редактор house.xml для задания класса дома
-
 
 
 
@@ -5273,9 +5271,42 @@ local Tags = {
 
 
 
+function GetDatabaseZoneNode(zone)
+	for i,node in ipairs(xmlNodeGetChildren(ZoneNode)) do
+		if(zone == xmlNodeGetValue(node)) then
+			return xmlNodeGetAttribute(node, "owner")
+		end
+	end
+end
+
+local TeamTag = {
+	["Баллас"] = {1524, 1525, 1529}, 
+	["Колумбийский картель"] = {1524, 1525, 1529}, 
+	["Русская мафия"] =  {1524, 1525, 1529}, 
+	["Вагос"] = {1530},
+	["Якудзы"] = {1530},
+	["Ацтекас"] = {1531},
+	["Гроув-стрит"] = {1528}, 
+	["Триады"] = {1528},
+	["Рифа"] = {1526},
+	["Полиция"] = {1528}, 
+}
+
+
+
+
+
 for name, dat in pairs(Tags) do
 	for i, v in pairs(dat) do
-		Tags[name][i][1] = createObject(1526, v[2],v[3],v[4], 0, 0, v[5])
+		local zoneowner = GetDatabaseZoneNode(name)
+		if(zoneowner) then
+			if(not TeamTag[zoneowner]) then
+				zoneowner = "Полиция"
+			end
+			local model = TeamTag[zoneowner][math.random(#TeamTag[zoneowner])]
+		
+			Tags[name][i][1] = createObject(model, v[2],v[3],v[4], 0, 0, v[5])
+		end
 	end
 end
 
@@ -7690,13 +7721,6 @@ function GetZCoord(x,y,dat)
 	return z
 end
 
-function GetDatabaseZoneNode(zone)
-	for i,node in ipairs(xmlNodeGetChildren(ZoneNode)) do
-		if(zone == xmlNodeGetValue(node)) then
-			return xmlNodeGetAttribute(node, "owner")
-		end
-	end
-end
 
 
 

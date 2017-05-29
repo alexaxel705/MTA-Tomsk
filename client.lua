@@ -326,7 +326,6 @@ local PreloadTextures = {
 	["18.5-мм"] = createObject(18044, 4340, 4000, 4000),
 	["Скот"] = createObject(11470, 4345, 4000, 4000),
 	["Сено"] = createObject(1453, 4350, 4000, 4020),
-	["Газета"] = createObject(2674, 4355, 4000, 4020),
 	["Кредитка"] = createObject(1581, 4365, 4000, 4020),
 	["Огнетушитель"] = createObject(366, 4370, 4000, 4020),
 	["Спрей"] = createObject(365, 4375, 4000, 4020),
@@ -336,6 +335,7 @@ local PreloadTextures = {
 	["Базука"] = createObject(359, 4395, 4000, 4000),
 	["Ракета"] = createObject(345, 4400, 4000, 4000),
 	["Деньги"] = createObject(1212, 4410, 4000, 4020),
+	["Газета"] = createObject(2674, 4415, 4000, 4020),
 }
 
 local CreateTextureStage = false
@@ -5605,6 +5605,22 @@ function park()
 end
 
 
+local objectTypes = {
+	[1524] = "Графити", 
+    [1525] = "Графити",
+	[1526] = "Графити",
+	[1528] = "Графити",
+	[1529] = "Графити",
+	[1530] = "Графити",
+	[1531] = "Графити"
+}
+
+function GetObjectType(obj)
+	local model = getElementModel(obj)
+	return objectTypes[model] or "Неизвестно"
+end
+
+
 function onClientPlayerWeaponFireFunc(weapon, ammo, ammoInClip, hitX, hitY, hitZ, hitElement)
 	if source == localPlayer then
 		if(not hitElement) then
@@ -5619,7 +5635,7 @@ function onClientPlayerWeaponFireFunc(weapon, ammo, ammoInClip, hitX, hitY, hitZ
 		
 		
 		if(weapon == 41) then
-			if(getElementModel(hitElement) == 1526) then
+			if(GetObjectType(hitElement) == "Графити") then
 				ToolTip("Доделаю потом")
 			end
 		elseif(weapon == 42) then
@@ -9620,6 +9636,7 @@ local VehiclesInStream = {}
 local VehicleTrunk = {}
 
 
+
 function initTrunk(theVehicle, trunkobj)
 	if(VehicleTrunk[theVehicle]) then
 		for _, obj in pairs(VehicleTrunk[theVehicle]) do
@@ -9707,7 +9724,7 @@ function StreamIn()
 			ObjectInStream[source]["collision"] = createColSphere(x,y,z+1, 1)
 			attachElements(ObjectInStream[source]["collision"], source)
 			setElementAttachedOffsets(ObjectInStream[source]["collision"], 0,0,1)
-		elseif(getElementModel(source) == 1526) then
+		elseif(GetObjectType(source) == "Графити") then
 			ObjectInStream[source] = {}
 			local x,y,z = getElementPosition(source)
 			ObjectInStream[source]["collision"] = createColSphere(x,y,z, 1)
