@@ -5291,7 +5291,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 233.4, -269.9, 0.4, 0, 0 --
+		local x,y,z,i,d  = 180.5, -214.3, 1.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7378,14 +7378,16 @@ function Drop(item, x,y,z,i,d)
 			pic = createPickup(x, y, z, 3, 2037, 0)
 		end
 	end
-	setElementData(pic, "arr", toJSON(item))
-	setElementInterior(pic, i)
-	setElementDimension(pic, d)
-	setTimer(function(pic)
-		if(isElement(pic)) then
-			destroyElement(pic)
-		end
-	end, 600000, 1, pic)
+	if(pic) then
+		setElementData(pic, "arr", toJSON(item))
+		setElementInterior(pic, i)
+		setElementDimension(pic, d)
+		setTimer(function(pic)
+			if(isElement(pic)) then
+				destroyElement(pic)
+			end
+		end, 600000, 1, pic)
+	end
 end
 
 
@@ -9266,11 +9268,10 @@ function PedDamage(ped, weapon, bodypart, loss)
 				end
 			end
 			
-			local PedZone = getElementData(ped, "zone")
-			if(PedZone) then
-				if(GetDatabaseZoneNode(PedZone)) then
-					cap(source, PedZone)
-				end
+			local x,y,z = getElementPosition(ped)
+			local zone = getZoneName(x,y,z, false)			
+			if(GetDatabaseZoneNode(zone)) then
+				cap(source, zone)
 			end
 		end
 	end

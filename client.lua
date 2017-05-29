@@ -2957,7 +2957,7 @@ function LookHouse(h)
 	else
 		PlayerChangeSkinTeamRang = color[2]..h[5]
 	end
-	lookedHouse=h
+	lookedHouse = h
 	
 	if(h[6] == 90) then
 		setCameraMatrix(x+20, y-20, z+30, x, y, z)
@@ -4039,7 +4039,7 @@ function checkKey()
 		for _, thePeds in pairs(getElementsByType("ped", getRootElement(), true)) do
 			UpdateArmas(thePeds)
 		end
-		if(theVehicle) then
+		if(theVehicle and PData["ClearDriving"]) then
 			if(speed == "000") then
 				resetTimer(PData["ClearDriving"])
 				if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer)) then
@@ -9069,7 +9069,7 @@ function DrawPlayerMessage()
 		
 
 		
-			if(theVehicle) then
+			if(theVehicle and PData["Handling"]) then
 				tick = getTickCount()
 				local angulo,velocidad = angle()
 				
