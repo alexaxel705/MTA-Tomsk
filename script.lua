@@ -5319,7 +5319,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  =  1369.2, -1408.2, 12.4, 0, 0 --
+		local x,y,z,i,d  =  2291.1, -2091.9, 12.3, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)

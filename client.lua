@@ -4633,6 +4633,8 @@ function StartLoad() -- Первый этап загрузки
 	setFogDistance(10)
 	setTime(12, 0)
 	setWeather(0)
+	setFarClipDistance(1000)
+	setFogDistance(0)
 	downloadFile("lang/"..PData["LANG"])
 end
 
@@ -5707,6 +5709,8 @@ function resourcemap()
 		if(PEDChangeSkin == "play") then
 			helpmessage("Идет загрузка...")
 			PEDChangeSkin = "cinema"
+			
+			SetPlayerHudComponentVisible("all", false)
 			setElementFrozen(localPlayer, true)
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			if(theVehicle) then
@@ -5736,6 +5740,7 @@ function resourcemap()
 		if(PEDChangeSkin == "cinema") then
 			setCameraTarget(localPlayer)
 			PData["ResourceMap"] = nil
+			SetPlayerHudComponentVisible("all", true)
 			setElementFrozen(localPlayer, false)
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			if(theVehicle) then
@@ -5775,9 +5780,9 @@ function map()
 				if(PData["infopath"][arr3[1]]) then
 					local dat = PData["infopath"][arr3[1]][tostring(arr3[2])]
 					if(dat) then
-						local color = tocolor(120,105,103,150)
+						local color = tocolor(120,105,103,255)
 						if(dat[1] == "Closed" or maincolor == "Closed") then
-							color = tocolor(140,125,123,150)
+							color = tocolor(140,125,123,255)
 						end
 						local x2,y2,z2 = dat[2], dat[3], dat[4]
 						
@@ -5813,7 +5818,11 @@ addEventHandler("map", localPlayer, map)
 
 
 function InfoPath(zone, arr, last)
-	PData['infopath'][zone] = fromJSON(arr)
+	if(arr) then
+		PData['infopath'][zone] = fromJSON(arr)
+	else
+		PData['infopath'][zone] = nil
+	end
 	
 	if(last) then
 		map()
