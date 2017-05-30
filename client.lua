@@ -5290,7 +5290,7 @@ addEventHandler("TrunkWindow", localPlayer, TrunkWindow)
 
 
 function CarJack()
-	triggerServerEvent("WarpPedIntoVehicle", localPlayer, getVehicleOccupant(Targets["theVehicle"])) 
+	triggerServerEvent("WarpPedIntoVehicle", localPlayer, getVehicleOccupant(Targets["theVehicle"]), localPlayer) 
 end
 addEvent("CarJack", true)
 addEventHandler("CarJack", localPlayer, CarJack)

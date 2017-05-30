@@ -1401,6 +1401,7 @@ local VehicleRegionSpecific = {
 	["Julius Thruway West"] = {443},
 	["Julius Thruway North"] = {443},
 	["Julius Thruway East"] = {443},
+	["Ocean Docks"] = {515, 514, 403, 499, 524, 609, 498, 455, 414, 456, 440}, 
 }
 
 
@@ -11579,12 +11580,21 @@ function PlayerElementSync(thePlayer, obj, state)
 						local nextnode, nextid = unpack(FoundNextRandomNode(node, id))
 						local team = getElementData(obj, "team")
 
-						
-																		
+														
 						local vehinfo = false
-						if(team == "Полиция" or team == "Мирные жители") then
-							local region = getZoneName(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4], true)
+						local region = getZoneName(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4], true)
+						if(team == "Полиция") then
+							local zone = getZoneName(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4], false)
 							vehinfo = NewTeamVehicle[team][region][math.random(#NewTeamVehicle[team][region])]
+						elseif(team == "Мирные жители") then
+							local arr = table.copy(NewTeamVehicle[team][region])
+							local zone = getZoneName(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4], false)
+							if(VehicleRegionSpecific[zone]) then
+								for _, model in pairs(VehicleRegionSpecific[zone]) do
+									arr[#arr+1] = {model}
+								end
+							end
+							vehinfo = arr[math.random(#arr)]
 						else
 							vehinfo = NewTeamVehicle[team][math.random(#NewTeamVehicle[team])]
 						end
@@ -11620,7 +11630,9 @@ function PlayerElementSync(thePlayer, obj, state)
 				end
 			end
 			SData["PlayerElementSync"][obj][getPlayerName(thePlayer)] = state
-
+			if state == true then
+				setElementSyncer(obj, thePlayer)
+			end
 			if(getArrSize(SData["PlayerElementSync"][obj]) == 0) then
 				SData["PlayerElementSync"][obj] = nil
 				if(getElementData(obj, "DynamicBot")) then
@@ -12589,12 +12601,11 @@ addEvent("fightstyle", true)
 addEventHandler("fightstyle", root, fightstyle)
 
 
-function WarpPedIntoVehicle(thePlayer)
-
-	removePedFromVehicle(thePlayer)
-	local x,y,z = getElementPosition(thePlayer)
-	--setElementCollisionsEnabled(thePlayer, false)
-	--StartAnimation(thePlayer, "ped", "car_getout_lhs", 1500, false, false, false, false)
+function WarpPedIntoVehicle(thePed, thePlayer)
+	local theVehicle = getPedOccupiedVehicle(thePed)
+	setElementSyncer(theVehicle, thePlayer)
+	setElementSyncer(thePed, thePlayer)
+	removePedFromVehicle(thePed)
 end
 addEvent("WarpPedIntoVehicle", true)
 addEventHandler("WarpPedIntoVehicle", root, WarpPedIntoVehicle)
