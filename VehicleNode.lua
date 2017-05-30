@@ -24435,7 +24435,7 @@ PathNodes = {
 		[317] = {true, 1925.8, -1934.6, 12.4, false}, 
 		[318] = {true, 1936.8, -1934.6, 12.4, false}, 
 		[319] = {true, 1948.1, -1934.7, 12.4, false}, 
-		[320] = {true, 1959.6, -1934.6, 12.4, false}, 
+		[320] = {true, 1959.6, -1934.6, 12.4, false, {{"El Corona", 600}}}, 
 		[321] = {true, 1964.5, -1934.9, 12.4, false, {{"Willowfield", 100}, {"El Corona", 200}}}, 
 		
 		[400] = {true, 1697.1, -2168.8, 15, false}, 
@@ -28503,8 +28503,8 @@ PathNodes = {
 		[2415] = {true, 1358.3, -1437.6, 12.4, false}, 
 		[2416] = {true, 1359, -1427.1, 12.4, false}, 
 		[2417] = {true, 1359.7, -1416.6, 12.4, false}, 
-		[2418] = {true, 1359.9, -1408.3, 12.3, false},
-		[2419] = {true, 1359.6, -1402.7, 12.3, false}, 
+		[2418] = {true, 1359.9, -1408.3, 12.3, false, {{"Commerce", 2500}}}, 
+		[2419] = {true, 1359.6, -1402.7, 12.3, false, {{"Commerce", 2700}}},  
 		[2420] = {true, 1359.8, -1397.5, 12.4, false, {{"Market", 2519}}},
 		[2421] = {true, 1359.9, -1392.5, 12.5, false, {{"Market", 2520}}},
 		[2422] = {true, 1359.8, -1374.9, 12.5, false}, 
@@ -33055,7 +33055,54 @@ PathNodes = {
 		[2406] = {true, 1567.1, -1802.7, 12.4, false}, 
 		[2407] = {true, 1567.1, -1814, 12.4, false}, 
 		[2408] = {true, 1567.1, -1825, 12.4, false}, 
-		[2409] = {true, 1567.1, -1835.3, 12.4, false, {{"Verdant Bluffs", 1800}}}, 		
+		[2409] = {true, 1567.1, -1835.3, 12.4, false, {{"Verdant Bluffs", 1800}}}, 	
+
+		[2500] = {true, 1370.7, -1408.1, 12.4, false}, 
+		[2501] = {true, 1380.7, -1408.1, 12.4, false}, 
+		[2502] = {true, 1390.9, -1408.8, 12.4, false}, 
+		[2503] = {true, 1394.5, -1418, 12.4, false}, 
+		[2504] = {true, 1394.4, -1428.8, 12.4, false}, 
+		[2505] = {true, 1394.3, -1439.6, 12.4, false}, 
+		[2506] = {true, 1402.3, -1444.3, 12.4, false}, 
+		[2507] = {true, 1412.4, -1443.6, 12.4, false}, 
+		[2508] = {true, 1423.5, -1443.4, 12.4, false}, 
+		[2509] = {true, 1434.1, -1443.6, 12.4, false}, 
+		[2510] = {true, 1444.3, -1443.7, 12.4, false}, 
+		[2511] = {true, 1452.4, -1443.4, 12.4, false}, 
+		[2512] = {true, 1456.8, -1443.3, 12.4, false, {{"Commerce", 2600}}}, 
+		
+		[2600] = {true, 1457.1, -1438.7, 12.4, false}, 
+		[2601] = {true, 1452.7, -1438.7, 12.4, false, {{"Commerce", 2511}}}, 
+		[2602] = {true, 1442.1, -1438.8, 12.4, false}, 
+		[2603] = {true, 1431.1, -1438.8, 12.4, false}, 
+		[2604] = {true, 1423, -1434.9, 12.4, false, {{"Commerce", 2800}}}, 
+		[2605] = {true, 1422.9, -1424.4, 12.4, false}, 
+		[2606] = {true, 1422.9, -1413.1, 12.4, false}, 
+		[2607] = {true, 1423, -1402.9, 12.4, false}, 
+		[2608] = {true, 1419.7, -1394, 12.4, false}, 
+		[2609] = {true, 1409.6, -1393.2, 12.4, false}, 
+		[2610] = {true, 1399.1, -1393.2, 12.4, false}, 
+		[2611] = {true, 1388.8, -1393.2, 12.4, false}, 
+		[2612] = {true, 1378.2, -1393.3, 12.5, false}, 
+		[2613] = {true, 1370.9, -1393, 12.5, false, {{"Market", 2421}}}, 
+		
+		[2700] = {true, 1370.3, -1403.2, 12.4, false}, 
+		[2701] = {true, 1380.5, -1403, 12.4, false}, 
+		[2702] = {true, 1390.5, -1402.8, 12.4, false}, 
+		[2703] = {true, 1399.2, -1406.1, 12.4, false}, 
+		[2704] = {true, 1399.8, -1416.5, 12.4, false}, 
+		[2705] = {true, 1399.7, -1427.1, 12.4, false}, 
+		[2706] = {true, 1399.7, -1437.2, 12.4, false, {{"Commerce", 2506}}}, 
+		
+		[2800] = {true, 1418.1, -1433.8, 12.4, false}, 
+		[2801] = {true, 1418.2, -1423.1, 12.4, false}, 
+		[2802] = {true, 1418.2, -1412.5, 12.4, false}, 
+		[2803] = {true, 1417.9, -1402.5, 12.4, false}, 
+		[2804] = {true, 1409.4, -1398.3, 12.4, false}, 
+		[2805] = {true, 1399.4, -1398.1, 12.4, false}, 
+		[2806] = {true, 1389, -1398.1, 12.4, false}, 
+		[2807] = {true, 1378.4, -1398.1, 12.4, false}, 
+		[2808] = {true, 1370.9, -1397.9, 12.4, false, {{"Market", 2420}}}, 
 	},
 	["Little Mexico"] = {
 		[1] = {true, 1762.9, -1606.8, 12.4, false}, 
@@ -34484,7 +34531,7 @@ PathNodes = {
 		[905] = {true, 2232.9, -25.6, 25.3, false}, 
 		[906] = {true, 2224.2, -31.1, 25.3, false}, 
 		[907] = {true, 2221.5, -40.7, 25.3, false}, 
-		[908] = {true, 2221.5, -51.9, 25.3, false, {{"Palomino Creek", 1805}}}, 
+		[908] = {true, 2221.5, -51.9, 25.3, false}, 
 		[909] = {true, 2221.6, -62.1, 25.3, false}, 
 		[910] = {true, 2221.7, -72.4, 25.3, false}, 
 		[911] = {true, 2221.6, -82.4, 25.3, false}, 
@@ -46068,12 +46115,10 @@ end
 
 
 function CreateVehicleNodeMarker(zone, last)
-	if(getServerPort() == 22013) then
-		if(PathNodes[zone]) then
-			triggerClientEvent(source, "InfoPath", source, zone, toJSON(PathNodes[zone]), last)
-		else
-			triggerClientEvent(source, "InfoPath", source, zone, nil, last)
-		end
+	if(PathNodes[zone]) then
+		triggerClientEvent(source, "InfoPath", source, zone, toJSON(PathNodes[zone]), last)
+	else
+		triggerClientEvent(source, "InfoPath", source, zone, nil, last)
 	end
 end
 addEvent("CreateVehicleNodeMarker", true)

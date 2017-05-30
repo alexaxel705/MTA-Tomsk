@@ -1400,17 +1400,18 @@ end
 function SetControl(thePlayer, control, state, analog)
 	if(getElementType(thePlayer) == "player") then
 		if(analog) then
-			setAnalogControlState(control, state)
+			return setAnalogControlState(control, state)
 		else
-			setControlState(control, state)
+			return setControlState(control, state)
 		end
 	else
 		if(analog) then
-			setPedAnalogControlState(thePlayer, control, state)
+			return setPedAnalogControlState(thePlayer, control, state)
 		else
-			setPedControlState(thePlayer, control, state)
+			return setPedControlState(thePlayer, control, state)
 		end
 	end
+	return false
 end
 
 
@@ -3614,8 +3615,11 @@ function UpdateBot()
 					local x2,y2,z2 = getPositionInFront(theVehicle, 6)
 					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
 					if(hitElement) then
-						if(getElementType(hitElement) == "vehicle" or getElementType(hitElement) == "player" or getElementType(hitElement) == "ped") then
+						if(getElementType(hitElement) == "vehicle") then
 							brake = true
+						elseif(getElementType(hitElement) == "player" or getElementType(hitElement) == "ped") then
+							brake = true
+							HornPed(thePed, hitElement)
 						end
 					end
 				end
@@ -3928,8 +3932,29 @@ function GetVehicleMaxRPM(engineAcceleration)
 end
 
 
-
-
+local PedHorn = {}
+function HornPed(thePed, thePlayer)
+	if(not isTimer(PedHorn[thePed])) then
+		setPedControlState(thePed, "horn", true)
+		PedHorn[thePed] = setTimer(function() 
+			if(getPedControlState(thePed, "horn")) then
+				setPedControlState(thePed, "horn", false)
+			else
+				setPedControlState(thePed, "horn", true)
+			end
+		end, math.random(100,500), 5)
+		if(thePlayer) then
+			local rand = math.random(1,5)
+			if(rand > 2) then
+				StartAnimation(thePlayer, "ped", "fucku", 1500, false, true, true, false)
+			elseif(rand == 1) then
+				StartAnimation(thePlayer, "ped", "ev_step", 1500, false, true, true, false)
+			elseif(rand == 2) then
+				StartAnimation(thePlayer, "ped", "ev_dive", 3000,false,true,true,false)
+			end
+		end
+	end
+end
 
 
 
@@ -4038,30 +4063,14 @@ function updateWorld()
 										RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
 										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 									end
-									
-									setPedControlState(occ, "horn", true)
-									setTimer(function() 
-										if(getPedControlState(occ, "horn")) then
-											setPedControlState(occ, "horn", false)
-										else
-											setPedControlState(occ, "horn", true)
-										end
-									end, math.random(100,500), 5)
+									HornPed(occ)
 								else
 									if(not isTimer(PData["VehicleBonus"])) then
 										AddRage(math.round(VehicleSpeed-100, 0))
 										RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
 										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 									end
-									
-									setPedControlState(occ, "horn", true)
-									setTimer(function() 
-										if(getPedControlState(occ, "horn")) then
-											setPedControlState(occ, "horn", false)
-										else
-											setPedControlState(occ, "horn", true)
-										end
-									end, math.random(100,500), 5)
+									HornPed(occ)
 								end
 							end
 						end
@@ -4082,30 +4091,14 @@ function updateWorld()
 										RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
 										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 									end
-									
-									setPedControlState(occ, "horn", true)
-									setTimer(function() 
-										if(getPedControlState(occ, "horn")) then
-											setPedControlState(occ, "horn", false)
-										else
-											setPedControlState(occ, "horn", true)
-										end
-									end, math.random(100,500), 5)
+									HornPed(occ)
 								else	
 									if(not isTimer(PData["VehicleBonus"])) then
 										AddRage(math.round(VehicleSpeed-100, 0))
 										RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
 										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 									end
-									
-									setPedControlState(occ, "horn", true)
-									setTimer(function() 
-										if(getPedControlState(occ, "horn")) then
-											setPedControlState(occ, "horn", false)
-										else
-											setPedControlState(occ, "horn", true)
-										end
-									end, math.random(100,500), 5)
+									HornPed(occ)
 								end
 							end
 						end
@@ -4583,6 +4576,7 @@ function updateCamera()
 	end
 	
 	if(PData["ResourceMap"]) then
+		setSkyGradient(170,103,0 ,170,103,0)
 		for i, v in pairs(PData["ResourceMap"]) do
 			dxDrawLine3D(v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8])
 		end
@@ -5714,6 +5708,10 @@ function resourcemap()
 			helpmessage("Идет загрузка...")
 			PEDChangeSkin = "cinema"
 			setElementFrozen(localPlayer, true)
+			local theVehicle = getPedOccupiedVehicle(localPlayer)
+			if(theVehicle) then
+				setElementFrozen(theVehicle, true)
+			end
 			
 			local loadingzones = {}
 			for name, dat in pairs(PData["infopath"]) do
@@ -5739,6 +5737,10 @@ function resourcemap()
 			setCameraTarget(localPlayer)
 			PData["ResourceMap"] = nil
 			setElementFrozen(localPlayer, false)
+			local theVehicle = getPedOccupiedVehicle(localPlayer)
+			if(theVehicle) then
+				setElementFrozen(theVehicle, false)
+			end
 			PEDChangeSkin = "play"
 			GameSky(getZoneName(x,y,z, true))
 		end
@@ -5779,15 +5781,26 @@ function map()
 						end
 						local x2,y2,z2 = dat[2], dat[3], dat[4]
 						
-						PData["ResourceMap"][#PData["ResourceMap"]+1] = {x/50,y/50,z/50+0.2+(4000),x2/50,y2/50,z2/50+0.2+(4000), color, 20}
+						PData["ResourceMap"][#PData["ResourceMap"]+1] = {x/50,y/50,z/50+0.2+(4000),x2/50,y2/50,z2/50+0.2+(4000), color, 18}
 					end
 				end
 			end
 		end end
 	end
 	
-	setCameraMatrix(0, 0, 4150, 0, 0, 4000, 0, 70)
-	setSkyGradient(170,103,0 ,170,103,0)
+	
+	if(PData['gps']) then
+		for i,v in pairs(PData['gps']) do --тут
+			if(oldmarker) then
+				local x,y,z = unpack(fromJSON(getElementData(v, "coord")))
+				local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
+				PData["ResourceMap"][#PData["ResourceMap"]+1] = {x/50,y/50,z/50+0.2+(4000),x2/50,y2/50,z2/50+0.2+(4000), tocolor(255,0,0,150), 20}
+			end
+			oldmarker = v
+		end
+	end
+	setCameraMatrix(0, 0, 4250, 0, 0, 4000, 0, 70)
+	setWeather(0)
 end
 
 addEvent("map", true)
@@ -6016,12 +6029,16 @@ function playerPressedKey(button, press)
 		elseif(button == "mouse_wheel_down") then
 			if(press) then
 				local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-				setCameraMatrix(x,y+2,z+10,rx,ry,rz,r,f)
+				if(z < 4250) then
+					setCameraMatrix(x,y+2,z+10,rx,ry,rz,r,f)
+				end
 			end
 		elseif(button == "mouse_wheel_up") then
 			if(press) then
 				local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-				setCameraMatrix(x,y-2,z-10,rx,ry,rz,r,f)
+				if(z > 4010) then
+					setCameraMatrix(x,y-2,z-10,rx,ry,rz,r,f)
+				end
 			end
 		end
 	end
