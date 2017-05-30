@@ -46067,19 +46067,19 @@ end
 
 
 
-local MarkerZoneCreated = {}
-function CreateVehicleNodeMarker(zone)
+function CreateVehicleNodeMarker(zone, last)
 	if(getServerPort() == 22013) then
-		if(not MarkerZoneCreated[zone]) then
-			MarkerZoneCreated[zone] = true
-			if(PathNodes[zone]) then
-				triggerClientEvent(source, "InfoPath", source, zone, toJSON(PathNodes[zone]))
-			end
+		if(PathNodes[zone]) then
+			triggerClientEvent(source, "InfoPath", source, zone, toJSON(PathNodes[zone]), last)
+		else
+			triggerClientEvent(source, "InfoPath", source, zone, nil, last)
 		end
 	end
 end
 addEvent("CreateVehicleNodeMarker", true)
 addEventHandler("CreateVehicleNodeMarker", root, CreateVehicleNodeMarker)
+
+
 
 
 

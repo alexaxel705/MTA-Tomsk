@@ -1632,9 +1632,6 @@ local ZonesRegion = {
 	["Downtown"] = "San Fierro"
 }
 
-
-
-
 --Модель, номер, цвет, вариант, команда (если есть)
 
 local TeamVehicle = {

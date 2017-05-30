@@ -30,6 +30,7 @@ local RobAction = false
 local StreamData = {}
 local VideoMemory = {["HUD"] = {}}
 local PData = {
+	["3DLines"] = {}, 
 	['loading'] = 0,
 	['Target'] = {}, 
 	['blip'] = {}, 
@@ -45,7 +46,177 @@ local PData = {
 	['MultipleAction'] = {},
 	['LANG'] = "Ru_ru.po", 
 	["DisplayCollection"] = {}, -- Отображает на экране количество коллекций в районе
-	['infopath'] = {}, -- Для разработчика
+	['infopath'] = {
+		["Linden Side"] = false,
+		["Las Venturas Airport"] = false,
+		["Harry Gold Parkway"] = false,
+		["Los Santos International"] = false,
+		["Come-A-Lot"] = false,
+		["Juniper Hill"] = false,
+		["City Hall"] = false,
+		["Julius Thruway North"] = false,
+		["Montgomery"] = false,
+		["El Corona"] = false,
+		["Queens"] = false,
+		["The High Roller"] = false,
+		["K.A.C.C. Military Fuels"] = false,
+		["Pilson Intersection"] = false,
+		["Vinewood"] = false,
+		["Mulholland Intersection"] = false,
+		["The Emerald Isle"] = false,
+		["Flint County"] = false,
+		["El Quebrados"] = false,
+		["Tierra Robada"] = false,
+		["Linden Station"] = false,
+		["Blackfield Chapel"] = false,
+		["San Andreas Sound"] = false,
+		["Conference Center"] = false,
+		["Roca Escalante"] = false,
+		["The Camel's Toe"] = false,
+		["El Castillo del Diablo"] = false,
+		["Lil' Probe Inn"] = false,
+		["Martin Bridge"] = false,
+		["Beacon Hill"] = false,
+		["Battery Point"] = false,
+		["Missionary Hill"] = false,
+		["The Pink Swan"] = false,
+		["Easter Tunnel"] = false,
+		["Red County"] = false,
+		["Commerce"] = false,
+		["Palomino Creek"] = false,
+		["Blueberry"] = false,
+		["Montgomery Intersection"] = false,
+		["Santa Maria Beach"] = false,
+		["Las Barrancas"] = false,
+		["Regular Tom"] = false,
+		["Shady Creeks"] = false,
+		["Kincaid Bridge"] = false,
+		["Los Flores"] = false,
+		["Valle Ocultado"] = false,
+		["Julius Thruway West"] = false,
+		["Jefferson"] = false,
+		["Unknown Bar"] = false,
+		["Hashbury"] = false,
+		["'The Big Ear'"] = false,
+		["Back o Beyond"] = false,
+		["Los Santos"] = false,
+		["Playa del Seville"] = false,
+		["Last Dime Motel"] = false,
+		["Temple"] = false,
+		["San Fierro"] = false,
+		["Rockshore East"] = false,
+		["The Mako Span"] = false,
+		["Hilltop Farm"] = false,
+		["Avispa Country Club"] = false,
+		["The Sherman Dam"] = false,
+		["Ganton"] = false,
+		["Fisher's Lagoon"] = false,
+		["Pirates in Men's Pants"] = false,
+		["Ocean Flats"] = false,
+		["Rockshore West"] = false,
+		["Cranberry Station"] = false,
+		["Hankypanky Point"] = false,
+		["The Clown's Pocket"] = false,
+		["Doherty"] = false,
+		["Unknown"] = false,
+		["Esplanade North"] = false,
+		["North Rock"] = false,
+		["Bayside Marina"] = false,
+		["The Four Dragons Casino"] = false,
+		["Richman"] = false,
+		["Calton Heights"] = false,
+		["The Strip"] = false,
+		["Spinybed"] = false,
+		["Restricted Area"] = false,
+		["Verona Beach"] = false,
+		["King's"] = false,
+		["Garver Bridge"] = false,
+		["Easter Basin"] = false,
+		["LVA Freight Depot"] = false,
+		["Whetstone"] = false,
+		["Aldea Malvada"] = false,
+		["Easter Bay Airport"] = false,
+		["Fallow Bridge"] = false,
+		["Redsands East"] = false,
+		["Royal Casino"] = false,
+		["Las Brujas"] = false,
+		["Dillimore"] = false,
+		["Randolph Industrial Estate"] = false,
+		["Blueberry Acres"] = false,
+		["Willowfield"] = false,
+		["Market"] = false,
+		["Julius Thruway East"] = false,
+		["Palisades"] = false,
+		["Bone County"] = false,
+		["Leafy Hollow"] = false,
+		["Flint Range"] = false,
+		["Sherman Reservoir"] = false,
+		["Hunter Quarry"] = false,
+		["Easter Bay Chemicals"] = false,
+		["Sobell Rail Yards"] = false,
+		["Yellow Bell Station"] = false,
+		["Bayside"] = false,
+		["Paradiso"] = false,
+		["Verdant Meadows"] = false,
+		["Blackfield Intersection"] = false,
+		["Hampton Barns"] = false,
+		["Chinatown"] = false,
+		["Los Santos Inlet"] = false,
+		["Bayside Tunnel"] = false,
+		["Idlewood"] = false,
+		["Rodeo"] = false,
+		["Verdant Bluffs"] = false,
+		["Foster Valley"] = false,
+		["Whitewood Estates"] = false,
+		["Marina"] = false,
+		["Garcia"] = false,
+		["East Los Santos"] = false,
+		["Downtown Los Santos"] = false,
+		["Juniper Hollow"] = false,
+		["Fallen Tree"] = false,
+		["Green Palms"] = false,
+		["Las Venturas"] = false,
+		["Esplanade East"] = false,
+		["Gant Bridge"] = false,
+		["Mount Chiliad"] = false,
+		["Robada Intersection"] = false,
+		["Pilgrim"] = false,
+		["Glen Park"] = false,
+		["Fort Carson"] = false,
+		["Julius Thruway South"] = false,
+		["Angel Pine"] = false,
+		["Mulholland"] = false,
+		["Little Mexico"] = false,
+		["The Visage"] = false,
+		["Financial"] = false,
+		["Market Station"] = false,
+		["Blackfield"] = false,
+		["Yellow Bell Golf Course"] = false,
+		["Las Payasadas"] = false,
+		["Shady Cabin"] = false,
+		["Frederick Bridge"] = false,
+		["Octane Springs"] = false,
+		["The Panopticon"] = false,
+		["East Beach"] = false,
+		["Caligula's Palace"] = false,
+		["Flint Water"] = false,
+		["San Fierro Bay"] = false,
+		["Fern Ridge"] = false,
+		["Creek"] = false,
+		["Las Colinas"] = false,
+		["Santa Flora"] = false,
+		["Starfish Casino"] = false,
+		["Redsands West"] = false,
+		["Flint Intersection"] = false,
+		["Old Venturas Strip"] = false,
+		["Pershing Square"] = false,
+		["Arco del Oeste"] = false,
+		["Prickle Pine"] = false,
+		["Ocean Docks"] = false,
+		["Greenglass College"] = false,
+		["Unity Station"] = false,
+		["Downtown"] = false,
+	}, -- Для разработчика
 	['changezone'] = {} -- Для разработчика
 }
 local LangArr = {}
@@ -347,6 +518,7 @@ function yep()
 
 end
 addCommandHandler("yep", yep)
+
 
 
 
@@ -1257,7 +1429,11 @@ function SetZoneDisplay(zone)
 		end
 		ZonesDisplay[#ZonesDisplay+1] = {zone, 0, false}
 	end
-	triggerServerEvent("CreateVehicleNodeMarker", localPlayer, zone)
+	
+	if(not PData["infopath"][zone]) then
+		triggerServerEvent("CreateVehicleNodeMarker", localPlayer, zone)
+	end
+	
 	if(not GroundMaterial[zone]) then
 		triggerServerEvent("ZonesGroundPosition", localPlayer, zone)
 	end
@@ -4405,6 +4581,12 @@ function updateCamera()
 			end
 		end
 	end
+	
+	if(PData["ResourceMap"]) then
+		for i, v in pairs(PData["ResourceMap"]) do
+			dxDrawLine3D(v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8])
+		end
+	end
 end
 addEventHandler("onClientPreRender", getRootElement(), updateCamera)
 
@@ -5526,10 +5708,103 @@ end
 
 
 
+function resourcemap()
+	if(not PData["ResourceMap"]) then
+		if(PEDChangeSkin == "play") then
+			helpmessage("Идет загрузка...")
+			PEDChangeSkin = "cinema"
+			setElementFrozen(localPlayer, true)
+			
+			local loadingzones = {}
+			for name, dat in pairs(PData["infopath"]) do
+				if(not dat) then
+					loadingzones[#loadingzones+1] = name
+				end
+			end
+			
+			if(#loadingzones == 0) then 
+				map()
+			else
+				for slot = 1, #loadingzones do
+					if(slot == #loadingzones) then
+						triggerServerEvent("CreateVehicleNodeMarker", localPlayer, loadingzones[slot], true)
+					else
+						triggerServerEvent("CreateVehicleNodeMarker", localPlayer, loadingzones[slot])
+					end
+				end
+			end
+		end
+	else
+		if(PEDChangeSkin == "cinema") then
+			setCameraTarget(localPlayer)
+			PData["ResourceMap"] = nil
+			setElementFrozen(localPlayer, false)
+			PEDChangeSkin = "play"
+			GameSky(getZoneName(x,y,z, true))
+		end
+	end
+end
 
 
-function InfoPath(zone, arr)
+function map()
+	PData["ResourceMap"] = {}
+	
+	for zone, arr in pairs(PData["infopath"]) do
+		if(arr) then for i, arr2 in pairs(arr) do
+			local maincolor = false
+
+			if(arr2[1] == "Closed") then
+				maincolor = "Closed"
+			end
+			local x,y,z = arr2[2], arr2[3], arr2[4]
+			
+			local nextmarkers = {}
+			if(arr2[6]) then
+				for _,k in pairs(arr2[6]) do
+					table.insert(nextmarkers, {k[1], k[2]})
+				end
+			end
+			
+			if(PData["infopath"][zone][tostring(i+1)]) then
+				table.insert(nextmarkers, {zone, i+1})
+			end
+			
+			for _, arr3 in pairs(nextmarkers) do
+				if(PData["infopath"][arr3[1]]) then
+					local dat = PData["infopath"][arr3[1]][tostring(arr3[2])]
+					if(dat) then
+						local color = tocolor(120,105,103,150)
+						if(dat[1] == "Closed" or maincolor == "Closed") then
+							color = tocolor(140,125,123,150)
+						end
+						local x2,y2,z2 = dat[2], dat[3], dat[4]
+						
+						PData["ResourceMap"][#PData["ResourceMap"]+1] = {x/50,y/50,z/50+0.2+(4000),x2/50,y2/50,z2/50+0.2+(4000), color, 20}
+					end
+				end
+			end
+		end end
+	end
+	
+	setCameraMatrix(0, 0, 4150, 0, 0, 4000, 0, 70)
+	setSkyGradient(170,103,0 ,170,103,0)
+end
+
+addEvent("map", true)
+addEventHandler("map", localPlayer, map)
+
+
+
+
+
+
+
+function InfoPath(zone, arr, last)
 	PData['infopath'][zone] = fromJSON(arr)
+	
+	if(last) then
+		map()
+	end
 end
 addEvent("InfoPath", true)
 addEventHandler("InfoPath", localPlayer, InfoPath)
@@ -5699,6 +5974,59 @@ addEventHandler("SetupInventory", localPlayer, SetupInventory)
 
 
 function playerPressedKey(button, press)
+	if(PData["ResourceMap"]) then
+		if(press) then
+			killTimer(PData["MovementMapTimer"])
+			PData["MovementMapSpeed"] = 1
+		else
+			killTimer(PData["MovementMapTimer"])
+		end
+		if(button == "w") then
+			if(press) then
+				PData["MovementMapTimer"] = setTimer(function() 
+					local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
+					setCameraMatrix(x,y+PData["MovementMapSpeed"],z,rx,ry+PData["MovementMapSpeed"],rz,r,f)
+					PData["MovementMapSpeed"] = PData["MovementMapSpeed"]+0.3
+				end, 50, 0)
+			end
+		elseif(button == "s") then
+			if(press) then
+				PData["MovementMapTimer"] = setTimer(function() 
+					local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
+					setCameraMatrix(x,y-PData["MovementMapSpeed"],z,rx,ry-PData["MovementMapSpeed"],rz,r,f)
+					PData["MovementMapSpeed"] = PData["MovementMapSpeed"]+0.3
+				end, 50, 0)
+			end
+		elseif(button == "a") then
+			if(press) then
+				PData["MovementMapTimer"] = setTimer(function() 
+					local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
+					setCameraMatrix(x-PData["MovementMapSpeed"],y,z,rx-PData["MovementMapSpeed"],ry,rz,r,f)
+					PData["MovementMapSpeed"] = PData["MovementMapSpeed"]+0.3
+				end, 50, 0)
+			end
+		elseif(button == "d") then
+			if(press) then
+				PData["MovementMapTimer"] = setTimer(function() 
+					local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
+					setCameraMatrix(x+PData["MovementMapSpeed"],y,z,rx+PData["MovementMapSpeed"],ry,rz,r,f)
+					PData["MovementMapSpeed"] = PData["MovementMapSpeed"]+0.3
+				end, 50, 0)
+			end	
+		elseif(button == "mouse_wheel_down") then
+			if(press) then
+				local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
+				setCameraMatrix(x,y+2,z+10,rx,ry,rz,r,f)
+			end
+		elseif(button == "mouse_wheel_up") then
+			if(press) then
+				local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
+				setCameraMatrix(x,y-2,z-10,rx,ry,rz,r,f)
+			end
+		end
+	end
+
+
 	if(button == "mouse2") then
 		if(isPlayerMapForced()) then
 			if(press) then
@@ -6057,7 +6385,7 @@ function CreateTarget(el)
 end
 
 function ShakeLevel(level)
-	PData["ShakeLVL"]=PData["ShakeLVL"]+level
+	PData["ShakeLVL"] = PData["ShakeLVL"]+level
 end
 addEvent("ShakeLevel", true)
 addEventHandler("ShakeLevel", localPlayer, ShakeLevel)
@@ -8949,6 +9277,7 @@ function DrawPlayerMessage()
 				local material = GetGroundMaterial(x,y,z,z-2)
 				dxDrawBorderedText("Материал: "..material.."\nЗона: "..getZoneName(x,y,z), 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
 				for zone, arr in pairs(PData['infopath']) do
+					if(arr) then
 					for i, arr2 in pairs(arr) do
 						local maincolor = false
 
@@ -8997,6 +9326,7 @@ function DrawPlayerMessage()
 								end
 							end
 						end
+					end
 					end
 				end
 				
@@ -10380,6 +10710,8 @@ local Weather = {
 }
 local WeatherTimer = false
 function GameSky(zone, h, blended)
+	if(PData["ResourceMap"]) then return false end
+
 	if(not zone) then zone = PlayerZoneTrue end
 	if(not h) then h, _ = getTime() end
 
@@ -10562,6 +10894,7 @@ addEventHandler("onClientResourceStart",  getRootElement(),
 			bindKey("p", "down", autoMove)
 			bindKey("r", "down", reload)
 			bindKey("F1", "down", ShowInfoKey)
+			bindKey("F10", "down", resourcemap)
 			bindKey("F11", "down", openmap)
 			bindKey("F12", "down", hideinv)
 			StartLoad()
