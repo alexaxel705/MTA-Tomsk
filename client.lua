@@ -3828,12 +3828,16 @@ function updateWorld()
 					local _,_,rz = getElementRotation(theVehicle)
 					
 					local x,y,z = getPointInFrontOfPoint(vxc, vyc, vzc, rz-270, 30)
-					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxc, vyc, vzc,x,y,z, false, true, false, false, false, false, false, false, theVehicle,false,false)
+					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxc, vyc, vzc,x,y,z, false, true, true, false, false, false, false, false, theVehicle,false,false)
 					if(hitElement) then
-						if(not PData["VehicleBonus3"]) then PData["VehicleBonus3"] = 0 end
-						PData["VehicleBonus3"] = PData["VehicleBonus3"] + 0.2
-						if(PData["VehicleBonus3"] > 1) then 
-							RageInfo(Text("Преследование +{points}", {{"{points}", math.round(PData["VehicleBonus3"], 0)}}))
+						if(getElementType(hitElement) == "vehicle") then
+							if(not PData["VehicleBonus3"]) then PData["VehicleBonus3"] = 0 end
+							PData["VehicleBonus3"] = PData["VehicleBonus3"] + 0.2
+							if(PData["VehicleBonus3"] > 1) then 
+								RageInfo(Text("Преследование +{points}", {{"{points}", math.round(PData["VehicleBonus3"], 0)}}))
+							end
+						elseif(getElementType(hitElement) == "ped") then
+							StartAnimation(hitElement, "ped", "ev_dive", 3000,false,true,true,false)
 						end
 					else
 						if(PData["VehicleBonus3"]) then

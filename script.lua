@@ -5322,7 +5322,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 180.5, -214.3, 1.4, 0, 0 --
+		local x,y,z,i,d  =  1144.7, -1578, 13.3, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5379,7 +5379,7 @@ local ReplaceVehicleAnimation = {
 	}
 }
 
-			
+-- Добавить потом blendTime 
 function StartAnimation(thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame, forced)
 	if(ReplaceVehicleAnimation[block]) then
 		if(ReplaceVehicleAnimation[block][anim]) then
