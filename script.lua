@@ -5324,7 +5324,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  =  2079.4, -1749.7, 12.4, 0, 0 --
+		local x,y,z,i,d  = 2066, -1674.8, 12.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12883,6 +12883,7 @@ addEventHandler("loginPlayerEvent", root, loginPlayer)
 
 local PlayersRole = {
 	["alexaxel705"] = "Разработчик",
+	["Mes'yebur"] = "Тестировщик", 
 	["*Vk*Ricci"] = "Корректор английского языка",
 	["Pioner"] = "Корректор азербайджанского языка",
 	["Fucker"] = "Контент менеджер",
