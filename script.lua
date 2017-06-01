@@ -227,8 +227,6 @@ local EndRaceInfoTimer = false
 local RaceArray = false
 local PlayersEnteredPickup = {}
 local Threes = {}
-local ActionTimer = {}
-local ActionObject = {}
 local ThreesPickup = {}
 local StandartInventory = toJSON({{},{},{},{},{},{},{},{},{},{}})
 local Collections = toJSON({[953] = {}, [954] = {}, [1276] = {}})
@@ -5344,11 +5342,11 @@ addCommandHandler("tp", tp)
 
 
 function StopAnimation(thePlayer, key)
-	if(isTimer(ActionTimer[thePlayer])) then
-		killTimer(ActionTimer[thePlayer])
-		if(ActionObject[thePlayer]) then
-			Drop(ActionObject[thePlayer][6], ActionObject[thePlayer][1],ActionObject[thePlayer][2],ActionObject[thePlayer][3],ActionObject[thePlayer][4],ActionObject[thePlayer][5])
-			ActionObject[thePlayer] = nil
+	if(isTimer(PData[thePlayer]["ActionTimer"])) then
+		killTimer(PData[thePlayer]["ActionTimer"])
+		if(PData[thePlayer]["ActionObject"]) then
+			Drop(PData[thePlayer]["ActionObject"][6], PData[thePlayer]["ActionObject"][1],PData[thePlayer]["ActionObject"][2],PData[thePlayer]["ActionObject"][3],PData[thePlayer]["ActionObject"][4],PData[thePlayer]["ActionObject"][5])
+			PData[thePlayer]["ActionObject"] = nil
 		end
 	end
 	if(getElementHealth(thePlayer) > 20) then
@@ -6874,16 +6872,30 @@ addEventHandler("BankEvent", root, BankEvent)
 
 
 
-function CreateThreePlayer(thePlayer, model, x,y,z, dat)
-	local x,y = math.round(x, 0),math.round(y, 0)
-	if(not isTimer(ActionTimer[thePlayer])) then
+function CreateThreePlayer(thePlayer, i, x,y,z)
+	x,y = math.round(x, 0),math.round(y, 0)
+	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
+	local model = false
+	
+	if(arr[i][1] == "Конопля") then
+		model = 823
+	elseif(arr[i][1] ~= "Кока") then
+		model = 782
+	else
+		return false
+	end
+	
+	
+
+	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
 		local name = "T"..md5(tostring(x..y..z))
 		StartAnimation(thePlayer, "BOMBER","BOM_Plant", false,false,false,false)
-		dat[2] = 1
-		ActionObject[thePlayer] = {x,y,z+0.5, getElementInterior(thePlayer), getElementDimension(thePlayer), dat}
-		ActionTimer[thePlayer] = setTimer(function()
-			if(CreateThree(model, x,y,z, name, dat[3])) then
-				if(model == 823) then
+		arr[i][2] = 1
+		PData[thePlayer]["ActionObject"] = {x,y,z+0.5, getElementInterior(thePlayer), getElementDimension(thePlayer), arr[i]}
+		RemoveInventoryItemNew(thePlayer, "player", i)
+		PData[thePlayer]["ActionTimer"] = setTimer(function()
+			if(CreateThree(model, x,y,z, name, arr[i][3])) then
+				if(arr[i][1] == "Конопля") then
 					outputChatBox("Ты посадил #558833коноплю",thePlayer,255,255,255,true)
 					WantedLevel(thePlayer, 0.1)
 					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
@@ -6896,7 +6908,7 @@ function CreateThreePlayer(thePlayer, model, x,y,z, dat)
 						end
 					end
 					times = 3480
-				elseif(model == 782) then
+				elseif(arr[i][1] == "Кока") then
 					outputChatBox("Ты посадил коку",thePlayer,255,255,255,true)
 					WantedLevel(thePlayer, 0.1)
 					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
@@ -6917,12 +6929,12 @@ function CreateThreePlayer(thePlayer, model, x,y,z, dat)
 				xmlNodeSetAttribute(NewNode, "z", z)
 				xmlNodeSetAttribute(NewNode, "model", model)
 				xmlNodeSetAttribute(NewNode, "stage", 1)
-				xmlNodeSetAttribute(NewNode, "quality", dat[3])
+				xmlNodeSetAttribute(NewNode, "quality", arr[i][3])
 				xmlNodeSetAttribute(NewNode, "t", times)
 			else
 				outputChatBox("Тут уже посажено растение!", thePlayer, 255, 255, 255, true)
 			end
-			ActionObject[thePlayer] = nil
+			PData[thePlayer]["ActionObject"] = nil
 		end, 2200, 1)
 	end
 end
@@ -6940,9 +6952,9 @@ function RemoveThree(name)
 end
 
 function HarvestThree(thePlayer, pic)
-	if(not isTimer(ActionTimer[thePlayer])) then
+	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
 		StartAnimation(thePlayer, "BOMBER","BOM_Plant_Crouch_Out", false,false,false,false)
-		ActionTimer[thePlayer] = setTimer(function()
+		PData[thePlayer]["ActionTimer"] = setTimer(function()
 			local Node = xmlFindChild(ThreesNode, getElementData(pic, "Three"), 0)
 			local t = tonumber(xmlNodeGetAttribute(Node, "t"))
 			local model = tonumber(xmlNodeGetAttribute(Node, "model"))
@@ -12577,7 +12589,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Конопля", 1, 750, {})
+	--AddInventoryItem(thePlayer, "Конопля", 1, 1, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
@@ -13022,14 +13034,14 @@ addEventHandler("PrisonSleep", root, PrisonSleep)
 
 
 function PrisonGavno(x,y,z,rz)
-	if(not isTimer(ActionTimer[source])) then
+	if(not isTimer(PData[source]["ActionTimer"])) then
 		if(rz == 0) then
 			SetPlayerPosition(source,x-0.1,y-0.5,z+1,nil,nil,rz)
 		else
 			SetPlayerPosition(source,x+0.1,y+0.5,z+1,nil,nil,rz)
 		end
 		StartAnimation(source,"SILENCED", "SilenceCrouchfire", 1000,false,false,false)
-		ActionTimer[source] = setTimer(function(thePlayer)
+		PData[source]["ActionTimer"] = setTimer(function(thePlayer)
 			AddInventoryItem(thePlayer, "Фекалии", 1, math.random(0,1000), {})
 		end, 1000, 1, source)
 	end
@@ -14476,7 +14488,7 @@ end
 
 local wanktimers = {}
 function iznas2(thePlayer, thePed)
-	if(not isTimer(ActionTimer[thePlayer])) then
+	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
 		if(thePed) then
 			if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
 				if(isTimer(wanktimers[thePlayer])) then
@@ -14494,7 +14506,7 @@ function iznas2(thePlayer, thePed)
 					UnBindAllKey(thePed)
 					Pain(thePlayer)
 					Pain(thePed)
-					ActionTimer[thePlayer] = setTimer(function()
+					PData[thePlayer]["ActionTimer"] = setTimer(function()
 						BindAllKey(thePlayer)
 						BindAllKey(thePed)
 						Koryachka(thePed)
@@ -14526,7 +14538,7 @@ addEventHandler("iznas2", getRootElement(), iznas2)
 
 
 function iznas3(thePlayer, thePed)
-	if(not isTimer(ActionTimer[thePlayer])) then
+	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
 		if(thePed) then
 			if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
 				if(isTimer(wanktimers[thePlayer])) then
@@ -14544,7 +14556,7 @@ function iznas3(thePlayer, thePed)
 					UnBindAllKey(thePed)
 					Pain(thePlayer)
 					Pain(thePed)
-					ActionTimer[thePlayer] = setTimer(function()
+					PData[thePlayer]["ActionTimer"] = setTimer(function()
 						BindAllKey(thePlayer)
 						BindAllKey(thePed)
 						Koryachka(thePed)
@@ -14565,7 +14577,7 @@ addEventHandler("iznas3", getRootElement(), iznas3)
 
 
 function iznas(thePlayer, thePed)
-	if(not isTimer(ActionTimer[thePlayer])) then
+	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
 		if(thePed) then
 			if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
 				if(isTimer(wanktimers[thePlayer])) then
@@ -14583,7 +14595,7 @@ function iznas(thePlayer, thePed)
 					UnBindAllKey(thePed)
 					Pain(thePlayer)
 					Pain(thePed)
-					ActionTimer[thePlayer] = setTimer(function()
+					PData[thePlayer]["ActionTimer"] = setTimer(function()
 						BindAllKey(thePlayer)
 						BindAllKey(thePed)
 						Koryachka(thePed)
@@ -14616,7 +14628,7 @@ addEventHandler("iznas", getRootElement(), iznas)
 
 
 function blowjob(thePlayer, thePed)
-	if(not isTimer(ActionTimer[thePlayer])) then
+	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
 		if(thePed) then
 			if(getElementType(thePed) == "player" or getElementType(thePed) == "ped") then
 				if(isTimer(wanktimers[thePlayer])) then
@@ -14635,7 +14647,7 @@ function blowjob(thePlayer, thePed)
 					Pain(thePlayer)
 					Pain(thePed)
 					
-					ActionTimer[thePlayer] = setTimer(function()
+					PData[thePlayer]["ActionTimer"] = setTimer(function()
 						BindAllKey(thePlayer)
 						BindAllKey(thePed)
 						Koryachka(thePed)
@@ -14659,14 +14671,14 @@ addEventHandler("blowjob", getRootElement(), blowjob)
 
 
 function butilka(thePlayer, name, i, thePed)
-	if(not isTimer(ActionTimer[thePlayer])) then
+	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
 		local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
 		
 		if(getElementHealth(thePed) < 20) then
 			StartAnimation(thePed, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
 			setElementData(thePed, "BottleAnus", ItemsNamesArr[arr[i][1]])
 			AddPlayerArmas(thePed, ItemsNamesArr[arr[i][1]]) 
-			ActionTimer[thePlayer] = setTimer(function()
+			PData[thePlayer]["ActionTimer"] = setTimer(function()
 				Koryachka(thePed)
 				RemovePlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
 				removeElementData(thePed, "BottleAnus")
@@ -14700,11 +14712,11 @@ addEventHandler("butilka", getRootElement(), butilka)
 
 
 function razd(thePlayer, player2)
-	if(not isTimer(ActionTimer[thePlayer])) then
+	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
 		if(player2) then
 			if(getElementType(player2) == "player" or getElementType(player2) == "ped") then
 				StartAnimation(thePlayer, "BOMBER","BOM_Plant_Crouch_Out", false,false,false,false)
-				ActionTimer[thePlayer] = setTimer(function()
+				PData[thePlayer]["ActionTimer"] = setTimer(function()
 					local arr = fromJSON(GetDatabaseAccount(thePlayer, "wardrobe"))
 					local new = getElementModel(player2)
 					if(not arr[new]) then 
