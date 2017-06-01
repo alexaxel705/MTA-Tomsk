@@ -228,6 +228,7 @@ local RaceArray = false
 local PlayersEnteredPickup = {}
 local Threes = {}
 local ActionTimer = {}
+local ActionObject = {}
 local ThreesPickup = {}
 local StandartInventory = toJSON({{},{},{},{},{},{},{},{},{},{}})
 local Collections = toJSON({[953] = {}, [954] = {}, [1276] = {}})
@@ -5345,6 +5346,10 @@ addCommandHandler("tp", tp)
 function StopAnimation(thePlayer, key)
 	if(isTimer(ActionTimer[thePlayer])) then
 		killTimer(ActionTimer[thePlayer])
+		if(ActionObject[thePlayer]) then
+			Drop(ActionObject[thePlayer][6], ActionObject[thePlayer][1],ActionObject[thePlayer][2],ActionObject[thePlayer][3],ActionObject[thePlayer][4],ActionObject[thePlayer][5])
+			ActionObject[thePlayer] = nil
+		end
 	end
 	if(getElementHealth(thePlayer) > 20) then
 		setPedAnimation(thePlayer, nil,nil)
@@ -6869,16 +6874,17 @@ addEventHandler("BankEvent", root, BankEvent)
 
 
 
-function CreateThreePlayer(thePlayer, model, x,y,z, quality)
+function CreateThreePlayer(thePlayer, model, x,y,z, dat)
 	local x,y = math.round(x, 0),math.round(y, 0)
 	if(not isTimer(ActionTimer[thePlayer])) then
 		local name = "T"..md5(tostring(x..y..z))
 		StartAnimation(thePlayer, "BOMBER","BOM_Plant", false,false,false,false)
+		dat[2] = 1
+		ActionObject[thePlayer] = {x,y,z+0.5, getElementInterior(thePlayer), getElementDimension(thePlayer), dat}
 		ActionTimer[thePlayer] = setTimer(function()
-			if(CreateThree(model, x,y,z, name, quality)) then
+			if(CreateThree(model, x,y,z, name, dat[3])) then
 				if(model == 823) then
 					outputChatBox("Ты посадил #558833коноплю",thePlayer,255,255,255,true)
-					RemoveInventoryItem(thePlayer, "Конопля")
 					WantedLevel(thePlayer, 0.1)
 					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 					if(PlayerTeam == "Баллас") then
@@ -6892,7 +6898,6 @@ function CreateThreePlayer(thePlayer, model, x,y,z, quality)
 					times = 3480
 				elseif(model == 782) then
 					outputChatBox("Ты посадил коку",thePlayer,255,255,255,true)
-					RemoveInventoryItem(thePlayer, "Кока")
 					WantedLevel(thePlayer, 0.1)
 					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 					if(PlayerTeam == "Колумбийский картель") then
@@ -6912,11 +6917,12 @@ function CreateThreePlayer(thePlayer, model, x,y,z, quality)
 				xmlNodeSetAttribute(NewNode, "z", z)
 				xmlNodeSetAttribute(NewNode, "model", model)
 				xmlNodeSetAttribute(NewNode, "stage", 1)
-				xmlNodeSetAttribute(NewNode, "quality", quality)
+				xmlNodeSetAttribute(NewNode, "quality", dat[3])
 				xmlNodeSetAttribute(NewNode, "t", times)
 			else
 				outputChatBox("Тут уже посажено растение!", thePlayer, 255, 255, 255, true)
 			end
+			ActionObject[thePlayer] = nil
 		end, 2200, 1)
 	end
 end
@@ -12571,7 +12577,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Ракета", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Конопля", 1, 750, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
