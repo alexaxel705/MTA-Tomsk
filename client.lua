@@ -7543,7 +7543,7 @@ function SetInventoryItem(name, i, item, count, quality, data)
 			initTrunk(TrunkWindows, toJSON(PInv["trunk"]))
 		end
 		triggerServerEvent("SaveInventory", localPlayer, localPlayer, toJSON(PInv["player"]))
-		outputChatBox("123")
+
 		UpdateInventoryMass()
 		triggerServerEvent("useinvweapon", localPlayer, localPlayer)
 	end
