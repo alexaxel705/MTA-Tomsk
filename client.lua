@@ -3567,7 +3567,7 @@ function UpdateBot()
 		if(theVehicle) then
 			local x,y,z = getElementPosition(theVehicle)
 			local rx,ry,rz = getElementRotation(theVehicle)
-			local brake = false
+			local brakes = false
 			local path = false
 			local nextpath = false
 			local maxspd = 40
@@ -3587,12 +3587,12 @@ function UpdateBot()
 				if(distance < PointDistance) then
 					if(arr[4]) then
 						if(trafficlight[tostring(getTrafficLightState())] == arr[4]) then
-							brake = true
+							brakes = true
 						end
 						
 					end
 					
-					if(brake == false) then -- Если не ждет на светофоре
+					if(brakes == false) then -- Если не ждет на светофоре
 						if(StreamData[thePed]["UpdateRequest"]) then
 							StreamData[thePed]["UpdateRequest"] = false
 							triggerServerEvent("SetNextDynamicNode", localPlayer, thePed)
@@ -3606,7 +3606,7 @@ function UpdateBot()
 					nextpath = {tmpx, tmpy, tmpz}
 					distance = getDistanceBetweenPoints2D(path[1], path[2], x,y)
 					if(distance < PointDistance) then
-						brake = true
+						brakes = true
 					end
 				end
 				
@@ -3616,9 +3616,9 @@ function UpdateBot()
 					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
 					if(hitElement) then
 						if(getElementType(hitElement) == "vehicle") then
-							brake = true
+							brakes = true
 						elseif(getElementType(hitElement) == "player" or getElementType(hitElement) == "ped") then
-							brake = true
+							brakes = true
 							HornPed(thePed, hitElement)
 						end
 					end
@@ -3646,7 +3646,7 @@ function UpdateBot()
 				local limitspeed = maxspd-((maxspd-10)*(nextrot/90))
 
 				
-				if(brake) then
+				if(brakes) then
 					setPedAnalogControlState(thePed, "accelerate", 0)
 					setPedAnalogControlState(thePed, "brake_reverse", 0)
 					setPedControlState(thePed, "handbrake", true)
@@ -3730,7 +3730,7 @@ function UpdateBot()
 				if(theVehicle) then
 					local x,y,z = getElementPosition(theVehicle)
 					local rx,ry,rz = getElementRotation(theVehicle)
-					local brake = false
+					local brakes = false
 					
 					local nextrot = GetMarrot(findRotation(x, y, MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2]),rz)
 					if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
@@ -3749,12 +3749,12 @@ function UpdateBot()
 					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
 					if(hitElement) then
 						if(getElementType(hitElement) == "vehicle" or getElementType(hitElement) == "player" or getElementType(hitElement) == "ped") then
-							brake = true
+							brakes = true
 						end
 					end
 					
 						
-					if(brake) then
+					if(brakes) then
 						SetControl(thePlayer, "accelerate", 0, true)
 						SetControl(thePlayer, "brake_reverse", 0, true)
 						SetControl(thePlayer, "handbrake", true)
@@ -9301,7 +9301,21 @@ function DrawPlayerMessage()
 				end
 				
 				local material = GetGroundMaterial(x,y,z,z-2)
-				dxDrawBorderedText("Материал: "..material.."\nЗона: "..getZoneName(x,y,z), 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
+				local out = "Материал: "..material.."\nЗона: "..getZoneName(x,y,z)
+				if(isCursorShowing()) then
+					local x,y,z = getCameraMatrix()
+					local sx,sy, cx,cy,cz = getCursorPosition()
+					local theVehicle = getPedOccupiedVehicle(localPlayer)
+					local _,_,_,_,hitElement,_,_,_,_,_,_,model = processLineOfSight(x,y,z, cx,cy,cz, true,true,true, true, true, true, false, true, false, true, false)
+					
+					dxDrawLine3D(x,y,z, cx,cy,cz)
+					if(model) then
+						out = out.."\nЭлемент: "..model
+					end
+				end
+				dxDrawBorderedText(out, 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
+
+				
 				for zone, arr in pairs(PData['infopath']) do
 					if(arr) then
 					for i, arr2 in pairs(arr) do
@@ -9869,6 +9883,7 @@ local VehicleTrunks = {
 
 	[496] = {{-0.5, -1.7, -0.05, 10, 0, 0}, {0, -1.7, -0.05, 10, 0, 0}, {0.5, -1.7, -0.05, 10, 0, 0}},
 	
+	[517] = {{-0.5, -2.3, -0.05, 0, 0, 0}, {0, -2.3, -0.05, 0, 0, 0}, {0.5, -2.3, -0.05, 0, 0, 0}},
 	[518] = {{-0.5, -2.3, -0.05, 0, 0, 0}, {0, -2.3, -0.05, 0, 0, 0}, {0.5, -2.3, -0.05, 0, 0, 0}},
 	
 	[533] = {{-0.6, -2, 0.1, 10, 0, 0}, {0, -2, 0.1, 10, 0, 0}, {0.6, -2, 0.1, 10, 0, 0}},

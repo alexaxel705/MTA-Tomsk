@@ -3092,6 +3092,7 @@ local VehicleTrunks = {
 
 	[496] = {{-0.5, -1.7, -0.05, 10, 0, 0}, {0, -1.7, -0.05, 10, 0, 0}, {0.5, -1.7, -0.05, 10, 0, 0}},
 	
+	[517] = {{-0.5, -2.3, -0.05, 0, 0, 0}, {0, -2.3, -0.05, 0, 0, 0}, {0.5, -2.3, -0.05, 0, 0, 0}},
 	[518] = {{-0.5, -2.3, -0.05, 0, 0, 0}, {0, -2.3, -0.05, 0, 0, 0}, {0.5, -2.3, -0.05, 0, 0, 0}},
 	
 	[533] = {{-0.6, -2, 0.1, 10, 0, 0}, {0, -2, 0.1, 10, 0, 0}, {0.6, -2, 0.1, 10, 0, 0}},
@@ -5320,7 +5321,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  =  2291.1, -2091.9, 12.3, 0, 0 --
+		local x,y,z,i,d  = 1521.9, -1166.3, 23.1, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7645,7 +7646,9 @@ function preLoad(name)
 			setVehiclePaintjob(v, xmlNodeGetAttribute(node, "vinyl"))
 		end
 		if(xmlNodeGetAttribute(node, "siren")) then setElementData(v, "siren", xmlNodeGetAttribute(node, "siren")) end
+		if(xmlNodeGetAttribute(node, "trunk")) then setElementData(v, "trunk", xmlNodeGetAttribute(node, "trunk")) end
 
+		
 		local comp = fromJSON(xmlNodeGetAttribute(node, "handl"))
 		UpdateVehicleHandling(v, comp)
 	end
@@ -13649,7 +13652,7 @@ local PrisonVariable = {
 local DroppedItem = {
 	["Рюкзак"] = true, 
 	["Чемодан"] = true, 
-	["Ранец"] = true, 
+	["Пакет"] = true, 
 	["Конопля"] = true, 
 	["Кока"] = true, 
 	["Косяк"] = true, 
@@ -15508,9 +15511,22 @@ setElementData(createMarker(2410.7, -1426, 23, "cylinder", 4, 99, 148, 222, 70),
 
 function SaveTrunk(theVehicle, arr)
 	setElementData(theVehicle, "trunk", arr)
+	if(getElementData(theVehicle, "x")) then
+		for i,node in ipairs(xmlNodeGetChildren(CarNode)) do
+			if(getElementData(theVehicle, "owner") == xmlNodeGetValue(node)) then
+				if(getElementData(theVehicle, "x") == xmlNodeGetAttribute(node, "vx") and getElementData(theVehicle, "y") == xmlNodeGetAttribute(node, "vy") and getElementData(theVehicle, "z") == xmlNodeGetAttribute(node, "vz")) then
+					xmlNodeSetAttribute(node, "trunk", arr)
+				end
+			end
+		end
+	end	
 end
 addEvent("SaveTrunk", true)
 addEventHandler("SaveTrunk", getRootElement(), SaveTrunk)
+
+
+
+
 
 
 
