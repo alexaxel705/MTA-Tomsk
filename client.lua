@@ -7869,7 +7869,7 @@ function UseInventoryItem(name, i)
 		local x, y, z = getElementPosition(localPlayer)
 		local gz = getGroundPosition(x, y, z)
 		if(ValidateMaterialForThree(x,y,z, gz)) then
-			triggerServerEvent("CreateThreePlayer", localPlayer, localPlayer, x,y,gz, i)
+			triggerServerEvent("CreateThreePlayer", localPlayer, localPlayer, i, x,y,gz)
 		else
 			outputChatBox("Здесь нельзя садить коку",255,255,255,true)
 		end
