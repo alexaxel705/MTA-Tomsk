@@ -3076,6 +3076,8 @@ local VehicleTrunks = {
 	[402] = {{-0.6, -2.2, 0.15, 0, 0, 0}, {0, -2.2, 0.15, 0, 0, 0}, {0.6, -2.2, 0.15, 0, 0, 0}},
 	[403] = false,
 	[404] = {{-0.6, -1.7, 0.2, 0, 0, 0}, {0, -1.7, -0.07, 0, 0, 0}, {0.6, -1.7, 0.2, 0, 0, 0}, {-0.6, -2.2, -0.07, 0, 0, 0}, {0, -2.2, -0.07, 0, 0, 0}, {0.6, -2.2, -0.07, 0, 0, 0}},
+	
+	[412] = {{-0.6, -2.4, -0.05, 10, 0, 0}, {0, -2.4, -0.05, 10, 0, 0}, {0.6, -2.4, -0.05, 10, 0, 0}, {-0.6, -3.0, -0.05, 10, 0, 0}, {0, -3.0, -0.05, 10, 0, 0}, {0.6, -3.0, -0.05, 10, 0, 0}},
 
 	[419] = {{-0.6, -2.4, -0.05, 10, 0, 0}, {0, -2.4, -0.05, 10, 0, 0}, {0.6, -2.4, -0.05, 10, 0, 0}},
 	
@@ -3101,9 +3103,10 @@ local VehicleTrunks = {
 	[536] = {{-0.6, -2.6, -0, 10, 0, 0}, {0, -2.6, 0, 10, 0, 0}, {0.6, -2.6, 0, 10, 0, 0}},
 	
 	[542] = {{-0.6, -2.5, 0.1, 10, 0, 0}, {0, -2.5, 0.1, 10, 0, 0}, {0.6, -2.5, 0.1, 10, 0, 0}},
+	[543] = {{-0.6, -0.9, 0, 0, 0, 0}, {0, -0.9, -0, 0, 0, 0}, {0.6, -0.9, 0, 0, 0, 0}, {-0.6, -1.6, 0, 0, 0, 0}, {0, -1.6, -0, 0, 0, 0}, {0.6, -1.6, 0, 0, 0, 0}, {-0.6, -2.2, 0, 0, 0, 0}, {0, -2.2, 0, 0, 0, 0}, {0.6, -2.2, 0, 0, 0, 0}},
 	
 	[549] = {{-0.5, -2.1, 0.06, 0, 0, 0}, {0, -2.1, 0.06, 0, 0, 0}, {0.5, -2.1, 0.06, 0, 0, 0}},
-	
+
 	[558] = {{-0.5, -2.1, 0.3, 0, 0, 0}, {0, -2.1, 0.3, 0, 0, 0}, {0.5, -2.1, 0.3, 0, 0, 0}},
 	[559] = {{-0.5, -1.8, 0.2, 0, 0, 0}, {0, -1.8, 0.2, 0, 0, 0}, {0.5, -1.8, 0.2, 0, 0, 0}},
 	[560] = {{-0.5, -1.9, 0.2, 0, 0, 0}, {0, -1.9, 0.2, 0, 0, 0}, {0.5, -1.9, 0.2, 0, 0, 0}},
@@ -3112,7 +3115,9 @@ local VehicleTrunks = {
 	
 	[603] = {{-0.6, -2.2, 0.1, 10, 0, 0}, {0, -2.2, 0.1, 10, 0, 0}, {0.6, -2.2, 0.1, 10, 0, 0}},
 	[604] = {{-0.6, -2.3, -0.05, 0, 0, 0}, {0, -2.3, -0.05, 0, 0, 0}, {0.6, -2.3, -0.05, 0, 0, 0}},
+	[605] = {{-0.6, -0.9, 0, 0, 0, 0}, {0, -0.9, -0, 0, 0, 0}, {0.6, -0.9, 0, 0, 0, 0}, {-0.6, -1.6, 0, 0, 0, 0}, {0, -1.6, -0, 0, 0, 0}, {0.6, -1.6, 0, 0, 0, 0}, {-0.6, -2.2, 0, 0, 0, 0}, {0, -2.2, 0, 0, 0, 0}, {0.6, -2.2, 0, 0, 0, 0}},
 }
+
 
 
 
@@ -3232,15 +3237,14 @@ end
 
 
 
---[[
-local vs = CreateVehicle(562, -217, 2603.3, 62.7, 0, 0, 81, "test", true, 0, 0)
+--[[local vs = CreateVehicle(555, -217, 2603.3, 62.7, 0, 0, 81, "test", true, 0, 0)
 setElementData(vs, "trunk", toJSON({{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
 {"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
 {"Сено", 1, 1, toJSON({})}, {"Сено", 1, 1, toJSON({})}, {"Сено", 1, 1, toJSON({})}
 }))
 
-setVehicleDoorOpenRatio(vs, 1, 1)
---]]
+setVehicleDoorOpenRatio(vs, 1, 1)--]]
+
 
 
 
@@ -5315,13 +5319,13 @@ end
 
 local cs = 96
 function tp(thePlayer, command, h)
-	if getPlayerName(thePlayer) == "alexaxel705" or getPlayerName(thePlayer) == "Mishel'" then
+	if getPlayerName(thePlayer) == "alexaxel705" then
 		local theVehicle = getPedOccupiedVehicle(thePlayer)
 		cs = cs+1
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 1521.9, -1166.3, 23.1, 0, 0 --
+		local x,y,z,i,d  =  2079.4, -1749.7, 12.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6782,34 +6786,24 @@ end
 
 
 function vp(thePlayer, command, h)
-	local model = 439
-	local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
-	if(h) then model = tonumber(h) end
-	local x,y,z=getElementPosition(thePlayer)
-	local v  = CreateVehicle(model, x,y,z+1)
-	setElementInterior(v, i)
-	setElementDimension(v, d)
+	if(getServerPort() == 22013) then
+		local model = 439
+		local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
+		if(h) then model = tonumber(h) end
+		local x,y,z = getElementPosition(thePlayer)
+		local v  = CreateVehicle(model, x,y,z+1)
+		setElementInterior(v, i)
+		setElementDimension(v, d)
 
-	warpPedIntoVehicle(thePlayer, v)
-	SetTeam(thePlayer, "Баллас")
-	setElementData(v, "destroy", "true", false)
+		warpPedIntoVehicle(thePlayer, v)
+		SetTeam(thePlayer, "Баллас")
+		setElementData(v, "destroy", "true", false)
+	end
 end
 addCommandHandler("vp", vp)
 
 
 
-
-
-
-function CreateMats(x,y,z, mats)
-	local o = false
-	if(mats == "Продукты") then
-		o = createObject(3057, x,y,z)	
-	end
-	setElementData(o, "matsname", mats)
-	setElementFrozen(o,true)
-	return o
-end
 
 
 function RandomDance(thePlayer, thePed)
@@ -7692,7 +7686,7 @@ function preLoad(name)
 		local rand = math.random(#availzones)
 		local randx = math.random(availzones[rand][1], availzones[rand][4])
 		local randy = math.random(availzones[rand][2], availzones[rand][5])
-		local randz = GetZCoord(randx, randy, availzones[rand])+0.6
+		local randz = GetZCoord(randx, randy, availzones[rand])+1
 		
 		local rot = availzones[rand][7]
 		local randrot = math.random(1,2)
