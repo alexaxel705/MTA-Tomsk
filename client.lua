@@ -1354,7 +1354,7 @@ function PlayerSpawn()
 		end
 		PInv["player"] = fromJSON(getElementData(localPlayer, "inv"))
 		SetupInventory() 
-		PData["wasted"]=nil
+		PData["wasted"] = nil
 		SetPlayerHudComponentVisible("all", true)
 		
 		for i = 1, #SpawnAction do
@@ -7523,27 +7523,30 @@ end
 
 
 function SetInventoryItem(name, i, item, count, quality, data)
-	if(data) then data = fromJSON(data) end
-	if(name == "backpack") then
-		PInv["player"][backpackid][4]["content"][i][1] = item
-		PInv["player"][backpackid][4]["content"][i][2] = count
-		PInv["player"][backpackid][4]["content"][i][3] = quality
-		PInv["player"][backpackid][4]["content"][i][4] = data
-	else
-		PInv[name][i][1] = item
-		PInv[name][i][2] = count
-		PInv[name][i][3] = quality
-		PInv[name][i][4] = data
+	if(not isPedDead(localPlayer)) then
+		if(data) then data = fromJSON(data) end
+		if(name == "backpack") then
+			PInv["player"][backpackid][4]["content"][i][1] = item
+			PInv["player"][backpackid][4]["content"][i][2] = count
+			PInv["player"][backpackid][4]["content"][i][3] = quality
+			PInv["player"][backpackid][4]["content"][i][4] = data
+		else
+			PInv[name][i][1] = item
+			PInv[name][i][2] = count
+			PInv[name][i][3] = quality
+			PInv[name][i][4] = data
+		end
+		
+		
+		if(name == "trunk") then
+			triggerServerEvent("SaveTrunk", localPlayer, TrunkWindows, toJSON(PInv["trunk"]))
+			initTrunk(TrunkWindows, toJSON(PInv["trunk"]))
+		end
+		triggerServerEvent("SaveInventory", localPlayer, localPlayer, toJSON(PInv["player"]))
+		outputChatBox("123")
+		UpdateInventoryMass()
+		triggerServerEvent("useinvweapon", localPlayer, localPlayer)
 	end
-	
-	
-	if(name == "trunk") then
-		triggerServerEvent("SaveTrunk", localPlayer, TrunkWindows, toJSON(PInv["trunk"]))
-		initTrunk(TrunkWindows, toJSON(PInv["trunk"]))
-	end
-	triggerServerEvent("SaveInventory", localPlayer, localPlayer, toJSON(PInv["player"]))
-	UpdateInventoryMass()
-	triggerServerEvent("useinvweapon", localPlayer, localPlayer)
 end
 
 

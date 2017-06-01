@@ -12901,11 +12901,9 @@ end
 
 
 function SaveInventory(thePlayer, arr)
-	if(not isPedDead(thePlayer)) then
-		SetDatabaseAccount(thePlayer, "inv", arr)
-		setElementData(thePlayer, "inv", arr)
-		setPlayerMoney(thePlayer, GetPlayerMoney(thePlayer))
-	end
+	SetDatabaseAccount(thePlayer, "inv", arr)
+	setElementData(thePlayer, "inv", arr)
+	setPlayerMoney(thePlayer, GetPlayerMoney(thePlayer))
 end
 addEvent("SaveInventory", true)
 addEventHandler("SaveInventory", root, SaveInventory)
@@ -13280,7 +13278,7 @@ function handsup(thePlayer)
 				UnBindAllKey(thePlayer)
 			end
 		end
-		StartAnimation(thePlayer, "ped", "handsup",-1,false,false,false)
+		StartAnimation(thePlayer, "ped", "handsup",-1,false,false,true,true)
 	else
 		return false
 	end
@@ -13657,7 +13655,7 @@ local DroppedItem = {
 
 function player_Wasted(ammo, killer, weapon, bodypart, stealth)	
 	if(PData[source]["RobPed"]) then
-		StopRob(thePlayer)
+		StopRob(source)
 	end
 	UnBindAllKey(source)
 	SetControls(source, "crack", {["fire"] = false,  ["action"] = false, ["jump"] = false})
@@ -13669,12 +13667,15 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 	for i = 1, #arr do
 		if(arr[i][1]) then
 			if(DroppedItem[arr[i][1]]) then
-				dropinvitem(source, "player", i)
+				local x,y,z = getElementPosition(source)
+				x,y = (x-1)+(math.random()*2), (y-1)+(math.random()*2)
+				Drop(arr[i], x, y, z, getElementInterior(source), getElementDimension(source))
 				arr[i] = {}
 			end
 		end
 	end
-	SetDatabaseAccount(source, "inv", toJSON(arr))
+	
+	SaveInventory(source, toJSON(arr))
 	
 	if(killer) then
 		if(source ~= killer) then
