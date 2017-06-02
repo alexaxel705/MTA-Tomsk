@@ -3239,7 +3239,7 @@ end
 --[[local vs = CreateVehicle(555, -217, 2603.3, 62.7, 0, 0, 81, "test", true, 0, 0)
 setElementData(vs, "trunk", toJSON({{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
 {"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-{"Сено", 1, 1, toJSON({})}, {"Сено", 1, 1, toJSON({})}, {"Сено", 1, 1, toJSON({})}
+{"Зерно", 1, 1, toJSON({})}, {"Зерно", 1, 1, toJSON({})}, {"Зерно", 1, 1, toJSON({})}
 }))
 
 setVehicleDoorOpenRatio(vs, 1, 1)--]]
@@ -7224,7 +7224,7 @@ local ItemsNamesArr = {
 	["Рюкзак"] = 3026, 
 	["Канистра"] = 1650,
 	["Запаска"] = 1025,
-	["Сено"] = 1453,
+	["Зерно"] = 1453,
 	["CoK"] = 2670,
 	["Деньги"] = 1212, 
 }
@@ -7308,7 +7308,7 @@ function useinvweapon(thePlayer, slot)
 	local carry = false
 	for _, a in pairs(arr) do
 		if(a[1]) then
-			if(a[1] == "Запаска" or a[1] == "Сено") then
+			if(a[1] == "Запаска" or a[1] == "Зерно") then
 				carry = true
 			end
 		end
@@ -7435,7 +7435,7 @@ end
 
 
 function DropHarvest(x,y,z)
-	Drop({"Сено", 1, 450, {}}, x,y,z,0,0)
+	Drop({"Зерно", 1, 450, {}}, x,y,z,0,0)
 end
 addEvent("DropHarvest", true)
 addEventHandler("DropHarvest", root, DropHarvest)
@@ -15616,7 +15616,6 @@ addEventHandler("onPlayerVehicleExit", getRootElement(), turnEngineOff)
 
 
 function turnEngineOn(theVehicle, leftSeat, jackerPlayer, unbindkey)
-setTrainDerailable(theVehicle, false)   
 	if(getElementType(source) == "player") then
 		if(not theVehicle) then return false end
 		if(not unbindkey) then

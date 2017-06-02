@@ -424,7 +424,7 @@ local TexturesPosition = {
 	["9-мм"] = {-4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 250}, 
 	["18.5-мм"] = {-4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 250}, 
 	["Скот"] = {10,0,1.2, 0,0,1.2, 0,70, 255}, 
-	["Сено"] = {2,0,0, 0,0,0, 0,70, 200},
+	["Зерно"] = {2,0,0, 0,0,0, 0,70, 200},
 	["Газета"] = {0.8,0.2,0.75, 0.8,0.2,0, 0,70, 200},
 	["Деньги"] = {0.2,0.2,0.35, -0.05,-0.05,0, 0,70, 200},
 	["Кредитка"] = {-0.3,0.7,0.6, 0,0,0, 0,70, 200},
@@ -497,7 +497,7 @@ local PreloadTextures = {
 	["9-мм"] = createObject(18044, 4330, 4000, 4000),
 	["18.5-мм"] = createObject(18044, 4340, 4000, 4000),
 	["Скот"] = createObject(11470, 4345, 4000, 4000),
-	["Сено"] = createObject(1453, 4350, 4000, 4020),
+	["Зерно"] = createObject(1453, 4350, 4000, 4020),
 	["Кредитка"] = createObject(1581, 4365, 4000, 4020),
 	["Огнетушитель"] = createObject(366, 4370, 4000, 4020),
 	["Спрей"] = createObject(365, 4375, 4000, 4020),
@@ -1186,7 +1186,7 @@ local items = {
 	
 	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, false, true},
 	["Скот"] = {false, "Скот", 1, false, 90000, 5, false, false, false},
-	["Сено"] = {false, "Сено", 10, false, 2500, 5, false, false, false}, 
+	["Зерно"] = {false, "Зерно", 10, false, 2500, 5, false, false, false}, 
 	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false},
 	["Деньги"] = {false, "Деньги", 99999999, false, 0.01, 1, false, false, false},
 	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false, false}, 
@@ -1261,7 +1261,7 @@ local WeaponNamesArr = {
 	["Канистра"] = 1650,
 	["Пакет"] = 2663,
 	["Запаска"] = 1025,
-	["Сено"] = 1453
+	["Зерно"] = 1453
 }
 
 
@@ -6064,6 +6064,7 @@ function playerPressedKey(button, press)
 					PData["WaypointBlip"] = createBlip(x*50, y*50, 0, 41)
 					local px,py,pz = getElementPosition(localPlayer)
 					triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x*50, y*50, 20)
+					outputChatBox(x.." "..y.." "..z)
 				end
 			end
 		end
@@ -8613,7 +8614,7 @@ function RGBToHex(red, green, blue, alpha)
 end
 
 function create3dtext(text,x,y,z,razmer,dist,color,font)
-	local px,py,pz = getPedBonePosition(localPlayer, 8)
+	local px,py,pz = getCameraMatrix()
     local distance = getDistanceBetweenPoints3D(x,y,z,px,py,pz)
     if distance <= dist then
 		if(getPedOccupiedVehicle(localPlayer)) then
@@ -9059,6 +9060,7 @@ local ResourceInMap = {
 	[1] = {-382, -1437, 26, "Flint Range Farm"},
 	[2] = {-85, 27, 3, "Flint Range Farm"},
 	[3] = {1929, 170, 37, "Flint Range Farm"},
+	[4] = {-1439, -1534, 101, "Flint Range Farm"}, -- Скот
 }
 
 function DrawPlayerMessage()
@@ -9090,6 +9092,17 @@ function DrawPlayerMessage()
 		
 		end
 		
+		create3dtext("Los Santos\n#ffff00★",37,-32,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+		create3dtext("San Fierro\n#ffff00★★",-44,8,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+		create3dtext("Las Venturas\n#ffff00★★★",40,33,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+		create3dtext("Angel Pine\n#ffff00★★★★★",-43,-49,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		create3dtext("Las Payasadas\n#ffff00★★★★",-5,53,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		create3dtext("El Quebrados\n#ffff00★★★★★",-30,51,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		create3dtext("Fort Caston\n#ffff00★★",-4.9,22,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		create3dtext("Palomino Creek\n#ffff00★★★",47,0.6,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		create3dtext("Dillimore\n#ffff00★",13.4,-10.8,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		
+
 		
 		local _, _, camz = getCameraMatrix()
 		local LocalScale = NewScale*((3000/camz))
@@ -9907,7 +9920,7 @@ local itemsData = {
 	["АК-47"] = {355, {0.7, -0.1, -0.15, -0.05, 270, 0, 30}}, 
 	["М16"] = {356, {0.7, -0.1, -0.15, -0.05, 270, 0, 30}},	
 	["Пакет"] = {2663, {1, 0, 0, 0, 90, 180, 0}}, 
-	["Сено"] = {1453, {0.6, 0, 0, 0, 90, 90, 90}}, 
+	["Зерно"] = {1453, {0.6, 0, 0, 0, 90, 90, 90}}, 
 	["Огнетушитель"] = {366, {0.7, -0.1, -0.15, -0.05, 270, 0, 30}}, 
 }
 
