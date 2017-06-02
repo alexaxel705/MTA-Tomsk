@@ -5324,7 +5324,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2066, -1674.8, 12.4, 0, 0 --
+		local x,y,z,i,d  = -200.6, -1112.3, 2.1, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -15616,6 +15616,7 @@ addEventHandler("onPlayerVehicleExit", getRootElement(), turnEngineOff)
 
 
 function turnEngineOn(theVehicle, leftSeat, jackerPlayer, unbindkey)
+setTrainDerailable(theVehicle, false)   
 	if(getElementType(source) == "player") then
 		if(not theVehicle) then return false end
 		if(not unbindkey) then

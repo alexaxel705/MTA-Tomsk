@@ -434,6 +434,7 @@ local TexturesPosition = {
 	["Огнемет"] = {0.45,0.9,0.12, 0.45,0,0.12, 8,70, 110}, 
 	["Ракушка"] = {0,1.2,0, 0,0,0, 0,70, 250}, 
 	["Ракета"] = {0.8,0,0, 0.4,0,0, 0,70, 250}, 
+	["Flint Range Farm"] = {70,30,0, 0,0,0, 0,70, 255}, 
 	--["Пропуск"] = {0,-0.6,-0.6, 0,0,0, 0,70, 200}, -- Object 1581
 }
 
@@ -507,6 +508,7 @@ local PreloadTextures = {
 	["Ракета"] = createObject(345, 4400, 4000, 4000),
 	["Деньги"] = createObject(1212, 4410, 4000, 4020),
 	["Газета"] = createObject(2674, 4415, 4000, 4020),
+	["Flint Range Farm"] = createObject(17005, 4500, 4000, 4020),
 }
 
 local CreateTextureStage = false
@@ -1188,6 +1190,8 @@ local items = {
 	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false},
 	["Деньги"] = {false, "Деньги", 99999999, false, 0.01, 1, false, false, false},
 	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false, false}, 
+	
+	["Flint Range Farm"] = {false, "", 1, false, 1, 1, false, false, false},
 }
 
 
@@ -4574,13 +4578,6 @@ function updateCamera()
 			end
 		end
 	end
-	
-	if(PData["ResourceMap"]) then
-		setSkyGradient(170,103,0 ,170,103,0)
-		for i, v in pairs(PData["ResourceMap"]) do
-			dxDrawLine3D(v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8])
-		end
-	end
 end
 addEventHandler("onClientPreRender", getRootElement(), updateCamera)
 
@@ -5748,6 +5745,7 @@ function resourcemap()
 			end
 			PEDChangeSkin = "play"
 			GameSky(getZoneName(x,y,z, true))
+			showCursor(false)
 		end
 	end
 end
@@ -5758,12 +5756,6 @@ function map()
 	
 	for zone, arr in pairs(PData["infopath"]) do
 		if(arr) then for i, arr2 in pairs(arr) do
-			local maincolor = false
-
-			if(arr2[1] == "Closed") then
-				maincolor = "Closed"
-			end
-			local x,y,z = arr2[2], arr2[3], arr2[4]
 			
 			local nextmarkers = {}
 			if(arr2[6]) then
@@ -5781,12 +5773,13 @@ function map()
 					local dat = PData["infopath"][arr3[1]][tostring(arr3[2])]
 					if(dat) then
 						local color = tocolor(120,105,103,255)
-						if(dat[1] == "Closed" or maincolor == "Closed") then
+						if(dat[1] == "Closed" or arr2[1] == "Closed") then
 							color = tocolor(140,125,123,255)
 						end
-						local x2,y2,z2 = dat[2], dat[3], dat[4]
 						
-						PData["ResourceMap"][#PData["ResourceMap"]+1] = {x/50,y/50,z/50+0.2+(4000),x2/50,y2/50,z2/50+0.2+(4000), color, 18}
+						x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
+						x2,y2,z2 = GetCoordOnMap(dat[2], dat[3], dat[4])
+						PData["ResourceMap"][#PData["ResourceMap"]+1] = {x,y,z,x2,y2,z2, color, 18}
 					end
 				end
 			end
@@ -5795,17 +5788,23 @@ function map()
 	
 	
 	if(PData['gps']) then
-		for i,v in pairs(PData['gps']) do --тут
+		for i,v in pairs(PData['gps']) do
 			if(oldmarker) then
 				local x,y,z = unpack(fromJSON(getElementData(v, "coord")))
 				local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
-				PData["ResourceMap"][#PData["ResourceMap"]+1] = {x/50,y/50,z/50+0.2+(4000),x2/50,y2/50,z2/50+0.2+(4000), tocolor(255,0,0,150), 20}
+				x,y,z = GetCoordOnMap(x,y,z)
+				x2,y2,z2 = GetCoordOnMap(x2,y2,z2)
+				PData["ResourceMap"][#PData["ResourceMap"]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,150), 20}
 			end
 			oldmarker = v
 		end
 	end
 	setCameraMatrix(0, 0, 4250, 0, 0, 4000, 0, 70)
+	
+	setSkyGradient(170,103,0 ,170,103,0)
+	setFarClipDistance(500)
 	setWeather(0)
+	showCursor(true)
 end
 
 addEvent("map", true)
@@ -5813,8 +5812,15 @@ addEventHandler("map", localPlayer, map)
 
 
 
+function GetCoordOnMap(x,y,z)
+	return x/50,y/50,z/50+(4000)
+end
 
 
+function GetCursorPositionOnMap()
+	local _,_,x,y,z = getCursorPosition()
+	return x,y,z
+end
 
 
 function InfoPath(zone, arr, last)
@@ -6047,6 +6053,17 @@ function playerPressedKey(button, press)
 				local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
 				if(z > 4010) then
 					setCameraMatrix(x,y-2,z-10,rx,ry,rz,r,f)
+				end
+			end
+		elseif(button == "mouse2") then
+			if(press) then
+				if(isElement(PData["WaypointBlip"])) then
+					destroyElement(PData["WaypointBlip"])
+				else
+					local x,y,z = GetCursorPositionOnMap()
+					PData["WaypointBlip"] = createBlip(x*50, y*50, 0, 41)
+					local px,py,pz = getElementPosition(localPlayer)
+					triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x*50, y*50, 20)
 				end
 			end
 		end
@@ -6422,7 +6439,6 @@ addEventHandler("ShakeLevel", localPlayer, ShakeLevel)
 
 addEventHandler("onClientRender", root,
 	function()
-		
 		if(NewsPaper[1]) then
 			if(NewsPaper[2]) then
 				dxDrawImage(screenWidth/6, screenHeight/6, screenWidth/1.5, screenHeight/1.5, NewsPaper[1], 0, 0, 0, tocolor(255,255,255,255), true)
@@ -6751,7 +6767,6 @@ addEventHandler("onClientRender", root,
 				end
 			end
 		end
-		
 	end
 )
 
@@ -9040,13 +9055,52 @@ end
 
 
 
-
+local ResourceInMap = {
+	[1] = {-382, -1437, 26, "Flint Range Farm"},
+	[2] = {-85, 27, 3, "Flint Range Farm"},
+	[3] = {1929, 170, 37, "Flint Range Farm"},
+}
 
 function DrawPlayerMessage()
 	local x,y,z = getElementPosition(localPlayer)
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	
 	local sx, sy, font, tw, th, color
+	
+	if(PData["ResourceMap"]) then
+		for i, v in pairs(PData["ResourceMap"]) do
+			dxDrawLine3D(v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8])
+		end
+		
+		
+		mx,my,mz = GetCoordOnMap(x,y,z)
+		sx,sy = getScreenFromWorldPosition(mx,my,mz)
+		if(sx and sy) then
+			dxDrawCircle(sx,sy, 6*NewScale, 2*NewScale, 1, 0, 360, tocolor(255,24,20,150))
+		end
+		
+		
+		if(isElement(PData["WaypointBlip"])) then
+			local x,y,z = getElementPosition(PData["WaypointBlip"])
+			mx,my,mz = GetCoordOnMap(x,y,z)
+			sx,sy = getScreenFromWorldPosition(mx,my,mz)
+			if(sx and sy) then
+				dxDrawCircle(sx,sy, 6*NewScale, 6*NewScale, 1, 0, 360, tocolor(255,24,20,150))
+			end
+		
+		end
+		
+		
+		local _, _, camz = getCameraMatrix()
+		local LocalScale = NewScale*((3000/camz))
+		for i, dat in pairs(ResourceInMap) do
+			mx,my,mz = GetCoordOnMap(dat[1],dat[2],dat[3])
+			sx,sy = getScreenFromWorldPosition(mx,my,mz)
+			if(sx and sy) then
+				dxDrawImage(sx-(50*LocalScale),sy-(50*LocalScale), 100*LocalScale, 80*LocalScale, items[dat[4]][1])
+			end
+		end
+	end
 	
 	for key, arr in pairs(PData["MultipleAction"]) do
 		local text = arr[2]
@@ -9322,11 +9376,6 @@ function DrawPlayerMessage()
 				for zone, arr in pairs(PData['infopath']) do
 					if(arr) then
 					for i, arr2 in pairs(arr) do
-						local maincolor = false
-
-						if(arr2[1] == "Closed") then
-							maincolor = "Closed"
-						end
 						local x,y,z = arr2[2], arr2[3], arr2[4]
 						
 						local px,py,pz = getElementPosition(localPlayer)
@@ -9352,7 +9401,7 @@ function DrawPlayerMessage()
 									local dat = PData['infopath'][arr3[1]][tostring(arr3[2])]
 									if(dat) then
 										local color = tocolor(50,255,50,150)
-										if(dat[1] == "Closed" or maincolor == "Closed") then
+										if(dat[1] == "Closed" or arr2[1] == "Closed") then
 											color = tocolor(255,50,50,150)
 										end
 										local x2,y2,z2 = dat[2], dat[3], dat[4]
