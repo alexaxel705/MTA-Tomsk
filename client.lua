@@ -30,7 +30,6 @@ local RobAction = false
 local StreamData = {}
 local VideoMemory = {["HUD"] = {}}
 local PData = {
-	["3DLines"] = {}, 
 	['loading'] = 0,
 	['Target'] = {}, 
 	['blip'] = {}, 
@@ -434,7 +433,6 @@ local TexturesPosition = {
 	["Огнемет"] = {0.45,0.9,0.12, 0.45,0,0.12, 8,70, 110}, 
 	["Ракушка"] = {0,1.2,0, 0,0,0, 0,70, 250}, 
 	["Ракета"] = {0.8,0,0, 0.4,0,0, 0,70, 250}, 
-	["Flint Range Farm"] = {70,30,0, 0,0,0, 0,70, 255}, 
 	--["Пропуск"] = {0,-0.6,-0.6, 0,0,0, 0,70, 200}, -- Object 1581
 }
 
@@ -508,7 +506,6 @@ local PreloadTextures = {
 	["Ракета"] = createObject(345, 4400, 4000, 4000),
 	["Деньги"] = createObject(1212, 4410, 4000, 4020),
 	["Газета"] = createObject(2674, 4415, 4000, 4020),
-	["Flint Range Farm"] = createObject(17005, 4500, 4000, 4020),
 }
 
 local CreateTextureStage = false
@@ -1190,8 +1187,6 @@ local items = {
 	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false},
 	["Деньги"] = {false, "Деньги", 99999999, false, 0.01, 1, false, false, false},
 	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false, false}, 
-	
-	["Flint Range Farm"] = {false, "", 1, false, 1, 1, false, false, false},
 }
 
 
@@ -2570,12 +2565,29 @@ function SetGPS(arr)
 		end
 	end
 	PData['gps'] = {}
-	local arr = fromJSON(arr)
+	arr = fromJSON(arr)
 	for i, k in pairs(arr) do
 		local id = (#arr+1)-i
 		PData['gps'][id] = createRadarArea(k[1]-10, k[2]-10, 20,20, 210,0,0,255)
 		setElementData(PData['gps'][id], "coord", toJSON({k[1],k[2],k[3]}))
 	end
+	if(PData["ResourceMap"]) then
+		PData["ResourceMap"][2] = {}
+		if(PData['gps']) then
+			local oldmarker = false
+			for i,v in pairs(PData['gps']) do
+				if(oldmarker) then
+					local x,y,z = unpack(fromJSON(getElementData(v, "coord")))
+					local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
+					x,y,z = GetCoordOnMap(x,y,z)
+					x2,y2,z2 = GetCoordOnMap(x2,y2,z2)
+					PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 18}
+				end
+				oldmarker = v
+			end
+		end
+	end
+	
 	local text = Text("На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу {key} для автоматического перемещения", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}})
 	InformTitle(text)
 end
@@ -5701,11 +5713,30 @@ end
 
 
 
+local ResourceInMap = {
+	[1] = {false, 17005, -382, -1437, 26,0},
+	[2] = {false, 17005, -85, 27, 3, 0},
+	[3] = {false, 17005, 1929, 170, 37, 0},
+	[4] = {false, 17005, -1439, -1534, 101, 0}, -- Скот
+}
+
 function resourcemap()
 	if(not PData["ResourceMap"]) then
 		if(PEDChangeSkin == "play") then
 			helpmessage("Идет загрузка...")
 			PEDChangeSkin = "cinema"
+			
+			
+			for i, dat in pairs(ResourceInMap) do
+				if(not dat[1]) then
+					mx,my,mz = GetCoordOnMap(dat[3],dat[4],dat[5])
+					dat[1] = createObject(dat[2], mx,my,mz)
+					setElementRotation(dat[1], 0,0,dat[6])
+					setObjectScale(dat[1], 0.1)
+					local col = createColSphere(mx,my,mz, 2)
+					attachElements(dat[1], col)
+				end
+			end
 			
 			SetPlayerHudComponentVisible("all", false)
 			setElementFrozen(localPlayer, true)
@@ -5752,7 +5783,7 @@ end
 
 
 function map()
-	PData["ResourceMap"] = {}
+	PData["ResourceMap"] = {[1] = {}, [2] = {}} -- 1 Roads, 2 GPS
 	
 	for zone, arr in pairs(PData["infopath"]) do
 		if(arr) then for i, arr2 in pairs(arr) do
@@ -5779,7 +5810,7 @@ function map()
 						
 						x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
 						x2,y2,z2 = GetCoordOnMap(dat[2], dat[3], dat[4])
-						PData["ResourceMap"][#PData["ResourceMap"]+1] = {x,y,z,x2,y2,z2, color, 18}
+						PData["ResourceMap"][1][#PData["ResourceMap"][1]+1] = {x,y,z,x2,y2,z2, color, 18}
 					end
 				end
 			end
@@ -5788,13 +5819,14 @@ function map()
 	
 	
 	if(PData['gps']) then
+		local oldmarker = false
 		for i,v in pairs(PData['gps']) do
 			if(oldmarker) then
 				local x,y,z = unpack(fromJSON(getElementData(v, "coord")))
 				local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
 				x,y,z = GetCoordOnMap(x,y,z)
 				x2,y2,z2 = GetCoordOnMap(x2,y2,z2)
-				PData["ResourceMap"][#PData["ResourceMap"]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,150), 20}
+				PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 18}
 			end
 			oldmarker = v
 		end
@@ -5802,7 +5834,7 @@ function map()
 	setCameraMatrix(0, 0, 4250, 0, 0, 4000, 0, 70)
 	
 	setSkyGradient(170,103,0 ,170,103,0)
-	setFarClipDistance(500)
+	setFarClipDistance(600)
 	setWeather(0)
 	showCursor(true)
 end
@@ -5817,8 +5849,17 @@ function GetCoordOnMap(x,y,z)
 end
 
 
-function GetCursorPositionOnMap()
+function GetCursorPositionOnMap() -- Можно оптимизировать в дальнейшем
 	local _,_,x,y,z = getCursorPosition()
+	local camx, camy, camz = getCameraMatrix()
+	
+	local x2, y2, z2 = camx-x, camy-y, camz-z
+	for i = 0, math.round(z2, 0) do
+		local per = (i/math.round(z2, 0))
+		if(z+(z2*per) >= 4000) then
+			return x+(x2*per),y+(y2*per),z+(z2*per)
+		end
+	end
 	return x,y,z
 end
 
@@ -6064,7 +6105,6 @@ function playerPressedKey(button, press)
 					PData["WaypointBlip"] = createBlip(x*50, y*50, 0, 41)
 					local px,py,pz = getElementPosition(localPlayer)
 					triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x*50, y*50, 20)
-					outputChatBox(x.." "..y.." "..z)
 				end
 			end
 		end
@@ -8634,6 +8674,19 @@ function create3dtext(text,x,y,z,razmer,dist,color,font)
 end
 
 
+function Create3DTextOnMap(text,x,y,z,razmer,dist,color,font)
+	x = x/50
+	y = y/50
+	local px,py,pz = getCameraMatrix()
+    local distance = getDistanceBetweenPoints3D(x,y,z,px,py,pz)
+    if distance <= dist then
+		sx,sy = getScreenFromWorldPosition(x, y, z, 0.06)
+		if not sx then return end
+		dxDrawBorderedText(text, sx, sy, sx, sy, color, (1-(distance/dist))*razmer, font, "center", "bottom", false, false, false,false)
+    end
+end
+
+
 function setDoingDriveby()
 	if(getPedOccupiedVehicle(localPlayer) and not InventoryWindows) then
 		if not isPedDoingGangDriveby(localPlayer) then
@@ -9056,12 +9109,6 @@ end
 
 
 
-local ResourceInMap = {
-	[1] = {-382, -1437, 26, "Flint Range Farm"},
-	[2] = {-85, 27, 3, "Flint Range Farm"},
-	[3] = {1929, 170, 37, "Flint Range Farm"},
-	[4] = {-1439, -1534, 101, "Flint Range Farm"}, -- Скот
-}
 
 function DrawPlayerMessage()
 	local x,y,z = getElementPosition(localPlayer)
@@ -9070,8 +9117,10 @@ function DrawPlayerMessage()
 	local sx, sy, font, tw, th, color
 	
 	if(PData["ResourceMap"]) then
-		for i, v in pairs(PData["ResourceMap"]) do
-			dxDrawLine3D(v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8])
+		for i, dat in pairs(PData["ResourceMap"]) do
+			for name, v in pairs(dat) do
+				dxDrawLine3D(v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8])
+			end
 		end
 		
 		
@@ -9092,27 +9141,24 @@ function DrawPlayerMessage()
 		
 		end
 		
-		create3dtext("Los Santos\n#ffff00★",37,-32,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-		create3dtext("San Fierro\n#ffff00★★",-44,8,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-		create3dtext("Las Venturas\n#ffff00★★★",40,33,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-		create3dtext("Angel Pine\n#ffff00★★★★★",-43,-49,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		create3dtext("Las Payasadas\n#ffff00★★★★",-5,53,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		create3dtext("El Quebrados\n#ffff00★★★★★",-30,51,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		create3dtext("Fort Caston\n#ffff00★★",-4.9,22,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		create3dtext("Palomino Creek\n#ffff00★★★",47,0.6,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		create3dtext("Dillimore\n#ffff00★",13.4,-10.8,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		
+		Create3DTextOnMap("Los Santos\n#ffff00★",1850,-1600,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("San Fierro\n#ffff00★★",-2200,400,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Las Venturas\n#ffff00★★★",2200,1650,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Angel Pine\n#ffff00★★★★★",-2150,-2450,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Las Payasadas\n#ffff00★★★★",-250,2650,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("El Quebrados\n#ffff00★★★★★",-1500,2500,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Fort Caston\n#ffff00★★",-245,1100,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Palomino Creek\n#ffff00★★★",2350,30,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Blueberry\n#ffff00★★★",215,-215,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Dillimore\n#ffff00★",670,-540,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 
-		
-		local _, _, camz = getCameraMatrix()
-		local LocalScale = NewScale*((3000/camz))
-		for i, dat in pairs(ResourceInMap) do
-			mx,my,mz = GetCoordOnMap(dat[1],dat[2],dat[3])
-			sx,sy = getScreenFromWorldPosition(mx,my,mz)
-			if(sx and sy) then
-				dxDrawImage(sx-(50*LocalScale),sy-(50*LocalScale), 100*LocalScale, 80*LocalScale, items[dat[4]][1])
-			end
-		end
+
+	--[[	x,y,z = getCameraMatrix()
+		sx,sy, cx,cy,cz = getCursorPosition()
+
+		if(hitElement) then
+			Create3DTextOnMap("Какое то здание..",cx*50,cy*50,cz,NewScale*2,2000,tocolor(230,230,230,255),"default-bold")
+		end--]]
 	end
 	
 	for key, arr in pairs(PData["MultipleAction"]) do
