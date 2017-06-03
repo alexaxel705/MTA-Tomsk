@@ -5324,7 +5324,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -2523.3, -622.3, 131.7, 0, 0 --
+		local x,y,z,i,d  = 2416.1, -1919.8, 12.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12337,13 +12337,16 @@ addCommandHandler("st", st)
 
 
 function arm(thePlayer)
-	if(GetDatabaseAccount(thePlayer, "ATUT") ~= 3) then
-		SetTeam(thePlayer, "Военные")
-		SetDatabaseAccount(thePlayer, "skin", 312)
-		triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))))
-
+	if(getTeamName(getPlayerTeam(thePlayer)) == "Уголовники") then
+		if(GetDatabaseAccount(thePlayer, "ATUT") ~= 3) then
+			SetTeam(thePlayer, "Военные")
+			SetDatabaseAccount(thePlayer, "skin", 312)
+			triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))))
+		else
+			ToolTip(thePlayer, "Ты уже отслужил!")
+		end
 	else
-		ToolTip(thePlayer, "Ты уже отслужил!")
+		ToolTip(thePlayer, "Сначала отсиди!")
 	end
 end
 addCommandHandler("arm", arm)

@@ -3093,7 +3093,7 @@ function NewNextSkinEnter(_, _, closed)
 	unbindKey ("arrow_l", "down", NewNextSkinMinus) 
 	unbindKey ("arrow_r", "down", NewNextSkinPlus) 
 	unbindKey ("enter", "down", NewNextSkinEnter) 
-	PEDChangeSkin="play"
+	PEDChangeSkin = "play"
 	showCursor(false)
 	if(closed) then 
 		triggerServerEvent("buywardrobe", localPlayer, localPlayer)
@@ -5722,20 +5722,23 @@ local ResourceInMap = {
 	[1] = {false, 17005, 0.1, -382, -1437, 26,0, "FARMFR"},
 	[2] = {false, 17005, 0.1, -85, 27, 3, 0, "В разработке"},
 	[3] = {false, 17005, 0.1, 1929, 170, 37, 0, "Пока что"},
-	[4] = {false, 17005, 0.1, -1439, -1534, 101, 0, "Ферма"}, 
+	[4] = {false, 17335, 0.1, -1439, -1534, 101, 90, "Ферма"}, 
 	[5] = {false, 10357, 0.05, -2523, -622, 132, 0, "Электростанция"}, -- Электростанция
+	--[6] = {false, 5033, 0.02, 1751, -1884, 13, 0, "Unity Station"}, 
+	--[7] = {false, 8079, 0.02, 1573, 1791, 9.8, 0, "Больница"}, 
+	[8] = {false, 3976, 0.02, 1555.2, -1675.6, 16.2, 0, "Полицейский участок"},
+	
 }
 
 function resourcemap()
 	if(not PData["ResourceMap"]) then
 		if(PEDChangeSkin == "play") then
-			PEDChangeSkin = "cinema"
-			
+			PEDChangeSkin = "map"
 			
 			for i, dat in pairs(ResourceInMap) do
 				if(not dat[1]) then
 					mx,my,mz = GetCoordOnMap(dat[4],dat[5],dat[6])
-					dat[1] = createObject(dat[2], mx,my,mz)
+					dat[1] = createObject(dat[2], mx,my,mz+0.2) -- Чуть завышены так как высота линий 0.18
 					local col = createColSphere(mx,my,mz, 3)
 					attachElements(col, dat[1])
 					setObjectScale(dat[1], dat[3])
@@ -5772,7 +5775,7 @@ function resourcemap()
 			end
 		end
 	else
-		if(PEDChangeSkin == "cinema") then
+		if(PEDChangeSkin == "map") then
 			setCameraTarget(localPlayer)
 			PData["ResourceMap"] = nil
 			SetPlayerHudComponentVisible("all", true)
@@ -9212,7 +9215,7 @@ function DrawPlayerMessage()
 
 		if(PData["MapHitElement"]) then
 			x,y,z = getElementPosition(PData["MapHitElement"])
-			Create3DTextOnMap(getElementData(PData["MapHitElement"], "NameInMap"),x*50,y*50,z,NewScale*2,2000,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap(getElementData(PData["MapHitElement"], "NameInMap"),x*50,y*50,z,NewScale,2000,tocolor(230,230,230,255),"default-bold")
 		end
 	end
 	
