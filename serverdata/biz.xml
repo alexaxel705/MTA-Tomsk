@@ -12,8 +12,8 @@
     
     <SOLIN owner="" xyz="[854.6, -605.2, 18.4]" biz="Solarin Industries" price="6700000" money="0"></SOLIN>
     
-	
-    <NPZSF owner="" xyz="[-1015.3, -689.2, 32]" price="9000000" money=""></NPZSF>
+    
+    <NPZSF owner="" xyz="[-1015.3, -689.2, 32]" price="9000000" money="0"></NPZSF>
     <PETLV owner="" xyz="[261.7, 1408.4, 10.5]" price="40000000" money="0"></PETLV>
     <BIOEN owner="" xyz="[-382.6, -1437.3, 25.7]" price="1000000" money="0"></BIOEN>
     <FARMFR owner="" xyz="[-382.6, -1437.3, 25.7]" var='[ { &quot;Качество земли&quot;: 1 } ]' price="340000" money="0"></FARMFR>
@@ -52,7 +52,7 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDUN>
-    <MEDLS owner="" xyz="[1181.7, -1318, 13.6]" price="1670000" money="0">
+    <MEDLS owner="" xyz="[1181.7, -1318, 13.6]" price="1670000" money="1500">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
@@ -79,14 +79,14 @@
         <VAC name="Врач"></VAC>
     </MEDSF>
     <AMMOLS owner="" xyz="[1366.5, -1274.2, 13.5]" biz="Ammunation LS" price="2500000" money="0"></AMMOLS>
-    <MERLS owner="" biz="Мэрия LS" price="0" money="0" srok="359">
+    <MERLS owner="" biz="Мэрия LS" price="0" money="0" srok="353">
         <VAC name="Начальник LSPD" jobbiz="PLSPD"></VAC>
     </MERLS>
-    <MERSF owner="" biz="Мэрия SF" price="0" money="0" srok="420">
+    <MERSF owner="" biz="Мэрия SF" price="0" money="0" srok="414">
         <VAC name="ФБР" jobbiz="FBISF"></VAC>
         <VAC name="Начальник SFPD" jobbiz="PSFPD"></VAC>
     </MERSF>
-    <MERLV owner="" biz="Мэрия LV" price="0" money="0" srok="60">
+    <MERLV owner="" biz="Мэрия LV" price="0" money="0" srok="54">
         <VAC name="Директор ЦРУ" jobbiz="CIASA"></VAC>
     </MERLV>
     <CIASA owner="" xyz="[213.1, 1822.8, 6.4]" biz="Штаб квартира ЦРУ" price="0" money="0">

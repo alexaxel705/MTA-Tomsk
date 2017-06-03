@@ -12402,7 +12402,7 @@ addCommandHandler("st", st)
 
 
 function arm(thePlayer)
-	if(getTeamName(getPlayerTeam(thePlayer)) == "Уголовники") then
+	if(getTeamName(getPlayerTeam(thePlayer)) ~= "Уголовники") then
 		if(GetDatabaseAccount(thePlayer, "ATUT") ~= 3) then
 			SetTeam(thePlayer, "Военные")
 			SetDatabaseAccount(thePlayer, "skin", 312)
