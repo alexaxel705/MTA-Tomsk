@@ -1,8 +1,8 @@
 <biz>
     <ELSF owner="" xyz="[-2521.2, -624.5, 132.7]" price="2000000" money="0"></ELSF>
-    <SPRUNK owner="" xyz="[1324.2, 286.4, 20]" biz="Sprunk" price="400000" money="0"></SPRUNK>
+    <SPRUNK owner="" xyz="[1324.2, 286.4, 20]" price="400000" money="0"></SPRUNK>
     <SPRAYSA owner="" xyz="[1942.1, 2184.7, 10.8]" price="100000" money="0"></SPRAYSA>
-    <MEDRA owner="" xyz="[188.6, 1929.5, 17.7, 0, 0]" biz="Психиатрическая больница SA" price="0" money="0">
+    <MEDRA owner="" xyz="[188.6, 1929.5, 17.7, 0, 0]" price="0" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
@@ -10,7 +10,7 @@
         <VAC name="Врач"></VAC>
     </MEDRA>
     
-    <SOLIN owner="" xyz="[854.6, -605.2, 18.4]" biz="Solarin Industries" price="6700000" money="0"></SOLIN>
+    <SOLIN owner="" xyz="[854.6, -605.2, 18.4]" price="6700000" money="0"></SOLIN>
     
     
     <NPZSF owner="" xyz="[-1015.3, -689.2, 32]" price="9000000" money="0"></NPZSF>
@@ -20,32 +20,32 @@
     <FARMWS owner="" xyz="[-1431.6, -1528.9, 101.7]" price="694000" money="0"></FARMWS>
     
     
-    <SANNEWS owner="" xyz="[783.4, -1329, 13.5]" biz="San News" price="550000" money="0">
+    <SANNEWS owner="" xyz="[783.4, -1329, 13.5]" price="550000" money="0">
         <VAC name="Репортер"></VAC>
     </SANNEWS>
     
-    <MEDBC owner="" xyz="[-314.2, 1049.4, 20.34]" biz="Скорая помощь Bone County" price="680000" money="0">
+    <MEDBC owner="" xyz="[-314.2, 1049.4, 20.34]" price="680000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDBC>
-    <MEDTR owner="" xyz="[-1512.5, 2520.8, 55.9]" biz="Скорая помощь Tierra Robada" price="500000" money="0">
+    <MEDTR owner="" xyz="[-1512.5, 2520.8, 55.9]" price="500000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDTR>
-    <MEDRC owner="" xyz="[1229.3, 308.7, 19.8]" biz="Скорая помощь Red County" price="900000" money="0">
+    <MEDRC owner="" xyz="[1229.3, 308.7, 19.8]" price="900000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDRC>
-    <MEDUN owner="" xyz="[2041.3, -1408.9, 17.2]" biz="Отделение травматологии" price="1400000" money="0">
+    <MEDUN owner="" xyz="[2041.3, -1408.9, 17.2]" price="1400000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
@@ -59,7 +59,7 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDLS>
-    <MEDWS owner="" xyz="[-2204.6, -2311.5, 30.6]" biz="Скорая помощь Whetstone" price="880000" money="0">
+    <MEDWS owner="" xyz="[-2204.6, -2311.5, 30.6]" price="880000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
@@ -71,25 +71,25 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDLV>
-    <MEDSF owner="" xyz="[-2675.4, 634.3, 14.5]" biz="Скорая помощь San Fierro" price="1900000" money="0">
+    <MEDSF owner="" xyz="[-2675.4, 634.3, 14.5]" price="1900000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDSF>
-    <AMMOLS owner="" xyz="[1366.5, -1274.2, 13.5]" biz="Ammunation LS" price="2500000" money="0"></AMMOLS>
-    <MERLS owner="" biz="Мэрия LS" price="0" money="0" srok="353">
+    <AMMOLS owner="" xyz="[1366.5, -1274.2, 13.5]" price="2500000" money="0"></AMMOLS>
+    <MERLS owner="" price="0" money="0" srok="353">
         <VAC name="Начальник LSPD" jobbiz="PLSPD"></VAC>
     </MERLS>
-    <MERSF owner="" biz="Мэрия SF" price="0" money="0" srok="414">
+    <MERSF owner="" price="0" money="0" srok="414">
         <VAC name="ФБР" jobbiz="FBISF"></VAC>
         <VAC name="Начальник SFPD" jobbiz="PSFPD"></VAC>
     </MERSF>
-    <MERLV owner="" biz="Мэрия LV" price="0" money="0" srok="54">
+    <MERLV owner="" price="0" money="0" srok="54">
         <VAC name="Директор ЦРУ" jobbiz="CIASA"></VAC>
     </MERLV>
-    <CIASA owner="" xyz="[213.1, 1822.8, 6.4]" biz="Штаб квартира ЦРУ" price="0" money="0">
+    <CIASA owner="" xyz="[213.1, 1822.8, 6.4]" price="0" money="0">
         <VAC name="Тайный агент по борьбе с наркотиками"></VAC>
         <VAC name="Учёный CPC" jobbiz="MEDRA"></VAC>
     </CIASA>
@@ -103,58 +103,58 @@
         <VAC name="Офицер 2 класса"></VAC>
         <VAC name="Шериф округа Red County" jobbiz="PRCPD"></VAC>
     </PLSPD>
-    <PSFPD owner="" biz="SFPD" price="0" money="0">
+    <PSFPD owner="" price="0" money="0">
         
     </PSFPD>
-    <PLVPD owner="" biz="LVPD" price="0" money="0">
+    <PLVPD owner="" price="0" money="0">
         
     </PLVPD>
-    <PRCPD owner="" biz="RCPD" price="0" money="0">
+    <PRCPD owner="" price="0" money="0">
         <VAC name="Помощник шерифа"></VAC>
     </PRCPD>
-    <PBCPD owner="" biz="BCPD" price="0" money="0">
+    <PBCPD owner="" price="0" money="0">
         <VAC name="Помощник шерифа"></VAC>
     </PBCPD>
-    <PTRPD owner="" biz="TRPD" price="0" money="0">
+    <PTRPD owner="" price="0" money="0">
         <VAC name="Помощник шерифа"></VAC>
     </PTRPD>
-    <PWSPD owner="" biz="WSPD" price="0" money="0">
+    <PWSPD owner="" price="0" money="0">
         <VAC name="Помощник шерифа"></VAC>
     </PWSPD>
     
-    <FBISF owner="" xyz="[246.6, 118.3, 1003.2, 10, 0]" biz="ФБР" price="0" money="0">
+    <FBISF owner="" xyz="[246.6, 118.3, 1003.2, 10, 0]" price="0" money="0">
         <VAC name="ФБР"></VAC>
         <VAC name="ФБР"></VAC>
         <VAC name="ФБР"></VAC>
     </FBISF>
     
-    <BANBC owner="" xyz="[2309.3, -2.1, 26.7, 0, 1]" biz="Банк Bone County" price="2000000" money="0"></BANBC>
-    <BANSF owner="" xyz="[2309.3, -2.1, 26.7, 0, 2]" biz="Банк San Fierro" price="3800000" money="0"></BANSF>
-    <BANTR owner="" xyz="[2309.3, -2.1, 26.7, 0, 3]" biz="Банк Tierra Robada" price="2500000" money="0"></BANTR>
-    <BANLV owner="" xyz="[2309.3, -2.1, 26.7, 0, 4]" biz="Банк Las Venturas" price="5000000" money="0"></BANLV>
-    <BANLS owner="" xyz="[2309.3, -2.1, 26.7, 0, 5]" biz="Банк Los Santos" price="4500000" money="0"></BANLS>
-    <CERBC owner="" xyz="[-207.9, 1119.2, 20.4, 0, 0]" biz="Церковь Tierra Robada" price="6250000" money="0">
+    <BANBC owner="" xyz="[2309.3, -2.1, 26.7, 0, 1]" price="2000000" money="0"></BANBC>
+    <BANSF owner="" xyz="[2309.3, -2.1, 26.7, 0, 2]" price="3800000" money="0"></BANSF>
+    <BANTR owner="" xyz="[2309.3, -2.1, 26.7, 0, 3]" price="2500000" money="0"></BANTR>
+    <BANLV owner="" xyz="[2309.3, -2.1, 26.7, 0, 4]" price="5000000" money="0"></BANLV>
+    <BANLS owner="" xyz="[2309.3, -2.1, 26.7, 0, 5]" price="4500000" money="0"></BANLS>
+    <CERBC owner="" xyz="[-207.9, 1119.2, 20.4, 0, 0]" price="6250000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERBC>
-    <CERLV owner="" xyz="[2520.4, 918.5, 11, 0, 0]" biz="Свадебная часовня Las Venturas" price="4650000" money="0">
+    <CERLV owner="" xyz="[2520.4, 918.5, 11, 0, 0]" price="4650000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERLV>
-    <CERLV2 owner="" xyz="[2519.4, 2033.4, 11.2, 0, 0]" biz="Свадебная часовня Las Venturas" price="4600000" money="0">
+    <CERLV2 owner="" xyz="[2519.4, 2033.4, 11.2, 0, 0]" price="4600000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERLV2>
-    <CERLV3 owner="" xyz="[2439.5, 1293.3, 11, 0, 0]" biz="Свадебная часовня Las Venturas" price="4620000" money="0">
+    <CERLV3 owner="" xyz="[2439.5, 1293.3, 11, 0, 0]" price="4620000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERLV3>
-    <CERSF owner="" xyz="[-1989.9, 1117.9, 54.5, 0, 0]" biz="Церковь San Fierro" price="12000000" money="0">
+    <CERSF owner="" xyz="[-1989.9, 1117.9, 54.5, 0, 0]" price="12000000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERSF>
-    <CERRC owner="" xyz="[2256.8, -44.6, 26.9, 0, 0]" biz="Церковь Red County" price="3500000" money="0">
+    <CERRC owner="" xyz="[2256.8, -44.6, 26.9, 0, 0]" price="3500000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERRC>
-    <CERLS owner="" xyz="[2234, -1333.3, 24, 0, 0]" biz="Церковь Red County" price="8400000" money="0">
+    <CERLS owner="" xyz="[2234, -1333.3, 24, 0, 0]" price="8400000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERLS>
-    <DALBC owner="" xyz="[-323.5, 2675.6, 63.7, 0, 0]" biz="Грузоперевозки Bone County" price="8400000" money="0">
+    <DALBC owner="" xyz="[-323.5, 2675.6, 63.7, 0, 0]" price="8400000" money="0">
         <VAC name="Дальнобойщик"></VAC>
         <VAC name="Дальнобойщик"></VAC>
         <VAC name="Дальнобойщик"></VAC>

@@ -6099,8 +6099,51 @@ local BizInfo = {
 	["BIOEN"] = {1939, "Химический завод", {"Удобрения"}, {"Химикаты"}},
 	["PETLV"] = {1859, "Нефтяные скважины", {"Нефть"}, false},
 	["NPZSF"] = {1901, "Химический завод", {"Бензин", "Химикаты"}, {"Нефть"}}, 
-	["SPRAYSA"] = {1957, "Pay'n'Spray", false, false}
+	["SPRAYSA"] = {1957, "Pay'n'Spray", false, false}, 
+	["SPRUNK"] = {1932, "Sprunk", false, false}, 
+	["MEDRA"] = {1922, "Психиатрическая больница SA", false, false},
+	["SOLIN"] = {1923, "Solarin Industries", false, false}, 
+	["SANNEWS"] = {1969, "San News", false, false}, 
+	["MEDBC"] = {1955, "Скорая помощь Bone County", false, false}, 
+	["MEDTR"] = {1943, "Скорая помощь Tierra Robada", false, false}, 
+	["MEDRC"] = {1970, "Скорая помощь Red County", false, false}, 
+	["MEDUN"] = {1965, "Отделение травматологии", false, false}, 
+	["MEDWS"] = {1933, "Скорая помощь Whetstone", false, false}, 
+	["MEDSF"] = {1918, "Скорая помощь San Fierro", false, false},
+	["AMMOLS"] = {1900, "Ammunation LS", false, false}, 
+	["MERLS"] = {1844, "Мэрия LS", false, false},
+	["MERSF"] = {1800, "Мэрия SF", false, false},
+	["MERLV"] = {1912, "Мэрия LV", false, false},
+	["CIASA"] = {1935, "Штаб квартира ЦРУ", false, false}, 
+	["PSFPD"] = {1952, "Полицейский участок", false, false}, 
+	["PLVPD"] = {1944, "Полицейский участок", false, false}, 
+	["PRCPD"] = {1967, "Полицейский участок", false, false}, 
+	["PBCPD"] = {1951, "Полицейский участок", false, false}, 
+	["PTRPD"] = {1921, "Полицейский участок", false, false}, 
+	["PWSPD"] = {1966, "Полицейский участок", false, false}, 
+	["FBISF"] = {1952, "ФБР", false, false}, 
+	["BANBC"] = {1960, "Банк", false, false}, 
+	["BANSF"] = {1936, "Банк", false, false}, 
+	["BANTR"] = {1914, "Банк", false, false}, 
+	["BANLV"] = {1942, "Банк", false, false}, 
+	["BANLS"] = {1903, "Банк", false, false}, 
+	["CERBC"] = {1805, "Церковь Tierra Robada", false, false}, 
+	["CERLV"] = {1835, "Свадебная часовня Las Venturas", false, false}, 
+	["CERLV2"] = {1877, "Свадебная часовня Las Venturas", false, false}, 
+	["CERLV3"] = {1825, "Свадебная часовня Las Venturas", false, false}, 
+	["CERSF"] = {1877, "Церковь San Fierro", false, false}, 
+	["CERRC"] = {1903, "Церковь Red County", false, false}, 
+	["CERLS"] = {1793, "Церковь Los Santos", false, false}, 
+	["DALBC"] = {1939, "База дальнобойщиков", false, false}, 
 }
+
+
+
+
+
+
+
+
 
 function StartLookBiz(thePlayer,thePed,biz,control)
 	if(thePlayer) then
