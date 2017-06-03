@@ -52,7 +52,7 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDUN>
-    <MEDLS owner="" xyz="[1181.7, -1318, 13.6]" price="1670000" money="1500">
+    <MEDLS owner="" xyz="[1181.7, -1318, 13.6]" price="1670000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
