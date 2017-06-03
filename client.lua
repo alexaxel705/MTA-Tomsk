@@ -2582,7 +2582,7 @@ function SetGPS(arr)
 					local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
 					x,y,z = GetCoordOnMap(x,y,z)
 					x2,y2,z2 = GetCoordOnMap(x2,y2,z2)
-					PData["ResourceMap"][3][#PData["ResourceMap"][3]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 18}
+					PData["ResourceMap"][3][#PData["ResourceMap"][3]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 10}
 				end
 				oldmarker = v
 			end
@@ -2729,13 +2729,23 @@ function bizControl(name, data)
 
 	
 	if(data["var"]) then
-		local i = 0
-		for datname, dat in pairs(data["var"]) do
-			i=i+1
-			local text = "#CCCCCC"..datname..": "..dat.." "
-			local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
-			local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
-			PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
+		for i, dat in pairs(data["var"]) do
+			if(dat[1] == "Производит" or dat[1] == "Принимает") then
+				local text = "#CCCCCC"..dat[1]..": "
+				for i2, towar in pairs(dat[2]) do
+					if(i2 > 1) then
+						text = text..", "
+					end
+					text = text..towar
+				end
+				
+				local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
+				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
+			else
+				local text = "#CCCCCC"..dat[1]..": "..dat[2].." "
+				local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
+				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
+			end
 		end
 	end
 	BIZCTL = name
@@ -5726,13 +5736,14 @@ end
 -- Object, Model, Scale, x,y,z,rz, bizname
 local ResourceInMap = {
 	[1] = {false, 17005, 0.1, -382, -1437, 26,0, "FARMFR"},
-	[2] = {false, 17005, 0.1, -85, 27, 3, 0, ""},
-	[3] = {false, 17005, 0.1, 1929, 170, 37, 0, ""},
-	[4] = {false, 17335, 0.1, -1439, -1534, 101, 90, ""}, 
+	--[2] = {false, 17005, 0.1, -85, 27, 3, 0, ""},
+	--[3] = {false, 17005, 0.1, 1929, 170, 37, 0, ""},
+	[4] = {false, 17335, 0.1, -1439, -1534, 101, 90, "FARMWS"}, 
 	[5] = {false, 10357, 0.05, -2523, -622, 132, 0, "ELSF"}, 
 	[7] = {false, 8079, 0.02, 1573, 1791, 9.8, 0, "MEDLV"}, 
 	[8] = {false, 3976, 0.02, 1555.2, -1675.6, 16.2, 0, "PLSPD"},
-	
+	[9] = {false, 5708, 0.02, 1140, -1342, 15.4, 0, "MEDLS"}, 
+	[10] = {false, 12988, 0.02, 1352, 348, 20.5, 335, "BIOEN"}, 
 }
 
 
@@ -5744,8 +5755,8 @@ function resourcemap()
 			for i, dat in pairs(ResourceInMap) do
 				if(not dat[1]) then
 					mx,my,mz = GetCoordOnMap(dat[4],dat[5],dat[6])
-					dat[1] = createObject(dat[2], mx,my,mz+0.2) -- Чуть завышены так как высота линий 0.18
-					local col = createColSphere(mx,my,mz, 3)
+					dat[1] = createObject(dat[2], mx,my,mz+0.1) -- Чуть завышены так как толщина линий 1
+					local col = createColSphere(mx,my,mz, 2)
 					attachElements(col, dat[1])
 					setObjectScale(dat[1], dat[3])
 					setElementRotation(dat[1], 0,0,dat[7])
@@ -5827,7 +5838,7 @@ function map()
 						
 						x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
 						x2,y2,z2 = GetCoordOnMap(dat[2], dat[3], dat[4])
-						PData["ResourceMap"][1][#PData["ResourceMap"][1]+1] = {x,y,z,x2,y2,z2, color, 18}
+						PData["ResourceMap"][1][#PData["ResourceMap"][1]+1] = {x,y,z,x2,y2,z2, color, 10}
 					end
 				end
 			end
@@ -5843,7 +5854,7 @@ function map()
 				local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
 				x,y,z = GetCoordOnMap(x,y,z)
 				x2,y2,z2 = GetCoordOnMap(x2,y2,z2)
-				PData["ResourceMap"][3][#PData["ResourceMap"][3]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 18}
+				PData["ResourceMap"][3][#PData["ResourceMap"][3]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 10}
 			end
 			oldmarker = v
 		end
@@ -5869,7 +5880,7 @@ function map()
 					if(dat) then
 						x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
 						x2,y2,z2 = GetCoordOnMap(dat[2], dat[3], dat[4])
-						PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(99,0,0,255), 18}
+						PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(99,0,0,255), 10}
 					end
 				end
 			end
@@ -6150,12 +6161,16 @@ function playerPressedKey(button, press)
 					PData["WaypointBlip"] = createBlip(x*50, y*50, 0, 41)
 					local px,py,pz = getElementPosition(localPlayer)
 					triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x*50, y*50, 20)
+					triggerServerEvent("saveserver", localPlayer, localPlayer, 
+					x*50, y*50, 20, 
+					x*50, y*50, 20, "PedPath"
+					)
 				end
 			end
 		elseif(button == "mouse1") then
 			if(press) then
 				if(PData["MapShowInfo"]) then
-					triggerServerEvent("StopBizControl", localPlayer, getElementData(PData["MapHitElement"], "NameInMap")) 
+					triggerServerEvent("StopBizControl", localPlayer, BIZCTL) 
 					BIZCTL = false
 					PText["biz"] = {}
 					PData["MapShowInfo"] = nil

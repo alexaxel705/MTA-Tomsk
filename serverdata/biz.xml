@@ -1,5 +1,5 @@
 <biz>
-    <ELSF owner="" xyz="[-2521.2, -624.5, 132.7]" biz="АЭС San Andreas" price="2000000" money="0"></ELSF>
+    <ELSF owner="" xyz="[-2521.2, -624.5, 132.7]" price="2000000" money="0"></ELSF>
     <SPRUNK owner="" xyz="[1324.2, 286.4, 20]" biz="Sprunk" price="400000" money="0"></SPRUNK>
     <SPRAYSA owner="" xyz="[1942.1, 2184.7, 10.8]" biz="Spray San Andreas" price="100000" money="0"></SPRAYSA>
     <MEDRA owner="" xyz="[188.6, 1929.5, 17.7, 0, 0]" biz="Психиатрическая больница SA" price="0" money="0">
@@ -13,9 +13,10 @@
     <SOLIN owner="" xyz="[854.6, -605.2, 18.4]" biz="Solarin Industries" price="6700000" money="0"></SOLIN>
     
     
-    <FARMFR owner="" xyz="[-382.6, -1437.3, 25.7]" var='[ { &quot;Качество земли&quot;: 1 } ]' biz="Ферма Flint Range" price="340000" money="0">
-        
-    </FARMFR>
+    <BIOEN owner="" xyz="[-382.6, -1437.3, 25.7]" price="1000000" money="0"></BIOEN>
+    <FARMFR owner="" xyz="[-382.6, -1437.3, 25.7]" var='[ { &quot;Качество земли&quot;: 1 } ]' price="340000" money="0"></FARMFR>
+    <FARMWS owner="" xyz="[-1431.6, -1528.9, 101.7]" price="694000" money="0"></FARMWS>
+    	
     
     <SANNEWS owner="" xyz="[783.4, -1329, 13.5]" biz="San News" price="550000" money="0">
         <VAC name="Репортер"></VAC>
@@ -49,7 +50,7 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDUN>
-    <MEDLS owner="" xyz="[1181.7, -1318, 13.6]" biz="Скорая помощь Los Santos" price="1670000" money="0">
+    <MEDLS owner="" xyz="[1181.7, -1318, 13.6]" price="1670000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
@@ -63,7 +64,7 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDWS>
-    <MEDLV owner="" xyz="[1619.4, 1819.7, 10.8]" biz="Скорая помощь Las Venturas" price="2300000" money="0">
+    <MEDLV owner="" xyz="[1619.4, 1819.7, 10.8]" price="2300000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
@@ -90,7 +91,7 @@
         <VAC name="Тайный агент по борьбе с наркотиками"></VAC>
         <VAC name="Учёный CPC" jobbiz="MEDRA"></VAC>
     </CIASA>
-    <PLSPD owner="" biz="LSPD" price="0" money="0">
+    <PLSPD owner="" price="0" money="0">
         <VAC name="Рядовой"></VAC>
         <VAC name="Инспектор ДПС"></VAC>
         <VAC name="Сержант"></VAC>

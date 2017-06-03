@@ -5324,7 +5324,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -379.4, -1436.1, 25.7, 0, 0 --
+		local x,y,z,i,d  = -382.6, -1437.3, 25.7, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6086,12 +6086,45 @@ function GetQualityColor(quality)
 	end
 end
 
+
+
+-- Дата основания, название, производимые ресурсы, потребляемые ресурсы
+local BizInfo = {
+	["FARMFR"] = {1837, "Ферма", {"Зерно"}, {"Удобрения"}},
+	["ELSF"] = {1924, "Электростанция", false, false},
+	["PLSPD"] = {1955, "Полицейский участок", false, false},
+	["MEDLV"] = {1966, "Скорая помощь", false, false}, 
+	["MEDLS"] = {1921, "Скорая помощь", false, false}, 
+	["FARMWS"] = {1855, "Скотный двор", {"Скот", "Молоко"}, {"Зерно"}}, 
+	["BIOEN"] = {1939, "Химический завод", {"Удобрения"}, {"Химикаты"}},
+}
+
 function StartLookBiz(thePlayer,thePed,biz,control)
 	if(thePlayer) then
 		--Баланс, Прибыль, Убыток
 		local node = xmlFindChild(BizNode, biz, 0)
 		local owner = xmlNodeGetAttribute(node, "owner")
-		local array = {["name"] = xmlNodeGetAttribute(node, "biz")}
+		local array = {
+			["name"] = BizInfo[biz][2],
+			["var"] = {}
+		}
+		array["var"][#array["var"]+1] = {"Владелец", xmlNodeGetValue(node)}
+		array["var"][#array["var"]+1] = {"Дата основания", BizInfo[biz][1]}
+		
+
+		
+		if(BizInfo[biz][4]) then
+			array["var"][#array["var"]+1] = {"Принимает", BizInfo[biz][4]}
+		end
+		
+		if(BizInfo[biz][3]) then
+			array["var"][#array["var"]+1] = {"Производит", BizInfo[biz][3]}
+		end
+		
+		
+		
+		
+		
 		if(control == "nachalnik") then
 			if(owner ~= getPlayerName(thePlayer)) then
 				if(thePed) then
@@ -6101,11 +6134,14 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 			end
 			array["money"] = xmlNodeGetAttribute(node, "money")
 			if(xmlNodeGetAttribute(node, "var")) then
-				array["var"] = fromJSON(xmlNodeGetAttribute(node, "var"))
-				for name, val in pairs(array["var"]) do
+				local arr = fromJSON(xmlNodeGetAttribute(node, "var"))
+				for name, val in pairs(arr) do
 					if(name == "Качество земли") then
-						array["var"][name] = GetQuality(val)
+						array["var"][#array["var"]+1] = {name, GetQuality(val)}
+					else
+						array["var"][#array["var"]+1] = {name, val}
 					end
+					
 				end
 			end
 			
@@ -6119,10 +6155,12 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 			end
 		elseif(control == "map") then
 			if(xmlNodeGetAttribute(node, "var")) then
-				array["var"] = fromJSON(xmlNodeGetAttribute(node, "var"))
-				for name, val in pairs(array["var"]) do
+				arr = fromJSON(xmlNodeGetAttribute(node, "var"))
+				for name, val in pairs(arr) do
 					if(name == "Качество земли") then
-						array["var"][name] = GetQuality(val)
+						array["var"][#array["var"]+1] = {name, GetQuality(val)}
+					else
+						array["var"][#array["var"]+1] = {name, val}
 					end
 				end
 			end
@@ -6876,9 +6914,9 @@ addEventHandler("CreateThree", root, CreateThree)
 function BankEvent(thePlayer, thePed, biz, update)
 	local Node = xmlFindChild(BizNode, biz, 0)
 	if(update) then
-		triggerClientEvent(thePlayer, "bankControlUpdate", thePlayer, biz, toJSON({GetDatabaseAccount(thePlayer, "bank"), xmlNodeGetAttribute(Node, "biz")}))
+		triggerClientEvent(thePlayer, "bankControlUpdate", thePlayer, biz, toJSON({GetDatabaseAccount(thePlayer, "bank"), BizInfo[biz][2]}))
 	else
-		triggerClientEvent(thePlayer, "BankControl", thePlayer, biz, toJSON({GetDatabaseAccount(thePlayer, "bank"), xmlNodeGetAttribute(Node, "biz")}))
+		triggerClientEvent(thePlayer, "BankControl", thePlayer, biz, toJSON({GetDatabaseAccount(thePlayer, "bank"), BizInfo[biz][2]}))
 	end
 	
 end
@@ -7490,7 +7528,6 @@ function NewPogoda()
 
 	setElementData(root, "weather", toJSON(CurrentWeather))
 end
-
 
 
 
