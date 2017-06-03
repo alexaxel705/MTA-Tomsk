@@ -5712,12 +5712,13 @@ end
 
 
 
-
+-- Object, Model, Scale, x,y,z,rz, bizname
 local ResourceInMap = {
-	[1] = {false, 17005, -382, -1437, 26,0},
-	[2] = {false, 17005, -85, 27, 3, 0},
-	[3] = {false, 17005, 1929, 170, 37, 0},
-	[4] = {false, 17005, -1439, -1534, 101, 0}, -- Скот
+	[1] = {false, 17005, 0.1, -382, -1437, 26,0, "FARMFR"},
+	[2] = {false, 17005, 0.1, -85, 27, 3, 0, "В разработке"},
+	[3] = {false, 17005, 0.1, 1929, 170, 37, 0, "Пока что"},
+	[4] = {false, 17005, 0.1, -1439, -1534, 101, 0, "Ферма"}, 
+	[5] = {false, 10357, 0.05, -2523, -622, 132, 0, "Электростанция"}, -- Электростанция
 }
 
 function resourcemap()
@@ -5729,12 +5730,13 @@ function resourcemap()
 			
 			for i, dat in pairs(ResourceInMap) do
 				if(not dat[1]) then
-					mx,my,mz = GetCoordOnMap(dat[3],dat[4],dat[5])
+					mx,my,mz = GetCoordOnMap(dat[4],dat[5],dat[6])
 					dat[1] = createObject(dat[2], mx,my,mz)
-					setElementRotation(dat[1], 0,0,dat[6])
-					setObjectScale(dat[1], 0.1)
-					local col = createColSphere(mx,my,mz, 2)
-					attachElements(dat[1], col)
+					local col = createColSphere(mx,my,mz, 3)
+					attachElements(col, dat[1])
+					setObjectScale(dat[1], dat[3])
+					setElementRotation(dat[1], 0,0,dat[7])
+					setElementData(dat[1], "NameInMap", dat[8])
 				end
 			end
 			
@@ -9122,12 +9124,15 @@ function DrawPlayerMessage()
 				dxDrawLine3D(v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8])
 			end
 		end
-		
-		
+	
+		mousex,mousey,mousez = GetCursorPositionOnMap()
 		mx,my,mz = GetCoordOnMap(x,y,z)
 		sx,sy = getScreenFromWorldPosition(mx,my,mz)
 		if(sx and sy) then
 			dxDrawCircle(sx,sy, 6*NewScale, 2*NewScale, 1, 0, 360, tocolor(255,24,20,150))
+			if(getDistanceBetweenPoints2D(mx,my,mousex,mousey) < 1) then
+				Create3DTextOnMap("ТЫ",mousex*50,mousey*50,mousez,NewScale*2,2000,tocolor(230,230,230,255),"default-bold")
+			end
 		end
 		
 		
@@ -9141,24 +9146,34 @@ function DrawPlayerMessage()
 		
 		end
 		
-		Create3DTextOnMap("Los Santos\n#ffff00★",1850,-1600,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("San Fierro\n#ffff00★★",-2200,400,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Los Santos\n#ffff00★★★★",1850,-1600,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("San Fierro\n#ffff00★★★",-2200,400,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
 		Create3DTextOnMap("Las Venturas\n#ffff00★★★",2200,1650,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Angel Pine\n#ffff00★★★★★",-2150,-2450,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Las Payasadas\n#ffff00★★★★",-250,2650,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("El Quebrados\n#ffff00★★★★★",-1500,2500,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Angel Pine\n#ffff00★★",-2150,-2450,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Las Payasadas\n#ffff00★★★",-250,2650,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("El Quebrados\n#ffff00★★★",-1500,2500,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 		Create3DTextOnMap("Fort Caston\n#ffff00★★",-245,1100,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 		Create3DTextOnMap("Palomino Creek\n#ffff00★★★",2350,30,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 		Create3DTextOnMap("Blueberry\n#ffff00★★★",215,-215,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 		Create3DTextOnMap("Dillimore\n#ffff00★",670,-540,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Montgomery\n#ffff00★",1310, 310,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Bayside\n#ffff00★",-2537, 2332,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 
-
-	--[[	x,y,z = getCameraMatrix()
-		sx,sy, cx,cy,cz = getCursorPosition()
+		
+		local hitElement = false
+		local col = createObject(16635, mousex,mousey,mousez)
+		for _, v in pairs(getElementsByType("colshape", getRootElement(), true)) do
+			if(isElementWithinColShape(col, v)) then
+				hitElement = getElementAttachedTo(v)
+			end
+		end
+		destroyElement(col)
+		
 
 		if(hitElement) then
-			Create3DTextOnMap("Какое то здание..",cx*50,cy*50,cz,NewScale*2,2000,tocolor(230,230,230,255),"default-bold")
-		end--]]
+			x,y,z = getElementPosition(hitElement)
+			Create3DTextOnMap(getElementData(hitElement, "NameInMap"),x*50,y*50,z,NewScale*2,2000,tocolor(230,230,230,255),"default-bold")
+		end
 	end
 	
 	for key, arr in pairs(PData["MultipleAction"]) do
