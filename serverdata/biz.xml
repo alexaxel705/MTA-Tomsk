@@ -1,7 +1,7 @@
 <biz>
     <ELSF owner="" xyz="[-2521.2, -624.5, 132.7]" price="2000000" money="0"></ELSF>
     <SPRUNK owner="" xyz="[1324.2, 286.4, 20]" biz="Sprunk" price="400000" money="0"></SPRUNK>
-    <SPRAYSA owner="" xyz="[1942.1, 2184.7, 10.8]" biz="Spray San Andreas" price="100000" money="0"></SPRAYSA>
+    <SPRAYSA owner="" xyz="[1942.1, 2184.7, 10.8]" price="100000" money="0"></SPRAYSA>
     <MEDRA owner="" xyz="[188.6, 1929.5, 17.7, 0, 0]" biz="Психиатрическая больница SA" price="0" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
