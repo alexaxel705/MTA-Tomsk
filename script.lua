@@ -5324,7 +5324,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -382.6, -1437.3, 25.7, 0, 0 --
+		local x,y,z,i,d  = 1554.8, -1675.8, 16.2, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6095,8 +6095,10 @@ local BizInfo = {
 	["PLSPD"] = {1955, "Полицейский участок", false, false},
 	["MEDLV"] = {1966, "Скорая помощь", false, false}, 
 	["MEDLS"] = {1921, "Скорая помощь", false, false}, 
-	["FARMWS"] = {1855, "Скотный двор", {"Скот", "Молоко"}, {"Зерно"}}, 
+	["FARMWS"] = {1855, "Скотный двор", {"Скот"}, {"Зерно"}}, 
 	["BIOEN"] = {1939, "Химический завод", {"Удобрения"}, {"Химикаты"}},
+	["PETLV"] = {1859, "Нефтяные скважины", {"Нефть"}, false},
+	["NPZSF"] = {1901, "Химический завод", {"Бензин", "Химикаты"}, {"Нефть"}}
 }
 
 function StartLookBiz(thePlayer,thePed,biz,control)
@@ -6112,18 +6114,6 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 		array["var"][#array["var"]+1] = {"Дата основания", BizInfo[biz][1]}
 		
 
-		
-		if(BizInfo[biz][4]) then
-			array["var"][#array["var"]+1] = {"Принимает", BizInfo[biz][4]}
-		end
-		
-		if(BizInfo[biz][3]) then
-			array["var"][#array["var"]+1] = {"Производит", BizInfo[biz][3]}
-		end
-		
-		
-		
-		
 		
 		if(control == "nachalnik") then
 			if(owner ~= getPlayerName(thePlayer)) then
@@ -6146,10 +6136,9 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 			end
 			
 			
-			array["vacancy"] = {}
-			
 			local vacancy = xmlNodeGetChildren(node)
 			for i, ChildNode in pairs(vacancy) do
+				if(not array["vacancy"]) then array["vacancy"] = {} end
 				local name = xmlNodeGetAttribute(ChildNode, "name")
 				array["vacancy"][i] = {biz, name, xmlNodeGetValue(ChildNode)}
 			end
@@ -6165,15 +6154,34 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 				end
 			end
 		else
-			array["vacancy"] = {}
-			
 			local vacancy = xmlNodeGetChildren(node)
 			for i, ChildNode in pairs(vacancy) do
+				if(not array["vacancy"]) then array["vacancy"] = {} end
 				local name = xmlNodeGetAttribute(ChildNode, "name")
 				array["vacancy"][i] = {biz, name, xmlNodeGetValue(ChildNode)}
 			end
 		end
 
+		
+		
+		if(BizInfo[biz][4]) then
+			local TradeArr = {}
+			for _, item in pairs(BizInfo[biz][4]) do
+				TradeArr[#TradeArr+1] = {item, "Trade", 1, {}}
+			end
+			array["var"][#array["var"]+1] = {"Принимает", TradeArr}
+		end
+		
+		if(BizInfo[biz][3]) then
+			local TradeArr = {}
+			for _, item in pairs(BizInfo[biz][3]) do
+				TradeArr[#TradeArr+1] = {item, "Trade", 750, {}}
+			end
+			array["var"][#array["var"]+1] = {"Производит", TradeArr}
+		end
+		
+		
+		
 		triggerClientEvent(thePlayer, "bizControl", thePlayer, biz, array)
 
 		BizControls[biz][thePlayer] = control
@@ -7725,19 +7733,21 @@ function preLoad(name)
 	local bizNode = xmlNodeGetChildren(BizNode)
 	for c,node in ipairs(bizNode) do
 		local NodeName = xmlNodeGetName(node)
-		if(xmlNodeGetAttribute(node, "xyz")) then
-			local x,y,z,i,d = fromJSON(xmlNodeGetAttribute(node, "xyz"))
-			BusinessPickup[NodeName] = createPickup(x,y,z, 3, 1274, 0)
-			if(xmlNodeGetAttribute(node, "owner") ~= "") then
-				setElementData(BusinessPickup[NodeName], "bizowner", xmlNodeGetAttribute(node, "owner"))
+		if(BizInfo[NodeName]) then -- Потом убрать
+			if(xmlNodeGetAttribute(node, "xyz")) then
+				local x,y,z,i,d = fromJSON(xmlNodeGetAttribute(node, "xyz"))
+				BusinessPickup[NodeName] = createPickup(x,y,z, 3, 1274, 0)
+				if(xmlNodeGetAttribute(node, "owner") ~= "") then
+					setElementData(BusinessPickup[NodeName], "bizowner", xmlNodeGetAttribute(node, "owner"))
+				end
+				if(i) then setElementInterior(BusinessPickup[NodeName], i) end
+				if(d) then setElementDimension(BusinessPickup[NodeName], d) end
+				setElementData(BusinessPickup[NodeName], "biz", BizInfo[NodeName][2])
+				setElementData(BusinessPickup[NodeName], "price", xmlNodeGetAttribute(node, "price"), false)
+				setElementData(BusinessPickup[NodeName], "name", NodeName)
 			end
-			if(i) then setElementInterior(BusinessPickup[NodeName], i) end
-			if(d) then setElementDimension(BusinessPickup[NodeName], d) end
-			setElementData(BusinessPickup[NodeName], "biz", xmlNodeGetAttribute(node, "biz"))
-			setElementData(BusinessPickup[NodeName], "price", xmlNodeGetAttribute(node, "price"), false)
-			setElementData(BusinessPickup[NodeName], "name", NodeName)
+			BizControls[NodeName] = {}
 		end
-		BizControls[NodeName] = {}
 	end
 	
 	UpdateVacancyList()
@@ -12647,7 +12657,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Конопля", 1, 1, {})
+	--AddInventoryItem(thePlayer, "Бензин", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
@@ -12657,8 +12667,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	--StartAnimation(source,"skate", "skate_run", 1000,false,false,false)
 	--[[SetDatabaseAccount(thePlayer, "PrisonTime", 423)
 	SetTeam(thePlayer, "Уголовники")--]]
-	--triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, math.random(-3000,3000), math.random(-3000,3000), math.random(-3000,3000), "Отвези груз")
-	end
+end
 addEvent("saveserver", true)
 addEventHandler("saveserver", root, saveserver)
 

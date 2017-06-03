@@ -259,7 +259,6 @@ local usableslot = 1
 local SprunkObject = false
 local CallPolice = false
 local BANKCTL = false
-local BIZCTL = false
 local MovePlayerTo = {} -- x,y,z,rz,mode [silent, fast],action,args
 local Targets = {}
 local MyHouseBlip = {}
@@ -423,6 +422,10 @@ local TexturesPosition = {
 	["9-мм"] = {-4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 250}, 
 	["18.5-мм"] = {-4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 250}, 
 	["Скот"] = {10,0,1.2, 0,0,1.2, 0,70, 255}, 
+	["Нефть"] = {2,0,0, 0,0,0, 0,70, 255}, 
+	["Химикаты"] = {2,0,0.1, 0,0,0.1, 0,70, 255}, 
+	["Удобрения"] = {2,0,0.1, 0,0,0.1, 0,70, 255}, 
+	["Бензин"] = {2,0,0.2, 0,0,0.2, 0,70, 255}, 
 	["Зерно"] = {2,0,0, 0,0,0, 0,70, 200},
 	["Газета"] = {0.8,0.2,0.75, 0.8,0.2,0, 0,70, 200},
 	["Деньги"] = {0.2,0.2,0.35, -0.05,-0.05,0, 0,70, 200},
@@ -506,6 +509,10 @@ local PreloadTextures = {
 	["Ракета"] = createObject(345, 4400, 4000, 4000),
 	["Деньги"] = createObject(1212, 4410, 4000, 4020),
 	["Газета"] = createObject(2674, 4415, 4000, 4020),
+	["Нефть"] = createObject(3632, 4420, 4000, 4020),
+	["Химикаты"] = createObject(1218, 4425, 4000, 4020),
+	["Бензин"] = createObject(1225, 4430, 4000, 4020),
+	["Удобрения"] = createObject(1222, 4435, 4000, 4020),
 }
 
 local CreateTextureStage = false
@@ -1183,6 +1190,10 @@ local items = {
 	
 	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, false, true},
 	["Скот"] = {false, "Скот", 1, false, 90000, 5, false, false, false},
+	["Нефть"] = {false, "Нефть", 1, false, 136000, 500, false, false, false},
+	["Химикаты"] = {false, "Химикаты", 1, false, 92000, 350, false, false, false},
+	["Удобрения"] = {false, "Удобрения", 1, false, 41000, 150, false, false, false},
+	["Бензин"] = {false, "Бензин", 1, false, 56000, 250, false, false, false},
 	["Зерно"] = {false, "Зерно", 10, false, 2500, 5, false, false, false}, 
 	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false},
 	["Деньги"] = {false, "Деньги", 99999999, false, 0.01, 1, false, false, false},
@@ -2711,17 +2722,15 @@ function bizControl(name, data)
 		end
 	else
 		if(data["vacancy"]) then
-			local text = "Список доступных вакансий: "
-			PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
 			for i, dat in pairs(data["vacancy"]) do
 				local text = "#CCCCCC"..dat[2].."#FFFFFF - "..dat[3].." "
 				local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
 				local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
-				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}	
+				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 440*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}	
 				if(dat[3] == "") then
-					PText["biz"][#PText["biz"]+1] = {"устроиться", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"startBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
+					PText["biz"][#PText["biz"]+1] = {"устроиться", 660*scalex+textWidth, 440*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"startBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
 				elseif(dat[3] == getPlayerName(localPlayer)) then
-					PText["biz"][#PText["biz"]+1] = {"уволиться", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"stopBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
+					PText["biz"][#PText["biz"]+1] = {"уволиться", 660*scalex+textWidth, 440*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"stopBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
 				end
 			end
 		end
@@ -2729,29 +2738,47 @@ function bizControl(name, data)
 
 	
 	if(data["var"]) then
+		local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
 		for i, dat in pairs(data["var"]) do
-			if(dat[1] == "Производит" or dat[1] == "Принимает") then
-				local text = "#CCCCCC"..dat[1]..": "
-				for i2, towar in pairs(dat[2]) do
-					if(i2 > 1) then
-						text = text..", "
-					end
-					text = text..towar
+			if(dat[1] == "Производит") then
+				if(not TradeWindows) then 
+					PInv["shop"] = {} 
+					PBut["shop"] = {} 
+					TradeWindows = name
 				end
 				
-				local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
-				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
+				for i2, towar in pairs(dat[2]) do
+					PInv["shop"][#PInv["shop"]+1] = towar
+				
+					PBut["shop"][#PBut["shop"]+1] = {580*scalex+((80*scalex)*i2), 575*scaley, 80*scalex, 60*scaley}
+				end
+				
+				local text = "#CCCCCC"..dat[1]..": "
+				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 550*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
+			elseif(dat[1] == "Принимает") then
+				if(not TradeWindows) then 
+					PInv["shop"] = {} 
+					PBut["shop"] = {} 
+					TradeWindows = name
+				end
+				
+				for i2, towar in pairs(dat[2]) do
+					PInv["shop"][#PInv["shop"]+1] = towar
+				
+					PBut["shop"][#PBut["shop"]+1] = {580*scalex+((80*scalex)*i2), 685*scaley, 80*scalex, 60*scaley}
+				end
+				
+				local text = "#CCCCCC"..dat[1]..": "
+				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 660*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
 			else
 				local text = "#CCCCCC"..dat[1]..": "..dat[2].." "
-				local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
-				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
+				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 370*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
 			end
 		end
 	end
-	BIZCTL = name
-	if(PData["ResourceMap"]) then
-		PData["BizControlName"] = data["name"]
-	end
+	
+	PData["BizControlName"] = {name, data["name"]}
+
 	showCursor(true)
 end
 addEvent("bizControl", true)
@@ -5743,69 +5770,79 @@ local ResourceInMap = {
 	[7] = {false, 8079, 0.02, 1573, 1791, 9.8, 0, "MEDLV"}, 
 	[8] = {false, 3976, 0.02, 1555.2, -1675.6, 16.2, 0, "PLSPD"},
 	[9] = {false, 5708, 0.02, 1140, -1342, 15.4, 0, "MEDLS"}, 
-	[10] = {false, 12988, 0.02, 1352, 348, 20.5, 335, "BIOEN"}, 
+	[10] = {false, 12988, 0.07, 1362, 328, 20.5, 335, "BIOEN"}, 
+	[11] = {false, 3426, 0.1, 187, 1415, 10.6, 335, "PETLV"}, 
+	[12] = {false, 17017, 0.05, -1040, -644, 132, 335, false}, 
+	[13] = {false, 17021, 0.05, -1040, -644, 32, 335, "NPZSF"}, 
 }
 
 
 function resourcemap()
 	if(not PData["ResourceMap"]) then
-		if(PEDChangeSkin == "play") then
-			PEDChangeSkin = "map"
-			
-			for i, dat in pairs(ResourceInMap) do
-				if(not dat[1]) then
-					mx,my,mz = GetCoordOnMap(dat[4],dat[5],dat[6])
-					dat[1] = createObject(dat[2], mx,my,mz+0.1) -- Чуть завышены так как толщина линий 1
+		for i, dat in pairs(ResourceInMap) do
+			if(not dat[1]) then
+				mx,my,mz = GetCoordOnMap(dat[4],dat[5],dat[6])
+				dat[1] = createObject(dat[2], mx,my,mz+0.1) -- Чуть завышены так как толщина линий 1
+				setElementRotation(dat[1], 0,0,dat[7])
+				setObjectScale(dat[1], dat[3])
+				if(dat[8]) then
 					local col = createColSphere(mx,my,mz, 2)
 					attachElements(col, dat[1])
-					setObjectScale(dat[1], dat[3])
-					setElementRotation(dat[1], 0,0,dat[7])
 					setElementData(dat[1], "NameInMap", dat[8])
+				end
 
-				end
 			end
-			
-			SetPlayerHudComponentVisible("all", false)
-			setElementFrozen(localPlayer, true)
-			local theVehicle = getPedOccupiedVehicle(localPlayer)
-			if(theVehicle) then
-				setElementFrozen(theVehicle, true)
+		end
+		
+		SetPlayerHudComponentVisible("all", false)
+		setElementFrozen(localPlayer, true)
+		local theVehicle = getPedOccupiedVehicle(localPlayer)
+		if(theVehicle) then
+			setElementFrozen(theVehicle, true)
+		end
+		
+		local loadingzones = {}
+		for name, dat in pairs(PData["infopath"]) do
+			if(not dat) then
+				loadingzones[#loadingzones+1] = name
 			end
-			
-			local loadingzones = {}
-			for name, dat in pairs(PData["infopath"]) do
-				if(not dat) then
-					loadingzones[#loadingzones+1] = name
-				end
-			end
-			
-			if(#loadingzones == 0) then 
-				map()
-			else
-				helpmessage("Идет загрузка...")
-				for slot = 1, #loadingzones do
-					if(slot == #loadingzones) then
-						triggerServerEvent("CreateVehicleNodeMarker", localPlayer, loadingzones[slot], true)
-					else
-						triggerServerEvent("CreateVehicleNodeMarker", localPlayer, loadingzones[slot])
-					end
+		end
+		
+		if(#loadingzones == 0) then 
+			map()
+		else
+			helpmessage("Идет загрузка...")
+			for slot = 1, #loadingzones do
+				if(slot == #loadingzones) then
+					triggerServerEvent("CreateVehicleNodeMarker", localPlayer, loadingzones[slot], true)
+				else
+					triggerServerEvent("CreateVehicleNodeMarker", localPlayer, loadingzones[slot])
 				end
 			end
 		end
 	else
-		if(PEDChangeSkin == "map") then
-			setCameraTarget(localPlayer)
-			PData["ResourceMap"] = nil
-			SetPlayerHudComponentVisible("all", true)
-			setElementFrozen(localPlayer, false)
-			local theVehicle = getPedOccupiedVehicle(localPlayer)
-			if(theVehicle) then
-				setElementFrozen(theVehicle, false)
-			end
-			PEDChangeSkin = "play"
-			GameSky(getZoneName(x,y,z, true))
-			showCursor(false)
+		setCameraTarget(localPlayer)
+		PData["ResourceMap"] = nil
+		
+		if(PData["BizControlName"]) then
+			triggerServerEvent("StopBizControl", localPlayer, PData["BizControlName"][1]) 
+			PText["biz"] = {}
+			PData["MapShowInfo"] = nil
+			PData["BizControlName"] = nil
+			PInv["shop"] = {} 
+			PBut["shop"] = {} 
+			TradeWindows = false
 		end
+		
+		
+		SetPlayerHudComponentVisible("all", true)
+		setElementFrozen(localPlayer, false)
+		local theVehicle = getPedOccupiedVehicle(localPlayer)
+		if(theVehicle) then
+			setElementFrozen(theVehicle, false)
+		end
+		GameSky(getZoneName(x,y,z, true))
+		showCursor(false)
 	end
 end
 
@@ -6170,11 +6207,13 @@ function playerPressedKey(button, press)
 		elseif(button == "mouse1") then
 			if(press) then
 				if(PData["MapShowInfo"]) then
-					triggerServerEvent("StopBizControl", localPlayer, BIZCTL) 
-					BIZCTL = false
+					triggerServerEvent("StopBizControl", localPlayer, PData["BizControlName"][1]) 
 					PText["biz"] = {}
 					PData["MapShowInfo"] = nil
 					PData["BizControlName"] = nil
+					PInv["shop"] = {} 
+					PBut["shop"] = {} 
+					TradeWindows = false
 				end
 				if(PData["MapHitElement"]) then
 					PData["MapShowInfo"] = getElementData(PData["MapHitElement"], "NameInMap")
@@ -6353,10 +6392,10 @@ function playerPressedKey(button, press)
 					cancelEvent()
 				end
 			end
-			if(BIZCTL) then
+			if(PData["BizControlName"]) then
 				cancelEvent()
-				triggerServerEvent("StopBizControl", localPlayer, BIZCTL) 
-				BIZCTL = false
+				triggerServerEvent("StopBizControl", localPlayer, PData["BizControlName"][1]) 
+				PData["BizControlName"] = nil
 				PText["biz"] = {}
 				showCursor(false)
 			end
@@ -8961,223 +9000,221 @@ local screenSaver = {
 
 function DrawPlayerInventory()
 	local sx, sy, font, tw, th, color
-	
-
 	if(PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer) and not isPlayerMapForced()) then
-			titleText = Text("Информация")
-			qualityInfo = ""
-			if(InventoryWindows) then
-				dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
-				if(backpackid) then
-					dxDrawBorderedText(PInv["player"][backpackid][1], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-				else
-					dxDrawBorderedText(getPlayerName(localPlayer), 660*scalex, 325*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-					local Birthday = getRealTime(getElementData(localPlayer, "Birthday"))
-					qualityInfo = Text("Дата рождения")..
-					": "..Birthday.monthday.."."..Birthday.month+(1).."."..Birthday.year+(1882)..
-					" ("..Text("{age} лет", {{"{age}", ServerDate.year-(Birthday.year-18)}})..
-					")\n"..Text("Фракция")..": "..Text(getTeamName(getPlayerTeam(localPlayer)))..
-					"\n"..Text("Работа")..": "..Text(getElementData(localPlayer, "job"))
-				end
-				
-				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(50*scaley), 640*scalex+(949*scalex), 360*scaley+(50*scaley), tocolor(120,120,120,255), 1)	
-				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(90*scaley), 640*scalex+(949*scalex), 360*scaley+(90*scaley), tocolor(120,120,120,255), 1)	
-				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(320*scaley), 640*scalex+(949*scalex), 360*scaley+(320*scaley), tocolor(120,120,120,255), 1)
-				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(372*scaley), 640*scalex+(949*scalex), 360*scaley+(372*scaley), tocolor(120,120,120,255), 1)
-				
-				dxDrawBorderedText(InventoryMass.."/"..MaxMass..Text("кг"), screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
-			elseif(TradeWindows) then			
-				dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
-				dxDrawBorderedText("Продажа", 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-			
-				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(50*scaley), 640*scalex+(949*scalex), 360*scaley+(50*scaley), tocolor(120,120,120,255), 1)	
-				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(90*scaley), 640*scalex+(949*scalex), 360*scaley+(90*scaley), tocolor(120,120,120,255), 1)	
-				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(320*scaley), 640*scalex+(949*scalex), 360*scaley+(320*scaley), tocolor(120,120,120,255), 1)
-				dxDrawLine(640*scalex+(646*scalex), 360*scaley+(372*scaley), 640*scalex+(949*scalex), 360*scaley+(372*scaley), tocolor(120,120,120,255), 1)
-				
-				dxDrawBorderedText(InventoryMass.."/"..MaxMass..Text("кг"), screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
-			elseif(TrunkWindows) then			
-				dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
-				dxDrawBorderedText("Багажник "..getVehicleName(TrunkWindows), 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-			elseif(BIZCTL) then
-				dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(20, 25, 20, 245))
-				dxDrawBorderedText(BIZCTL, 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-			elseif(BANKCTL) then
-				dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(25, 20, 20, 245))
-				dxDrawBorderedText(BANKCTL, 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
+		titleText = Text("Информация")
+		qualityInfo = ""
+		if(InventoryWindows) then
+			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
+			if(backpackid) then
+				dxDrawBorderedText(PInv["player"][backpackid][1], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
+			else
+				dxDrawBorderedText(getPlayerName(localPlayer), 660*scalex, 325*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
+				local Birthday = getRealTime(getElementData(localPlayer, "Birthday"))
+				qualityInfo = Text("Дата рождения")..
+				": "..Birthday.monthday.."."..Birthday.month+(1).."."..Birthday.year+(1882)..
+				" ("..Text("{age} лет", {{"{age}", ServerDate.year-(Birthday.year-18)}})..
+				")\n"..Text("Фракция")..": "..Text(getTeamName(getPlayerTeam(localPlayer)))..
+				"\n"..Text("Работа")..": "..Text(getElementData(localPlayer, "job"))
 			end
-
 			
-			dxDrawImage((screenWidth)-((80*NewScale)*10), screenHeight-(80*NewScale),(screenWidth)-((80*NewScale)*10), (80*NewScale), VideoMemory["HUD"]["PlayerInv"])
-
-			for name,arr in pairs(PBut) do
-				for i,el in pairs(arr) do
-					sx,sy = el[1], el[2]
-					local h,w = el[3], el[4]
-					
-					local CRAM = false
-					local CTBACK = tocolor(81,81,105,140)
-					local SystemName = PInv[name][i][1]
-					local DrawText = Text(SystemName)
-					if(PInv[name][i][4]) then
-						if(PInv[name][i][4]["name"]) then
-							DrawText = Text(PInv[name][i][4]["name"])
-						end
-					end
-
-					if(name == "player") then
-						if(i == usableslot) then
-							CRAM = tocolor(230,230,255,255)
-						end
-					else
-						CRAM = tocolor(120,120,120,255)
-					end
-
-
-					if(DragElementId) then
-						local TIText = PInv[DragElementName][DragElementId][1]
-						if(TIText) then
-							if(items[TIText][7]) then -- Связанные предметы
-								for razdelname,razdel in pairs(items[TIText][7]) do
-									for _, IT in pairs(razdel) do
-										if IT == SystemName then
-											dxDrawRectangle(sx, sy, h, w,  tocolor(0,255,0,50))
-										end
-									end
-								end
-							end
-							
-							if(items[TIText][9]) then -- Объединяемые предметы
-								if(DragElementId ~= i and DragElementName == name) then
-									if(TIText == SystemName) then
-										if(GetQuality(PInv[DragElementName][DragElementId][3]) == GetQuality(PInv[name][i][3])) then
-											dxDrawRectangle(sx, sy, h, w,  tocolor(255,153,0,50))
-										end
-									end
-								end
-							end
-						end
-						if(DragElementId == i and DragElementName == name) then
-							CRAM = tocolor(255,255,255,255)
-							qualityInfo = GetQualityInfo(PInv[DragElementName][DragElementId])
-							if(SystemName) then
-								dxDrawText(items[SystemName][2], 640*scalex+(5*scalex), 740*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale/1.8, "default", "left", "top", false, false, false, true)
-								titleText=DrawText
-							end
-						end
-					end
-
-					if(PInv[name][i][3]) then
-						if(DragElement ~= el) then
-							local r2,g2,b2 = hex2rgb(GetQualityColor(PInv[name][i][3]):sub(2,7))
-							if(PInv[name][i][4]["quality"]) then
-								r2,g2,b2 = hex2rgb(GetQualityColor(PInv[name][i][4]["quality"]):sub(2,7))
-							end
-							CTBACK = tocolor(r2,g2,b2,140)
-						end
-					end
-					
-					
-					dxDrawRectangle(sx, sy+(80*NewScale), h, w-(80*NewScale), CTBACK)
-						
-					if(CRAM) then
-						dxDrawLine(sx, sy, sx, sy+(80*NewScale), CRAM, 1)
-						dxDrawLine(sx+(80*NewScale), sy, sx+(80*NewScale), sy+(80*NewScale), CRAM, 1)
-						dxDrawLine(sx, sy, sx+(80*NewScale), sy, CRAM, 1)
-						dxDrawLine(sx, sy+(80*NewScale), sx+(80*NewScale), sy+(80*NewScale), CRAM, 1)
-						dxDrawLine(sx, sy+(80*NewScale), sx+(80*NewScale), sy+(80*NewScale), CRAM, 1)
-					end
-					
-
-					if(DragElement == el and DragX) then
-					
-					else
-						if(PInv[name][i][4]) then
-							dxDrawImage(sx,sy,h,w,items[SystemName][1])
-
-							local fontsize = scale/1.8
-							tw = dxGetTextWidth(DrawText, fontsize, "default-bold", true)
-							if(tw > w) then
-								fontsize=fontsize*(w/tw)
-							end
-							dxDrawBorderedText(DrawText, sx, sy+(140*NewScale), sx+(80*NewScale), sy, tocolor(255, 255, 255, 255), fontsize, "default-bold", "center", "center", false, false, false, true)
-							
-							if(name == "player" or name == "backpack" or name == "trunk") then
-								if(items[SystemName][3] > 1) then
-									local sht = {"", " шт"}
-									if(SystemName == "Деньги") then sht = {"$", ""} end
-									dxDrawBorderedText(sht[1]..PInv[name][i][2]..sht[2], sx, sy, sx+(76*NewScale), sy, tocolor(255, 255, 255, 255), scale/2, "default-bold", "right", "top", false, false, false, false)
-								end
-							elseif(name == "shop") then
-								dxDrawBorderedText("$"..GetItemCost(PInv[name][i]), sx, sy, sx+(76*NewScale), sy, tocolor(100, 255, 100, 255), scale/2.5, "pricedown", "right", "top", false, false, false, false)
-							end
-							
-							if(PInv[name][i][4]["патроны"]) then
-								dxDrawImage(sx+(h-(25*NewScale)), sy, 25*NewScale, 25*NewScale, items[PInv[name][i][4]["патроны"][1]][1])
-							end
-							
-							if(PInv[name][i][4]["лазер"]) then
-								dxDrawImage(sx+(h-(50*NewScale)), sy, 25*NewScale, 25*NewScale, items[PInv[name][i][4]["лазер"][1]][1])
-							end
-							
-							if(PInv[name][i][4]["сигареты"]) then
-								dxDrawImage(sx+(h-(25*NewScale)), sy, 25*NewScale, 25*NewScale, items[PInv[name][i][4]["сигареты"][1]][1])
-							end
-						end
-					end
-				end
-			end
+			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(50*scaley), 640*scalex+(949*scalex), 360*scaley+(50*scaley), tocolor(120,120,120,255), 1)	
+			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(90*scaley), 640*scalex+(949*scalex), 360*scaley+(90*scaley), tocolor(120,120,120,255), 1)	
+			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(320*scaley), 640*scalex+(949*scalex), 360*scaley+(320*scaley), tocolor(120,120,120,255), 1)
+			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(372*scaley), 640*scalex+(949*scalex), 360*scaley+(372*scaley), tocolor(120,120,120,255), 1)
+			
+			dxDrawBorderedText(InventoryMass.."/"..MaxMass..Text("кг"), screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
+		elseif(PData["BizControlName"]) then
+			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(20, 25, 20, 245))
+			dxDrawBorderedText(PData["BizControlName"][2], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
+		elseif(TradeWindows) then			
+			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
+			dxDrawBorderedText("Продажа", 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
 		
-			if(DragElement and DragX) then
-				sx, sy = PBut[DragElementName][DragElementId][3], PBut[DragElementName][DragElementId][4]
+			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(50*scaley), 640*scalex+(949*scalex), 360*scaley+(50*scaley), tocolor(120,120,120,255), 1)	
+			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(90*scaley), 640*scalex+(949*scalex), 360*scaley+(90*scaley), tocolor(120,120,120,255), 1)	
+			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(320*scaley), 640*scalex+(949*scalex), 360*scaley+(320*scaley), tocolor(120,120,120,255), 1)
+			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(372*scaley), 640*scalex+(949*scalex), 360*scaley+(372*scaley), tocolor(120,120,120,255), 1)
+			
+			dxDrawBorderedText(InventoryMass.."/"..MaxMass..Text("кг"), screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
+		elseif(TrunkWindows) then			
+			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
+			dxDrawBorderedText("Багажник "..getVehicleName(TrunkWindows), 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
+		elseif(BANKCTL) then
+			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(25, 20, 20, 245))
+			dxDrawBorderedText(BANKCTL, 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
+		end
+
+		
+		dxDrawImage((screenWidth)-((80*NewScale)*10), screenHeight-(80*NewScale),(screenWidth)-((80*NewScale)*10), (80*NewScale), VideoMemory["HUD"]["PlayerInv"])
+
+		for name,arr in pairs(PBut) do
+			for i,el in pairs(arr) do
+				sx,sy = el[1], el[2]
+				local h,w = el[3], el[4]
 				
-				dxDrawImage(DragX, DragY, sx, sy, items[PInv[DragElementName][DragElementId][1]][1], nil,nil,nil,true)
-				if(PInv[DragElementName][DragElementId][4]) then -- Экипированные в предмет вещи аля патроны
-					if(PInv[DragElementName][DragElementId][4]["патроны"]) then
-						dxDrawImage(DragX+(sx-(25*NewScale)), DragY, 25*NewScale, 25*NewScale, items[PInv[DragElementName][DragElementId][4]["патроны"][1]][1], nil,nil,nil,true)
-					elseif(PInv[DragElementName][DragElementId][4]["сигареты"]) then
-						dxDrawImage(DragX+(sx-(25*NewScale)), DragY, 25*NewScale, 25*NewScale, items[PInv[DragElementName][DragElementId][4]["сигареты"][1]][1], nil,nil,nil,true)
+				local CRAM = false
+				local CTBACK = tocolor(81,81,105,140)
+				local SystemName = PInv[name][i][1]
+				local DrawText = Text(SystemName)
+				if(PInv[name][i][4]) then
+					if(PInv[name][i][4]["name"]) then
+						DrawText = Text(PInv[name][i][4]["name"])
 					end
 				end
-				
-				local CTBACK = tocolor(81,81,105, 140)
-				if(PInv[DragElementName][DragElementId][3]) then
-					local r2,g2,b2 = hex2rgb(GetQualityColor(PInv[DragElementName][DragElementId][3]):sub(2,7))
-					if(PInv[DragElementName][DragElementId][4]["quality"]) then
-						r2,g2,b2 = hex2rgb(GetQualityColor(PInv[DragElementName][DragElementId][4]["quality"]):sub(2,7))
-					end
-					CTBACK = tocolor(r2,g2,b2,140)
-				end
-				dxDrawRectangle(DragX, DragY+(80*NewScale), sx, sy-(80*NewScale), CTBACK)
-				
-				if(DragElementName ~= "shop") then
-					if(items[PInv[DragElementName][DragElementId][1]][3] > 1) then
-						local sht = {"", " шт"}
-						if(PInv[DragElementName][DragElementId][1] == "Деньги") then sht = {"$", ""} end
-						dxDrawBorderedText(sht[1]..PInv[DragElementName][DragElementId][2]..sht[2], DragX, DragY, DragX+(76*NewScale), DragY, tocolor(255, 255, 255, 255), scale/2, "default-bold", "right", "top", false, false, true, true)
+
+				if(name == "player") then
+					if(i == usableslot) then
+						CRAM = tocolor(230,230,255,255)
 					end
 				else
-					dxDrawBorderedText("$"..GetItemCost(PInv[DragElementName][DragElementId]), DragX, DragY, DragX+(76*NewScale), DragY, tocolor(100, 255, 100, 255), scale/2.5, "pricedown", "right", "top", false, false, true, true)
+					CRAM = tocolor(120,120,120,255)
 				end
-				
-				local dragText = PInv[DragElementName][DragElementId][1]
-				if(PInv[DragElementName][DragElementId][4]) then
-					if(PInv[DragElementName][DragElementId][4]["name"]) then
-						dragText = PInv[DragElementName][DragElementId][4]["name"]
+
+
+				if(DragElementId) then
+					local TIText = PInv[DragElementName][DragElementId][1]
+					if(TIText) then
+						if(items[TIText][7]) then -- Связанные предметы
+							for razdelname,razdel in pairs(items[TIText][7]) do
+								for _, IT in pairs(razdel) do
+									if IT == SystemName then
+										dxDrawRectangle(sx, sy, h, w,  tocolor(0,255,0,50))
+									end
+								end
+							end
+						end
+						
+						if(items[TIText][9]) then -- Объединяемые предметы
+							if(DragElementId ~= i and DragElementName == name) then
+								if(TIText == SystemName) then
+									if(GetQuality(PInv[DragElementName][DragElementId][3]) == GetQuality(PInv[name][i][3])) then
+										dxDrawRectangle(sx, sy, h, w,  tocolor(255,153,0,50))
+									end
+								end
+							end
+						end
+					end
+					if(DragElementId == i and DragElementName == name) then
+						CRAM = tocolor(255,255,255,255)
+						qualityInfo = GetQualityInfo(PInv[DragElementName][DragElementId])
+						if(SystemName) then
+							dxDrawText(items[SystemName][2], 640*scalex+(5*scalex), 740*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale/1.8, "default", "left", "top", false, false, false, true)
+							titleText=DrawText
+						end
 					end
 				end
-				local fontsize = scale/1.8
-				tw = dxGetTextWidth(dragText, fontsize, "default-bold", true)
-				if(tw > (60*NewScale)) then
-					fontsize=fontsize*((60*NewScale)/tw)
+
+				if(PInv[name][i][3]) then
+					if(DragElement ~= el) then
+						local r2,g2,b2 = hex2rgb(GetQualityColor(PInv[name][i][3]):sub(2,7))
+						if(PInv[name][i][4]["quality"]) then
+							r2,g2,b2 = hex2rgb(GetQualityColor(PInv[name][i][4]["quality"]):sub(2,7))
+						end
+						CTBACK = tocolor(r2,g2,b2,140)
+					end
 				end
-				dxDrawBorderedText(dragText, DragX, DragY+(140*NewScale), DragX+(80*NewScale), DragY, tocolor(255, 255, 255, 255), fontsize, "default-bold", "center", "center", false, false, false, true)
-				titleText=dragText
+				
+				
+				dxDrawRectangle(sx, sy+(80*NewScale), h, w-(80*NewScale), CTBACK)
+					
+				if(CRAM) then
+					dxDrawLine(sx, sy, sx, sy+(80*NewScale), CRAM, 1)
+					dxDrawLine(sx+(80*NewScale), sy, sx+(80*NewScale), sy+(80*NewScale), CRAM, 1)
+					dxDrawLine(sx, sy, sx+(80*NewScale), sy, CRAM, 1)
+					dxDrawLine(sx, sy+(80*NewScale), sx+(80*NewScale), sy+(80*NewScale), CRAM, 1)
+					dxDrawLine(sx, sy+(80*NewScale), sx+(80*NewScale), sy+(80*NewScale), CRAM, 1)
+				end
+				
+
+				if(DragElement == el and DragX) then
+				
+				else
+					if(PInv[name][i][4]) then
+						dxDrawImage(sx,sy,h,w,items[SystemName][1])
+
+						local fontsize = scale/1.8
+						tw = dxGetTextWidth(DrawText, fontsize, "default-bold", true)
+						if(tw > w) then
+							fontsize=fontsize*(w/tw)
+						end
+						dxDrawBorderedText(DrawText, sx, sy+(140*NewScale), sx+(80*NewScale), sy, tocolor(255, 255, 255, 255), fontsize, "default-bold", "center", "center", false, false, false, true)
+						
+						if(name == "player" or name == "backpack" or name == "trunk") then
+							if(items[SystemName][3] > 1) then
+								local sht = {"", " шт"}
+								if(SystemName == "Деньги") then sht = {"$", ""} end
+								dxDrawBorderedText(sht[1]..PInv[name][i][2]..sht[2], sx, sy, sx+(76*NewScale), sy, tocolor(255, 255, 255, 255), scale/2, "default-bold", "right", "top", false, false, false, false)
+							end
+						elseif(name == "shop") then
+							dxDrawBorderedText("$"..GetItemCost(PInv[name][i]), sx, sy, sx+(76*NewScale), sy, tocolor(100, 255, 100, 255), scale/2.5, "pricedown", "right", "top", false, false, false, false)
+						end
+						
+						if(PInv[name][i][4]["патроны"]) then
+							dxDrawImage(sx+(h-(25*NewScale)), sy, 25*NewScale, 25*NewScale, items[PInv[name][i][4]["патроны"][1]][1])
+						end
+						
+						if(PInv[name][i][4]["лазер"]) then
+							dxDrawImage(sx+(h-(50*NewScale)), sy, 25*NewScale, 25*NewScale, items[PInv[name][i][4]["лазер"][1]][1])
+						end
+						
+						if(PInv[name][i][4]["сигареты"]) then
+							dxDrawImage(sx+(h-(25*NewScale)), sy, 25*NewScale, 25*NewScale, items[PInv[name][i][4]["сигареты"][1]][1])
+						end
+					end
+				end
 			end
-			if(InventoryWindows or TradeWindows) then
-				dxDrawBorderedText(titleText, screenWidth+(970*NewScale), 415*NewScale, 0, 0, tocolor(255, 255, 255, 255), scale/1.2, "default-bold", "center", "top", false, false, false, true)
-				dxDrawBorderedText(qualityInfo, 640*NewScale+(660*NewScale), (screenHeight/2.4), 0, 0, tocolor(255, 255, 255, 255), scale/1.5, "default-bold", "left", "top", false, false, false, true)
+		end
+		
+		if(DragElement and DragX) then
+			sx, sy = PBut[DragElementName][DragElementId][3], PBut[DragElementName][DragElementId][4]
+			
+			dxDrawImage(DragX, DragY, sx, sy, items[PInv[DragElementName][DragElementId][1]][1], nil,nil,nil,true)
+			if(PInv[DragElementName][DragElementId][4]) then -- Экипированные в предмет вещи аля патроны
+				if(PInv[DragElementName][DragElementId][4]["патроны"]) then
+					dxDrawImage(DragX+(sx-(25*NewScale)), DragY, 25*NewScale, 25*NewScale, items[PInv[DragElementName][DragElementId][4]["патроны"][1]][1], nil,nil,nil,true)
+				elseif(PInv[DragElementName][DragElementId][4]["сигареты"]) then
+					dxDrawImage(DragX+(sx-(25*NewScale)), DragY, 25*NewScale, 25*NewScale, items[PInv[DragElementName][DragElementId][4]["сигареты"][1]][1], nil,nil,nil,true)
+				end
 			end
+			
+			local CTBACK = tocolor(81,81,105, 140)
+			if(PInv[DragElementName][DragElementId][3]) then
+				local r2,g2,b2 = hex2rgb(GetQualityColor(PInv[DragElementName][DragElementId][3]):sub(2,7))
+				if(PInv[DragElementName][DragElementId][4]["quality"]) then
+					r2,g2,b2 = hex2rgb(GetQualityColor(PInv[DragElementName][DragElementId][4]["quality"]):sub(2,7))
+				end
+				CTBACK = tocolor(r2,g2,b2,140)
+			end
+			dxDrawRectangle(DragX, DragY+(80*NewScale), sx, sy-(80*NewScale), CTBACK)
+			
+			if(DragElementName ~= "shop") then
+				if(items[PInv[DragElementName][DragElementId][1]][3] > 1) then
+					local sht = {"", " шт"}
+					if(PInv[DragElementName][DragElementId][1] == "Деньги") then sht = {"$", ""} end
+					dxDrawBorderedText(sht[1]..PInv[DragElementName][DragElementId][2]..sht[2], DragX, DragY, DragX+(76*NewScale), DragY, tocolor(255, 255, 255, 255), scale/2, "default-bold", "right", "top", false, false, true, true)
+				end
+			else
+				dxDrawBorderedText("$"..GetItemCost(PInv[DragElementName][DragElementId]), DragX, DragY, DragX+(76*NewScale), DragY, tocolor(100, 255, 100, 255), scale/2.5, "pricedown", "right", "top", false, false, true, true)
+			end
+			
+			local dragText = PInv[DragElementName][DragElementId][1]
+			if(PInv[DragElementName][DragElementId][4]) then
+				if(PInv[DragElementName][DragElementId][4]["name"]) then
+					dragText = PInv[DragElementName][DragElementId][4]["name"]
+				end
+			end
+			local fontsize = scale/1.8
+			tw = dxGetTextWidth(dragText, fontsize, "default-bold", true)
+			if(tw > (60*NewScale)) then
+				fontsize=fontsize*((60*NewScale)/tw)
+			end
+			dxDrawBorderedText(dragText, DragX, DragY+(140*NewScale), DragX+(80*NewScale), DragY, tocolor(255, 255, 255, 255), fontsize, "default-bold", "center", "center", false, false, false, true)
+			titleText=dragText
+		end
+		if(InventoryWindows or TradeWindows) then
+			dxDrawBorderedText(titleText, screenWidth+(970*NewScale), 415*NewScale, 0, 0, tocolor(255, 255, 255, 255), scale/1.2, "default-bold", "center", "top", false, false, false, true)
+			dxDrawBorderedText(qualityInfo, 640*NewScale+(660*NewScale), (screenHeight/2.4), 0, 0, tocolor(255, 255, 255, 255), scale/1.5, "default-bold", "left", "top", false, false, false, true)
+		end
 
 	end	
 end
@@ -9947,11 +9984,6 @@ function DrawPlayerMessage()
 		end
 	elseif(PEDChangeSkin == "cinema") then
 		dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["Cinema"])
-	elseif(PEDChangeSkin == "map") then
-		if(PData["BizControlName"]) then
-			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(20, 25, 20, 245))
-			dxDrawBorderedText(PData["BizControlName"], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)
-		end
 	else
 		if(PData["wasted"]) then
 			local Block, Anim = getPedAnimation(localPlayer)
