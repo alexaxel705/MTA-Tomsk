@@ -2572,7 +2572,7 @@ function SetGPS(arr)
 		setElementData(PData['gps'][id], "coord", toJSON({k[1],k[2],k[3]}))
 	end
 	if(PData["ResourceMap"]) then
-		PData["ResourceMap"][2] = {}
+		PData["ResourceMap"][3] = {}
 		if(PData['gps']) then
 			local oldmarker = false
 			for i,v in pairs(PData['gps']) do
@@ -2581,7 +2581,7 @@ function SetGPS(arr)
 					local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
 					x,y,z = GetCoordOnMap(x,y,z)
 					x2,y2,z2 = GetCoordOnMap(x2,y2,z2)
-					PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 18}
+					PData["ResourceMap"][3][#PData["ResourceMap"][3]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 18}
 				end
 				oldmarker = v
 			end
@@ -4590,6 +4590,11 @@ function updateCamera()
 			end
 		end
 	end
+	
+	
+	if(PData["ResourceMap"]) then
+		setSkyGradient(170,103,0 ,170,103,0)
+	end
 end
 addEventHandler("onClientPreRender", getRootElement(), updateCamera)
 
@@ -5724,7 +5729,6 @@ local ResourceInMap = {
 function resourcemap()
 	if(not PData["ResourceMap"]) then
 		if(PEDChangeSkin == "play") then
-			helpmessage("Идет загрузка...")
 			PEDChangeSkin = "cinema"
 			
 			
@@ -5757,6 +5761,7 @@ function resourcemap()
 			if(#loadingzones == 0) then 
 				map()
 			else
+				helpmessage("Идет загрузка...")
 				for slot = 1, #loadingzones do
 					if(slot == #loadingzones) then
 						triggerServerEvent("CreateVehicleNodeMarker", localPlayer, loadingzones[slot], true)
@@ -5785,7 +5790,7 @@ end
 
 
 function map()
-	PData["ResourceMap"] = {[1] = {}, [2] = {}} -- 1 Roads, 2 GPS
+	PData["ResourceMap"] = {[1] = {}, [2] = {}, [3] = {}} -- 1 Roads, 2 GPS, 3 Railroads
 	
 	for zone, arr in pairs(PData["infopath"]) do
 		if(arr) then for i, arr2 in pairs(arr) do
@@ -5828,14 +5833,42 @@ function map()
 				local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
 				x,y,z = GetCoordOnMap(x,y,z)
 				x2,y2,z2 = GetCoordOnMap(x2,y2,z2)
-				PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 18}
+				PData["ResourceMap"][3][#PData["ResourceMap"][3]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 18}
 			end
 			oldmarker = v
 		end
 	end
+	
+	for zone, arr in pairs(RailRoads) do
+		for i, arr2 in pairs(arr) do
+			
+			local nextmarkers = {}
+			if(arr2[6]) then
+				for _,k in pairs(arr2[6]) do
+					table.insert(nextmarkers, {k[1], k[2]})
+				end
+			end
+			
+			if(RailRoads[zone][i+1]) then
+				table.insert(nextmarkers, {zone, i+1})
+			end
+			
+			for _, arr3 in pairs(nextmarkers) do
+				if(RailRoads[arr3[1]]) then
+					local dat = RailRoads[arr3[1]][arr3[2]]
+					if(dat) then
+						x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
+						x2,y2,z2 = GetCoordOnMap(dat[2], dat[3], dat[4])
+						PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(59,0,0,139), 18}
+					end
+				end
+			end
+		end
+	end
+	
+	
 	setCameraMatrix(0, 0, 4250, 0, 0, 4000, 0, 70)
 	
-	setSkyGradient(170,103,0 ,170,103,0)
 	setFarClipDistance(600)
 	setWeather(0)
 	showCursor(true)
@@ -6107,6 +6140,13 @@ function playerPressedKey(button, press)
 					PData["WaypointBlip"] = createBlip(x*50, y*50, 0, 41)
 					local px,py,pz = getElementPosition(localPlayer)
 					triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x*50, y*50, 20)
+				end
+			end
+		elseif(button == "mouse1") then
+			if(press) then
+				if(PData["MapHitElement"]) then
+					playSFX("script", 71, 0, false)
+					outputChatBox(getElementModel(PData["MapHitElement"]))
 				end
 			end
 		end
@@ -9160,19 +9200,19 @@ function DrawPlayerMessage()
 		Create3DTextOnMap("Bayside\n#ffff00★",-2537, 2332,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 
 		
-		local hitElement = false
+		PData["MapHitElement"] = false
 		local col = createObject(16635, mousex,mousey,mousez)
 		for _, v in pairs(getElementsByType("colshape", getRootElement(), true)) do
 			if(isElementWithinColShape(col, v)) then
-				hitElement = getElementAttachedTo(v)
+				PData["MapHitElement"] = getElementAttachedTo(v)
 			end
 		end
 		destroyElement(col)
 		
 
-		if(hitElement) then
-			x,y,z = getElementPosition(hitElement)
-			Create3DTextOnMap(getElementData(hitElement, "NameInMap"),x*50,y*50,z,NewScale*2,2000,tocolor(230,230,230,255),"default-bold")
+		if(PData["MapHitElement"]) then
+			x,y,z = getElementPosition(PData["MapHitElement"])
+			Create3DTextOnMap(getElementData(PData["MapHitElement"], "NameInMap"),x*50,y*50,z,NewScale*2,2000,tocolor(230,230,230,255),"default-bold")
 		end
 	end
 	
