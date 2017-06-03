@@ -23,5 +23,6 @@
 	<file src="lang/Ru_tr.po" download="false" />
 	
 	<file src="GTA3.mp3" />
+	<script src="RailNode.lua" type="client"/>
 	<script src="client.lua" type="client" validate="true" />
 </meta>
