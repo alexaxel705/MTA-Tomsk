@@ -5790,7 +5790,7 @@ end
 
 
 function map()
-	PData["ResourceMap"] = {[1] = {}, [2] = {}, [3] = {}} -- 1 Roads, 2 GPS, 3 Railroads
+	PData["ResourceMap"] = {[1] = {}, [2] = {}, [3] = {}} -- 1 Roads, 2 Railroads, 3 GPS
 	
 	for zone, arr in pairs(PData["infopath"]) do
 		if(arr) then for i, arr2 in pairs(arr) do
