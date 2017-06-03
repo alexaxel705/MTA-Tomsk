@@ -2571,6 +2571,7 @@ function SetGPS(arr)
 		PData['gps'][id] = createRadarArea(k[1]-10, k[2]-10, 20,20, 210,0,0,255)
 		setElementData(PData['gps'][id], "coord", toJSON({k[1],k[2],k[3]}))
 	end
+	
 	if(PData["ResourceMap"]) then
 		PData["ResourceMap"][3] = {}
 		if(PData['gps']) then
@@ -2709,17 +2710,19 @@ function bizControl(name, data)
 			end
 		end
 	else
-		local text = "Список доступных вакансий: "
-		PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
-		for i, dat in pairs(data["vacancy"]) do
-			local text = "#CCCCCC"..dat[2].."#FFFFFF - "..dat[3].." "
-			local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
-			local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
-			PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}	
-			if(dat[3] == "") then
-				PText["biz"][#PText["biz"]+1] = {"устроиться", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"startBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
-			elseif(dat[3] == getPlayerName(localPlayer)) then
-				PText["biz"][#PText["biz"]+1] = {"уволиться", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"stopBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
+		if(data["vacancy"]) then
+			local text = "Список доступных вакансий: "
+			PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
+			for i, dat in pairs(data["vacancy"]) do
+				local text = "#CCCCCC"..dat[2].."#FFFFFF - "..dat[3].." "
+				local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
+				local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
+				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}	
+				if(dat[3] == "") then
+					PText["biz"][#PText["biz"]+1] = {"устроиться", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"startBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
+				elseif(dat[3] == getPlayerName(localPlayer)) then
+					PText["biz"][#PText["biz"]+1] = {"уволиться", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"stopBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
+				end
 			end
 		end
 	end
@@ -2736,6 +2739,9 @@ function bizControl(name, data)
 		end
 	end
 	BIZCTL = name
+	if(PData["ResourceMap"]) then
+		PData["BizControlName"] = data["name"]
+	end
 	showCursor(true)
 end
 addEvent("bizControl", true)
@@ -5720,15 +5726,15 @@ end
 -- Object, Model, Scale, x,y,z,rz, bizname
 local ResourceInMap = {
 	[1] = {false, 17005, 0.1, -382, -1437, 26,0, "FARMFR"},
-	[2] = {false, 17005, 0.1, -85, 27, 3, 0, "В разработке"},
-	[3] = {false, 17005, 0.1, 1929, 170, 37, 0, "Пока что"},
-	[4] = {false, 17335, 0.1, -1439, -1534, 101, 90, "Ферма"}, 
-	[5] = {false, 10357, 0.05, -2523, -622, 132, 0, "Электростанция"}, -- Электростанция
-	--[6] = {false, 5033, 0.02, 1751, -1884, 13, 0, "Unity Station"}, 
-	--[7] = {false, 8079, 0.02, 1573, 1791, 9.8, 0, "Больница"}, 
-	[8] = {false, 3976, 0.02, 1555.2, -1675.6, 16.2, 0, "Полицейский участок"},
+	[2] = {false, 17005, 0.1, -85, 27, 3, 0, ""},
+	[3] = {false, 17005, 0.1, 1929, 170, 37, 0, ""},
+	[4] = {false, 17335, 0.1, -1439, -1534, 101, 90, ""}, 
+	[5] = {false, 10357, 0.05, -2523, -622, 132, 0, "ELSF"}, 
+	[7] = {false, 8079, 0.02, 1573, 1791, 9.8, 0, "MEDLV"}, 
+	[8] = {false, 3976, 0.02, 1555.2, -1675.6, 16.2, 0, "PLSPD"},
 	
 }
+
 
 function resourcemap()
 	if(not PData["ResourceMap"]) then
@@ -5744,6 +5750,7 @@ function resourcemap()
 					setObjectScale(dat[1], dat[3])
 					setElementRotation(dat[1], 0,0,dat[7])
 					setElementData(dat[1], "NameInMap", dat[8])
+
 				end
 			end
 			
@@ -5862,7 +5869,7 @@ function map()
 					if(dat) then
 						x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
 						x2,y2,z2 = GetCoordOnMap(dat[2], dat[3], dat[4])
-						PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(59,0,0,139), 18}
+						PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(99,0,0,255), 18}
 					end
 				end
 			end
@@ -6147,9 +6154,17 @@ function playerPressedKey(button, press)
 			end
 		elseif(button == "mouse1") then
 			if(press) then
+				if(PData["MapShowInfo"]) then
+					triggerServerEvent("StopBizControl", localPlayer, getElementData(PData["MapHitElement"], "NameInMap")) 
+					BIZCTL = false
+					PText["biz"] = {}
+					PData["MapShowInfo"] = nil
+					PData["BizControlName"] = nil
+				end
 				if(PData["MapHitElement"]) then
+					PData["MapShowInfo"] = getElementData(PData["MapHitElement"], "NameInMap")
 					playSFX("script", 71, 0, false)
-					outputChatBox(getElementModel(PData["MapHitElement"]))
+					triggerServerEvent("StartLookBiz", localPlayer, localPlayer, false, getElementData(PData["MapHitElement"], "NameInMap"), "map")
 				end
 			end
 		end
@@ -9155,6 +9170,22 @@ end
 
 
 
+--[[
+function GetPopulation(zone)
+	if(not PData["population"]) then
+		PData["population"] = {}
+		for i, ped in pairs(getElementsByType("ped", getRootElement())) do
+			local x,y,z = getElementPosition(ped)
+			local zone = getZoneName(x,y,z,false)
+			if(not PData["population"][zone]) then PData["population"][zone] = 0 end
+			PData["population"][zone] = PData["population"][zone]+1
+		end
+	end
+	return PData["population"][zone]
+end
+--]]
+
+
 function DrawPlayerMessage()
 	local x,y,z = getElementPosition(localPlayer)
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
@@ -9215,7 +9246,7 @@ function DrawPlayerMessage()
 
 		if(PData["MapHitElement"]) then
 			x,y,z = getElementPosition(PData["MapHitElement"])
-			Create3DTextOnMap(getElementData(PData["MapHitElement"], "NameInMap"),x*50,y*50,z,NewScale,2000,tocolor(230,230,230,255),"default-bold")
+			--Create3DTextOnMap(getElementData(PData["MapHitElement"], "NameInMap"),x*50,y*50,z,NewScale,2000,tocolor(230,230,230,255),"default-bold")
 		end
 	end
 	
@@ -9901,6 +9932,11 @@ function DrawPlayerMessage()
 		end
 	elseif(PEDChangeSkin == "cinema") then
 		dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["Cinema"])
+	elseif(PEDChangeSkin == "map") then
+		if(PData["BizControlName"]) then
+			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(20, 25, 20, 245))
+			dxDrawBorderedText(PData["BizControlName"], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)
+		end
 	else
 		if(PData["wasted"]) then
 			local Block, Anim = getPedAnimation(localPlayer)

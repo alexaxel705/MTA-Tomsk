@@ -5324,7 +5324,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2416.1, -1919.8, 12.4, 0, 0 --
+		local x,y,z,i,d  = -379.4, -1436.1, 25.7, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6091,7 +6091,7 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 		--Баланс, Прибыль, Убыток
 		local node = xmlFindChild(BizNode, biz, 0)
 		local owner = xmlNodeGetAttribute(node, "owner")
-		local array = {}
+		local array = {["name"] = xmlNodeGetAttribute(node, "biz")}
 		if(control == "nachalnik") then
 			if(owner ~= getPlayerName(thePlayer)) then
 				if(thePed) then
@@ -6108,14 +6108,32 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 					end
 				end
 			end
-		end
-		array["vacancy"] = {}
-		
-		
-		local vacancy = xmlNodeGetChildren(node)
-		for i, ChildNode in pairs(vacancy) do
-			local name = xmlNodeGetAttribute(ChildNode, "name")
-			array["vacancy"][i] = {biz, name, xmlNodeGetValue(ChildNode)}
+			
+			
+			array["vacancy"] = {}
+			
+			local vacancy = xmlNodeGetChildren(node)
+			for i, ChildNode in pairs(vacancy) do
+				local name = xmlNodeGetAttribute(ChildNode, "name")
+				array["vacancy"][i] = {biz, name, xmlNodeGetValue(ChildNode)}
+			end
+		elseif(control == "map") then
+			if(xmlNodeGetAttribute(node, "var")) then
+				array["var"] = fromJSON(xmlNodeGetAttribute(node, "var"))
+				for name, val in pairs(array["var"]) do
+					if(name == "Качество земли") then
+						array["var"][name] = GetQuality(val)
+					end
+				end
+			end
+		else
+			array["vacancy"] = {}
+			
+			local vacancy = xmlNodeGetChildren(node)
+			for i, ChildNode in pairs(vacancy) do
+				local name = xmlNodeGetAttribute(ChildNode, "name")
+				array["vacancy"][i] = {biz, name, xmlNodeGetValue(ChildNode)}
+			end
 		end
 
 		triggerClientEvent(thePlayer, "bizControl", thePlayer, biz, array)
