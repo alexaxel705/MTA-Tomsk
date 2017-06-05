@@ -2702,6 +2702,16 @@ end
 function bizControl(name, data)
 	PText["biz"] = {}
 	
+	if(data["money"]) then
+		local text = "Текущий баланс "..COLOR["DOLLAR"]["HEX"].."$"..data["money"].." "
+		local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
+		PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
+		PText["biz"][#PText["biz"]+1] = {"пополнить", 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "givebizmoney", "Введи сумму", toJSON{name}}}	
+		local textWidth = textWidth+dxGetTextWidth("пополнить ", scale*0.8, "default-bold", true)
+		PText["biz"][#PText["biz"]+1] = {"снять",  660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "removebizmoney", "Введи сумму", toJSON{name}}}	
+	end
+	
+	
 	if(data["Nachalnik"]) then
 		if(data["vacancy"]) then
 			for i, dat in pairs(data["vacancy"]) do
@@ -3772,7 +3782,7 @@ function UpdateBot()
 								end
 							end
 						end
-						MovePlayerTo[thePed] = FoundBotPath(thePed) -- обычное поведение
+						MovePlayerTo[thePed] = FoundBotPath(thePed) or nil -- обычное поведение
 					end
 				end
 			end
@@ -4423,10 +4433,14 @@ function FoundBotPath(ped)
 			if(BotCheckPath(x,y,z, x5,y5,z5,zone)) then -- В крайнем случае идем назад
 				return {x5,y5,z5,0,"silent"}
 			else
-				local arrtmp = fromJSON(getElementData(ped, "TINF"))
-				
-				arr = {arrtmp[3], arrtmp[4], arrtmp[5], arrtmp[6], "silent"}
-				return arr --Если нет путей
+				if(getElementData(ped, "TINF")) then
+					local arrtmp = fromJSON(getElementData(ped, "TINF"))
+					
+					arr = {arrtmp[3], arrtmp[4], arrtmp[5], arrtmp[6], "silent"}
+					return arr --Если нет путей
+				else
+					return false
+				end
 			end
 		end
 		return arr[math.random(1,#arr)] --Если спереди что то мешает выбераем рандомный свободный путь
@@ -10394,13 +10408,13 @@ function StreamIn()
 				local px,py,pz = getElementPosition(source)
 				local rz = tonumber(getElementData(source, "dialogrz"))
 				local x,y,z = getPointInFrontOfPoint(px,py,pz, rz, 2)
-				StreamData[source]["ActionMarker"]=createMarker(x,y,z-1,  "corona", 2, 255, 10, 10, 0)
+				StreamData[source]["ActionMarker"] = createMarker(x,y,z-1,  "corona", 2, 255, 10, 10, 0)
 				setElementInterior(StreamData[source]["ActionMarker"], getElementInterior(source))
 				setElementDimension(StreamData[source]["ActionMarker"], getElementDimension(source))
 				setElementData(StreamData[source]["ActionMarker"], "TriggerBot", getElementData(source, "TINF"))
 			else
 				local x,y,z = getElementPosition(source)
-				StreamData[source]["ActionMarker"]=createMarker(x,y,z,  "corona", 1, 255, 10, 10, 0)
+				StreamData[source]["ActionMarker"] = createMarker(x,y,z,  "corona", 1, 255, 10, 10, 0)
 				setElementInterior(StreamData[source]["ActionMarker"], getElementInterior(source))
 				setElementDimension(StreamData[source]["ActionMarker"], getElementDimension(source))
 				attachElements(StreamData[source]["ActionMarker"], source)
@@ -10408,7 +10422,7 @@ function StreamIn()
 			end
 		else
 			local x,y,z = getElementPosition(source)
-			StreamData[source]["ActionMarker"]=createMarker(x,y,z,  "corona", 1, 255, 10, 10, 0)
+			StreamData[source]["ActionMarker"] = createMarker(x,y,z,  "corona", 1, 255, 10, 10, 0)
 			setElementInterior(StreamData[source]["ActionMarker"], getElementInterior(source))
 			setElementDimension(StreamData[source]["ActionMarker"], getElementDimension(source))
 			attachElements(StreamData[source]["ActionMarker"], source)
