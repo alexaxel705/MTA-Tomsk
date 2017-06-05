@@ -29,6 +29,7 @@ local HomeEditor = false
 local RobAction = false
 local StreamData = {}
 local VideoMemory = {["HUD"] = {}}
+
 local PData = {
 	['loading'] = 0,
 	['Target'] = {}, 
@@ -2022,7 +2023,6 @@ end
 
 
 local Tun = {}
-local TunServerData = false
 local STPER = false
 function LoadUpgrade(Update, handl, othercomp)
 	Tun = {}
@@ -4265,11 +4265,11 @@ function checkKey()
 			PData["ShakeLVL"] = PData["ShakeLVL"]+5
 		end
 		
-		for _, thePlayers in pairs(getElementsByType("player", getRootElement(), true)) do
-			UpdateArmas(thePlayers)
+		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
+			UpdateArmas(thePlayer)
 		end
-		for _, thePeds in pairs(getElementsByType("ped", getRootElement(), true)) do
-			UpdateArmas(thePeds)
+		for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
+			UpdateArmas(thePed)
 		end
 		if(theVehicle and PData["ClearDriving"]) then
 			if(speed == "000") then
@@ -4365,20 +4365,14 @@ local BannedMaterial = {
 	[118] = true,
 }
 
-local IgnoreMaterial = {
-	["Unknown"] = true,
-}
 
 
 function BotCheckPath(x,y,z,x2,y2,z2,zone)
 	local gz = getGroundPosition(x2,y2,z2)
 	if(isLineOfSightClear(x,y,z-0.45,x2,y2,gz+0.1, true, true, true, true)) then
 		if(zone == getZoneName(x2,y2,z2)) then
-			local material = 2
-			if(not IgnoreMaterial[zone]) then  
-				material = GetGroundMaterial(x2,y2,z2, gz-2)
-			end
-			if(material) then
+			if(zone ~= "Unknown") then  
+				local material = GetGroundMaterial(x2,y2,z2, gz-2)
 				if(not BannedMaterial[material]) then
 					return true
 				end
@@ -5562,16 +5556,6 @@ end
 addEventHandler("onClientPlayerTarget", getRootElement(), targetingActivated)
 
 
-
-function getPositionFromElementOffset(element,offX,offY,offZ)
-    local m = getElementMatrix ( element )  -- Get the matrix
-    local x = offX * m[1][1] + offY * m[2][1] + offZ * m[3][1] + m[4][1]  -- Apply transform
-    local y = offX * m[1][2] + offY * m[2][2] + offZ * m[3][2] + m[4][2]
-    local z = offX * m[1][3] + offY * m[2][3] + offZ * m[3][3] + m[4][3]
-    return x, y, z                               -- Return the transformed point
-end
- 
-
  
 
 
@@ -5665,12 +5649,6 @@ local tick
 local idleTime
 local multTime
 local mult = 1
-
-
-local screenWidth, screenHeight = guiGetScreenSize()
-local x1,y1,x2,y2 = screenWidth*0.2,screenHeight*0.1,screenWidth*0.8,screenHeight*0.8
-
-
 
 
 
@@ -5931,7 +5909,6 @@ function map()
 	setWeather(0)
 	showCursor(true)
 end
-
 addEvent("map", true)
 addEventHandler("map", localPlayer, map)
 
@@ -8883,8 +8860,6 @@ addEvent("PlaySFXSoundEvent", true)
 addEventHandler("PlaySFXSoundEvent", localPlayer, PlaySFXSound)
 
 
-playSFX3D("script", 89, 0,-441.3, 2233.6, 42.7, true)--Музыка у дома Гроув-стрит
-
 
 
 addEventHandler("onClientVehicleExplode", getRootElement(), function()
@@ -8985,7 +8960,6 @@ end
 
 
 --1,2,5,6 - размеры x,y
-
 local screenSaver = {
 	{340*scalex, 330*scaley, 165*scalex, 150*scaley, screenWidth/2, 0, true, true, 0},
 	{340*scalex, 500*scaley, 90*scalex, 220*scaley, 0, 0, true, true, 0},
@@ -9220,22 +9194,6 @@ function DrawPlayerInventory()
 end
 
 
-
-
---[[
-function GetPopulation(zone)
-	if(not PData["population"]) then
-		PData["population"] = {}
-		for i, ped in pairs(getElementsByType("ped", getRootElement())) do
-			local x,y,z = getElementPosition(ped)
-			local zone = getZoneName(x,y,z,false)
-			if(not PData["population"][zone]) then PData["population"][zone] = 0 end
-			PData["population"][zone] = PData["population"][zone]+1
-		end
-	end
-	return PData["population"][zone]
-end
---]]
 
 
 function DrawPlayerMessage()
@@ -10053,8 +10011,6 @@ function SmoothCameraMove(x,y,z,x2,y2,z2,times,targetafter)
 		end
 		PData['CameraMove'] = nil
 	end, times, 1, targetafter)
-	
-	--setCameraMatrix (lx2, ly2, lz2, x2, y2, z2)
 end
 
 
@@ -10466,7 +10422,6 @@ function ClientVehicleExit(thePlayer, seat)
 	end
 end
 addEventHandler("onClientVehicleExit", getRootElement(), ClientVehicleExit)
------------------------------------------------------------------------------------
 
 
 function onAttach(theVehicle)
