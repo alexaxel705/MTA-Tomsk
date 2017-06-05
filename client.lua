@@ -2702,22 +2702,18 @@ end
 function bizControl(name, data)
 	PText["biz"] = {}
 	
-	if(data["money"]) then
-		local text = "Текущий баланс "..COLOR["DOLLAR"]["HEX"].."$"..data["money"].." "
-		local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
-		PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
-		PText["biz"][#PText["biz"]+1] = {"пополнить", 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "givebizmoney", "Введи сумму", toJSON{name}}}	
-		local textWidth = textWidth+dxGetTextWidth("пополнить ", scale*0.8, "default-bold", true)
-		PText["biz"][#PText["biz"]+1] = {"снять",  660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "removebizmoney", "Введи сумму", toJSON{name}}}	
-		for i, dat in pairs(data["vacancy"]) do
-			local text = "#CCCCCC"..dat[2].."#FFFFFF - "..dat[3].." "
-			local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
-			local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
-			PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}	
-			if(dat[3] ~= "") then
-				PText["biz"][#PText["biz"]+1] = {"уволить", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"editBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
-			else
-				PText["biz"][#PText["biz"]+1] = {"назначить", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "editBizVacancy", "Введи имя", toJSON{dat[1], dat[2], name, i-1}}}
+	if(data["Nachalnik"]) then
+		if(data["vacancy"]) then
+			for i, dat in pairs(data["vacancy"]) do
+				local text = "#CCCCCC"..dat[2].."#FFFFFF - "..dat[3].." "
+				local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
+				local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
+				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}	
+				if(dat[3] ~= "") then
+					PText["biz"][#PText["biz"]+1] = {"уволить", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"editBizVacancy", localPlayer, localPlayer, "", toJSON({dat[1], dat[2], name, i-1})}}}
+				else
+					PText["biz"][#PText["biz"]+1] = {"назначить", 660*scalex+textWidth, 400*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "editBizVacancy", "Введи имя", toJSON{dat[1], dat[2], name, i-1}}}
+				end
 			end
 		end
 	else
@@ -2739,39 +2735,41 @@ function bizControl(name, data)
 	
 	if(data["var"]) then
 		local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
-		for i, dat in pairs(data["var"]) do
-			if(dat[1] == "Продажа") then
+		for i, dats in pairs(data["var"]) do
+			if(dats[1] == "Торговля") then
 				if(not TradeWindows) then 
 					PInv["shop"] = {} 
 					PBut["shop"] = {} 
 					TradeWindows = name
 				end
-				
-				for i2, towar in pairs(dat[2]) do
-					PInv["shop"][#PInv["shop"]+1] = towar
-				
-					PBut["shop"][#PBut["shop"]+1] = {580*scalex+((80*scalex)*i2), 575*scaley, 80*scalex, 60*scaley}
+				local Coord = {
+					["Trade"] = {
+						["i"] = 1,
+						["x"] = 640*scalex,
+						["y"] = 600*scaley-(30*scaley), 
+						["vx"] = (2.5*scalex),
+						["vy"] = (80.5*scaley)
+					},
+					["Sell"] = {
+						["i"] = 1,
+						["x"] = 640*scalex,
+						["y"] = 460*scaley-(30*scaley), 
+						["vx"] = (2.5*scalex),
+						["vy"] = (80.5*scaley)
+					}
+				}
+				for _, dat in pairs(dats[2]) do
+					PInv["shop"][#PInv["shop"]+1] = dat
+					PBut["shop"][#PBut["shop"]+1] = {Coord[dat[2]]["x"]+Coord[dat[2]]["vx"], Coord[dat[2]]["y"]+Coord[dat[2]]["vy"], 80*scalex, 60*scaley}
+					Coord[dat[2]]["vx"] = Coord[dat[2]]["vx"]+(80.5*scalex)
+					if(Coord[dat[2]]["i"] == 8 or Coord[dat[2]]["i"] == 16 or Coord[dat[2]]["i"] == 24 or Coord[dat[2]]["i"] == 32) then
+						Coord[dat[2]]["x"], Coord[dat[2]]["y"] = 640*scalex, 360*scaley-(30*scaley)
+						Coord[dat[2]]["vx"], Coord[dat[2]]["vy"] = (2.5*scalex), Coord[dat[2]]["vy"]+(80.5*scaley)
+					end
+					Coord[dat[2]]["i"] = Coord[dat[2]]["i"]+1
 				end
-				
-				local text = "#CCCCCC"..dat[1]..": "
-				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 550*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
-			elseif(dat[1] == "Покупка") then
-				if(not TradeWindows) then 
-					PInv["shop"] = {} 
-					PBut["shop"] = {} 
-					TradeWindows = name
-				end
-				
-				for i2, towar in pairs(dat[2]) do
-					PInv["shop"][#PInv["shop"]+1] = towar
-				
-					PBut["shop"][#PBut["shop"]+1] = {580*scalex+((80*scalex)*i2), 685*scaley, 80*scalex, 60*scaley}
-				end
-				
-				local text = "#CCCCCC"..dat[1]..": "
-				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 660*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
 			else
-				local text = "#CCCCCC"..dat[1]..": "..dat[2].." "
+				local text = "#CCCCCC"..dats[1]..": "..dats[2].." "
 				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 370*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
 			end
 		end
@@ -6427,19 +6425,30 @@ function TradeWindow(Trade, biz)
 			DragElementId = false
 			DragElementName = false
 			showCursor(true)
-			local StPosx = 640*scalex
-			local StPosxy = 360*scaley-(30*scaley)
-			local binvx=(2.5*scalex)
-			local binvy=(80.5*scaley)
-			for i = 1, #PInv["shop"] do
-				PBut["shop"][i] = {StPosx+binvx, StPosxy+binvy, 80*scalex, 60*scaley}
-				binvx=binvx+(80.5*scalex)
-				if(i == 8 or i == 16 or i == 24 or i == 32) then
-					StPosx = 640*scalex
-					StPosxy = 360*scaley-(30*scaley)
-					binvx=(2.5*scalex)
-					binvy=binvy+(80.5*scaley)
+			local Coord = {
+				["Trade"] = {
+					["i"] = 1,
+					["x"] = 640*scalex,
+					["y"] = 500*scaley-(30*scaley), 
+					["vx"] = (2.5*scalex),
+					["vy"] = (80.5*scaley)
+				},
+				["Sell"] = {
+					["i"] = 1,
+					["x"] = 640*scalex,
+					["y"] = 360*scaley-(30*scaley), 
+					["vx"] = (2.5*scalex),
+					["vy"] = (80.5*scaley)
+				}
+			}
+			for _, dat in pairs(PInv["shop"]) do
+				PBut["shop"][#PBut["shop"]+1] = {Coord[dat[2]]["x"]+Coord[dat[2]]["vx"], Coord[dat[2]]["y"]+Coord[dat[2]]["vy"], 80*scalex, 60*scaley}
+				Coord[dat[2]]["vx"] = Coord[dat[2]]["vx"]+(80.5*scalex)
+				if(Coord[dat[2]]["i"] == 8 or Coord[dat[2]]["i"] == 16 or Coord[dat[2]]["i"] == 24 or Coord[dat[2]]["i"] == 32) then
+					Coord[dat[2]]["x"], Coord[dat[2]]["y"] = 640*scalex, 360*scaley-(30*scaley)
+					Coord[dat[2]]["vx"], Coord[dat[2]]["vy"] = (2.5*scalex), Coord[dat[2]]["vy"]+(80.5*scaley)
 				end
+				Coord[dat[2]]["i"] = Coord[dat[2]]["i"]+1
 			end
 		end
 	end
@@ -6807,7 +6816,6 @@ addEventHandler("onClientRender", root,
 					PData['ExpText'][i] = nil
 				end
 			end
-			
 			
 			
 			for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
@@ -9390,6 +9398,16 @@ function DrawPlayerMessage()
 				end
 			end	
 		else -- Не в тюнинге
+			for _, thePickup in pairs(getElementsByType("pickup", getRootElement(), true)) do
+				local owner = getElementData(thePickup, "bizowner") or ""
+				if(owner == getPlayerName(localPlayer)) then
+					if(getElementData(thePickup, "money")) then
+						local x,y,z = getElementPosition(thePickup)
+						create3dtext("$"..getElementData(thePickup, "money"), x,y,z+0.5, NewScale*3, 60, tocolor(54, 228, 70, 120), "pricedown")
+					end
+				end
+			end
+		
 			if(LainOS) then
 				dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["BlackScreen"])
 			end

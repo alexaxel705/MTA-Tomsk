@@ -3273,7 +3273,7 @@ createObject(11393, -2043.5166015625, 161.337890625, 29.320350646973, 0,0,0)
 
 
 local ItemsTrade = {
-	["24/7"] = {{"Газета", "Sell", 450, {}}, {"Пакет", "Sell", 750, {["content"] = {{},{},{},{},{},{},{},{}}}}, {"CoK", "Sell", 450, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"Pissh", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Канистра", "Sell", 450, {}}, {"Спрей", "Sell", 450, {}}},
+	["24/7"] = {{"Газета", "Sell", 450, {}}, {"Пакет", "Sell", 750, {["content"] = {{},{},{},{},{},{},{},{}}}}, {"CoK", "Sell", 450, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"Pissh", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Канистра", "Sell", 450, {}}, {"Спрей", "Sell", 450, {}}, {"Рыба", "Trade", 1, {}}},
 	["Zip"] = {{"Чемодан", "Sell", 550, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{}}}}},
 	["ProLaps"] = {{"Бита", "Sell", 450, {}},{"Клюшка", "Sell", 450, {}}, {"Парашют", "Sell", 250, {}}},
 	["Binco"] = {{"Рюкзак", "Sell", 450, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}}}},
@@ -6088,53 +6088,53 @@ end
 
 
 
--- Дата основания, название, производимые ресурсы, потребляемые ресурсы
+-- Дата основания, название, торговля
 local BizInfo = {
-	["FARMFR"] = {1837, "Ферма", {"Зерно"}, {"Удобрения"}},
-	["ELSF"] = {1924, "Электростанция", false, false},
-	["PLSPD"] = {1955, "Полицейский участок", false, false},
-	["MEDLV"] = {1966, "Скорая помощь", false, false}, 
-	["MEDLS"] = {1921, "Скорая помощь", false, false}, 
-	["FARMWS"] = {1855, "Скотный двор", {"Скот"}, {"Зерно"}}, 
-	["BIOEN"] = {1939, "Химический завод", {"Удобрения"}, {"Химикаты"}},
-	["PETLV"] = {1859, "Нефтяные скважины", {"Нефть"}, false},
-	["NPZSF"] = {1901, "Химический завод", {"Бензин", "Химикаты"}, {"Нефть"}}, 
-	["SPRAYSA"] = {1974, "Pay'n'Spray", false, false}, 
-	["SPRUNK"] = {1932, "Sprunk", false, false}, 
-	["MEDRA"] = {1922, "Психиатрическая больница SA", false, false},
-	["SOLIN"] = {1923, "Solarin Industries", false, false}, 
-	["SANNEWS"] = {1969, "San News", false, false}, 
-	["MEDBC"] = {1955, "Скорая помощь Bone County", false, false}, 
-	["MEDTR"] = {1943, "Скорая помощь Tierra Robada", false, false}, 
-	["MEDRC"] = {1970, "Скорая помощь Red County", false, false}, 
-	["MEDUN"] = {1965, "Отделение травматологии", false, false}, 
-	["MEDWS"] = {1933, "Скорая помощь Whetstone", false, false}, 
-	["MEDSF"] = {1918, "Скорая помощь San Fierro", false, false},
-	["AMMOLS"] = {1962, "Ammunation LS", false, false}, 
-	["MERLS"] = {1844, "Мэрия LS", false, false},
-	["MERSF"] = {1800, "Мэрия SF", false, false},
-	["MERLV"] = {1912, "Мэрия LV", false, false},
-	["CIASA"] = {1935, "Штаб квартира ЦРУ", false, false}, 
-	["PSFPD"] = {1952, "Полицейский участок", false, false}, 
-	["PLVPD"] = {1944, "Полицейский участок", false, false}, 
-	["PRCPD"] = {1967, "Полицейский участок", false, false}, 
-	["PBCPD"] = {1951, "Полицейский участок", false, false}, 
-	["PTRPD"] = {1921, "Полицейский участок", false, false}, 
-	["PWSPD"] = {1966, "Полицейский участок", false, false}, 
-	["FBISF"] = {1952, "ФБР", false, false}, 
-	["BANBC"] = {1960, "Банк", false, false}, 
-	["BANSF"] = {1936, "Банк", false, false}, 
-	["BANTR"] = {1914, "Банк", false, false}, 
-	["BANLV"] = {1942, "Банк", false, false}, 
-	["BANLS"] = {1903, "Банк", false, false}, 
-	["CERBC"] = {1805, "Церковь Tierra Robada", false, false}, 
-	["CERLV"] = {1835, "Свадебная часовня Las Venturas", false, false}, 
-	["CERLV2"] = {1877, "Свадебная часовня Las Venturas", false, false}, 
-	["CERLV3"] = {1825, "Свадебная часовня Las Venturas", false, false}, 
-	["CERSF"] = {1877, "Церковь San Fierro", false, false}, 
-	["CERRC"] = {1903, "Церковь Red County", false, false}, 
-	["CERLS"] = {1793, "Церковь Los Santos", false, false}, 
-	["DALBC"] = {1939, "База дальнобойщиков", false, false}, 
+	["FARMFR"] = {1837, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}},
+	["ELSF"] = {1924, "Электростанция", false},
+	["PLSPD"] = {1955, "Полицейский участок", false},
+	["MEDLV"] = {1966, "Скорая помощь", false}, 
+	["MEDLS"] = {1921, "Скорая помощь", false}, 
+	["FARMWS"] = {1855, "Скотный двор", {{"Скот", "Sell"}, {"Зерно", "Trade"}}}, 
+	["BIOEN"] = {1939, "Химический завод", {{"Удобрения", "Sell"}, {"Химикаты", "Trade"}}},
+	["PETLV"] = {1859, "Нефтяные скважины", {{"Нефть", "Sell"}}},
+	["NPZSF"] = {1901, "Химический завод", {{"Бензин", "Sell"}, {"Химикаты", "Sell"}, {"Нефть", "Trade"}}}, 
+	["SPRAYSA"] = {1974, "Pay'n'Spray", false}, 
+	["SPRUNK"] = {1932, "Sprunk", false}, 
+	["MEDRA"] = {1922, "Психиатрическая больница SA", false},
+	["SOLIN"] = {1923, "Solarin Industries", false}, 
+	["SANNEWS"] = {1969, "San News", false}, 
+	["MEDBC"] = {1955, "Скорая помощь Bone County", false}, 
+	["MEDTR"] = {1943, "Скорая помощь Tierra Robada", false}, 
+	["MEDRC"] = {1970, "Скорая помощь Red County", false}, 
+	["MEDUN"] = {1965, "Отделение травматологии", false}, 
+	["MEDWS"] = {1933, "Скорая помощь Whetstone", false}, 
+	["MEDSF"] = {1918, "Скорая помощь San Fierro", false},
+	["AMMOLS"] = {1962, "Ammunation LS", false}, 
+	["MERLS"] = {1844, "Мэрия LS", false},
+	["MERSF"] = {1800, "Мэрия SF", false},
+	["MERLV"] = {1912, "Мэрия LV", false},
+	["CIASA"] = {1935, "Штаб квартира ЦРУ", false}, 
+	["PSFPD"] = {1952, "Полицейский участок", false}, 
+	["PLVPD"] = {1944, "Полицейский участок", false}, 
+	["PRCPD"] = {1967, "Полицейский участок", false}, 
+	["PBCPD"] = {1951, "Полицейский участок", false}, 
+	["PTRPD"] = {1921, "Полицейский участок", false}, 
+	["PWSPD"] = {1966, "Полицейский участок", false}, 
+	["FBISF"] = {1952, "ФБР", false}, 
+	["BANBC"] = {1960, "Банк", false}, 
+	["BANSF"] = {1936, "Банк", false}, 
+	["BANTR"] = {1914, "Банк", false}, 
+	["BANLV"] = {1942, "Банк", false}, 
+	["BANLS"] = {1903, "Банк", false}, 
+	["CERBC"] = {1805, "Церковь Tierra Robada", false}, 
+	["CERLV"] = {1835, "Свадебная часовня Las Venturas", false}, 
+	["CERLV2"] = {1877, "Свадебная часовня Las Venturas", false}, 
+	["CERLV3"] = {1825, "Свадебная часовня Las Venturas", false}, 
+	["CERSF"] = {1877, "Церковь San Fierro", false}, 
+	["CERRC"] = {1903, "Церковь Red County", false}, 
+	["CERLS"] = {1793, "Церковь Los Santos", false}, 
+	["DALBC"] = {1939, "База дальнобойщиков", false}, 
 }
 
 
@@ -6154,10 +6154,7 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 			["name"] = BizInfo[biz][2],
 			["var"] = {}
 		}
-		array["var"][#array["var"]+1] = {"Владелец", xmlNodeGetValue(node)}
-		array["var"][#array["var"]+1] = {"Дата основания", BizInfo[biz][1]}
 		
-
 		
 		if(control == "nachalnik") then
 			if(owner ~= getPlayerName(thePlayer)) then
@@ -6166,7 +6163,7 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 				end
 				return false
 			end
-			array["money"] = xmlNodeGetAttribute(node, "money")
+			array["Nachalnik"] = true
 			if(xmlNodeGetAttribute(node, "var")) then
 				local arr = fromJSON(xmlNodeGetAttribute(node, "var"))
 				for name, val in pairs(arr) do
@@ -6186,15 +6183,23 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 				local name = xmlNodeGetAttribute(ChildNode, "name")
 				array["vacancy"][i] = {biz, name, xmlNodeGetValue(ChildNode)}
 			end
-		elseif(control == "map") then
-			if(xmlNodeGetAttribute(node, "var")) then
-				arr = fromJSON(xmlNodeGetAttribute(node, "var"))
-				for name, val in pairs(arr) do
-					if(name == "Качество земли") then
-						array["var"][#array["var"]+1] = {name, GetQuality(val)}
-					else
-						array["var"][#array["var"]+1] = {name, val}
-					end
+		end
+		
+		
+		
+		
+		array["var"][#array["var"]+1] = {"Владелец", xmlNodeGetAttribute(node, "owner")}
+		array["var"][#array["var"]+1] = {"Дата основания", BizInfo[biz][1]}
+		
+
+		
+		if(xmlNodeGetAttribute(node, "var")) then
+			arr = fromJSON(xmlNodeGetAttribute(node, "var"))
+			for name, val in pairs(arr) do
+				if(name == "Качество земли") then
+					array["var"][#array["var"]+1] = {name, GetQuality(val)}
+				else
+					array["var"][#array["var"]+1] = {name, val}
 				end
 			end
 		else
@@ -6208,20 +6213,12 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 
 		
 		
-		if(BizInfo[biz][4]) then
-			local TradeArr = {}
-			for _, item in pairs(BizInfo[biz][4]) do
-				TradeArr[#TradeArr+1] = {item, "Trade", 550, {}}
-			end
-			array["var"][#array["var"]+1] = {"Покупка", TradeArr}
-		end
-		
 		if(BizInfo[biz][3]) then
 			local TradeArr = {}
 			for _, item in pairs(BizInfo[biz][3]) do
-				TradeArr[#TradeArr+1] = {item, "Sell", 550, {}}
+				TradeArr[#TradeArr+1] = {item[1], item[2], 550, {}}
 			end
-			array["var"][#array["var"]+1] = {"Продажа", TradeArr}
+			array["var"][#array["var"]+1] = {"Торговля", TradeArr}
 		end
 		
 		
@@ -7788,6 +7785,7 @@ function preLoad(name)
 			setElementData(BusinessPickup[NodeName], "biz", BizInfo[NodeName][2])
 			setElementData(BusinessPickup[NodeName], "price", xmlNodeGetAttribute(node, "price"), false)
 			setElementData(BusinessPickup[NodeName], "name", NodeName)
+			setElementData(BusinessPickup[NodeName], "money", xmlNodeGetAttribute(node, "money"))
 		end
 		BizControls[NodeName] = {}
 	end
@@ -9577,6 +9575,8 @@ function AddBizMoney(bizname, count)
 	local Node = xmlFindChild(BizNode, bizname, 0)
 	if(Node) then
 		xmlNodeSetAttribute(Node, "money", xmlNodeGetAttribute(Node, "money")+(count))
+		
+		setElementData(BusinessPickup[bizname], "money", xmlNodeGetAttribute(Node, "money"))
 		UpdateBiz(bizname)
 	end
 end
@@ -12226,7 +12226,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Бензин", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Удочка", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
