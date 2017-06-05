@@ -17,6 +17,7 @@ local COLOR = {
 	}
 }
 
+local NewsPaper = {false, false, false, false}
 local GroundMaterial = {}
 local ZonesDisplay = {}
 local ClosedZones = false
@@ -4954,30 +4955,28 @@ function CreateBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance, 
 end
 
 
--- Объект, статус, год, месяц
-local NewsPaper = {false, false, false, false}
 function ReadNewsPaper(y,m)
-	NewsPaper[3] = y
-	NewsPaper[4] = m
-	if(not isBrowserDomainBlocked("109.227.228.4")) then
+	PData["WebLink"] = "http://109.227.228.4/engine/include/MTA/newspaper.php?y="..y.."&m="..m
+	if(not isBrowserDomainBlocked(PData["WebLink"], true)) then
 		if(not NewsPaper[1]) then
 			NewsPaper[1] = createBrowser(screenWidth/1.5, screenHeight/1.5, false, false)
+			NewsPaper[3] = PData["WebLink"]
 		else
 			CloseNewsPaper()
 		end
 	else
-		requestBrowserDomains({"109.227.228.4"})
+		requestBrowserDomains({PData["WebLink"], true})
 	end
 end
-addEventHandler("onClientBrowserWhitelistChange", root, function() ReadNewsPaper(NewsPaper[3],NewsPaper[4]) end)
+addEventHandler("onClientBrowserWhitelistChange", root, ReadNewsPaper)
 
 
-addEventHandler("onClientBrowserCreated", root, 
-	function()
-		loadBrowserURL(source, "http://109.227.228.4/engine/include/MTA/newspaper.php?y="..NewsPaper[3].."&m="..NewsPaper[4])
-		NewsPaper[2] = true
-	end
-)
+function onClientBrowserCreated()
+	loadBrowserURL(source, NewsPaper[3])
+	NewsPaper[2] = true
+end
+addEventHandler("onClientBrowserCreated", root, onClientBrowserCreated)
+
 
 
 
@@ -5739,6 +5738,22 @@ function ActivateInventory(enable, action)
 end
 
 
+
+
+function onClientChatMessageHandler(text)
+	if(PEDChangeSkin == "play") then
+		if string.find(text, "http?://[%w-_%.%?%.:/%+=&]+") then -- if string.match and text itself are the same
+			local s, e = string.find(text, "http?://[%w-_%.%?%.:/%+=&]+")
+			PData["WebLink"] = string.sub(text, s, e)
+			ToolTip("В чат добавлена ссылка\nНажми F5 чтобы посмотреть")
+		end
+	end
+
+end
+addEventHandler("onClientChatMessage", getRootElement(), onClientChatMessageHandler)
+
+
+
 function RemoveInventory()
 	if(initializedInv) then
 		initializedInv=false
@@ -5998,6 +6013,34 @@ function ShowInfoKey()
 end
 addEvent("ShowInfoKey", true)
 addEventHandler("ShowInfoKey", localPlayer, ShowInfoKey)
+
+
+
+
+function ShowLink()
+	if(PData["WebLink"]) then
+		if(not isBrowserDomainBlocked(PData["WebLink"], true)) then
+			if(not NewsPaper[1]) then
+				NewsPaper[1] = createBrowser(screenWidth/1.5, screenHeight/1.5, false, false)
+				NewsPaper[3] = PData["WebLink"]
+			else
+				CloseNewsPaper()
+			end
+		else
+			requestBrowserDomains({PData["WebLink"]}, true)
+		end
+	end
+end
+addEvent("ShowLink", true)
+addEventHandler("ShowLink", localPlayer, ShowLink)
+
+
+
+function onClientBrowserWhitelistChange()
+	ShowLink()
+end
+addEventHandler("onClientBrowserWhitelistChange", root, onClientBrowserWhitelistChange)
+
 
 
 
@@ -11211,6 +11254,7 @@ addEventHandler("onClientResourceStart",  getRootElement(),
 			bindKey("p", "down", autoMove)
 			bindKey("r", "down", reload)
 			bindKey("F1", "down", ShowInfoKey)
+			bindKey("F5", "down", ShowLink)
 			bindKey("F10", "down", resourcemap)
 			bindKey("F11", "down", openmap)
 			bindKey("F12", "down", hideinv)
