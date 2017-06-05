@@ -2725,7 +2725,7 @@ local VehicleSystem = {
 	[501] = {0.43, "RR 100", "", "A1 75", "Macpherson V12", "Brembo 12", "Michelin 11", 3, {2, 1992}, {8, CYear}, "RC"},
 	[522] = {0.67, "HRD 1200 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 12", 13, {2, 1984}, {7, 2002}, "Export"},
 	[554] = {1.08, "TF 1.3 L", "", "R5 170", "Macpherson V13", "Wilwood 245mm", "Michelin 13", 100, {6, 1988}, {2, 1999}, "Export"},
-	[586] = {0.63, "HRD 750 CC", "", "R4 190", "Macpherson V14", "Brembo 14", "Michelin 14", 26, {3, 1941}, {3, CYear}, "Western Motorcycle Company"},
+	[586] = {0.72, "HRD 750 CC", "", "R4 190", "Macpherson V14", "Brembo 14", "Michelin 14", 26, {3, 1941}, {3, CYear}, "Western Motorcycle Company"},
 	[523] = {0.57, "HRD 950 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 15", 16, {4, 1966}, {10, CYear}, "Export"},
 	[406] = {2.52, "MT 2", "", "R4 110", "Macpherson V15", "Brembo 15", "Michelin 16", 666, {1, 1974}, {8, CYear}, "DUDE"},
 	[422] = {0.99, "HLR D 1.8 L", "", "A5 165", "Macpherson V153", "Brembo 245mm", "Michelin 117", 56, {1, 1983}, {1, 1988}, "Vapid"},
@@ -3273,18 +3273,18 @@ createObject(11393, -2043.5166015625, 161.337890625, 29.320350646973, 0,0,0)
 
 
 local ItemsTrade = {
-	["24/7"] = {{"Газета", "Trade", 450, {}}, {"Пакет", "Trade", 750, {["content"] = {{},{},{},{},{},{},{},{}}}}, {"CoK", "Trade", 450, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"Pissh", "Trade", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Trade", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Trade", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Канистра", "Trade", 450, {}}, {"Спрей", "Trade", 450, {}}},
-	["Zip"] = {{"Чемодан", "Trade", 550, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{}}}}},
-	["ProLaps"] = {{"Бита", "Trade", 450, {}},{"Клюшка", "Trade", 450, {}}, {"Парашют", "Trade", 250, {}}},
-	["Binco"] = {{"Рюкзак", "Trade", 450, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}}}},
-	["AMMO1"] = {{"Deagle", "Trade", 450, {}}, {"MP5", "Trade", 450, {}}, {"АК-47", "Trade", 450, {}}, {"М16", "Trade", 450, {}}, {"M40", "Trade", 450, {}}, {"ИЖ-12", "Trade", 450, {}}, {"9-мм", "Trade", 450, {}}, {"5.56-мм", "Trade", 450, {}}, {"7.62-мм", "Trade", 450, {}}, {"18.5-мм", "Trade", 450, {}},{"Граната", "Trade", 550, {}}, {"Молотов", "Trade", 550, {}}, {"Бронежилет", "Trade", 650, {}}, {"Лазерный прицел", "Trade", 350, {}}},
-	["AMMO2"] = {{"USP-S", "Trade", 450, {}}, {"Tec-9", "Trade", 450, {}}, {"АК-47", "Trade", 450, {}}, {"М16", "Trade", 450, {}}, {"M40", "Trade", 450, {}}, {"ИЖ-12", "Trade", 450, {}}, {"9-мм", "Trade", 450, {}}, {"5.56-мм", "Trade", 450, {}}, {"7.62-мм", "Trade", 450, {}}, {"18.5-мм", "Trade", 450, {}}, {"Бронежилет", "Trade", 450, {}}, {"Лазерный прицел", "Trade", 450, {}}},
-	["AMMO3"] = {{"Кольт 45", "Trade", 450, {}}, {"Огнемет", "Trade", 450, {}}, {"Узи", "Trade", 450, {}}, {"Mossberg", "Trade", 450, {}}, {"Sawed-Off", "Trade", 450, {}}, {"SPAS-12", "Trade", 450, {}}, {"ИЖ-12", "Trade", 450, {}}, {"9-мм", "Trade", 450, {}}, {"5.56-мм", "Trade", 450, {}}, {"7.62-мм", "Trade", 450, {}}, {"18.5-мм", "Trade", 450, {}}, {"Бронежилет", "Trade", 550, {}}, {"Лазерный прицел", "Trade", 350, {}}},
-	["AMMO4"] = {{"Кольт 45", "Trade", 450, {}}, {"Базука", "Trade", 450, {}}, {"Узи", "Trade", 450, {}}, {"АК-47", "Trade", 450, {}}, {"М16", "Trade", 450, {}}, {"Mossberg", "Trade", 450, {}}, {"Sawed-Off", "Trade", 450, {}}, {"SPAS-12", "Trade", 450, {}}, {"ИЖ-12", "Trade", 450, {}}, {"9-мм", "Trade", 450, {}}, {"5.56-мм", "Trade", 450, {}}, {"7.62-мм", "Trade", 450, {}}, {"18.5-мм", "Trade", 450, {}}, {"Ракета", "Trade", 450, {}}, {"Бронежилет", "Trade", 550, {}}, {"Лазерный прицел", "Trade", 350, {}}},
-	["Electronics Shop"] = {{"Телефон", "Trade", 650, {}}, {"Камера", "Trade", 450, {}}, {"Бензопила", "Trade", 450, {}}},
-	["Sex Shop"] = {{"Dildo XXL", "Trade", 450, {}}, {"Dildo", "Trade", 450, {}}, {"Вибратор", "Trade", 450, {}}},
-	["Bait Shop"] = {{"Нож", "Trade", 250, {}}, {"Удочка", "Trade", 150, {}}, {"Лопата", "Trade", 450, {}}},
-	["Liquor Shop"] = {{"CoK", "Trade", 650, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"KBeer", "Trade", 550, {["hp"] = {"hp", 100, 0, {}}}}, {"KBeer Dark", "Trade", 550, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh", "Trade", 650, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Trade", 650, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Trade", 350, {["hp"] = {"hp", 100, 0, {}}}}},
+	["24/7"] = {{"Газета", "Sell", 450, {}}, {"Пакет", "Sell", 750, {["content"] = {{},{},{},{},{},{},{},{}}}}, {"CoK", "Sell", 450, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"Pissh", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Канистра", "Sell", 450, {}}, {"Спрей", "Sell", 450, {}}},
+	["Zip"] = {{"Чемодан", "Sell", 550, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{}}}}},
+	["ProLaps"] = {{"Бита", "Sell", 450, {}},{"Клюшка", "Sell", 450, {}}, {"Парашют", "Sell", 250, {}}},
+	["Binco"] = {{"Рюкзак", "Sell", 450, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}}}},
+	["AMMO1"] = {{"Deagle", "Sell", 450, {}}, {"MP5", "Sell", 450, {}}, {"АК-47", "Sell", 450, {}}, {"М16", "Sell", 450, {}}, {"M40", "Sell", 450, {}}, {"ИЖ-12", "Sell", 450, {}}, {"9-мм", "Sell", 450, {}}, {"5.56-мм", "Sell", 450, {}}, {"7.62-мм", "Sell", 450, {}}, {"18.5-мм", "Sell", 450, {}},{"Граната", "Sell", 550, {}}, {"Молотов", "Sell", 550, {}}, {"Бронежилет", "Sell", 650, {}}, {"Лазерный прицел", "Sell", 350, {}}},
+	["AMMO2"] = {{"USP-S", "Sell", 450, {}}, {"Tec-9", "Sell", 450, {}}, {"АК-47", "Sell", 450, {}}, {"М16", "Sell", 450, {}}, {"M40", "Sell", 450, {}}, {"ИЖ-12", "Sell", 450, {}}, {"9-мм", "Sell", 450, {}}, {"5.56-мм", "Sell", 450, {}}, {"7.62-мм", "Sell", 450, {}}, {"18.5-мм", "Sell", 450, {}}, {"Бронежилет", "Sell", 450, {}}, {"Лазерный прицел", "Sell", 450, {}}},
+	["AMMO3"] = {{"Кольт 45", "Sell", 450, {}}, {"Огнемет", "Sell", 450, {}}, {"Узи", "Sell", 450, {}}, {"Mossberg", "Sell", 450, {}}, {"Sawed-Off", "Sell", 450, {}}, {"SPAS-12", "Sell", 450, {}}, {"ИЖ-12", "Sell", 450, {}}, {"9-мм", "Sell", 450, {}}, {"5.56-мм", "Sell", 450, {}}, {"7.62-мм", "Sell", 450, {}}, {"18.5-мм", "Sell", 450, {}}, {"Бронежилет", "Sell", 550, {}}, {"Лазерный прицел", "Sell", 350, {}}},
+	["AMMO4"] = {{"Кольт 45", "Sell", 450, {}}, {"Базука", "Sell", 450, {}}, {"Узи", "Sell", 450, {}}, {"АК-47", "Sell", 450, {}}, {"М16", "Sell", 450, {}}, {"Mossberg", "Sell", 450, {}}, {"Sawed-Off", "Sell", 450, {}}, {"SPAS-12", "Sell", 450, {}}, {"ИЖ-12", "Sell", 450, {}}, {"9-мм", "Sell", 450, {}}, {"5.56-мм", "Sell", 450, {}}, {"7.62-мм", "Sell", 450, {}}, {"18.5-мм", "Sell", 450, {}}, {"Ракета", "Sell", 450, {}}, {"Бронежилет", "Sell", 550, {}}, {"Лазерный прицел", "Sell", 350, {}}},
+	["Electronics Shop"] = {{"Телефон", "Sell", 650, {}}, {"Камера", "Sell", 450, {}}, {"Бензопила", "Sell", 450, {}}},
+	["Sex Shop"] = {{"Dildo XXL", "Sell", 450, {}}, {"Dildo", "Sell", 450, {}}, {"Вибратор", "Sell", 450, {}}},
+	["Bait Shop"] = {{"Нож", "Sell", 250, {}}, {"Удочка", "Sell", 150, {}}, {"Лопата", "Sell", 450, {}}},
+	["Liquor Shop"] = {{"CoK", "Sell", 650, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"KBeer", "Sell", 550, {["hp"] = {"hp", 100, 0, {}}}}, {"KBeer Dark", "Sell", 550, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh", "Sell", 650, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Sell", 650, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}},
 }
 
 
@@ -5324,7 +5324,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 1554.8, -1675.8, 16.2, 0, 0 --
+		local x,y,z,i,d  =  -1010.2, -685.6, 32, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6211,17 +6211,17 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 		if(BizInfo[biz][4]) then
 			local TradeArr = {}
 			for _, item in pairs(BizInfo[biz][4]) do
-				TradeArr[#TradeArr+1] = {item, "Trade", 1, {}}
+				TradeArr[#TradeArr+1] = {item, "Trade", 550, {}}
 			end
-			array["var"][#array["var"]+1] = {"Принимает", TradeArr}
+			array["var"][#array["var"]+1] = {"Покупка", TradeArr}
 		end
 		
 		if(BizInfo[biz][3]) then
 			local TradeArr = {}
 			for _, item in pairs(BizInfo[biz][3]) do
-				TradeArr[#TradeArr+1] = {item, "Trade", 750, {}}
+				TradeArr[#TradeArr+1] = {item, "Sell", 550, {}}
 			end
-			array["var"][#array["var"]+1] = {"Производит", TradeArr}
+			array["var"][#array["var"]+1] = {"Продажа", TradeArr}
 		end
 		
 		
@@ -10655,16 +10655,14 @@ function moneyPickupHit(thePlayer)
 		end
 	elseif(getElementData(source, "biz")) then
 		local name = "нет\nЦена: $"..getElementData(source, "price")
-		local advtext = ""
+		local advtext = "\nНажми "..COLOR["KEY"]["HEX"].."ALT#FFFFFF чтобы открыть информацию"
 		if(getElementData(source, "bizowner")) then
-			name=getElementData(source, "bizowner")
+			name = getElementData(source, "bizowner")
 			if(name == getPlayerName(thePlayer)) then
-				advtext = "\nНажми "..COLOR["KEY"]["HEX"].."ALT#FFFFFF чтобы управлять бизнесом\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы продать бизнес"
-			else
-				advtext = "\nНажми "..COLOR["KEY"]["HEX"].."ALT#FFFFFF чтобы посмотреть список вакансий"
+				advtext = advtext.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы продать бизнес"
 			end
 		else
-			advtext = "\n\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы купить бизнес"
+			advtext = advtext.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы купить бизнес"
 		end
 		triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, advtext,getElementData(source, "biz"),"Владелец: "..name)
 		PlayersPickups[thePlayer] = source

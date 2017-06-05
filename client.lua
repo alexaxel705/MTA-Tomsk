@@ -2740,7 +2740,7 @@ function bizControl(name, data)
 	if(data["var"]) then
 		local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
 		for i, dat in pairs(data["var"]) do
-			if(dat[1] == "Производит") then
+			if(dat[1] == "Продажа") then
 				if(not TradeWindows) then 
 					PInv["shop"] = {} 
 					PBut["shop"] = {} 
@@ -2755,7 +2755,7 @@ function bizControl(name, data)
 				
 				local text = "#CCCCCC"..dat[1]..": "
 				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 550*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
-			elseif(dat[1] == "Принимает") then
+			elseif(dat[1] == "Покупка") then
 				if(not TradeWindows) then 
 					PInv["shop"] = {} 
 					PBut["shop"] = {} 
@@ -7077,6 +7077,20 @@ end)
 
 
 
+function IsItemForSale(name)
+	local state = false
+	for _, dat in pairs(PInv["shop"]) do
+		if(dat[2] == "Trade") then
+			if(dat[1] == name) then
+				state = true
+			end
+		end
+	end
+	return state
+end
+
+
+
 function hex2rgb(hex) return tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6)) end 
 
 
@@ -7215,16 +7229,21 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 								if(DragElement) then
 									if(name == "player") then
 										if(DragElementName == "shop") then
-											local text = PInv[DragElementName][DragElementId][1]
-											local quality = PInv[DragElementName][DragElementId][3]
-											local data = PInv[DragElementName][DragElementId][4]
-											if(items[text][3] > 1) then
-												CreateButtonInputInt("buyshopitem", Text("Введи количество"), toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
+											if(IsItemForSale(PInv[DragElementName][DragElementId][1])) then
+												ToolTip("Этот тип товара предприятие покупает")
 												StopDrag(name, i)
 											else
-												triggerServerEvent("buyshopitem", localPlayer, localPlayer, 1, toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
-												StopDrag(name, i)
-												break
+												local text = PInv[DragElementName][DragElementId][1]
+												local quality = PInv[DragElementName][DragElementId][3]
+												local data = PInv[DragElementName][DragElementId][4]
+												if(items[text][3] > 1) then
+													CreateButtonInputInt("buyshopitem", Text("Введи количество"), toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
+													StopDrag(name, i)
+												else
+													triggerServerEvent("buyshopitem", localPlayer, localPlayer, 1, toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
+													StopDrag(name, i)
+													break
+												end
 											end
 										elseif(DragElementName == "trunk") then
 											local tmp = table.copy(PInv[DragElementName][DragElementId])
@@ -7388,11 +7407,17 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 										end
 									elseif(name == "shop") then
 										if(DragElementName ~= "shop") then
-											local count = PInv[DragElementName][DragElementId][2]
-											triggerServerEvent("SellItem", localPlayer, localPlayer, GetItemCost(PInv[DragElementName][DragElementId])*count)
-											SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
-											StopDrag()--Оставить фокус на ячейке
-											break
+											if(IsItemForSale(PInv[DragElementName][DragElementId][1])) then
+												local count = PInv[DragElementName][DragElementId][2]
+												triggerServerEvent("SellItem", localPlayer, localPlayer, GetItemCost(PInv[DragElementName][DragElementId])*count)
+												SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
+												StopDrag()--Оставить фокус на ячейке
+												break
+											else
+												ToolTip("Этот тип товара предприятие не принимает")
+												StopDrag()--Оставить фокус на ячейке
+												break
+											end
 										else
 											StopDrag(name, i)
 										end
@@ -7714,13 +7739,17 @@ function onMyMouseDoubleClick(button, absoluteX, absoluteY, worldX, worldY,  wor
 								UseInventoryItem(name, i)
 							end
 						elseif(name == "shop") then
-							local text = PInv[name][i][1]
-							local quality = PInv[name][i][3]
-							local data = PInv[name][i][4]
-							if(items[text][3] > 1) then
-								CreateButtonInputInt("buyshopitem", Text("Введи количество"), toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
+							if(IsItemForSale(PInv[name][i][1])) then
+								ToolTip("Этот тип товара предприятие покупает")
 							else
-								triggerServerEvent("buyshopitem", localPlayer, localPlayer, 1, toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
+								local text = PInv[name][i][1]
+								local quality = PInv[name][i][3]
+								local data = PInv[name][i][4]
+								if(items[text][3] > 1) then
+									CreateButtonInputInt("buyshopitem", Text("Введи количество"), toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
+								else
+									triggerServerEvent("buyshopitem", localPlayer, localPlayer, 1, toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
+								end
 							end
 						end
 					end
@@ -9242,6 +9271,7 @@ function DrawPlayerMessage()
 		Create3DTextOnMap("Dillimore\n#ffff00★",670,-540,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 		Create3DTextOnMap("Montgomery\n#ffff00★",1310, 310,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 		Create3DTextOnMap("Bayside\n#ffff00★",-2537, 2332,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		Create3DTextOnMap("Las Barrancas\n#ffff00★",-763, 1504, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 
 		
 		PData["MapHitElement"] = false
