@@ -31,6 +31,7 @@ local RobAction = false
 local StreamData = {}
 local VideoMemory = {["HUD"] = {}}
 
+
 local PData = {
 	["Interface"] = {
 		["Full"] = true, 
@@ -2769,13 +2770,11 @@ function bizControl(name, data)
 	
 	if(data["var"]) then
 		local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
+		PInv["shop"] = {} 
+		PBut["shop"] = {} 
 		for i, dats in pairs(data["var"]) do
 			if(dats[1] == "Торговля") then
-				if(not TradeWindows) then 
-					PInv["shop"] = {} 
-					PBut["shop"] = {} 
-					TradeWindows = name
-				end
+				TradeWindows = name
 				local Coord = {
 					["Trade"] = {
 						["i"] = 1,
@@ -5837,6 +5836,8 @@ function resourcemap()
 		end
 		
 		SetPlayerHudComponentVisible("all", false)
+		PData["Interface"]["Full"] = true
+		PData["Interface"]["Inventory"] = true
 		setElementFrozen(localPlayer, true)
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
 		if(theVehicle) then
@@ -7513,7 +7514,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 										if(DragElementName ~= "shop") then
 											if(IsItemForSale(PInv[DragElementName][DragElementId][1])) then
 												local count = PInv[DragElementName][DragElementId][2]
-												triggerServerEvent("SellItem", localPlayer, localPlayer, GetItemCost(PInv[DragElementName][DragElementId])*count)
+												triggerServerEvent("SellShopItem", localPlayer, localPlayer, PInv[DragElementName][DragElementId][2], toJSON({PInv[DragElementName][DragElementId][1], GetItemCost(PInv[DragElementName][DragElementId]), PInv[DragElementName][DragElementId][3], PInv[DragElementName][DragElementId][4], TradeWindows}))
 												SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
 												StopDrag()--Оставить фокус на ячейке
 												break
@@ -7945,8 +7946,12 @@ function GetItemCost(it)
 		if(it[4]["cost"]) then return it[4]["cost"] end
 	end
 	cost = items[it[1]][6]
-	quality = it[3]
-	return math.round(cost*(quality/450), 0)
+	
+	local Economics = fromJSON(getElementData(root, "Economics"))
+	
+	if(Economics[it[1]]) then cost = cost*Economics[it[1]] end
+	
+	return math.round(cost*(it[3]/450), 0)
 end
 
 
@@ -9585,8 +9590,6 @@ function DrawPlayerMessage()
 				dxDrawText(ToolTipText, 25*scalex+(13*scalex), 325*scaley+(9*scaley), 0, 0, tocolor(255,255,255,255), scale, font, "left", "top", false, false, false, true)
 			end
 			
-
-
 			
 			local line = 1
 			for v,k in pairs(GPSObject) do

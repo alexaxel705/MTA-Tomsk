@@ -5377,7 +5377,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -2252.2, 569.5, 34, 0, 0 --
+		local x,y,z,i,d  = 264.8, 1408.7, 10.5, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7733,7 +7733,6 @@ function preLoad(name)
 		end
 	end
 	
-	
 	local CarNodes = xmlNodeGetChildren(CarNode) -- tut
 	for i,node in ipairs(CarNodes) do
 		local v = CreateVehicle(tonumber(xmlNodeGetAttribute(node, "vmodel")), xmlNodeGetAttribute(node, "vx"), xmlNodeGetAttribute(node, "vy"), xmlNodeGetAttribute(node, "vz"), xmlNodeGetAttribute(node, "vrx"), xmlNodeGetAttribute(node, "vry"), xmlNodeGetAttribute(node, "vrz"), xmlNodeGetValue(node), true, 0, 0)
@@ -7791,6 +7790,7 @@ function preLoad(name)
 		BizControls[NodeName] = {}
 	end
 	
+	UpdateProductCost()
 	UpdateVacancyList()
 	StartMP()
 	
@@ -7818,6 +7818,13 @@ function preLoad(name)
 		CreateRandomBot(randx,randy,randz,rot,nil,nil, getZoneName(randx,randy,randz, false))
 		table.remove(availzones, rand)
 	end
+	
+	
+	
+	
+	
+	
+	
 	
 	setTimer(worldtime, 1000, 0)
 end
@@ -10743,15 +10750,51 @@ function GetBizGeneration(biz)
 	return out
 end
 
-function AddBizProduct(biz, item, count)
-	local node = xmlFindChild(BizNode, biz, 0)
-	local arr = fromJSON(xmlNodeGetAttribute(node, "var"))
-	arr[item] = arr[item]+count
-	xmlNodeSetAttribute(node, "var", toJSON(arr))
+
+
+
+
+function UpdateProductCost()
+	local Products = {}
+	for name, dat in pairs(BizInfo) do
+		local Prods = GetBizGeneration(name)
+		for types, items in pairs(Prods) do
+			for _, item in pairs(items) do
+				if(not Products[item]) then Products[item] = 3 end -- Максимальный множитель x3
+				if(types == "Sell") then 
+					Products[item] = Products[item]-(AddBizProduct(name, item)/100) -- Уменьшаем если заполненны у потребителей
+				elseif(types == "Trade") then
+					Products[item] = Products[item]-(AddBizProduct(name, item)/100) -- Уменьшает множитель если заполненные склады
+				end
+			end
+		end
+	end
+	
+	setElementData(root, "Economics", toJSON(Products))
 end
 
 
 
+
+function AddBizProduct(biz, item, count, withoutsave)
+	local node = xmlFindChild(BizNode, biz, 0)
+	local arr = xmlNodeGetAttribute(node, "var")
+	local out = 0
+	if(arr) then
+		arr = fromJSON(arr)
+		if(count) then
+			arr[item] = arr[item]+count
+			if(arr[item] > 100) then return false
+			elseif(arr[item] < 0) then return false end -- Кончился продукт
+			if(not withoutsave) then
+				xmlNodeSetAttribute(node, "var", toJSON(arr))
+				UpdateProductCost()
+			end
+		end
+		out = arr[item]
+	end
+	return out
+end
 
 
 
@@ -12602,34 +12645,56 @@ function buyshopitem(thePlayer, count, args)
 	local arg = fromJSON(args)
 	local name, price, quality, data, biz = arg[1], tonumber(arg[2]), arg[3], arg[4], arg[5]
 
-	if(AddPlayerMoney(thePlayer, -price*count)) then
-		if(not data) then data = {} end
-		if(name == "CoK") then
-			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-			if(PlayerTeam == "Мирные жители") then
-				if(GetDatabaseAccount(thePlayer, "CTUT") == 0) then
-					SetDatabaseAccount(thePlayer, "CTUT", 1)
-					MissionCompleted(thePlayer, "СООБРАЗИТЕЛЬНОСТЬ +", "МИССИЯ ВЫПОЛНЕНА")
-					triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
-					UpdateTutorial(thePlayer)
+	if(AddBizProduct(biz, name, -count, true)) then -- Для того чтобы в случае нехватки денег лишний раз не дергать сохранение
+		if(AddPlayerMoney(thePlayer, -price*count)) then
+			if(not data) then data = {} end
+			if(name == "CoK") then
+				local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+				if(PlayerTeam == "Мирные жители") then
+					if(GetDatabaseAccount(thePlayer, "CTUT") == 0) then
+						SetDatabaseAccount(thePlayer, "CTUT", 1)
+						MissionCompleted(thePlayer, "СООБРАЗИТЕЛЬНОСТЬ +", "МИССИЯ ВЫПОЛНЕНА")
+						triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
+						UpdateTutorial(thePlayer)
+					end
 				end
+			elseif(name == "Газета") then
+				data = {["date"] = {ServerDate.month+1, ServerDate.year+1900}}
+			elseif(name == "Лазерный прицел") then
+				data = {["color"] = {math.random(0,255), math.random(255,255), math.random(0,255), math.random(180,255)}}
 			end
-		elseif(name == "Газета") then
-			data = {["date"] = {ServerDate.month+1, ServerDate.year+1900}}
-		elseif(name == "Лазерный прицел") then
-			data = {["color"] = {math.random(0,255), math.random(255,255), math.random(0,255), math.random(180,255)}}
+			
+			AddInventoryItem(thePlayer, name, 1*count, quality, data)
+			
+			if(biz) then
+				AddBizProduct(biz, name, -count)
+				AddBizMoney(biz, price*count)
+			end
 		end
-		
-		AddInventoryItem(thePlayer, name, 1*count, quality, data)
-		
-		if(biz) then
-			AddBizMoney(biz, price*count)
-		end
+	else
+		ToolTip("Этот товар кончился на предприятии", thePlayer)
 	end
 end
 addEvent("buyshopitem", true)
 addEventHandler("buyshopitem", root, buyshopitem)
 
+
+
+
+function SellShopItem(thePlayer, count, args)
+	local arg = fromJSON(args)
+	local name, price, quality, data, biz = arg[1], tonumber(arg[2]), arg[3], arg[4], arg[5]
+
+	if(AddBizProduct(biz, name, count, true)) then -- Для того чтобы в случае нехватки денег лишний раз не дергать сохранение
+		if(AddPlayerMoney(thePlayer, price*count)) then
+			AddBizProduct(biz, name, count)
+		end
+	else
+		ToolTip("Склады с данным товаром уже переполнены", thePlayer)
+	end
+end
+addEvent("SellShopItem", true)
+addEventHandler("SellShopItem", root, SellShopItem)
 
 
 
@@ -12886,10 +12951,10 @@ function MCHSEventHealth(thePlayer, thePed)
 				AddSkill(thePed, 24, -100)
 				setElementHealth(thePed, PlayerHealth)
 			else
-				outputChatBox("У пациента кончилась кровь!", thePlayer, 255,255,255,true)
+				ToolTip("У пациента кончилась кровь!", thePlayer)
 			end
 		else
-			outputChatBox("Пациент в плохом самочувствии!", thePlayer, 255,255,255,true)
+			ToolTip("Пациент в плохом самочувствии!", thePlayer)
 		end
 	else
 		if(FoundItemsCount(thePlayer, "Кровь") > 0) then
@@ -12907,10 +12972,10 @@ function MCHSEventHealth(thePlayer, thePed)
 				outputChatBox("Ты вылечил от дизентерии "..getPlayerName(thePed),thePlayer ,255,255,255,true)
 				RemoveInventoryItem(thePlayer, "Кровь")
 			else
-				outputChatBox("Пациент не болен!", thePlayer, 255,255,255,true)
+				ToolTip("Пациент не болен!", thePlayer)
 			end
 		else
-			outputChatBox("У тебя нету донорской крови!",thePlayer, 255, 255, 255, true)
+			ToolTip("У тебя нету донорской крови!",thePlayer)
 		end
 	end
 end
