@@ -1216,7 +1216,7 @@ local items = {
 	["Химикаты"] = {false, "Химикаты", 1, false, 92000, 350, false, false, false},
 	["Удобрения"] = {false, "Удобрения", 1, false, 41000, 150, false, false, false},
 	["Бензин"] = {false, "Бензин", 1, false, 56000, 250, false, false, false},
-	["Зерно"] = {false, "Зерно", 10, false, 2500, 5, false, false, false}, 
+	["Зерно"] = {false, "Зерно", 10, false, 2500, 50, false, false, false}, 
 	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false},
 	["Деньги"] = {false, "Деньги", 99999999, false, 0.01, 1, false, false, false},
 	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false, false}, 
@@ -5820,6 +5820,8 @@ local ResourceInMap = {
 	[12] = {false, 17017, 0.05, -1040, -644, 132, 335, false}, 
 	[13] = {false, 17021, 0.05, -1040, -644, 32, 335, "NPZSF"}, 
 	[14] = {false, 7493, 0.02, 966.9, 2140.8, 10.8, 0, "MEATFA"}, 
+	[15] = {false, 10775, 0.02, -1858, 3, 15.1, 0, "SOLIN"}, 
+	[16] = {false, 12931, 0.02, -70, -270, 5.4, 90, "FLEIS"},  
 }
 
 
@@ -9516,7 +9518,7 @@ function DrawPlayerMessage()
 				if(owner == getPlayerName(localPlayer)) then
 					if(getElementData(thePickup, "money")) then
 						local x,y,z = getElementPosition(thePickup)
-						create3dtext("$"..getElementData(thePickup, "money"), x,y,z+0.5, NewScale*3, 60, tocolor(54, 228, 70, 120), "pricedown")
+						create3dtext("$"..getElementData(thePickup, "money"), x,y,z+0.5, NewScale*3, 60, tocolor(54, 228, 70, 70), "pricedown")
 					end
 				end
 			end

@@ -62,6 +62,9 @@ local COLOR = {
 
 -- Дата основания, название, торговля
 local BizInfo = {
+	["FLEIS"] = {1869, "Пивзавод", {{"Зерно", "Trade"}}}, 
+	["MARIH"] = {1966, "Наркопритон", {{"Косяк", "Sell"}, {"Конопля", "Trade"}}}, 
+	["SPUNK"] = {1956, "Наркопритон", {{"Спанк", "Sell"}, {"Кока", "Trade"}}}, 
 	["FARMFR"] = {1837, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}}, 
 	["FARMPK"] = {1861, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}}, 
 	["FARMBA"] = {1809, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}},
@@ -77,7 +80,7 @@ local BizInfo = {
 	["SPRAYSA"] = {1974, "Pay'n'Spray", {}}, 
 	["SPRUNK"] = {1932, "Sprunk", {}}, 
 	["MEDRA"] = {1922, "Психиатрическая больница SA", {}}, 
-	["SOLIN"] = {1923, "Solarin Industries", {}}, 
+	["SOLIN"] = {1929, "Solarin Industries", {{"Бензин", "Trade"}}}, 
 	["SANNEWS"] = {1969, "San News", {}}, 
 	["MEDBC"] = {1955, "Скорая помощь Bone County", {}}, 
 	["MEDTR"] = {1943, "Скорая помощь Tierra Robada", {}}, 
@@ -297,8 +300,6 @@ local ThreesNames = {
 }
 local BotCreated = {}
 local CapZone = {}
-local ShmalTimer = {}
-local ShmalObject = {}
 local BizControls = {}
 local VacancyList = {}
 local BusinessPickup = {}
@@ -4914,25 +4915,11 @@ setElementInterior(CrackDoor1,2)
 local CrackDoor2 = createObject(18553,2571.2, -1301.9, 1044.3)
 setElementInterior(CrackDoor2,2)
 
-local MakeCrack = createPickup(2556.1, -1295.9, 1044.1, 3, 1239, 0)
-setElementInterior(MakeCrack, 2)
-setElementData(MakeCrack, "type", "function")
-setElementData(MakeCrack, "funcname", "CreateShmal")
-setElementData(MakeCrack, "funcinfo", "Изготовить #558833косяк#FFFFFF")
-
 local LainOS = createPickup(213.9, 1827.5, 6.41, 3, 1239, 0)
 setElementData(LainOS, "type", "function")
 setElementData(LainOS, "funcname", "StartLainOS")
 setElementData(LainOS, "funcinfo", "Управление "..COLOR["TEXT"]["HEX"].."компьютером#FFFFFF")
 
-
-
-
-local MakeSpank = createPickup(2543.3, -1295.9, 1044.1, 3, 1239, 0)
-setElementInterior(MakeSpank, 2)
-setElementData(MakeSpank, "type", "function")
-setElementData(MakeSpank, "funcname", "CreateSpunk")
-setElementData(MakeSpank, "funcinfo", "Изготовить спанк")
 
 
 local MakeSpirt = createPickup(276.4, 1854, 8.8, 3, 1239, 0)
@@ -5380,7 +5367,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 1925.5, 170.1, 37.3, 0, 0 --
+		local x,y,z,i,d  = -49.9, -269.4, 6.6, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6420,40 +6407,6 @@ addEventHandler("EnterGarage", root, EnterGarage)
 
 
 
-function CreateShmal()
-	if(not isTimer(ShmalTimer[source])) then
-		local cannabis = FoundItemsCount(source, "Конопля")
-		if(cannabis >= 1) then
-			RemoveInventoryItem(source, "Конопля")
-			setElementRotation(source, 0,0,0)
-			StartAnimation(source, "RIFLE", "RIFLE_load")
-			UnBindAllKey(source)
-			ShmalObject[source] = createObject(823,2556.2, -1294.7, 1044.6)
-			setObjectScale(ShmalObject[source], 0.25)			
-			setElementInterior(ShmalObject[source], 2)
-			ShmalTimer[source] = setTimer(function(thePlayer)
-				AddInventoryItem(thePlayer, "Косяк", 1, 0, {})
-				destroyElement(ShmalObject[thePlayer])
-				StopAnimation(thePlayer)
-				BindAllKey(thePlayer)
-				local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-				if(PlayerTeam == "Баллас") then
-					if(GetDatabaseAccount(thePlayer, "BTUT") == 3) then
-						MissionCompleted(thePlayer, "СООБРАЗИТЕЛЬНОСТЬ +", "МИССИЯ ВЫПОЛНЕНА")
-						SetDatabaseAccount(thePlayer, "BTUT", 4)
-					end
-				end
-			end, 10000, 1, source)
-		else
-			outputChatBox("Тебе нужна #558833конопля#FFFFFF", source, 255,255,255,true)
-		end
-	end
-end
-addEvent("CreateShmal", true)
-addEventHandler("CreateShmal", root, CreateShmal)
-
-
-
 
 function StartLainOS()
 	triggerClientEvent(source, "StartLainOS", source)
@@ -6462,39 +6415,8 @@ addEvent("StartLainOS", true)
 addEventHandler("StartLainOS", root, StartLainOS)
 
 
-
-function CreateSpunk()
-	if(not isTimer(ShmalTimer[source])) then
-		local cannabis = FoundItemsCount(source, "Кока")
-		if(cannabis >= 1) then
-			RemoveInventoryItem(source, "Кока")
-			setElementRotation(source, 0,0,0)
-			StartAnimation(source, "RIFLE", "RIFLE_load")
-			UnBindAllKey(source)
-			ShmalObject[source] = createObject(823,2543.3, -1294.7, 1044.6)
-			setObjectScale(ShmalObject[source], 0.25)			
-			setElementInterior(ShmalObject[source], 2)
-			ShmalTimer[source] = setTimer(function(thePlayer)
-				AddInventoryItem(thePlayer, "Спанк", 1, 0, {})
-				destroyElement(ShmalObject[thePlayer])
-				StopAnimation(thePlayer)
-				BindAllKey(thePlayer)
-				local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-				if(PlayerTeam == "Колумбийский картель") then
-					if(GetDatabaseAccount(thePlayer, "KTUT") == 3) then
-						MissionCompleted(thePlayer, "СООБРАЗИТЕЛЬНОСТЬ +", "МИССИЯ ВЫПОЛНЕНА")
-						SetDatabaseAccount(thePlayer, "KTUT", 4)
-					end
-				end
-			end, 10000, 1, source)
-		else
-			outputChatBox("Тебе нужна кока", source, 255,255,255,true)
-		end
-	end
-end
-addEvent("CreateSpunk", true)
-addEventHandler("CreateSpunk", root, CreateSpunk)
-
+local ShmalTimer = {}
+local ShmalObject = {}
 function CreateSpirt()
 	if(not isTimer(ShmalTimer[source])) then
 		local cannabis = FoundItemsCount(source, "Фекалии")
@@ -10612,7 +10534,7 @@ function UpdateTutorial(thePlayer)
 			outputChatBox("Чтобы продолжить обучение собери урожай коки",thePlayer, 255,255,255,true)
 		elseif(GetDatabaseAccount(thePlayer, "KTUT") == 3) then
 			outputChatBox("Отправляйся в притон и изготовь спанк", thePlayer, 255,255,255,true)
-			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 1257.3, 241.8, 18.9, "Притон", "Зайди в притон и изготовь спанк")
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, -2624.6, 1412.65, 7.1, "Притон", "Зайди в притон и изготовь спанк")
 		end
 	end
 end
@@ -12322,7 +12244,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Удочка", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Кока", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
@@ -12693,7 +12615,7 @@ function buyshopitem(thePlayer, count, args)
 			end
 		end
 	else
-		ToolTip("Этот товар кончился на предприятии", thePlayer)
+		ToolTip(thePlayer, "Этот товар кончился на предприятии")
 	end
 end
 addEvent("buyshopitem", true)
@@ -12711,7 +12633,7 @@ function SellShopItem(thePlayer, count, args)
 			AddBizProduct(biz, name, count)
 		end
 	else
-		ToolTip("Склады с данным товаром уже переполнены", thePlayer)
+		ToolTip(thePlayer, "Склады с данным товаром уже переполнены")
 	end
 end
 addEvent("SellShopItem", true)
@@ -12972,10 +12894,10 @@ function MCHSEventHealth(thePlayer, thePed)
 				AddSkill(thePed, 24, -100)
 				setElementHealth(thePed, PlayerHealth)
 			else
-				ToolTip("У пациента кончилась кровь!", thePlayer)
+				ToolTip(thePlayer, "У пациента кончилась кровь!")
 			end
 		else
-			ToolTip("Пациент в плохом самочувствии!", thePlayer)
+			ToolTip(thePlayer, "Пациент в плохом самочувствии!")
 		end
 	else
 		if(FoundItemsCount(thePlayer, "Кровь") > 0) then
@@ -12993,10 +12915,10 @@ function MCHSEventHealth(thePlayer, thePed)
 				outputChatBox("Ты вылечил от дизентерии "..getPlayerName(thePed),thePlayer ,255,255,255,true)
 				RemoveInventoryItem(thePlayer, "Кровь")
 			else
-				ToolTip("Пациент не болен!", thePlayer)
+				ToolTip(thePlayer, "Пациент не болен!")
 			end
 		else
-			ToolTip("У тебя нету донорской крови!",thePlayer)
+			ToolTip(thePlayer, "У тебя нету донорской крови!")
 		end
 	end
 end
@@ -16240,7 +16162,7 @@ function withdraw(thePlayer, count, args)
 			AddPlayerMoney(thePlayer, count)
 			BankEvent(thePlayer, false, arg[1], true)
 		else
-			ToolTip("На твоем счету нет столько денег!", thePlayer)
+			ToolTip(thePlayer, "На твоем счету нет столько денег!")
 		end
 	end
 end
@@ -16283,7 +16205,7 @@ function removebizmoney(thePlayer, count, args)
 					AddPlayerMoney(thePlayer, count)
 					AddBizMoney(arg[1], -count)
 				else
-					ToolTip("На твоем счету нет столько денег!", thePlayer)
+					ToolTip(thePlayer, "На твоем счету нет столько денег!")
 				end
 			end
 		end
@@ -16359,7 +16281,7 @@ function VehicleUpgrade(upgrade, count)
 				triggerClientEvent(source, "helpmessageEvent", source, "#009900Уже установлено!")
 			else
 				setElementData(theVehicle, "siren", "true")
-				ToolTip("Чтобы управлять сигнализацией выйди из машины и наведи на неё прицел.",source)
+				ToolTip(source, "Чтобы управлять сигнализацией выйди из машины и наведи на неё прицел.")
 				AddPlayerMoney(source, -count, "КУПЛЕНО!")
 				if(getElementData(theVehicle, "x")) then
 					local CarNodes = xmlNodeGetChildren(CarNode)
