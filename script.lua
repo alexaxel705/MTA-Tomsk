@@ -63,11 +63,14 @@ local COLOR = {
 -- Дата основания, название, торговля
 local BizInfo = {
 	["FARMFR"] = {1837, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}}, 
+	["FARMPK"] = {1861, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}}, 
+	["FARMBA"] = {1809, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}},
+	["FARMWS"] = {1855, "Скотный двор", {{"Скот", "Sell"}, {"Зерно", "Trade"}}}, 
+	["MEATFA"] = {1908, "Мясокомбинат", {{"Мясо", "Sell"}, {"Скот", "Trade"}}}, 
 	["ELSF"] = {1924, "Электростанция", {}}, 
 	["PLSPD"] = {1955, "Полицейский участок", {}}, 
 	["MEDLV"] = {1966, "Скорая помощь", {}}, 
 	["MEDLS"] = {1921, "Скорая помощь", {}}, 
-	["FARMWS"] = {1855, "Скотный двор", {{"Скот", "Sell"}, {"Зерно", "Trade"}}}, 
 	["BIOEN"] = {1939, "Химический завод", {{"Удобрения", "Sell"}, {"Химикаты", "Trade"}}}, 
 	["PETLV"] = {1859, "Нефтяные скважины", {{"Нефть", "Sell"}}}, 
 	["NPZSF"] = {1901, "Химический завод", {{"Бензин", "Sell"}, {"Химикаты", "Sell"}, {"Нефть", "Trade"}}}, 
@@ -5377,7 +5380,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 264.8, 1408.7, 10.5, 0, 0 --
+		local x,y,z,i,d  = 1925.5, 170.1, 37.3, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5482,8 +5485,8 @@ CreateEnter(-2026.7, -102.1, 35.2, 270, 0, 0, false, -2026.9, -103.6, 1035.2, 18
 CreateEnter(-2029.7, -120.5, 35.2, 270, 0, 0, false, -2029.7, -119.4, 1035.2, 0, 3, 0) -- Автошкола SF 2
 CreateEnter(2019.4, 1007.8, 10.8, 270, 0, 0, false, 2018.9, 1017.8, 996.9, 90, 10, 0, "Казино «The Four Dragons»")
 CreateEnter(1689.6, -1518.4, 13.5, 270, 0, 0, false, -787.6, 445.4, 1362.4, 90, 1, 0, "Liberty City")
-
-
+CreateEnter(966.2, 2160.7, 10.8, 270, 0, 0, false, 965.4, 2107.8, 1011, 90, 1, 0, "Sindacco Abattoir")
+CreateEnter(931, 2129.6, 10.8, 90, 0, 0, false, 964.9, 2160.1, 1011, 90, 1, 0, "Sindacco Abattoir")
 
 
 
@@ -7329,6 +7332,7 @@ local ItemsNamesArr = {
 	["Канистра"] = 1650,
 	["Запаска"] = 1025,
 	["Нефть"] = 3632, 
+	["Мясо"] = 2805, 
 	["Химикаты"] = 1218, 
 	["Зерно"] = 1453,
 	["CoK"] = 2670,
@@ -7818,12 +7822,6 @@ function preLoad(name)
 		CreateRandomBot(randx,randy,randz,rot,nil,nil, getZoneName(randx,randy,randz, false))
 		table.remove(availzones, rand)
 	end
-	
-	
-	
-	
-	
-	
 	
 	
 	setTimer(worldtime, 1000, 0)
@@ -10784,7 +10782,7 @@ function AddBizProduct(biz, item, count, withoutsave)
 		arr = fromJSON(arr)
 		if(count) then
 			arr[item] = arr[item]+count
-			if(arr[item] > 100) then return false
+			if(arr[item] > 100) then return false -- Переполнен
 			elseif(arr[item] < 0) then return false end -- Кончился продукт
 			if(not withoutsave) then
 				xmlNodeSetAttribute(node, "var", toJSON(arr))
@@ -10830,6 +10828,29 @@ function worldtime()
 				if(#items["Trade"] == 0) then -- Создаваемые без обмена на что либо
 					for _, item in pairs(items["Sell"]) do
 						AddBizProduct(name, item, 1)
+					end
+				else
+					local status = true
+					for _, item in pairs(items["Trade"]) do -- Проверяем есть ли все товары на обмен
+						if(not AddBizProduct(name, item, -1, true)) then -- Без сохранения
+							status = false
+						end
+					end
+					
+					for _, item in pairs(items["Sell"]) do -- Проверяем нужно ли расходовать материалы
+						if(not AddBizProduct(name, item, 1, true)) then -- Без сохранения
+							status = false
+						end
+					end
+					
+					if(status == true) then -- Начинаем обмен
+						for _, item in pairs(items["Trade"]) do
+							AddBizProduct(name, item, -1)
+						end
+						
+						for _, item in pairs(items["Sell"]) do
+							AddBizProduct(name, item, 1)
+						end
 					end
 				end
 			end
