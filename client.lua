@@ -340,6 +340,14 @@ local BindedKeys = {} --[key] = {TriggerServerEvent(unpack)}
 
 
 
+function GetDistance(a,b)
+	local x,y,z = getElementPosition(a)
+	local x2,y2,z2 = getElementPosition(b)
+	return getDistanceBetweenPoints3D(x,y,z,x2,y2,z2)
+end
+
+
+
 function MinusToPlus(var)
 	if(var < 0) then
 		var = var-var-var
@@ -3782,8 +3790,18 @@ function UpdateBot()
 			if(not dialogrz) then
 				if(isElementSyncer(thePed)) then
 					if(attacker) then
-						local x,y,z = getPedBonePosition(GetElementAttacker(thePed), ActualBones[math.random(#ActualBones)])
-						MovePlayerTo[thePed]={x,y,z,0,"fast"}
+						local x,y,z = getPedBonePosition(attacker, ActualBones[math.random(#ActualBones)])
+						MovePlayerTo[thePed] = {x,y,z,0,"fast",false,false,true} -- x,y,z,rz,speed,event,args,fire
+						if(getElementData(thePed, "team") == "Полиция") then
+							if(getElementData(attacker, "NoFireMePolice")) then
+								MovePlayerTo[thePed][8] = false
+								if(GetDistance(thePed, attacker) < 15) then
+									if(getElementData(attacker, "NoFireMePolice") == "0") then
+										triggerServerEvent("PoliceArrest", localPlayer, thePed, attacker)
+									end
+								end
+							end
+						end
 					else
 						local x,y,z = getElementPosition(thePed)
 						local x2,y2,z2 = getPositionInFront(thePed, 2)
@@ -3882,7 +3900,7 @@ function UpdateBot()
 								setPedCameraRotation(thePlayer, angle)
 							else
 								SetControl(thePlayer, "forwards", 1, true)
-								if(getElementData(thePlayer, "sprint")) then
+								if(MovePlayerTo[thePlayer][5] == "fast") then
 									SetControl(thePlayer, "sprint", true)
 								else
 									SetControl(thePlayer, "walk", true)
@@ -3907,7 +3925,9 @@ function UpdateBot()
 											setPedControlState(thePlayer, "aim_weapon", true)
 											setPedAimTarget(thePlayer,MovePlayerTo[thePlayer][1],MovePlayerTo[thePlayer][2],MovePlayerTo[thePlayer][3])
 											
-											SetControl(thePlayer, "fire", true)
+											if(MovePlayerTo[thePlayer][8]) then
+												SetControl(thePlayer, "fire", true)
+											end
 											
 											FireTimer[thePlayer] = setTimer(function(thePlayer)
 												SetControl(thePlayer, "fire", false)

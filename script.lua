@@ -4945,7 +4945,7 @@ setElementData(MakeSpirt, "funcinfo", "Дистиллятор фекалий")
 function SetPlayerPosition(thePlayer,x,y,z,i,d,rz,anim,name)
 	if(anim) then
 		local Speed = 1
-		if(getControlState(thePlayer, "SPRINT")) then
+		if(getControlState(thePlayer, "sprint")) then
 			StartAnimation(thePlayer, "POLICE","Door_Kick",false,false,false,false)
 			Speed=0.7
 		else
@@ -9424,17 +9424,13 @@ function PedDamage(ped, weapon, bodypart, loss)
 		if(SkinData[getElementModel(ped)][4]) then
 			if(getPedWeapon(ped) == 0) then
 				giveWeapon(ped, SkinData[getElementModel(ped)][4], 9999, true)
-				setElementData(ped, "sprint", "true")
 			end
 		else
-			local rand = math.random(1,3)
+			local rand = math.random(1,2)
 			if(rand == 1) then
 				StartAnimation(ped, "ped", "cower",1000,true,true,true)
 			elseif(rand == 2) then
-				setElementData(ped, "sprint", "true")
-			elseif(rand == 3) then
 				setElementData(ped, "attacker", nil)
-				setElementData(ped, "sprint", "true")
 			end
 		end
 	end
@@ -10468,7 +10464,7 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 	
 	
 	setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "inv"))
-
+	setElementData(thePlayer, "NoFireMePolice", "0")
 
 	if(frname == "Уголовники") then
 		local Prison = GetDatabaseAccount(thePlayer, "Prison")
@@ -12775,11 +12771,13 @@ function PoliceArrest(thePlayer, thePed)
 			triggerClientEvent(thePlayers, "PlayerSayEvent", thePlayers, "Руки вверх!", thePlayer)
 			triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "script", 210, 82,x,y,z, false)
 		end
-		WastedPoliceTimer[thePed]=thePlayer
+		WastedPoliceTimer[thePed] = thePlayer
 		triggerClientEvent(thePed, "helpmessageEvent", thePed, "Нажми "..COLOR["KEY"]["HEX"].."H#FFFFFF чтобы поднять руки")
+		setElementData(thePed, "NoFireMePolice", "1")
 		setTimer(function()
-			WastedPoliceTimer[thePed]=false
-		end, 3000, 1)
+			removeElementData(thePed, "NoFireMePolice") 
+			WastedPoliceTimer[thePed] = nil
+		end, 4000, 1)
 	end
 end
 addEvent("PoliceArrest", true)
@@ -12967,6 +12965,9 @@ function handsup(thePlayer)
 				triggerClientEvent(thePlayer, "onClientWastedLocalPlayer", thePlayer)
 				toggleAllControls(thePlayer,false)
 				UnBindAllKey(thePlayer)
+			else
+				removeElementData(WastedPoliceTimer[thePlayer], "attacker")
+				setElementData(thePlayer, "NoFireMePolice", "0")
 			end
 		end
 		StartAnimation(thePlayer, "ped", "handsup",-1,false,false,true,true)
@@ -13376,7 +13377,6 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 				for _,ped in pairs(getElementsByType "ped") do
 					if(getElementData(ped, "attacker") == getPlayerName(source)) then
 						removeElementData(ped, "attacker")
-						removeElementData(ped, "sprint")
 					end
 				end
 			
