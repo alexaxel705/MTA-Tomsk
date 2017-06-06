@@ -39,10 +39,9 @@ local PData = {
 		["AreaName"] = true,
 		["Collections"] = true
 	}, 
+	['WantedFlashing'] = false, 
 	['loading'] = 0,
 	['Target'] = {}, 
-	['ShowWantedLevel'] = true, 
-	['WantedFlashing'] = false, 
 	['blip'] = {}, 
 	['DublicateRadar'] = {},
 	['AlphaRadar'] = {},
