@@ -32,8 +32,17 @@ local StreamData = {}
 local VideoMemory = {["HUD"] = {}}
 
 local PData = {
+	["Interface"] = {
+		["Full"] = true, 
+		["WantedLevel"] = true,
+		["Inventory"] = true,
+		["AreaName"] = true,
+		["Collections"] = true
+	}, 
 	['loading'] = 0,
 	['Target'] = {}, 
+	['ShowWantedLevel'] = true, 
+	['WantedFlashing'] = false, 
 	['blip'] = {}, 
 	['DublicateRadar'] = {},
 	['AlphaRadar'] = {},
@@ -1269,6 +1278,8 @@ local WeaponNamesArr = {
 	["Канистра"] = 1650,
 	["Пакет"] = 2663,
 	["Запаска"] = 1025,
+	["Нефть"] = 3632, 
+	["Химикаты"] = 1218,
 	["Зерно"] = 1453
 }
 
@@ -2386,12 +2397,10 @@ end
 
 
 function hideinv()
-	if(PData["HideInventory"]) then
-		PData["HideInventory"] = nil
-		SetPlayerHudComponentVisible("all", true)
-	else
-		PData["HideInventory"] = true
+	if(PData["Interface"]["Full"]) then
 		SetPlayerHudComponentVisible("all", false)
+	else
+		SetPlayerHudComponentVisible("all", true)
 	end
 end
 
@@ -2404,6 +2413,13 @@ function SetPlayerHudComponentVisible(component, show)
 			setPlayerHudComponentVisible("wanted", false)
 			setPlayerHudComponentVisible("area_name", false)
 			setPlayerHudComponentVisible("vehicle_name", false)
+			for name, _ in pairs(PData["Interface"]) do
+				PData["Interface"][name] = true
+			end
+		else
+			for name, _ in pairs(PData["Interface"]) do
+				PData["Interface"][name] = false
+			end
 		end
 	end
 end
@@ -3540,6 +3556,8 @@ local WeaponModel = {
 	[1650] = {1650, nil},
 	[2663] = {2663, nil},
 	[1025] = {1025, nil},
+	[3632] = {3632, nil}, 
+	[1218] = {1218, nil}, 
 	[1453] = {1453, nil},
 	[330] = {330, nil}
 }
@@ -5164,7 +5182,7 @@ function intro()
 	local i = 1
 	setTimer(function()
 		local text = string.sub(prints, 0, i*2)
-		if math.fmod(i,2)~=0 then
+		if math.fmod(i,2) ~=0 then
 			text=text.."■"
 		end
 		PText["HUD"][1] = {text, 320*scalex, 160*scaley, 0, 0, tocolor(255,140,0, 255), scale*5, "default-bold", "left", "top", false, false, false, true, true, 0, 0, 0, {}}
@@ -5177,7 +5195,7 @@ function intro()
 			i=1
 			setTimer(function()
 				local text = string.sub(prints, 0, i*2)
-				if math.fmod(i,2)~=0 then
+				if math.fmod(i,2) ~=0 then
 					text=text.."■"
 				end
 				if(i == 17) then
@@ -6170,7 +6188,9 @@ addEventHandler("SetupInventory", localPlayer, SetupInventory)
 function playerPressedKey(button, press)
 	if(PData["ResourceMap"]) then
 		if(press) then
-			killTimer(PData["MovementMapTimer"])
+			if(isTimer(PData["MovementMapTimer"])) then
+				killTimer(PData["MovementMapTimer"])
+			end
 			PData["MovementMapSpeed"] = 1
 		else
 			killTimer(PData["MovementMapTimer"])
@@ -8641,6 +8661,8 @@ local ModelPlayerPosition = {
 	[1608] = {3, 0, 0, -0.25, 90, 0, 0},
 	[1607] = {3, 0, 0, -0.25, 90, 0, 0},
 	[1025] = {12, 0.2, 0.05, 0, 0, 0, 75},
+	[3632] = {12, 0, 0, 0, 0, 90, 0},
+	[1218] = {12, 0, 0, 0, 0, 90, 0},
 	[1453] = {12, 0.2, 0.1, 0, 0, 90, 345},
 }
 
@@ -9068,7 +9090,12 @@ local screenSaver = {
 
 function DrawPlayerInventory()
 	local sx, sy, font, tw, th, color
-	if(PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer) and not isPlayerMapForced()) then
+	--[[ 
+		Уберешь потом PData["Interface"]["Full"]
+		когда сделаешь все зависимости
+		возможно помимо отображения работают какие либо вычисления
+	-- ]] 
+	if(PData["Interface"]["Full"] and PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer) and not isPlayerMapForced()) then
 		titleText = Text("Информация")
 		qualityInfo = ""
 		if(InventoryWindows) then
@@ -9367,7 +9394,7 @@ function DrawPlayerMessage()
 	end
 	PData["MultipleAction"] = {}
 		
-	if(PEDChangeSkin == "play" and initializedInv and not isPlayerMapForced() and not PData["HideInventory"]) then
+	if(PEDChangeSkin == "play" and initializedInv and not isPlayerMapForced()) then
 		if(tuningList) then
 			sx,sy = (screenWidth/2.55), screenHeight-(150*scaley)
 		
@@ -9469,26 +9496,30 @@ function DrawPlayerMessage()
 				dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["BlackScreen"])
 			end
 
-			
-			local cposx, cposy = 100*NewScale, screenHeight/1.6
-			for name, dat in pairs(PData["DisplayCollection"]) do
-				dxDrawCircle(cposx+(30*NewScale), cposy+(20*NewScale), 0, 40*NewScale, 1, 0, 360, tocolor(70,74,70,15))
-				dxDrawCircle(cposx+(30*NewScale), cposy+(20*NewScale), 40*NewScale, 5*NewScale, 1, 0, 360, tocolor(20,24,20,15))
+			if(PData["Interface"]["Collections"]) then
+				local cposx, cposy = 100*NewScale, screenHeight/1.6
+				for name, dat in pairs(PData["DisplayCollection"]) do
+					dxDrawCircle(cposx+(30*NewScale), cposy+(20*NewScale), 0, 40*NewScale, 1, 0, 360, tocolor(70,74,70,15))
+					dxDrawCircle(cposx+(30*NewScale), cposy+(20*NewScale), 40*NewScale, 5*NewScale, 1, 0, 360, tocolor(20,24,20,15))
 
-				dxDrawImage(cposx, cposy-(5*NewScale), 60*NewScale, 40*NewScale, items[name][1])
-				dxDrawBorderedText(dat[1]-dat[2].."/"..dat[1], cposx+(165*NewScale), cposy+(35*NewScale), 0, 0, tocolor(255, 255, 255, 255), NewScale*1.5, "default-bold", "center", "top", nil, nil, nil, true)
-				cposy = cposy-(100*NewScale)
+					dxDrawImage(cposx, cposy-(5*NewScale), 60*NewScale, 40*NewScale, items[name][1])
+					dxDrawBorderedText(dat[1]-dat[2].."/"..dat[1], cposx+(165*NewScale), cposy+(35*NewScale), 0, 0, tocolor(255, 255, 255, 255), NewScale*1.5, "default-bold", "center", "top", nil, nil, nil, true)
+					cposy = cposy-(100*NewScale)
+				end
+			end
+
+			if(PData["Interface"]["Inventory"]) then
+				DrawPlayerInventory()
 			end
 			
-
-			
-			DrawPlayerInventory()
 			
 			dxDrawBorderedText(AddITimerText, 44*scalex, screenHeight-(60*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale, "sans")
 
 			if(ZonesDisplay[1]) then
 				if(not PData['Minimize']) then
-					dxDrawImage(screenWidth-(dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.15)-(25*scalex), screenHeight-(140*scaley), (dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.3), dxGetFontHeight(NewScale*4, "default-bold"), DrawLocation(ZonesDisplay[1][1]), 0, 0, 0, tocolor(255, 255, 255, ZonesDisplay[1][2]))
+					if(PData["Interface"]["AreaName"]) then
+						dxDrawImage(screenWidth-(dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.15)-(25*scalex), screenHeight-(140*scaley), (dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.3), dxGetFontHeight(NewScale*4, "default-bold"), DrawLocation(ZonesDisplay[1][1]), 0, 0, 0, tocolor(255, 255, 255, ZonesDisplay[1][2]))
+					end
 				end
 
 				if(tonumber(ZonesDisplay[1][3])) then
@@ -9731,24 +9762,34 @@ function DrawPlayerMessage()
 				dxDrawRectangle(screenWidth/2-(sx/2)+(HS*NewScale), screenHeight/1.2+(sy/2), 10*NewScale, -(NewScale*PData["HarvestDisplay"]), tocolor(255, 153, 0, 255))
 			end
 			
-			local wanted = getElementData(localPlayer, "WantedLevel")
-			if(wanted) then
+			local wanted = getElementData(localPlayer, "WantedLevel") or ""
+			if(PData["Interface"]["WantedLevel"]) then
 				if(PData["WantedLevel"]) then
 					if(PData["WantedLevel"] ~= wanted) then
 						VideoMemory["HUD"]["Wanted"] = nil
+						PData['WantedFlashing'] = setTimer(function() end, 100, 7)
 					end
 				end
 				PData["WantedLevel"] = wanted
 				local posx, posy = screenWidth-(screenWidth/4.5), screenHeight/3
 				if(getPedStat(localPlayer, 24) <= 573) then posx, posy = screenWidth-(screenWidth/4.5), screenHeight/3.4 end
 				if(tonumber(wanted)) then
+					local flash = false
+					if(isTimer(PData['WantedFlashing'])) then
+						local _, executesRemaining, _ = getTimerDetails(PData['WantedFlashing'])
+						if(math.fmod(executesRemaining, 2) ~= 0) then
+							flash = true
+						end
+					end
+				
 					if(not PData['Minimize']) then
 						wanted = tonumber(wanted)
 						tw, _ = dxGetTextWidth("★★★★★★", scale, "pricedown", false), dxGetFontHeight(scale, "pricedown")
 						
 						dxDrawImage(posx, posy, dxGetTextWidth("★★★★★★", scale, "pricedown", false), dxGetFontHeight(scale, "pricedown"), VideoMemory["HUD"]["WantedBackground"])
-						dxDrawImage(posx+(tw*((6-wanted)/6)), posy, dxGetTextWidth("★★★★★★", scale, "pricedown", false), dxGetFontHeight(scale, "pricedown"), DrawWanted(wanted))
-				
+						if(not flash) then
+							dxDrawImage(posx+(tw*((6-wanted)/6)), posy, dxGetTextWidth("★★★★★★", scale, "pricedown", false), dxGetFontHeight(scale, "pricedown"), DrawWanted(wanted))
+						end
 					end
 				else
 					dxDrawBorderedText(wanted, posx, posy, screenWidth, screenHeight, tocolor(200, 200, 200, 180), scale, "default-bold", "left", "top", nil, nil, nil, true)

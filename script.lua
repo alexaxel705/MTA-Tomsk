@@ -59,6 +59,59 @@ local COLOR = {
 }
 
 
+
+-- Дата основания, название, торговля
+local BizInfo = {
+	["FARMFR"] = {1837, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}}, 
+	["ELSF"] = {1924, "Электростанция", {}}, 
+	["PLSPD"] = {1955, "Полицейский участок", {}}, 
+	["MEDLV"] = {1966, "Скорая помощь", {}}, 
+	["MEDLS"] = {1921, "Скорая помощь", {}}, 
+	["FARMWS"] = {1855, "Скотный двор", {{"Скот", "Sell"}, {"Зерно", "Trade"}}}, 
+	["BIOEN"] = {1939, "Химический завод", {{"Удобрения", "Sell"}, {"Химикаты", "Trade"}}}, 
+	["PETLV"] = {1859, "Нефтяные скважины", {{"Нефть", "Sell"}}}, 
+	["NPZSF"] = {1901, "Химический завод", {{"Бензин", "Sell"}, {"Химикаты", "Sell"}, {"Нефть", "Trade"}}}, 
+	["SPRAYSA"] = {1974, "Pay'n'Spray", {}}, 
+	["SPRUNK"] = {1932, "Sprunk", {}}, 
+	["MEDRA"] = {1922, "Психиатрическая больница SA", {}}, 
+	["SOLIN"] = {1923, "Solarin Industries", {}}, 
+	["SANNEWS"] = {1969, "San News", {}}, 
+	["MEDBC"] = {1955, "Скорая помощь Bone County", {}}, 
+	["MEDTR"] = {1943, "Скорая помощь Tierra Robada", {}}, 
+	["MEDRC"] = {1970, "Скорая помощь Red County", {}}, 
+	["MEDUN"] = {1965, "Отделение травматологии", {}}, 
+	["MEDWS"] = {1933, "Скорая помощь Whetstone", {}}, 
+	["MEDSF"] = {1918, "Скорая помощь San Fierro", {}},
+	["AMMOLS"] = {1962, "Ammunation LS", {}}, 
+	["MERLS"] = {1844, "Мэрия LS", {}},
+	["MERSF"] = {1800, "Мэрия SF", {}},
+	["MERLV"] = {1912, "Мэрия LV", {}},
+	["CIASA"] = {1935, "Штаб квартира ЦРУ", {}}, 
+	["PSFPD"] = {1952, "Полицейский участок", {}}, 
+	["PLVPD"] = {1944, "Полицейский участок", {}}, 
+	["PRCPD"] = {1967, "Полицейский участок", {}}, 
+	["PBCPD"] = {1951, "Полицейский участок", {}}, 
+	["PTRPD"] = {1921, "Полицейский участок", {}}, 
+	["PWSPD"] = {1966, "Полицейский участок", {}}, 
+	["FBISF"] = {1952, "ФБР", {}}, 
+	["BANBC"] = {1960, "Банк", {}}, 
+	["BANSF"] = {1936, "Банк", {}}, 
+	["BANTR"] = {1914, "Банк", {}}, 
+	["BANLV"] = {1942, "Банк", {}}, 
+	["BANLS"] = {1903, "Банк", {}}, 
+	["CERBC"] = {1805, "Церковь Tierra Robada", {}}, 
+	["CERLV"] = {1835, "Свадебная часовня Las Venturas", {}}, 
+	["CERLV2"] = {1877, "Свадебная часовня Las Venturas", {}}, 
+	["CERLV3"] = {1825, "Свадебная часовня Las Venturas", {}}, 
+	["CERSF"] = {1877, "Церковь San Fierro", {}}, 
+	["CERRC"] = {1903, "Церковь Red County", {}}, 
+	["CERLS"] = {1793, "Церковь Los Santos", {}}, 
+	["DALBC"] = {1939, "База дальнобойщиков", {}}, 
+}
+
+
+
+
 function setCameraOnPlayerJoin()
 	setElementData(source, "color", RGBToHex(math.random(0,255), math.random(0,255), math.random(0,255)))
 	for i=1,getMaxPlayers() do--Даем ID
@@ -5324,7 +5377,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  =  -2445.5, 501.8, 30.1, 0, 0 --
+		local x,y,z,i,d  = -2252.2, 569.5, 34, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5731,6 +5784,8 @@ function WantedLevel(thePlayer, count)
 	SetDatabaseAccount(thePlayer, "wanted", wanted)
 	if(GetDatabaseAccount(thePlayer, "PrisonTime") <= 0) then
 		setElementData(thePlayer, "WantedLevel", wanted)
+	else
+	
 	end
 end
 
@@ -6085,62 +6140,6 @@ function GetQualityColor(quality)
 		return "#9900FF"
 	end
 end
-
-
-
--- Дата основания, название, торговля
-local BizInfo = {
-	["FARMFR"] = {1837, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}},
-	["ELSF"] = {1924, "Электростанция", false},
-	["PLSPD"] = {1955, "Полицейский участок", false},
-	["MEDLV"] = {1966, "Скорая помощь", false}, 
-	["MEDLS"] = {1921, "Скорая помощь", false}, 
-	["FARMWS"] = {1855, "Скотный двор", {{"Скот", "Sell"}, {"Зерно", "Trade"}}}, 
-	["BIOEN"] = {1939, "Химический завод", {{"Удобрения", "Sell"}, {"Химикаты", "Trade"}}},
-	["PETLV"] = {1859, "Нефтяные скважины", {{"Нефть", "Sell"}}},
-	["NPZSF"] = {1901, "Химический завод", {{"Бензин", "Sell"}, {"Химикаты", "Sell"}, {"Нефть", "Trade"}}}, 
-	["SPRAYSA"] = {1974, "Pay'n'Spray", false}, 
-	["SPRUNK"] = {1932, "Sprunk", false}, 
-	["MEDRA"] = {1922, "Психиатрическая больница SA", false},
-	["SOLIN"] = {1923, "Solarin Industries", false}, 
-	["SANNEWS"] = {1969, "San News", false}, 
-	["MEDBC"] = {1955, "Скорая помощь Bone County", false}, 
-	["MEDTR"] = {1943, "Скорая помощь Tierra Robada", false}, 
-	["MEDRC"] = {1970, "Скорая помощь Red County", false}, 
-	["MEDUN"] = {1965, "Отделение травматологии", false}, 
-	["MEDWS"] = {1933, "Скорая помощь Whetstone", false}, 
-	["MEDSF"] = {1918, "Скорая помощь San Fierro", false},
-	["AMMOLS"] = {1962, "Ammunation LS", false}, 
-	["MERLS"] = {1844, "Мэрия LS", false},
-	["MERSF"] = {1800, "Мэрия SF", false},
-	["MERLV"] = {1912, "Мэрия LV", false},
-	["CIASA"] = {1935, "Штаб квартира ЦРУ", false}, 
-	["PSFPD"] = {1952, "Полицейский участок", false}, 
-	["PLVPD"] = {1944, "Полицейский участок", false}, 
-	["PRCPD"] = {1967, "Полицейский участок", false}, 
-	["PBCPD"] = {1951, "Полицейский участок", false}, 
-	["PTRPD"] = {1921, "Полицейский участок", false}, 
-	["PWSPD"] = {1966, "Полицейский участок", false}, 
-	["FBISF"] = {1952, "ФБР", false}, 
-	["BANBC"] = {1960, "Банк", false}, 
-	["BANSF"] = {1936, "Банк", false}, 
-	["BANTR"] = {1914, "Банк", false}, 
-	["BANLV"] = {1942, "Банк", false}, 
-	["BANLS"] = {1903, "Банк", false}, 
-	["CERBC"] = {1805, "Церковь Tierra Robada", false}, 
-	["CERLV"] = {1835, "Свадебная часовня Las Venturas", false}, 
-	["CERLV2"] = {1877, "Свадебная часовня Las Venturas", false}, 
-	["CERLV3"] = {1825, "Свадебная часовня Las Venturas", false}, 
-	["CERSF"] = {1877, "Церковь San Fierro", false}, 
-	["CERRC"] = {1903, "Церковь Red County", false}, 
-	["CERLS"] = {1793, "Церковь Los Santos", false}, 
-	["DALBC"] = {1939, "База дальнобойщиков", false}, 
-}
-
-
-
-
-
 
 
 
@@ -7329,6 +7328,8 @@ local ItemsNamesArr = {
 	["Рюкзак"] = 3026, 
 	["Канистра"] = 1650,
 	["Запаска"] = 1025,
+	["Нефть"] = 3632, 
+	["Химикаты"] = 1218, 
 	["Зерно"] = 1453,
 	["CoK"] = 2670,
 	["Деньги"] = 1212, 
@@ -7413,7 +7414,7 @@ function useinvweapon(thePlayer, slot)
 	local carry = false
 	for _, a in pairs(arr) do
 		if(a[1]) then
-			if(a[1] == "Запаска" or a[1] == "Зерно") then
+			if(a[1] == "Запаска" or a[1] == "Зерно" or a[1] == "Нефть" or a[1] == "Химикаты") then
 				carry = true
 			end
 		end
@@ -10736,6 +10737,28 @@ local Events = {
 	[570556800] = "DestroyDoherty", -- 01/30/1988 @ 4:00pm (UTC)
 }
 
+
+
+function GetBizGeneration(biz)
+	local out = {["Sell"] = {}, ["Trade"] = {}}
+	for name, dat in pairs(BizInfo[biz][3]) do
+		out[dat[2]][#out[dat[2]]+1] = dat[1]
+	end
+	return out
+end
+
+function AddBizProduct(biz, item, count)
+	local node = xmlFindChild(BizNode, biz, 0)
+	local arr = fromJSON(xmlNodeGetAttribute(node, "var"))
+	arr[item] = arr[item]+count
+	xmlNodeSetAttribute(node, "var", toJSON(arr))
+end
+
+
+
+
+
+
 function worldtime()
 	for thePed,_ in pairs(SData["DriverBot"]) do
 		if(isElement(thePed)) then
@@ -10762,6 +10785,19 @@ function worldtime()
 	local hour, minutes = getTime()
 	ServerDate = getRealTime(ServerDate.timestamp+60)
 	if(minutes == 0) then
+		for name, dat in pairs(BizInfo) do
+			local items = GetBizGeneration(name)
+			if(#items["Sell"] > 0) then -- Если есть создаваемые товары
+				if(#items["Trade"] == 0) then -- Создаваемые без обмена на что либо
+					for _, item in pairs(items["Sell"]) do
+						AddBizProduct(name, item, 1)
+					end
+				end
+			end
+		end
+		
+		
+	
 		if(hour == 3 or hour == 9 or hour == 15 or hour == 21) then	
 			NewPogoda()
 		end

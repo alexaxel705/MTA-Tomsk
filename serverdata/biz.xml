@@ -3,15 +3,15 @@
     <SPRUNK owner="" xyz="[1324.2, 286.4, 20]" price="400000" money="0"></SPRUNK>
     <SPRAYSA owner="" xyz="[1942.1, 2184.7, 10.8]" price="100000" money="0"></SPRAYSA>
     <SOLIN owner="" xyz="[854.6, -605.2, 18.4]" price="6700000" money="0"></SOLIN>
-    <NPZSF owner="" xyz="[-1015.3, -689.2, 32]" price="9000000" money="0"></NPZSF>
-    <PETLV owner="" xyz="[261.7, 1408.4, 10.5]" price="40000000" money="0"></PETLV>
-    <BIOEN owner="" xyz="[-382.6, -1437.3, 25.7]" price="1000000" money="0"></BIOEN>
-    <FARMFR owner="" xyz="[-382.6, -1437.3, 25.7]" var='[ { &quot;Качество земли&quot;: 1 } ]' price="340000" money="0"></FARMFR>
-    <FARMWS owner="" xyz="[-1431.6, -1528.9, 101.7]" price="694000" money="0"></FARMWS>
+    <NPZSF owner="" xyz="[-1015.3, -689.2, 32]" price="9000000" money="0" var='[ { &quot;Химикаты&quot;: 0, &quot;Нефть&quot;: 0, &quot;Бензин&quot;: 0 } ]'></NPZSF>
+    <PETLV owner="" xyz="[261.7, 1408.4, 10.5]" price="40000000" money="0" var='[ { &quot;Нефть&quot;: 0 } ]'></PETLV>
+    <BIOEN owner="" xyz="[-382.6, -1437.3, 25.7]" price="1000000" money="0" var='[ { &quot;Удобрения&quot;: 0, &quot;Химикаты&quot;: 0 } ]'></BIOEN>
+    <FARMFR owner="" xyz="[-382.6, -1437.3, 25.7]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 0, &quot;Удобрения&quot;: 0 } ]' price="340000" money="0"></FARMFR>
+    <FARMWS owner="" xyz="[-1431.6, -1528.9, 101.7]" price="694000" money="0" var='[ { &quot;Скот&quot;: 0, &quot;Зерно&quot;: 0 } ]'></FARMWS>
     <SANNEWS owner="" xyz="[783.4, -1329, 13.5]" price="550000" money="0">
         <VAC name="Репортер"></VAC>
     </SANNEWS>
-	<MEDRA owner="" xyz="[188.6, 1929.5, 17.7, 0, 0]" price="0" money="0">
+    <MEDRA owner="" xyz="[188.6, 1929.5, 17.7, 0, 0]" price="0" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
