@@ -62,6 +62,11 @@ local COLOR = {
 
 -- Дата основания, название, торговля, уровень
 local BizInfo = {
+	["BAYSA"] = {1871, "Bayside", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.05}, 
+	["FORCA"] = {1778, "Fort Caston", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.19}, 
+	["LASBA"] = {1210, "Las Barricadas", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.025}, 
+	["ELQUE"] = {1448, "El Quebrados", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.075}, 
+	["ANLPI"] = {1651, "Angel Pine", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.135}, 
 	["LASPA"] = {1709, "Las Payasadas", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.1}, 
 	["FLEIS"] = {1869, "Пивзавод", {{"Зерно", "Trade"}, {"Алкоголь", "Sell"}}, 1}, 
 	["MARIH"] = {1966, "Наркопритон", {{"Косяк", "Sell"}, {"Конопля", "Trade"}}, 1}, 
@@ -139,7 +144,8 @@ function setCameraOnPlayerJoin()
 			['vehicle_secondary_fire'] = {},
 			['jump'] = {},
 			['sprint'] = {},
-			['aim_weapon'] = {}
+			['aim_weapon'] = {},
+			['enter_exit'] = {}, 
 		}
 	}
 	
@@ -5372,7 +5378,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -49.9, -269.4, 6.6, 0, 0 --
+		local x,y,z,i,d  = -135.1, 1116.8, 20.2, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6162,13 +6168,19 @@ local ItemProdsCoeff = {
 	["Бензин"] = 0.45,
 }
 
+
+function GetBizMaxProds(biz, prod)
+	return math.round((BizInfo[biz][4]*100)*ItemProdsCoeff[prod], 0)
+end
+
+
 function UpdateProductCost()
 	local Products = {}
 	for name, dat in pairs(BizInfo) do
 		local Prods = GetBizGeneration(name)
 		for types, items in pairs(Prods) do
 			for _, item in pairs(items) do
-				local maxProds = (BizInfo[name][4]*100)*ItemProdsCoeff[item]
+				local maxProds = GetBizMaxProds(name, item)
 				if(not Products[item]) then Products[item] = 3 end -- Максимальный множитель x3
 				if(types == "Sell") then 
 					Products[item] = Products[item]-(AddBizProduct(name, item)/maxProds) -- Уменьшаем если заполненны у потребителей
@@ -6185,6 +6197,8 @@ end
 
 
 
+
+
 function AddBizProduct(biz, item, count, withoutsave)
 	local node = xmlFindChild(BizNode, biz, 0)
 	local arr = xmlNodeGetAttribute(node, "var")
@@ -6193,7 +6207,7 @@ function AddBizProduct(biz, item, count, withoutsave)
 		arr = fromJSON(arr)
 		if(count) then
 			arr[item] = arr[item]+count
-			if(arr[item] > 100) then return false -- Переполнен
+			if(arr[item] > GetBizMaxProds(biz, item)) then return false -- Переполнен
 			elseif(arr[item] < 0) then return false end -- Кончился продукт
 			if(not withoutsave) then
 				arr["lvl"] = arr["lvl"]+0.00025
@@ -6253,7 +6267,7 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 				elseif(name == "lvl") then
 					--array["var"][#array["var"]+1] = {"Уровень", math.round(val, 0)}
 				else
-					array["var"][name] = val.."/"..math.round((BizInfo[biz][4]*100)*ItemProdsCoeff[name], 0)
+					array["var"][name] = val.."/"..GetBizMaxProds(biz, name)
 				end
 			end
 		else
@@ -7413,9 +7427,9 @@ function useinvweapon(thePlayer, slot)
 	end
 	if(carry) then
 		StartAnimation(thePlayer, "CARRY", "crry_prtial", 1, false, true, true, true, false)
-		SetControls(thePlayer, "carry", {["fire"] = true, ["action"] = true, ["jump"] = true, ["aim_weapon"] = true})
+		SetControls(thePlayer, "carry", {["fire"] = true, ["action"] = true, ["jump"] = true, ["aim_weapon"] = true, ["enter_exit"] = true})
 	else
-		SetControls(thePlayer, "carry", {["fire"] = false, ["action"] = false, ["jump"] = false, ["aim_weapon"] = false})
+		SetControls(thePlayer, "carry", {["fire"] = false, ["action"] = false, ["jump"] = false, ["aim_weapon"] = false, ["enter_exit"] = false})
 	end
 
 	local WM = WeaponNamesArr[arr[PData[thePlayer]["WeaponSlot"]][1]]
@@ -13387,7 +13401,16 @@ local DroppedItem = {
 	["Кока"] = true, 
 	["Косяк"] = true, 
 	["Спанк"] = true, 
-	["Парашют"] = true
+	["Парашют"] = true,
+	["Запаска"] = true,
+	["Алкоголь"] = true,
+	["Скот"] = true,
+	["Мясо"] = true,
+	["Нефть"] = true,
+	["Химикаты"] = true,
+	["Удобрения"] = true,
+	["Бензин"] = true,
+	["Зерно"] = true,
 }
 
 
@@ -15118,9 +15141,6 @@ function AddPlayerMoney(thePlayer, count, mission)
 	end
 	return true
 end
-addEvent("SellItem", true)
-addEventHandler("SellItem", getRootElement(), AddPlayerMoney)
-
 
 
 function MissionCompleted(thePlayer, count, mission, target, cinema)

@@ -15,7 +15,13 @@
     <SPUNK owner="" xyz="[-2653.8, 1428.4, 912.4, 3, 0]" price="30000000" money="0" var='[ { &quot;Кока&quot;: 0, &quot;Спанк&quot;: 0, &quot;lvl&quot;: 1 } ]'></SPUNK>
     <FLEIS owner="" xyz="[-49.9, -269.4, 6.6]" price="6080000" money="0" var='[ { &quot;Зерно&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;lvl&quot;: 1 } ]'></FLEIS>
     <LASPA owner="" xyz="[-300.5, 2658.7, 63]" price="0" money="0" var='[ { &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.1, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></LASPA>
+    <ANLPI owner="" xyz="[-2192.6, -2433.5, 30.9]" price="0" money="0" var='[ { &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.135, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></ANLPI>
+	<ELQUE owner="" xyz="[-1507.5, 2560.8, 55.8]" price="0" money="0" var='[ { &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.075, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></ELQUE>
+    <LASBA owner="" xyz="[-818.2, 1560.6, 27.1]" price="0" money="0" var='[ { &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.025, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></LASBA>
+    <FORCA owner="" xyz="[-135.1, 1116.8, 20.2]" price="0" money="0" var='[ { &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.19, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></FORCA>
+    <BAYSA owner="" xyz="[-2455.7, 2293, 5]" price="0" money="0" var='[ { &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.05, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></BAYSA>
     
+	
     <SANNEWS owner="" xyz="[783.4, -1329, 13.5]" price="550000" money="0">
         <VAC name="Репортер"></VAC>
     </SANNEWS>

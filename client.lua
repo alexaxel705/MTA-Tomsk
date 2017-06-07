@@ -1213,15 +1213,15 @@ local items = {
 	["Дельфин"] = {false, "Морской дельфин", 1, false, 0, 5300, false, false, false},
 	["Парашют"] = {false, "Парашют", 1, "useinvweapon", 400, 700, false, true, true},
 	
-	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, false, true},
-	["Алкоголь"] = {false, "Алкоголь", 1, false, 40000, 600, false, false, false},
-	["Скот"] = {false, "Скот", 1, false, 90000, 200, false, false, false},
-	["Мясо"] = {false, "Мясо", 1, false, 36000, 330, false, false, false},
-	["Нефть"] = {false, "Нефть", 1, false, 136000, 500, false, false, false},
-	["Химикаты"] = {false, "Химикаты", 1, false, 92000, 350, false, false, false},
-	["Удобрения"] = {false, "Удобрения", 1, false, 41000, 150, false, false, false},
-	["Бензин"] = {false, "Бензин", 1, false, 56000, 250, false, false, false},
-	["Зерно"] = {false, "Зерно", 10, false, 2500, 50, false, false, false}, 
+	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, true, true},
+	["Алкоголь"] = {false, "Алкоголь", 1, false, 40000, 600, false, true, false},
+	["Скот"] = {false, "Скот", 1, false, 90000, 200, false, true, false},
+	["Мясо"] = {false, "Мясо", 1, false, 36000, 330, false, true, false},
+	["Нефть"] = {false, "Нефть", 1, false, 136000, 500, false, true, false},
+	["Химикаты"] = {false, "Химикаты", 1, false, 92000, 350, false, true, false},
+	["Удобрения"] = {false, "Удобрения", 1, false, 41000, 150, false, true, false},
+	["Бензин"] = {false, "Бензин", 1, false, 56000, 250, false, true, false},
+	["Зерно"] = {false, "Зерно", 1, false, 2500, 50, false, true, false}, 
 	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false},
 	["Деньги"] = {false, "Деньги", 99999999, false, 0.01, 1, false, false, false},
 	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false, false}, 
@@ -5831,6 +5831,14 @@ local ResourceInMap = {
 	[15] = {false, 10775, 0.02, -1858, 3, 15.1, 0, "SOLIN"}, 
 	[16] = {false, 12931, 0.02, -70, -270, 5.4, 90, "FLEIS"},  
 	[17] = {false, 16399, 0.02, -300.5, 2658.7, 63, 0, "LASPA"}, 
+	[18] = {false, 18474, 0.02, -2192.1, -2432.9, 31, 0, "ANLPI"}, 
+	[19] = {false, 11456, 0.02, -1520.5, 2573.9, 55.8, 0, "ELQUE"}, 
+	[20] = {false, 11436, 0.02, -818.2, 1560.6, 27.1, 0, "LASBA"}, 
+	[21] = {false, 16385, 0.02, -135.1, 1116.8, 20.2, 0, "FORCA"}, 
+	[22] = {false, 9243, 0.02, -2455.7, 2293, 5, 0, "BAYSA"}, 
+	
+	
+	
 }
 
 
