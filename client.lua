@@ -456,6 +456,8 @@ local TexturesPosition = {
 	["Огнемет"] = {0.45,0.9,0.12, 0.45,0,0.12, 8,70, 110}, 
 	["Ракушка"] = {0,1.2,0, 0,0,0, 0,70, 250}, 
 	["Ракета"] = {0.8,0,0, 0.4,0,0, 0,70, 250}, 
+	["Алкоголь"] = {2.5,0,0.6, 0,0,0.6, 0,70, 255}, 
+	
 	--["Пропуск"] = {0,-0.6,-0.6, 0,0,0, 0,70, 200}, -- Object 1581
 }
 
@@ -534,6 +536,8 @@ local PreloadTextures = {
 	["Бензин"] = createObject(1225, 4430, 4000, 4020),
 	["Удобрения"] = createObject(1222, 4435, 4000, 4020),
 	["Мясо"] = createObject(2805, 4440, 4000, 4020),
+	["Алкоголь"] = createObject(2900, 4445, 4000, 4020),
+
 }
 
 local CreateTextureStage = false
@@ -1210,6 +1214,7 @@ local items = {
 	["Парашют"] = {false, "Парашют", 1, "useinvweapon", 400, 700, false, true, true},
 	
 	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, false, true},
+	["Алкоголь"] = {false, "Алкоголь", 1, false, 40000, 600, false, false, false},
 	["Скот"] = {false, "Скот", 1, false, 90000, 200, false, false, false},
 	["Мясо"] = {false, "Мясо", 1, false, 36000, 330, false, false, false},
 	["Нефть"] = {false, "Нефть", 1, false, 136000, 500, false, false, false},
@@ -1290,6 +1295,7 @@ local WeaponNamesArr = {
 	["Пакет"] = 2663,
 	["Запаска"] = 1025,
 	["Нефть"] = 3632, 
+	["Алкоголь"] = 2900, 
 	["Мясо"] = 2805, 
 	["Химикаты"] = 1218,
 	["Зерно"] = 1453
@@ -2776,8 +2782,8 @@ function bizControl(name, data)
 		local FH = dxGetFontHeight(scale*0.8, "default-bold")*1.1
 		PInv["shop"] = {} 
 		PBut["shop"] = {} 
-		for i, dats in pairs(data["var"]) do
-			if(dats[1] == "Торговля") then
+		for varname, dats in pairs(data["var"]) do
+			if(varname == "Торговля") then
 				TradeWindows = name
 				local Coord = {
 					["Trade"] = {
@@ -2795,8 +2801,9 @@ function bizControl(name, data)
 						["vy"] = (80.5*scaley)
 					}
 				}
-				for _, dat in pairs(dats[2]) do
+				for _, dat in pairs(dats) do
 					PInv["shop"][#PInv["shop"]+1] = dat
+					--PText["biz"][#PText["biz"]+1] = {Coord[dat[2]]["i"], screenWidth-Coord[dat[2]]["x"]+Coord[dat[2]]["vx"]+(80.5*scaley), Coord[dat[2]]["y"]+Coord[dat[2]]["vy"]-(25*scaley), 0, screenHeight, tocolor(255, 255, 255, 255), NewScale, "pricedown", "center", "top", false, false, false, true, false, 0, 0, 0, {}}
 					PBut["shop"][#PBut["shop"]+1] = {Coord[dat[2]]["x"]+Coord[dat[2]]["vx"], Coord[dat[2]]["y"]+Coord[dat[2]]["vy"], 80*scalex, 60*scaley}
 					Coord[dat[2]]["vx"] = Coord[dat[2]]["vx"]+(80.5*scalex)
 					if(Coord[dat[2]]["i"] == 8 or Coord[dat[2]]["i"] == 16 or Coord[dat[2]]["i"] == 24 or Coord[dat[2]]["i"] == 32) then
@@ -2806,8 +2813,8 @@ function bizControl(name, data)
 					Coord[dat[2]]["i"] = Coord[dat[2]]["i"]+1
 				end
 			else
-				local text = "#CCCCCC"..dats[1]..": "..dats[2].." "
-				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 370*scaley+(FH*i), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
+				local text = "#CCCCCC"..varname..": "..dats.." "
+				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 370*scaley+(FH*(#PText["biz"]+1)), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
 			end
 		end
 	end
@@ -3569,7 +3576,8 @@ local WeaponModel = {
 	[3632] = {3632, nil}, 
 	[1218] = {1218, nil}, 
 	[1453] = {1453, nil},
-	[330] = {330, nil}
+	[330] = {330, nil}, 
+	[2900] = {2900, nil}, 
 }
 
 function table.copy(t)
@@ -5812,9 +5820,9 @@ local ResourceInMap = {
 	[3] = {false, 12915, 0.1, -44.4, 78.7, 3.1, 0, "FARMBA"},
 	[4] = {false, 17335, 0.1, -1439, -1534, 101, 90, "FARMWS"}, 
 	[5] = {false, 10357, 0.05, -2523, -622, 132, 0, "ELSF"}, 
-	[7] = {false, 8079, 0.02, 1573, 1791, 9.8, 0, "MEDLV"}, 
-	[8] = {false, 3976, 0.02, 1555.2, -1675.6, 16.2, 0, "PLSPD"},
-	[9] = {false, 5708, 0.02, 1140, -1342, 15.4, 0, "MEDLS"}, 
+	--[7] = {false, 8079, 0.02, 1573, 1791, 9.8, 0, "MEDLV"}, 
+	--[8] = {false, 3976, 0.02, 1555.2, -1675.6, 16.2, 0, "PLSPD"},
+	--[9] = {false, 5708, 0.02, 1140, -1342, 15.4, 0, "MEDLS"}, 
 	[10] = {false, 12988, 0.07, 1362, 328, 20.5, 335, "BIOEN"}, 
 	[11] = {false, 3426, 0.1, 187, 1415, 10.6, 335, "PETLV"}, 
 	[12] = {false, 17017, 0.05, -1040, -644, 132, 335, false}, 
@@ -5822,6 +5830,7 @@ local ResourceInMap = {
 	[14] = {false, 7493, 0.02, 966.9, 2140.8, 10.8, 0, "MEATFA"}, 
 	[15] = {false, 10775, 0.02, -1858, 3, 15.1, 0, "SOLIN"}, 
 	[16] = {false, 12931, 0.02, -70, -270, 5.4, 90, "FLEIS"},  
+	[17] = {false, 16399, 0.02, -300.5, 2658.7, 63, 0, "LASPA"}, 
 }
 
 
@@ -8695,6 +8704,7 @@ local ModelPlayerPosition = {
 	[3632] = {12, 0, 0, 0, 0, 90, 0},
 	[1218] = {12, 0, 0, 0, 0, 90, 0},
 	[1453] = {12, 0.2, 0.1, 0, 0, 90, 345},
+	[2900] = {12, -0.1, 0.3, 0.15, 0, 90, 0},
 }
 
 
@@ -8705,7 +8715,7 @@ function CreatePlayerArmas(thePlayer, model)
 	if(StreamData[thePlayer]["armas"]) then
 		if(ModelPlayerPosition[tonumber(model)]) then
 			StreamData[thePlayer]["armas"][model] = createObject(model, 0,0,0)
-			if(tonumber(model) == 1025 or tonumber(model) == 1453) then -- Уменьшаем запаску
+			if(tonumber(model) == 1025 or tonumber(model) == 1453 or tonumber(model) == 2900) then -- Уменьшаем запаску
 				setObjectScale(StreamData[thePlayer]["armas"][model], 0.6)
 			end
 			setElementCollisionsEnabled(StreamData[thePlayer]["armas"][model], false)
@@ -10244,6 +10254,7 @@ local itemsData = {
 	["Химикаты"] = {1218, {0.6, 0, 0, -0.1, 90, 90, 90}}, 
 	["Удобрения"] = {1222, {0.6, 0, 0, -0.1, 90, 90, 90}}, 
 	["Бензин"] = {1225, {0.6, 0, 0, -0.1, 90, 90, 90}}, 
+	["Алкоголь"] = {2900, {0.5, 0, 0, -0.1, 90, 90, 90}}, 
 }
 
 

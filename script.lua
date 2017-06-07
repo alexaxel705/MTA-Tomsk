@@ -60,27 +60,28 @@ local COLOR = {
 
 
 
--- Дата основания, название, торговля
+-- Дата основания, название, торговля, уровень
 local BizInfo = {
-	["FLEIS"] = {1869, "Пивзавод", {{"Зерно", "Trade"}}}, 
-	["MARIH"] = {1966, "Наркопритон", {{"Косяк", "Sell"}, {"Конопля", "Trade"}}}, 
-	["SPUNK"] = {1956, "Наркопритон", {{"Спанк", "Sell"}, {"Кока", "Trade"}}}, 
-	["FARMFR"] = {1837, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}}, 
-	["FARMPK"] = {1861, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}}, 
-	["FARMBA"] = {1809, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}},
-	["FARMWS"] = {1855, "Скотный двор", {{"Скот", "Sell"}, {"Зерно", "Trade"}}}, 
-	["MEATFA"] = {1908, "Мясокомбинат", {{"Мясо", "Sell"}, {"Скот", "Trade"}}}, 
+	["LASPA"] = {1709, "Las Payasadas", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.1}, 
+	["FLEIS"] = {1869, "Пивзавод", {{"Зерно", "Trade"}, {"Алкоголь", "Sell"}}, 1}, 
+	["MARIH"] = {1966, "Наркопритон", {{"Косяк", "Sell"}, {"Конопля", "Trade"}}, 1}, 
+	["SPUNK"] = {1956, "Наркопритон", {{"Спанк", "Sell"}, {"Кока", "Trade"}}, 1}, 
+	["FARMFR"] = {1837, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}, 1}, 
+	["FARMPK"] = {1861, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}, 1}, 
+	["FARMBA"] = {1809, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}, 1},
+	["FARMWS"] = {1855, "Скотный двор", {{"Скот", "Sell"}, {"Зерно", "Trade"}}, 1}, 
+	["MEATFA"] = {1908, "Мясокомбинат", {{"Мясо", "Sell"}, {"Скот", "Trade"}}, 1}, 
 	["ELSF"] = {1924, "Электростанция", {}}, 
 	["PLSPD"] = {1955, "Полицейский участок", {}}, 
 	["MEDLV"] = {1966, "Скорая помощь", {}}, 
 	["MEDLS"] = {1921, "Скорая помощь", {}}, 
-	["BIOEN"] = {1939, "Химический завод", {{"Удобрения", "Sell"}, {"Химикаты", "Trade"}}}, 
+	["BIOEN"] = {1939, "Химический завод", {{"Удобрения", "Sell"}, {"Химикаты", "Trade"}}, 1}, 
 	["PETLV"] = {1859, "Нефтяные скважины", {{"Нефть", "Sell"}}}, 
-	["NPZSF"] = {1901, "Химический завод", {{"Бензин", "Sell"}, {"Химикаты", "Sell"}, {"Нефть", "Trade"}}}, 
+	["NPZSF"] = {1901, "Химический завод", {{"Бензин", "Sell"}, {"Химикаты", "Sell"}, {"Нефть", "Trade"}}, 1}, 
 	["SPRAYSA"] = {1974, "Pay'n'Spray", {}}, 
 	["SPRUNK"] = {1932, "Sprunk", {}}, 
 	["MEDRA"] = {1922, "Психиатрическая больница SA", {}}, 
-	["SOLIN"] = {1929, "Solarin Industries", {{"Бензин", "Trade"}}}, 
+	["SOLIN"] = {1929, "Solarin Industries", {{"Бензин", "Trade"}}, 1}, 
 	["SANNEWS"] = {1969, "San News", {}}, 
 	["MEDBC"] = {1955, "Скорая помощь Bone County", {}}, 
 	["MEDTR"] = {1943, "Скорая помощь Tierra Robada", {}}, 
@@ -3162,6 +3163,9 @@ local VehicleTrunks = {
 	[543] = {{-0.6, -0.9, 0, 0, 0, 0}, {0, -0.9, -0, 0, 0, 0}, {0.6, -0.9, 0, 0, 0, 0}, {-0.6, -1.6, 0, 0, 0, 0}, {0, -1.6, -0, 0, 0, 0}, {0.6, -1.6, 0, 0, 0, 0}, {-0.6, -2.2, 0, 0, 0, 0}, {0, -2.2, 0, 0, 0, 0}, {0.6, -2.2, 0, 0, 0, 0}},
 	
 	[549] = {{-0.5, -2.1, 0.06, 0, 0, 0}, {0, -2.1, 0.06, 0, 0, 0}, {0.5, -2.1, 0.06, 0, 0, 0}},
+	
+	[554] = {{-0.6, -0.9, 0, 0, 0, 0}, {0, -0.9, -0, 0, 0, 0}, {0.6, -0.9, 0, 0, 0, 0}, {-0.6, -1.6, 0, 0, 0, 0}, {0, -1.6, -0, 0, 0, 0}, {0.6, -1.6, 0, 0, 0, 0}, {-0.6, -2.2, 0, 0, 0, 0}, {0, -2.2, 0, 0, 0, 0}, {0.6, -2.2, 0, 0, 0, 0}}, 
+	[555] = {{-0.5, -1.9, -0.08, 0, 0, 0}, {0, -1.9, -0.08, 0, 0, 0}, {0.5, -1.9, -0.08, 0, 0, 0}},
 
 	[558] = {{-0.5, -2.1, 0.3, 0, 0, 0}, {0, -2.1, 0.3, 0, 0, 0}, {0.5, -2.1, 0.3, 0, 0, 0}},
 	[559] = {{-0.5, -1.8, 0.2, 0, 0, 0}, {0, -1.8, 0.2, 0, 0, 0}, {0.5, -1.8, 0.2, 0, 0, 0}},
@@ -3173,6 +3177,7 @@ local VehicleTrunks = {
 	[604] = {{-0.6, -2.3, -0.05, 0, 0, 0}, {0, -2.3, -0.05, 0, 0, 0}, {0.6, -2.3, -0.05, 0, 0, 0}},
 	[605] = {{-0.6, -0.9, 0, 0, 0, 0}, {0, -0.9, -0, 0, 0, 0}, {0.6, -0.9, 0, 0, 0, 0}, {-0.6, -1.6, 0, 0, 0, 0}, {0, -1.6, -0, 0, 0, 0}, {0.6, -1.6, 0, 0, 0, 0}, {-0.6, -2.2, 0, 0, 0, 0}, {0, -2.2, 0, 0, 0, 0}, {0.6, -2.2, 0, 0, 0, 0}},
 }
+
 
 
 
@@ -6132,6 +6137,77 @@ function GetQualityColor(quality)
 end
 
 
+function GetBizGeneration(biz)
+	local out = {["Sell"] = {}, ["Trade"] = {}}
+	for name, dat in pairs(BizInfo[biz][3]) do
+		out[dat[2]][#out[dat[2]]+1] = dat[1]
+	end
+	return out
+end
+
+
+-- Коэффициент продуктов к уровню
+local ItemProdsCoeff = {
+	["Зерно"] = 1,
+	["Скот"] = 0.88,
+	["Мясо"] = 0.73,
+	["Алкоголь"] = 0.68,
+	["Кока"] = 1,
+	["Спанк"] = 0.21,
+	["Конопля"] = 1,
+	["Косяк"] = 0.4,
+	["Нефть"] = 1,
+	["Удобрения"] = 0.30,
+	["Химикаты"] = 0.25,
+	["Бензин"] = 0.45,
+}
+
+function UpdateProductCost()
+	local Products = {}
+	for name, dat in pairs(BizInfo) do
+		local Prods = GetBizGeneration(name)
+		for types, items in pairs(Prods) do
+			for _, item in pairs(items) do
+				local maxProds = (BizInfo[name][4]*100)*ItemProdsCoeff[item]
+				if(not Products[item]) then Products[item] = 3 end -- Максимальный множитель x3
+				if(types == "Sell") then 
+					Products[item] = Products[item]-(AddBizProduct(name, item)/maxProds) -- Уменьшаем если заполненны у потребителей
+				elseif(types == "Trade") then
+					Products[item] = Products[item]-(AddBizProduct(name, item)/maxProds) -- Уменьшает множитель если заполненные склады
+				end
+			end
+		end
+	end
+	
+	setElementData(root, "Economics", toJSON(Products))
+end
+
+
+
+
+function AddBizProduct(biz, item, count, withoutsave)
+	local node = xmlFindChild(BizNode, biz, 0)
+	local arr = xmlNodeGetAttribute(node, "var")
+	local out = 0
+	if(arr) then
+		arr = fromJSON(arr)
+		if(count) then
+			arr[item] = arr[item]+count
+			if(arr[item] > 100) then return false -- Переполнен
+			elseif(arr[item] < 0) then return false end -- Кончился продукт
+			if(not withoutsave) then
+				arr["lvl"] = arr["lvl"]+0.00025
+				BizInfo[biz][4] = arr["lvl"]
+				xmlNodeSetAttribute(node, "var", toJSON(arr))
+				UpdateProductCost()
+			end
+		end
+		out = arr[item]
+	end
+	return out
+end
+
+
 
 
 function StartLookBiz(thePlayer,thePed,biz,control)
@@ -6153,17 +6229,6 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 				return false
 			end
 			array["Nachalnik"] = true
-			if(xmlNodeGetAttribute(node, "var")) then
-				local arr = fromJSON(xmlNodeGetAttribute(node, "var"))
-				for name, val in pairs(arr) do
-					if(name == "Качество земли") then
-						array["var"][#array["var"]+1] = {name, GetQuality(val)}
-					else
-						array["var"][#array["var"]+1] = {name, val}
-					end
-					
-				end
-			end
 			
 			
 			local vacancy = xmlNodeGetChildren(node)
@@ -6174,11 +6239,9 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 			end
 		end
 		
-		
-		
-		
-		array["var"][#array["var"]+1] = {"Владелец", xmlNodeGetAttribute(node, "owner")}
-		array["var"][#array["var"]+1] = {"Дата основания", BizInfo[biz][1]}
+		array["var"]["Уровень"] = math.round(BizInfo[biz][4])
+		array["var"]["Дата основания"] = BizInfo[biz][1]
+		array["var"]["Владелец"] = xmlNodeGetAttribute(node, "owner")
 		
 
 		
@@ -6186,9 +6249,11 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 			arr = fromJSON(xmlNodeGetAttribute(node, "var"))
 			for name, val in pairs(arr) do
 				if(name == "Качество земли") then
-					array["var"][#array["var"]+1] = {name, GetQuality(val)}
+					--array["var"][#array["var"]+1] = {name, GetQuality(val)}
+				elseif(name == "lvl") then
+					--array["var"][#array["var"]+1] = {"Уровень", math.round(val, 0)}
 				else
-					array["var"][#array["var"]+1] = {name, val}
+					array["var"][name] = val.."/"..math.round((BizInfo[biz][4]*100)*ItemProdsCoeff[name], 0)
 				end
 			end
 		else
@@ -6207,7 +6272,7 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 			for _, item in pairs(BizInfo[biz][3]) do
 				TradeArr[#TradeArr+1] = {item[1], item[2], 550, {}}
 			end
-			array["var"][#array["var"]+1] = {"Торговля", TradeArr}
+			array["var"]["Торговля"] = TradeArr
 		end
 		
 		
@@ -7254,6 +7319,7 @@ local ItemsNamesArr = {
 	["Канистра"] = 1650,
 	["Запаска"] = 1025,
 	["Нефть"] = 3632, 
+	["Алкоголь"] = 2900, 
 	["Мясо"] = 2805, 
 	["Химикаты"] = 1218, 
 	["Зерно"] = 1453,
@@ -7340,7 +7406,7 @@ function useinvweapon(thePlayer, slot)
 	local carry = false
 	for _, a in pairs(arr) do
 		if(a[1]) then
-			if(a[1] == "Запаска" or a[1] == "Зерно" or a[1] == "Нефть" or a[1] == "Химикаты") then
+			if(a[1] == "Запаска" or a[1] == "Зерно" or a[1] == "Нефть" or a[1] == "Химикаты" or a[1] == "Алкоголь") then
 				carry = true
 			end
 		end
@@ -7713,6 +7779,17 @@ function preLoad(name)
 			setElementData(BusinessPickup[NodeName], "name", NodeName)
 			setElementData(BusinessPickup[NodeName], "money", xmlNodeGetAttribute(node, "money"))
 		end
+		
+		
+		local arr = xmlNodeGetAttribute(node, "var")
+		
+		if(arr) then
+			arr = fromJSON(arr)
+			if(arr["lvl"]) then
+				BizInfo[NodeName][4] = arr["lvl"]
+			end
+		end
+
 		BizControls[NodeName] = {}
 	end
 	
@@ -10662,61 +10739,6 @@ local Events = {
 
 
 
-function GetBizGeneration(biz)
-	local out = {["Sell"] = {}, ["Trade"] = {}}
-	for name, dat in pairs(BizInfo[biz][3]) do
-		out[dat[2]][#out[dat[2]]+1] = dat[1]
-	end
-	return out
-end
-
-
-
-
-
-function UpdateProductCost()
-	local Products = {}
-	for name, dat in pairs(BizInfo) do
-		local Prods = GetBizGeneration(name)
-		for types, items in pairs(Prods) do
-			for _, item in pairs(items) do
-				if(not Products[item]) then Products[item] = 3 end -- Максимальный множитель x3
-				if(types == "Sell") then 
-					Products[item] = Products[item]-(AddBizProduct(name, item)/100) -- Уменьшаем если заполненны у потребителей
-				elseif(types == "Trade") then
-					Products[item] = Products[item]-(AddBizProduct(name, item)/100) -- Уменьшает множитель если заполненные склады
-				end
-			end
-		end
-	end
-	
-	setElementData(root, "Economics", toJSON(Products))
-end
-
-
-
-
-function AddBizProduct(biz, item, count, withoutsave)
-	local node = xmlFindChild(BizNode, biz, 0)
-	local arr = xmlNodeGetAttribute(node, "var")
-	local out = 0
-	if(arr) then
-		arr = fromJSON(arr)
-		if(count) then
-			arr[item] = arr[item]+count
-			if(arr[item] > 100) then return false -- Переполнен
-			elseif(arr[item] < 0) then return false end -- Кончился продукт
-			if(not withoutsave) then
-				xmlNodeSetAttribute(node, "var", toJSON(arr))
-				UpdateProductCost()
-			end
-		end
-		out = arr[item]
-	end
-	return out
-end
-
-
 
 function worldtime()
 	for thePed,_ in pairs(SData["DriverBot"]) do
@@ -10753,13 +10775,23 @@ function worldtime()
 					end
 				else
 					local status = true
+					local bonus = 1
+					--[[
+						* Удобрения вспомогательный бонус. Ускоряет в 5 раз
+					--]]
 					for _, item in pairs(items["Trade"]) do -- Проверяем есть ли все товары на обмен
 						if(not AddBizProduct(name, item, -1, true)) then -- Без сохранения
-							status = false
+							if(item ~= "Удобрения") then
+								status = false
+							end
+						else
+							if(item == "Удобрения") then
+								bonus = 5
+							end
 						end
 					end
 					
-					for _, item in pairs(items["Sell"]) do -- Проверяем нужно ли расходовать материалы
+					for _, item in pairs(items["Sell"]) do -- Проверяем нужно ли производить материалы
 						if(not AddBizProduct(name, item, 1, true)) then -- Без сохранения
 							status = false
 						end
@@ -10771,9 +10803,13 @@ function worldtime()
 						end
 						
 						for _, item in pairs(items["Sell"]) do
-							AddBizProduct(name, item, 1)
+							AddBizProduct(name, item, 1*bonus)
 						end
 					end
+				end
+			else
+				for _, item in pairs(items["Sell"]) do -- Если потребитель
+					AddBizProduct(name, item, -1)
 				end
 			end
 		end
@@ -12244,7 +12280,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Кока", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Удобрения", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
