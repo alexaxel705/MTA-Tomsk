@@ -153,6 +153,7 @@ function setCameraOnPlayerJoin()
 			['sprint'] = {},
 			['aim_weapon'] = {},
 			['enter_exit'] = {}, 
+			['enter_passenger'] = {}
 		}
 	}
 	
@@ -6994,7 +6995,7 @@ function CreateThreePlayer(thePlayer, i, x,y,z)
 	
 	if(arr[i][1] == "Конопля") then
 		model = 823
-	elseif(arr[i][1] ~= "Кока") then
+	elseif(arr[i][1] == "Кока") then
 		model = 782
 	else
 		return false
@@ -7434,9 +7435,9 @@ function useinvweapon(thePlayer, slot)
 	end
 	if(carry) then
 		StartAnimation(thePlayer, "CARRY", "crry_prtial", 1, false, true, true, true, false)
-		SetControls(thePlayer, "carry", {["fire"] = true, ["action"] = true, ["jump"] = true, ["aim_weapon"] = true, ["enter_exit"] = true})
+		SetControls(thePlayer, "carry", {["fire"] = true, ["action"] = true, ["jump"] = true, ["aim_weapon"] = true, ["enter_exit"] = true, ["enter_passenger"] = true})
 	else
-		SetControls(thePlayer, "carry", {["fire"] = false, ["action"] = false, ["jump"] = false, ["aim_weapon"] = false, ["enter_exit"] = false})
+		SetControls(thePlayer, "carry", {["fire"] = false, ["action"] = false, ["jump"] = false, ["aim_weapon"] = false, ["enter_exit"] = false, ["enter_passenger"] = false})
 	end
 
 	local WM = WeaponNamesArr[arr[PData[thePlayer]["WeaponSlot"]][1]]
