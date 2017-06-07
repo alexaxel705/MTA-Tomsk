@@ -14,6 +14,7 @@
     <MARIH owner="" xyz="[2548.3, -1297.6, 1044.1, 2, 0]" price="5000000" money="0" var='[ { &quot;Конопля&quot;: 0, &quot;Косяк&quot;: 0, &quot;lvl&quot;: 1 } ]'></MARIH>
     <SPUNK owner="" xyz="[-2653.8, 1428.4, 912.4, 3, 0]" price="30000000" money="0" var='[ { &quot;Кока&quot;: 0, &quot;Спанк&quot;: 0, &quot;lvl&quot;: 1 } ]'></SPUNK>
     <FLEIS owner="" xyz="[-49.9, -269.4, 6.6]" price="6080000" money="0" var='[ { &quot;Зерно&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;lvl&quot;: 1 } ]'></FLEIS>
+    <LASPA owner="" xyz="[-300.5, 2658.7, 63]" price="0" money="0" var='[ { &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.1, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></LASPA>
     
     <SANNEWS owner="" xyz="[783.4, -1329, 13.5]" price="550000" money="0">
         <VAC name="Репортер"></VAC>
