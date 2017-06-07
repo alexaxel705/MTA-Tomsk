@@ -6,11 +6,13 @@
     <NPZSF owner="" xyz="[-1015.3, -689.2, 32]" price="9000000" money="0" var='[ { &quot;Химикаты&quot;: 0, &quot;Нефть&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 1 } ]'></NPZSF>
     <PETLV owner="" xyz="[261.7, 1408.4, 10.5]" price="40000000" money="0" var='[ { &quot;Нефть&quot;: 0, &quot;lvl&quot;: 1 } ]'></PETLV>
     <BIOEN owner="" xyz="[1352.1, 348.4, 20.5]" price="1000000" money="0" var='[ { &quot;Удобрения&quot;: 0, &quot;Химикаты&quot;: 0, &quot;lvl&quot;: 1 } ]'></BIOEN>
-    <FARMFR owner="" xyz="[-382, -1437, 26]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 0, &quot;Удобрения&quot;: 0, &quot;lvl&quot;: 1 } ]' price="340000" money="0"></FARMFR>
-    <FARMPK owner="" xyz="[1925.5, 170.1, 37.3]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 0, &quot;Удобрения&quot;: 0, &quot;lvl&quot;: 1 } ]' price="510000" money="0"></FARMPK>
-    <FARMBA owner="" xyz="[-44.4, 78.7, 3.1]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 0, &quot;Удобрения&quot;: 0, &quot;lvl&quot;: 1 } ]' price="510000" money="0"></FARMBA>
-    <FARMWS owner="" xyz="[-1431.6, -1528.9, 101.7]" price="694000" money="0" var='[ { &quot;Скот&quot;: 0, &quot;Зерно&quot;: 0, &quot;lvl&quot;: 1 } ]'></FARMWS>
-    <MEATFA owner="" xyz="[960.8, 2099.7, 1011, 1, 0]" price="3185000" money="0" var='[ { &quot;Мясо&quot;: 0, &quot;Скот&quot;: 0, &quot;lvl&quot;: 1 } ]'></MEATFA>
+   
+	<FARMFR owner="" xyz="[-382, -1437, 26]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 0, &quot;Удобрения&quot;: 0, &quot;lvl&quot;:  0.3 } ]' price="340000" money="0"></FARMFR>
+    <FARMPK owner="" xyz="[1925.5, 170.1, 37.3]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 0, &quot;Удобрения&quot;: 0, &quot;lvl&quot;: 0.2 } ]' price="510000" money="0"></FARMPK>
+    <FARMBA owner="" xyz="[-44.4, 78.7, 3.1]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 0, &quot;Удобрения&quot;: 0, &quot;lvl&quot;: 0.32 } ]' price="510000" money="0"></FARMBA>
+    <FARMWS owner="" xyz="[-1431.6, -1528.9, 101.7]" price="694000" money="0" var='[ { &quot;Скот&quot;: 0, &quot;Зерно&quot;: 0, &quot;lvl&quot;: 0.12 } ]'></FARMWS>
+    
+	<MEATFA owner="" xyz="[960.8, 2099.7, 1011, 1, 0]" price="3185000" money="0" var='[ { &quot;Мясо&quot;: 0, &quot;Скот&quot;: 0, &quot;lvl&quot;: 0.25 } ]'></MEATFA>
     <MARIH owner="" xyz="[2548.3, -1297.6, 1044.1, 2, 0]" price="5000000" money="0" var='[ { &quot;Конопля&quot;: 0, &quot;Косяк&quot;: 0, &quot;lvl&quot;: 1 } ]'></MARIH>
     <SPUNK owner="" xyz="[-2653.8, 1428.4, 912.4, 3, 0]" price="30000000" money="0" var='[ { &quot;Кока&quot;: 0, &quot;Спанк&quot;: 0, &quot;lvl&quot;: 1 } ]'></SPUNK>
     <FLEIS owner="" xyz="[-49.9, -269.4, 6.6]" price="6080000" money="0" var='[ { &quot;Зерно&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;lvl&quot;: 1 } ]'></FLEIS>
