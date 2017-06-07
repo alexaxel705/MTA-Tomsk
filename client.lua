@@ -7980,8 +7980,8 @@ function GetItemCost(it)
 	if(Economics[it[1]]) then cost = cost*Economics[it[1]] end
 	
 	
-	if(it[2] == "Trade") then
-		cost = cost*1.25 -- Цена продажи выше на четверть
+	if(it[2] == "Sell") then
+		cost = cost*0.75 -- Цена покупки меньше на четверть
 	end
 	
 	return math.round(cost*(it[3]/450), 0)
