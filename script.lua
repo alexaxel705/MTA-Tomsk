@@ -62,6 +62,13 @@ local COLOR = {
 
 -- Дата основания, название, торговля, уровень
 local BizInfo = {
+	["SANFI"] = {1339, "San Fierro", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.45},
+	["PALOM"] = {1639, "Palomino Creek", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.23},
+	["MONTG"] = {1587, "Montgomery", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.17},
+	["LASVE"] = {1861, "Las Venturas", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.5},
+	["BLUEB"] = {1788, "Blueberry", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.15}, 
+	["DILLI"] = {1852, "Dillimore", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.05},
+	["LOSSA"] = {1609, "Los Santos", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.3},
 	["BAYSA"] = {1871, "Bayside", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.05}, 
 	["FORCA"] = {1778, "Fort Caston", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.19}, 
 	["LASBA"] = {1210, "Las Barricadas", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.025}, 
@@ -5378,7 +5385,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -135.1, 1116.8, 20.2, 0, 0 --
+		local x,y,z,i,d  = -2101.6, -15.9, 35.3, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
