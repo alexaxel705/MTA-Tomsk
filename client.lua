@@ -7803,7 +7803,6 @@ addEventHandler("RemoveButtonData", localPlayer, RemoveButtonData)
 
 
 function ReplaceInventoryItem(name1, item1, name2, item2)
-outputChatBox("123")
 	if(backpackid) then
 		if(name1 == "player") then
 			if(item1 == backpackid) then
