@@ -28,9 +28,9 @@ local PlayersMessage = {}
 local PlayersAction = {}
 local HomeEditor = false
 local RobAction = false
+local FireTimer = {}
 local StreamData = {}
 local VideoMemory = {["HUD"] = {}}
-
 
 local PData = {
 	["Interface"] = {
@@ -3667,7 +3667,6 @@ local ActualBones = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33,
 
 
 
-local FireTimer = {}
 function UpdateBot()
 	for _,thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
 		local theVehicle = getPedOccupiedVehicle(thePed)
@@ -7987,6 +7986,9 @@ function GetItemCost(it)
 	if(it[2] == "Sell") then
 		cost = cost*0.75 -- Цена покупки меньше на четверть
 	end
+	
+	
+	if(cost <= 0) then cost = 1 end
 	
 	return math.round(cost*(it[3]/450), 0)
 end
