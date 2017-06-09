@@ -1735,7 +1735,7 @@ local TeamVehicle = {
 	},
 	["Вагос"] = {{474,"VAGOS228",{6, 6, 0, 0}}, {467,"VAGOS228",{6, 6, 0, 0}}, {576 ,"VAGOS228",{6, 6, 0, 0}}},
 	["Колумбийский картель"] = {{422,"COKA 228",{116, 116, 116, 116},{2, 2}}, {440,"COKA 228",{116, 116, 116, 116},{1, 1}}, {600 ,"COKA 228",{116, 116, 116, 116},{2, 2}}, {543 ,"COKA 228",{116, 116, 116, 116},{4, 4}}},
-	["Русская мафия"] = {{560,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {445,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {581,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {409,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}},
+	["Русская мафия"] = {{404,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {560,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {445,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {581,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {409,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}},
 	["Триады"] = {{560,"TRIA 228",{0,0,0,0}}, {445,"TRIA 228",{0,0,0,0}}, {414,"TRIA 228",{83,83,83,83},{5,5}}},
 	["Якудзы"] = {{439,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {482,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {467,"YAZA 228",{177,15,11, 255,255,255}, {0, 0}, "createYakuza"}},
 	["Рифа"] = {{536,"RIFA 228",{94, 94, 0, 0}}, {439,"RIFA 228",{94, 94, 0, 0}}, {475 ,"RIFA 228",{94, 94, 0, 0}}},
@@ -5410,7 +5410,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 1367.2, -1274.1, 13.5, 0, 0 --
+		local x,y,z,i,d  =  -237.6, 164.3, 3.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
