@@ -7418,7 +7418,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 												
 												local DragQuality = PInv[DragElementName][DragElementId][3]
 												local ButQuality = PInv[name][i][3]
-												if(GetQuality(DragQuality) == GetQuality(ButQuality)) then
+												if(GetQuality(DragQuality) == GetQuality(ButQuality) and items[PInv[name][i][1]][3] ~= 1) then
 													if(DragElementId ~= i) then
 														if(items[PInv[name][i][1]][3] >= PInv[name][i][2]+PInv[DragElementName][DragElementId][2]) then
 															SetInventoryItem(name, i, PInv[name][i][1],PInv[name][i][2]+PInv[DragElementName][DragElementId][2],ButQuality, toJSON(PInv[name][i][4]))
@@ -7803,6 +7803,7 @@ addEventHandler("RemoveButtonData", localPlayer, RemoveButtonData)
 
 
 function ReplaceInventoryItem(name1, item1, name2, item2)
+outputChatBox("123")
 	if(backpackid) then
 		if(name1 == "player") then
 			if(item1 == backpackid) then

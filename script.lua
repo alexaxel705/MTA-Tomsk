@@ -75,7 +75,7 @@ local BizInfo = {
 	["ELQUE"] = {1448, "El Quebrados", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.075}, 
 	["ANLPI"] = {1651, "Angel Pine", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.135}, 
 	["LASPA"] = {1709, "Las Payasadas", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.1}, 
-	["FLEIS"] = {1869, "Пивзавод", {{"Зерно", "Trade"}, {"Алкоголь", "Sell"}}, 1}, 
+	["FLEIS"] = {1869, "Спиртзавод", {{"Зерно", "Trade"}, {"Алкоголь", "Sell"}}, 1}, 
 	["MARIH"] = {1966, "Наркопритон", {{"Косяк", "Sell"}, {"Конопля", "Trade"}}, 1}, 
 	["SPUNK"] = {1956, "Наркопритон", {{"Спанк", "Sell"}, {"Кока", "Trade"}}, 1}, 
 	["FARMFR"] = {1837, "Ферма", {{"Зерно", "Sell"}, {"Удобрения", "Trade"}}, 0.3}, 
@@ -5410,7 +5410,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -2101.6, -15.9, 35.3, 0, 0 --
+		local x,y,z,i,d  = 1367.2, -1274.1, 13.5, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6242,8 +6242,10 @@ function AddBizProduct(biz, item, count, withoutsave)
 			if(arr[item] > GetBizMaxProds(biz, item)) then return false -- Переполнен
 			elseif(arr[item] < 0) then return false end -- Кончился продукт
 			if(not withoutsave) then
-				arr["lvl"] = arr["lvl"]+0.00025
-				BizInfo[biz][4] = arr["lvl"]
+				if(count < 0) then
+					arr["lvl"] = arr["lvl"]+0.00025
+					BizInfo[biz][4] = arr["lvl"]
+				end
 				xmlNodeSetAttribute(node, "var", toJSON(arr))
 				UpdateProductCost()
 			end
@@ -6285,7 +6287,7 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 			end
 		end
 		
-		array["var"]["Уровень"] = math.round(BizInfo[biz][4])
+		if(BizInfo[biz][4]) then array["var"]["Уровень"] = math.round(BizInfo[biz][4]) end
 		array["var"]["Дата основания"] = BizInfo[biz][1]
 		array["var"]["Владелец"] = xmlNodeGetAttribute(node, "owner")
 		
