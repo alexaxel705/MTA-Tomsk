@@ -47,7 +47,6 @@ local PData = {
 	['DublicateRadar'] = {},
 	['AlphaRadar'] = {},
 	['ExpText'] = {},
-	['drdist'] = 0,
 	['stamina'] = 8,
 	['LVLUPSTAMINA'] = 10,
 	['rage'] = 0, 
@@ -1074,14 +1073,17 @@ function save()
 end
 
 function saveauto()
-	helpmessage("Запись начата!")
-	setTimer(function() 
-		if(PData["drdist"] > 10) then
-			PData["drdist"] = 0
-			save()
-		end
-	end, 50, 0)
-	
+	if(PData["Driver"]) then
+		helpmessage("Запись начата!")
+		setTimer(function() 
+			if(PData["Driver"]["Distance"] > 10) then
+				PData["Driver"]["Distance"] = 0
+				save()
+			end
+		end, 50, 0)
+	else
+		ToolTip("Сядь в машину!")
+	end
 end
 
 
@@ -1202,9 +1204,9 @@ local items = {
 
 	["Кулак"] = {false, nil, 1, "useinvweapon", 0, 0, false, false, false},
 
-	["Конопля"] = {false, "Сырые листья конопли, могут быть посажены на землю или траву.\nТак же используются для получения шмали.", 100, "CreateCanabis", 260, 10, false, true, false}, 
-	["Кока"] = {false, "Кока приобрела широкую известность как сырьё для изготовления кокаина — наркотика из класса стимуляторов", 25, "CreateCoka", 625, 25, false, true, false},
-	["Косяк"] = {false, "Косяк, вызывает зависимость, восстанавливает жизни", 20, "usedrugs", 1, 500, false, true, true},
+	["Конопля"] = {false, "Сырые листья конопли, могут быть посажены на землю или траву.\nТак же используются для получения шмали.", 100, "CreateCanabis", 260, 760, false, true, false}, 
+	["Кока"] = {false, "Кока приобрела широкую известность как сырьё для изготовления кокаина — наркотика из класса стимуляторов", 25, "CreateCoka", 625, 2500, false, true, false},
+	["Косяк"] = {false, "Косяк, вызывает зависимость, восстанавливает жизни", 20, "usedrugs", 1, 16000, false, true, true},
 	["Спанк"] = {false, "Спанк, вызывает зависимость", 10, "usedrugs", 100, 1000, false, true, true},
 	["Удочка"] = {false, "Рыболовная удочка", 1, "useinvweapon", 400, 700, false, false, true},
 	["Рыба"] = {false, "Рыба", 1, false, 0, 0, false, false, false},
@@ -1217,7 +1219,7 @@ local items = {
 	["Алкоголь"] = {false, "Алкоголь", 1, false, 40000, 600, false, true, false},
 	["Скот"] = {false, "Скот", 1, false, 90000, 200, false, true, false},
 	["Мясо"] = {false, "Мясо", 1, false, 36000, 330, false, true, false},
-	["Нефть"] = {false, "Нефть", 1, false, 136000, 500, false, true, false},
+	["Нефть"] = {false, "Нефть", 1, false, 136000, 1500, false, true, false},
 	["Химикаты"] = {false, "Химикаты", 1, false, 92000, 350, false, true, false},
 	["Удобрения"] = {false, "Удобрения", 1, false, 41000, 150, false, true, false},
 	["Бензин"] = {false, "Бензин", 1, false, 56000, 250, false, true, false},
@@ -2283,7 +2285,7 @@ addEventHandler("UpgradeServerPreload", getRootElement(), UpgradeServerPreload)
 
 function TuningExit()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
-	PData["Handling"] = getVehicleHandling(theVehicle)
+	PData["Driver"]["Handling"] = getVehicleHandling(theVehicle)
 	setVehicleColor(theVehicle ,ToC1, ToC2, ToC3, ToC4)
 	showCursor(false)
 	if(RepairButton) then guiSetVisible(RepairButton, false) end
@@ -2735,7 +2737,7 @@ end
 
 function bizControl(name, data)
 	PText["biz"] = {}
-	
+	helpmessage("", "", "")
 	if(data["money"]) then
 		local text = "Текущий баланс "..COLOR["DOLLAR"]["HEX"].."$"..data["money"].." "
 		local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
@@ -4081,53 +4083,53 @@ end
 function updateWorld()
 	UpdateBot()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
-	if(PData["drx"] and theVehicle) then
+	if(PData["Driver"] and theVehicle) then
 		if(getElementDimension(localPlayer) == 0) then
 			local x,y,z = getElementPosition(theVehicle)
-			PData["drdist"] = PData["drdist"]+getDistanceBetweenPoints3D(PData["drx"], PData["dry"], PData["drz"], x, y, z)
-			PData["drx"],PData["dry"],PData["drz"] = x,y,z
-			if(PData["drdist"] >= 2000) then
+			PData["Driver"]["Distance"] = PData["Driver"]["Distance"]+getDistanceBetweenPoints3D(PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"], x, y, z)
+			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = x,y,z
+			if(PData["Driver"]["Distance"] >= 2000) then
 				local VehType = getVehicleType(theVehicle)
-				PData["drdist"] = 0
+				PData["Driver"]["Distance"] = 0
 				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 10)
 			end
 			
 			if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
 				if(not isVehicleOnGround(theVehicle)) then
-					if(not PData["jump"]) then 
-						PData["jump"] = {0} 
-						PData["jump"][2], PData["jump"][3], PData["jump"][4] = getElementPosition(theVehicle)
-						PData["jump"][5], PData["jump"][6], PData["jump"][7] = getElementRotation(theVehicle)
-						PData["jump"][8], PData["jump"][9], PData["jump"][10] = 0, 0, 0
+					if(not PData["Driver"]["jump"]) then 
+						PData["Driver"]["jump"] = {0} 
+						PData["Driver"]["jump"][2], PData["Driver"]["jump"][3], PData["Driver"]["jump"][4] = getElementPosition(theVehicle)
+						PData["Driver"]["jump"][5], PData["Driver"]["jump"][6], PData["Driver"]["jump"][7] = getElementRotation(theVehicle)
+						PData["Driver"]["jump"][8], PData["Driver"]["jump"][9], PData["Driver"]["jump"][10] = 0, 0, 0
 					end
-					PData["jump"][1] = PData["jump"][1]+0.5
-					if(PData["jump"][1] >= 20) then
-						RageInfo(Text("Отрыв от земли +{points}", {{"{points}", math.round(PData["jump"][1], 0)}}))
+					PData["Driver"]["jump"][1] = PData["Driver"]["jump"][1]+0.5
+					if(PData["Driver"]["jump"][1] >= 20) then
+						RageInfo(Text("Отрыв от земли +{points}", {{"{points}", math.round(PData["Driver"]["jump"][1], 0)}}))
 						
 						local rx,ry,rz = getElementRotation(theVehicle)
-						PData["jump"][8] = math.round(PData["jump"][8]+MinusToPlus(math.sin(rx-PData["jump"][5])), 0)
-						PData["jump"][9] = math.round(PData["jump"][9]+MinusToPlus(math.sin(ry-PData["jump"][6])), 0)
-						PData["jump"][10] = math.round(PData["jump"][10]+MinusToPlus(math.sin(rz-PData["jump"][7])), 0)
+						PData["Driver"]["jump"][8] = math.round(PData["Driver"]["jump"][8]+MinusToPlus(math.sin(rx-PData["Driver"]["jump"][5])), 0)
+						PData["Driver"]["jump"][9] = math.round(PData["Driver"]["jump"][9]+MinusToPlus(math.sin(ry-PData["Driver"]["jump"][6])), 0)
+						PData["Driver"]["jump"][10] = math.round(PData["Driver"]["jump"][10]+MinusToPlus(math.sin(rz-PData["Driver"]["jump"][7])), 0)
 						
-						PData["jump"][5], PData["jump"][6], PData["jump"][7] = getElementRotation(theVehicle)
+						PData["Driver"]["jump"][5], PData["Driver"]["jump"][6], PData["Driver"]["jump"][7] = getElementRotation(theVehicle)
 						
 					end
 				else
-					if(PData["jump"]) then
-						if(PData["jump"][1] >= 20) then
-							AddRage(math.round(PData["jump"][1], 0))
+					if(PData["Driver"]["jump"]) then
+						if(PData["Driver"]["jump"][1] >= 20) then
+							AddRage(math.round(PData["Driver"]["jump"][1], 0))
 							local x,y,z = getElementPosition(theVehicle)
-							local jumph = math.floor(PData["jump"][4]-z, 1)
+							local jumph = math.floor(PData["Driver"]["jump"][4]-z, 1)
 							if(jumph < 0) then jumph = jumph-jumph-jumph end
 							if(jumph > 10) then
-								local salto = (math.round(PData["jump"][8]/360, 0))+(math.round(PData["jump"][9]/360, 0))+(math.round(PData["jump"][10]/360, 0))
-								helpmessage("Дистанция: "..math.floor(getDistanceBetweenPoints2D(PData["jump"][2], PData["jump"][3], x,y), 1)..
+								local salto = (math.round(PData["Driver"]["jump"][8]/360, 0))+(math.round(PData["Driver"]["jump"][9]/360, 0))+(math.round(PData["Driver"]["jump"][10]/360, 0))
+								helpmessage("Дистанция: "..math.floor(getDistanceBetweenPoints2D(PData["Driver"]["jump"][2], PData["Driver"]["jump"][3], x,y), 1)..
 								"м Высота: "..jumph.."м "..
 								"Переворотов: "..salto..
-								" Вращение: "..PData["jump"][8]+PData["jump"][9]+PData["jump"][10].."°")
+								" Вращение: "..PData["Driver"]["jump"][8]+PData["Driver"]["jump"][9]+PData["Driver"]["jump"][10].."°")
 							end
 						end
-						PData["jump"] = nil
+						PData["Driver"]["jump"] = nil
 					end
 				end
 			end
@@ -5846,6 +5848,7 @@ local ResourceInMap = {
 	[27] = {false, 13078, 0.02, 1228.1, 182.7, 20.3, 0, "MONTG"}, 
 	[28] = {false, 12964, 0.02, 2246.4, 52.4, 26.7, 0, "PALOM"}, 
 	[29] = {false, 11092, 0.02, -2119.9, -26.1, 35.3, 0, "SANFI"}, 
+	[30] = {false, 3755, 0.02, 2483.8, -2115.9, 13.5, 0, "FOSOI"}, 
 }
 
 
@@ -8518,8 +8521,11 @@ function PlayerVehicleEnter(theVehicle, seat)
 	if(source == localPlayer) then 
 		Targets["theVehicle"] = nil
 		if(seat == 0) then
-			PData["drx"], PData["dry"], PData["drz"] = getElementPosition(theVehicle)
-			PData["Handling"] = getVehicleHandling(theVehicle)
+			PData["Driver"] = {
+				["Handling"] = getVehicleHandling(theVehicle),
+				["Distance"] = 0
+			}
+			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = getElementPosition(theVehicle)
 			local name = getVehicleName(theVehicle)
 			if(getElementData(theVehicle, "name")) then
 				name = getElementData(theVehicle, "name")
@@ -8537,8 +8543,7 @@ function PlayerVehicleExit(theVehicle, seat)
 	if(source == localPlayer) then 
 		ChangeInfo() 
 		if(seat == 0) then
-			PData["drx"], PData["dry"], PData["drz"] = false, false, false
-			PData["Handling"] = false
+			PData["Driver"] = nil
 		end
 	end
 end
@@ -9884,7 +9889,7 @@ function DrawPlayerMessage()
 		
 
 		
-			if(theVehicle and PData["Handling"]) then
+			if(PData["Driver"]) then
 				tick = getTickCount()
 				local angulo,velocidad = angle()
 				
@@ -9920,7 +9925,7 @@ function DrawPlayerMessage()
 					speed = "0"..speed
 				end
 
-				local MaxRPM = GetVehicleMaxRPM(PData["Handling"]["engineAcceleration"])
+				local MaxRPM = GetVehicleMaxRPM(PData["Driver"]["Handling"]["engineAcceleration"])
 				local RPMMeter = false
 				local RPMDate = false 
 				
@@ -9957,7 +9962,7 @@ function DrawPlayerMessage()
 				end
 				
 				if(RPMDate) then
-					local RPM = (225*(getVehicleRPM(theVehicle, PData["Handling"]["engineAcceleration"], PData["Handling"]["dragCoeff"], PData["Handling"]["numberOfGears"])/RPMDate))
+					local RPM = (225*(getVehicleRPM(theVehicle, PData["Driver"]["Handling"]["engineAcceleration"], PData["Driver"]["Handling"]["dragCoeff"], PData["Driver"]["Handling"]["numberOfGears"])/RPMDate))
 					local RedRPMZone = 225*((MaxRPM/RPMDate))
 					if(SlowTahometer < RPM) then
 						SlowTahometer = SlowTahometer+(RPM-SlowTahometer)/20
@@ -9985,7 +9990,7 @@ function DrawPlayerMessage()
 					dxDrawCircle(sx,sy, 87*TS, 1*TS, 0.8, 120, 345, tocolor(255,255,255,255))
 					
 					dxDrawCircle(sx,sy, 30*TS, 35*TS, 1, 0, 360, tocolor(0,0,0,20))
-					dxDrawText(getVehicleGear(theVehicle, PData["Handling"]["engineAcceleration"], PData["Handling"]["dragCoeff"], PData["Handling"]["numberOfGears"]), sx,sy-(30*scaley),sx,sy-(30*scaley), tocolor(255,255,255,255), scale*2.5, "default-bold", "center", "center")
+					dxDrawText(getVehicleGear(theVehicle, PData["Driver"]["Handling"]["engineAcceleration"], PData["Driver"]["Handling"]["dragCoeff"], PData["Driver"]["Handling"]["numberOfGears"]), sx,sy-(30*scaley),sx,sy-(30*scaley), tocolor(255,255,255,255), scale*2.5, "default-bold", "center", "center")
 
 					if(getElementData(theVehicle, "Fuel")) then
 						local handlingTable = getOriginalHandling(getElementModel(theVehicle))
@@ -10300,8 +10305,27 @@ local VehicleTrunks = {
 
 	[419] = {{-0.6, -2.4, -0.05, 10, 0, 0}, {0, -2.4, -0.05, 10, 0, 0}, {0.6, -2.4, -0.05, 10, 0, 0}},
 	
+	[422] = {
+		{-0.6, -0.7, -0.1, 0, 0, 0}, {0, -0.7, -0.1, 0, 0, 0}, {0.6, -0.7, -0.1, 0, 0, 0}, 
+		{-0.6, -1.3, -0.1, 0, 0, 0}, {0, -1.3, -0.1, 0, 0, 0}, {0.6, -1.3, -0.1, 0, 0, 0},
+		{-0.6, -2, -0.1, 0, 0, 0}, {0, -2, -0.1, 0, 0, 0}, {0.6, -2, -0.1, 0, 0, 0},
+	},
+	
 	[439] = {{-0.6, -2.2, -0.05, 10, 0, 0}, {0, -2.2, -0.05, 10, 0, 0}, {0.6, -2.2, -0.05, 10, 0, 0}},
 	
+	[442] = false,
+	[443] = false,
+	[444] = false,
+	[445] = {{-0.6, -2.5, -0.05, 10, 0, 0}, {0, -2.5, -0.05, 10, 0, 0}, {0.6, -2.5, -0.05, 10, 0, 0}},
+	[446] = false, 
+	[447] = false, 
+	[448] = false, 
+	[449] = false,
+	[450] = false, 
+	[451] = false, 
+	[452] = false, 
+	[453] = false,
+	[454] = false, 
 	[455] = {
 		{-1, -0.2, 0.2, 0, 0, 0}, {-0.5, -0.2, 0.2, 0, 0, 0}, {0.5, -0.2, 0.2, 0, 0, 0}, {1, -0.2, 0.2, 0, 0, 0}, 
 		{-1, -0.9, 0.2, 0, 0, 0}, {-0.5, -0.9, 0.2, 0, 0, 0}, {0.5, -0.9, 0.2, 0, 0, 0}, {1, -0.9, 0.2, 0, 0, 0}, 
@@ -10312,10 +10336,35 @@ local VehicleTrunks = {
 		{-1, -4.1, 0.2, 0, 0, 0}, {-0.5, -4.1, 0.2, 0, 0, 0}, {0.5, -4.1, 0.2, 0, 0, 0}, {1, -4.1, 0.2, 0, 0, 0}, 
 		
 	},
-
+	[456] = {
+		{-0.6, -0.3, 0.25, 0, 0, 0}, {0, -0.3, 0.25, 0, 0, 0}, {0.6, -0.3, 0.25, 0, 0, 0}, 
+		{-0.6, -1, 0.25, 0, 0, 0}, {0, -1, 0.25, 0, 0, 0}, {0.6, -1, 0.25, 0, 0, 0}, 
+		{-0.6, -1.7, 0.25, 0, 0, 0}, {0, -1.7, 0.25, 0, 0, 0}, {0.6, -1.7, 0.25, 0, 0, 0}, 
+		{-0.6, -2.2, 0.25, 0, 0, 0}, {0, -2.2, 0.25, 0, 0, 0}, {0.6, -2.2, 0.25, 0, 0, 0}
+	}, 
+	[457] = false,
+	[458] = {{-0.6, -1.7, 0, 0, 0, 0}, {0, -1.7, 0, 0, 0, 0}, {0.6, -1.7, 0, 0, 0, 0}, {-0.6, -2.3, 0, 0, 0, 0}, {0, -2.3, 0, 0, 0, 0}, {0.6, -2.3, 0, 0, 0, 0}},
+	[459] = {
+		{-0.6, -0.3, -0.07, 0, 0, 0}, {0, -0.3, -0.07, 0, 0, 0}, {0.6, -0.3, -0.07, 0, 0, 0}, 
+		{-0.6, -1, -0.07, 0, 0, 0}, {0, -1, -0.07, 0, 0, 0}, {0.6, -1, -0.07, 0, 0, 0}, 
+		{-0.6, -1.7, -0.07, 0, 0, 0}, {0, -1.7, -0.07, 0, 0, 0}, {0.6, -1.7, -0.07, 0, 0, 0}, 
+		{-0.6, -2.2, -0.07, 0, 0, 0}, {0, -2.2, -0.07, 0, 0, 0}, {0.6, -2.2, -0.07, 0, 0, 0}
+	}, 
+	[460] = false,
+	[461] = false,
+	[462] = false, 
+	[463] = false, 
+	[464] = false, 
+	[465] = false, 
 	[466] = {{-0.6, -2.3, -0.05, 0, 0, 0}, {0, -2.3, -0.05, 0, 0, 0}, {0.6, -2.3, -0.05, 0, 0, 0}},
 	[467] = {{-0.5, -2.3, -0.05, 0, 0, 0}, {0, -2.3, -0.05, 0, 0, 0}, {0.5, -2.3, -0.05, 0, 0, 0}},
-		
+	[468] = false,
+	[469] = false,
+	[470] =  {{-0.8, -2, 0.25, 10, 0, 0}, {0, -2, 0.1, 10, 0, 0}, {0.8, -2, 0.25, 10, 0, 0}},
+	[471] = false, 
+	[472] = false,
+	[473] = false,
+	[474] = {{-0.6, -2.5, -0.15, 10, 0, 0}, {0, -2.5, -0.15, 10, 0, 0}, {0.6, -2.5, -0.15, 10, 0, 0}},
 	[475] = {{-0.6, -2.3, -0.05, 10, 0, 0}, {0, -2.3, -0.05, 10, 0, 0}, {0.6, -2.3, -0.05, 10, 0, 0}},
 	
 	[478] = {{-0.6, -0.9, 0, 0, 0, 0}, {0, -0.9, -0, 0, 0, 0}, {0.6, -0.9, 0, 0, 0, 0}, {-0.6, -1.6, 0, 0, 0, 0}, {0, -1.6, 0, 0, 0, 0}, {0.6, -1.6, 0, 0, 0, 0}, {-0.6, -2.2, 0, 0, 0, 0}, {0, -2.2, 0, 0, 0, 0}, {0.6, -2.2, 0, 0, 0, 0}},
@@ -10323,7 +10372,6 @@ local VehicleTrunks = {
 	[480] = {{-0.5, -1.8, 0, 10, 0, 0}, {0, -1.8, 0, 10, 0, 0}, {0.5, -1.8, 0, 10, 0, 0}},
 
 	[489] = {{-0.6, -1.7, 0.2, 0, 0, 0}, {0, -1.7, -0.07, 0, 0, 0}, {0.6, -1.7, 0.2, 0, 0, 0}, {-0.6, -2.2, -0.07, 0, 0, 0}, {0, -2.2, -0.07, 0, 0, 0}, {0.6, -2.2, -0.07, 0, 0, 0}},
-
 	[490] = {{-0.5, -1.7, -0.05, 10, 0, 0}, {0, -1.7, -0.05, 10, 0, 0}, {0.5, -1.7, -0.05, 10, 0, 0}},
 	
 	[496] = {{-0.5, -1.7, -0.05, 10, 0, 0}, {0, -1.7, -0.05, 10, 0, 0}, {0.5, -1.7, -0.05, 10, 0, 0}},
