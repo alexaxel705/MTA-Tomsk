@@ -5455,7 +5455,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2483.8, -2115.9, 13.5, 0, 0 --
+		local x,y,z,i,d  = -377.3, -1437.6, 25.7, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -10758,6 +10758,11 @@ function moneyPickupHit(thePlayer)
 			name = getElementData(source, "bizowner")
 			if(name == getPlayerName(thePlayer)) then
 				advtext = advtext.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы продать бизнес"
+				
+				if(getElementData(source, "money")) then
+					AddPlayerMoney(thePlayer, tonumber(getElementData(source, "money")))
+					AddBizMoney(getElementData(source, "name"), -getElementData(source, "money"))
+				end
 			end
 		else
 			advtext = advtext.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы купить бизнес"
@@ -12215,8 +12220,8 @@ function PayDay()
 	for theKey,thePlayer in ipairs(getElementsByType("player")) do 
 		local team = getPlayerTeam(thePlayer)
 		if(team) then
-			local bankMoney=GetDatabaseAccount(thePlayer, "bank")
-			local price=GetDatabaseZoneTeamPrice(getTeamName(team))
+			local bankMoney = GetDatabaseAccount(thePlayer, "bank")
+			local price = GetDatabaseZoneTeamPrice(getTeamName(team))
 			local PTeam = getTeamName(team)
 			if(price > 0) then
 				AddPlayerMoney(thePlayer, price)
@@ -15518,13 +15523,17 @@ function CreateRaceMarker(thePlayer, array, checkpoint)
 				if(EndRaceTimeout == 0) then 
 					if(racePlayerFinish[1]) then 
 						RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
+						RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
+						RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
 						outputChatBox("Победитель: #CC9966"..getPlayerName(thePlayer), getRootElement(), 255,255,255, true)
 					end
 					if(racePlayerFinish[2]) then 
 						RacePriceGeneration(getPlayerFromName(racePlayerFinish[2]))
+						RacePriceGeneration(getPlayerFromName(racePlayerFinish[2]))
 						outputChatBox("Второе место: #CC9966"..racePlayerFinish[2], getRootElement(), 255,255,255, true) 
 					end
 					if(racePlayerFinish[3]) then 
+						RacePriceGeneration(getPlayerFromName(racePlayerFinish[3]))
 						RacePriceGeneration(getPlayerFromName(racePlayerFinish[3]))
 						outputChatBox("Третье место: #CC9966"..racePlayerFinish[3], getRootElement(), 255,255,255, true) 
 					end
@@ -15575,7 +15584,7 @@ function RacePriceGeneration(thePlayer)
 	else
 		local parts = AutomobileVComp[math.random(#AutomobileVComp)]
 		AddPlayerVehiclePart(thePlayer, parts[1], parts[2])
-		outputChatBox("Ты выиграл #FF0000"..parts[1].." "..parts[2], thePlayer, 255,255,255,true)
+		outputChatBox("Ты выиграл #FFFFFF"..parts[1].." "..parts[2], thePlayer, math.random(255),math.random(255),math.random(255),true)
 	end
 end
 

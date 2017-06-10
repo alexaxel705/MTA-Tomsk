@@ -323,6 +323,12 @@ HUD:
 	12 - Portuguese
 	13 - Azerbaijani
 	14 - Turkish
+	
+	101 - Первая ячейка приза
+	102 - Вторая
+	103 - Третья
+	104 - Четвертая
+	105 - Пятая
 --]]
 local RespawnTimer = false
 local LainOS = false
@@ -6013,6 +6019,7 @@ addEventHandler("map", localPlayer, map)
 
 
 
+
 function GetCoordOnMap(x,y,z)
 	return x/50,y/50,z/50+(4000)
 end
@@ -6048,8 +6055,6 @@ addEvent("InfoPath", true)
 addEventHandler("InfoPath", localPlayer, InfoPath)
 
 
-
-		
 function InfoPathPed(zone, arr)
 	if(not GroundMaterial[zone]) then
 		local arr = fromJSON(arr)
@@ -6112,6 +6117,8 @@ function onClientBrowserWhitelistChange()
 	ShowLink()
 end
 addEventHandler("onClientBrowserWhitelistChange", root, onClientBrowserWhitelistChange)
+
+
 
 
 
