@@ -4236,6 +4236,8 @@ local NonRandVeh = {
 	{false, 442, 931.2, -1081.9, 23.3,0,0,180}, 
 	
 -- Red County
+	{false, 431, 658.8, -452.8, 15.3, 0, 0, 90}, -- Автобус
+
 	-- Ферма
 	{false, 532, -104.6, -22.2, 2.1,0,0,70}, 
 
@@ -5455,7 +5457,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -377.3, -1437.6, 25.7, 0, 0 --
+		local x,y,z,i,d  =  2349.6, 1070.8, 9.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -11326,7 +11328,7 @@ function InitDynamicBot()
 	for district, arr in pairs(PathNodes) do
 		for i, k in pairs(arr) do
 			if(k[1] == true) then
-				local rand = math.random(1,35)
+				local rand = math.random(1,40)
 				if(rand == 1) then 
 					CreateDynamicBot(district, i)
 				end
@@ -12382,7 +12384,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Удобрения", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Фекалии", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")

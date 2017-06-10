@@ -388,6 +388,7 @@ local trafficlight = {
 -- X,Y,Z, look At X, look At Y, look At Z,roll,fov, Порог срабатывания хромокея
 local TexturesPosition = {
 	["Кулак"] = {0,0,0, 0,0,0, 0,70, 255}, 
+	["Фекалии"] = {-2,-4,1, 0,0,0, 0,70, 255}, 
 	["АК-47"] = {0.3,1,0, 0.3,0,0, 8,70, 110}, 
 	["Кольт 45"] = {0.2,0.4,0.05, 0.1,-0.2,0.05, 0,70, 110}, 
 	["Узи"] = {0.2,0.4,0, 0,-0.2,0, 0,70, 110}, 
@@ -542,7 +543,7 @@ local PreloadTextures = {
 	["Удобрения"] = createObject(1222, 4435, 4000, 4020),
 	["Мясо"] = createObject(2805, 4440, 4000, 4020),
 	["Алкоголь"] = createObject(2900, 4445, 4000, 4020),
-
+	["Фекалии"] = createObject(16444, 4450, 4000, 4020),
 }
 
 local CreateTextureStage = false
@@ -1174,7 +1175,7 @@ local items = {
 	["KBeer"] = {false, "3 Литра светлого немецкого пива KBeer", 1, "usedrink", 3084, 615, false, false, false},
 	["KBeer Dark"] = {false, "3 Литра темного немецкого пива KBeer", 1, "usedrink", 3084, 735, false, false, false}, 
 	["isabella"] = {false, "Вино", 1, "usedrink", 1043, 515, false, false, false},
-	["Фекалии"] = {"invobject/crap.png", "Для одних - обычное говно\nДля других - сладкий хлебушек", 10, "eatcrap", 150, 0, false, false, true},
+	["Фекалии"] = {false, "Для одних - обычное говно\nДля других - сладкий хлебушек", 10, "eatcrap", 150, 0, false, false, true},
 	["CoK"] = {false, "Пачка сигарет CoK", 1, "usesmoke", 5, 20, false, false},
 	["Сигарета"] = {false, "Просто сигарета", 20, "usesmoke", 0.2, 1, {["сигареты"] = {"CoK"}}, false, false}, 
 	["Mossberg"] = {false, "Дробовик Mossberg 500", 1, "useinvweapon", 3300, 4700, false, false, true},
@@ -1223,7 +1224,7 @@ local items = {
 	
 	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, true, true},
 	["Алкоголь"] = {false, "Алкоголь", 1, false, 40000, 600, false, true, false},
-	["Скот"] = {false, "Скот", 1, false, 90000, 200, false, true, false},
+	["Скот"] = {false, "Скот", 1, false, 90000, 700, false, true, false},
 	["Мясо"] = {false, "Мясо", 1, false, 36000, 330, false, true, false},
 	["Нефть"] = {false, "Нефть", 1, false, 136000, 1500, false, true, false},
 	["Химикаты"] = {false, "Химикаты", 1, false, 92000, 350, false, true, false},
@@ -4702,7 +4703,7 @@ function updateCamera()
 	
 	
 	if(PData["ResourceMap"]) then
-		setSkyGradient(170,103,0 ,170,103,0)
+		setSkyGradient(170,103,0 ,170,103,0) -- ,170,103,0
 	end
 end
 addEventHandler("onClientPreRender", getRootElement(), updateCamera)
@@ -8447,15 +8448,15 @@ function dxDrawBorderedText(text, left, top, right, bottom, color, scale, font, 
 		local r,g,b = bitExtract(color, 0, 8), bitExtract(color, 8, 8), bitExtract(color, 16, 8)
 		if(r+g+b >= 100) then r = 0 g = 0 b = 0 else r = 255 g = 255 b = 255 end
 		local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
-		local locsca = math.floor(scale)
+		local locsca = math.round(scale, 0)
 		if (locsca == 0) then locsca = 1 end
 		for oX = -locsca, locsca do 
 			for oY = -locsca, locsca do 
-				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false,subPixelPositioning)
+				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false,true)
 			end
 		end
 
-		dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, true, subPixelPositioning)
+		dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, true, true)
 	end
 end
 
@@ -9216,7 +9217,7 @@ function DrawPlayerInventory()
 			dxDrawBorderedText(InventoryMass.."/"..MaxMass..Text("кг"), screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
 		elseif(TrunkWindows) then			
 			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
-			dxDrawBorderedText("Багажник "..getVehicleName(TrunkWindows), 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
+			dxDrawBorderedText("Багажник", 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
 		elseif(BANKCTL) then
 			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(25, 20, 20, 245))
 			dxDrawBorderedText(BANKCTL, 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	

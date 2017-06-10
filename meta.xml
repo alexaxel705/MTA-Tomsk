@@ -13,7 +13,6 @@
 
 	<file src="invobject/laser.png" />
 	<file src="invobject/chroma.png" />
-	<file src="invobject/crap.png" />
 	<file src="invobject/unknown.png" />
 
 	<file src="lang/Ru_ru.po" download="false" />
