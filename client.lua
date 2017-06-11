@@ -313,8 +313,8 @@ HUD:
 	3 - ChangeInfo
 	4 - ChangeInfoAdv
 	5 - helpmessage
-	6 - helpmessage
-	7 - helpmessage
+	6 - MissionCompleted
+	7 - MissionCompleted
 	8 - input
 	9 - очки ярости
 	
@@ -2744,7 +2744,8 @@ end
 
 function bizControl(name, data)
 	PText["biz"] = {}
-	helpmessage("", "", "")
+	helpmessage("")
+	MissionCompleted("", "")
 	if(data["money"]) then
 		local text = "Текущий баланс "..COLOR["DOLLAR"]["HEX"].."$"..data["money"].." "
 		local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
@@ -3448,7 +3449,8 @@ function StartLookZonesBeta(zones, update)
 		LookHouse(SpawnPoints[1])
 	else
 		playSFX("genrl", 75, 1, false)
-		helpmessage("", update, "")
+		helpmessage("")
+		MissionCompleted(update, "")
 		local x,y,z = getElementPosition(localPlayer)
 		setCameraMatrix(x+20, y-20, z+30, x, y, z)
 		PEDChangeSkin = "cinema"
@@ -5288,7 +5290,7 @@ addEventHandler("RespectMessage", localPlayer, RespectMessage)
 
 
 
-function helpmessage(message, job, money, removetarget, cinema)
+function helpmessage(message)
 	if(removetarget) then
 		Targets["thePlayer"] = nil
 	end
@@ -5296,9 +5298,27 @@ function helpmessage(message, job, money, removetarget, cinema)
 		killTimer(PData["helpmessageTimer"])
 	end
 	
-	
-	PText["HUD"][5] = {Text(message), screenWidth, screenHeight-(300*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2.3, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
+	PText["HUD"][5] = {Text(message), screenWidth, screenHeight-(200*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2.3, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
 
+	PData["helpmessageTimer"] = setTimer(function()
+		PText["HUD"][5] = nil
+	end, 3500, 1)
+end
+addEvent("helpmessageEvent", true)
+addEventHandler("helpmessageEvent", localPlayer, helpmessage)
+
+
+
+
+function MissionCompleted(job, money, removetarget, cinema)
+	if(removetarget) then
+		Targets["thePlayer"] = nil
+	end
+	if(isTimer(PData["MissionCompletedTimer"])) then
+		killTimer(PData["MissionCompletedTimer"])
+	end
+	
+	
 	if(job) then
 		PText["HUD"][6] = {"#744D02"..Text(job), screenWidth, screenHeight/2-dxGetFontHeight(NewScale*6, "sans")/2, 0, 0, tocolor(255, 255, 255, 255), NewScale*6, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
 	end
@@ -5311,8 +5331,7 @@ function helpmessage(message, job, money, removetarget, cinema)
 		end
 	end
 	
-	PData["helpmessageTimer"] = setTimer(function()
-		PText["HUD"][5] = nil
+	PData["MissionCompletedTimer"] = setTimer(function()
 		PText["HUD"][6] = nil
 		PText["HUD"][7] = nil
 	end, 3500, 1)
@@ -5328,10 +5347,8 @@ function helpmessage(message, job, money, removetarget, cinema)
 		end, 3500, 1)
 	end
 end
-addEvent("helpmessageEvent", true)
-addEventHandler("helpmessageEvent", localPlayer, helpmessage)
-
-
+addEvent("MissionCompleted", true)
+addEventHandler("MissionCompleted", localPlayer, MissionCompleted)
 
 
 

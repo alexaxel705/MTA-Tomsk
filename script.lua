@@ -5936,7 +5936,7 @@ function laltEnteredPickup(thePlayer)
 					elseif(getElementData(PetrolFuelMarker[thePlayer], "type") == "GEnter") then -- Переделать потом на клиентскую часть
 						if(getElementData(PetrolFuelMarker[thePlayer], "locked")) then
 							if(getElementData(PetrolFuelMarker[thePlayer], "locked") == 1) then
-								triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Дверь закрыта!")
+								HelpMessage(thePlayer, "Дверь закрыта!")
 								return false
 							end
 						end
@@ -5991,10 +5991,10 @@ function laltEnteredPickup(thePlayer)
 				if(getElementData(target, "owner") == getPlayerName(thePlayer)) then
 					if(getElementData(target, "siren") == "false") then
 						setElementData(target, "siren", "true")
-						triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Сигнализация включена!")
+						HelpMessage(thePlayer, "Сигнализация включена!")
 					elseif(getElementData(target, "siren") == "true") then
 						setElementData(target, "siren", "false")
-						triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Сигнализация выключена!")
+						HelpMessage(thePlayer, "Сигнализация выключена!")
 					end
 				end
 			end
@@ -6022,7 +6022,7 @@ function laltEnteredPickup(thePlayer)
 				elseif(getElementData(pic, "house")) then
 					if(getElementData(pic, "locked")) then
 						if(getElementData(pic, "locked") == 1) then
-							triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Дверь закрыта!")
+							HelpMessage(thePlayer, "Дверь закрыта!")
 							return false
 						end
 					end
@@ -9945,7 +9945,7 @@ function EnterHouse(buyhouse, spawn)
 				end
 			end
 		else
-			triggerClientEvent(source, "helpmessageEvent", source, "Дверь закрыта!")
+			HelpMessage(source, "Дверь закрыта!")
 		end
 	end
 end
@@ -10695,7 +10695,8 @@ function moneyPickupHit(thePlayer)
 		else
 			advtext = advtext.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы купить бизнес"
 		end
-		triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, advtext,getElementData(source, "biz"),"Владелец: "..name)
+		HelpMessage(thePlayer, advtext)
+		MissionCompleted(getElementData(source, "biz"),"Владелец: "..name)
 		PlayersPickups[thePlayer] = source
 	elseif(getElementData(source, "wardrobe")) then
 		PlayersPickups[thePlayer] = source
@@ -12846,7 +12847,7 @@ function PoliceArrest(thePlayer, thePed)
 			triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "script", 210, 82,x,y,z, false)
 		end
 		WastedPoliceTimer[thePed] = thePlayer
-		triggerClientEvent(thePed, "helpmessageEvent", thePed, "Нажми "..COLOR["KEY"]["HEX"].."H#FFFFFF чтобы поднять руки")
+		HelpMessage(thePed, "Нажми "..COLOR["KEY"]["HEX"].."H#FFFFFF чтобы поднять руки")
 		setElementData(thePed, "NoFireMePolice", "1")
 		setTimer(function()
 			removeElementData(thePed, "NoFireMePolice") 
@@ -13906,7 +13907,7 @@ function MarkerHit(hitElement, Dimension)
 			elseif(getElementData(source, "type") == "SPRAY") then
 				local g = getElementData(source, "id")
 				setGarageOpen(g, false)
-				setTimer(function()
+				setTimer(function(thePlayer, theVehicle)
 					if(AddPlayerMoney(thePlayer, -100)) then
 						fixVehicle(theVehicle)
 						MissionCompleted(thePlayer, "$100", Text(thePlayer, "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА"))
@@ -13914,7 +13915,7 @@ function MarkerHit(hitElement, Dimension)
 						AddBizMoney("SPRAYSA", 100)
 					end
 					setGarageOpen(g, true)
-				end, 3000, 1)
+				end, 3000, 1, thePlayer, theVehicle)
 			elseif(getElementData(source, "type") == "GEnter") then
 				ToolTip(thePlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nзаехать в гараж")
 				PetrolFuelMarker[thePlayer] = source
@@ -13922,10 +13923,10 @@ function MarkerHit(hitElement, Dimension)
 				ToolTip(thePlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nвыехать из гаража")
 				PetrolFuelMarker[thePlayer] = source
 			elseif(getElementData(source, "type") == "siren") then	
-				triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Установка сигнализации "..COLOR["DOLLAR"]["HEX"].."$35000\n#FFFFFFНажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы установить")
+				HelpMessage(thePlayer, "Установка сигнализации "..COLOR["DOLLAR"]["HEX"].."$35000\n#FFFFFFНажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы установить")
 				PetrolFuelMarker[thePlayer] = source
 			elseif(getElementData(source, "type") == "recyclels") then	
-				triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Авторазбор\nНажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы сдать автомобиль")
+				HelpMessage(thePlayer, "Авторазбор\nНажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы сдать автомобиль")
 				PetrolFuelMarker[thePlayer] = source
 			elseif(getElementData(source, "type") == "racePlayerMarker" and getElementData(source, "player") == getPlayerName(thePlayer)) then
 				CreateRaceMarker(thePlayer, getElementData(racePlayerMarker[getPlayerName(thePlayer)], "array"), getElementData(racePlayerMarker[getPlayerName(thePlayer)], "stage")+1)
@@ -14112,7 +14113,7 @@ function OpenTuning(thePlayer,x,y,z,rz)
 					triggerClientEvent(thePlayer, "CameraTuning", thePlayer, (vehh["mass"]/5)+(1000-getElementHealth(theVehicle)), getElementData(theVehicle, "handl"), toJSON(parts))
 				end
 			else
-				triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Тюнинговать можно только автомобили!")
+				HelpMessage(thePlayer, "Тюнинговать можно только автомобили!")
 			end
 		end
 	end
@@ -14592,15 +14593,15 @@ function respawnExplodedVehicle()
 				local zone = getZoneName(x,y,z, true)
 				local park = GetRandomParking(zone)
 				if(park) then
-					Parkings[zone][park[1]][park[2]][1] = source
-					local randz = park[6]
+					Parkings[park[1]][park[2]][park[3]][1] = source
+					local randz = park[7]
 					if(math.random(0,1) == 1) then
 						randz = randz+180
 					end
 					
-					setVehicleRespawnPosition(source, park[3], park[4], park[5]+VehicleSystem[getElementModel(source)][1], 0, 0, randz)
+					setVehicleRespawnPosition(source, park[4], park[5], park[6]+VehicleSystem[getElementModel(source)][1], 0, 0, randz)
 					if(owner) then
-						triggerClientEvent(owner, "AddGPSMarker", owner, park[3], park[4], park[5], "Забери свой транспорт")
+						triggerClientEvent(owner, "AddGPSMarker", owner, park[4], park[5], park[6], "Забери свой транспорт")
 						ToolTip(owner, "Ваш транспорт доставлен на парковку")
 					end
 				end
@@ -14620,7 +14621,7 @@ function GetRandomParking(city)
 		for name, dat in pairs(Parkings[city]) do
 			for i, dat2 in pairs(dat) do
 				if(not dat2[1]) then
-					randpark[#randpark+1] = {name, i, dat2[2], dat2[3], dat2[4], dat2[5]}
+					randpark[#randpark+1] = {city, name, i, dat2[2], dat2[3], dat2[4], dat2[5]}
 				end
 			end
 		end
@@ -15151,7 +15152,7 @@ function AddPlayerMoney(thePlayer, count, mission)
 	givePlayerMoney(thePlayer, count)
 	AddInventoryItem(thePlayer, "Деньги", count, 550, {})
 	if(mission) then
-		triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "", mission, count)
+		MissionCompleted(mission, count)
 		triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 6)
 	end
 	return true
@@ -15159,7 +15160,12 @@ end
 
 
 function MissionCompleted(thePlayer, count, mission, target, cinema)
-	triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "", mission, count, target, cinema)
+	triggerClientEvent(thePlayer, "MissionCompleted", thePlayer, mission, count, target, cinema)
+end
+
+
+function HelpMessage(thePlayer, text)
+	triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, text)
 end
 
 
@@ -15406,8 +15412,7 @@ function CreateTruckMarker(thePlayer, x, y, z)
 	TruckMarker[thePlayer]=createMarker(x, y, z, "checkpoint", 10, 0, 0, 0, 0, thePlayer)
 	setElementData(TruckMarker[thePlayer], "type", "TruckMarker")
 	setElementData(TruckMarker[thePlayer], "player", getPlayerName(thePlayer))
-	
-	triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "#FFFFFFОтвези груз на #FF0000красный маркер#FFFFFF\nчтобы получить #32CD32вознаграждение")
+	HelpMessage(thePlayer, "#FFFFFFОтвези груз на #FF0000красный маркер#FFFFFF\nчтобы получить #32CD32вознаграждение")
 	triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, x, y, z, "Отвези груз")
 end
 
@@ -15416,7 +15421,7 @@ end
 function CreateRaceMarker(thePlayer, array, checkpoint)
 	triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 7)
 	if(array) then -- Нет массива при финише
-		triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Участок "..checkpoint-(1).." из "..#array/3)
+		HelpMessage(thePlayer, "Участок "..checkpoint-(1).." из "..#array/3)
 		if(isElement(racePlayerMarker[getPlayerName(thePlayer)])) then
 			destroyElement(racePlayerMarker[getPlayerName(thePlayer)])
 			destroyElement(racePlayerBlip[getPlayerName(thePlayer)])
@@ -15539,16 +15544,16 @@ end
 function RacePriceGeneration(thePlayer)
 	local x,y,z = getElementPosition(thePlayer)
 	local zone = getZoneName(x,y,z,true)
-	local Prices = math.random(1,10)
+	local Prices = math.random(1,100)
 	if(Prices == 1) then
 		local park = GetRandomParking(zone)
 		if(park) then
 			local RacePrice = PriceAuto[math.random(1, #PriceAuto)]
-			local v = CreateVehicle(RacePrice, park[3], park[4], park[5]+VehicleSystem[RacePrice][1], 0,0,park[6], getPlayerName(thePlayer))
+			local v = CreateVehicle(RacePrice, park[4], park[5], park[6]+VehicleSystem[RacePrice][1], 0,0,park[7], getPlayerName(thePlayer))
 			
-			Parkings[zone][park[1]][park[2]][1] = v
+			Parkings[park[1]][park[2]][park[3]][1] = v
 			setElementData(v, "owner", getPlayerName(thePlayer))
-			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, park[3], park[4], park[5], "Приз")
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, park[4], park[5], park[6], "Приз")
 			outputChatBox("Забери свой приз на красном маркере!", thePlayer, 255,255,255,true)
 		end
 	else
@@ -15658,7 +15663,7 @@ function race(arr, name)
 
 			for slot = 1, #MPPlayerList do
 				if(getPlayerFromName(MPPlayerList[slot])) then
-					triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "helpmessageEvent", getPlayerFromName(MPPlayerList[slot]), "Начало гонки через "..StartRaceTimeout.." сек.")
+					HelpMessage(getPlayerFromName(MPPlayerList[slot]), "Начало гонки через "..StartRaceTimeout.." сек.")
 				end
 			end
 		end
@@ -15779,7 +15784,7 @@ function VehicleBindKeyRadioR(thePlayer)
 		end
 		channelveh[theVehicle]=channelveh[theVehicle]+1
 		if(channelveh[theVehicle] > #radio) then channelveh[theVehicle]=0 end
-		triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Радиостанция №"..channelveh[theVehicle])
+		HelpMessage(thePlayer, "Радиостанция №"..channelveh[theVehicle])
 		switch_radio(theVehicle, channelveh[theVehicle])
 	end
 end
@@ -15793,7 +15798,7 @@ function VehicleBindKeyRadioL(thePlayer)
 		end
 		channelveh[theVehicle]=channelveh[theVehicle]-1
 		if(channelveh[theVehicle] < 0) then channelveh[theVehicle]=#radio end
-		triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Радиостанция №"..channelveh[theVehicle])
+		HelpMessage(thePlayer, "Радиостанция №"..channelveh[theVehicle])
 		switch_radio(theVehicle, channelveh[theVehicle])
 	end
 end
@@ -16011,11 +16016,11 @@ function lockhouse(thePlayer)
 							local arr = fromJSON(xmlNodeGetAttribute(node, "Garage"))
 							if(arr[getElementData(PlayersEnteredPickup[thePlayer], "number")][5] == 1) then
 								arr[getElementData(PlayersEnteredPickup[thePlayer], "number")][5] = 0
-								triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Ты открыл гараж")
+								HelpMessage(thePlayer, "Ты открыл гараж")
 								triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 17)
 							else
 								arr[getElementData(PlayersEnteredPickup[thePlayer], "number")][5] = 1
-								triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Ты закрыл гараж")
+								HelpMessage(thePlayer, "Ты закрыл гараж")
 								triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 16)
 							end
 							setElementData(Garages[getElementData(PlayersEnteredPickup[thePlayer], "h")][getElementData(PlayersEnteredPickup[thePlayer], "number")]["enter"], "locked", arr[getElementData(PlayersEnteredPickup[thePlayer], "number")][5])
@@ -16028,12 +16033,12 @@ function lockhouse(thePlayer)
 							if(xmlNodeGetAttribute(node, "locked") == "1") then
 								xmlNodeSetAttribute(node, "locked", "0")
 								setElementData(getElementByID(xmlNodeGetName(node)), "locked", 0, false)
-								triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Ты открыл дом")
+								HelpMessage(thePlayer, "Ты открыл дом")
 								triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 17)
 							else
 								xmlNodeSetAttribute(node, "locked", "1")
 								setElementData(getElementByID(xmlNodeGetName(node)), "locked", 1, false)
-								triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, "Ты закрыл дом")
+								HelpMessage(thePlayer, "Ты закрыл дом")
 								triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 16)
 							end
 						end
@@ -16475,7 +16480,7 @@ function VehicleUpgrade(upgrade, count)
 		elseif(upgrade == 8) then
 			local vehh = getVehicleHandling(theVehicle)
 			if(getElementData(theVehicle, "siren")) then
-				triggerClientEvent(source, "helpmessageEvent", source, "#009900Уже установлено!")
+				HelpMessage(source, "#009900Уже установлено!")
 			else
 				setElementData(theVehicle, "siren", "true")
 				ToolTip(source, "Чтобы управлять сигнализацией выйди из машины и наведи на неё прицел.")
@@ -16533,7 +16538,7 @@ function VehicleUpgrade(upgrade, count)
 			end	
 		end
 	else
-		triggerClientEvent(source, "helpmessageEvent", source, "#B4191CНедостаточно средств!")
+		HelpMessage(source, "#B4191CНедостаточно средств!")
 	end
 end
 addEvent("VehicleUpgrade", true)
