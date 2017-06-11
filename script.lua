@@ -5588,16 +5588,16 @@ local CasinoObjectInfo = {
 
 local CasinoPrice = {
 	["Blueberry"] = 2,
-	["Cherry"] = 5,
-	["Bar"] = 10,
-	["Gold"] = 10,
-	["Bell"] = 15,
-	["Double Bar"] = 20,
-	["Double Gold"] = 20,
-	["69"] = 25,
-	["Tripple Bar"] = 30,
-	["Melon"] = 40,
-	["Seven"] = 50
+	["Cherry"] = 4,
+	["Bar"] = 7,
+	["Gold"] = 7,
+	["Bell"] = 10,
+	["Double Bar"] = 15,
+	["Double Gold"] = 15,
+	["69"] = 20,
+	["Tripple Bar"] = 25,
+	["Melon"] = 30,
+	["Seven"] = 30
 
 }
 
