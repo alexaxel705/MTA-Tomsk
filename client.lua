@@ -2489,6 +2489,8 @@ function MarkerHit(hitPlayer, Dimension)
 			destroyElement(source)
 		elseif(getElementData(source, "TrailerInfo")) then
 			ChangeInfo(getElementData(source, "TrailerInfo"))
+		elseif(getElementData(source, "type") == "Race") then
+			NextRaceMarker()
 		elseif(getElementData(source, "type") == "RVMarker") then
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			if(theVehicle) then
@@ -8615,44 +8617,68 @@ addEventHandler("ChangeInfoAdv", localPlayer, ChangeInfoAdv)
 
 
 
-function StartRace()
-	PData["RaceStart"] = getTickCount()
+
+
+function NextRaceMarker()
+	table.remove(PData["Race"]["Track"], 1)
+	if(PData["Race"]["Marker"]) then destroyElement(PData["Race"]["Marker"]) end
+	if(PData["Race"]["Blip"]) then destroyElement(PData["Race"]["Blip"]) end
+		
+	if(#PData["Race"]["Track"] >= 1) then
+		PData["Race"]["Marker"] = createMarker(PData["Race"]["Track"][1][1], PData["Race"]["Track"][1][2], PData["Race"]["Track"][1][3], "checkpoint", 20, 255, 0, 0, 170)
+		setElementData(PData["Race"]["Marker"], "type", "Race")
+		PData["Race"]["Blip"] = createBlipAttachedTo(PData["Race"]["Marker"],0,2,255,0,0, 255,0, 99999)
+		if(PData["Race"]["Track"][2]) then
+			setMarkerTarget(PData["Race"]["Marker"], PData["Race"]["Track"][2][1], PData["Race"]["Track"][2][2], PData["Race"]["Track"][2][3])
+		end
+	else	
+		triggerServerEvent("RaceFinish", localPlayer, localPlayer, getTickCount()-PData["Race"]["Start"])
+	end
+end
+
+
+function StartRace(arr)
+	PData["Race"] = {
+		["Start"] = getTickCount(), 
+		["Track"] = arr
+	}
+	NextRaceMarker()
 end
 addEvent("StartRace", true)
 addEventHandler("StartRace", localPlayer, StartRace)
 
 
-function EndRace(racename, oldbest)
-	if(PData["RaceStart"]) then
-		if(racename) then
-			local seconds = (getTickCount()-PData["RaceStart"])/1000
-			local hours = math.floor(seconds/3600)
-			local mins = math.floor(seconds/60 - (hours*60))
-			local secs = math.floor(seconds - hours*3600 - mins *60)
-			local msec = math.floor(((getTickCount()-PData["RaceStart"])-(secs*1000)-(mins*60000)-(hours*3600000))/10)
 
-			
-			if(oldbest) then
-				oldbest = tonumber(oldbest)
-				local seconds2 = (oldbest)/1000
-				local hours2 = math.floor(seconds2/3600)
-				local mins2 = math.floor(seconds2/60 - (hours2*60))
-				local secs2 = math.floor(seconds2 - hours2*3600 - mins2 *60)
-				local msec2 = math.floor(((oldbest)-(secs2*1000)-(mins2*60000)-(hours2*3600000))/10)
-				
-				ToolTip("Твоё время "..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec).."\n"..
-				"Рекорд трассы: "..string.format("%02.f", mins2)..":"..string.format("%02.f", secs2)..":"..string.format("%02.f", msec2))
-				if(oldbest > (getTickCount()-PData["RaceStart"])) then
-					triggerServerEvent("BestTimeSet", localPlayer, localPlayer, racename, getTickCount()-PData["RaceStart"])
-				end
-			else
-				ToolTip("Твоё время "..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec))
-				triggerServerEvent("BestTimeSet", localPlayer, localPlayer, racename, getTickCount()-PData["RaceStart"])
-			end
-		end
+
+
+
+function EndRace(oldbest)
+	if(PData["Race"]) then
+		local seconds = (getTickCount()-PData["Race"]["Start"])/1000
+		local hours = math.floor(seconds/3600)
+		local mins = math.floor(seconds/60 - (hours*60))
+		local secs = math.floor(seconds - hours*3600 - mins *60)
+		local msec = math.floor(((getTickCount()-PData["Race"]["Start"])-(secs*1000)-(mins*60000)-(hours*3600000))/10)
+
 		
-		PData["RaceStart"] = nil
+		oldbest = tonumber(oldbest)
+		local seconds2 = (oldbest)/1000
+		local hours2 = math.floor(seconds2/3600)
+		local mins2 = math.floor(seconds2/60 - (hours2*60))
+		local secs2 = math.floor(seconds2 - hours2*3600 - mins2 *60)
+		local msec2 = math.floor(((oldbest)-(secs2*1000)-(mins2*60000)-(hours2*3600000))/10)
+		
+		ToolTip("Твоё время "..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec).."\n"..
+		"Рекорд трассы: "..string.format("%02.f", mins2)..":"..string.format("%02.f", secs2)..":"..string.format("%02.f", msec2))
 	end
+	
+	
+	for _, element in pairs(PData["Race"]) do
+		if(isElement(element)) then
+			destroyElement(element)
+		end
+	end
+	PData["Race"] = nil
 end
 addEvent("EndRace", true)
 addEventHandler("EndRace", localPlayer, EndRace)
@@ -10072,18 +10098,18 @@ function DrawPlayerMessage()
 					dxDrawText(speed, sx,sy+(15*scaley),sx,sy+(15*scaley), tocolor(120,120,120,255), scale*1.25, "default-bold", "center", "center")
 					dxDrawText(Text("КМ/Ч"), sx,sy+(45*scaley),sx,sy+(45*scaley), tocolor(120,120,120,255), scale/1.5, "default-bold", "center", "center")
 				
-					if(PData["RaceStart"]) then
+					if(PData["Race"]) then
 						dxDrawRectangle(sx-(327*scalex),sy-(82*scaley), 139*NewScale, 154*NewScale, tocolor(0,0,0))
 						dxDrawRectangle(sx-(325*scalex),sy-(80*scaley), 135*NewScale, 150*NewScale, tocolor(121,137,153))
 						dxDrawRectangle(sx-(320*scalex),sy-(75*scaley), 125*NewScale, 140*NewScale, tocolor(0,0,0))
 						--dxDrawText("2", sx-(310*scalex),sy-(75*scaley),0,0, tocolor(121,137,153,255), NewScale*7, "default-bold", "left", "top")
 						--dxDrawText("/4", sx-(250*scalex),sy-(25*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
 						
-						local seconds = (getTickCount()-PData["RaceStart"])/1000
+						local seconds = (getTickCount()-PData["Race"]["Start"])/1000
 						local hours = math.floor(seconds/3600)
 						local mins = math.floor(seconds/60 - (hours*60))
 						local secs = math.floor(seconds - hours*3600 - mins *60)
-						local msec =  math.floor(((getTickCount()-PData["RaceStart"])-(secs*1000)-(mins*60000)-(hours*3600000))/10)
+						local msec =  math.floor(((getTickCount()-PData["Race"]["Start"])-(secs*1000)-(mins*60000)-(hours*3600000))/10)
 						dxDrawText(string.format("%02.f", mins)..":"..string.format("%02.f", secs), sx-(257*scalex), sy+(5*scaley), sx-(257*scalex), sy+(5*scaley), tocolor(121,137,153,255), NewScale*3, "default-bold", "center", "top")
 
 					end

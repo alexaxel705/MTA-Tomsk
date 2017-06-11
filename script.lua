@@ -292,7 +292,6 @@ local Teams = {
 	['Ацтекас'] = createTeam('Ацтекас', 48, 213, 200)
 }
 local MPPlayerList={}
-local racePlayerMarker = {}
 local NewTeamVehicle = {}
 local racePlayerBlip = {}
 local racePlayerFinish = {}
@@ -12229,6 +12228,80 @@ end
 
 
 
+local NightRace1 = {
+	[1] = {1018.8, -1144.8, 23.7},
+	[2] = {1078.1, -1144.9, 23.5},
+	[3] = {1251.6, -1144.9, 23.5},
+	[4] = {1451.4, -1160.9, 23.5},
+	[5] = {1635.2, -1160.9, 23.8},
+	[6] = {1842.6, -1181, 23.5},
+	[7] = {1849.3, -1219.9, 18.6},
+	[8] = {1849.4, -1427.2, 13.3},
+	[9] = {1833.5, -1539.1, 13.3},
+	[10] = {1821.5, -1670.5, 13.3},
+	[11] = {1821.5, -1926.9, 13.3},
+	[12] = {1958.8, -1932.2, 13.3},
+	[13] = {1961.5, -2110.3, 13.3},
+	[14] = {1963.5, -2215.1, 15.8},
+	[15] = {1963.5, -2353.6, 13.3},
+	[16] = {1963.5, -2585.9, 13.3},
+	[17] = {1812.4, -2585.9, 13.3},
+	[18] = {1385.7, -2585.9, 16.4},
+	[19] = {1333.5, -2586, 13.1}, 
+	[20] = {1320.3, -2504.9, 12.4},
+	[21] = {1298.7, -2449.3, 7.44},
+	[22] = {1167.5, -2408.5, 10.2},
+	[23] = {1064.8, -2297.7, 12.6},
+	[24] = {1031.4, -2190.1, 12.7},
+	[25] = {1053.5, -2050.8, 12.7}
+}
+
+
+
+local NightRace2 = {
+	[1] = {-214.0810546875, 2634.9453125, 62.8358306884779164},
+	[2] = {-290.470703125, 2633.3876953125, 62.84163665771564},
+	[3] = {-359.451171875, 2658.9931640625, 64.51752471923834},
+	[4] = {-467.3408203125, 2716.7890625, 63.9744987487793834},
+	[5] = {-603.5068359375, 2755.724609375, 59.75499725341834},
+	[6] = {-777.671875, 2731.10546875, 45.1319618225125341834},
+	[7] = {-943.3212890625, 2719.197265625, 45.64790725708834},
+	[8] = {-1223.205078125, 2684.685546875, 46.11724472045934},
+	[9] = {-1197.4208984375, 2622.9775390625, 55.385635375977},
+	[10] = {-1111.001953125, 2502.7490234375, 80.4488296508797},
+	[11] = {-1100.77734375, 2369.1044921875, 84.90806579589897},
+	[12] = {-1067.330078125, 2198.1162109375, 87.5415191650397}
+}
+
+
+local NightRace3 = {
+	[1] = {752.9, 323.6, 19.9}, 
+	[2] = {828.9, 339.8, 18.9}, 
+	[3] = {991.8, 418.9, 18.9}, 
+	[4] = {1058.7, 462.3, 19.7}, 
+	[5] = {1192.8, 369.3, 19.2}, 
+	[6] = {1300, 321, 18.4},
+	[7] = {1401.4, 255.2, 18.4}, 
+	[8] = {1395, 202.5, 18.5}, 
+	[9] = {1511.7, 140.8, 30.5}, 
+	[10] = {1553.4, 39.1, 23.2}, 
+	[11] = {1556.6, -104.1, 19.1}, 
+	[12] = {1514.4, -186.8, 12},
+	[13] = {1374, -211.6, 5.7}, 
+	[14] = {1258.4, -147.9, 37.5}, 
+	[15] = {1080.8, -63.4, 18.2}, 
+	[16] = {906.2, -89.6, 19.8},
+	[17] = {773.2, -138.6, 19.9},
+	[18] = {676.4, -195.7, 13.5},
+	[19] = {566, -203, 14.8},
+	[20] = {472.5, -266.7, 9.9},
+	[21] = {343.9, -339.5, 9.3},
+	[22] = {260.1, -373.2, 7.8},
+	[23] = {208.7, -285.3, 0.4}
+}   
+
+
+
 
 
 
@@ -12248,6 +12321,9 @@ function seti(thePlayer, command, h)
 	tmpi = tonumber(h)
 end
 addCommandHandler("seti", seti)
+
+
+
 
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
@@ -13928,10 +14004,6 @@ function MarkerHit(hitElement, Dimension)
 			elseif(getElementData(source, "type") == "recyclels") then	
 				HelpMessage(thePlayer, "Авторазбор\nНажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы сдать автомобиль")
 				PetrolFuelMarker[thePlayer] = source
-			elseif(getElementData(source, "type") == "racePlayerMarker" and getElementData(source, "player") == getPlayerName(thePlayer)) then
-				CreateRaceMarker(thePlayer, getElementData(racePlayerMarker[getPlayerName(thePlayer)], "array"), getElementData(racePlayerMarker[getPlayerName(thePlayer)], "stage")+1)
-			elseif(getElementData(source, "type") == "racePlayerMarkerFinish" and getElementData(source, "player") == getPlayerName(thePlayer)) then
-				CreateRaceMarker(thePlayer, false, false)
 			elseif(getElementData(source, "type") == "kickstart") then
 				local x,y,z = getElementPosition(source)
 				local r,g,b,a = getMarkerColor(source)
@@ -14543,7 +14615,7 @@ function race(thePlayer, command, h)
 		end
 		if(YouRacer == false) then
 			MPPlayerList[#MPPlayerList+1] = getPlayerName(thePlayer)
-			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, SData["RaceArr"][1], SData["RaceArr"][2], SData["RaceArr"][3], "Гонка")
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, SData["RaceArr"][1][1], SData["RaceArr"][1][2], SData["RaceArr"][1][3], "Гонка")
 			outputChatBox("* "..getElementData(thePlayer, "color")..getPlayerName(thePlayer).." #FFFFFFприсоединился к гонке!",getRootElement(),255,255,255,true)
 		end
 	else
@@ -15140,6 +15212,17 @@ end
 
 
 
+
+function MissionCompleted(thePlayer, count, mission, target, cinema)
+	triggerClientEvent(thePlayer, "MissionCompleted", thePlayer, mission, count, target, cinema)
+end
+
+
+function HelpMessage(thePlayer, text)
+	triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, text)
+end
+
+
 function AddPlayerMoney(thePlayer, count, mission)
 	if(count < 0) then 
 		if(GetPlayerMoney(thePlayer)+count < 0) then
@@ -15152,20 +15235,10 @@ function AddPlayerMoney(thePlayer, count, mission)
 	givePlayerMoney(thePlayer, count)
 	AddInventoryItem(thePlayer, "Деньги", count, 550, {})
 	if(mission) then
-		MissionCompleted(mission, count)
+		MissionCompleted(thePlayer, count, mission)
 		triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 6)
 	end
 	return true
-end
-
-
-function MissionCompleted(thePlayer, count, mission, target, cinema)
-	triggerClientEvent(thePlayer, "MissionCompleted", thePlayer, mission, count, target, cinema)
-end
-
-
-function HelpMessage(thePlayer, text)
-	triggerClientEvent(thePlayer, "helpmessageEvent", thePlayer, text)
 end
 
 
@@ -15409,7 +15482,7 @@ function CreateTruckMarker(thePlayer, x, y, z)
 	if(isElement(TruckMarker[thePlayer])) then
 		DestroyTruckMarker(thePlayer)
 	end
-	TruckMarker[thePlayer]=createMarker(x, y, z, "checkpoint", 10, 0, 0, 0, 0, thePlayer)
+	TruckMarker[thePlayer] = createMarker(x, y, z, "checkpoint", 10, 0, 0, 0, 0, thePlayer)
 	setElementData(TruckMarker[thePlayer], "type", "TruckMarker")
 	setElementData(TruckMarker[thePlayer], "player", getPlayerName(thePlayer))
 	HelpMessage(thePlayer, "#FFFFFFОтвези груз на #FF0000красный маркер#FFFFFF\nчтобы получить #32CD32вознаграждение")
@@ -15418,114 +15491,67 @@ end
 
 
 
-function CreateRaceMarker(thePlayer, array, checkpoint)
-	triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 7)
-	if(array) then -- Нет массива при финише
-		HelpMessage(thePlayer, "Участок "..checkpoint-(1).." из "..#array/3)
-		if(isElement(racePlayerMarker[getPlayerName(thePlayer)])) then
-			destroyElement(racePlayerMarker[getPlayerName(thePlayer)])
-			destroyElement(racePlayerBlip[getPlayerName(thePlayer)])
-		end
-		
-		racePlayerMarker[getPlayerName(thePlayer)]=createMarker(array[(checkpoint*3)-2], array[(checkpoint*3)-1], array[checkpoint*3], "checkpoint", 20, 255, 0, 0, 170, thePlayer)
-		setElementData(racePlayerMarker[getPlayerName(thePlayer)], "player", getPlayerName(thePlayer))
-		racePlayerBlip[getPlayerName(thePlayer)]=createBlipAttachedTo(racePlayerMarker[getPlayerName(thePlayer)],0,2,255,0,0, 255,0, 99999, thePlayer)
-		if(array[(checkpoint*3)+3]) then
-			setMarkerTarget(racePlayerMarker[getPlayerName(thePlayer)],array[(checkpoint*3)+1], array[(checkpoint*3)+2], array[(checkpoint*3)+3])
-			setElementData(racePlayerMarker[getPlayerName(thePlayer)], "type", "racePlayerMarker")
-			setElementData(racePlayerMarker[getPlayerName(thePlayer)], "array", array)
-			setElementData(racePlayerMarker[getPlayerName(thePlayer)], "stage", checkpoint)
-		else
-			setElementData(racePlayerMarker[getPlayerName(thePlayer)], "type", "racePlayerMarkerFinish")
-		end
-	else
-		destroyElement(racePlayerMarker[getPlayerName(thePlayer)])
-		destroyElement(racePlayerBlip[getPlayerName(thePlayer)])
-		racePlayerFinish[#racePlayerFinish+1] = getPlayerName(thePlayer)
-		
-		
-		local besttime = false
-		local FishNode = xmlFindChild(FishesNode, SData["RaceName"], 0)
-		if(FishNode) then
-			besttime = xmlNodeGetValue(FishNode)
-		end
-
-		triggerClientEvent(thePlayer, "EndRace", thePlayer, SData["RaceName"], besttime)
-		if(#racePlayerFinish == 1) then
-			AddPlayerMoney(getPlayerFromName(racePlayerFinish[1]), raceMoney(SData["RaceArr"]), "МИССИЯ ВЫПОЛНЕНА!")
-			killTimer(raceGlobalTimer)
-			for slot = 1, #MPPlayerList do
-				if(getPlayerFromName(MPPlayerList[slot])) then
-					outputChatBox("#CC9966"..racePlayerFinish[1].."#FFFFFF Пришел на финиш первым! Гонка закончится через 30 секунд.", getPlayerFromName(MPPlayerList[slot]), 255,255,255,true)
-				end
-			end
-			local EndRaceTimeout = 30
-			EndRaceInfoTimer = setTimer(function()
-				if(EndRaceTimeout == 0) then 
-					for slot = 1, #MPPlayerList do
-						if(getPlayerFromName(MPPlayerList[slot])) then
-							local FishNode = xmlFindChild(FishesNode, SData["RaceName"], 0)
-							if(FishNode) then
-								besttime = xmlNodeGetValue(FishNode)
-							end
-							triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "EndRace", getPlayerFromName(MPPlayerList[slot]), false, false)
-						end
-					end
-				
-				
-					if(racePlayerFinish[1]) then 
-						RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
-						RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
-						RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
-						outputChatBox("Победитель: #CC9966"..getPlayerName(thePlayer), getRootElement(), 255,255,255, true)
-					end
-					if(racePlayerFinish[2]) then 
-						RacePriceGeneration(getPlayerFromName(racePlayerFinish[2]))
-						RacePriceGeneration(getPlayerFromName(racePlayerFinish[2]))
-						outputChatBox("Второе место: #CC9966"..racePlayerFinish[2], getRootElement(), 255,255,255, true) 
-					end
-					if(racePlayerFinish[3]) then 
-						RacePriceGeneration(getPlayerFromName(racePlayerFinish[3]))
-						RacePriceGeneration(getPlayerFromName(racePlayerFinish[3]))
-						outputChatBox("Третье место: #CC9966"..racePlayerFinish[3], getRootElement(), 255,255,255, true) 
-					end
-					endRace()
-				else
-					for slot = 1, #MPPlayerList do
-						if(getPlayerFromName(MPPlayerList[slot])) then
-							triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "ChangeInfoAdv", getPlayerFromName(MPPlayerList[slot]), "Завершение гонки через "..EndRaceTimeout, 2000)
-						end
-					end
-				end
-				EndRaceTimeout = EndRaceTimeout-1
-			end, 1000, 31)
-		elseif(#racePlayerFinish == 2) then AddPlayerMoney(getPlayerFromName(racePlayerFinish[2]), math.floor(raceMoney(SData["RaceArr"])/2), "МИССИЯ ВЫПОЛНЕНА!")
-		elseif(#racePlayerFinish == 3) then AddPlayerMoney(getPlayerFromName(racePlayerFinish[3]), math.floor(raceMoney(SData["RaceArr"])/3), "МИССИЯ ВЫПОЛНЕНА!")
-		end
-	end
-end
-
-
-function BestTimeSet(thePlayer, racename, times)
-	local FishHones = xmlNodeGetChildren(FishesNode)
-	local FishNode = xmlFindChild(FishesNode, racename, 0)
+function RaceFinish(thePlayer, times)
+	--triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 7)
+	racePlayerFinish[#racePlayerFinish+1] = getPlayerName(thePlayer)
+	times = tonumber(times)
+	
+	local besttime = false
+	local FishNode = xmlFindChild(FishesNode, SData["RaceName"], 0)
 	if(FishNode) then
-		xmlNodeSetValue(FishNode, times)
+		besttime = tonumber(xmlNodeGetValue(FishNode))
 	else
-		local NewNode = xmlCreateChild(FishesNode, racename)
-		xmlNodeSetValue(NewNode, times)
+		FishNode = xmlCreateChild(FishesNode, SData["RaceName"])
+		xmlNodeSetValue(FishNode, times)
+		besttime = times
 	end
+
 	
 	local seconds = (times)/1000
 	local hours = math.floor(seconds/3600)
 	local mins = math.floor(seconds/60 - (hours*60))
 	local secs = math.floor(seconds - hours*3600 - mins *60)
 	local msec = math.floor(((times)-(secs*1000)-(mins*60000)-(hours*3600000))/10)
-
-	outputChatBox("#CC9966"..getPlayerName(thePlayer).."#FFFFFF установил новый #FF0000рекорд#FFFFFF на трассе #FFFFCC"..racename.." #FFFFFF"..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec), getRootElement(), 255,255,255, true)
+	
+		
+	if(times <= besttime) then
+		xmlNodeSetValue(FishNode, times)
+		outputChatBox("#CC9966"..getPlayerName(thePlayer).."#FFFFFF установил новый #FF0000рекорд#FFFFFF на трассе #FFFFCC"..SData["RaceName"].." #FFFFFF"..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec), getRootElement(), 255,255,255, true)
+	end
+	
+	
+	triggerClientEvent(thePlayer, "EndRace", thePlayer, besttime)
+	
+	if(#racePlayerFinish == 1) then
+		AddPlayerMoney(getPlayerFromName(racePlayerFinish[1]), raceMoney(SData["RaceArr"]), "МИССИЯ ВЫПОЛНЕНА!")
+		killTimer(raceGlobalTimer)
+		for slot = 1, #MPPlayerList do
+			if(getPlayerFromName(MPPlayerList[slot])) then
+				outputChatBox("#CC9966"..racePlayerFinish[1].."#FFFFFF Пришел на финиш первым! Гонка закончится через 30 секунд.", getPlayerFromName(MPPlayerList[slot]), 255,255,255,true)
+			end
+		end
+		local EndRaceTimeout = 30
+		EndRaceInfoTimer = setTimer(function()
+			if(EndRaceTimeout == 0) then 
+				endRace()
+			else
+				for slot = 1, #MPPlayerList do
+					if(getPlayerFromName(MPPlayerList[slot])) then
+						HelpMessage(getPlayerFromName(MPPlayerList[slot]), "Завершение гонки через "..EndRaceTimeout)
+					end
+				end
+			end
+			EndRaceTimeout = EndRaceTimeout-1
+		end, 1000, 31)
+	elseif(#racePlayerFinish == 2) then AddPlayerMoney(getPlayerFromName(racePlayerFinish[2]), math.floor(raceMoney(SData["RaceArr"])/2), "МИССИЯ ВЫПОЛНЕНА!")
+	elseif(#racePlayerFinish == 3) then AddPlayerMoney(getPlayerFromName(racePlayerFinish[3]), math.floor(raceMoney(SData["RaceArr"])/3), "МИССИЯ ВЫПОЛНЕНА!")
+	end
 end
-addEvent("BestTimeSet", true)
-addEventHandler("BestTimeSet", getRootElement(), BestTimeSet)
+addEvent("RaceFinish", true)
+addEventHandler("RaceFinish", getRootElement(), RaceFinish)
+
+
+
 
 
 
@@ -15567,9 +15593,10 @@ end
 
 function raceMoney(arr)
 	local money = 0
-	for slot = 1, #arr/6 do
-		local arrsix=slot*6
-		money = money+getDistanceBetweenPoints3D(arr[arrsix-5], arr[arrsix-4], arr[arrsix-3], arr[arrsix-2], arr[arrsix-1], arr[arrsix])
+	for i, _ in pairs(arr) do
+		if(arr[i+1]) then
+			money = money+getDistanceBetweenPoints3D(arr[i][1], arr[i][2], arr[i][3], arr[i+1][1], arr[i+1][2], arr[i+1][3])
+		end
 	end
 	return math.floor(money*5)
 end
@@ -15638,7 +15665,7 @@ end
 function race(arr, name)
 	SData["RaceArr"] = arr
 	SData["RaceName"] = name
-	local raceblip = createBlip(arr[1], arr[2], 0, 33)
+	local raceblip = createBlip(arr[1][1], arr[1][2], 0, 33)
 	outputChatBox("Стартует мероприятие гонка!", getRootElement(), 255,255,255, true)
 	
 	local StartRaceTimeout = 90
@@ -15647,8 +15674,7 @@ function race(arr, name)
 			destroyElement(raceblip)
 			for slot = 1, #MPPlayerList do
 				if(getPlayerFromName(MPPlayerList[slot])) then
-					CreateRaceMarker(getPlayerFromName(MPPlayerList[slot]), arr, 2)
-					triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "StartRace", getPlayerFromName(MPPlayerList[slot]))
+					triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "StartRace", getPlayerFromName(MPPlayerList[slot]), SData["RaceArr"])
 				end
 			end
 			raceGlobalTimer = setTimer(function()
@@ -15656,9 +15682,9 @@ function race(arr, name)
 			end, 120000, 1)
 		else
 			if(isElementVisibleTo(raceblip, getRootElement())) then
-				setElementVisibleTo (raceblip, getRootElement(), false)
+				setElementVisibleTo(raceblip, getRootElement(), false)
 			else
-				setElementVisibleTo (raceblip, getRootElement(), true)
+				setElementVisibleTo(raceblip, getRootElement(), true)
 			end
 
 			for slot = 1, #MPPlayerList do
@@ -15808,16 +15834,36 @@ end
 
 
 
-
-
-
 function endRace()
 	for slot = 1, #MPPlayerList do
-		if(isElement(racePlayerMarker[MPPlayerList[slot]])) then
-			destroyElement(racePlayerMarker[MPPlayerList[slot]])
-			destroyElement(racePlayerBlip[MPPlayerList[slot]])
+		if(getPlayerFromName(MPPlayerList[slot])) then
+			local FishNode = xmlFindChild(FishesNode, SData["RaceName"], 0)
+			if(FishNode) then
+				besttime = xmlNodeGetValue(FishNode)
+			end
+			triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "EndRace", getPlayerFromName(MPPlayerList[slot]), besttime)
 		end
 	end
+	
+	
+	if(racePlayerFinish[1]) then 
+		RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
+		RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
+		RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
+		outputChatBox("Победитель: #CC9966"..getPlayerName(thePlayer), getRootElement(), 255,255,255, true)
+	end
+	if(racePlayerFinish[2]) then 
+		RacePriceGeneration(getPlayerFromName(racePlayerFinish[2]))
+		RacePriceGeneration(getPlayerFromName(racePlayerFinish[2]))
+		outputChatBox("Второе место: #CC9966"..racePlayerFinish[2], getRootElement(), 255,255,255, true) 
+	end
+	if(racePlayerFinish[3]) then 
+		RacePriceGeneration(getPlayerFromName(racePlayerFinish[3]))
+		RacePriceGeneration(getPlayerFromName(racePlayerFinish[3]))
+		outputChatBox("Третье место: #CC9966"..racePlayerFinish[3], getRootElement(), 255,255,255, true) 
+	end
+
+
 	MPPlayerList = {}
 	racePlayerFinish = {}
 	SData["RaceArr"] = false
@@ -15825,7 +15871,6 @@ function endRace()
 			StartMP()
 	end, 10000, 1)
 end
-
 
 
 
@@ -16050,81 +16095,6 @@ function lockhouse(thePlayer)
 end
 
 
-
-
-
-
-local NightRace1={
-	1018.8, -1144.8, 23.7,
-	1078.1, -1144.9, 23.5,
-	1251.6, -1144.9, 23.5,
-	1451.4, -1160.9, 23.5,
-	1635.2, -1160.9, 23.8,
-	1842.6, -1181, 23.5,
-	1849.3, -1219.9, 18.6,
-	1849.4, -1427.2, 13.3,
-	1833.5, -1539.1, 13.3,
-	1821.5, -1670.5, 13.3,
-	1821.5, -1926.9, 13.3,
-	1958.8, -1932.2, 13.3,
-	1961.5, -2110.3, 13.3,
-	1963.5, -2215.1, 15.8,
-	1963.5, -2353.6, 13.3,
-	1963.5, -2585.9, 13.3,
-	1812.4, -2585.9, 13.3,
-	1385.7, -2585.9, 16.4,
-	1333.5, -2586, 13.1,
-	1320.3, -2504.9, 12.4,
-	1298.7, -2449.3, 7.44,
-	1167.5, -2408.5, 10.2,
-	1064.8, -2297.7, 12.6,
-	1031.4, -2190.1, 12.7,
-	1053.5, -2050.8, 12.7
-}
-
-
-
-local NightRace2={
-	-214.0810546875, 2634.9453125, 62.8358306884779164,
-	-290.470703125, 2633.3876953125, 62.84163665771564,
-	-359.451171875, 2658.9931640625, 64.51752471923834,
-	-467.3408203125, 2716.7890625, 63.9744987487793834,
-	-603.5068359375, 2755.724609375, 59.75499725341834,
-	-777.671875, 2731.10546875, 45.1319618225125341834,
-	-943.3212890625, 2719.197265625, 45.64790725708834,
-	-1223.205078125, 2684.685546875, 46.11724472045934,
-	-1197.4208984375, 2622.9775390625, 55.385635375977,
-	-1111.001953125, 2502.7490234375, 80.4488296508797,
-	-1100.77734375, 2369.1044921875, 84.90806579589897,
-	-1067.330078125, 2198.1162109375, 87.5415191650397
-}
-
-
-local NightRace3={
-	752.9, 323.6, 19.9, 
-	828.9, 339.8, 18.9, 
-	991.8, 418.9, 18.9, 
-	1058.7, 462.3, 19.7, 
-	1192.8, 369.3, 19.2, 
-	1300, 321, 18.4,
-	1401.4, 255.2, 18.4, 
-	1395, 202.5, 18.5, 
-	1511.7, 140.8, 30.5, 
-	1553.4, 39.1, 23.2, 
-	1556.6, -104.1, 19.1, 
-	1514.4, -186.8, 12,
-	1374, -211.6, 5.7, 
-	1258.4, -147.9, 37.5, 
-	1080.8, -63.4, 18.2, 
-	906.2, -89.6, 19.8,
-	773.2, -138.6, 19.9,
-	676.4, -195.7, 13.5,
-	566, -203, 14.8,
-	472.5, -266.7, 9.9,
-	343.9, -339.5, 9.3,
-	260.1, -373.2, 7.8,
-	208.7, -285.3, 0.4
-}
 
 
 
