@@ -8598,6 +8598,51 @@ addEventHandler("ChangeInfoAdv", localPlayer, ChangeInfoAdv)
 
 
 
+function StartRace()
+	PData["RaceStart"] = getTickCount()
+end
+addEvent("StartRace", true)
+addEventHandler("StartRace", localPlayer, StartRace)
+
+
+function EndRace(racename, oldbest)
+	if(PData["RaceStart"]) then
+		if(racename) then
+			local seconds = (getTickCount()-PData["RaceStart"])/1000
+			local hours = math.floor(seconds/3600)
+			local mins = math.floor(seconds/60 - (hours*60))
+			local secs = math.floor(seconds - hours*3600 - mins *60)
+			local msec = math.floor(((getTickCount()-PData["RaceStart"])-(secs*1000)-(mins*60000)-(hours*3600000))/10)
+
+			
+			if(oldbest) then
+				oldbest = tonumber(oldbest)
+				local seconds2 = (oldbest)/1000
+				local hours2 = math.floor(seconds2/3600)
+				local mins2 = math.floor(seconds2/60 - (hours2*60))
+				local secs2 = math.floor(seconds2 - hours2*3600 - mins2 *60)
+				local msec2 = math.floor(((oldbest)-(secs2*1000)-(mins2*60000)-(hours2*3600000))/10)
+				
+				ToolTip("Твоё время "..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec).."\n"..
+				"Рекорд трассы: "..string.format("%02.f", mins2)..":"..string.format("%02.f", secs2)..":"..string.format("%02.f", msec2))
+				if(oldbest > (getTickCount()-PData["RaceStart"])) then
+					triggerServerEvent("BestTimeSet", localPlayer, localPlayer, racename, getTickCount()-PData["RaceStart"])
+				end
+			else
+				ToolTip("Твоё время "..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec))
+				triggerServerEvent("BestTimeSet", localPlayer, localPlayer, racename, getTickCount()-PData["RaceStart"])
+			end
+		end
+		
+		PData["RaceStart"] = nil
+	end
+end
+addEvent("EndRace", true)
+addEventHandler("EndRace", localPlayer, EndRace)
+
+
+
+
 
 function StartLainOS()
 	if(not LainOS) then
@@ -10009,6 +10054,22 @@ function DrawPlayerMessage()
 
 					dxDrawText(speed, sx,sy+(15*scaley),sx,sy+(15*scaley), tocolor(120,120,120,255), scale*1.25, "default-bold", "center", "center")
 					dxDrawText(Text("КМ/Ч"), sx,sy+(45*scaley),sx,sy+(45*scaley), tocolor(120,120,120,255), scale/1.5, "default-bold", "center", "center")
+				
+					if(PData["RaceStart"]) then
+						dxDrawRectangle(sx-(327*scalex),sy-(82*scaley), 139*NewScale, 154*NewScale, tocolor(0,0,0))
+						dxDrawRectangle(sx-(325*scalex),sy-(80*scaley), 135*NewScale, 150*NewScale, tocolor(121,137,153))
+						dxDrawRectangle(sx-(320*scalex),sy-(75*scaley), 125*NewScale, 140*NewScale, tocolor(0,0,0))
+						--dxDrawText("2", sx-(310*scalex),sy-(75*scaley),0,0, tocolor(121,137,153,255), NewScale*7, "default-bold", "left", "top")
+						--dxDrawText("/4", sx-(250*scalex),sy-(25*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
+						
+						local seconds = (getTickCount()-PData["RaceStart"])/1000
+						local hours = math.floor(seconds/3600)
+						local mins = math.floor(seconds/60 - (hours*60))
+						local secs = math.floor(seconds - hours*3600 - mins *60)
+						local msec =  math.floor(((getTickCount()-PData["RaceStart"])-(secs*1000)-(mins*60000)-(hours*3600000))/10)
+						dxDrawText(string.format("%02.f", mins)..":"..string.format("%02.f", secs), sx-(257*scalex), sy+(5*scaley), sx-(257*scalex), sy+(5*scaley), tocolor(121,137,153,255), NewScale*3, "default-bold", "center", "top")
+
+					end
 				end
 				
 				local hardtruck = theVehicle
