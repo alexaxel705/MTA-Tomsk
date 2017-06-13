@@ -4641,11 +4641,7 @@ function UpdateTabEvent()
 	if(TabScroll > #thePlayers) then TabScroll = #thePlayers end
 	for slot = TabScroll, #thePlayers do
 		if(TABCurrent < MAXSCROLL) then
-			if(getElementData(thePlayers[slot], "rate")) then
-				RANG=RANG..getElementData(thePlayers[slot], "rate").."\n"
-			else
-				RANG=RANG..Text("Не авторизирован").."\n"
-			end
+			RANG=RANG.."".."\n"
 			IDF = IDF..getElementData(thePlayers[slot], "id").."\n"
 			NF = NF..getElementData(thePlayers[slot], "color")..getPlayerName(thePlayers[slot]):gsub('#%x%x%x%x%x%x', '').."\n"
 			PING = PING..getPlayerPing(thePlayers[slot]).."\n"
@@ -4750,7 +4746,9 @@ end
 
 function StartUnload()
 	LoginClient(false)
-	VideoMemory = {["HUD"] = {}}
+	for name, dat in pairs(VideoMemory) do
+		VideoMemory[name] = {}
+	end
 	stopSound(GTASound)
 	return true
 end
@@ -4844,7 +4842,7 @@ function HUDPreload()
 	dxDrawBorderedText("RPG RealLife (Russian Federation/Tomsk)", 540*scalex, 285*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawBorderedText(Text("ид"), x+(15*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawBorderedText(Text("ник"), x+(60*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawBorderedText(Text("место в рейтинге"), x+(300*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
+	dxDrawBorderedText("", x+(300*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawBorderedText(Text("пинг"), x+(710*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawLine(510*scalex, 329*scaley, x+(750*NewScale), 329*scaley, tocolor(120,120,120,255), 1)
 	dxDrawRectangle(475*scalex, 810*scaley, 470*NewScale, 215*NewScale, tocolor(0, 0, 0, 170))
@@ -4866,6 +4864,13 @@ function HUDPreload()
 	dxDrawRectangle(0,screenHeight-(screenHeight/9),screenWidth, screenHeight/9, tocolor(0,0,0,255))
 	dxSetBlendMode("blend")
 
+	VideoMemory["HUD"]["CollectionCircle"] = dxCreateRenderTarget(100*NewScale, 100*NewScale, true)
+	dxSetRenderTarget(VideoMemory["HUD"]["CollectionCircle"], true)
+	dxSetBlendMode("modulate_add")
+	dxDrawCircle(50*NewScale, 50*NewScale, 0, 40*NewScale, 1, 0, 360, tocolor(70,74,70,15))
+	dxDrawCircle(50*NewScale, 50*NewScale, 40*NewScale, 5*NewScale, 1, 0, 360, tocolor(20,24,20,15))
+	dxSetBlendMode("blend")
+	
 	PData['loading'] = 6
 	
 	VideoMemory["HUD"]["BlackScreen"] = dxCreateRenderTarget(screenWidth, screenHeight, true)
@@ -8479,6 +8484,9 @@ function dxDrawBorderedText(text, left, top, right, bottom, color, scale, font, 
 	end
 end
 
+
+
+
 function normalspeed(h,m,weather)
 	if(isTimer(DrugsTimer)) then
 		killTimer(DrugsTimer)
@@ -8637,10 +8645,11 @@ function NextRaceMarker()
 end
 
 
-function StartRace(arr)
+function StartRace(arr, players)
 	PData["Race"] = {
 		["Start"] = getTickCount(), 
-		["Track"] = arr
+		["Track"] = arr,
+		["Racers"] = players
 	}
 	NextRaceMarker()
 end
@@ -9671,8 +9680,7 @@ function DrawPlayerMessage()
 			if(PData["Interface"]["Collections"]) then
 				local cposx, cposy = 100*NewScale, screenHeight/1.6
 				for name, dat in pairs(PData["DisplayCollection"]) do
-					dxDrawCircle(cposx+(30*NewScale), cposy+(20*NewScale), 0, 40*NewScale, 1, 0, 360, tocolor(70,74,70,15))
-					dxDrawCircle(cposx+(30*NewScale), cposy+(20*NewScale), 40*NewScale, 5*NewScale, 1, 0, 360, tocolor(20,24,20,15))
+					dxDrawImage(cposx-(20*NewScale), cposy-(25*NewScale), 100*NewScale, 100*NewScale, VideoMemory["HUD"]["CollectionCircle"])
 
 					dxDrawImage(cposx, cposy-(5*NewScale), 60*NewScale, 40*NewScale, items[name][1])
 					dxDrawBorderedText(dat[1]-dat[2].."/"..dat[1], cposx+(165*NewScale), cposy+(35*NewScale), 0, 0, tocolor(255, 255, 255, 255), NewScale*1.5, "default-bold", "center", "top", nil, nil, nil, true)
@@ -10067,7 +10075,7 @@ function DrawPlayerMessage()
 					end
 					sx = screenWidth-(150*scalex)
 					sy = screenHeight-(247*scaley)
-					local TS = scale/2
+					local TS = NewScale
 					dxDrawCircle(sx,sy, 88*TS, 23*TS, 1, 0, 360, tocolor(0,0,0,5))
 					dxDrawCircle(sx,sy, 100*TS, 5*TS, 4, 120, 120+RedRPMZone, tocolor(0,0,0,200))
 					dxDrawCircle(sx,sy, 100*TS, 5*TS, 4, 120+RedRPMZone, 345, tocolor(255,51,51,200))
@@ -10102,8 +10110,9 @@ function DrawPlayerMessage()
 						dxDrawRectangle(sx-(327*scalex),sy-(82*scaley), 139*NewScale, 154*NewScale, tocolor(0,0,0))
 						dxDrawRectangle(sx-(325*scalex),sy-(80*scaley), 135*NewScale, 150*NewScale, tocolor(121,137,153))
 						dxDrawRectangle(sx-(320*scalex),sy-(75*scaley), 125*NewScale, 140*NewScale, tocolor(0,0,0))
-						--dxDrawText("2", sx-(310*scalex),sy-(75*scaley),0,0, tocolor(121,137,153,255), NewScale*7, "default-bold", "left", "top")
-						--dxDrawText("/4", sx-(250*scalex),sy-(25*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
+						dxDrawText("0", sx-(305*scalex),sy-(82*scaley),0,0, tocolor(121,137,153,255), NewScale*7, "default-bold", "left", "top")
+						dxDrawText("ой", sx-(255*scalex),sy-(70*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
+						dxDrawText("/"..#PData["Race"]["Racers"], sx-(255*scalex),sy-(35*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
 						
 						local seconds = (getTickCount()-PData["Race"]["Start"])/1000
 						local hours = math.floor(seconds/3600)

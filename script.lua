@@ -1,10 +1,53 @@
 local ids = {}
+
+
+-- Хранит исходные значения, которые в дальнейшем будут отфильтрованы в SData
+local SourceData = {
+	["PriceAuto"] = {434, 461, 494, 495, 502, 503, 504, 521, 522, 568, 573, 581, 429, 587, 602},
+	["TeamVehicle"] = {
+		["Гроув-стрит"] = {{567,"GRST 228",{86, 86, 86, 86}}, {492 ,"GROVE4L_",{59,34,86,86}}, {412,"GRST 228",{86, 86, 86, 86}}},
+		["Баллас"] = {{517,"BALS 228",{30, 30, 30, 30}}, {412,"BALS 228",{30, 30, 30, 30}}, {566 ,"BALS 228",{30, 30, 30, 30}}},
+		["Ацтекас"] = {{466,"AZTC 228",{93, 71, 0, 0}}, {576,"AZTC 228",{93, 71, 0, 0}}, {474 ,"AZTC 228",{93, 71, 0, 0}}},
+		["Байкеры"] = {{468,"METAL228"}, {463,"METAL228"}, {586 ,"METAL228"}},
+		--{для всех}, {такси}, {эксклюзивы}, {полиция}
+		["Полиция"] = {
+			["Los Santos"] = {{596, "POLS 228"}, {523, "PBKE 228"}}, 
+			["Red County"] = {{599, "PORC"}, {523, "PBKE 228"}}, 
+			["Whetstone"] = {{599, "POWS 228"}, {523, "PBKE 228"}}, 
+			["Flint County"] = {{599, "POFC 228"}, {523, "PBKE 228"}}, 
+			["San Fierro"] = {{597, "POSF 228"}, {523, "PBKE 228"}}, 
+			["Bone County"] = {{598, "POBC 228"}, {523, "PBKE 228"}}, 
+			["Tierra Robada"] = {{598, "POTR 228"}, {523, "PBKE 228"}}, 
+			["Las Venturas"] = {{598, "POLV 228"}, {523, "PBKE 228"}}, 
+		},
+		["Мирные жители"] = {
+			["Los Santos"] = {{404},{419},{439},{496},{475}, {420}, {603}, {467},{436},{585},{462},{602},{458},{526},{527},{529},{566},{540},{547},{546},{466},{491},{507},{516},{426}}, -- Phoenix эксклюзив 
+			["Red County"] = {{404},{419},{439},{496},{475}, {477}, {478},{489},{554},{483},{468}}, -- ZR-350 эксклюзив
+			["Whetstone"] = {{404},{419},{439},{496},{475}, {506}, {478},{483},{489},{554},{468}}, -- Super GT эксклюзив
+			["Flint County"] = {{404},{419},{439},{496},{475}, {402}, {478},{483},{489},{554},{468}}, -- Buffalo эксклюзив
+			["San Fierro"] = {{404},{419},{439},{496},{475}, {415}, {438},{579},{554},{468},{550},{580},{405},{421},{426},{445},{507},{540},{551},{418}}, -- Cheetah эксклюзив
+			["Bone County"] = {{404},{419},{439},{496},{475}, {480}, {549},{554},{500},{586},{505},{518},{542},{543},{604},{605},{508}}, -- Comet эксклюзив
+			["Tierra Robada"] = {{404},{419},{439},{496},{475}, {533}, {549},{500},{586},{505},{518},{542},{543},{604},{605},{508}}, -- Feltzer эксклюзив
+			["Las Venturas"] = {{404},{419},{439},{496},{475}, {420}, {541}, {400},{555},{587},{589},{463},{561},{560},{559},{558},{562},{400},{565},{575}}, -- Bullet эксклюзив
+			["Unknown"] = {{404},{419},{439},{496},{475}}
+		},
+		["Вагос"] = {{474,"VAGOS228",{6, 6, 0, 0}}, {467,"VAGOS228",{6, 6, 0, 0}}, {576 ,"VAGOS228",{6, 6, 0, 0}}},
+		["Колумбийский картель"] = {{422,"COKA 228",{116, 116, 116, 116},{2, 2}}, {440,"COKA 228",{116, 116, 116, 116},{1, 1}}, {600 ,"COKA 228",{116, 116, 116, 116},{2, 2}}, {543 ,"COKA 228",{116, 116, 116, 116},{4, 4}}},
+		["Русская мафия"] = {{404,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {560,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {445,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {581,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {409,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}},
+		["Триады"] = {{560,"TRIA 228",{0,0,0,0}}, {445,"TRIA 228",{0,0,0,0}}, {414,"TRIA 228",{83,83,83,83},{5,5}}},
+		["Якудзы"] = {{439,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {482,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {467,"YAZA 228",{177,15,11, 255,255,255}, {0, 0}, "createYakuza"}},
+		["Рифа"] = {{536,"RIFA 228",{94, 94, 0, 0}}, {439,"RIFA 228",{94, 94, 0, 0}}, {475 ,"RIFA 228",{94, 94, 0, 0}}},
+		["Деревенщины"] = {{478,"KOLHZ228",{61, 61, 0, 0}}, {543 ,"KOLHZ228",{61, 61, 0, 0}}, {531,"KOLHZ228",{61, 61, 0, 0}}}
+	}, 
+}
 local PData = {}
-local SData = {['Chat Message'] = {}, ["VehAccData"] = {}}
-local Score = {}
+local SData = {
+	['Chat Message'] = {}, 
+	["VehAccData"] = {},
+	["DriverBot"] = {}, 
+	["PlayerElementSync"] = {}
+}
 local Vibori = false
-SData["DriverBot"] = {}
-SData["PlayerElementSync"] = {}
 local TimersAgain = {}
 local kandidats = {}
 local disableVoice = {}
@@ -248,15 +291,6 @@ end
 
 
 
-function GetScoreboardPositionFromName(name)
-	local i = 0
-	for k,v in spairs(Score, function(t,a,b) return t[b] < t[a] end) do
-		i=i+1
-		if(k == name) then return i end
-	end
-	return false
-end
-
 
 PlayerNode = xmlLoadFile("serverdata/playerdata.xml")
 CarNode = xmlLoadFile("serverdata/car.xml")
@@ -292,7 +326,6 @@ local Teams = {
 	['Ацтекас'] = createTeam('Ацтекас', 48, 213, 200)
 }
 local MPPlayerList={}
-local NewTeamVehicle = {}
 local racePlayerBlip = {}
 local racePlayerFinish = {}
 local raceGlobalTimer = false
@@ -304,7 +337,6 @@ local ThreesPickup = {}
 local StandartInventory = toJSON({{},{},{},{},{},{},{},{},{},{}})
 local Collections = toJSON({[953] = {}, [954] = {}, [1276] = {}})
 local PlayersPickups = {}
-local PriceAuto = {434, 461, 494, 495, 502, 503, 504, 521, 522, 568, 573, 581, 429, 587, 602}
 local VehicleBand = {} -- Заспауненые автомобили фракций
 local VehicleBandBlip = {}
 local BotBlip = {}
@@ -1704,43 +1736,6 @@ local ZonesRegion = {
 }
 
 --Модель, номер, цвет, вариант, команда (если есть)
-
-local TeamVehicle = {
-	["Гроув-стрит"] = {{567,"GRST 228",{86, 86, 86, 86}}, {492 ,"GROVE4L_",{59,34,86,86}}, {412,"GRST 228",{86, 86, 86, 86}}},
-	["Баллас"] = {{517,"BALS 228",{30, 30, 30, 30}}, {412,"BALS 228",{30, 30, 30, 30}}, {566 ,"BALS 228",{30, 30, 30, 30}}},
-	["Ацтекас"] = {{466,"AZTC 228",{93, 71, 0, 0}}, {576,"AZTC 228",{93, 71, 0, 0}}, {474 ,"AZTC 228",{93, 71, 0, 0}}},
-	["Байкеры"] = {{468,"METAL228"}, {463,"METAL228"}, {586 ,"METAL228"}},
-	--{для всех}, {такси}, {эксклюзивы}, {полиция}
-	["Полиция"] = {
-		["Los Santos"] = {{596, "POLS 228"}, {523, "PBKE 228"}}, 
-		["Red County"] = {{599, "PORC"}, {523, "PBKE 228"}}, 
-		["Whetstone"] = {{599, "POWS 228"}, {523, "PBKE 228"}}, 
-		["Flint County"] = {{599, "POFC 228"}, {523, "PBKE 228"}}, 
-		["San Fierro"] = {{597, "POSF 228"}, {523, "PBKE 228"}}, 
-		["Bone County"] = {{598, "POBC 228"}, {523, "PBKE 228"}}, 
-		["Tierra Robada"] = {{598, "POTR 228"}, {523, "PBKE 228"}}, 
-		["Las Venturas"] = {{598, "POLV 228"}, {523, "PBKE 228"}}, 
-	},
-	["Мирные жители"] = {
-		["Los Santos"] = {{404},{419},{439},{496},{475}, {420}, {603}, {467},{436},{585},{462},{602},{458},{526},{527},{529},{566},{540},{547},{546},{466},{491},{507},{516},{426}}, -- Phoenix эксклюзив 
-		["Red County"] = {{404},{419},{439},{496},{475}, {477}, {478},{489},{554},{483},{468}}, -- ZR-350 эксклюзив
-		["Whetstone"] = {{404},{419},{439},{496},{475}, {506}, {478},{483},{489},{554},{468}}, -- Super GT эксклюзив
-		["Flint County"] = {{404},{419},{439},{496},{475}, {402}, {478},{483},{489},{554},{468}}, -- Buffalo эксклюзив
-		["San Fierro"] = {{404},{419},{439},{496},{475}, {415}, {438},{579},{554},{468},{550},{580},{405},{421},{426},{445},{507},{540},{551},{418}}, -- Cheetah эксклюзив
-		["Bone County"] = {{404},{419},{439},{496},{475}, {480}, {549},{554},{500},{586},{505},{518},{542},{543},{604},{605},{508}}, -- Comet эксклюзив
-		["Tierra Robada"] = {{404},{419},{439},{496},{475}, {533}, {549},{500},{586},{505},{518},{542},{543},{604},{605},{508}}, -- Feltzer эксклюзив
-		["Las Venturas"] = {{404},{419},{439},{496},{475}, {420}, {541}, {400},{555},{587},{589},{463},{561},{560},{559},{558},{562},{400},{565},{575}}, -- Bullet эксклюзив
-		["Unknown"] = {{404},{419},{439},{496},{475}}
-	},
-	["Вагос"] = {{474,"VAGOS228",{6, 6, 0, 0}}, {467,"VAGOS228",{6, 6, 0, 0}}, {576 ,"VAGOS228",{6, 6, 0, 0}}},
-	["Колумбийский картель"] = {{422,"COKA 228",{116, 116, 116, 116},{2, 2}}, {440,"COKA 228",{116, 116, 116, 116},{1, 1}}, {600 ,"COKA 228",{116, 116, 116, 116},{2, 2}}, {543 ,"COKA 228",{116, 116, 116, 116},{4, 4}}},
-	["Русская мафия"] = {{404,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {560,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {445,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {581,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {409,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}},
-	["Триады"] = {{560,"TRIA 228",{0,0,0,0}}, {445,"TRIA 228",{0,0,0,0}}, {414,"TRIA 228",{83,83,83,83},{5,5}}},
-	["Якудзы"] = {{439,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {482,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {467,"YAZA 228",{177,15,11, 255,255,255}, {0, 0}, "createYakuza"}},
-	["Рифа"] = {{536,"RIFA 228",{94, 94, 0, 0}}, {439,"RIFA 228",{94, 94, 0, 0}}, {475 ,"RIFA 228",{94, 94, 0, 0}}},
-	["Деревенщины"] = {{478,"KOLHZ228",{61, 61, 0, 0}}, {543 ,"KOLHZ228",{61, 61, 0, 0}}, {531,"KOLHZ228",{61, 61, 0, 0}}}
-}
-
 
 
 
@@ -4477,8 +4472,16 @@ local RandVeh = {
 
 local RandomVehicles = {}
 function SpawnAllVehicle()
-	NewTeamVehicle = {}
-	for team, arr in pairs(TeamVehicle) do
+	SData["PriceAuto"] = {}
+	for _, model in pairs(SourceData["PriceAuto"]) do
+		if(VehicleSystem[model][9][2] <= ServerDate.year+1900) then
+			SData["PriceAuto"][#SData["PriceAuto"]+1] = model
+		end
+	end
+
+
+	SData["TeamVehicle"] = {}
+	for team, arr in pairs(SourceData["TeamVehicle"]) do
 		for region, arr2 in pairs(arr) do
 			if(tonumber(region)) then -- Если не указана местность
 				local skip = false
@@ -4490,8 +4493,8 @@ function SpawnAllVehicle()
 					end
 					
 					if(not skip) then
-						if(not NewTeamVehicle[team]) then NewTeamVehicle[team] = {} end
-						NewTeamVehicle[team][#NewTeamVehicle[team]+1] = arr2
+						if(not SData["TeamVehicle"][team]) then SData["TeamVehicle"][team] = {} end
+						SData["TeamVehicle"][team][#SData["TeamVehicle"][team]+1] = arr2
 					end
 				end
 			else
@@ -4504,9 +4507,9 @@ function SpawnAllVehicle()
 							end
 						end
 						if(not skip) then
-							if(not NewTeamVehicle[team]) then NewTeamVehicle[team] = {} end
-							if(not NewTeamVehicle[team][region]) then NewTeamVehicle[team][region] = {} end
-							NewTeamVehicle[team][region][#NewTeamVehicle[team][region]+1] = arr3
+							if(not SData["TeamVehicle"][team]) then SData["TeamVehicle"][team] = {} end
+							if(not SData["TeamVehicle"][team][region]) then SData["TeamVehicle"][team][region] = {} end
+							SData["TeamVehicle"][team][region][#SData["TeamVehicle"][team][region]+1] = arr3
 						end
 					end
 				end
@@ -4527,7 +4530,7 @@ function SpawnAllVehicle()
 	end
 	for _,k in pairs(RandVeh) do
 		local region = getZoneName(k[1], k[2], k[3], true)
-		local vehinfo = NewTeamVehicle["Мирные жители"][region][math.random(#NewTeamVehicle["Мирные жители"][region])]
+		local vehinfo = SData["TeamVehicle"]["Мирные жители"][region][math.random(#SData["TeamVehicle"]["Мирные жители"][region])]
 		RandomVehicles[#RandomVehicles+1] = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6], vehinfo[2], true)
 		
 		if(getElementData(RandomVehicles[#RandomVehicles], "trunk")) then
@@ -5382,7 +5385,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 135, -199.3, 0.4, 0, 0 --
+		local x,y,z,i,d  = 960.2, -1039.2, 29.1, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -7629,11 +7632,6 @@ function preLoad(name)
 		triggerEvent("onPlayerJoin", thePlayer)
 	end
 	
-	
-	local PlayerNodes = xmlNodeGetChildren(PlayerNode)
-	for i,node in ipairs(PlayerNodes) do
-		Score[xmlNodeGetValue(node)] = GeneratePlayerScore(xmlNodeGetAttribute(node, "skill"))
-	end
 
 	setTime(ServerDate.hour, ServerDate.minute)
 	setElementData(root, "ServerTime", ServerDate.timestamp)
@@ -7690,19 +7688,19 @@ function preLoad(name)
 			else
 				SpawnPoint[name] = {false,false,false,false,false,zoneowner}
 			end
-			if(VehicleSpawnPoint[name] and NewTeamVehicle[zoneowner]) then
+			if(VehicleSpawnPoint[name] and SData["TeamVehicle"][zoneowner]) then
 				VehicleBand[name] = {}
 				local VehicleCount = 1
 				for v,k in pairs(VehicleSpawnPoint[name]) do
 					local vehinfo = false
 					if(zoneowner == "Полиция" or zoneowner == "Мирные жители") then
 						local region = getZoneName(k[1], k[2], k[3], true)
-						vehinfo = NewTeamVehicle["Мирные жители"][region][math.random(#NewTeamVehicle["Мирные жители"][region])]
+						vehinfo = SData["TeamVehicle"]["Мирные жители"][region][math.random(#SData["TeamVehicle"]["Мирные жители"][region])]
 					else
-						if(not NewTeamVehicle[zoneowner][VehicleCount]) then
+						if(not SData["TeamVehicle"][zoneowner][VehicleCount]) then
 							VehicleCount = 1
 						end
-						vehinfo = NewTeamVehicle[zoneowner][VehicleCount]
+						vehinfo = SData["TeamVehicle"][zoneowner][VehicleCount]
 					end
 					
 					local theVehicle = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6])
@@ -9735,9 +9733,9 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 					local vehinfo = false
 					if(PlayerTeam == "Полиция") then
 						local region = getZoneName(k[1], k[2], k[3], true)
-						vehinfo = NewTeamVehicle[PlayerTeam][region][math.random(#NewTeamVehicle[PlayerTeam][region])]
+						vehinfo = SData["TeamVehicle"][PlayerTeam][region][math.random(#SData["TeamVehicle"][PlayerTeam][region])]
 					else
-						vehinfo = NewTeamVehicle[PlayerTeam][math.random(1, #NewTeamVehicle[PlayerTeam])]
+						vehinfo = SData["TeamVehicle"][PlayerTeam][math.random(1, #SData["TeamVehicle"][PlayerTeam])]
 					end
 					
 					local theVehicle = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6], vehinfo[2], true)
@@ -9772,12 +9770,12 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 				local vehinfo = false
 				if(PlayerTeam == "Полиция") then
 					local region = getZoneName(k[1], k[2], k[3], true)
-					vehinfo = NewTeamVehicle[PlayerTeam][region][math.random(#NewTeamVehicle[PlayerTeam][region])]
+					vehinfo = SData["TeamVehicle"][PlayerTeam][region][math.random(#SData["TeamVehicle"][PlayerTeam][region])]
 				else
-					if(not NewTeamVehicle[PlayerTeam][VehicleCount]) then
+					if(not SData["TeamVehicle"][PlayerTeam][VehicleCount]) then
 						VehicleCount = 1
 					end
-					vehinfo = NewTeamVehicle[PlayerTeam][VehicleCount]
+					vehinfo = SData["TeamVehicle"][PlayerTeam][VehicleCount]
 				end
 
 				local theVehicle = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6], vehinfo[2], true)
@@ -10543,9 +10541,6 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 	useinvweapon(thePlayer)
 	UpdateTutorial(thePlayer)
 	
-	if(not Score[getPlayerName(thePlayer)]) then Score[getPlayerName(thePlayer)] = GeneratePlayerScore(GetDatabaseAccount(thePlayer, "skill")) end
-	setElementData(thePlayer, "rate", GetScoreboardPositionFromName(getPlayerName(thePlayer)))
-	
 	if(not PData[thePlayer]["Timer"]) then
 		setElementData(thePlayer, "armasplus", toJSON({}))
 		PData[thePlayer]["Timer"] = setTimer(function(thePlayer)
@@ -10864,16 +10859,6 @@ function worldtime()
 				SpawnAllVehicle()
 			end
 			setElementData(root, "ServerTime", ServerDate.timestamp)
-			Score = {}
-			local PlayerNodes = xmlNodeGetChildren(PlayerNode)
-			for _, node in ipairs(PlayerNodes) do
-				Score[xmlNodeGetValue(node)] = GeneratePlayerScore(xmlNodeGetAttribute(node, "skill"))
-				local thePlayer = getPlayerFromName(xmlNodeGetValue(node))
-				if(thePlayer) then
-					setElementData(thePlayer, "rate", GetScoreboardPositionFromName(xmlNodeGetValue(node)))
-				end
-			end
-			
 		end
 		for v,k in pairs(Threes) do
 			if(isElement(Threes[v])) then
@@ -11319,9 +11304,9 @@ function PlayerElementSync(thePlayer, obj, state)
 						local region = getZoneName(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4], true)
 						if(team == "Полиция") then
 							local zone = getZoneName(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4], false)
-							vehinfo = NewTeamVehicle[team][region][math.random(#NewTeamVehicle[team][region])]
+							vehinfo = SData["TeamVehicle"][team][region][math.random(#SData["TeamVehicle"][team][region])]
 						elseif(team == "Мирные жители") then
-							local arr = table.copy(NewTeamVehicle[team][region])
+							local arr = table.copy(SData["TeamVehicle"][team][region])
 							local zone = getZoneName(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4], false)
 							if(VehicleRegionSpecific[zone]) then
 								for _, model in pairs(VehicleRegionSpecific[zone]) do
@@ -11330,7 +11315,7 @@ function PlayerElementSync(thePlayer, obj, state)
 							end
 							vehinfo = arr[math.random(#arr)]
 						else
-							vehinfo = NewTeamVehicle[team][math.random(#NewTeamVehicle[team])]
+							vehinfo = SData["TeamVehicle"][team][math.random(#SData["TeamVehicle"][team])]
 						end
 						
 						local x,y,z = PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4]+VehicleSystem[vehinfo[1]][1]
@@ -15574,7 +15559,7 @@ function RacePriceGeneration(thePlayer)
 	if(Prices == 1) then
 		local park = GetRandomParking(zone)
 		if(park) then
-			local RacePrice = PriceAuto[math.random(1, #PriceAuto)]
+			local RacePrice = SData["PriceAuto"][math.random(1, #SData["PriceAuto"])]
 			local v = CreateVehicle(RacePrice, park[4], park[5], park[6]+VehicleSystem[RacePrice][1], 0,0,park[7], getPlayerName(thePlayer))
 			
 			Parkings[park[1]][park[2]][park[3]][1] = v
@@ -15668,13 +15653,13 @@ function race(arr, name)
 	local raceblip = createBlip(arr[1][1], arr[1][2], 0, 33)
 	outputChatBox("Стартует мероприятие гонка!", getRootElement(), 255,255,255, true)
 	
-	local StartRaceTimeout = 90
+	local StartRaceTimeout = 10
 	MPTimer = setTimer(function()
 		if(StartRaceTimeout == 0) then
 			destroyElement(raceblip)
 			for slot = 1, #MPPlayerList do
 				if(getPlayerFromName(MPPlayerList[slot])) then
-					triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "StartRace", getPlayerFromName(MPPlayerList[slot]), SData["RaceArr"])
+					triggerClientEvent(getPlayerFromName(MPPlayerList[slot]), "StartRace", getPlayerFromName(MPPlayerList[slot]), SData["RaceArr"], MPPlayerList)
 				end
 			end
 			raceGlobalTimer = setTimer(function()
@@ -15694,7 +15679,7 @@ function race(arr, name)
 			end
 		end
 		StartRaceTimeout = StartRaceTimeout-1
-	end, 1000, 91)
+	end, 1000, 11)
 	outputChatBox("Для участия в гонке напиши #A0A0A0/race", getRootElement(), 255,255,255, true)
 end
 
@@ -15850,7 +15835,7 @@ function endRace()
 		RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
 		RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
 		RacePriceGeneration(getPlayerFromName(racePlayerFinish[1]))
-		outputChatBox("Победитель: #CC9966"..getPlayerName(thePlayer), getRootElement(), 255,255,255, true)
+		outputChatBox("Победитель: #CC9966"..racePlayerFinish[1], getRootElement(), 255,255,255, true)
 	end
 	if(racePlayerFinish[2]) then 
 		RacePriceGeneration(getPlayerFromName(racePlayerFinish[2]))
