@@ -258,7 +258,6 @@ local PlayerZone = "Blueberry Acres"
 local PlayerZoneTrue = "Red County"
 local tuningList = false
 local ToC1, ToC2, ToC3, ToC4 = false, false, false, false
-local RepairButton = false
 local upgrades = false
 local TCButton = {}
 local TCButton2 = {}
@@ -1548,10 +1547,7 @@ addEventHandler("UpdateZones", getRootElement(), UpdateZones)
 addEventHandler("onClientGUIClick", getResourceRootElement(getThisResource()),  
 function()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
-	if(getElementData(source, "data") == "tuningRepair") then
-		triggerServerEvent("repairVeh", localPlayer)
-		guiSetVisible(source, false)
-	elseif(getElementData(source, "ped")) then
+	if(getElementData(source, "ped")) then
 		playSFX("genrl", 53, 5, false)
 		if(getElementData(source, "data") == "SwitchButtonR") then
 			NextSkinPlus()
@@ -1897,8 +1893,9 @@ local Upgrading = {
 
 
 
+
 local OrigX, OrigY, OrigZ = false
-function CameraTuning(repair, handl, othercomp)
+function CameraTuning(handl, othercomp)
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	ToC1, ToC2, ToC3, ToC4 = getVehicleColor(theVehicle)
 	upgrades = getVehicleUpgrades(theVehicle)
@@ -1906,11 +1903,6 @@ function CameraTuning(repair, handl, othercomp)
 	setCameraMatrix (OrigX-5, OrigY+4,OrigZ+1, OrigX, OrigY, OrigZ)
 	showCursor(true)
 
-	if(repair > 0) then
-		RepairButton=guiCreateButton( 0.55, 0.8, 0.075, 0.05, "Ремонт $"..repair, true)
-		setElementData(RepairButton, "data", "tuningRepair")
-		guiSetVisible(RepairButton, true)
-	end
 	LoadUpgrade(true, handl, othercomp)
 
 	
@@ -1998,34 +1990,23 @@ addEventHandler("CameraTuning", getRootElement(), CameraTuning)
 
 
 local vinyl_vehicles={
-    [483]={0},        -- camper
-    [534]={0,1,2},    -- remington
-    [535]={0,1,2},    -- slamvan
-    [536]={0,1,2},    -- blade
-    [558]={0,1,2},    -- uranus
-    [559]={0,1,2},    -- jester
-    [560]={0,1,2},    -- sultan
-    [561]={0,1,2},    -- stratum
-    [562]={0,1,2},    -- elegy
-    [565]={0,1,2},    -- flash
-    [567]={0,1,2},    -- savanna
-    [575]={0,1},      -- broadway
-    [576]={0,1,2},    -- tornado
+    [483] = {0}, 
+    [534] = {0,1,2}, 
+    [535] = {0,1,2}, 
+    [536] = {0,1,2}, 
+    [558] = {0,1,2}, 
+    [559] = {0,1,2}, 
+    [560] = {0,1,2}, 
+    [561] = {0,1,2}, 
+    [562] = {0,1,2}, 
+    [565] = {0,1,2}, 
+    [567] = {0,1,2}, 
+    [575] = {0,1}, 
+    [576] = {0,1,2}, 
 }
 
 local TuningSelector = 1
 
-
-function GetVehiclePower(mass, acceleration) return math.ceil(mass/(140)*(acceleration)) end
-function GetVehicleTopSpeed(acceleration, dragcoeff, maxvel)
-	local pureMax = math.floor(math.sqrt(3300*acceleration/dragcoeff)*1.18) 
-	if(pureMax < maxvel) then
-		return (1000/348)*pureMax
-	else
-		return (1000/348)*maxvel
-	end
-end --При 26.5
-function GetVehicleAcceleration(acceleration, dragCoeff, tractionMultiplier) return 714+math.ceil((acceleration*(acceleration-dragCoeff))*tractionMultiplier) end --При 120
 
 local PartsMultipler = {
 	["Brakes"] = {
@@ -2040,8 +2021,48 @@ local PartsMultipler = {
 		["Automobile"] = 66.666666666667,
 		["Train"] = 117.64705882353,
 		["Unknown"] = 0,
-	}
+	},
+	["Tires"] = {
+		["Trailer"] = 0,
+		["Plane"] = 0,
+		["Monster Truck"] = 0,
+		["Helicopter"] = 0,
+		["Quad"] = 0,
+		["BMX"] = 0,
+		["Boat"] = 0,
+		["Bike"] = 0,
+		["Automobile"] = {2.5},
+		["Train"] = 0,
+		["Unknown"] = 0,
+	},
 }
+
+
+
+
+
+function GetVehiclePower(mass, acceleration) return math.ceil(mass/(140)*(acceleration)) end
+function GetVehicleTopSpeed(acceleration, dragcoeff, maxvel)
+	local pureMax = math.floor(math.sqrt(3300*acceleration/dragcoeff)*1.18) 
+	if(pureMax < maxvel) then
+		return (1000/348)*pureMax
+	else
+		return (1000/348)*maxvel
+	end
+end --При 26.5
+function GetVehicleAcceleration(acceleration, dragCoeff, tractionMultiplier) return 714+math.ceil((acceleration*(acceleration-dragCoeff))*tractionMultiplier) end --При 120
+
+
+function GetVehicleControl(tractionMultiplier)
+	local theVehicleType = getVehicleType(getPedOccupiedVehicle(localPlayer))
+	return tractionMultiplier/PartsMultipler["Tires"][theVehicleType][1]
+end
+
+
+
+
+
+
 
 
 
@@ -2133,6 +2154,9 @@ function UpdateTuningPerformans(NewDat)
 	local TopSpeed = math.floor(GetVehicleTopSpeed(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["maxVelocity"])/(1000/348))
 	local Brake = math.floor(STPER["brakeBias"]*100)..'/'..(100)-math.floor(STPER["brakeBias"]*100)..' ('..GetVehicleBrakes(STPER["brakeDeceleration"])..')'
 	local Trans = STPER["driveType"].." "..STPER["numberOfGears"]
+	local Control = GetVehicleControl(STPER["tractionMultiplier"])
+
+	
 	if(NewDat) then
 		NEWPER = getVehicleHandling(getPedOccupiedVehicle(localPlayer))
 		local nTopSpeed = (GetVehicleTopSpeed(NEWPER["engineAcceleration"], NEWPER["dragCoeff"], NEWPER["maxVelocity"])/(1000/348))-(GetVehicleTopSpeed(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["maxVelocity"])/(1000/348))
@@ -2145,6 +2169,7 @@ function UpdateTuningPerformans(NewDat)
 		Acceleration = GetVehicleAcceleration(NEWPER["engineAcceleration"], NEWPER["dragCoeff"], NEWPER["tractionMultiplier"])-GetVehicleAcceleration(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["tractionMultiplier"])
 		Brake = math.floor(NEWPER["brakeBias"]*100)..'/'..(100)-math.floor(NEWPER["brakeBias"]*100)..' ('..GetVehicleBrakes(NEWPER["brakeDeceleration"])..')'
 		Trans = NEWPER["driveType"].." "..NEWPER["numberOfGears"]
+		Control = GetVehicleControl(NEWPER["tractionMultiplier"])
 	else
 		triggerServerEvent("UpgradePreload", localPlayer, localPlayer)
 		NEWPER = false
@@ -2155,6 +2180,7 @@ function UpdateTuningPerformans(NewDat)
 	PText["tuning"]["power"] = {Text("Мощность").." "..Power.." "..Text("Л.С."), sx+(300*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
 	PText["tuning"]["acceleration"] = {Text("Ускорение").." ("..Trans.." АКПП) ("..Acceleration..")", sx+(600*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
 	PText["tuning"]["brakes"] = {Text("Тормоза").." "..Brake, sx+(900*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
+--	PText["tuning"]["Управление"] = {Text("Управление").." "..Control, sx+(900*scaley), sy-(130*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
 end
 
 
@@ -2295,7 +2321,6 @@ function TuningExit()
 	PData["Driver"]["Handling"] = getVehicleHandling(theVehicle)
 	setVehicleColor(theVehicle ,ToC1, ToC2, ToC3, ToC4)
 	showCursor(false)
-	if(RepairButton) then guiSetVisible(RepairButton, false) end
 	tuningList=false
 	for slot = 1, #TCButton do
 		destroyElement(TCButton[slot])
@@ -4346,7 +4371,7 @@ function checkKey()
 		end
 		if(theVehicle and PData["ClearDriving"]) then
 			if(speed == "000") then
-				resetTimer(PData["ClearDriving"])
+				if(isTimer(PData["ClearDriving"])) then resetTimer(PData["ClearDriving"]) end
 				if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer)) then
 					ChangeInfo(Text("Нажми {key} чтобы припарковать машину", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}}), 1000)
 				end
@@ -5409,16 +5434,16 @@ function TrunkWindow()
 				showCursor(true)
 				local StPosx = 640*scalex
 				local StPosxy = 360*scaley-(30*scaley)
-				local binvx=(2.5*scalex)
-				local binvy=(80.5*scaley)
+				local binvx = (2.5*scalex)
+				local binvy = (80.5*scaley)
 				for i, _ in pairs(PInv["trunk"]) do
 					PBut["trunk"][i] = {StPosx+binvx, StPosxy+binvy, 80*scalex, 60*scaley}
 					binvx=binvx+(80.5*scalex)
 					if(i == 8 or i == 16 or i == 24 or i == 32) then
 						StPosx = 640*scalex
 						StPosxy = 360*scaley-(30*scaley)
-						binvx=(2.5*scalex)
-						binvy=binvy+(80.5*scaley)
+						binvx = (2.5*scalex)
+						binvy = binvy+(80.5*scaley)
 					end
 				end
 			end
@@ -6576,7 +6601,6 @@ function playerPressedKey(button, press)
     end
 end
 addEventHandler("onClientKey", root, playerPressedKey)
-
 
 
 
@@ -8645,6 +8669,28 @@ function NextRaceMarker()
 end
 
 
+
+function GetRacePosition()
+	local pos = #PData["Race"]["Racers"]
+	local x,y,z = getElementPosition(localPlayer)
+	local mydist = getDistanceBetweenPoints2D(x,y, PData["Race"]["Track"][#PData["Race"]["Track"]][1], PData["Race"]["Track"][#PData["Race"]["Track"]][2])
+	for _, name in pairs(PData["Race"]["Racers"]) do
+		local thePlayer = getPlayerFromName(name)
+		if(thePlayer) then
+			if(thePlayer ~= localPlayer) then
+				x,y,z = getElementPosition(thePlayer)
+				if(mydist < getDistanceBetweenPoints2D(x,y, PData["Race"]["Track"][#PData["Race"]["Track"]][1], PData["Race"]["Track"][#PData["Race"]["Track"]][2])) then
+					pos = pos-1
+				end
+			end
+		else
+			pos = pos-1
+		end
+	end
+	return pos
+end
+
+
 function StartRace(arr, players)
 	PData["Race"] = {
 		["Start"] = getTickCount(), 
@@ -9497,6 +9543,16 @@ end
 
 
 
+local PosVar = {
+	[1] = "ый",
+	[2] = "ой",
+	[3] = "ий",
+	[4] = "ый",
+	[5] = "ый",
+	[6] = "ой",
+	[7] = "ой",
+	[8] = "ой",
+}
 
 function DrawPlayerMessage()
 	local x,y,z = getElementPosition(localPlayer)
@@ -10107,11 +10163,12 @@ function DrawPlayerMessage()
 					dxDrawText(Text("КМ/Ч"), sx,sy+(45*scaley),sx,sy+(45*scaley), tocolor(120,120,120,255), scale/1.5, "default-bold", "center", "center")
 				
 					if(PData["Race"]) then
+						local pos = GetRacePosition()
 						dxDrawRectangle(sx-(327*scalex),sy-(82*scaley), 139*NewScale, 154*NewScale, tocolor(0,0,0))
 						dxDrawRectangle(sx-(325*scalex),sy-(80*scaley), 135*NewScale, 150*NewScale, tocolor(121,137,153))
 						dxDrawRectangle(sx-(320*scalex),sy-(75*scaley), 125*NewScale, 140*NewScale, tocolor(0,0,0))
-						dxDrawText("0", sx-(305*scalex),sy-(82*scaley),0,0, tocolor(121,137,153,255), NewScale*7, "default-bold", "left", "top")
-						dxDrawText("ой", sx-(255*scalex),sy-(70*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
+						dxDrawText(pos, sx-(305*scalex),sy-(82*scaley),0,0, tocolor(121,137,153,255), NewScale*7, "default-bold", "left", "top")
+						dxDrawText(PosVar[pos] or "ый", sx-(255*scalex),sy-(70*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
 						dxDrawText("/"..#PData["Race"]["Racers"], sx-(255*scalex),sy-(35*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
 						
 						local seconds = (getTickCount()-PData["Race"]["Start"])/1000

@@ -14164,11 +14164,9 @@ function OpenTuning(thePlayer,x,y,z,rz)
 				triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 5)
 				local parts = GetPlayerVehiclePart(thePlayer, theVehicle)
 				
-				if(getElementHealth(theVehicle) == 1000) then
-					triggerClientEvent(thePlayer, "CameraTuning", thePlayer, 0, getElementData(theVehicle, "handl"), toJSON(parts))
-				else
-					triggerClientEvent(thePlayer, "CameraTuning", thePlayer, (vehh["mass"]/5)+(1000-getElementHealth(theVehicle)), getElementData(theVehicle, "handl"), toJSON(parts))
-				end
+				fixVehicle(theVehicle)
+				triggerClientEvent(thePlayer, "CameraTuning", thePlayer, getElementData(theVehicle, "handl"), toJSON(parts))
+
 			else
 				HelpMessage(thePlayer, "Тюнинговать можно только автомобили!")
 			end
@@ -15653,7 +15651,7 @@ function race(arr, name)
 	local raceblip = createBlip(arr[1][1], arr[1][2], 0, 33)
 	outputChatBox("Стартует мероприятие гонка!", getRootElement(), 255,255,255, true)
 	
-	local StartRaceTimeout = 10
+	local StartRaceTimeout = 90
 	MPTimer = setTimer(function()
 		if(StartRaceTimeout == 0) then
 			destroyElement(raceblip)
@@ -15679,7 +15677,7 @@ function race(arr, name)
 			end
 		end
 		StartRaceTimeout = StartRaceTimeout-1
-	end, 1000, 11)
+	end, 1000, 91)
 	outputChatBox("Для участия в гонке напиши #A0A0A0/race", getRootElement(), 255,255,255, true)
 end
 

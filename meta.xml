@@ -6,6 +6,7 @@
     <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
 	<script src="PedNode.lua" type="server"/>
 	<script src="VehicleNode.lua" type="server"/>
+	<script src="DynamicObject.lua" type="server" />
 	<script src="script.lua" />
 	<export function='BurnChatMSG' type="server" http='true' />
 
