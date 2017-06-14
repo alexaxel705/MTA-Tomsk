@@ -5076,10 +5076,10 @@ function SetPlayerPosition(thePlayer,x,y,z,i,d,rz,anim,name)
 		fadeCamera(thePlayer, false, Speed, 0, 0, 0)
 
 		UnBindAllKey(thePlayer)
-		if(name) then
-			triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, name)
-		end
 		PData[thePlayer]["TPTimer"] = setTimer(function() 
+			if(name) then
+				triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, name)
+			end
 			BindAllKey(thePlayer)
 			fadeCamera(thePlayer, true, 1, 0, 0, 0)
 			triggerClientEvent(thePlayer, "ChangeInfo", thePlayer)
