@@ -295,7 +295,6 @@ local ArrestTimerEvent = false
 local DrugsTimer = false
 local SpunkTimer = false
 local GPSObject = {}
-local speed = "000"
 local VehicleSpeed = 0
 local SlowTahometer = 0
 local screenSource = dxCreateScreenSource(screenWidth, screenHeight)
@@ -4370,7 +4369,7 @@ function checkKey()
 			UpdateArmas(thePed)
 		end
 		if(theVehicle and PData["ClearDriving"]) then
-			if(speed == "000") then
+			if(VehicleSpeed > 1) then
 				if(isTimer(PData["ClearDriving"])) then resetTimer(PData["ClearDriving"]) end
 				if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer)) then
 					ChangeInfo(Text("Нажми {key} чтобы припарковать машину", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}}), 1000)
@@ -6198,7 +6197,7 @@ function park()
 	else
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
 		if(theVehicle) then
-			if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer) and not tuningList and speed == "000") then
+			if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer) and not tuningList and VehicleSpeed > 1) then
 				triggerServerEvent("ParkMyCar", localPlayer, theVehicle)
 				setControlState("enter_exit", true)
 			end
@@ -8892,9 +8891,15 @@ local ModelPlayerPosition = {
 
 
 
-
-
-
+function outputLoss(attacker)
+	if(getElementType(attacker) == "vehicle") then attacker = getVehicleOccupant(attacker) end
+	if(attacker) then
+		if(attacker == localPlayer) then
+			triggerServerEvent("DestroyObject", localPlayer, localPlayer, source)
+		end
+	end
+end
+addEventHandler("onClientObjectBreak", root, outputLoss)
 
 
 function CreatePlayerArmas(thePlayer, model) 
@@ -9556,7 +9561,6 @@ local PosVar = {
 
 function DrawPlayerMessage()
 	local x,y,z = getElementPosition(localPlayer)
-	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	
 	local sx, sy, font, tw, th, color
 	
@@ -10049,7 +10053,8 @@ function DrawPlayerMessage()
 		
 
 		
-			if(PData["Driver"]) then
+			local theVehicle = getPedOccupiedVehicle(localPlayer)
+			if(PData["Driver"] and theVehicle) then
 				tick = getTickCount()
 				local angulo,velocidad = angle()
 				
@@ -10079,11 +10084,6 @@ function DrawPlayerMessage()
 				
 				local vx, vy, vz = getElementVelocity(theVehicle)
 				VehicleSpeed = (vx^2 + vy^2 + vz^2)^(0.5)*156
-				
-				speed = tostring(math.floor(VehicleSpeed))
-				for i = #speed, 2 do
-					speed = "0"..speed
-				end
 
 				local MaxRPM = GetVehicleMaxRPM(PData["Driver"]["Handling"]["engineAcceleration"])
 				local RPMMeter = false
@@ -10159,7 +10159,7 @@ function DrawPlayerMessage()
 						dxDrawCircle(sx,sy, 90*TS, 4*TS, 1, 10+math.floor(80-(80*(getElementData(theVehicle, "Fuel")/maxfuel))), 90, tocolor(255,255,255,60))
 					end
 
-					dxDrawText(speed, sx,sy+(15*scaley),sx,sy+(15*scaley), tocolor(120,120,120,255), scale*1.25, "default-bold", "center", "center")
+					dxDrawText(string.format("%03.f", VehicleSpeed), sx,sy+(15*scaley),sx,sy+(15*scaley), tocolor(120,120,120,255), scale*1.25, "default-bold", "center", "center")
 					dxDrawText(Text("КМ/Ч"), sx,sy+(45*scaley),sx,sy+(45*scaley), tocolor(120,120,120,255), scale/1.5, "default-bold", "center", "center")
 				
 					if(PData["Race"]) then
@@ -10427,7 +10427,7 @@ function AddRage(count)
 		count = count+(count*((1000-getPedStat(localPlayer, 160))/200))
 	end
 	if(PData['rage']+count < 0) then
-		killTimer(PData['ragetimer'])
+		if(isTimer(PData['ragetimer'])) then killTimer(PData['ragetimer']) end
 		triggerServerEvent("AccelerationDown", localPlayer, localPlayer)
 		PData['rage'] = 0
 	elseif(PData['rage'] + count > 1000) then
@@ -10901,7 +10901,7 @@ function onAttach(theVehicle)
 						ToolTip("Для сбора урожая удерживай\nскорость в пределах зеленой зоны")
 					end
 					
-					if(speed == "018" or speed == "019" or speed == "020" or speed == "021" or speed == "022") then
+					if(VehicleSpeed >= 18 and VehicleSpeed <= 22) then
 						PData["HarvestDisplay"] = PData["HarvestDisplay"]+0.25
 						if(PData["HarvestDisplay"] == 40) then
 							PData["HarvestDisplay"] = 0

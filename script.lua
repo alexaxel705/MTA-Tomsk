@@ -5385,7 +5385,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 960.2, -1039.2, 29.1, 0, 0 --
+		local x,y,z,i,d  = 1484.6, 2046.8, 9.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12312,6 +12312,7 @@ addCommandHandler("seti", seti)
 
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
+	--RacePriceGeneration(thePlayer)
 	local zone = getZoneName(x,y,z)
 	if(savetype == "PedPath") then
 		local angle = findRotation(x,y, x,ry)
@@ -15541,8 +15542,8 @@ addEventHandler("RaceFinish", getRootElement(), RaceFinish)
 
 
 
-local AutomobileVComp = table.copy(VComp)
-for nameparts, data in pairs(AutomobileVComp) do
+local AutomobileVComp = {}
+for nameparts, data in pairs(VComp) do
 	for name, types in pairs(data) do
 		if(types[1] == "Automobile") then
 			AutomobileVComp[#AutomobileVComp+1] = {nameparts, name}
@@ -15566,6 +15567,12 @@ function RacePriceGeneration(thePlayer)
 			outputChatBox("Забери свой приз на красном маркере!", thePlayer, 255,255,255,true)
 		end
 	else
+		--[[for i ,v in pairs(AutomobileVComp) do
+			local parts = AutomobileVComp[i]
+			AddPlayerVehiclePart(thePlayer, v[1], v[2])
+			outputChatBox("Ты выиграл #FFFFFF"..v[1].." "..v[2], thePlayer, math.random(255),math.random(255),math.random(255),true)
+	
+		end--]]
 		local parts = AutomobileVComp[math.random(#AutomobileVComp)]
 		AddPlayerVehiclePart(thePlayer, parts[1], parts[2])
 		outputChatBox("Ты выиграл #FFFFFF"..parts[1].." "..parts[2], thePlayer, math.random(255),math.random(255),math.random(255),true)
