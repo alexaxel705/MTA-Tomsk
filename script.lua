@@ -3250,7 +3250,7 @@ end
 
 
 
--- Просто копировать сюда обновления из клиента	[400] = {{-0.6, -1.4, 0.1, 60, 0, 0}, {0, -1.4, 0.1, 60, 0, 0}, {0.6, -1.4, 0.1, 60, 0, 0}, {-0.6, -1.9, -0.08, 10, 0, 0}, {0, -1.9, -0.08, 10, 0, 0}, {0.6, -1.9, -0.08, 10, 0, 0}},
+-- Просто копировать сюда обновления из клиента	
 
 local VehicleTrunks = {
 	[400] = {{-0.6, -1.4, 0.1, 60, 0, 0}, {0, -1.4, 0.1, 60, 0, 0}, {0.6, -1.4, 0.1, 60, 0, 0}, {-0.6, -1.9, -0.08, 10, 0, 0}, {0, -1.9, -0.08, 10, 0, 0}, {0.6, -1.9, -0.08, 10, 0, 0}},
@@ -5076,10 +5076,10 @@ function SetPlayerPosition(thePlayer,x,y,z,i,d,rz,anim,name)
 		fadeCamera(thePlayer, false, Speed, 0, 0, 0)
 
 		UnBindAllKey(thePlayer)
+		if(name) then
+			triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, name)
+		end
 		PData[thePlayer]["TPTimer"] = setTimer(function() 
-			if(name) then
-				triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, name)
-			end
 			BindAllKey(thePlayer)
 			fadeCamera(thePlayer, true, 1, 0, 0, 0)
 			triggerClientEvent(thePlayer, "ChangeInfo", thePlayer)
@@ -5499,7 +5499,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 1484.6, 2046.8, 9.8, 0, 0 --
+		local x,y,z,i,d  = 1770.9, 2171, 9.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)

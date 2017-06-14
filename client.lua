@@ -4799,8 +4799,7 @@ end
 
 
 
---[[
-local vehicleIDS = {
+--[[local vehicleIDS = {
     602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585, 405, 587,
     409, 466, 550, 492, 566, 546, 540, 551, 421, 516, 529, 592, 553, 577, 488, 511, 497, 548, 563, 512, 476, 593, 447, 425, 519, 520, 460, 417,
     469, 487, 513, 581, 510, 509, 522, 481, 461, 462, 448, 521, 468, 463, 586, 472, 473, 493, 595, 484, 430, 453, 452, 446, 454, 485, 552, 431,
@@ -4816,9 +4815,7 @@ for id, num in pairs(vehicleIDS) do
 	TexturesPosition["car"..num] = {-7,5,4, 0,0,0, 0,70, 110}
 	items["car"..num] = {false}
 	setElementFrozen(PreloadTextures["car"..num], true)
-end
---]]
-
+end--]]
 
 function StartUnload()
 	LoginClient(false)
@@ -6973,14 +6970,14 @@ addEventHandler("onClientRender", root,
 				
 				if(color) then
 					if(color >= 0) then
-						color=tocolor(54, 192, 44, 255)
+						color = tocolor(54, 192, 44, 255)
 					else
-						color=tocolor(204, 0, 0, 255)
+						color = tocolor(204, 0, 0, 255)
 					end
 				else
-					color=tocolor(200, 200, 200, 255)
+					color = tocolor(200, 200, 200, 255)
 				end
-				dxDrawBorderedText(Text(fract), (110*scalex), -(100*scaley), screenWidth, screenHeight, color, scale/1.4, "default-bold", "center", "center")
+				MemText(Text(fract), (screenWidth/2)+(60*scalex), (screenHeight/2)-(70*scaley), color, NewScale*1.5, "default-bold", NewScale*1.5, 0, true)
 							
 				
 				if(getVehiclePlateText(Targets["theVehicle"]) == "SELL 228") then
@@ -7006,8 +7003,8 @@ addEventHandler("onClientRender", root,
 				else
 					color=tocolor(200, 200, 200, 255)
 				end
-				dxDrawBorderedText(Text(getTeamGroup(ArraySkinInfo[skin][1])), (110*scalex), -(100*scaley), screenWidth, screenHeight, color, scale/1.4, "default-bold", "center", "center")
-			
+				MemText(Text(getTeamGroup(ArraySkinInfo[skin][1])), (screenWidth/2)+(60*scalex), (screenHeight/2)-(70*scaley), color, NewScale*1.5, "default-bold", NewScale*1.5, 0, true)
+							
 				CreateTarget(Targets["thePlayer"])
 			elseif(Targets["thePed"]) then
 				local team = getElementData(Targets["thePed"], "team")
@@ -7022,7 +7019,7 @@ addEventHandler("onClientRender", root,
 					color=tocolor(200, 200, 200, 255)
 				end
 				if(team) then
-					dxDrawBorderedText(Text(getTeamGroup(team)), (110*scalex), -(100*scaley), screenWidth, screenHeight, color, scale/1.4, "default-bold", "center", "center")
+					MemText(Text(getTeamGroup(team)), (screenWidth/2)+(60*scalex), (screenHeight/2)-(70*scaley), color, NewScale*1.5, "default-bold", NewScale*1.5, 0, true)
 				end
 				
 				CreateTarget(Targets["thePed"])
@@ -7149,7 +7146,6 @@ addEventHandler("onClientRender", root,
 						end
 
 						create3dtext(text, x,y,z+0.17, scale*0.7, 60, tocolor(255,255,255, 220), "default-bold")
-						-- тут
 					end
 				end
 			end
@@ -8571,6 +8567,67 @@ end
 
 
 
+function MemText(text, left, top, color, scale, font, border, incline, centerX, centerY)
+	if(text) then
+		local w,h = dxGetTextWidth(text, scale, font, true)+(border*2), dxGetFontHeight(scale, font)+(border*2)
+		local index = text..color
+		
+		if(not VideoMemory["HUD"][index]) then
+			VideoMemory["HUD"][index] = dxCreateRenderTarget(w+((w*incline)/4),h, true)
+			dxSetRenderTarget(VideoMemory["HUD"][index], true)
+			dxSetBlendMode("modulate_add")
+			
+			local posx, posy = ((w*incline)/4),0
+			if(border) then
+				posx = posx+border
+				posy = posy+border
+			end
+			
+			
+			local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
+			for oX = -border, border do 
+				for oY = -border, border do 
+					dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,true)
+				end
+			end
+
+			dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,true)
+
+			dxSetBlendMode("blend")
+			dxSetRenderTarget()
+			
+			if(incline > 0) then 
+				local pixels = dxGetTexturePixels(VideoMemory["HUD"][index])
+				local x, y = dxGetPixelsSize(pixels)
+				local texture = dxCreateTexture(x,y, "argb")
+				local pixels2 = dxGetTexturePixels(texture)
+				local pady = 0
+				for y2 = 0, y-1 do
+					for x2 = 0, x-1 do
+						local colors = {dxGetPixelColor(pixels, x2,y2)}
+						if(colors[4] > 0) then
+							dxSetPixelColor(pixels2, x2-pady, y2, colors[1],colors[2],colors[3],colors[4])
+						end
+					end
+					pady = pady+incline
+				end
+				
+				dxSetTexturePixels(texture, pixels2)
+				VideoMemory["HUD"][index] = texture
+			end
+		end
+		if(centerX) then left = left-(w/2) end
+		if(centerY) then top = top-(h/2) end
+		
+		return dxDrawImage(left,top, w,h, VideoMemory["HUD"][index], 0, 0, 0, color) 
+	end
+end
+
+
+
+
+
+
 function normalspeed(h,m,weather)
 	if(isTimer(DrugsTimer)) then
 		killTimer(DrugsTimer)
@@ -9520,13 +9577,13 @@ function DrawPlayerInventory()
 					if(PInv[name][i][4]) then
 						dxDrawImage(sx,sy,h,w,items[SystemName][1])
 
-						local fontsize = scale/1.8
+						local fontsize = NewScale
 						tw = dxGetTextWidth(DrawText, fontsize, "default-bold", true)
 						if(tw > w) then
 							fontsize=fontsize*(w/tw)
 						end
-						dxDrawBorderedText(DrawText, sx, sy+(140*NewScale), sx+(80*NewScale), sy, tocolor(255, 255, 255, 255), fontsize, "default-bold", "center", "center", false, false, false, true)
-						
+						MemText(DrawText, sx+(40*scalex), sy+(70*scaley), tocolor(255, 255, 255, 255), fontsize, "default-bold", NewScale, 0.1, true, true)
+							
 						if(name == "player" or name == "backpack" or name == "trunk") then
 							if(items[SystemName][3] > 1) then
 								local sht = {"", " шт"}
@@ -9591,12 +9648,13 @@ function DrawPlayerInventory()
 					dragText = PInv[DragElementName][DragElementId][4]["name"]
 				end
 			end
-			local fontsize = scale/1.8
+			local fontsize = NewScale
 			tw = dxGetTextWidth(dragText, fontsize, "default-bold", true)
 			if(tw > (60*NewScale)) then
 				fontsize=fontsize*((60*NewScale)/tw)
 			end
-			dxDrawBorderedText(dragText, DragX, DragY+(140*NewScale), DragX+(80*NewScale), DragY, tocolor(255, 255, 255, 255), fontsize, "default-bold", "center", "center", false, false, false, true)
+			MemText(dragText, DragX+(40*scalex), DragY+(70*scaley), tocolor(255, 255, 255, 255), fontsize, "default-bold", NewScale, 0.1, true, true)
+
 			titleText=dragText
 		end
 		if(InventoryWindows or TradeWindows) then
@@ -9891,7 +9949,7 @@ function DrawPlayerMessage()
 					dist = ""
 				end
 				dxDrawBorderedText(getElementData(v, "info")..dist, 0, screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), screenWidth-(10*NewScale), screenHeight, tocolor(200, 200, 200, 255), scale, "default-bold", "right", "top", nil, nil, nil, true)
-				line=line+1
+				line = line+1
 			end
 			
 			if(PData['gps']) then
@@ -10726,10 +10784,10 @@ function DrawLocation(location)
 			for x2 = 0, x-1 do
 				local colors = {dxGetPixelColor(pixels, x2,y2)}
 				if(colors[4] > 0) then
-					dxSetPixelColor(pixels2, x2-math.floor(pady), y2, colors[1],colors[2],colors[3],colors[4])
+					dxSetPixelColor(pixels2, x2-pady, y2, colors[1],colors[2],colors[3],colors[4])
 				end
 			end
-			pady=pady+0.15
+			pady = pady+0.15
 		end
 		
 		--[[
