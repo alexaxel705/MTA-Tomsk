@@ -2008,32 +2008,44 @@ local TuningSelector = 1
 
 
 local PartsMultipler = {
-	["Brakes"] = {
-		["Trailer"] = 125,
-		["Plane"] = 666.66666666667,
-		["Monster Truck"] = 142.85714285714,
-		["Helicopter"] = 181.81818181818,
-		["Quad"] = 0,
-		["BMX"] = 52.631578947368,
-		["Boat"] = 14285.714224893,
-		["Bike"] = 66.666666666667,
-		["Automobile"] = 66.666666666667,
-		["Train"] = 117.64705882353,
-		["Unknown"] = 0,
-	},
 	["Tires"] = {
-		["Trailer"] = 0,
-		["Plane"] = 0,
-		["Monster Truck"] = 0,
-		["Helicopter"] = 0,
-		["Quad"] = 0,
-		["BMX"] = 0,
-		["Boat"] = 0,
-		["Bike"] = 0,
-		["Automobile"] = {2.5},
-		["Train"] = 0,
-		["Unknown"] = 0,
-	},
+		["Trailer"] = {[1] = {0.44999998807907, 0.44999998807907}, [2] = {0.75, 0.75}, [3] = {0.5, 0.5}}, 
+		["Plane"] = {[1] = {0.050000000745058, 1.5}, [2] = {0.80000001192093, 45}, [3] = {0.5, 0.85000002384186}}, 
+		["Monster Truck"] = {[1] = {0.64999997615814, 0.77999997138977}, [2] = {0.80000001192093, 0.85000002384186}, [3] = {0.5, 0.55000001192093}}, 
+		["Train"] = {[1] = {0.97000002861023, 0.97000002861023}, [2] = {0.76999998092651, 0.76999998092651}, [3] = {0.50999999046326, 0.50999999046326}}, 
+		["Boat"] = {[1] = {-3.5, 3.5}, [2] = {3.5, 25}, [3] = {0.40000000596046, 1}}, 
+		["Bike"] = {[1] = {1.2000000476837, 1.7999999523163}, [2] = {0.81999999284744, 0.89999997615814}, [3] = {0.46000000834465, 0.50999999046326}}, 
+		["Automobile"] = {[1] = {0.5, 2.5}, [2] = {0.64999997615814, 0.9200000166893}, [3] = {0.34999999403954, 0.60000002384186}}, 
+		["Helicopter"] = {[1] = {1.1000000238419, 1.1000000238419}, [2] = {0.75, 0.75}, [3] = {0.5, 0.5}}, 
+		["Quad"] = {[1] = {0.69999998807907, 0.69999998807907}, [2] = {0.89999997615814, 0.89999997615814}, [3] = {0.49000000953674, 0.49000000953674}}, 
+	}, 
+	["Turbo"] = {
+		["Automobile"] = {[1] = {0, 2}, [2] = {0.7000000476837, 1}}, 
+	}, 
+	["Engines"] = {
+		["Trailer"] = {[1] = {7.1999998092651, 7.1999998092651}, [2] = {2, 2}}, 
+		["Plane"] = {[1] = {0.40000000596046, 6.4000000953674}, [2] = {4, 120}}, 
+		["Monster Truck"] = {[1] = {10, 18}, [2] = {2, 4}}, 
+		["Train"] = {[1] = {8, 10}, [2] = {1, 3}}, 
+		["Quad"] = {[1] = {10, 10}, [2] = {5, 5}}, 
+		["BMX"] = {[1] = {7.1999998092651, 10}, [2] = {5, 7}}, 
+		["Boat"] = {[1] = {0.20000000298023, 1.2000000476837}, [2] = {1, 1}}, 
+		["Bike"] = {[1] = {12, 24}, [2] = {4, 5}}, 
+		["Automobile"] = {[1] = {4.8000001907349, 20}, [2] = {1.3999999761581, 20}}, 
+		["Helicopter"] = {[1] = {6.4000000953674, 14}, [2] = {0.050000000745058, 0.20000000298023}}, 
+		["Unknown"] = {[1] = {8, 8}, [2] = {5, 5}}, 
+	}, 
+	["Brakes"] = {
+		["Trailer"] = {[1] = {8, 8}}, 
+		["Plane"] = {[1] = {0.0099999997764826, 1.5}}, 
+		["Monster Truck"] = {[1] = {3.1700000762939, 7}}, 
+		["Helicopter"] = {[1] = {5, 5.5}}, 
+		["BMX"] = {[1] = {19, 19}}, 
+		["Boat"] = {[1] = {0.019999999552965, 0.070000000298023}}, 
+		["Bike"] = {[1] = {10, 15}}, 
+		["Automobile"] = {[1] = {3.5, 15}}, 
+		["Train"] = {[1] = {8.5, 8.5}}, 
+	}, 
 }
 
 
@@ -2049,18 +2061,37 @@ function GetVehicleTopSpeed(acceleration, dragcoeff, maxvel)
 		return (1000/348)*maxvel
 	end
 end --При 26.5
-function GetVehicleAcceleration(acceleration, dragCoeff, tractionMultiplier) return 714+math.ceil((acceleration*(acceleration-dragCoeff))*tractionMultiplier) end --При 120
 
 
-function GetVehicleControl(tractionMultiplier)
+function GetVehicleAcceleration(acceleration, tractionMultiplier) 
 	local theVehicleType = getVehicleType(getPedOccupiedVehicle(localPlayer))
-	return tractionMultiplier/PartsMultipler["Tires"][theVehicleType][1]
+	local minacc = PartsMultipler["Engines"][theVehicleType][1][1]-PartsMultipler["Turbo"][theVehicleType][1][1]
+	local maxacc = PartsMultipler["Engines"][theVehicleType][1][2]+PartsMultipler["Turbo"][theVehicleType][1][2]
+	
+	return ((GetValPer(minacc, maxacc, acceleration)*10)/2)+(GetVehicleClutch(tractionMultiplier)/2)
+end 
+
+
+
+function GetVehicleClutch(tractionMultiplier)
+	local theVehicleType = getVehicleType(getPedOccupiedVehicle(localPlayer))
+	return GetValPer(PartsMultipler["Tires"][theVehicleType][1][1], PartsMultipler["Tires"][theVehicleType][1][2], tractionMultiplier)*10
 end
 
 
+function GetVehicleControl(tractionBias)
+	local theVehicleType = getVehicleType(getPedOccupiedVehicle(localPlayer))
+	return GetValPer(PartsMultipler["Tires"][theVehicleType][3][1], PartsMultipler["Tires"][theVehicleType][3][2], tractionBias)*10
+end
 
 
-
+function GetValPer(mins, maxs, raw)
+	mins = math.round(mins, 2)
+	maxs = math.round(maxs, 2)
+	raw = math.round(raw, 2)
+    return (raw-mins)/(maxs-mins)*100
+end
+ 
 
 
 
@@ -2073,9 +2104,12 @@ function GetElementAttacker(element)
 	return attacker
 end
 
-function GetVehicleBrakes(brakes)
+
+
+function GetVehicleBrakes(brakes, tractionLoss)
 	local theVehicleType = getVehicleType(getPedOccupiedVehicle(localPlayer))
-	return math.floor(brakes*PartsMultipler["Brakes"][theVehicleType]) -- при максимуме 15
+	return ((GetValPer(PartsMultipler["Brakes"][theVehicleType][1][1], PartsMultipler["Brakes"][theVehicleType][1][2], brakes)*10)/2)+
+		((GetValPer(PartsMultipler["Tires"][theVehicleType][2][1], PartsMultipler["Tires"][theVehicleType][2][2], tractionLoss)*10)/2)
 end
 
 
@@ -2149,12 +2183,11 @@ end
 local NEWPER = false
 function UpdateTuningPerformans(NewDat)
 	local Power = GetVehiclePower(STPER["mass"], STPER["engineAcceleration"])
-	local Acceleration = GetVehicleAcceleration(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["tractionMultiplier"])
+	local Acceleration = GetVehicleAcceleration(STPER["engineAcceleration"], STPER["tractionMultiplier"])
 	local TopSpeed = math.floor(GetVehicleTopSpeed(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["maxVelocity"])/(1000/348))
-	local Brake = math.floor(STPER["brakeBias"]*100)..'/'..(100)-math.floor(STPER["brakeBias"]*100)..' ('..GetVehicleBrakes(STPER["brakeDeceleration"])..')'
+	local Brake = math.floor(STPER["brakeBias"]*100)..'/'..(100)-math.floor(STPER["brakeBias"]*100)
 	local Trans = STPER["driveType"].." "..STPER["numberOfGears"]
-	local Control = GetVehicleControl(STPER["tractionMultiplier"])
-
+	local Control = GetVehicleControl(STPER["tractionBias"])
 	
 	if(NewDat) then
 		NEWPER = getVehicleHandling(getPedOccupiedVehicle(localPlayer))
@@ -2165,10 +2198,10 @@ function UpdateTuningPerformans(NewDat)
 		local nPower = GetVehiclePower(NEWPER["mass"], NEWPER["engineAcceleration"])-GetVehiclePower(STPER["mass"], STPER["engineAcceleration"])
 		if(nPower > 0) then Power = Power..'+'..nPower
 		elseif(nPower < 0) then Power = Power..''..nPower end
-		Acceleration = GetVehicleAcceleration(NEWPER["engineAcceleration"], NEWPER["dragCoeff"], NEWPER["tractionMultiplier"])-GetVehicleAcceleration(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["tractionMultiplier"])
-		Brake = math.floor(NEWPER["brakeBias"]*100)..'/'..(100)-math.floor(NEWPER["brakeBias"]*100)..' ('..GetVehicleBrakes(NEWPER["brakeDeceleration"])..')'
+		Acceleration = GetVehicleAcceleration(NEWPER["engineAcceleration"], NEWPER["tractionMultiplier"])-GetVehicleAcceleration(STPER["engineAcceleration"], STPER["tractionMultiplier"])
+		Brake = math.floor(NEWPER["brakeBias"]*100)..'/'..(100)-math.floor(NEWPER["brakeBias"]*100)
 		Trans = NEWPER["driveType"].." "..NEWPER["numberOfGears"]
-		Control = GetVehicleControl(NEWPER["tractionMultiplier"])
+		Control = GetVehicleControl(NEWPER["tractionBias"])
 	else
 		triggerServerEvent("UpgradePreload", localPlayer, localPlayer)
 		NEWPER = false
@@ -2177,9 +2210,10 @@ function UpdateTuningPerformans(NewDat)
 	
 	PText["tuning"]["topspeed"] = {Text("Макс скорость").." "..TopSpeed.." "..Text("КМ/Ч"), sx, sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
 	PText["tuning"]["power"] = {Text("Мощность").." "..Power.." "..Text("Л.С."), sx+(300*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
-	PText["tuning"]["acceleration"] = {Text("Ускорение").." ("..Trans.." АКПП) ("..Acceleration..")", sx+(600*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
+	PText["tuning"]["acceleration"] = {Text("Ускорение").." ("..Trans.." АКПП)", sx+(600*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
 	PText["tuning"]["brakes"] = {Text("Тормоза").." "..Brake, sx+(900*scaley), sy-(30*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
---	PText["tuning"]["Управление"] = {Text("Управление").." "..Control, sx+(900*scaley), sy-(130*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
+	PText["tuning"]["Управление"] = {Text("Управление").." "..Control, sx+(900*scaley), sy-(170*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.7, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true}}
+
 end
 
 
@@ -9644,13 +9678,13 @@ function DrawPlayerMessage()
 				if(NEWPER) then
 					TopSpeed = GetVehicleTopSpeed(NEWPER["engineAcceleration"], NEWPER["dragCoeff"], NEWPER["maxVelocity"])-GetVehicleTopSpeed(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["maxVelocity"])
 					Power = GetVehiclePower(NEWPER["mass"], NEWPER["engineAcceleration"])-GetVehiclePower(STPER["mass"], STPER["engineAcceleration"])
-					Acceleration = GetVehicleAcceleration(NEWPER["engineAcceleration"], NEWPER["dragCoeff"], NEWPER["tractionMultiplier"])-GetVehicleAcceleration(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["tractionMultiplier"])
-					Brake = GetVehicleBrakes(NEWPER["brakeDeceleration"])-GetVehicleBrakes(STPER["brakeDeceleration"])
+					Acceleration = GetVehicleAcceleration(NEWPER["engineAcceleration"], NEWPER["tractionMultiplier"])-GetVehicleAcceleration(STPER["engineAcceleration"], STPER["tractionMultiplier"])
+					Brake = GetVehicleBrakes(NEWPER["brakeDeceleration"], NEWPER["tractionLoss"])-GetVehicleBrakes(STPER["brakeDeceleration"], STPER["tractionLoss"])
 				end
 				DrawProgressBar(sx, sy, (GetVehicleTopSpeed(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["maxVelocity"]))+TopSpeed,TopSpeed,200)
 				DrawProgressBar(sx+(300*scaley), sy, GetVehiclePower(STPER["mass"], STPER["engineAcceleration"])+Power,Power,200) --При максимальной мощности 348 лс.
-				DrawProgressBar(sx+(600*scaley), sy, GetVehicleAcceleration(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["tractionMultiplier"])+Acceleration,Acceleration,200)
-				DrawProgressBar(sx+(900*scaley), sy, GetVehicleBrakes(STPER["brakeDeceleration"])+Brake,Brake,200)
+				DrawProgressBar(sx+(600*scaley), sy, GetVehicleAcceleration(STPER["engineAcceleration"], STPER["tractionMultiplier"])+Acceleration,Acceleration,200)
+				DrawProgressBar(sx+(900*scaley), sy, GetVehicleBrakes(STPER["brakeDeceleration"], STPER["tractionLoss"])+Brake,Brake,200)
 			end
 		
 			sx,sy = guiGetScreenSize()

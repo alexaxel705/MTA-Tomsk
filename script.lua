@@ -2770,6 +2770,102 @@ local VComp = {
 }
 
 
+local WriteDat = {}
+for name, dat in pairs(VComp) do
+	if(name == "Brakes") then
+		WriteDat[name] = {}
+		for i,v in pairs(dat) do
+			if(not WriteDat[name][v[1]]) then WriteDat[name][v[1]] = {[1] = {-100000, 100000}} end
+			if(v[2] > WriteDat[name][v[1]][1][1]) then
+				WriteDat[name][v[1]][1][1] = v[2]
+			end
+			if(v[2] < WriteDat[name][v[1]][1][2]) then
+				WriteDat[name][v[1]][1][2] = v[2]
+			end
+		end
+	elseif(name == "Tires") then
+		WriteDat[name] = {}
+		for i,v in pairs(dat) do
+			if(not WriteDat[name][v[1]]) then 
+				WriteDat[name][v[1]] = {
+					[1] = {-100000, 100000}, 
+					[2] = {-100000, 100000}, 
+					[3] = {-100000, 100000}
+				} 
+			end
+			if(v[2] > WriteDat[name][v[1]][1][1]) then
+				WriteDat[name][v[1]][1][1] = v[2]
+			end
+			if(v[2] < WriteDat[name][v[1]][1][2]) then
+				WriteDat[name][v[1]][1][2] = v[2]
+			end
+			
+			
+			if(v[3] > WriteDat[name][v[1]][2][1]) then
+				WriteDat[name][v[1]][2][1] = v[3]
+			end
+			if(v[3] < WriteDat[name][v[1]][2][2]) then
+				WriteDat[name][v[1]][2][2] = v[3]
+			end
+			
+			if(v[4] > WriteDat[name][v[1]][3][1]) then
+				WriteDat[name][v[1]][3][1] = v[4]
+			end
+			if(v[4] < WriteDat[name][v[1]][3][2]) then
+				WriteDat[name][v[1]][3][2] = v[4]
+			end
+		end
+	elseif(name == "Engines" or name == "Turbo") then
+		WriteDat[name] = {}
+		for i,v in pairs(dat) do
+			if(not WriteDat[name][v[1]]) then 
+				WriteDat[name][v[1]] = {
+					[1] = {-100000, 100000}, 
+					[2] = {-100000, 100000}, 
+				} 
+			end
+			if(v[2] > WriteDat[name][v[1]][1][1]) then
+				WriteDat[name][v[1]][1][1] = v[2]
+			end
+			if(v[2] < WriteDat[name][v[1]][1][2]) then
+				WriteDat[name][v[1]][1][2] = v[2]
+			end
+			
+			
+			if(v[3] > WriteDat[name][v[1]][2][1]) then
+				WriteDat[name][v[1]][2][1] = v[3]
+			end
+			if(v[3] < WriteDat[name][v[1]][2][2]) then
+				WriteDat[name][v[1]][2][2] = v[3]
+			end
+		end
+	end
+end
+
+
+
+datess = ""
+for name, dat in pairs(WriteDat) do
+	datess = datess..'\n	["'..name..'"] = {'
+	for name2, dat2 in pairs(dat) do
+		datess = datess..'\n		["'..name2..'"] = {'
+		local count = 0
+		for i, dat3 in pairs(dat2) do
+			if(count >= 1) then
+				datess = datess..", "
+			end
+			datess = datess.."["..i.."] = {"..dat3[2]..", "..dat3[1].."}"
+			count = count+1
+		end
+		datess = datess..'}, '
+	end
+	datess = datess..'\n	}, '
+end
+fileDelete("save.txt")
+local hFile = fileCreate("save.txt")
+fileWrite(hFile, datess) -- write a text line
+fileClose(hFile)
+
 
 
 	
@@ -3281,19 +3377,15 @@ function CreateVehicle(model, x, y, z, rx, ry, rz, numberplate, bDirection, vari
 		if(tonumber(h[k])) then
 			if(h[k] ~= hh[k]) then 
 				outputChatBox(h[k].." ~= "..hh[k].." "..k.." "..model) 
-					fileDelete("save.txt")
-					local hFile = fileCreate("save.txt")
-					fileWrite(hFile, h[k].." ~= "..hh[k].." "..k.." "..model) -- write a text line
-					fileClose(hFile)
+				fileDelete("save.txt")
+				local hFile = fileCreate("save.txt")
+				fileWrite(hFile, h[k].." ~= "..hh[k].." "..k.." "..model) -- write a text line
+				fileClose(hFile)
 			end
 		end
 	end--]]
 	return theVehicle
 end
-
-
-
-
 
 
 
@@ -12313,6 +12405,7 @@ addCommandHandler("seti", seti)
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	--RacePriceGeneration(thePlayer)
+	setVehicleHandling(getPedOccupiedVehicle(thePlayer), "tractionLoss", 0.1)
 	local zone = getZoneName(x,y,z)
 	if(savetype == "PedPath") then
 		local angle = findRotation(x,y, x,ry)
@@ -15263,6 +15356,10 @@ local sp46 = createMarker(720.2, -456.9, 15, "corona", 4, 0, 0, 0, 0)
 setElementData(sp46, "type", "SPRAY")
 setElementData(sp46, "id", 46)
 setElementData(sp46, "rz", 180)
+
+
+
+--setElementData(createMarker(-220.5, 2619.3, 61.8, "corona", 4, 0, 0, 0, 0), "type", "RVMarker")
 
 setElementData(createMarker(2644.7, -2044, 12, "corona", 4, 0, 0, 0, 0), "type", "RVMarker")
 setElementData(createMarker(1041.5, -1015.9, 31, "corona", 4, 0, 0, 0, 0), "type", "RVMarker")
