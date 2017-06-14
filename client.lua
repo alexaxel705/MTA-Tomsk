@@ -557,6 +557,22 @@ addCommandHandler("yep", yep)
 
 
 
+local VehicleType = {
+	[441] = "RC", 
+	[464] = "RC", 
+	[594] = "RC", 
+	[501] = "RC", 
+	[465] = "RC", 
+	[564] = "RC", 
+}
+function GetVehicleType(theVehicle)
+	if(isElement(theVehicle)) then theVehicle = getElementModel(theVehicle) end
+	return VehicleType[theVehicle] or getVehicleType(theVehicle)
+end
+
+
+
+
 local sens = 0.1
 
 function minusx()
@@ -2009,6 +2025,7 @@ local TuningSelector = 1
 
 local PartsMultipler = {
 	["Tires"] = {
+		["RC"] = {[1] = {0.20000000298023, 1.1000000238419}, [2] = {0.75, 0.89999997615814}, [3] = {0.49000000953674, 0.5}}, 
 		["Trailer"] = {[1] = {0.44999998807907, 0.44999998807907}, [2] = {0.75, 0.75}, [3] = {0.5, 0.5}}, 
 		["Plane"] = {[1] = {0.050000000745058, 1.5}, [2] = {0.80000001192093, 45}, [3] = {0.5, 0.85000002384186}}, 
 		["Monster Truck"] = {[1] = {0.64999997615814, 0.77999997138977}, [2] = {0.80000001192093, 0.85000002384186}, [3] = {0.5, 0.55000001192093}}, 
@@ -2016,30 +2033,31 @@ local PartsMultipler = {
 		["Boat"] = {[1] = {-3.5, 3.5}, [2] = {3.5, 25}, [3] = {0.40000000596046, 1}}, 
 		["Bike"] = {[1] = {1.2000000476837, 1.7999999523163}, [2] = {0.81999999284744, 0.89999997615814}, [3] = {0.46000000834465, 0.50999999046326}}, 
 		["Automobile"] = {[1] = {0.5, 2.5}, [2] = {0.64999997615814, 0.9200000166893}, [3] = {0.34999999403954, 0.60000002384186}}, 
-		["Helicopter"] = {[1] = {1.1000000238419, 1.1000000238419}, [2] = {0.75, 0.75}, [3] = {0.5, 0.5}}, 
 		["Quad"] = {[1] = {0.69999998807907, 0.69999998807907}, [2] = {0.89999997615814, 0.89999997615814}, [3] = {0.49000000953674, 0.49000000953674}}, 
 	}, 
 	["Turbo"] = {
 		["Automobile"] = {[1] = {0, 2}, [2] = {0.7000000476837, 1}}, 
 	}, 
 	["Engines"] = {
+		["RC"] = {[1] = {0.40000000596046, 20}, [2] = {0.20000000298023, 120}}, 
 		["Trailer"] = {[1] = {7.1999998092651, 7.1999998092651}, [2] = {2, 2}}, 
-		["Plane"] = {[1] = {0.40000000596046, 6.4000000953674}, [2] = {4, 120}}, 
+		["Plane"] = {[1] = {0.68000000715256, 6.4000000953674}, [2] = {4, 20}}, 
 		["Monster Truck"] = {[1] = {10, 18}, [2] = {2, 4}}, 
 		["Train"] = {[1] = {8, 10}, [2] = {1, 3}}, 
 		["Quad"] = {[1] = {10, 10}, [2] = {5, 5}}, 
 		["BMX"] = {[1] = {7.1999998092651, 10}, [2] = {5, 7}}, 
 		["Boat"] = {[1] = {0.20000000298023, 1.2000000476837}, [2] = {1, 1}}, 
 		["Bike"] = {[1] = {12, 24}, [2] = {4, 5}}, 
-		["Automobile"] = {[1] = {4.8000001907349, 20}, [2] = {1.3999999761581, 20}}, 
-		["Helicopter"] = {[1] = {6.4000000953674, 14}, [2] = {0.050000000745058, 0.20000000298023}}, 
+		["Automobile"] = {[1] = {4.8000001907349, 16}, [2] = {1.3999999761581, 20}}, 
 		["Unknown"] = {[1] = {8, 8}, [2] = {5, 5}}, 
+		["Helicopter"] = {[1] = {6.4000000953674, 6.4000000953674}, [2] = {0.050000000745058, 0.20000000298023}}, 
 	}, 
 	["Brakes"] = {
+		["RC"] = {[1] = {5.5, 5.5}}, 
 		["Trailer"] = {[1] = {8, 8}}, 
 		["Plane"] = {[1] = {0.0099999997764826, 1.5}}, 
 		["Monster Truck"] = {[1] = {3.1700000762939, 7}}, 
-		["Helicopter"] = {[1] = {5, 5.5}}, 
+		["Helicopter"] = {[1] = {5, 5}}, 
 		["BMX"] = {[1] = {19, 19}}, 
 		["Boat"] = {[1] = {0.019999999552965, 0.070000000298023}}, 
 		["Bike"] = {[1] = {10, 15}}, 
@@ -2064,7 +2082,7 @@ end --При 26.5
 
 
 function GetVehicleAcceleration(acceleration, tractionMultiplier) 
-	local theVehicleType = getVehicleType(getPedOccupiedVehicle(localPlayer))
+	local theVehicleType = GetVehicleType(getPedOccupiedVehicle(localPlayer))
 	local minacc = PartsMultipler["Engines"][theVehicleType][1][1]-PartsMultipler["Turbo"][theVehicleType][1][1]
 	local maxacc = PartsMultipler["Engines"][theVehicleType][1][2]+PartsMultipler["Turbo"][theVehicleType][1][2]
 	
@@ -2074,13 +2092,13 @@ end
 
 
 function GetVehicleClutch(tractionMultiplier)
-	local theVehicleType = getVehicleType(getPedOccupiedVehicle(localPlayer))
+	local theVehicleType = GetVehicleType(getPedOccupiedVehicle(localPlayer))
 	return GetValPer(PartsMultipler["Tires"][theVehicleType][1][1], PartsMultipler["Tires"][theVehicleType][1][2], tractionMultiplier)*10
 end
 
 
 function GetVehicleControl(tractionBias)
-	local theVehicleType = getVehicleType(getPedOccupiedVehicle(localPlayer))
+	local theVehicleType = GetVehicleType(getPedOccupiedVehicle(localPlayer))
 	return GetValPer(PartsMultipler["Tires"][theVehicleType][3][1], PartsMultipler["Tires"][theVehicleType][3][2], tractionBias)*10
 end
 
@@ -2107,7 +2125,7 @@ end
 
 
 function GetVehicleBrakes(brakes, tractionLoss)
-	local theVehicleType = getVehicleType(getPedOccupiedVehicle(localPlayer))
+	local theVehicleType = GetVehicleType(getPedOccupiedVehicle(localPlayer))
 	return ((GetValPer(PartsMultipler["Brakes"][theVehicleType][1][1], PartsMultipler["Brakes"][theVehicleType][1][2], brakes)*10)/2)+
 		((GetValPer(PartsMultipler["Tires"][theVehicleType][2][1], PartsMultipler["Tires"][theVehicleType][2][2], tractionLoss)*10)/2)
 end
@@ -2132,7 +2150,7 @@ function LoadUpgrade(Update, handl, othercomp)
 			Upgrading[4]["data"][1] = {handl[4].." [Установлена]", "Suspension", "Установлено"}
 			Upgrading[5]["data"][1] = {handl[5].." [Установлены]", "Brakes", "Установлено"}
 			Upgrading[6]["data"][1] = {handl[6].." [Установлены]", "Tires", "Установлено"}
-			local vtype = getVehicleType(theVehicle)
+			local vtype = GetVehicleType(theVehicle)
 			for i, arr in pairs(fromJSON(othercomp)) do
 				local ks = nil
 				if i == "Engines" then ks = 1
@@ -4075,16 +4093,16 @@ end
 
 function getVehicleGear(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
 	local onegear = getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears)
-	local result
+	local result = 0
 	for Gear = 0, numberOfGears, 1 do
 		if(getVehicleCurrentGear(theVehicle) > 0) then
 			if(onegear*Gear <= VehicleSpeed) then
 				if((Gear+1) <= numberOfGears) then
-					result=(Gear+1)
+					result = (Gear+1)
 				end
 			end
 		else
-			result=0
+			result = 0
 		end
 	end
     return result
@@ -4158,12 +4176,12 @@ function updateWorld()
 			PData["Driver"]["Distance"] = PData["Driver"]["Distance"]+getDistanceBetweenPoints3D(PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"], x, y, z)
 			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = x,y,z
 			if(PData["Driver"]["Distance"] >= 2000) then
-				local VehType = getVehicleType(theVehicle)
+				local VehType = GetVehicleType(theVehicle)
 				PData["Driver"]["Distance"] = 0
 				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 10)
 			end
 			
-			if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
+			if(GetVehicleType(theVehicle) == "Automobile" or GetVehicleType(theVehicle) == "Bike") then
 				if(not isVehicleOnGround(theVehicle)) then
 					if(not PData["Driver"]["jump"]) then 
 						PData["Driver"]["jump"] = {0} 
@@ -4207,10 +4225,10 @@ function updateWorld()
 			if(VehicleSpeed > 100) then
 				local vxl,vyl,vzl, vxr, vyr, vzr = false
 				local vxc, vyc, vzc = getElementPosition(theVehicle)
-				if(getVehicleType(theVehicle) == "Automobile") then
+				if(GetVehicleType(theVehicle) == "Automobile") then
 					vxl, vyl, vzl = getVehicleComponentPosition(theVehicle, "wheel_lf_dummy", "world")
 					vxr, vyr, vzr = getVehicleComponentPosition(theVehicle, "wheel_rf_dummy", "world")
-				elseif(getVehicleType(theVehicle) == "Bike") then
+				elseif(GetVehicleType(theVehicle) == "Bike") then
 					vxl, vyl, vzl = getVehicleComponentPosition(theVehicle, "wheel_front", "world")
 					vxr, vyr, vzr = getVehicleComponentPosition(theVehicle, "wheel_front", "world")
 				end
@@ -5500,7 +5518,11 @@ addEvent("CarJack", true)
 addEventHandler("CarJack", localPlayer, CarJack)
 
 
-
+function PedDialog()
+	triggerServerEvent("PedDialog", localPlayer, localPlayer, Targets["thePlayer"])
+end
+addEvent("PedDialog", true)
+addEventHandler("PedDialog", localPlayer, PedDialog)
 
 
 
@@ -5627,7 +5649,6 @@ function targetingActivated(target)
 				local distance = getDistanceBetweenPoints3D(x,y,z,x2,y2,z2)
 				local message=""
 				if(distance < 2) then
-
 					if(getElementHealth(target) < 20) then
 						message = message.."Нажми #A0A0A0F2#FFFFFF чтобы поднять игрока\n"	
 					end
@@ -6498,7 +6519,7 @@ function playerPressedKey(button, press)
 		
 		for key, arr in pairs(PData["MultipleAction"]) do
 			if(key == button) then
-				triggerEvent(arr[1], localPlayer)
+				triggerEvent(arr[1], localPlayer, localPlayer, arr[5])
 			end
 		end
 		
@@ -6693,6 +6714,11 @@ function CreateTarget(el)
 					if(getElementType(driver) == "ped") then
 						PData["MultipleAction"]["f"] = {"CarJack", false, false, false}
 					end
+				end
+			elseif(types == "player") then
+				sx,sy = getScreenFromWorldPosition(ex,ey,ez)
+				if(sx and sy) then
+					PData["MultipleAction"]["e"] = {"PedDialog", "Начать разговор", sx,sy}
 				end
 			end
 		end
@@ -6981,6 +7007,8 @@ addEventHandler("onClientRender", root,
 					color=tocolor(200, 200, 200, 255)
 				end
 				dxDrawBorderedText(Text(getTeamGroup(ArraySkinInfo[skin][1])), (110*scalex), -(100*scaley), screenWidth, screenHeight, color, scale/1.4, "default-bold", "center", "center")
+			
+				CreateTarget(Targets["thePlayer"])
 			elseif(Targets["thePed"]) then
 				local team = getElementData(Targets["thePed"], "team")
 				local color = getTeamVariable(team)
@@ -6998,7 +7026,6 @@ addEventHandler("onClientRender", root,
 				end
 				
 				CreateTarget(Targets["thePed"])
-				
 			end
 			
 			for _, ped in pairs(getElementsByType("ped", getRootElement(), true)) do
@@ -9674,17 +9701,20 @@ function DrawPlayerMessage()
 			sx,sy = (screenWidth/2.55), screenHeight-(150*scaley)
 		
 			if(STPER) then
-				local TopSpeed, Power, Acceleration, Brake = 0,0,0,0
+				local TopSpeed, Power, Acceleration, Brake, Control = 0,0,0,0,0
 				if(NEWPER) then
 					TopSpeed = GetVehicleTopSpeed(NEWPER["engineAcceleration"], NEWPER["dragCoeff"], NEWPER["maxVelocity"])-GetVehicleTopSpeed(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["maxVelocity"])
 					Power = GetVehiclePower(NEWPER["mass"], NEWPER["engineAcceleration"])-GetVehiclePower(STPER["mass"], STPER["engineAcceleration"])
 					Acceleration = GetVehicleAcceleration(NEWPER["engineAcceleration"], NEWPER["tractionMultiplier"])-GetVehicleAcceleration(STPER["engineAcceleration"], STPER["tractionMultiplier"])
 					Brake = GetVehicleBrakes(NEWPER["brakeDeceleration"], NEWPER["tractionLoss"])-GetVehicleBrakes(STPER["brakeDeceleration"], STPER["tractionLoss"])
+					Control = GetVehicleControl(NEWPER["tractionBias"])-GetVehicleControl(STPER["tractionBias"])
 				end
 				DrawProgressBar(sx, sy, (GetVehicleTopSpeed(STPER["engineAcceleration"], STPER["dragCoeff"], STPER["maxVelocity"]))+TopSpeed,TopSpeed,200)
 				DrawProgressBar(sx+(300*scaley), sy, GetVehiclePower(STPER["mass"], STPER["engineAcceleration"])+Power,Power,200) --При максимальной мощности 348 лс.
 				DrawProgressBar(sx+(600*scaley), sy, GetVehicleAcceleration(STPER["engineAcceleration"], STPER["tractionMultiplier"])+Acceleration,Acceleration,200)
 				DrawProgressBar(sx+(900*scaley), sy, GetVehicleBrakes(STPER["brakeDeceleration"], STPER["tractionLoss"])+Brake,Brake,200)
+				DrawProgressBar(sx+(900*scaley), sy-(130*scaley), GetVehicleControl(STPER["tractionBias"])+Control,Control,200)
+			
 			end
 		
 			sx,sy = guiGetScreenSize()
@@ -10290,7 +10320,7 @@ function DrawPlayerMessage()
 				
 				local Skill = false
 				if(theVehicle) then
-					local VehType = getVehicleType(theVehicle)
+					local VehType = GetVehicleType(theVehicle)
 					Skill = VehTypeSkill[VehType]
 					if(Skill == 160) then
 						if(string.sub(getVehiclePlateText(theVehicle), 0, 1) == "I" and string.sub(getVehiclePlateText(theVehicle), 6, 9) == "228") then
@@ -10586,6 +10616,7 @@ local VehicleTrunks = {
 	[489] = {{-0.6, -1.7, 0.2, 0, 0, 0}, {0, -1.7, -0.07, 0, 0, 0}, {0.6, -1.7, 0.2, 0, 0, 0}, {-0.6, -2.2, -0.07, 0, 0, 0}, {0, -2.2, -0.07, 0, 0, 0}, {0.6, -2.2, -0.07, 0, 0, 0}},
 	[490] = {{-0.5, -1.7, -0.05, 10, 0, 0}, {0, -1.7, -0.05, 10, 0, 0}, {0.5, -1.7, -0.05, 10, 0, 0}},
 	
+	[495] = {{-0.6, -1, -0.1, 0, 0, 0}, {0, -1, -0.1, 0, 0, 0}, {0.6, -1, -0.1, 0, 0, 0}, {-0.6, -1.7, -0.1, 0, 0, 0}, {0, -1.7, -0.1, 0, 0, 0}, {0.6, -1.7, -0.1, 0, 0, 0}},
 	[496] = {{-0.5, -1.7, -0.05, 10, 0, 0}, {0, -1.7, -0.05, 10, 0, 0}, {0.5, -1.7, -0.05, 10, 0, 0}},
 	
 	[505] = {{-0.5, -1.7, -0.05, 10, 0, 0}, {0, -1.7, -0.05, 10, 0, 0}, {0.5, -1.7, -0.05, 10, 0, 0}},
@@ -10761,12 +10792,6 @@ function StreamIn()
 	if(getElementType(source) == "player") then
 		if(not StreamData[source]) then
 			StreamData[source] = {["armas"] = {}}
-			local x,y,z = getElementPosition(source)
-			StreamData[source]["ActionMarker"]=createMarker(x,y,z, "cylinder", 1, 255, 10, 10, 0)
-			setElementInterior(StreamData[source]["ActionMarker"], getElementInterior(source))
-			setElementDimension(StreamData[source]["ActionMarker"], getElementDimension(source))
-			attachElements(StreamData[source]["ActionMarker"], source)
-			setElementData(StreamData[source]["ActionMarker"], "TriggerBot", getPlayerName(source))
 		end
 		UpdateArmas(source)
 	elseif(getElementType(source) == "vehicle") then
@@ -10786,7 +10811,7 @@ function StreamIn()
 		
 		if(getElementData(source, "type")) then
 			if(getElementData(source, "type") == "jobtruck") then
-				if(getVehicleType(source) == "Trailer") then
+				if(GetVehicleType(source) == "Trailer") then
 					if(not getVehicleTowingVehicle(source)) then
 						triggerEvent("onClientTrailerDetach", source, source)
 					end

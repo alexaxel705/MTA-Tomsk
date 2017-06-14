@@ -103,6 +103,22 @@ local COLOR = {
 
 
 
+local VehicleType = {
+	[441] = "RC", 
+	[464] = "RC", 
+	[594] = "RC", 
+	[501] = "RC", 
+	[465] = "RC", 
+	[564] = "RC", 
+}
+function GetVehicleType(theVehicle)
+	if(isElement(theVehicle)) then theVehicle = getElementModel(theVehicle) end
+	return VehicleType[theVehicle] or getVehicleType(theVehicle)
+end
+
+
+
+
 -- Дата основания, название, торговля, уровень
 local BizInfo = {
 	["SANFI"] = {1339, "San Fierro", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.45},
@@ -2144,6 +2160,11 @@ function CreateDialogBot(skin,x,y,z,rz,i,d,dialog,name)
 end
 
 
+
+--[[
+ *** Некоторые запчасти RC и Вертолетов, лодок совпадают.
+ *** Будут конфликты создай дубликаты с указанием VehicleType для каждого отдельно
+--]]
 local VComp = {
 	["Tires"] = {--tractionMultiplier, tractionLoss, tractionBias 
 		["Michelin 51"] = {"Automobile", 0.75, 0.80000001192093, 0.5}, 
@@ -2169,7 +2190,7 @@ local VComp = {
 		["Michelin 50"] = {"Automobile", 0.75, 0.85000002384186, 0.51999998092651}, 
 		["Michelin 37"] = {"Boat", 2, 4.1999998092651, 0.69999998807907}, 
 		["Michelin 68"] = {"Automobile", 0.64999997615814, 0.89999997615814, 0.50999999046326}, 
-		["Michelin 43"] = {"Automobile", 0.80000001192093, 0.89999997615814, 0.49000000953674}, 
+		["Michelin 43"] = {"RC", 0.80000001192093, 0.89999997615814, 0.49000000953674}, 
 		["Michelin 89"] = {"Automobile", 0.75, 0.88999998569489, 0.5}, 
 		["Michelin 53"] = {"Automobile", 0.69999998807907, 0.75, 0.50999999046326}, 
 		["ANNAITE"] = {"Automobile", 0.85000002384186, 0.69999998807907, 0.46000000834465}, 
@@ -2185,7 +2206,7 @@ local VComp = {
 		["Michelin 98"] = {"Automobile", 0.94999998807907, 0.80000001192093, 0.44999998807907}, 
 		["Michelin 96"] = {"Automobile", 0.85000002384186, 0.85000002384186, 0.5}, 
 		["Michelin 71"] = {"Boat", 2, 15, 0.5}, 
-		["Michelin 48"] = {"Automobile", 0.60000002384186, 0.89999997615814, 0.49000000953674}, 
+		["Michelin 48"] = {"RC", 0.60000002384186, 0.89999997615814, 0.49000000953674}, 
 		["КАМА-505"] = {"Automobile", 0.64999997615814, 0.80000001192093, 0.51999998092651}, 
 		["Michelin 106"] = {"Automobile", 0.60000002384186, 0.85000002384186, 0.5}, 
 		["Brigestone"] = {"Automobile", 0.69999998807907, 0.80000001192093, 0.5}, 
@@ -2218,7 +2239,7 @@ local VComp = {
 		["Michelin 101"] = {"Automobile", 0.64999997615814, 0.69999998807907, 0.46999999880791}, 
 		["Michelin 125"] = {"Automobile", 0.89999997615814, 0.85000002384186, 0.47999998927116}, 
 		["Michelin 45"] = {"Boat", 3.5, 3.5, 1}, 
-		["Michelin 11"] = {"Helicopter", 1.1000000238419, 0.75, 0.5}, 
+		["Michelin 11"] = {"RC", 1.1000000238419, 0.75, 0.5}, 
 		["Michelin 54"] = {"Automobile", 0.80000001192093, 0.80000001192093, 0.51999998092651}, 
 		["Michelin 57"] = {"Automobile", 0.69999998807907, 0.80000001192093, 0.52999997138977}, 
 		["Michelin 127"] = {"Automobile", 0.75, 0.89999997615814, 0.5}, 
@@ -2268,7 +2289,7 @@ local VComp = {
 		["Michelin 20"] = {"Automobile", 0.85000002384186, 0.80000001192093, 0.60000002384186}, 
 		["Michelin 28"] = {"Automobile", 0.69999998807907, 0.69999998807907, 0.46000000834465}, 
 		["Michelin 63"] = {"Automobile", 0.75, 0.83999997377396, 0.52999997138977}, 
-		["Michelin 94"] = {"Plane", 0.20000000298023, 0.89999997615814, 0.5}, 
+		["Michelin 94"] = {"RC", 0.20000000298023, 0.89999997615814, 0.5}, 
 		["Michelin 129"] = {"Plane", 0.55000001192093, 0.80000001192093, 0.69999998807907}, 
 		["Michelin 73"] = {"Plane", 0.050000000745058, 1, 0.5}, 
 		["Michelin 27"] = {"Automobile", 0.80000001192093, 0.75, 0.55000001192093}, 
@@ -2291,7 +2312,7 @@ local VComp = {
 		["Wilwood 212mm"] = {"Monster Truck", 7, 0.44999998807907},
 		["Wilwood 200mm"] = {"Automobile", 6.4000000953674, 0.44999998807907},
 		["Endless 230mm"] = {"Automobile", 8, 0.5799999833107},
-		["Brembo 12"] = {"Helicopter", 5.5, 0.5},
+		["Brembo 12"] = {"RC", 5.5, 0.5},
 		["Endless 160mm"] = {"Automobile", 4.5, 0.80000001192093},
 		["Brembo 15"] = {"Monster Truck", 3.1700000762939, 0.40000000596046},
 		["Brembo 5"] = {"Bike", 15, 0.5},
@@ -2365,12 +2386,12 @@ local VComp = {
 		["Brembo 14"] = {"Bike", 10, 0.55000001192093},
 		["Wilwood 180mm"] = {"Automobile", 5.4000000953674, 0.44999998807907},
 	},
-	["Suspension"] = {--VehicleType, suspensionForceLevel suspensionDamping suspensionHighSpeedDamping suspensionUpperLimit suspensionLowerLimit suspensionFrontRearBias suspensionAntiDiveMultiplier
+	["Suspension"] = { --VehicleType, suspensionForceLevel suspensionDamping suspensionHighSpeedDamping suspensionUpperLimit suspensionLowerLimit suspensionFrontRearBias suspensionAntiDiveMultiplier
 		["Macpherson V61"] = {"Automobile", 1.2000000476837, 0.10000000149012, 0, 0.46999999880791, -0.10999999940395, 0.5, 0}, 
 		["Macpherson TR"] = {"Trailer", 1.5, 0.050000000745058, 0, 0.30000001192093, -0.15000000596046, 0.5, 0}, 
 		["Macpherson V155"] = {"Automobile", 1.2999999523163, 0.12999999523163, 0, 0.27000001072884, -0.15000000596046, 0.5, 0.30000001192093}, 
 		["Lower Suspension Kit 2"] = {"Automobile", 1.2000000476837, 0.18999999761581, 0, 0.25, -0.10000000149012, 0.5, 0.40000000596046}, 
-		["Macpherson V52"] = {"Automobile", 3, 0.30000001192093, 0, 0.15000000596046, -0.15000000596046, 0.5, 0}, 
+		["Macpherson V52"] = {"RC", 3, 0.30000001192093, 0, 0.15000000596046, -0.15000000596046, 0.5, 0}, 
 		["Macpherson V23"] = {"Monster Truck", 1.5, 0.070000000298023, 0, 0.44999998807907, -0.30000001192093, 0.5, 0.30000001192093}, 
 		["Macpherson V58"] = {"Automobile", 1, 0.050000000745058, 0, 0.34999999403954, -0.20000000298023, 0.5799999833107, 0}, 
 		["Macpherson V90"] = {"Automobile", 1.2000000476837, 0.11999999731779, 0, 0.30000001192093, -0.15000000596046, 0.5, 0.40000000596046}, 
@@ -2470,7 +2491,7 @@ local VComp = {
 		["Macpherson V108"] = {"Automobile", 1, 0.12999999523163, 5, 0.25, -0.10000000149012, 0.44999998807907, 0.30000001192093}, 
 		["Macpherson V115"] = {"Automobile", 1.6000000238419, 0.15000000596046, 0, 0.34000000357628, -0.10000000149012, 0.5, 0}, 
 		["Macpherson V109"] = {"Monster Truck", 0.80000001192093, 0.10000000149012, 0, 0.40000000596046, -0.40000000596046, 0.5, 0.30000001192093}, 
-		["Macpherson V122"] = {"Plane", 0.60000002384186, 0.10000000149012, 0, 0.25, 0, 0.80000001192093, 0}, 
+		["Macpherson V122"] = {"RC", 0.60000002384186, 0.10000000149012, 0, 0.25, 0, 0.80000001192093, 0}, 
 		["Macpherson V7"] = {"Automobile", 0.89999997615814, 0.12999999523163, 3, 0.30000001192093, -0.10000000149012, 0.5, 0.30000001192093}, 
 		["Macpherson V11"] = {"Automobile", 2, 0.090000003576279, 0, 0.25, -0.10000000149012, 0.5, 0}, 
 		["Macpherson V21"] = {"Automobile", 1.5, 0.10000000149012, 10, 0.28999999165535, -0.15999999642372, 0.60000002384186, 0.40000000596046}, 
@@ -2513,7 +2534,7 @@ local VComp = {
 		["Macpherson V145"] = {"Automobile", 1, 0.050000000745058, 0, 0.44999998807907, -0.20999999344349, 0.44999998807907, 0.30000001192093}, 
 		["Macpherson V68"] = {"Automobile", 1.2999999523163, 0.079999998211861, 5, 0.30000001192093, -0.20000000298023, 0.5, 0.25}, 
 		["Macpherson V141"] = {"Automobile", 0.69999998807907, 0.079999998211861, 3, 0.30000001192093, -0.15999999642372, 0.5, 0.5}, 
-		["Macpherson V12"] = {"Helicopter", 1.6000000238419, 0.10000000149012, 0, 0.28000000119209, -0.079999998211861, 0.5, 0}, 
+		["Macpherson V12"] = {"RC", 1.6000000238419, 0.10000000149012, 0, 0.28000000119209, -0.079999998211861, 0.5, 0}, 
 		["Macpherson V152"] = {"Automobile", 1.2000000476837, 0.10000000149012, 0, 0.34999999403954, -0.15000000596046, 0.5, 0}, 
 		["Macpherson V85"] = {"Automobile", 1, 0.15000000596046, 0, 0.27000001072884, -0.18999999761581, 0.5, 0.55000001192093}, 
 		["Macpherson V119"] = {"Automobile", 2.4000000953674, 0.079999998211861, 0, 0.28000000119209, -0.14000000059605, 0.5, 0.25}, 
@@ -2526,7 +2547,7 @@ local VComp = {
 		["Macpherson V125"] = {"Plane", 2, 0.15000000596046, 0, 0.55000001192093, -0.050000000745058, 0.5, 0}, 
 		["Macpherson V105"] = {"Boat", 1, 3, 0, 0.10000000149012, 0.5, 2, 0}, 
 		["Macpherson V81"] = {"Automobile", 1, 0.10000000149012, 5, 0.25, -0.20000000298023, 0.34999999403954, 0}, 
-		["Macpherson V62"] = {"Automobile", 1.6000000238419, 0.10000000149012, 0, 0.28000000119209, -0.14000000059605, 0.5, 0}, 
+		["Macpherson V62"] = {"RC", 1.6000000238419, 0.10000000149012, 0, 0.28000000119209, -0.14000000059605, 0.5, 0}, 
 		["Macpherson V171"] = {"Automobile", 1.3999999761581, 0.10000000149012, 0, 0.37000000476837, -0.17000000178814, 0.5, 0}, 
 		["Macpherson V39"] = {"Automobile", 1.7999999523163, 0.11999999731779, 0, 0.30000001192093, -0.25, 0.5, 0}, 
 		["Macpherson V3"] = {"Automobile", 1.7999999523163, 0.070000000298023, 0, 0.34999999403954, -0.18000000715256, 0.25, 0}, 
@@ -2604,7 +2625,7 @@ local VComp = {
 		["LPE 2.2 L"] = {"Automobile", 7.1999998092651, 1.7999999523163, "petrol", 2200, 114},
 		["BMX 1"] = {"BMX", 10, 5, "petrol", 100, 8},
 		["SFP 2.0 L"] = {"Automobile", 9.6000003814697, 2, "petrol", 1500, 103},
-		["RC Tiger Engine"] = {"Automobile", 14, 5, "electric", 100, 10},
+		["RC Tiger Engine"] = {"RC", 14, 5, "electric", 100, 10},
 		["TF D 1.7 L v2"] = {"Automobile", 10, 2.7000000476837, "diesel", 1700, 122},
 		["ODL 1.7 L"] = {"Automobile", 11.199999809265, 2.4000000953674, "petrol", 1400, 112},
 		["HLR 1.7 L"] = {"Automobile", 8, 2.5, "petrol", 1600, 92},
@@ -2695,7 +2716,7 @@ local VComp = {
 		["IAE V1500"] = {"Plane", 6.4000000953674, 14, "petrol", 5000, 229},
 		["HLR GT 1.7 L"] = {"Automobile", 8.8000001907349, 2.5, "petrol", 1700, 107},
 		["TF GLE 2.4 L"] = {"Automobile", 10.39999961853, 2.2000000476837, "petrol", 1500, 112},
-		["RC Bandit Engine"] = {"Automobile", 14, 6, "electric", 100, 10},
+		["RC Bandit Engine"] = {"RC", 14, 6, "electric", 100, 10},
 		["ODL 1.6 L v2"] = {"Automobile", 11.199999809265, 2.5, "petrol", 1600, 128},
 		["TRBD 1.3 L"] = {"Automobile", 5.5999999046326, 3, "diesel", 3500, 140},
 		["HLR GT 1.7 L v2"] = {"Automobile", 8.8000001907349, 2.5, "petrol", 1600, 101},
@@ -2712,7 +2733,7 @@ local VComp = {
 		["RST GLE 2.0 L v3"] = {"Automobile", 6.4000000953674, 2, "petrol", 2500, 115},
 		["BE 400 CC"] = {"Boat", 1, 1, "petrol", 2200, 16},
 		["BMX 3"] = {"BMX", 7.1999998092651, 7, "petrol", 100, 6},
-		["RC CAM ENGINE"] = {"Automobile", 20, 20, "electric", 100, 15},
+		["RC CAM ENGINE"] = {"RC", 20, 20, "electric", 100, 15},
 		["Bandito Engine"] = {"Automobile", 14, 4, "petrol", 1000, 100},
 		["TRBD LX 2.0 L"] = {"Automobile", 5.1999998092651, 2, "diesel", 8000, 298},
 		["TF 2.0 L"] = {"Automobile", 10, 2, "petrol", 1600, 115},
@@ -2740,7 +2761,7 @@ local VComp = {
 		["SFP 2.0 L v3"] = {"Automobile", 9.6000003814697, 2, "petrol", 1700, 117},
 		["HRD 500 CC"] = {"Quad", 10, 5, "petrol", 400, 29},
 		["MT 2"] = {"Monster Truck", 10, 4, "diesel", 20000, 1429},
-		["RR 100"] = {"Helicopter", 14, 0.20000000298023, "petrol", 100, 10},
+		["RR 100"] = {"RC", 14, 0.20000000298023, "petrol", 100, 10},
 		["2JZ GTE 3.2 L"] = {"Automobile", 11.199999809265, 2.2000000476837, "petrol", 2000, 160},
 		["IAE V1000"] = {"Plane", 6.4000000953674, 10, "petrol", 5000, 229},
 		["BSHEE 3.0 L"] = {"Automobile", 13.199999809265, 2, "petrol", 1400, 132},
@@ -2758,7 +2779,7 @@ local VComp = {
 		["RST D 1.3 L"] = {"Automobile", 6, 3, "diesel", 2600, 112},
 		["IAE V100"] = {"Plane", 0.80000001192093, 20, "petrol", 1900, 11},
 		["TF 1.7 L"] = {"Automobile", 10, 2.5, "petrol", 2500, 179},
-		["IAE V2800"] = {"Plane", 0.40000000596046, 120, "petrol", 100, 1},
+		["IAE V2800"] = {"RC", 0.40000000596046, 120, "petrol", 100, 1},
 		["LPE D 1.3 L"] = {"Automobile", 7.1999998092651, 3, "diesel", 2600, 134},
 		["ODL 1.6 L"] = {"Automobile", 11.199999809265, 2.5, "petrol", 1400, 112},
 		["HLR D 1.0 L"] = {"Automobile", 8, 5, "diesel", 5500, 315},
@@ -2769,102 +2790,101 @@ local VComp = {
 	}
 }
 
-
-local WriteDat = {}
-for name, dat in pairs(VComp) do
-	if(name == "Brakes") then
-		WriteDat[name] = {}
-		for i,v in pairs(dat) do
-			if(not WriteDat[name][v[1]]) then WriteDat[name][v[1]] = {[1] = {-100000, 100000}} end
-			if(v[2] > WriteDat[name][v[1]][1][1]) then
-				WriteDat[name][v[1]][1][1] = v[2]
-			end
-			if(v[2] < WriteDat[name][v[1]][1][2]) then
-				WriteDat[name][v[1]][1][2] = v[2]
-			end
-		end
-	elseif(name == "Tires") then
-		WriteDat[name] = {}
-		for i,v in pairs(dat) do
-			if(not WriteDat[name][v[1]]) then 
-				WriteDat[name][v[1]] = {
-					[1] = {-100000, 100000}, 
-					[2] = {-100000, 100000}, 
-					[3] = {-100000, 100000}
-				} 
-			end
-			if(v[2] > WriteDat[name][v[1]][1][1]) then
-				WriteDat[name][v[1]][1][1] = v[2]
-			end
-			if(v[2] < WriteDat[name][v[1]][1][2]) then
-				WriteDat[name][v[1]][1][2] = v[2]
-			end
-			
-			
-			if(v[3] > WriteDat[name][v[1]][2][1]) then
-				WriteDat[name][v[1]][2][1] = v[3]
-			end
-			if(v[3] < WriteDat[name][v[1]][2][2]) then
-				WriteDat[name][v[1]][2][2] = v[3]
-			end
-			
-			if(v[4] > WriteDat[name][v[1]][3][1]) then
-				WriteDat[name][v[1]][3][1] = v[4]
-			end
-			if(v[4] < WriteDat[name][v[1]][3][2]) then
-				WriteDat[name][v[1]][3][2] = v[4]
-			end
-		end
-	elseif(name == "Engines" or name == "Turbo") then
-		WriteDat[name] = {}
-		for i,v in pairs(dat) do
-			if(not WriteDat[name][v[1]]) then 
-				WriteDat[name][v[1]] = {
-					[1] = {-100000, 100000}, 
-					[2] = {-100000, 100000}, 
-				} 
-			end
-			if(v[2] > WriteDat[name][v[1]][1][1]) then
-				WriteDat[name][v[1]][1][1] = v[2]
-			end
-			if(v[2] < WriteDat[name][v[1]][1][2]) then
-				WriteDat[name][v[1]][1][2] = v[2]
-			end
-			
-			
-			if(v[3] > WriteDat[name][v[1]][2][1]) then
-				WriteDat[name][v[1]][2][1] = v[3]
-			end
-			if(v[3] < WriteDat[name][v[1]][2][2]) then
-				WriteDat[name][v[1]][2][2] = v[3]
-			end
-		end
-	end
-end
-
-
-
-datess = ""
-for name, dat in pairs(WriteDat) do
-	datess = datess..'\n	["'..name..'"] = {'
-	for name2, dat2 in pairs(dat) do
-		datess = datess..'\n		["'..name2..'"] = {'
-		local count = 0
-		for i, dat3 in pairs(dat2) do
-			if(count >= 1) then
-				datess = datess..", "
-			end
-			datess = datess.."["..i.."] = {"..dat3[2]..", "..dat3[1].."}"
-			count = count+1
-		end
-		datess = datess..'}, '
-	end
-	datess = datess..'\n	}, '
-end
-fileDelete("save.txt")
-local hFile = fileCreate("save.txt")
-fileWrite(hFile, datess) -- write a text line
-fileClose(hFile)
+--local WriteDat = {}
+--for name, dat in pairs(VComp) do
+--	if(name == "Brakes") then
+--		WriteDat[name] = {}
+--		for i,v in pairs(dat) do
+--			if(not WriteDat[name][v[1]]) then WriteDat[name][v[1]] = {[1] = {-100000, 100000}} end
+--			if(v[2] > WriteDat[name][v[1]][1][1]) then
+--				WriteDat[name][v[1]][1][1] = v[2]
+--			end
+--			if(v[2] < WriteDat[name][v[1]][1][2]) then
+--				WriteDat[name][v[1]][1][2] = v[2]
+--			end
+--		end
+--	elseif(name == "Tires") then
+--		WriteDat[name] = {}
+--		for i,v in pairs(dat) do
+--			if(not WriteDat[name][v[1]]) then 
+--				WriteDat[name][v[1]] = {
+--					[1] = {-100000, 100000}, 
+--					[2] = {-100000, 100000}, 
+--					[3] = {-100000, 100000}
+--				} 
+--			end
+--			if(v[2] > WriteDat[name][v[1]][1][1]) then
+--				WriteDat[name][v[1]][1][1] = v[2]
+--			end
+--			if(v[2] < WriteDat[name][v[1]][1][2]) then
+--				WriteDat[name][v[1]][1][2] = v[2]
+--			end
+--			
+--			
+--			if(v[3] > WriteDat[name][v[1]][2][1]) then
+--				WriteDat[name][v[1]][2][1] = v[3]
+--			end
+--			if(v[3] < WriteDat[name][v[1]][2][2]) then
+--				WriteDat[name][v[1]][2][2] = v[3]
+--			end
+--			
+--			if(v[4] > WriteDat[name][v[1]][3][1]) then
+--				WriteDat[name][v[1]][3][1] = v[4]
+--			end
+--			if(v[4] < WriteDat[name][v[1]][3][2]) then
+--				WriteDat[name][v[1]][3][2] = v[4]
+--			end
+--		end
+--	elseif(name == "Engines" or name == "Turbo") then
+--		WriteDat[name] = {}
+--		for i,v in pairs(dat) do
+--			if(not WriteDat[name][v[1]]) then 
+--				WriteDat[name][v[1]] = {
+--					[1] = {-100000, 100000}, 
+--					[2] = {-100000, 100000}, 
+--				} 
+--			end
+--			if(v[2] > WriteDat[name][v[1]][1][1]) then
+--				WriteDat[name][v[1]][1][1] = v[2]
+--			end
+--			if(v[2] < WriteDat[name][v[1]][1][2]) then
+--				WriteDat[name][v[1]][1][2] = v[2]
+--			end
+--			
+--			
+--			if(v[3] > WriteDat[name][v[1]][2][1]) then
+--				WriteDat[name][v[1]][2][1] = v[3]
+--			end
+--			if(v[3] < WriteDat[name][v[1]][2][2]) then
+--				WriteDat[name][v[1]][2][2] = v[3]
+--			end
+--		end
+--	end
+--end
+--
+--
+--
+--datess = ""
+--for name, dat in pairs(WriteDat) do
+--	datess = datess..'\n	["'..name..'"] = {'
+--	for name2, dat2 in pairs(dat) do
+--		datess = datess..'\n		["'..name2..'"] = {'
+--		local count = 0
+--		for i, dat3 in pairs(dat2) do
+--			if(count >= 1) then
+--				datess = datess..", "
+--			end
+--			datess = datess.."["..i.."] = {"..dat3[2]..", "..dat3[1].."}"
+--			count = count+1
+--		end
+--		datess = datess..'}, '
+--	end
+--	datess = datess..'\n	}, '
+--end
+--fileDelete("save.txt")
+--local hFile = fileCreate("save.txt")
+--fileWrite(hFile, datess) -- write a text line
+--fileClose(hFile)
 
 
 
@@ -3230,9 +3250,9 @@ end
 
 
 
--- Просто копировать сюда обновления из клиента
+-- Просто копировать сюда обновления из клиента	[400] = {{-0.6, -1.4, 0.1, 60, 0, 0}, {0, -1.4, 0.1, 60, 0, 0}, {0.6, -1.4, 0.1, 60, 0, 0}, {-0.6, -1.9, -0.08, 10, 0, 0}, {0, -1.9, -0.08, 10, 0, 0}, {0.6, -1.9, -0.08, 10, 0, 0}},
+
 local VehicleTrunks = {
-	[400] = {{-0.6, -1.4, 0.1, 60, 0, 0}, {0, -1.4, 0.1, 60, 0, 0}, {0.6, -1.4, 0.1, 60, 0, 0}, {-0.6, -1.9, -0.08, 10, 0, 0}, {0, -1.9, -0.08, 10, 0, 0}, {0.6, -1.9, -0.08, 10, 0, 0}},
 	[401] = {{-0.4, -2.1, 0.15, 10, 0, 0}, {0.4, -2.1, 0.15, 10, 0, 0}},
 	[402] = {{-0.6, -2.2, 0.15, 0, 0, 0}, {0, -2.2, 0.15, 0, 0, 0}, {0.6, -2.2, 0.15, 0, 0, 0}},
 	[403] = false,
@@ -3311,6 +3331,7 @@ local VehicleTrunks = {
 	[489] = {{-0.6, -1.7, 0.2, 0, 0, 0}, {0, -1.7, -0.07, 0, 0, 0}, {0.6, -1.7, 0.2, 0, 0, 0}, {-0.6, -2.2, -0.07, 0, 0, 0}, {0, -2.2, -0.07, 0, 0, 0}, {0.6, -2.2, -0.07, 0, 0, 0}},
 	[490] = {{-0.5, -1.7, -0.05, 10, 0, 0}, {0, -1.7, -0.05, 10, 0, 0}, {0.5, -1.7, -0.05, 10, 0, 0}},
 	
+	[495] = {{-0.6, -1, -0.1, 0, 0, 0}, {0, -1, -0.1, 0, 0, 0}, {0.6, -1, -0.1, 0, 0, 0}, {-0.6, -1.7, -0.1, 0, 0, 0}, {0, -1.7, -0.1, 0, 0, 0}, {0.6, -1.7, -0.1, 0, 0, 0}},
 	[496] = {{-0.5, -1.7, -0.05, 10, 0, 0}, {0, -1.7, -0.05, 10, 0, 0}, {0.5, -1.7, -0.05, 10, 0, 0}},
 	
 	[505] = {{-0.5, -1.7, -0.05, 10, 0, 0}, {0, -1.7, -0.05, 10, 0, 0}, {0.5, -1.7, -0.05, 10, 0, 0}},
@@ -3341,6 +3362,7 @@ local VehicleTrunks = {
 	[604] = {{-0.6, -2.3, -0.05, 0, 0, 0}, {0, -2.3, -0.05, 0, 0, 0}, {0.6, -2.3, -0.05, 0, 0, 0}},
 	[605] = {{-0.6, -0.9, 0, 0, 0, 0}, {0, -0.9, -0, 0, 0, 0}, {0.6, -0.9, 0, 0, 0, 0}, {-0.6, -1.6, 0, 0, 0, 0}, {0, -1.6, -0, 0, 0, 0}, {0.6, -1.6, 0, 0, 0, 0}, {-0.6, -2.2, 0, 0, 0, 0}, {0, -2.2, 0, 0, 0, 0}, {0.6, -2.2, 0, 0, 0, 0}},
 }
+
 
 
 
@@ -3456,9 +3478,8 @@ end
 
 
 
-
 --[[
-local vs = CreateVehicle(422, -217, 2603.3, 62.7, 0, 0, 81, "test", true, 3, 3)
+local vs = CreateVehicle(495, -217, 2603.3, 62.7, 0, 0, 81, "test", true, 3, 3)
 setElementData(vs, "trunk", toJSON({{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
 {"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
 {"Зерно", 1, 1, toJSON({})}, {"Зерно", 1, 1, toJSON({})}, {"Зерно", 1, 1, toJSON({})},
@@ -6058,7 +6079,7 @@ function laltEnteredPickup(thePlayer)
 						end
 					else
 						local model = getElementModel(theVehicle)
-						if(getVehicleType(model) ~= "BMX") then
+						if(GetVehicleType(model) ~= "BMX") then
 							if(not isTimer(FuelTimer[theVehicle])) then
 								triggerEvent("onPlayerVehicleExit", thePlayer, theVehicle, 0, 0, true)
 								ToolTip(thePlayer, Text(thePlayer, "Нажми {key} чтобы остановить заправку", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
@@ -9621,7 +9642,9 @@ function cap(thePlayer, zone)
 						end
 						if(BotCreated[zone]) then
 							for slot = 1, #BotCreated[zone] do
-								setElementData(BotCreated[zone][slot], "SpawnBlock", "true", false)
+								if(isElement(BotCreated[zone][slot])) then
+									setElementData(BotCreated[zone][slot], "SpawnBlock", "true", false)
+								end
 							end
 						end
 						CapZone[zone]=PlayerTeam
@@ -12405,7 +12428,6 @@ addCommandHandler("seti", seti)
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	--RacePriceGeneration(thePlayer)
-	setVehicleHandling(getPedOccupiedVehicle(thePlayer), "tractionLoss", 0.1)
 	local zone = getZoneName(x,y,z)
 	if(savetype == "PedPath") then
 		local angle = findRotation(x,y, x,ry)
@@ -14039,7 +14061,7 @@ function MarkerHit(hitElement, Dimension)
     local elementType = getElementType(hitElement) -- get the hit element's type
 	if(elementType == "vehicle" and Dimension) then
 		local thePlayer = getVehicleOccupant(hitElement, 0)
-		if(getVehicleType(hitElement) == "Trailer") then
+		if(GetVehicleType(hitElement) == "Trailer") then
 			local truck = getVehicleTowingVehicle(hitElement)
 			if(truck) then thePlayer = getVehicleOccupant(truck, 0) end
 		end
@@ -14235,7 +14257,7 @@ function OpenTuning(thePlayer,x,y,z,rz)
 	local theVehicle = getPedOccupiedVehicle(thePlayer)
 	if(theVehicle) then
 		if(getPedOccupiedVehicleSeat(thePlayer) == 0) then
-			if(getVehicleType(theVehicle) == "Automobile" or getVehicleType(theVehicle) == "Bike") then
+			if(GetVehicleType(theVehicle) == "Automobile" or GetVehicleType(theVehicle) == "Bike") then
 				
 				setPlayerHudComponentVisible(thePlayer, "radar", false)
 				PData[thePlayer]["oldposition"] = {x,y,z,rz}
@@ -15486,7 +15508,7 @@ function turnEngineOff(theVehicle, leftSeat, jackerPlayer, unbindkey)
 		end
 		
 		if leftSeat == 0 then
-			if(getVehicleType(getElementModel(theVehicle)) ~= "BMX" and getVehicleType(getElementModel(theVehicle)) ~= "Train") then
+			if(GetVehicleType(getElementModel(theVehicle)) ~= "BMX" and GetVehicleType(getElementModel(theVehicle)) ~= "Train") then
 				setVehicleEngineState(theVehicle, false)
 				benztimer[theVehicle] = nil
 			end
@@ -15520,7 +15542,7 @@ function turnEngineOn(theVehicle, leftSeat, jackerPlayer, unbindkey)
 		
 		if leftSeat == 0 then
 			CheckSiren(theVehicle, source)
-			if(getVehicleType(getElementModel(theVehicle)) ~= "BMX" and getVehicleType(getElementModel(theVehicle)) ~= "Train") then
+			if(GetVehicleType(getElementModel(theVehicle)) ~= "BMX" and GetVehicleType(getElementModel(theVehicle)) ~= "Train") then
 				if(not getElementData(theVehicle, "Fuel")) then
 					setElementData(theVehicle, "Fuel", 10)
 				end
@@ -15639,12 +15661,11 @@ addEventHandler("RaceFinish", getRootElement(), RaceFinish)
 
 
 
-local AutomobileVComp = {}
+local VCompVehicleTypes = {}
 for nameparts, data in pairs(VComp) do
 	for name, types in pairs(data) do
-		if(types[1] == "Automobile") then
-			AutomobileVComp[#AutomobileVComp+1] = {nameparts, name}
-		end
+		if(not VCompVehicleTypes[types[1]]) then VCompVehicleTypes[types[1]] = {} end
+		VCompVehicleTypes[types[1]][#VCompVehicleTypes[types[1]]+1] = {nameparts, name}
 	end
 end
 
@@ -15664,13 +15685,13 @@ function RacePriceGeneration(thePlayer)
 			outputChatBox("Забери свой приз на красном маркере!", thePlayer, 255,255,255,true)
 		end
 	else
-		--[[for i ,v in pairs(AutomobileVComp) do
-			local parts = AutomobileVComp[i]
+		--[[for i ,v in pairs(VCompVehicleTypes["Automobile"]) do
+			local parts = VCompVehicleTypes[i]
 			AddPlayerVehiclePart(thePlayer, v[1], v[2])
 			outputChatBox("Ты выиграл #FFFFFF"..v[1].." "..v[2], thePlayer, math.random(255),math.random(255),math.random(255),true)
 	
 		end--]]
-		local parts = AutomobileVComp[math.random(#AutomobileVComp)]
+		local parts = VCompVehicleTypes["Automobile"][math.random(#VCompVehicleTypes["Automobile"])]
 		AddPlayerVehiclePart(thePlayer, parts[1], parts[2])
 		outputChatBox("Ты выиграл #FFFFFF"..parts[1].." "..parts[2], thePlayer, math.random(255),math.random(255),math.random(255),true)
 	end
