@@ -4421,7 +4421,7 @@ function checkKey()
 			UpdateArmas(thePed)
 		end
 		if(theVehicle and PData["ClearDriving"]) then
-			if(VehicleSpeed > 1) then
+			if(VehicleSpeed < 1) then
 				if(isTimer(PData["ClearDriving"])) then resetTimer(PData["ClearDriving"]) end
 				if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer)) then
 					ChangeInfo(Text("Нажми {key} чтобы припарковать машину", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}}), 1000)
