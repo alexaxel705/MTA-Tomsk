@@ -5502,7 +5502,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  =  504.7, 2379.3, 30.1, 0, 0 --
+		local x,y,z,i,d  = 2307.2, -1274.4, 22.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12674,7 +12674,6 @@ end
 
 
 
-
 function GetDatabaseAccount(thePlayer, str)
 	local node = xmlFindChild(PlayerNode, "P"..md5(getPlayerName(thePlayer)), 0)
 	if(node) then
@@ -13208,6 +13207,7 @@ setElementData(PrisonFoodGate1, "team",  toJSON({"МЧС", "Военные", "П
 PrisonFoodGate2 = createObject(2930, 226.6, 1872.4, 15.4)
 setElementData(PrisonFoodGate2, "gates", toJSON({226.6, 1871.4, 15.4}))
 setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+
 
 
 

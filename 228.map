@@ -46,4 +46,8 @@
     <object id="object (CJ_EXT_SPRUNK) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="955" doublesided="false" scale="1" dimension="0" posX="257.79999" posY="1850" posZ="8.2" rotX="0" rotY="0" rotZ="180"></object>
     <object id="object (CJ_EXT_CANDY) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="956" doublesided="false" scale="1" dimension="0" posX="253.10001" posY="1873.5" posZ="8.2" rotX="0" rotY="0" rotZ="0"></object>
     <removeWorldObject id="removeWorldObject (laeChicanoTr1) (1)" radius="99.250221" interior="0" model="5449" lodModel="0" posX="2124.8906" posY="-1023.3594" posZ="53.6875" rotX="0" rotY="0" rotZ="0"></removeWorldObject>
+    <object id="object (chinaTgarageDoor) (1)" breakable="true" interior="0" alpha="255" model="2957" doublesided="false" scale="1" dimension="0" posX="2313.5" posY="-1267.6" posZ="24.6" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="object (chinaTgarageDoor) (2)" breakable="true" interior="0" alpha="255" model="2957" doublesided="false" scale="1" dimension="0" posX="2313.5" posY="-1262" posZ="24.6" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="object (chinaTgarageDoor) (3)" breakable="true" interior="0" alpha="255" model="2957" doublesided="false" scale="1" dimension="0" posX="2313.5" posY="-1273" posZ="24.6" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="object (chinaTgarageDoor) (4)" breakable="true" interior="0" alpha="255" model="2957" doublesided="false" scale="1" dimension="0" posX="2313.5" posY="-1278.5" posZ="24.5" rotX="0" rotY="0" rotZ="90"></object>
 </map>
