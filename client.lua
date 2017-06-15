@@ -4525,6 +4525,8 @@ function BotCheckPath(x,y,z,x2,y2,z2,zone)
 				if(not BannedMaterial[material]) then
 					return true
 				end
+			else
+				return true
 			end
 		end
 	end
@@ -7039,7 +7041,7 @@ addEventHandler("onClientRender", root,
 				end
 				if(text ~= "") then
 					local hx,hy,hz = getPedBonePosition(ped, 5)
-					create3dtext(text, hx,hy,hz+0.17, scale*0.7, 60, tocolor(255,255,255, 220), "default-bold")
+					create3dtext(text, hx,hy,hz+0.25, NewScale*1.8, 60, tocolor(255,255,255, 220), "default-bold")
 				end
 			end
 			
@@ -7067,11 +7069,7 @@ addEventHandler("onClientRender", root,
 					local Team = getPlayerTeam(thePlayer)
 					if(Team) then
 						local x,y,z = getPedBonePosition(thePlayer, 5)
-						local text = " \n"
-
-						if(PlayersAction[thePlayer]) then
-							text = "#CC99CC"..PlayersAction[thePlayer].."\n"
-						end
+						local text = {}
 						
 						local skin = getElementModel(thePlayer)
 						if(not skin) then return false end
@@ -7079,19 +7077,23 @@ addEventHandler("onClientRender", root,
 						
 						if(isPedDoingTask(thePlayer, "TASK_SIMPLE_USE_GUN")) then
 							if(getElementData(thePlayer, "laser")) then
-								local x,y,z = getPedWeaponMuzzlePosition(thePlayer)
+								local wx,wy,wz = getPedWeaponMuzzlePosition(thePlayer)
 								local x2,y2,z2 = getPedTargetEnd(thePlayer)
 								local arr = fromJSON(getElementData(thePlayer, "laser"))
-								dxDrawLine3D(x,y,z,x2,y2,z2, tocolor(arr["color"][1], arr["color"][2], arr["color"][3], arr["color"][4]), 0.8)
+								dxDrawLine3D(wx,wy,wz,x2,y2,z2, tocolor(arr["color"][1], arr["color"][2], arr["color"][3], arr["color"][4]), 0.8)
 							end
 						end
 						
 						if(skin == 285 or skin == 264) then
-							text = text..RGBToHex(getTeamColor(getTeamFromName(ArraySkinInfo[skin][1]))).."『 неизвестно 』"
+							text["nickname"] = "『 неизвестно 』"
+							local r,g,b = getTeamColor(getTeamFromName(ArraySkinInfo[skin][1]))
+							text["nicknamecolor"] = tocolor(r,g,b, 200)
 						else
 							if(not ArraySkinInfo[skin]) then outputChatBox(skin) end
 							if(thePlayer ~= localPlayer) then
-								text = text..RGBToHex(getTeamColor(getTeamFromName(ArraySkinInfo[skin][1])))..getPlayerName(thePlayer)
+								text["nickname"] = getPlayerName(thePlayer)
+								local r,g,b = getTeamColor(getTeamFromName(ArraySkinInfo[skin][1]))
+								text["nicknamecolor"] = tocolor(r,g,b, 200)
 							end
 							if(skin == 252) then --CENSORED
 								sx, sy, sz = getCameraMatrix()
@@ -7138,14 +7140,24 @@ addEventHandler("onClientRender", root,
 							end
 						end
 						
-
-						if(PlayersMessage[thePlayer]) then
-							text = text.."\n#EEEEEE"..PlayersMessage[thePlayer]
-						else
-							text = text.."\n "
+						local cx,cy,cz = getCameraMatrix()
+						local depth = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
+						if(depth < 60) then
+							local fh = dxGetFontHeight(NewScale*1.8, "default-bold")/(60/(60-depth))
+							local sx,sy = getScreenFromWorldPosition(x,y,z+0.30)
+							if(PlayersMessage[thePlayer]) then
+								x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
+								create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "default-bold")
+							end
+							
+							x, y, z = getWorldFromScreenPosition(sx, sy, depth)
+							create3dtext(text["nickname"], x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "default-bold")
+						
+							if(PlayersAction[thePlayer]) then
+								x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
+								create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "default-bold")
+							end
 						end
-
-						create3dtext(text, x,y,z+0.17, scale*0.7, 60, tocolor(255,255,255, 220), "default-bold")
 					end
 				end
 			end
@@ -8566,8 +8578,10 @@ end
 
 
 
-
-function MemText(text, left, top, color, scale, font, border, incline, centerX, centerY)
+--[[
+	scale3D - Необходимо для того чтобы уменьшать текст в 3D пространстве, без перерисовки
+--]]
+function MemText(text, left, top, color, scale, font, border, incline, centerX, centerY, scale3D)
 	if(text) then
 		local w,h = dxGetTextWidth(text, scale, font, true)+(border*2), dxGetFontHeight(scale, font)+(border*2)
 		local index = text..color
@@ -8615,6 +8629,11 @@ function MemText(text, left, top, color, scale, font, border, incline, centerX, 
 				dxSetTexturePixels(texture, pixels2)
 				VideoMemory["HUD"][index] = texture
 			end
+		end
+		
+		if(scale3D) then 
+			w = w/scale3D 
+			h = h/scale3D
 		end
 		if(centerX) then left = left-(w/2) end
 		if(centerY) then top = top-(h/2) end
@@ -9218,13 +9237,13 @@ function create3dtext(text,x,y,z,razmer,dist,color,font)
 			if(isLineOfSightClear(x,y,z, px,py,pz, true, false, false, true, false, false, false, localPlayer)) then
 				sx,sy = getScreenFromWorldPosition(x, y, z, 0.06)
 				if not sx then return end
-				dxDrawBorderedText(text, sx, sy, sx, sy, color, (1-(distance/dist))*razmer, font, "center", "bottom", false, false, false,false)
+				MemText(text, sx, sy, color, razmer, font, razmer, 0, true, true, dist/(dist-distance))
 			end
 		else
 			if(isLineOfSightClear(x,y,z, px,py,pz, true, true, false, true, false, false, false, localPlayer)) then
 				sx,sy = getScreenFromWorldPosition(x, y, z, 0.06)
 				if not sx then return end
-				dxDrawBorderedText(text, sx, sy, sx, sy, color, (1-(distance/dist))*razmer, font, "center", "bottom", false, false, false,false)
+				MemText(text, sx, sy, color, razmer, font, razmer, 0, true, true, dist/(dist-distance))
 			end
 		end
     end
@@ -10701,6 +10720,8 @@ local VehicleTrunks = {
 	[561] = {{-0.5, -1.9, 0, 0, 0, 0}, {0, -1.9, 0, 0, 0, 0}, {0.5, -1.9, 0, 0, 0, 0}},
 	[562] = {{-0.5, -1.9, 0.2, 0, 0, 0}, {0, -1.9, 0.2, 0, 0, 0}, {0.5, -1.9, 0.2, 0, 0, 0}},
 	
+	[576] = {{-0.6, -2.1, -0.05, 10, 0, 0}, {0, -2.1, -0.05, 10, 0, 0}, {0.6, -2.1, -0.05, 10, 0, 0}, {-0.6, -2.7, -0.05, 10, 0, 0}, {0, -2.7, -0.05, 10, 0, 0}, {0.6, -2.7, -0.05, 10, 0, 0}},
+
 	[603] = {{-0.6, -2.2, 0.1, 10, 0, 0}, {0, -2.2, 0.1, 10, 0, 0}, {0.6, -2.2, 0.1, 10, 0, 0}},
 	[604] = {{-0.6, -2.3, -0.05, 0, 0, 0}, {0, -2.3, -0.05, 0, 0, 0}, {0.6, -2.3, -0.05, 0, 0, 0}},
 	[605] = {{-0.6, -0.9, 0, 0, 0, 0}, {0, -0.9, -0, 0, 0, 0}, {0.6, -0.9, 0, 0, 0, 0}, {-0.6, -1.6, 0, 0, 0, 0}, {0, -1.6, -0, 0, 0, 0}, {0.6, -1.6, 0, 0, 0, 0}, {-0.6, -2.2, 0, 0, 0, 0}, {0, -2.2, 0, 0, 0, 0}, {0.6, -2.2, 0, 0, 0, 0}},
