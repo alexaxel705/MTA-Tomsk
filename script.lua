@@ -14070,7 +14070,7 @@ function MarkerHit(hitElement, Dimension)
 			if(truck) then thePlayer = getVehicleOccupant(truck, 0) end
 		end
 		if(thePlayer) then
-			theVehicle=hitElement
+			local theVehicle = hitElement
 			if(getElementData(theVehicle, "type") == "jobtruck" and getElementData(source, "type") == "TruckMarker" and getElementData(source, "player") == getPlayerName(thePlayer)) then
 				AddPlayerMoney(thePlayer, getElementData(theVehicle, "money"), "РАБОТА ВЫПОЛНЕНА!")
 				AddSkill(thePlayer, 161)

@@ -6251,7 +6251,7 @@ function park()
 	else
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
 		if(theVehicle) then
-			if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer) and not tuningList and VehicleSpeed > 1) then
+			if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer) and not tuningList and VehicleSpeed < 1) then
 				triggerServerEvent("ParkMyCar", localPlayer, theVehicle)
 				setControlState("enter_exit", true)
 			end
