@@ -6335,10 +6335,10 @@ function SetupInventory()
 		for i,val in pairs(PInv["player"]) do
 			PBut["player"][i] = {StPosx+binvx, StPosxy+binvy, 80*NewScale, 60*NewScale}
 
-			binvx=binvx+(80.5*NewScale)
+			binvx = binvx+(80.5*NewScale)
 		end
 		
-		initializedInv=true
+		initializedInv = true
 		UpdateInventoryMass()
 	end
 end
@@ -6660,7 +6660,8 @@ addEventHandler("onClientKey", root, playerPressedKey)
 function TradeWindow(Trade, biz)
 	if(PEDChangeSkin == "play") then
 		if(not TradeWindows and not InventoryWindows) then
-			PInv["shop"]=fromJSON(Trade)
+			PInv["shop"] = Trade
+			PBut["shop"] = {} 
 			TradeWindows = biz
 			DragElementId = false
 			DragElementName = false

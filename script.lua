@@ -5496,13 +5496,13 @@ end
 
 local cs = 96
 function tp(thePlayer, command, h)
-	if getPlayerName(thePlayer) == "alexaxel705" then
+	if(getServerPort() == 22013) then
 		local theVehicle = getPedOccupiedVehicle(thePlayer)
 		cs = cs+1
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2307.2, -1274.4, 22.8, 0, 0 --
+		local x,y,z,i,d  = 2197, 1677.1, 12.4, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5510,9 +5510,6 @@ function tp(thePlayer, command, h)
 			SetPlayerPosition(thePlayer, x,y,z,i,d)
 		end
 		--SetPlayerPosition(thePlayer, 240.3, 77.7, 1005.2, 6, 1)
-
-	else
-		outputChatBox("оп, нихуя...", thePlayer,255,255,255,true)
 	end
 end
 addCommandHandler("tp", tp)
@@ -5606,6 +5603,8 @@ CreateEnter(193.4, 1931.4, 17.6, 270, 0, 0, false, 264.3, 1857.9, 8.86, 0, 0, 0)
 CreateEnter(-2026.7, -102.1, 35.2, 270, 0, 0, false, -2026.9, -103.6, 1035.2, 180, 3, 0) -- Автошкола SF
 CreateEnter(-2029.7, -120.5, 35.2, 270, 0, 0, false, -2029.7, -119.4, 1035.2, 0, 3, 0) -- Автошкола SF 2
 CreateEnter(2019.4, 1007.8, 10.8, 270, 0, 0, false, 2018.9, 1017.8, 996.9, 90, 10, 0, "Казино «The Four Dragons»")
+CreateEnter(2197, 1677.1, 12.4, 90, 0, 0, false, 2233.9, 1714.7, 1012.4, 180, 1, 0, "Казино «Caligulas»")
+
 CreateEnter(1689.6, -1518.4, 13.5, 270, 0, 0, false, -787.6, 445.4, 1362.4, 90, 1, 0, "Liberty City")
 CreateEnter(966.2, 2160.7, 10.8, 270, 0, 0, false, 965.4, 2107.8, 1011, 90, 1, 0, "Sindacco Abattoir")
 CreateEnter(931, 2129.6, 10.8, 90, 0, 0, false, 964.9, 2160.1, 1011, 90, 1, 0, "Sindacco Abattoir")
@@ -5635,6 +5634,50 @@ setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT3"}))
 setElementData(o, "funcinfo", "Сыграть $100")
 
 
+o = CreatePickup(1963.8, 998.6, 992.5, 3, 1239, 0, 0, 10)
+setElementData(o, "type", "function")
+setElementData(o, "funcname", "PlayCasino")
+setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT4"}))
+setElementData(o, "funcinfo", "Сыграть $100")
+
+
+o = CreatePickup(1961.3, 992.6, 992.5, 3, 1239, 0, 0, 10)
+setElementData(o, "type", "function")
+setElementData(o, "funcname", "PlayCasino")
+setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT5"}))
+setElementData(o, "funcinfo", "Сыграть $100")
+
+
+o = CreatePickup(1957, 988.3, 992.5, 3, 1239, 0, 0, 10)
+setElementData(o, "type", "function")
+setElementData(o, "funcname", "PlayCasino")
+setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT6"}))
+setElementData(o, "funcinfo", "Сыграть $100")
+
+
+o = CreatePickup(1965.8, 1037.5, 992.5, 3, 1239, 0, 0, 10)
+setElementData(o, "type", "function")
+setElementData(o, "funcname", "PlayCasino")
+setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT7"}))
+setElementData(o, "funcinfo", "Сыграть $100")
+
+
+o = CreatePickup(1963, 1044.1, 992.5, 3, 1239, 0, 0, 10)
+setElementData(o, "type", "function")
+setElementData(o, "funcname", "PlayCasino")
+setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT8"}))
+setElementData(o, "funcinfo", "Сыграть $100")
+
+
+o = CreatePickup(1958.1, 1049, 992.5, 3, 1239, 0, 0, 10)
+setElementData(o, "type", "function")
+setElementData(o, "funcname", "PlayCasino")
+setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT9"}))
+setElementData(o, "funcinfo", "Сыграть $100")
+
+
+
+
 
 local CasinoGame = {
 	["The Four Dragons"] = {
@@ -5655,9 +5698,47 @@ local CasinoGame = {
 			[2] = CreateObject(2347, 1957.75, 987.20, 992.99, 0,0,32, nil, 10),
 			[3] = CreateObject(2347, 1957.85, 987.28, 992.99, 0,0,32, nil, 10),
 			["timer"] = false
-		}
+		},
+		["SLOT4"] = {
+			[1] = CreateObject(2347, 1964.54, 998.30, 992.98, 0, 0, 259, nil, 10),
+			[2] = CreateObject(2347, 1964.55, 998.41, 992.98, 0, 0, 259, nil, 10),
+			[3] = CreateObject(2347, 1964.56, 998.54, 992.98, 0, 0, 259, nil, 10), 
+			["timer"] = false
+		},
+		["SLOT5"] = {
+			[1] = CreateObject(2347, 1961.89, 992.08, 992.98, 0, 0, 235, nil, 10),
+			[2] = CreateObject(2347, 1961.95, 992.18, 992.98, 0, 0, 235, nil, 10),
+			[3] = CreateObject(2347, 1962.02, 992.28, 992.98, 0, 0, 235, nil, 10),
+			["timer"] = false
+		},
+		["SLOT6"] = {
+			[1] = CreateObject(2347, 1957.33, 987.58, 992.98, 0, 0, 213, nil, 10),
+			[2] = CreateObject(2347, 1957.43, 987.65, 992.98, 0, 0, 213, nil, 10),
+			[3] = CreateObject(2347, 1957.53, 987.72, 992.98, 0, 0, 213, nil, 10),
+			["timer"] = false
+		}, 
+		["SLOT7"] = {
+			[1] = CreateObject(2347, 1965.12, 1037.24, 992.98, 0, 0, 101, nil, 10),
+			[2] = CreateObject(2347, 1965.01, 1037.36, 992.98, 0, 0, 101, nil, 10),
+			[3] = CreateObject(2347, 1965.07, 1037.47, 992.98, 0, 0, 101, nil, 10),
+			["timer"] = false
+		},
+		["SLOT8"] = {
+			[1] = CreateObject(2347, 1962.46, 1043.56, 992.98, 0, 0, 123, nil, 10),
+			[2] = CreateObject(2347, 1962.40, 1043.66, 992.98, 0, 0, 123, nil, 10),
+			[3] = CreateObject(2347, 1962.33, 1043.75, 992.98, 0, 0, 123, nil, 10),
+			["timer"] = false
+		},
+		["SLOT9"] = {
+			[1] = CreateObject(2347, 1957.54, 1048.50, 992.98, 0, 0, 145, nil, 10),
+			[2] = CreateObject(2347, 1957.64, 1048.44, 992.98, 0, 0, 145, nil, 10),
+			[3] = CreateObject(2347, 1957.74, 1048.37, 992.98, 0, 0, 145, nil, 10),
+			["timer"] = false
+		},
 	}
 }
+
+
 
 
 local CasinoObjectInfo = {
@@ -9385,7 +9466,7 @@ addEventHandler("DialogMoney", getRootElement(), DialogMoney)
 
 
 function TradePlayerWindow(thePlayer, thePed, arg)
-	triggerClientEvent(thePlayer, "TradeWindow", thePlayer, toJSON(arg[1]), arg[2])
+	triggerClientEvent(thePlayer, "TradeWindow", thePlayer, arg[1], arg[2])
 end
 addEvent("TradePlayerWindow", true)
 addEventHandler("TradePlayerWindow", getRootElement(), TradePlayerWindow)
@@ -12492,7 +12573,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Фекалии", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Алкоголь", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
