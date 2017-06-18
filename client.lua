@@ -2871,33 +2871,37 @@ function bizControl(name, data)
 		PBut["shop"] = {} 
 		for varname, dats in pairs(data["var"]) do
 			if(varname == "Торговля") then
-				TradeWindows = name
-				local Coord = {
-					["Trade"] = {
-						["i"] = 1,
-						["x"] = 640*scalex,
-						["y"] = 700*scaley-(30*scaley), 
-						["vx"] = (2.5*scalex),
-						["vy"] = (80.5*scaley)
-					},
-					["Sell"] = {
-						["i"] = 1,
-						["x"] = 640*scalex,
-						["y"] = 560*scaley-(30*scaley), 
-						["vx"] = (2.5*scalex),
-						["vy"] = (80.5*scaley)
+				if(not PData["ResourceMap"]) then
+					TradeWindow(dats, name)
+				else
+					TradeWindows = name
+					local Coord = {
+						["Trade"] = {
+							["i"] = 1,
+							["x"] = 640*scalex,
+							["y"] = 700*scaley-(30*scaley), 
+							["vx"] = (2.5*scalex),
+							["vy"] = (80.5*scaley)
+						},
+						["Sell"] = {
+							["i"] = 1,
+							["x"] = 640*scalex,
+							["y"] = 560*scaley-(30*scaley), 
+							["vx"] = (2.5*scalex),
+							["vy"] = (80.5*scaley)
+						}
 					}
-				}
-				for _, dat in pairs(dats) do
-					PInv["shop"][#PInv["shop"]+1] = dat
-					--PText["biz"][#PText["biz"]+1] = {Coord[dat[2]]["i"], screenWidth-Coord[dat[2]]["x"]+Coord[dat[2]]["vx"]+(80.5*scaley), Coord[dat[2]]["y"]+Coord[dat[2]]["vy"]-(25*scaley), 0, screenHeight, tocolor(255, 255, 255, 255), NewScale, "pricedown", "center", "top", false, false, false, true, false, 0, 0, 0, {}}
-					PBut["shop"][#PBut["shop"]+1] = {Coord[dat[2]]["x"]+Coord[dat[2]]["vx"], Coord[dat[2]]["y"]+Coord[dat[2]]["vy"], 80*scalex, 60*scaley}
-					Coord[dat[2]]["vx"] = Coord[dat[2]]["vx"]+(80.5*scalex)
-					if(Coord[dat[2]]["i"] == 8 or Coord[dat[2]]["i"] == 16 or Coord[dat[2]]["i"] == 24 or Coord[dat[2]]["i"] == 32) then
-						Coord[dat[2]]["x"], Coord[dat[2]]["y"] = 640*scalex, 360*scaley-(30*scaley)
-						Coord[dat[2]]["vx"], Coord[dat[2]]["vy"] = (2.5*scalex), Coord[dat[2]]["vy"]+(80.5*scaley)
+					for _, dat in pairs(dats) do
+						PInv["shop"][#PInv["shop"]+1] = dat
+						--PText["biz"][#PText["biz"]+1] = {Coord[dat[2]]["i"], screenWidth-Coord[dat[2]]["x"]+Coord[dat[2]]["vx"]+(80.5*scaley), Coord[dat[2]]["y"]+Coord[dat[2]]["vy"]-(25*scaley), 0, screenHeight, tocolor(255, 255, 255, 255), NewScale, "pricedown", "center", "top", false, false, false, true, false, 0, 0, 0, {}}
+						PBut["shop"][#PBut["shop"]+1] = {Coord[dat[2]]["x"]+Coord[dat[2]]["vx"], Coord[dat[2]]["y"]+Coord[dat[2]]["vy"], 80*scalex, 60*scaley}
+						Coord[dat[2]]["vx"] = Coord[dat[2]]["vx"]+(80.5*scalex)
+						if(Coord[dat[2]]["i"] == 8 or Coord[dat[2]]["i"] == 16 or Coord[dat[2]]["i"] == 24 or Coord[dat[2]]["i"] == 32) then
+							Coord[dat[2]]["x"], Coord[dat[2]]["y"] = 640*scalex, 360*scaley-(30*scaley)
+							Coord[dat[2]]["vx"], Coord[dat[2]]["vy"] = (2.5*scalex), Coord[dat[2]]["vy"]+(80.5*scaley)
+						end
+						Coord[dat[2]]["i"] = Coord[dat[2]]["i"]+1
 					end
-					Coord[dat[2]]["i"] = Coord[dat[2]]["i"]+1
 				end
 			else
 				local text = "#CCCCCC"..varname..": "..dats.." "
@@ -8636,8 +8640,21 @@ function MemText(text, left, top, color, scale, font, border, incline, centerX, 
 			w = w/scale3D 
 			h = h/scale3D
 		end
-		if(centerX) then left = left-(w/2) end
-		if(centerY) then top = top-(h/2) end
+		if(centerX) then 
+			if(centerX == "right") then 
+				left = left-(w) 
+			else
+				left = left-(w/2) 
+			end
+		end
+		
+		if(centerY) then 
+			if(centerY == "bottom") then 
+				top = top-(h) 
+			else
+				top = top-(h/2)
+			end
+		end
 		
 		return dxDrawImage(left,top, w,h, VideoMemory["HUD"][index], 0, 0, 0, color) 
 	end
@@ -10143,6 +10160,7 @@ function DrawPlayerMessage()
 			end
 			
 			local wanted = getElementData(localPlayer, "WantedLevel") or ""
+			local TotalDamage = getElementData(localPlayer, "Damage")
 			if(PData["Interface"]["WantedLevel"]) then
 				if(PData["WantedLevel"]) then
 					if(PData["WantedLevel"] ~= wanted) then
@@ -10170,6 +10188,9 @@ function DrawPlayerMessage()
 						if(not flash) then
 							dxDrawImage(posx+(tw*((6-wanted)/6)), posy, dxGetTextWidth("★★★★★★", scale, "pricedown", false), dxGetFontHeight(scale, "pricedown"), DrawWanted(wanted))
 						end
+					end
+					if(TotalDamage) then
+						MemText("Ущерб: $"..TotalDamage, posx+dxGetTextWidth("★★★★★★", scale, "pricedown", false), posy+dxGetFontHeight(scale, "pricedown"), tocolor(200, 0, 0, 210), NewScale*1.5, "default-bold", NewScale*1.5, 0, "right", false)
 					end
 				else
 					dxDrawBorderedText(wanted, posx, posy, screenWidth, screenHeight, tocolor(200, 200, 200, 180), scale, "default-bold", "left", "top", nil, nil, nil, true)

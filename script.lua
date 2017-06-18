@@ -6464,32 +6464,33 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 			end
 		end
 		
-		if(BizInfo[biz][4]) then array["var"]["Уровень"] = math.round(BizInfo[biz][4]) end
-		array["var"]["Дата основания"] = BizInfo[biz][1]
-		array["var"]["Владелец"] = xmlNodeGetAttribute(node, "owner")
-		
+		if(control == "map") then
+			if(BizInfo[biz][4]) then array["var"]["Уровень"] = math.round(BizInfo[biz][4]) end
+			array["var"]["Дата основания"] = BizInfo[biz][1]
+			array["var"]["Владелец"] = xmlNodeGetAttribute(node, "owner")
+			
 
-		
-		if(xmlNodeGetAttribute(node, "var")) then
-			arr = fromJSON(xmlNodeGetAttribute(node, "var"))
-			for name, val in pairs(arr) do
-				if(name == "Качество земли") then
-					--array["var"][#array["var"]+1] = {name, GetQuality(val)}
-				elseif(name == "lvl") then
-					--array["var"][#array["var"]+1] = {"Уровень", math.round(val, 0)}
-				else
-					array["var"][name] = val.."/"..GetBizMaxProds(biz, name)
+			
+			if(xmlNodeGetAttribute(node, "var")) then
+				arr = fromJSON(xmlNodeGetAttribute(node, "var"))
+				for name, val in pairs(arr) do
+					if(name == "Качество земли") then
+						--array["var"][#array["var"]+1] = {name, GetQuality(val)}
+					elseif(name == "lvl") then
+						--array["var"][#array["var"]+1] = {"Уровень", math.round(val, 0)}
+					else
+						array["var"][name] = val.."/"..GetBizMaxProds(biz, name)
+					end
+				end
+			else
+				local vacancy = xmlNodeGetChildren(node)
+				for i, ChildNode in pairs(vacancy) do
+					if(not array["vacancy"]) then array["vacancy"] = {} end
+					local name = xmlNodeGetAttribute(ChildNode, "name")
+					array["vacancy"][i] = {biz, name, xmlNodeGetValue(ChildNode)}
 				end
 			end
-		else
-			local vacancy = xmlNodeGetChildren(node)
-			for i, ChildNode in pairs(vacancy) do
-				if(not array["vacancy"]) then array["vacancy"] = {} end
-				local name = xmlNodeGetAttribute(ChildNode, "name")
-				array["vacancy"][i] = {biz, name, xmlNodeGetValue(ChildNode)}
-			end
 		end
-
 		
 		
 		if(BizInfo[biz][3]) then
@@ -10874,10 +10875,10 @@ function moneyPickupHit(thePlayer)
 			TABEvent(thePlayer) -- Сразу подбираем, для выпадаемых с ботов денег
 		end
 	elseif(getElementData(source, "biz")) then
-		local name = "нет\nЦена: $"..getElementData(source, "price")
+		local name = "Цена: $"..getElementData(source, "price")
 		local advtext = "\nНажми "..COLOR["KEY"]["HEX"].."ALT#FFFFFF чтобы открыть информацию"
 		if(getElementData(source, "bizowner")) then
-			name = getElementData(source, "bizowner")
+			name = "Владелец: "..getElementData(source, "bizowner")
 			if(name == getPlayerName(thePlayer)) then
 				advtext = advtext.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы продать бизнес"
 				
@@ -10890,7 +10891,7 @@ function moneyPickupHit(thePlayer)
 			advtext = advtext.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы купить бизнес"
 		end
 		HelpMessage(thePlayer, advtext)
-		MissionCompleted(getElementData(source, "biz"),"Владелец: "..name)
+		MissionCompleted(thePlayer, name, getElementData(source, "biz"))
 		PlayersPickups[thePlayer] = source
 	elseif(getElementData(source, "wardrobe")) then
 		PlayersPickups[thePlayer] = source

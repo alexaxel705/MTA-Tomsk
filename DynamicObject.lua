@@ -11288,7 +11288,7 @@ function DestroyObject(thePlayer, obj)
 	if(not TotalDamage[thePlayer]) then TotalDamage[thePlayer] = 0 end
 	if(ObjectCost[getElementModel(obj)]) then
 		TotalDamage[thePlayer] = TotalDamage[thePlayer]+ObjectCost[getElementModel(obj)]
-		--HelpMessage(thePlayer, "Ущерб: $"..TotalDamage[thePlayer])
+		setElementData(thePlayer, "Damage", TotalDamage[thePlayer])
 	end
 end
 addEvent("DestroyObject", true)
