@@ -3916,7 +3916,7 @@ function UpdateBot()
 						if(hitElement) then
 							if(getElementType(hitElement) == "vehicle") then
 								if(getVehicleOccupant(hitElement)) then
-									local rand = math.random(1,2)
+									local rand = math.random(1,5)
 									if(rand == 1) then
 										StartAnimation(thePed, "ped", "fucku", 1500, false, true, true, false)
 									elseif(rand == 2) then
@@ -5699,21 +5699,20 @@ function targetingActivated(target)
 					SprunkObject = target
 					bindKey ("f", "down", SprunkFunk)
 				elseif(getElementModel(target) == 1812) then
-				
 					ChangeInfo(Text("Нажми {key} чтобы лечь", {{"{key}", COLOR["KEY"]["HEX"].."E#FFFFFF"}}))
-					PrisonSleep=target
+					PrisonSleep = target
 					bindKey ("e", "down", PrisonSleepEv)
 				elseif(getElementModel(target) == 2525) then
 					ChangeInfo("Нажми #A0A0A0F#FFFFFF чтобы справить нужду\nНажми #A0A0A0E#FFFFFF чтобы чистить говно")
-					PrisonGavno=target
+					PrisonGavno = target
 					bindKey ("e", "down", PrisonGavnoEv)
 					bindKey ("f", "down", PrisonPiss)
 				elseif(getElementModel(target) == 10149 or getElementModel(target) == 10184 or getElementModel(target) == 2930 or getElementModel(target) == 11327 or getElementModel(target) == 975 or getElementModel(target) == 988) then
 					ChangeInfo("Нажми #A0A0A0H#FFFFFF чтобы управлять воротами")
-					Targets["theGate"] = target
+					Targets["object"] = target
 				elseif(getElementModel(target) == 17566 or getElementModel(target) == 10671) then
 					ChangeInfo("Нажми #A0A0A0H#FFFFFF чтобы управлять гаражом")
-					Targets["theGate"] = target
+					Targets["object"] = target
 				end
 			elseif(tostring(getElementType(target)) == "ped") then
 				if(getElementData(target, "team")) then
@@ -6242,8 +6241,8 @@ end
 
 
 function opengate()
-	if(Targets["theGate"]) then
-		triggerServerEvent("opengate", localPlayer, Targets["theGate"])
+	if(Targets["object"]) then
+		triggerServerEvent("opengate", localPlayer, Targets["object"])
 	else
 		triggerServerEvent("handsup", localPlayer, localPlayer)	
 	end
@@ -9701,6 +9700,39 @@ function DrawPlayerInventory()
 
 	end	
 end
+
+
+
+
+
+
+
+
+
+addEventHandler("onClientVehicleCollision", root,
+    function(collider,force, bodyPart, x, y, z, nx, ny, nz)
+         if(source == getPedOccupiedVehicle(localPlayer)) then
+			if(collider) then
+				if(isTimer(PData["Driver"]["Collision"])) then
+					killTimer(PData["Driver"]["Collision"])
+				else
+					PData["Driver"]["CollisionPoint"] = 0
+				end
+				
+				local fDamageMultiplier = getVehicleHandling(source).collisionDamageMultiplier
+				PData["Driver"]["CollisionPoint"] = PData["Driver"]["CollisionPoint"]+(force*fDamageMultiplier)
+
+				PData["Driver"]["Collision"] = setTimer(function(targetafter)
+					triggerServerEvent("DestroyObject", localPlayer, localPlayer, PData["Driver"]["CollisionPoint"])
+					PData["Driver"]["CollisionPoint"] = nil
+				end, 200, 1)
+			end
+         end
+    end
+)
+
+
+
 
 
 

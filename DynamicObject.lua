@@ -11286,9 +11286,15 @@ local ObjectCost = {
 local TotalDamage = {}
 function DestroyObject(thePlayer, obj)
 	if(not TotalDamage[thePlayer]) then TotalDamage[thePlayer] = 0 end
-	if(ObjectCost[getElementModel(obj)]) then
-		TotalDamage[thePlayer] = TotalDamage[thePlayer]+ObjectCost[getElementModel(obj)]
+	
+	if(tonumber(obj)) then
+		TotalDamage[thePlayer] = math.floor(TotalDamage[thePlayer]+obj)
 		setElementData(thePlayer, "Damage", TotalDamage[thePlayer])
+	else
+		if(ObjectCost[getElementModel(obj)]) then
+			TotalDamage[thePlayer] = TotalDamage[thePlayer]+ObjectCost[getElementModel(obj)]
+			setElementData(thePlayer, "Damage", TotalDamage[thePlayer])
+		end
 	end
 end
 addEvent("DestroyObject", true)

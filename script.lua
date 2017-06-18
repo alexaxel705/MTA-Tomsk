@@ -12513,6 +12513,14 @@ addCommandHandler("seti", seti)
 
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
+ --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)
+
+	--[[StartAnimation(thePlayer, "ped", "ev_dive", 3000,false,true,true,false)
+	
+	setTimer(function(thePlayer)
+		setPedAnimationProgress(thePlayer, "ev_dive", 0.2)
+	
+	end, 50, 1, thePlayer)--]]
 	--RacePriceGeneration(thePlayer)
 	local zone = getZoneName(x,y,z)
 	if(savetype == "PedPath") then
