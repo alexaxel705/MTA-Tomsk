@@ -4368,10 +4368,11 @@ function updateWorld()
 			
 			CheckZoneCollect(zone)
 		end
-	end
+		
 	
-	if(PlayerZoneTrue ~= getZoneName(x,y,z, true)) then
-		GameSky(getZoneName(x,y,z, true), false, true)
+		if(PlayerZoneTrue ~= getZoneName(x,y,z, true)) then
+			GameSky(getZoneName(x,y,z, true), false, true)
+		end
 	end
 end
 
@@ -6583,13 +6584,13 @@ function playerPressedKey(button, press)
 			if(button == "lshift") then
 				if(PData['rage'] > 0) then
 					if(press) then
-						triggerServerEvent("Acceleration", localPlayer, localPlayer)
 						PData['ragetimer'] = setTimer(function() 
 							AddRage(-4)
 						end, 50, 0)
+						triggerServerEvent("Acceleration", localPlayer, localPlayer)
 					else
-						triggerServerEvent("AccelerationDown", localPlayer, localPlayer)
 						killTimer(PData['ragetimer'])
+						triggerServerEvent("AccelerationDown", localPlayer, localPlayer)
 					end
 				end
 			end
@@ -7250,17 +7251,19 @@ addEventHandler("onClientRender", root,
 						if(depth < 60) then
 							local fh = dxGetFontHeight(NewScale*1.8, "default-bold")/(60/(60-depth))
 							local sx,sy = getScreenFromWorldPosition(x,y,z+0.30)
-							if(PlayersMessage[thePlayer]) then
-								x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
-								create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "default-bold")
-							end
+							if(sx and sy) then
+								if(PlayersMessage[thePlayer]) then
+									x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
+									create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "default-bold")
+								end
+								
+								x, y, z = getWorldFromScreenPosition(sx, sy, depth)
+								create3dtext(text["nickname"], x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "default-bold")
 							
-							x, y, z = getWorldFromScreenPosition(sx, sy, depth)
-							create3dtext(text["nickname"], x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "default-bold")
-						
-							if(PlayersAction[thePlayer]) then
-								x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
-								create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "default-bold")
+								if(PlayersAction[thePlayer]) then
+									x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
+									create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "default-bold")
+								end
 							end
 						end
 					end
@@ -11669,7 +11672,6 @@ function GameSky(zone, h, blended)
 
 	if(not zone) then zone = PlayerZoneTrue end
 	if(not h) then h, _ = getTime() end
-
 	local AllWeather = fromJSON(getElementData(root, "weather"))
 	local weatherID = AllWeather[zone]
 	local WT = timecyc[zone][ServerWName[weatherID]][HTimecyc[h]]
