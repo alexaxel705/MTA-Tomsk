@@ -12549,14 +12549,11 @@ addCommandHandler("seti", seti)
 
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
+
  --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)
 
-	--[[StartAnimation(thePlayer, "ped", "ev_dive", 3000,false,true,true,false)
-	
-	setTimer(function(thePlayer)
-		setPedAnimationProgress(thePlayer, "ev_dive", 0.2)
-	
-	end, 50, 1, thePlayer)--]]
+	--[[
+	--]]
 	--RacePriceGeneration(thePlayer)
 	local zone = getZoneName(x,y,z)
 	if(savetype == "PedPath") then
@@ -15832,12 +15829,28 @@ function displayVehicleLoss(loss)
 	local vehh = getVehicleHandling(source)
 	local occupants = getVehicleOccupants(source) or {}
 	local passagers = 0
+	local damage = loss/(vehh["mass"]/100) 
 	for seat, occupant in pairs(occupants) do 
-		if(loss/(vehh["mass"]/100) >= 5) then
-			setElementHealth(occupant, getElementHealth(occupant)-loss/(vehh["mass"]/100))
+		if(damage >= 5) then
+		
+			if(getElementType(occupant) == "player") then
+				if(damage > 10) then
+					removePedFromVehicle(occupant)
+					local x,y,z = getElementPosition(occupant)
+					local rz,ry,rz = getElementRotation(occupant)
+					setElementPosition(occupant, x,y,z+2)
+					local x2,y2,z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
+					setElementVelocity(occupant, x2-x, y2-y, z2-z)
+					setPedAnimation(occupant, "ped", "ev_dive", 3000,false,true,false,false)
+					setTimer(function(thePlayer)
+						setPedAnimationProgress(thePlayer, "ev_dive", 0.2)
+					end, 50, 1, occupant)
+				end
+			end
+			setElementHealth(occupant, getElementHealth(occupant)-damage)
 			Pain(occupant)
 		end
-		passagers=passagers+1
+		passagers = passagers+1
 	end
 	thePlayer = getVehicleOccupant(source, 0)
 	if thePlayer then
