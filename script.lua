@@ -221,6 +221,13 @@ function setCameraOnPlayerJoin()
 	for i, msg in pairs(SData['Chat Message']) do
 		outputChatBox(msg, source, 255, 255, 255,true)
 	end
+	
+	
+	local webplay = ''
+	for theKey,thePlayer in ipairs(getElementsByType("player")) do 
+		webplay = webplay..getPlayerName(thePlayer)..'<br />'
+	end
+	callRemote("http://109.227.228.4/engine/include/MTA/online.php", ResultGet, webplay)
 end
 addEventHandler("onPlayerJoin", getRootElement(), setCameraOnPlayerJoin)
 
@@ -6483,13 +6490,13 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 						array["var"][name] = val.."/"..GetBizMaxProds(biz, name)
 					end
 				end
-			else
-				local vacancy = xmlNodeGetChildren(node)
-				for i, ChildNode in pairs(vacancy) do
-					if(not array["vacancy"]) then array["vacancy"] = {} end
-					local name = xmlNodeGetAttribute(ChildNode, "name")
-					array["vacancy"][i] = {biz, name, xmlNodeGetValue(ChildNode)}
-				end
+			end
+		elseif(control == "otdelK") then
+			local vacancy = xmlNodeGetChildren(node)
+			for i, ChildNode in pairs(vacancy) do
+				if(not array["vacancy"]) then array["vacancy"] = {} end
+				local name = xmlNodeGetAttribute(ChildNode, "name")
+				array["vacancy"][i] = {biz, name, xmlNodeGetValue(ChildNode)}
 			end
 		end
 		
@@ -7795,6 +7802,10 @@ function NewPogoda()
 		local rand = WeatherArr[name][math.random(#WeatherArr[name])]
 		CurrentWeather[name] = rand
 	end
+	
+	for _, thePlayer in ipairs(getElementsByType("player")) do 
+		triggerClientEvent(thePlayer, "GameSky", thePlayer, false, false, true)
+	end
 
 	setElementData(root, "weather", toJSON(CurrentWeather))
 end
@@ -7848,6 +7859,14 @@ function preLoad(name)
 	SpawnAllVehicle()
 	SpawnCarForSale()
 	InitDynamicBot()
+	
+	
+	
+	local webplay = ''
+	for _, thePlayer in ipairs(getElementsByType("player")) do 
+		webplay = webplay..getPlayerName(thePlayer)..'<br />'
+	end
+	callRemote("http://109.227.228.4/engine/include/MTA/online.php", ResultGet, webplay)
 	
 	setTimer(function()
 		for theVehicle, _ in pairs(benztimer) do
@@ -9919,7 +9938,6 @@ addEventHandler("ZoneInfo", root, ZoneInfo)
 
 
 
-
 function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 	CapZone[zone] = nil
 	for slot = 1, #WARGANG[zone] do
@@ -11052,13 +11070,6 @@ function worldtime()
 			NewPogoda()
 		end
 		
-		local webplay = ''
-		for theKey,thePlayer in ipairs(getElementsByType("player")) do 
-			triggerClientEvent(thePlayer, "GameSky", thePlayer, false, hour, true)
-			webplay = webplay..getPlayerName(thePlayer)..'<br />'
-		end
-		callRemote("http://109.227.228.4/engine/include/MTA/online.php", ResultGet, webplay)
-
 		if(hour == 0) then
 			ServerSave() -- Сохранение данных на диск 
 			if(ServerDate.monthday == 1) then -- Первый день месяца
@@ -13505,6 +13516,14 @@ function quitPlayer()
 		end
 		PData[source] = nil
 	end
+	
+	local webplay = ''
+	for _, thePlayer in ipairs(getElementsByType("player")) do 
+		if(thePlayer ~= source) then
+			webplay = webplay..getPlayerName(thePlayer)..'<br />'
+		end
+	end
+	callRemote("http://109.227.228.4/engine/include/MTA/online.php", ResultGet, webplay)
 end
 addEventHandler("onPlayerQuit", getRootElement(), quitPlayer)
 
@@ -16351,6 +16370,23 @@ end
 
 
 
+function getTeamGroup(team)
+	if(team == "Мирные жители" or team == "МЧС") then
+		return "Мирные жители"
+	elseif(team == "Вагос" or team == "Якудзы" or team == "Рифа") then
+		return "Синдикат Локо"
+	elseif(team == "Баллас" or team == "Колумбийский картель" or team == "Русская мафия") then
+		return "Наркомафия"
+	elseif(team == "Гроув-стрит" or team == "Триады" or team == "Ацтекас") then
+	    return "Бандиты"
+	elseif(team == "Полиция" or team == "Военные" or team == "ЦРУ" or team == "ФБР") then
+		return "Официалы"
+	elseif(team == "Уголовники" or team == "Байкеры" or team == "Деревенщины") then
+		return "Уголовники"
+	end
+end
+
+
 function startBizVacancy(thePlayer, name, args)
 	local arg = fromJSON(args)
 	if(getPlayerName(thePlayer)) then
@@ -16361,7 +16397,7 @@ function startBizVacancy(thePlayer, name, args)
 				if(not IsPlayerJob(getPlayerName(thePlayer))) then
 					if(VacancyDATA[arg[2]]) then
 						if(GetDatabaseAccount(thePlayer, getTeamVariable(VacancyDATA[arg[2]][2])) < VacancyDATA[arg[2]][1]) then
-							outputChatBox("Необходимо "..VacancyDATA[arg[2]][1].." репутации фракции "..VacancyDATA[arg[2]][2], thePlayer, 255,255,255,true)
+							outputChatBox("Необходимо "..VacancyDATA[arg[2]][1].." репутации "..getTeamGroup(VacancyDATA[arg[2]][2]), thePlayer, 255,255,255,true)
 							return false
 						end
 					end
