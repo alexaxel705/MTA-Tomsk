@@ -4798,17 +4798,21 @@ function updateCamera()
 	
 	for mar, dat in pairs(AnimatedMarker) do
 		if(dat[1] == "up") then
-			dat[2] = dat[2]+0.005
-			if(dat[2] >= 0.2) then
+			dat[2] = dat[2]+0.01
+			if(dat[2] >= 0.25) then
 				dat[1] = "down"
 			end
 		else
-			dat[2] = dat[2]-0.005
-			if(dat[2] <= -0.2) then
+			dat[2] = dat[2]-0.01
+			if(dat[2] <= -0.25) then
 				dat[1] = "up"
 			end
 		end
-		setElementPosition(mar, dat[3], dat[4], dat[5]+dat[2])
+		if(isElementAttached(mar)) then
+			setElementAttachedOffsets(mar, dat[3], dat[4], dat[5]+dat[2])
+		else
+			setElementPosition(mar, dat[3], dat[4], dat[5]+dat[2])
+		end
 	end
 end
 addEventHandler("onClientPreRender", getRootElement(), updateCamera)
@@ -10959,6 +10963,9 @@ function StreamIn()
 	elseif(getElementType(source) == "marker") then
 		if(getMarkerType(source) == "arrow") then
 			local mx,my,mz = getElementPosition(source)
+			if(isElementAttached(source)) then
+				mx,my,mz = getElementAttachedOffsets(source)
+			end
 			AnimatedMarker[source] = {"up", 0, mx,my,mz}
 		end
 	elseif(getElementType(source) == "vehicle") then
