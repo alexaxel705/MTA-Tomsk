@@ -354,8 +354,8 @@ local StandartInventory = toJSON({{},{},{},{},{},{},{},{},{},{}})
 local Collections = toJSON({[953] = {}, [954] = {}, [1276] = {}})
 local PlayersPickups = {}
 local VehicleBand = {} -- Заспауненые автомобили фракций
-local VehicleBandBlip = {}
-local BotBlip = {}
+local DynamicBlip = {}
+local DynamicMar = {}
 local ThreesNames = {
 	[782] = "Кока",
 	[823] = "Конопля"
@@ -9953,16 +9953,18 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 					if(vehinfo[5]) then 
 						triggerEvent(vehinfo[5], theVehicle)
 					end
-					VehicleBand[zone][slot]=theVehicle
+					VehicleBand[zone][slot] = theVehicle
 				end
-				if(isElement(VehicleBandBlip[VehicleBand[zone][slot]])) then
-					destroyElement(VehicleBandBlip[VehicleBand[zone][slot]])
+				if(isElement(DynamicBlip[VehicleBand[zone][slot]])) then
+					destroyElement(DynamicBlip[VehicleBand[zone][slot]])
+					destroyElement(DynamicMar[VehicleBand[zone][slot]])
 				end
 			end
 		else -- Новые автомобили
 			for slot = 1, #VehicleBand[zone] do
-				if(isElement(VehicleBandBlip[VehicleBand[zone][slot]])) then
-					destroyElement(VehicleBandBlip[VehicleBand[zone][slot]])
+				if(isElement(DynamicBlip[VehicleBand[zone][slot]])) then
+					destroyElement(DynamicBlip[VehicleBand[zone][slot]])
+					destroyElement(DynamicMar[VehicleBand[zone][slot]])
 				end
 			end
 			VehicleBand[zone] = {}
@@ -10012,8 +10014,9 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 	if(BotCreated[zone]) then
 		if(spawnbot) then -- Прервали захват (восстановление)
 			for slot = 1, #BotCreated[zone] do
-				if(isElement(BotBlip[BotCreated[zone][slot]])) then
-					destroyElement(BotBlip[BotCreated[zone][slot]])
+				if(isElement(DynamicBlip[BotCreated[zone][slot]])) then
+					destroyElement(DynamicBlip[BotCreated[zone][slot]])
+					destroyElement(DynamicMar[BotCreated[zone][slot]])
 				end
 				local createornot = false
 				if(isElement(BotCreated[zone][slot])) then
@@ -10039,8 +10042,9 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 			end
 		else -- Новые боты
 			for slot = 1, #BotCreated[zone] do
-				if(isElement(BotBlip[BotCreated[zone][slot]])) then
-					destroyElement(BotBlip[BotCreated[zone][slot]])
+				if(isElement(DynamicBlip[BotCreated[zone][slot]])) then
+					destroyElement(DynamicBlip[BotCreated[zone][slot]])
+					destroyElement(DynamicMar[BotCreated[zone][slot]])
 				end
 				local createornot = false
 				if(isElement(BotCreated[zone][slot])) then
@@ -11127,22 +11131,30 @@ function worldtime()
 				if(isElement(theVehicle)) then
 					local vx,vy,vz = getElementPosition(theVehicle)
 					if(zone == getZoneName(vx,vy,vz) and getElementHealth(theVehicle) > 0) then
-						if(not isElement(VehicleBandBlip[theVehicle])) then
-							VehicleBandBlip[theVehicle] = createBlipAttachedTo(theVehicle, 0, 2, r,g,b)
-							setElementVisibleTo(VehicleBandBlip[theVehicle], root, false)
-							for v,k in pairs(PlayerInZone) do
-								setElementVisibleTo(VehicleBandBlip[theVehicle], k, true)
+						if(not isElement(DynamicBlip[theVehicle])) then
+							DynamicBlip[theVehicle] = createBlipAttachedTo(theVehicle, 0, 1, r,g,b, 200, 2)
+							setElementVisibleTo(DynamicBlip[theVehicle], root, false)
+							DynamicMar[theVehicle] = createMarker(vx,vy,vz, "arrow", 1, 255, 0, 0, 200)
+							attachElements(DynamicMar[theVehicle], theVehicle, 0, 0, 2)
+							setElementVisibleTo(DynamicMar[theVehicle], root, false)
+							
+							for _,k in pairs(PlayerInZone) do
+								setElementVisibleTo(DynamicBlip[theVehicle], k, true)
+								setElementVisibleTo(DynamicMar[theVehicle], k, true)
 							end
 						else
-							setElementVisibleTo(VehicleBandBlip[theVehicle], root, false)
-							for v,k in pairs(PlayerInZone) do
-								setElementVisibleTo(VehicleBandBlip[theVehicle], k, true)
+							setElementVisibleTo(DynamicBlip[theVehicle], root, false)
+							setElementVisibleTo(DynamicMar[theVehicle], root, false)
+							for _,k in pairs(PlayerInZone) do
+								setElementVisibleTo(DynamicBlip[theVehicle], k, true)
+								setElementVisibleTo(DynamicMar[theVehicle], k, true)
 							end
 						end
-						TotalVehicle=TotalVehicle+1
+						TotalVehicle = TotalVehicle+1
 					else
-						if(isElement(VehicleBandBlip[theVehicle])) then
-							destroyElement(VehicleBandBlip[theVehicle])
+						if(isElement(DynamicBlip[theVehicle])) then
+							destroyElement(DynamicBlip[theVehicle])
+							destroyElement(DynamicMar[theVehicle])
 						end
 					end
 				end
@@ -11159,22 +11171,29 @@ function worldtime()
 					if(team == GetDatabaseZoneNode(zone)) then
 						if(not getElementData(ped, "NextNode")) then
 							if(zone == getZoneName(vx,vy,vz, false) and not isPedDead(ped)) then
-								if(not isElement(BotBlip[ped])) then
-									BotBlip[ped] = createBlipAttachedTo(ped, 0, 2, r,g,b)
-									setElementVisibleTo(BotBlip[ped], root, false)
-									for v,k in pairs(PlayerInZone) do
-										setElementVisibleTo(BotBlip[ped], k, true)
+								if(not isElement(DynamicBlip[ped])) then
+									DynamicBlip[ped] = createBlipAttachedTo(ped, 0, 1, r,g,b, 200, 2)
+									setElementVisibleTo(DynamicBlip[ped], root, false)
+									DynamicMar[ped] = createMarker(vx,vy,vz, "arrow", 1, 255, 0, 0, 200)
+									attachElements(DynamicMar[ped], ped, 0, 0, 2)
+									setElementVisibleTo(DynamicMar[ped], root, false)
+									for _,k in pairs(PlayerInZone) do
+										setElementVisibleTo(DynamicBlip[ped], k, true)
+										setElementVisibleTo(DynamicMar[ped], k, false)
 									end
 								else
-									setElementVisibleTo(BotBlip[ped], root, false)
-									for v,k in pairs(PlayerInZone) do
-										setElementVisibleTo(BotBlip[ped], k, true)
+									setElementVisibleTo(DynamicBlip[ped], root, false)
+									setElementVisibleTo(DynamicMar[ped], root, false)
+									for _,k in pairs(PlayerInZone) do
+										setElementVisibleTo(DynamicBlip[ped], k, true)
+										setElementVisibleTo(DynamicMar[ped], k, true)
 									end
 								end
 								TotalBot = TotalBot + 1
 							else
-								if(isElement(BotBlip[ped])) then
-									destroyElement(BotBlip[ped])
+								if(isElement(DynamicBlip[ped])) then
+									destroyElement(DynamicBlip[ped])
+									destroyElement(DynamicMar[ped])
 								end
 							end
 						end
@@ -11231,6 +11250,24 @@ function getPointInFrontOfPoint(x, y, z, rZ, dist)
 end
 
 
+
+
+local TotalDamage = {}
+function DestroyObject(thePlayer, obj)
+	if(not TotalDamage[thePlayer]) then TotalDamage[thePlayer] = 0 end
+	
+	if(tonumber(obj)) then
+		TotalDamage[thePlayer] = math.floor(TotalDamage[thePlayer]+obj)
+		setElementData(thePlayer, "Damage", TotalDamage[thePlayer])
+	else
+		if(ObjectCost[getElementModel(obj)]) then
+			TotalDamage[thePlayer] = TotalDamage[thePlayer]+ObjectCost[getElementModel(obj)]
+			setElementData(thePlayer, "Damage", TotalDamage[thePlayer])
+		end
+	end
+end
+addEvent("DestroyObject", true)
+addEventHandler("DestroyObject", getRootElement(), DestroyObject)
 
 
 
@@ -12489,9 +12526,6 @@ local NightRace3 = {
 
 
 
-
-
-
 function math.round(number, decimals, method)
     decimals = decimals or 0
     local factor = 10 ^ decimals
@@ -13706,6 +13740,16 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 	if(PData[source]["RobPed"]) then
 		StopRob(source)
 	end
+	
+	if(weapon == 63) then
+		if(PData[source]["LastVehicle"]) then
+			if(getElementData(PData[source]["LastVehicle"], "killer")) then 
+				killer = getPlayerFromName(getElementData(PData[source]["LastVehicle"], "killer")) 
+				weapon = getElementData(PData[source]["LastVehicle"], "weapon") or 1337
+			end
+		end
+	end
+	
 	UnBindAllKey(source)
 	SetControls(source, "crack", {["fire"] = false,  ["action"] = false, ["jump"] = false})
 	AddSkill(source, 22, -7)
@@ -14826,29 +14870,6 @@ function respawnExplodedVehicle()
 	if(isTimer(FuelTimer[source])) then
 		killTimer(FuelTimer[source])
 	end
-	local killer = getElementData(source, "killer")
-	if(killer) then 
-		killer = getPlayerFromName(killer) 
-	end
-	local weapon = getElementData(source, "weapon") or 1337
-	
-	
-	local occupants = getVehicleOccupants(source) or {}
-	for seat, occupant in pairs(occupants) do
-		if(occupant) then
-			if(getElementType(occupant) == "player") then
-				killPed(occupant, killer, weapon, 3) 
-			elseif(getElementType(occupant) == "ped") then
-				killPed(occupant, killer, weapon, 3) 
-			end
-			if(killer) then
-				if(WeaponModel[weapon][2]) then 
-					AddSkill(killer, WeaponModel[weapon][2]) 
-				end
-				WantedLevel(killer, 0.1)
-			end
-		end
-	end
 
 	if(not getElementData(source, "destroy")) then 
 		if(getElementData(source, "owner")) then
@@ -14906,10 +14927,6 @@ function respawnVehicleAfterDead()
 	if getElementData(source, "d") then setElementDimension(source, getElementData(source, "d")) else setElementDimension(source, 0)  end
 	for slot = 0, 5 do
 		setVehicleDoorOpenRatio(source, slot, 0)
-	end
-	local occupant = getVehicleOccupant(source)
-	if(occupant) then
-		triggerClientEvent(occupant, "VehiclePlayerInfo", occupant, "")
 	end
 	if(getElementData(source, "destroy")) then 
 		destroyElement(source)
@@ -15622,9 +15639,10 @@ addEventHandler("onPlayerVehicleExit", getRootElement(), turnEngineOff)
 
 
 function turnEngineOn(theVehicle, leftSeat, jackerPlayer, unbindkey)
-	--setTrainDerailable(theVehicle, false)    
+	--setTrainDerailable(theVehicle, false)   
 	if(getElementType(source) == "player") then
 		if(not theVehicle) then return false end
+		PData[source]["LastVehicle"] = theVehicle -- В случай взрыва автомобиля, получаем информацию из этой переменной о атакующем
 		if(not unbindkey) then
 			BindVehicleKey(source)
 		end

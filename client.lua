@@ -10931,7 +10931,7 @@ function StreamIn()
 		local occupant = getVehicleOccupant(source)
 		VehiclesInStream[source] = {}
 		if(not getElementData(source, "owner")) then
-			VehiclesInStream[source]["blip"] = createBlipAttachedTo(source, 0, 1, 170,170,170,255,1000)
+			VehiclesInStream[source]["blip"] = createBlipAttachedTo(source, 0, 1, 170,170,170,255,1)
 		end
 
 		if(occupant) then

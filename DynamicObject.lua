@@ -11233,8 +11233,10 @@ local objs = {
 
 restoreAllWorldModels()
 for i, v in pairs(objs) do
-	removeWorldModel(v[1], 4000, v[4], v[5], v[6])
-	createObject(v[1], v[4], v[5], v[6], v[7], v[8], v[9])
+	if(getServerPort() ~= 22013) then
+		removeWorldModel(v[1], 4000, v[4], v[5], v[6])
+		createObject(v[1], v[4], v[5], v[6], v[7], v[8], v[9])
+	end
 end
 
 
@@ -11281,25 +11283,6 @@ local ObjectCost = {
 	[3460] = 500, 
 	[1257] = 2500, 
 }
-
-
-local TotalDamage = {}
-function DestroyObject(thePlayer, obj)
-	if(not TotalDamage[thePlayer]) then TotalDamage[thePlayer] = 0 end
-	
-	if(tonumber(obj)) then
-		TotalDamage[thePlayer] = math.floor(TotalDamage[thePlayer]+obj)
-		setElementData(thePlayer, "Damage", TotalDamage[thePlayer])
-	else
-		if(ObjectCost[getElementModel(obj)]) then
-			TotalDamage[thePlayer] = TotalDamage[thePlayer]+ObjectCost[getElementModel(obj)]
-			setElementData(thePlayer, "Damage", TotalDamage[thePlayer])
-		end
-	end
-end
-addEvent("DestroyObject", true)
-addEventHandler("DestroyObject", getRootElement(), DestroyObject)
-
 
 
 
