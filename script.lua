@@ -121,19 +121,19 @@ end
 
 -- Дата основания, название, торговля, уровень
 local BizInfo = {
-	["SANFI"] = {1339, "San Fierro", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.45},
-	["PALOM"] = {1639, "Palomino Creek", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.23},
-	["MONTG"] = {1587, "Montgomery", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.17},
-	["LASVE"] = {1861, "Las Venturas", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.5},
-	["BLUEB"] = {1788, "Blueberry", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.15}, 
-	["DILLI"] = {1852, "Dillimore", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.05},
-	["LOSSA"] = {1609, "Los Santos", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.3},
-	["BAYSA"] = {1871, "Bayside", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.05}, 
-	["FORCA"] = {1778, "Fort Caston", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.19}, 
-	["LASBA"] = {1210, "Las Barricadas", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.025}, 
-	["ELQUE"] = {1448, "El Quebrados", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.075}, 
-	["ANLPI"] = {1651, "Angel Pine", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.135}, 
-	["LASPA"] = {1709, "Las Payasadas", {{"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.1}, 
+	["SANFI"] = {1339, "San Fierro", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.45},
+	["PALOM"] = {1639, "Palomino Creek", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.23},
+	["MONTG"] = {1587, "Montgomery", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.17},
+	["LASVE"] = {1861, "Las Venturas", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.5},
+	["BLUEB"] = {1788, "Blueberry", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.15}, 
+	["DILLI"] = {1852, "Dillimore", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.05},
+	["LOSSA"] = {1609, "Los Santos", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.3},
+	["BAYSA"] = {1871, "Bayside", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.05}, 
+	["FORCA"] = {1778, "Fort Caston", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.19}, 
+	["LASBA"] = {1210, "Las Barricadas", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.025}, 
+	["ELQUE"] = {1448, "El Quebrados", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.075}, 
+	["ANLPI"] = {1651, "Angel Pine", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.135}, 
+	["LASPA"] = {1709, "Las Payasadas", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.1}, 
 	["FLEIS"] = {1869, "Спиртзавод", {{"Зерно", "Trade"}, {"Алкоголь", "Sell"}}, 1}, 
 	["MARIH"] = {1966, "Наркопритон", {{"Косяк", "Sell"}, {"Конопля", "Trade"}}, 1}, 
 	["SPUNK"] = {1956, "Наркопритон", {{"Спанк", "Sell"}, {"Кока", "Trade"}}, 1}, 
@@ -148,8 +148,8 @@ local BizInfo = {
 	["MEDLS"] = {1921, "Скорая помощь", {}}, 
 	["BIOEN"] = {1939, "Химический завод", {{"Удобрения", "Sell"}, {"Химикаты", "Trade"}}, 1}, 
 	["PETLV"] = {1859, "Нефтяные скважины", {{"Нефть", "Sell"}}}, 
-	["NPZSF"] = {1901, "Химический завод", {{"Бензин", "Sell"}, {"Химикаты", "Sell"}, {"Нефть", "Trade"}}, 1}, 
-	["FOSOI"] = {1918, "Химический завод", {{"Бензин", "Sell"}, {"Химикаты", "Sell"}, {"Нефть", "Trade"}}, 1}, 
+	["NPZSF"] = {1901, "Химический завод", {{"Пропан", "Sell"}, {"Бензин", "Sell"}, {"Химикаты", "Sell"}, {"Нефть", "Trade"}}, 1}, 
+	["FOSOI"] = {1918, "Химический завод", {{"Пропан", "Sell"}, {"Бензин", "Sell"}, {"Химикаты", "Sell"}, {"Нефть", "Trade"}}, 1}, 
 	["SPRAYSA"] = {1974, "Pay'n'Spray", {}}, 
 	["SPRUNK"] = {1932, "Sprunk", {}}, 
 	["MEDRA"] = {1922, "Психиатрическая больница SA", {}}, 
@@ -6371,6 +6371,7 @@ local ItemProdsCoeff = {
 	["Удобрения"] = 0.30,
 	["Химикаты"] = 0.25,
 	["Бензин"] = 0.45,
+	["Пропан"] = 0.3
 }
 
 
@@ -7545,6 +7546,7 @@ local ItemsNamesArr = {
 	["Канистра"] = 1650,
 	["Запаска"] = 1025,
 	["Нефть"] = 3632, 
+	["Пропан"] = 1370, 
 	["Алкоголь"] = 2900, 
 	["Мясо"] = 2805, 
 	["Химикаты"] = 1218, 
@@ -7632,7 +7634,7 @@ function useinvweapon(thePlayer, slot)
 	local carry = false
 	for _, a in pairs(arr) do
 		if(a[1]) then
-			if(a[1] == "Запаска" or a[1] == "Зерно" or a[1] == "Нефть" or a[1] == "Химикаты" or a[1] == "Алкоголь") then
+			if(a[1] == "Запаска" or a[1] == "Зерно" or a[1] == "Нефть" or a[1] == "Химикаты" or a[1] == "Алкоголь" or a[1] == "Пропан") then
 				carry = true
 			end
 		end
@@ -12616,7 +12618,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Алкоголь", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Пропан", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
@@ -13729,6 +13731,7 @@ local DroppedItem = {
 	["Скот"] = true,
 	["Мясо"] = true,
 	["Нефть"] = true,
+	["Пропан"] = true,
 	["Химикаты"] = true,
 	["Удобрения"] = true,
 	["Бензин"] = true,
