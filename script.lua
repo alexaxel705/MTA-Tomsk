@@ -5509,7 +5509,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2530.1, -1735.3, 12.4, 0, 0 --
+		local x,y,z,i,d  = -2661.3, 1423.8, 23.9, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5887,6 +5887,10 @@ CreateCop(627, -571.8, 17.9, 270, "Шериф округа Red County", 4)
 
 
 CreateEnter(-2624.6, 1412.65, 7.1, 180, 0, 0, false, -2636.7, 1402.5, 906.5, 0, 3, 0) -- Синдикат локо
+CreateEnter(-2661.3, 1423.8, 23.9, 190, 0, 0, false, -2661, 1417.6, 922.2, 0, 3, 0) -- Синдикат локо крыша
+
+
+
 
 
 CreateEnter(2229.9, -1721.2, 13.6, 270, 0, 0, false, 772.3, -5.1, 1000.7, 0, 5, 0) -- Качалка LS

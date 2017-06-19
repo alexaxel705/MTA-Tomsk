@@ -30,6 +30,7 @@ local HomeEditor = false
 local RobAction = false
 local FireTimer = {}
 local StreamData = {}
+local AnimatedMarker = {}
 local VideoMemory = {["HUD"] = {}}
 
 local PData = {
@@ -4792,6 +4793,22 @@ function updateCamera()
 	
 	if(PData["ResourceMap"]) then
 		setSkyGradient(170,103,0 ,170,103,0) -- ,170,103,0
+	end
+	
+	
+	for mar, dat in pairs(AnimatedMarker) do
+		if(dat[1] == "up") then
+			dat[2] = dat[2]+0.005
+			if(dat[2] >= 0.2) then
+				dat[1] = "down"
+			end
+		else
+			dat[2] = dat[2]-0.005
+			if(dat[2] <= -0.2) then
+				dat[1] = "up"
+			end
+		end
+		setElementPosition(mar, dat[3], dat[4], dat[5]+dat[2])
 	end
 end
 addEventHandler("onClientPreRender", getRootElement(), updateCamera)
@@ -10939,6 +10956,11 @@ function StreamIn()
 			StreamData[source] = {["armas"] = {}}
 		end
 		UpdateArmas(source)
+	elseif(getElementType(source) == "marker") then
+		if(getMarkerType(source) == "arrow") then
+			local mx,my,mz = getElementPosition(source)
+			AnimatedMarker[source] = {"up", 0, mx,my,mz}
+		end
 	elseif(getElementType(source) == "vehicle") then
 		local occupant = getVehicleOccupant(source)
 		VehiclesInStream[source] = {}
@@ -11191,6 +11213,10 @@ function StreamOut()
 					destroyElement(object)
 				end
 			end
+		end
+	elseif(getElementType(source) == "marker") then
+		if(AnimatedMarker[source]) then
+			AnimatedMarker[source] = nil
 		end
 	end
 	
