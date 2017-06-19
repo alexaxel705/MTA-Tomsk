@@ -4065,6 +4065,7 @@ function UpdateBot()
 end
 
 
+
 		
 function StartAnimation(thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame, forced)
 	triggerServerEvent("StartAnimation", localPlayer, thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame, forced)
@@ -5570,6 +5571,78 @@ function StopSleep()
 end
 
 
+local vending = {
+	{955, 0, -862.82, 1536.60, 21.98, 0, 0, 180},
+	{956, 0, 2271.72, -76.46, 25.96, 0, 0, 0},
+	{955, 0, 1277.83, 372.51, 18.95, 0, 0, 64},
+	{956, 0, 662.42, -552.16, 15.71, 0, 0, 180},
+	{955, 0, 201.01, -107.61, 0.89, 0, 0, 270},
+	{955, 0, -253.73, 2597.95, 62.24, 0, 0, 90},
+	{956, 0, -253.73, 2599.75, 62.24, 0, 0, 90},
+	{956, 0, -76.03, 1227.99, 19.12, 0, 0, 90},
+	{955, 0, -14.70, 1175.36, 18.95, 0, 0, 180},
+	{1977, 7, 316.87, -140.35, 998.58, 0, 0, 270},
+	{956, 0, -1455.11, 2591.665, 55.23, 0, 0, 180},
+	{955, 0, 2352.18, -1357.15, 23.77, 0, 0, 90},
+	{955, 0, 2325.97, -1645.14, 14.21, 0, 0, 0},
+	{956, 0, 2139.52, -1161.48, 23.35, 0, 0, 87},
+	{956, 0, 2153.23, -1016.14, 62.23, 0, 0, 127},
+	{955, 0, 1928.74, -1772.44, 12.94, 0, 0, 90},
+	{1776, 1, 2222.36, 1602.64, 1000.06, 0, 0, 90},
+	{1775, 1, 2222.20, 1606.77, 1000.05, 0, 0, 90},
+	{1775, 1, 2155.90, 1606.77, 1000.05, 0, 0, 90},
+	{1775, 1, 2209.90, 1607.19, 1000.05, 0, 0, 270},
+	{1776, 1, 2155.84, 1607.87, 1000.06, 0, 0, 90},
+	{1776, 1, 2202.45, 1617, 1000.06, 0, 0, 180},
+	{1776, 1, 2209.24, 1621.21, 1000.06, 0, 0, 0},
+	{1776, 3, 330.67, 178.50, 1020.07, 0, 0, 0},
+	{1776, 3, 331.92, 178.50, 1020.07, 0, 0, 0},
+	{1776, 3, 350.91, 206.08, 1008.47, 0, 0, 90},
+	{1776, 3, 361.56, 158.61, 1008.47, 0, 0, 180},
+	{1776, 3, 371.59, 178.45, 1020.07, 0, 0, 0},
+	{1776, 3, 374.89, 188.97, 1008.47, 0, 0, 0},
+	{1775, 2, 2576.70, -1284.43, 1061.09, 0, 0, 270},
+	{1775, 15, 2225.20, -1153.42, 1025.90, 0, 0, 270},
+	{955, 0, 1154.72, -1460.89, 15.15, 0, 0, 270},
+	{956, 0, 2480.85, -1959.27, 12.96, 0, 0, 180},
+	{955, 0, 2060.11, -1897.65, 12.92, 0, 0, 0},
+	{955, 0, 1729.78, -1943.05, 12.94, 0, 0, 0},
+	{956, 0, 1634.10, -2237.53, 12.89, 0, 0, 0},
+	{955, 0, 1789.21, -1369.26, 15.16, 0, 0, 270},
+	{956, 0, -2229.18, 286.41, 34.70, 0, 0, 180},
+	{955, 0, -1980.79, 142.66, 27.07, 0, 0, 270},
+	{955, 0, -2118.96, -423.64, 34.72, 0, 0, 255},
+	{955, 0, -2118.61, -422.41, 34.72, 0, 0, 255},
+	{955, 0, -2097.27, -398.33, 34.72, 0, 0, 180},
+	{955, 0, -2092.08, -490.05, 34.72, 0, 0, 0},
+	{955, 0, -2063.27, -490.05, 34.72, 0, 0, 0},
+	{955, 0, -2005.64, -490.05, 34.72, 0, 0, 0},
+	{955, 0, -2034.46, -490.05, 34.72, 0, 0, 0},
+	{955, 0, -2068.56, -398.33, 34.72, 0, 0, 180},
+	{955, 0, -2039.85, -398.33, 34.72, 0, 0, 180},
+	{955, 0, -2011.14, -398.33, 34.72, 0, 0, 180},
+	{955, 0, -1350.11, 492.28, 10.58, 0, 0, 90},
+	{956, 0, -1350.11, 493.85, 10.58, 0, 0, 90},
+	{955, 0, 2319.99, 2532.85, 10.21, 0, 0, 0},
+	{956, 0, 2845.72, 1295.04, 10.78, 0, 0, 0},
+	{955, 0, 2503.14, 1243.70, 10.21, 0, 0, 180},
+	{956, 0, 2647.69, 1129.66, 10.21, 0, 0, 0},
+	{1209, 0, -2420.21, 984.57, 44.29, 0, 0, 90},
+	{1302, 0, -2420.17, 985.94, 44.29, 0, 0, 90},
+	{955, 0, 2085.77, 2071.35, 10.45, 0, 0, 90},
+	{956, 0, 1398.84, 2222.60, 10.42, 0, 0, 180},
+	{956, 0, 1659.46, 1722.85, 10.21, 0, 0, 0},
+	{955, 0, 1520.14, 1055.26, 10, 0, 0, 270},
+	{1775, 6, -19.03, -57.83, 1003.63, 0, 0, 180},
+	{1776, 6, -36.14, -57.87, 1003.63, 0, 0, 180}
+}
+
+
+for key,theVend in pairs(vending) do
+	local o = createObject(theVend[1], theVend[3], theVend[4], theVend[5], theVend[6], theVend[7],theVend[8],false)
+	setElementInterior(o, theVend[2])
+end
+
 
 
 local effectNames = {"blood_heli","boat_prop","camflash","carwashspray","cement","cloudfast","coke_puff","coke_trail","cigarette_smoke",
@@ -5582,6 +5655,8 @@ local effectNames = {"blood_heli","boat_prop","camflash","carwashspray","cement"
 "smoke50lit","shootlight","smoke_flare","tank_fire","teargas","teargasAD","tree_hit_fir","tree_hit_palm","vent","vent2",
 "water_hydrant","water_ripples","water_speed","water_splash","water_splash_big","water_splsh_sml","water_swim","waterfall_end",
 "water_fnt_tme","water_fountain","wallbust","WS_factorysmoke"}
+
+
 
 
 DrugsEffect = {}
@@ -5691,9 +5766,9 @@ function targetingActivated(target)
 				ChangeInfo(t)
 			elseif(tostring(getElementType(target)) == "object") then
 				if(getElementModel(target) == 955 or getElementModel(target) == 956 
-				or getElementModel(target) ==  1977 or getElementModel(target) ==  1775
-				or getElementModel(target) ==  1776 or getElementModel(target) ==  1209
-				or getElementModel(target) ==  1302) then
+				or getElementModel(target) == 1977 or getElementModel(target) == 1775
+				or getElementModel(target) == 1776 or getElementModel(target) == 1209
+				or getElementModel(target) == 1302) then
 					toggleControl("enter_exit", false) 
 					ToolTip(Text("Sprunk стоимость #3B7231$20#FFFFFF").."\n"..Text("Нажми {key} чтобы купить", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
 					SprunkObject = target
@@ -7369,75 +7444,6 @@ end
 
 
 
-local vending = {{955, 0, -862.82, 1536.60, 21.98, 0, 0, 180},
-	{956, 0, 2271.72, -76.46, 25.96, 0, 0, 0},
-	{955, 0, 1277.83, 372.51, 18.95, 0, 0, 64},
-	{956, 0, 662.42, -552.16, 15.71, 0, 0, 180},
-	{955, 0, 201.01, -107.61, 0.89, 0, 0, 270},
-	{955, 0, -253.73, 2597.95, 62.24, 0, 0, 90},
-	{956, 0, -253.73, 2599.75, 62.24, 0, 0, 90},
-	{956, 0, -76.03, 1227.99, 19.12, 0, 0, 90},
-	{955, 0, -14.70, 1175.36, 18.95, 0, 0, 180},
-	{1977, 7, 316.87, -140.35, 998.58, 0, 0, 270},
-	{956, 0, -1455.11, 2591.665, 55.23, 0, 0, 180},
-	{955, 0, 2352.18, -1357.15, 23.77, 0, 0, 90},
-	{955, 0, 2325.97, -1645.14, 14.21, 0, 0, 0},
-	{956, 0, 2139.52, -1161.48, 23.35, 0, 0, 87},
-	{956, 0, 2153.23, -1016.14, 62.23, 0, 0, 127},
-	{955, 0, 1928.74, -1772.44, 12.94, 0, 0, 90},
-	{1776, 1, 2222.36, 1602.64, 1000.06, 0, 0, 90},
-	{1775, 1, 2222.20, 1606.77, 1000.05, 0, 0, 90},
-	{1775, 1, 2155.90, 1606.77, 1000.05, 0, 0, 90},
-	{1775, 1, 2209.90, 1607.19, 1000.05, 0, 0, 270},
-	{1776, 1, 2155.84, 1607.87, 1000.06, 0, 0, 90},
-	{1776, 1, 2202.45, 1617, 1000.06, 0, 0, 180},
-	{1776, 1, 2209.24, 1621.21, 1000.06, 0, 0, 0},
-	{1776, 3, 330.67, 178.50, 1020.07, 0, 0, 0},
-	{1776, 3, 331.92, 178.50, 1020.07, 0, 0, 0},
-	{1776, 3, 350.91, 206.08, 1008.47, 0, 0, 90},
-	{1776, 3, 361.56, 158.61, 1008.47, 0, 0, 180},
-	{1776, 3, 371.59, 178.45, 1020.07, 0, 0, 0},
-	{1776, 3, 374.89, 188.97, 1008.47, 0, 0, 0},
-	{1775, 2, 2576.70, -1284.43, 1061.09, 0, 0, 270},
-	{1775, 15, 2225.20, -1153.42, 1025.90, 0, 0, 270},
-	{955, 0, 1154.72, -1460.89, 15.15, 0, 0, 270},
-	{956, 0, 2480.85, -1959.27, 12.96, 0, 0, 180},
-	{955, 0, 2060.11, -1897.65, 12.92, 0, 0, 0},
-	{955, 0, 1729.78, -1943.05, 12.94, 0, 0, 0},
-	{956, 0, 1634.10, -2237.53, 12.89, 0, 0, 0},
-	{955, 0, 1789.21, -1369.26, 15.16, 0, 0, 270},
-	{956, 0, -2229.18, 286.41, 34.70, 0, 0, 180},
-	{955, 0, -1980.79, 142.66, 27.07, 0, 0, 270},
-	{955, 0, -2118.96, -423.64, 34.72, 0, 0, 255},
-	{955, 0, -2118.61, -422.41, 34.72, 0, 0, 255},
-	{955, 0, -2097.27, -398.33, 34.72, 0, 0, 180},
-	{955, 0, -2092.08, -490.05, 34.72, 0, 0, 0},
-	{955, 0, -2063.27, -490.05, 34.72, 0, 0, 0},
-	{955, 0, -2005.64, -490.05, 34.72, 0, 0, 0},
-	{955, 0, -2034.46, -490.05, 34.72, 0, 0, 0},
-	{955, 0, -2068.56, -398.33, 34.72, 0, 0, 180},
-	{955, 0, -2039.85, -398.33, 34.72, 0, 0, 180},
-	{955, 0, -2011.14, -398.33, 34.72, 0, 0, 180},
-	{955, 0, -1350.11, 492.28, 10.58, 0, 0, 90},
-	{956, 0, -1350.11, 493.85, 10.58, 0, 0, 90},
-	{955, 0, 2319.99, 2532.85, 10.21, 0, 0, 0},
-	{956, 0, 2845.72, 1295.04, 10.78, 0, 0, 0},
-	{955, 0, 2503.14, 1243.70, 10.21, 0, 0, 180},
-	{956, 0, 2647.69, 1129.66, 10.21, 0, 0, 0},
-	{1209, 0, -2420.21, 984.57, 44.29, 0, 0, 90},
-	{1302, 0, -2420.17, 985.94, 44.29, 0, 0, 90},
-	{955, 0, 2085.77, 2071.35, 10.45, 0, 0, 90},
-	{956, 0, 1398.84, 2222.60, 10.42, 0, 0, 180},
-	{956, 0, 1659.46, 1722.85, 10.21, 0, 0, 0},
-	{955, 0, 1520.14, 1055.26, 10, 0, 0, 270},
-	{1775, 6, -19.03, -57.83, 1003.63, 0, 0, 180},
-	{1776, 6, -36.14, -57.87, 1003.63, 0, 0, 180}}
-
-
-for key,theVend in pairs(vending) do
-	local o = createObject(theVend[1], theVend[3], theVend[4], theVend[5], theVend[6], theVend[7],theVend[8],false)
-	setElementInterior(o, theVend[2])
-end
 
 function StopDrag(name, id)
 	if(name and id) then
@@ -10045,7 +10051,6 @@ function DrawPlayerMessage()
 			
 	
 			if(ShowInfo) then
-				
 				for i, arr in pairs(PData['changezone']) do
 					local wx,wy,wz = false, false, false
 					if(arr[2]) then
@@ -11189,30 +11194,32 @@ addEventHandler("onClientElementDestroy", getRootElement(), StreamOut)
 			
 
 
-local ServerWName = {}
-ServerWName[0] = "EXTRASUNNY_LA"
-ServerWName[1] = "SUNNY_LA"
-ServerWName[2] = "EXTRASUNNY_SMOG_LA"
-ServerWName[3] = "SUNNY_SMOG_LA"
-ServerWName[4] = "CLOUDY_LA"
-ServerWName[5] = "SUNNY_SF"
-ServerWName[6] = "EXTRASUNNY_SF"
-ServerWName[7] = "CLOUDY_SF"
-ServerWName[8] = "RAINY_SF"
-ServerWName[9] = "FOGGY_SF"
-ServerWName[10] = "SUNNY_VEGAS"
-ServerWName[11] = "EXTRASUNNY_VEGAS"
-ServerWName[12] = "CLOUDY_VEGAS"
-ServerWName[13] = "EXTRASUNNY_COUNTRYSIDE"
-ServerWName[14] = "SUNNY_COUNTRYSIDE"
-ServerWName[15] = "CLOUDY_COUNTRYSIDE"
-ServerWName[16] = "RAINY_COUNTRYSIDE"
-ServerWName[17] = "EXTRASUNNY_DESERT"
-ServerWName[18] = "SUNNY_DESERT"
-ServerWName[19] = "SANDSTORM_DESERT"
-ServerWName[20] = "UNDERWATER"
-ServerWName[21] = "EXTRACOLOURS_1"
-ServerWName[22] = "EXTRACOLOURS_2"
+local ServerWName = {
+	[0] = "EXTRASUNNY_LA", 
+	[1] = "SUNNY_LA", 
+	[2] = "EXTRASUNNY_SMOG_LA", 
+	[3] = "SUNNY_SMOG_LA", 
+	[4] = "CLOUDY_LA", 
+	[5] = "SUNNY_SF", 
+	[6] = "EXTRASUNNY_SF", 
+	[7] = "CLOUDY_SF", 
+	[8] = "RAINY_SF", 
+	[9] = "FOGGY_SF", 
+	[10] = "SUNNY_VEGAS", 
+	[11] = "EXTRASUNNY_VEGAS", 
+	[12] = "CLOUDY_VEGAS", 
+	[13] = "EXTRASUNNY_COUNTRYSIDE", 
+	[14] = "SUNNY_COUNTRYSIDE", 
+	[15] = "CLOUDY_COUNTRYSIDE", 
+	[16] = "RAINY_COUNTRYSIDE", 
+	[17] = "EXTRASUNNY_DESERT", 
+	[18] = "SUNNY_DESERT", 
+	[19] = "SANDSTORM_DESERT", 
+	[20] = "UNDERWATER", 
+	[21] = "EXTRACOLOURS_1", 
+	[22] = "EXTRACOLOURS_2"
+}
+
 
 
 --Amb			Amb_Obj	Dir			Sky top			Sky bot		SunCore		SunCorona	SunSz	SprSz	SprBght	Shdw	LightShd	PoleShd	FarClp	FogSt	LightOnGround	LowCloudsRGB	BottomCloudRGB	WaterRGBA			Alpha1	RGB1			Alpha2	RGB2		CloudAlpha
