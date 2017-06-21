@@ -45,7 +45,8 @@ local SData = {
 	['Chat Message'] = {}, 
 	["VehAccData"] = {},
 	["DriverBot"] = {}, 
-	["PlayerElementSync"] = {}
+	["PlayerElementSync"] = {},
+	["TrunkUsed"] = {}
 }
 local Vibori = false
 local TimersAgain = {}
@@ -5509,7 +5510,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -2661.3, 1423.8, 23.9, 0, 0 --
+		local x,y,z,i,d  = -838.6, -124.9, 60.9, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12630,7 +12631,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Пропан", 1, 550, {})
+	--AddInventoryItem(thePlayer, "Базука", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
@@ -15592,13 +15593,25 @@ addEventHandler("SaveTrunk", getRootElement(), SaveTrunk)
 
 
 
-local OpenedTrunks = {}
 
 function TrunkOpen(thePlayer, theVehicle)
-	if(getVehicleDoorOpenRatio(theVehicle, 1) == 0) then
-		setVehicleDoorOpenRatio(theVehicle, 1, 1, 200)
+	local AlreadyUsed = false
+	for _, dat in pairs(SData["TrunkUsed"]) do
+		if(dat == theVehicle) then
+			AlreadyUsed = true
+		end
 	end
-	OpenedTrunks[thePlayer] = theVehicle
+	
+	if(not AlreadyUsed) then
+		if(getVehicleDoorOpenRatio(theVehicle, 1) == 0) then
+			setVehicleDoorOpenRatio(theVehicle, 1, 1, 200)
+		end
+		SData["TrunkUsed"][thePlayer] = theVehicle
+		
+		triggerClientEvent(thePlayer, "TrunkWindow", thePlayer)
+	else
+		ToolTip(thePlayer, "Багажник уже кто-то использует!")
+	end
 end
 addEvent("TrunkOpen", true)
 addEventHandler("TrunkOpen", getRootElement(), TrunkOpen)
@@ -15606,10 +15619,10 @@ addEventHandler("TrunkOpen", getRootElement(), TrunkOpen)
 
 
 function TrunkClose(thePlayer)
-	if(getVehicleDoorOpenRatio(OpenedTrunks[thePlayer], 1) == 1) then
-		setVehicleDoorOpenRatio(OpenedTrunks[thePlayer], 1, 0, 200)
+	if(getVehicleDoorOpenRatio(SData["TrunkUsed"][thePlayer], 1) == 1) then
+		setVehicleDoorOpenRatio(SData["TrunkUsed"][thePlayer], 1, 0, 200)
 	end
-	OpenedTrunks[thePlayer] = nil
+	SData["TrunkUsed"][thePlayer] = nil
 end
 addEvent("TrunkClose", true)
 addEventHandler("TrunkClose", getRootElement(), TrunkClose)
@@ -15855,21 +15868,6 @@ function displayVehicleLoss(loss)
 	local damage = loss/(vehh["mass"]/100) 
 	for seat, occupant in pairs(occupants) do 
 		if(damage >= 5) then
-		
-			if(getElementType(occupant) == "player") then
-				if(damage > 10) then
-					removePedFromVehicle(occupant)
-					local x,y,z = getElementPosition(occupant)
-					local rz,ry,rz = getElementRotation(occupant)
-					setElementPosition(occupant, x,y,z+2)
-					local x2,y2,z2 = getPointInFrontOfPoint(x, y, z, rz+90, 1)
-					setElementVelocity(occupant, x2-x, y2-y, z2-z)
-					setPedAnimation(occupant, "ped", "ev_dive", 3000,false,true,false,false)
-					setTimer(function(thePlayer)
-						setPedAnimationProgress(thePlayer, "ev_dive", 0.2)
-					end, 50, 1, occupant)
-				end
-			end
 			setElementHealth(occupant, getElementHealth(occupant)-damage)
 			Pain(occupant)
 		end
@@ -16153,6 +16151,9 @@ function onPlayerChat(message, messageType, messagenovision)
 		
 		if messageType == 0 and message then
 			if(not isTimer(PData[source]["AntiFlood"])) then
+				for key,thePlayers in pairs(getElementsByType "player") do
+					triggerClientEvent(thePlayers, "PlayerSayEvent", thePlayers, message, source)
+				end
 				if(Phones[source]) then
 					local CallTo = PhonesTo[source]
 					outputChatBox("(ТЕЛЕФОН) ["..getElementData(source, "id").."] "..getPlayerName(source)..": "..message, source,0,255,255, true)
@@ -16167,9 +16168,6 @@ function onPlayerChat(message, messageType, messagenovision)
 					end
 					cancelEvent()
 					return true
-				end
-				for key,thePlayers in pairs(getElementsByType "player") do
-					triggerClientEvent(thePlayers, "PlayerSayEvent", thePlayers, message, source)
 				end
 				local color = getElementData(source, "color")
 				local team = getPlayerTeam(source)
@@ -16229,6 +16227,24 @@ function BurnChatMSG(name, message, nickcolor)
 end
 addEvent("BurnChatMSG", true)
 addEventHandler("BurnChatMSG", getRootElement(), BurnChatMSG)
+
+
+
+
+function ForceRemoveFromVehicle(thePlayer, force)
+	removePedFromVehicle(thePlayer)
+	local x,y,z = getElementPosition(thePlayer)
+	local rz,ry,rz = getElementRotation(thePlayer)
+	setElementPosition(thePlayer, x,y,z+2)
+	local x2,y2,z2 = getPointInFrontOfPoint(x, y, z, rz+90, force)
+	setElementVelocity(thePlayer, x2-x, y2-y, (z2-z)+0.5)
+	setPedAnimation(thePlayer, "ped", "ev_dive", 3000,false,true,false,false)
+	setTimer(function(thePlayer)
+		setPedAnimationProgress(thePlayer, "ev_dive", 0.2)
+	end, 50, 1, thePlayer)
+end
+addEvent("ForceRemoveFromVehicle", true)
+addEventHandler("ForceRemoveFromVehicle", getRootElement(), ForceRemoveFromVehicle)
 
 
 

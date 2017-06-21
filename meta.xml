@@ -21,6 +21,6 @@
 	<file src="GTA3.mp3" />
 	<script src="RailNode.lua" type="client"/>
 	<script src="client.lua" type="client" validate="true" />
-	<script src="script.lua" />
+	<script src="script.lua" type="server" />
 	<export function='BurnChatMSG' type="server" http='true' />
 </meta>

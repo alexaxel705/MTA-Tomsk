@@ -322,12 +322,6 @@ HUD:
 	12 - Portuguese
 	13 - Azerbaijani
 	14 - Turkish
-	
-	101 - Первая ячейка приза
-	102 - Вторая
-	103 - Третья
-	104 - Четвертая
-	105 - Пятая
 --]]
 local RespawnTimer = false
 local LainOS = false
@@ -525,7 +519,7 @@ local PreloadTextures = {
 	["5.56-мм"] = createObject(18044, 4330, 4000, 4000),
 	["9-мм"] = createObject(18044, 4330, 4000, 4000),
 	["18.5-мм"] = createObject(18044, 4340, 4000, 4000),
-	["Скот"] = createObject(11470, 4345, 4000, 4000),
+	["Скот"] = createObject(11470, 4345, 4000, 4010),
 	["Зерно"] = createObject(1453, 4350, 4000, 4020),
 	["Кредитка"] = createObject(1581, 4365, 4000, 4020),
 	["Огнетушитель"] = createObject(366, 4370, 4000, 4020),
@@ -4502,12 +4496,17 @@ end
 
 
 addEventHandler("onClientElementDataChange", getRootElement(),
-function(dataName)
+function(dataName, oldValue)
 	if getElementType(source) == "ped" then
 		if dataName == "DynamicBot" then
 			if(StreamData[source]) then
 				StreamData[source]["UpdateRequest"] = true
 			end
+		end
+	elseif getElementType(source) == "vehicle" then
+		if dataName == "trunk" then
+			 triggerEvent("onClientElementStreamOut", source)
+			 triggerEvent("onClientElementStreamIn", source)
 		end
 	end
 end)
@@ -5508,7 +5507,6 @@ function TrunkWindow()
 	if(Targets["theVehicle"]) then
 		if(PEDChangeSkin == "play") then
 			if(not TrunkWindows and not InventoryWindows) then
-				triggerServerEvent("TrunkOpen", localPlayer, localPlayer, Targets["theVehicle"])
 				PInv["trunk"] = fromJSON(getElementData(Targets["theVehicle"], "trunk"))
 				DragElementId = false
 				DragElementName = false
@@ -5539,6 +5537,12 @@ addEventHandler("TrunkWindow", localPlayer, TrunkWindow)
 
 
 
+
+function TrunkReq(arg)
+	triggerServerEvent("TrunkOpen", localPlayer, localPlayer, Targets["theVehicle"]) 
+end
+addEvent("TrunkReq", true)
+addEventHandler("TrunkReq", localPlayer, TrunkReq)
 
 
 
@@ -6848,7 +6852,7 @@ function CreateTarget(el)
 						if(distdummy < 3) then
 							sx,sy = getScreenFromWorldPosition(x,y,z)
 							if(sx and sy) then
-								PData["MultipleAction"]["e"] = {"TrunkWindow", "открыть", sx, sy}
+								PData["MultipleAction"]["e"] = {"TrunkReq", "открыть", sx, sy}
 							end
 						end
 					end
@@ -8014,7 +8018,6 @@ function SetInventoryItem(name, i, item, count, quality, data)
 		
 		if(name == "trunk") then
 			triggerServerEvent("SaveTrunk", localPlayer, TrunkWindows, toJSON(PInv["trunk"]))
-			initTrunk(TrunkWindows, toJSON(PInv["trunk"]))
 		end
 		triggerServerEvent("SaveInventory", localPlayer, localPlayer, toJSON(PInv["player"]))
 
@@ -9037,6 +9040,7 @@ local ModelPlayerPosition = {
 	[356] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
 	[357] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
 	[358] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
+	[359] = {3, 0.07, -0.14, 0, 0, 290, 15}, 
 	[341] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
 	[3026] = {3, 0, -0.10, -0.15, 0, 270, 0}, 
 	[339] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
@@ -9746,16 +9750,20 @@ end
 
 
 addEventHandler("onClientVehicleCollision", root,
-    function(collider,force, bodyPart, x, y, z, nx, ny, nz)
+    function(HitElement,force, bodyPart, x, y, z, nx, ny, nz, hitElementForce)
          if(source == getPedOccupiedVehicle(localPlayer)) then
-			if(collider) then
+			if(force > 500) then
+				triggerServerEvent("ForceRemoveFromVehicle", localPlayer, localPlayer, force/1000)
+			end
+			
+			if(HitElement) then
+				local fDamageMultiplier = getVehicleHandling(source).collisionDamageMultiplier
 				if(isTimer(PData["Driver"]["Collision"])) then
 					killTimer(PData["Driver"]["Collision"])
 				else
 					PData["Driver"]["CollisionPoint"] = 0
 				end
 				
-				local fDamageMultiplier = getVehicleHandling(source).collisionDamageMultiplier
 				PData["Driver"]["CollisionPoint"] = PData["Driver"]["CollisionPoint"]+(force*fDamageMultiplier)
 
 				PData["Driver"]["Collision"] = setTimer(function(targetafter)
@@ -10922,26 +10930,29 @@ local VehicleTrunk = {}
 
 
 
-function initTrunk(theVehicle, trunkobj)
-	if(VehicleTrunk[theVehicle]) then
-		for _, obj in pairs(VehicleTrunk[theVehicle]) do
-			destroyElement(obj)
-		end
-	end
-	VehicleTrunk[theVehicle] = {}
-	trunkobj = fromJSON(trunkobj)
-	for i, v in pairs(trunkobj) do
-		if(itemsData[v[1]]) then
-			local x,y,z,rx,ry,rz = unpack(VehicleTrunks[getElementModel(theVehicle)][i])
-			local vx, vy, vz = getElementPosition(theVehicle)
-			local vrx, vry, vrz = getElementRotation(theVehicle)
-			if(itemsData[v[1]][2]) then
-				x,y,z,rx,ry,rz = x+itemsData[v[1]][2][2],y+itemsData[v[1]][2][3],z+itemsData[v[1]][2][4],rx+itemsData[v[1]][2][5],ry+itemsData[v[1]][2][6],rz+itemsData[v[1]][2][7]
-				VehicleTrunk[theVehicle][i] = createObject(itemsData[v[1]][1], vx+x, vy+y, vz+z, vrx+rx, vry+ry, vrz+rz)
-				setObjectScale(VehicleTrunk[theVehicle][i], itemsData[v[1]][2][1])
-				attachElements(VehicleTrunk[theVehicle][i], theVehicle, x,y,z,rx,ry,rz)
+function initTrunk(theVehicle)
+	local trunkobj = getElementData(theVehicle, "trunk")
+	if(trunkobj) then
+		if(VehicleTrunk[theVehicle]) then
+			for _, obj in pairs(VehicleTrunk[theVehicle]) do
+				destroyElement(obj)
 			end
-			
+		end
+		VehicleTrunk[theVehicle] = {}
+		trunkobj = fromJSON(trunkobj)
+		for i, v in pairs(trunkobj) do
+			if(itemsData[v[1]]) then
+				local x,y,z,rx,ry,rz = unpack(VehicleTrunks[getElementModel(theVehicle)][i])
+				local vx, vy, vz = getElementPosition(theVehicle)
+				local vrx, vry, vrz = getElementRotation(theVehicle)
+				if(itemsData[v[1]][2]) then
+					x,y,z,rx,ry,rz = x+itemsData[v[1]][2][2],y+itemsData[v[1]][2][3],z+itemsData[v[1]][2][4],rx+itemsData[v[1]][2][5],ry+itemsData[v[1]][2][6],rz+itemsData[v[1]][2][7]
+					VehicleTrunk[theVehicle][i] = createObject(itemsData[v[1]][1], vx+x, vy+y, vz+z, vrx+rx, vry+ry, vrz+rz)
+					setObjectScale(VehicleTrunk[theVehicle][i], itemsData[v[1]][2][1])
+					attachElements(VehicleTrunk[theVehicle][i], theVehicle, x,y,z,rx,ry,rz)
+				end
+				
+			end
 		end
 	end
 end
@@ -10999,9 +11010,7 @@ function StreamIn()
 				end
 			end
 		end
-		if(getElementData(source, "trunk")) then
-			initTrunk(source, getElementData(source, "trunk"))
-		end
+		initTrunk(source)
 	elseif(getElementType(source) == "object") then
 		if(getElementModel(source) == 1362) then
 			local x,y,z = getElementPosition(source)
