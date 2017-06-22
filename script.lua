@@ -192,6 +192,13 @@ local BizInfo = {
 
 
 
+function RGBToHex(red, green, blue, alpha)
+	if((red < 0 or red > 255 or green < 0 or green > 255 or blue < 0 or blue > 255) or (alpha and (alpha < 0 or alpha > 255))) then return nil end
+	if(alpha) then return string.format("#%.2X%.2X%.2X%.2X", red,green,blue,alpha)
+	else return string.format("#%.2X%.2X%.2X", red,green,blue) end
+end
+
+
 function setCameraOnPlayerJoin()
 	setElementData(source, "color", RGBToHex(math.random(0,255), math.random(0,255), math.random(0,255)))
 	for i=1,getMaxPlayers() do--Даем ID
@@ -5510,7 +5517,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -838.6, -124.9, 60.9, 0, 0 --
+		local x,y,z,i,d  = 1725.5, -1163, 22.6, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -11607,6 +11614,8 @@ function PlayerElementSync(thePlayer, obj, state)
 			SData["PlayerElementSync"][obj][getPlayerName(thePlayer)] = state
 			if state == true then
 				setElementSyncer(obj, thePlayer)
+			else
+				setElementSyncer(obj, false)
 			end
 			if(getArrSize(SData["PlayerElementSync"][obj]) == 0) then
 				SData["PlayerElementSync"][obj] = nil
@@ -15369,13 +15378,6 @@ function FishVes(ves, maxFish)
 	end
 end
 
-function RGBToHex(red, green, blue, alpha)
-	if((red < 0 or red > 255 or green < 0 or green > 255 or blue < 0 or blue > 255) or (alpha and (alpha < 0 or alpha > 255))) then return nil end
-	if(alpha) then return string.format("#%.2X%.2X%.2X%.2X", red,green,blue,alpha)
-	else return string.format("#%.2X%.2X%.2X", red,green,blue) end
-end
-
-
 function Respect(thePlayer, Group, count)
 	if(Group and count) then 
 		count = count*25 -- Множитель для ускорения...
@@ -16239,6 +16241,7 @@ function ForceRemoveFromVehicle(thePlayer, force)
 	local x2,y2,z2 = getPointInFrontOfPoint(x, y, z, rz+90, force)
 	setElementVelocity(thePlayer, x2-x, y2-y, (z2-z)+0.5)
 	setPedAnimation(thePlayer, "ped", "ev_dive", 3000,false,true,false,false)
+
 	setTimer(function(thePlayer)
 		setPedAnimationProgress(thePlayer, "ev_dive", 0.2)
 	end, 50, 1, thePlayer)

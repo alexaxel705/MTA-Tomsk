@@ -21,6 +21,10 @@ local NewsPaper = {false, false, false, false}
 local GroundMaterial = {}
 local ZonesDisplay = {}
 local ClosedZones = false
+local PedSyncObj = {}
+local ObjectInStream = {}
+local VehiclesInStream = {}
+local VehicleTrunk = {}
 local DestroyedBlip = {}
 local SkinList,SwitchButtonL,SwitchButtonR,SwitchButtonAccept,PEDChangeSkin = false
 local SkinFlag = true
@@ -4505,8 +4509,7 @@ function(dataName, oldValue)
 		end
 	elseif getElementType(source) == "vehicle" then
 		if dataName == "trunk" then
-			 triggerEvent("onClientElementStreamOut", source)
-			 triggerEvent("onClientElementStreamIn", source)
+			 triggerEvent("onClientElementStreamOut", source, true)
 		end
 	end
 end)
@@ -9752,10 +9755,6 @@ end
 addEventHandler("onClientVehicleCollision", root,
     function(HitElement,force, bodyPart, x, y, z, nx, ny, nz, hitElementForce)
          if(source == getPedOccupiedVehicle(localPlayer)) then
-			if(force > 500) then
-				triggerServerEvent("ForceRemoveFromVehicle", localPlayer, localPlayer, force/1000)
-			end
-			
 			if(HitElement) then
 				local fDamageMultiplier = getVehicleHandling(source).collisionDamageMultiplier
 				if(isTimer(PData["Driver"]["Collision"])) then
@@ -9770,6 +9769,10 @@ addEventHandler("onClientVehicleCollision", root,
 					triggerServerEvent("DestroyObject", localPlayer, localPlayer, PData["Driver"]["CollisionPoint"])
 					PData["Driver"]["CollisionPoint"] = nil
 				end, 200, 1)
+			end
+			
+			if(force > 500) then
+				triggerServerEvent("ForceRemoveFromVehicle", localPlayer, localPlayer, force/1000)
 			end
          end
     end
@@ -10923,10 +10926,6 @@ function DrawLocation(location)
 end
 
 
-local PedSyncObj = {}
-local ObjectInStream = {}
-local VehiclesInStream = {}
-local VehicleTrunk = {}
 
 
 
@@ -10959,7 +10958,7 @@ end
 
 
 
-function StreamIn()
+function StreamIn(restream)
 	if(CreateTextureStage) then
 		if(CreateTextureStage[2] == 3) then
 			if(PreloadTextures[CreateTextureStage[1]] == source) then
@@ -11083,7 +11082,9 @@ function StreamIn()
 			end
 		end
 	end
-	triggerServerEvent("PlayerElementSync", localPlayer, localPlayer, source, true)
+	if(not restream) then
+		triggerServerEvent("PlayerElementSync", localPlayer, localPlayer, source, true)
+	end
 end
 addEvent("onClientElementStreamIn", true)
 addEventHandler("onClientElementStreamIn", getRootElement(), StreamIn)
@@ -11208,7 +11209,7 @@ function clientPickupHit(thePlayer, matchingDimension)
 end
 addEventHandler("onClientPickupHit", getRootElement(), clientPickupHit)
 
-function StreamOut()
+function StreamOut(restream)
 	if(StreamData[source]) then 
 		for v,k in pairs(StreamData[source]["armas"]) do
 			destroyElement(StreamData[source]["armas"][v])
@@ -11221,15 +11222,15 @@ function StreamOut()
 
 	if(getElementType(source) == "object" or getElementType(source) == "pickup")then
 		if(ObjectInStream[source]) then
-			for _, object in pairs(ObjectInStream[source]) do
-				destroyElement(object)
+			for _, obj in pairs(ObjectInStream[source]) do
+				destroyElement(obj)
 			end
 		end
 	elseif(getElementType(source) == "vehicle") then
 		if(VehiclesInStream[source]) then
-			for _, object in pairs(VehiclesInStream[source]) do
-				if(isElement(object)) then
-					destroyElement(object)
+			for _, obj in pairs(VehiclesInStream[source]) do
+				if(isElement(obj)) then
+					destroyElement(obj)
 				end
 			end
 		end
@@ -11239,6 +11240,12 @@ function StreamOut()
 		end
 	end
 	
+	if(restream) then 
+		if isElementStreamedIn(source) then
+			triggerEvent("onClientElementStreamIn", source, true) 
+			return false
+		end
+	end
 	triggerServerEvent("PlayerElementSync", localPlayer, localPlayer, source, nil)
 end
 addEventHandler("onClientElementStreamOut", getRootElement(), StreamOut)
