@@ -21,7 +21,7 @@ local SourceData = {
 			["Las Venturas"] = {{598, "POLV 228"}, {523, "PBKE 228"}}, 
 		},
 		["Мирные жители"] = {
-			["Los Santos"] = {{404},{419},{439},{496},{475}, {420}, {603}, {467},{436},{585},{462},{602},{458},{526},{527},{529},{566},{540},{547},{546},{466},{491},{507},{516},{426}}, -- Phoenix эксклюзив 
+			["Los Santos"] = {{404},{419},{421},{439},{496},{475}, {420}, {603}, {467},{436},{585},{462},{602},{458},{526},{527},{529},{566},{540},{547},{546},{466},{491},{507},{516},{426}}, -- Phoenix эксклюзив 
 			["Red County"] = {{404},{419},{439},{496},{475}, {477}, {478},{489},{554},{483},{468}}, -- ZR-350 эксклюзив
 			["Whetstone"] = {{404},{419},{439},{496},{475}, {506}, {478},{483},{489},{554},{468}}, -- Super GT эксклюзив
 			["Flint County"] = {{404},{419},{439},{496},{475}, {402}, {478},{483},{489},{554},{468}}, -- Buffalo эксклюзив
@@ -5517,7 +5517,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 1725.5, -1163, 22.6, 0, 0 --
+		local x,y,z,i,d  = 8152, -9143, 6.3, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5528,6 +5528,8 @@ function tp(thePlayer, command, h)
 	end
 end
 addCommandHandler("tp", tp)
+
+
 
 
 
@@ -7128,13 +7130,12 @@ end
 
 
 
-function vp(thePlayer, command, h)
+function vp(thePlayer, model, x,y,z)
 	if(getServerPort() == 22013) then
-		local model = 439
+	outputChatBox(model)
+		if(not model) then model = 439 end
 		local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
-		if(h) then model = tonumber(h) end
-		local x,y,z = getElementPosition(thePlayer)
-		local v  = CreateVehicle(model, x,y,z+1)
+		local v = CreateVehicle(tonumber(model), x,y,z+1)
 		setElementInterior(v, i)
 		setElementDimension(v, d)
 
@@ -7143,7 +7144,8 @@ function vp(thePlayer, command, h)
 		setElementData(v, "destroy", "true", false)
 	end
 end
-addCommandHandler("vp", vp)
+addEvent("vp", true)
+addEventHandler("vp", root, vp)
 
 
 
@@ -12575,6 +12577,7 @@ addCommandHandler("seti", seti)
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 
+	--triggerClientEvent(thePlayer, "GameSky", thePlayer, "Red County", 8, false)
  --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)
 
 	--[[
@@ -12653,7 +12656,6 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 end
 addEvent("saveserver", true)
 addEventHandler("saveserver", root, saveserver)
-
 
 
 
@@ -15263,7 +15265,53 @@ local Fishes = {
 }
 
 
+--[[
+function string.explode(self, separator)
+    return loadstring("return {\""..self:gsub(separator, "\",\"").."\"}")()
+end
 
+
+function math.my(int)
+    local t = string.explode(tostring(int), "e")
+	if(t[2]) then
+		return t[1]^math.abs(t[2])
+	else
+		return int
+	end
+end
+
+function QuaternionsToAngles(x,y,z,w) 
+	x = math.my(x)
+	y = math.my(y)
+	z = math.my(z)
+	w = math.my(w)
+	
+	
+	
+	local ysqr = y*y
+	
+	local t0 = 2.0 * (w * x + y*z)
+	local t1 = 1.0 - 2.0 * (x*x + ysqr)
+	x = math.deg(math.atan2(t0, t1))
+	
+	local t2 = 2.0 * (w*y - z*x)
+	if(t2 > 1) then t2 = 1
+	elseif(t2 < -1) then t2 = -1 end
+	y = math.deg(math.asin(t2))
+	
+	local t3 = 2.0 * (w * z + x*y)
+	local t4 = 1.0 - 2.0 * (ysqr + z*z)
+	z = math.deg(math.atan2(t3, t4))
+	return x,y,z
+end
+
+
+local x,y,z,w = 0, 0, 0.7071068, 0.7071068
+
+local rx,ry,rz = QuaternionsToAngles(x,y,z,w)
+
+outputServerLog(rx.." "..ry.." "..rz)
+--]]
 
 function startfish(thePlayer, lx,ly,lz)
 	if(not isTimer(PData[thePlayer]["FishRodTimer2"])) then
@@ -16234,7 +16282,7 @@ addEventHandler("BurnChatMSG", getRootElement(), BurnChatMSG)
 
 
 function ForceRemoveFromVehicle(thePlayer, force)
-	removePedFromVehicle(thePlayer)
+	--[[removePedFromVehicle(thePlayer)
 	local x,y,z = getElementPosition(thePlayer)
 	local rz,ry,rz = getElementRotation(thePlayer)
 	setElementPosition(thePlayer, x,y,z+2)
@@ -16244,7 +16292,7 @@ function ForceRemoveFromVehicle(thePlayer, force)
 
 	setTimer(function(thePlayer)
 		setPedAnimationProgress(thePlayer, "ev_dive", 0.2)
-	end, 50, 1, thePlayer)
+	end, 50, 1, thePlayer)--]]
 end
 addEvent("ForceRemoveFromVehicle", true)
 addEventHandler("ForceRemoveFromVehicle", getRootElement(), ForceRemoveFromVehicle)

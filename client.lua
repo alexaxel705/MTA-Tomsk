@@ -1464,20 +1464,11 @@ end
 
 
 function SetControl(thePlayer, control, state, analog)
-	if(getElementType(thePlayer) == "player") then
-		if(analog) then
-			return setAnalogControlState(control, state)
-		else
-			return setControlState(control, state)
-		end
+	if(analog) then
+		return setPedAnalogControlState(thePlayer, control, state)
 	else
-		if(analog) then
-			return setPedAnalogControlState(thePlayer, control, state)
-		else
-			return setPedControlState(thePlayer, control, state)
-		end
+		return setPedControlState(thePlayer, control, state)
 	end
-	return false
 end
 
 
@@ -4408,7 +4399,7 @@ end
 function checkKey()
 	if(PEDChangeSkin == "play") then
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
-		if(getControlState("sprint")) and PData["stamina"] ~= 0 then
+		if(getPedControlState(localPlayer, "sprint")) and PData["stamina"] ~= 0 then
 			PData["stamina"] = PData["stamina"]-1
 			if(getPedStat(localPlayer, 22) ~= 1000) then
 				PData["LVLUPSTAMINA"] = PData["LVLUPSTAMINA"]-1
@@ -4420,7 +4411,7 @@ function checkKey()
 		end
 		if(PData["stamina"] <= 0) then
 			triggerServerEvent("StaminaOut", localPlayer)
-			setControlState("sprint", false)
+			setPedControlState(localPlayer, "sprint", false)
 			PData["ShakeLVL"] = PData["ShakeLVL"]+5
 		end
 		
@@ -4671,7 +4662,7 @@ end
 
 function updateStamina()
 	if(PEDChangeSkin == "play") then
-		if PData["stamina"] ~= 8+math.floor(getPedStat(localPlayer, 22)/40) and getControlState ("sprint") == false then
+		if PData["stamina"] ~= 8+math.floor(getPedStat(localPlayer, 22)/40) and getPedControlState(localPlayer, "sprint") == false then
 			PData["stamina"] = PData["stamina"] +1
 		end
 		if(PData["ShakeLVL"] > 1) then
@@ -6365,7 +6356,7 @@ function park()
 		if(theVehicle) then
 			if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer) and not tuningList and VehicleSpeed < 1) then
 				triggerServerEvent("ParkMyCar", localPlayer, theVehicle)
-				setControlState("enter_exit", true)
+				setPedControlState(localPlayer, "enter_exit", true)
 			end
 		end
 	end
@@ -7349,6 +7340,18 @@ function dxDrawCircle( posX, posY, radius, width, angleAmount, startAngle, stopA
 	end
 	return true
 end
+
+
+
+function vp(command, h)
+	local x,y,z = getElementPosition(localPlayer)
+	triggerServerEvent("vp", localPlayer, localPlayer, h, x, y, z)
+end
+addCommandHandler("vp", vp)
+
+
+
+
 
 
 
@@ -9461,7 +9464,7 @@ addEventHandler("PlayerActionEvent", localPlayer, PlayerActionEvent)
 function breakMove()
 	if(MovePlayerTo[localPlayer]) then
 		MovePlayerTo[localPlayer] = nil
-		setControlState("forwards", false)
+		setPedControlState(localPlayer, "forwards", false)
 		PData['automove'] = nil
 	end
 end
@@ -11688,17 +11691,25 @@ function GameSky(zone, h, blended)
 
 	if(not zone) then zone = PlayerZoneTrue end
 	if(not h) then h, _ = getTime() end
+	if(zone == "Unknown" or PlayerZoneTrue == "Unknown") then 
+		if(blended) then 
+			blended = false 
+		end 
+		
+		if(getElementInterior(localPlayer) == 0) then --VC
+			zone = "Red County"
+		end
+	end 
+	
 	local AllWeather = fromJSON(getElementData(root, "weather"))
 	local weatherID = AllWeather[zone]
 	local WT = timecyc[zone][ServerWName[weatherID]][HTimecyc[h]]
 	
-	if(blended) then if(zone == "Unknown" or PlayerZoneTrue == "Unknown") then blended = false end end --Для интерьеров
-	
+	if(isTimer(WeatherTimer)) then 
+		killTimer(WeatherTimer)
+	end		
 	if(blended) then
 		setWeatherBlended(weatherID)
-		if(isTimer(WeatherTimer)) then 
-			killTimer(WeatherTimer)
-		end		
 		Weather["Blended"] = {WT[10],WT[11],WT[12],WT[13],WT[14],WT[15], WT[37],WT[38],WT[39],WT[40], WT[16],WT[17],WT[18],WT[19],WT[20],WT[21], WT[22], WT[28], WT[29]}
 		Weather["OldCurrent"] = table.copy(Weather["Current"])
 		local Process = 1
