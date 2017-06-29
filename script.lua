@@ -1278,35 +1278,6 @@ local StandartClosedMap = toJSON({
 
 
 
-local WeatherArr = {
-	["Los Santos"] = {0,1,2,3,4},
-	["San Fierro"] = {5,6,7,8,9},
-	["Las Venturas"] = {10,11,12},
-	["Red County"] = {13,14,15,16},
-	["Whetstone"] = {13,14,15,16},
-	["Flint County"] = {13,14,15,16},
-	["Bone County"] = {17,18,19},
-	["Tierra Robada"] = {17,18,19},
-	["UNDERWATER"] = {20},
-	["Unknown"] = {21, 22}
-}
-
-local CurrentWeather = {
-	["Los Santos"] = nil,
-	["San Fierro"] = nil,
-	["Las Venturas"] = nil,
-	["Red County"] = nil,
-	["Whetstone"] = nil,
-	["Flint County"] = nil,
-	["Bone County"] = nil,
-	["Tierra Robada"] = nil,
-	["UNDERWATER"] = nil,
-	["Unknown"] = nil
-}
-
-
-
-
 
 
 
@@ -5517,7 +5488,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 8152, -9143, 6.3, 0 --
+		local x,y,z,i,d  = 2210.1, -1397.6, 22.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5528,7 +5499,6 @@ function tp(thePlayer, command, h)
 	end
 end
 addCommandHandler("tp", tp)
-
 
 
 
@@ -7132,7 +7102,6 @@ end
 
 function vp(thePlayer, model, x,y,z)
 	if(getServerPort() == 22013) then
-	outputChatBox(model)
 		if(not model) then model = 439 end
 		local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
 		local v = CreateVehicle(tonumber(model), x,y,z+1)
@@ -7811,22 +7780,6 @@ addEventHandler("dropinvitem", root, dropinvitem)
 
 
 
-function NewPogoda()
-	for name, k in pairs(WeatherArr) do
-		local rand = WeatherArr[name][math.random(#WeatherArr[name])]
-		CurrentWeather[name] = rand
-	end
-	
-	for _, thePlayer in ipairs(getElementsByType("player")) do 
-		triggerClientEvent(thePlayer, "GameSky", thePlayer, false, false, true)
-	end
-
-	setElementData(root, "weather", toJSON(CurrentWeather))
-end
-
-
-
-
 
 function preLoad(name)
 	setServerConfigSetting("ped_sync_interval", 50, true)
@@ -7861,7 +7814,6 @@ function preLoad(name)
 
 	setTime(ServerDate.hour, ServerDate.minute)
 	setElementData(root, "ServerTime", ServerDate.timestamp)
-	NewPogoda()
 
 	
 	if(ServerDate.year+1900 >= 1988) then
@@ -9898,50 +9850,54 @@ end
 
 
 
-function ZoneInfo(zone)
-	local r,g,b = getTeamColor(getPlayerTeam(source))
-
-	local PlayerTeam = getTeamName(getPlayerTeam(source))
-	if(CapZone[zone]) then
-		setBlipColor(PData[source]['radar'], r,g,b, 255)
-	else
-		setBlipColor(PData[source]['radar'], r,g,b, 0)
-	end 
-
-	if(PlayerTeam == "Военные") then
-		if(getElementModel(source) == 312) then
-			if(zone ~= "Restricted Area") then
-				MissionCompleted(source, "ДЕЗЕРТИР", "СБЕЖАЛ")
-				SetTeam(source, "Мирные жители")
-				WantedLevel(source, 6)
-			end
-		end
-	elseif(PlayerTeam == "Уголовники") then
-		if(GetDatabaseAccount(source, "Prison") == "AREA51") then
-			if(zone ~= "Restricted Area") then
-				local ptime = GetDatabaseAccount(source, "PrisonTime")
-				SetDatabaseAccount(source, "PrisonTime", nil)
-				SetDatabaseAccount(source, "Prison", nil)
-				MissionCompleted(source, "", "СБЕЖАЛ")
-				SetTeam(source, "Мирные жители")
-				WantedLevel(source, 6)
-				SetDatabaseAccount(source, "inv", GetDatabaseAccount(source, "prisoninv"))
-				setElementData(source, "inv", GetDatabaseAccount(source, "prisoninv"))
-				SetDatabaseAccount(source, "prisoninv", nil)
-				triggerClientEvent(source, "PlayerSpawn", source)
-			end
-		else
-			if(getElementDimension(source) ~= 1) then
-				local ptime = GetDatabaseAccount(source, "PrisonTime")
-				SetDatabaseAccount(source, "PrisonTime", nil)
-				SetDatabaseAccount(source, "Prison", nil)
-				MissionCompleted(source, "", "СБЕЖАЛ")
-				SetTeam(source, "Мирные жители")
-				WantedLevel(source, 6)
-				SetDatabaseAccount(source, "inv", GetDatabaseAccount(source, "prisoninv"))
-				setElementData(source, "inv", GetDatabaseAccount(source, "prisoninv"))
-				SetDatabaseAccount(source, "prisoninv", nil)
-				triggerClientEvent(source, "PlayerSpawn", source)
+function ZoneInfo(thePlayer, zone)
+	if(thePlayer) then
+		if(getPlayerTeam(thePlayer)) then
+			local r,g,b = getTeamColor(getPlayerTeam(thePlayer))
+		
+			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+			if(CapZone[zone]) then
+				setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
+			else
+				setBlipColor(PData[thePlayer]['radar'], r,g,b, 0)
+			end 
+		
+			if(PlayerTeam == "Военные") then
+				if(getElementModel(thePlayer) == 312) then
+					if(zone ~= "Restricted Area") then
+						MissionCompleted(thePlayer, "ДЕЗЕРТИР", "СБЕЖАЛ")
+						SetTeam(thePlayer, "Мирные жители")
+						WantedLevel(thePlayer, 6)
+					end
+				end
+			elseif(PlayerTeam == "Уголовники") then
+				if(GetDatabaseAccount(thePlayer, "Prison") == "AREA51") then
+					if(zone ~= "Restricted Area") then
+						local ptime = GetDatabaseAccount(thePlayer, "PrisonTime")
+						SetDatabaseAccount(thePlayer, "PrisonTime", nil)
+						SetDatabaseAccount(thePlayer, "Prison", nil)
+						MissionCompleted(thePlayer, "", "СБЕЖАЛ")
+						SetTeam(thePlayer, "Мирные жители")
+						WantedLevel(thePlayer, 6)
+						SetDatabaseAccount(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
+						setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
+						SetDatabaseAccount(thePlayer, "prisoninv", nil)
+						triggerClientEvent(thePlayer, "PlayerSpawn", thePlayer)
+					end
+				else
+					if(getElementDimension(thePlayer) ~= 1) then
+						local ptime = GetDatabaseAccount(thePlayer, "PrisonTime")
+						SetDatabaseAccount(thePlayer, "PrisonTime", nil)
+						SetDatabaseAccount(thePlayer, "Prison", nil)
+						MissionCompleted(thePlayer, "", "СБЕЖАЛ")
+						SetTeam(thePlayer, "Мирные жители")
+						WantedLevel(thePlayer, 6)
+						SetDatabaseAccount(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
+						setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
+						SetDatabaseAccount(thePlayer, "prisoninv", nil)
+						triggerClientEvent(thePlayer, "PlayerSpawn", thePlayer)
+					end
+				end
 			end
 		end
 	end
@@ -10118,7 +10074,7 @@ function okCap(zone,r,g,b, PlayerTeam)
 			triggerClientEvent(thePlayer, "ChangeInfoAdv", thePlayer)
 			MissionCompleted(thePlayer, "УВАЖЕНИЕ +", "ТЕРРИТОРИЯ ЗАХВАЧЕНА!")
 			Respect(thePlayer, getTeamVariable(PlayerTeam), 1)
-			triggerEvent("ZoneInfo", thePlayer, zone)
+			triggerEvent("ZoneInfo", thePlayer, thePlayer, zone)
 		end
 		ToolTip(thePlayer, "Зарплата "..RGBToHex(r,g,b)..PlayerTeam.."#FFFFFF\nвыросла на "..COLOR["DOLLAR"]["HEX"].."$"..GetZoneSize(zone))
 	end
@@ -11081,7 +11037,7 @@ function worldtime()
 		
 	
 		if(hour == 3 or hour == 9 or hour == 15 or hour == 21) then	
-			NewPogoda()
+			triggerEvent("NewWeather", root)
 		end
 		
 		if(hour == 0) then
@@ -11245,7 +11201,7 @@ function worldtime()
 				end
 				for playerKey, playerValue in ipairs (PlayerInZone) do
 					triggerClientEvent(playerValue, "ChangeInfoAdv", playerValue, advinfo, 2000)
-					triggerEvent("ZoneInfo", playerValue, zone)
+					triggerEvent("ZoneInfo", playerValue, playerValue, zone)
 				end
 			end
 		end
@@ -12576,7 +12532,6 @@ addCommandHandler("seti", seti)
 
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
-
 	--triggerClientEvent(thePlayer, "GameSky", thePlayer, "Red County", 8, false)
  --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)
 
@@ -15263,55 +15218,6 @@ local Fishes = {
 	{"Акула", 5600, 136000},
 	{"Дельфин", 3200, 89000}
 }
-
-
---[[
-function string.explode(self, separator)
-    return loadstring("return {\""..self:gsub(separator, "\",\"").."\"}")()
-end
-
-
-function math.my(int)
-    local t = string.explode(tostring(int), "e")
-	if(t[2]) then
-		return t[1]^math.abs(t[2])
-	else
-		return int
-	end
-end
-
-function QuaternionsToAngles(x,y,z,w) 
-	x = math.my(x)
-	y = math.my(y)
-	z = math.my(z)
-	w = math.my(w)
-	
-	
-	
-	local ysqr = y*y
-	
-	local t0 = 2.0 * (w * x + y*z)
-	local t1 = 1.0 - 2.0 * (x*x + ysqr)
-	x = math.deg(math.atan2(t0, t1))
-	
-	local t2 = 2.0 * (w*y - z*x)
-	if(t2 > 1) then t2 = 1
-	elseif(t2 < -1) then t2 = -1 end
-	y = math.deg(math.asin(t2))
-	
-	local t3 = 2.0 * (w * z + x*y)
-	local t4 = 1.0 - 2.0 * (ysqr + z*z)
-	z = math.deg(math.atan2(t3, t4))
-	return x,y,z
-end
-
-
-local x,y,z,w = 0, 0, 0.7071068, 0.7071068
-
-local rx,ry,rz = QuaternionsToAngles(x,y,z,w)
-
-outputServerLog(rx.." "..ry.." "..rz)
---]]
 
 function startfish(thePlayer, lx,ly,lz)
 	if(not isTimer(PData[thePlayer]["FishRodTimer2"])) then
