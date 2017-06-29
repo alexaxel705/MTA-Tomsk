@@ -1400,26 +1400,24 @@ local ColorArray = {"000000","F5F5F5",
 
 local SpawnAction = {}
 function PlayerSpawn()
-	if(source == localPlayer) then
-		triggerEvent("onClientElementStreamIn", localPlayer)
-		local x,y,z = getElementPosition(localPlayer)
-		local zone = getZoneName(x,y,z)
-		PData["stamina"] = 5+math.floor(getPedStat(localPlayer, 22)/40)
-		for v,k in pairs(GPSObject) do
-			destroyElement(GPSObject[v])
-			GPSObject[v] = nil
-			destroyElement(v)
-		end
-		PInv["player"] = fromJSON(getElementData(localPlayer, "inv"))
-		SetupInventory() 
-		PData["wasted"] = nil
-		SetPlayerHudComponentVisible("all", true)
-		
-		for i = 1, #SpawnAction do
-			triggerEvent(unpack(SpawnAction[i]))
-		end
-		SpawnAction = {}
+	triggerEvent("onClientElementStreamIn", localPlayer)
+	local x,y,z = getElementPosition(localPlayer)
+	local zone = getZoneName(x,y,z)
+	PData["stamina"] = 5+math.floor(getPedStat(localPlayer, 22)/40)
+	for v,k in pairs(GPSObject) do
+		destroyElement(GPSObject[v])
+		GPSObject[v] = nil
+		destroyElement(v)
 	end
+	PInv["player"] = fromJSON(getElementData(localPlayer, "inv"))
+	SetupInventory() 
+	PData["wasted"] = nil
+	SetPlayerHudComponentVisible("all", true)
+	
+	for i = 1, #SpawnAction do
+		triggerEvent(unpack(SpawnAction[i]))
+	end
+	SpawnAction = {}
 end
 addEventHandler("onClientPlayerSpawn", getLocalPlayer(), PlayerSpawn)
 addEvent("PlayerSpawn", true)
@@ -2524,6 +2522,7 @@ function GPSFoundShop(bytype, varname, varval, name) --Тип, имя даты, 
 end
 addEvent("GPSFoundShop", true)
 addEventHandler("GPSFoundShop", localPlayer, GPSFoundShop)
+
 
 
 
@@ -5440,7 +5439,9 @@ function ToolTip(message)
 	end
 end
 addEvent("ToolTip", true)
-addEventHandler("ToolTip", localPlayer, ToolTip)
+addEventHandler("ToolTip", root, ToolTip)
+
+
 
 
 

@@ -5488,7 +5488,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2210.1, -1397.6, 22.8, 0, 0 --
+		local x,y,z,i,d  = 2021.8, 1006.1, 10.8, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5598,239 +5598,6 @@ CreateEnter(931, 2129.6, 10.8, 90, 0, 0, false, 964.9, 2160.1, 1011, 90, 1, 0, "
 
 
 
-
-
-local o = CreatePickup(1965.9, 998.2, 992.5, 3, 1239, 0, 0, 10)
-setElementData(o, "type", "function")
-setElementData(o, "funcname", "PlayCasino")
-setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT1"}))
-setElementData(o, "funcinfo", "Сыграть $100")
-
-o = CreatePickup(1963.1, 991.5, 992.5, 3, 1239, 0, 0, 10)
-setElementData(o, "type", "function")
-setElementData(o, "funcname", "PlayCasino")
-setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT2"}))
-setElementData(o, "funcinfo", "Сыграть $100")
-
-
-
-o = CreatePickup(1958.2, 986.6, 992.5, 3, 1239, 0, 0, 10)
-setElementData(o, "type", "function")
-setElementData(o, "funcname", "PlayCasino")
-setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT3"}))
-setElementData(o, "funcinfo", "Сыграть $100")
-
-
-o = CreatePickup(1963.8, 998.6, 992.5, 3, 1239, 0, 0, 10)
-setElementData(o, "type", "function")
-setElementData(o, "funcname", "PlayCasino")
-setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT4"}))
-setElementData(o, "funcinfo", "Сыграть $100")
-
-
-o = CreatePickup(1961.3, 992.6, 992.5, 3, 1239, 0, 0, 10)
-setElementData(o, "type", "function")
-setElementData(o, "funcname", "PlayCasino")
-setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT5"}))
-setElementData(o, "funcinfo", "Сыграть $100")
-
-
-o = CreatePickup(1957, 988.3, 992.5, 3, 1239, 0, 0, 10)
-setElementData(o, "type", "function")
-setElementData(o, "funcname", "PlayCasino")
-setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT6"}))
-setElementData(o, "funcinfo", "Сыграть $100")
-
-
-o = CreatePickup(1965.8, 1037.5, 992.5, 3, 1239, 0, 0, 10)
-setElementData(o, "type", "function")
-setElementData(o, "funcname", "PlayCasino")
-setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT7"}))
-setElementData(o, "funcinfo", "Сыграть $100")
-
-
-o = CreatePickup(1963, 1044.1, 992.5, 3, 1239, 0, 0, 10)
-setElementData(o, "type", "function")
-setElementData(o, "funcname", "PlayCasino")
-setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT8"}))
-setElementData(o, "funcinfo", "Сыграть $100")
-
-
-o = CreatePickup(1958.1, 1049, 992.5, 3, 1239, 0, 0, 10)
-setElementData(o, "type", "function")
-setElementData(o, "funcname", "PlayCasino")
-setElementData(o, "funcdata", toJSON({"The Four Dragons", "SLOT9"}))
-setElementData(o, "funcinfo", "Сыграть $100")
-
-
-
-
-
-local CasinoGame = {
-	["The Four Dragons"] = {
-		["SLOT1"] = {
-			[1] = CreateObject(2327, 1965.09, 998.20, 992.99, 0,0,80, nil, 10),
-			[2] = CreateObject(2327, 1965.11, 998.32, 992.99, 0,0,80, nil, 10),
-			[3] = CreateObject(2327, 1965.13, 998.44, 992.99, 0,0,80, nil, 10),
-			["timer"] = false
-		},
-		["SLOT2"] = {
-			[1] = CreateObject(2347, 1962.35, 991.81, 992.99, 0,0,54, nil, 10),
-			[2] = CreateObject(2347, 1962.42, 991.89, 992.99, 0,0,54, nil, 10),
-			[3] = CreateObject(2347, 1962.48, 991.97, 992.99, 0,0,54, nil, 10),
-			["timer"] = false
-		},
-		["SLOT3"] = {
-			[1] = CreateObject(2347, 1957.64, 987.13, 992.99, 0,0,32, nil, 10),
-			[2] = CreateObject(2347, 1957.75, 987.20, 992.99, 0,0,32, nil, 10),
-			[3] = CreateObject(2347, 1957.85, 987.28, 992.99, 0,0,32, nil, 10),
-			["timer"] = false
-		},
-		["SLOT4"] = {
-			[1] = CreateObject(2347, 1964.54, 998.30, 992.98, 0, 0, 259, nil, 10),
-			[2] = CreateObject(2347, 1964.55, 998.41, 992.98, 0, 0, 259, nil, 10),
-			[3] = CreateObject(2347, 1964.56, 998.54, 992.98, 0, 0, 259, nil, 10), 
-			["timer"] = false
-		},
-		["SLOT5"] = {
-			[1] = CreateObject(2347, 1961.89, 992.08, 992.98, 0, 0, 235, nil, 10),
-			[2] = CreateObject(2347, 1961.95, 992.18, 992.98, 0, 0, 235, nil, 10),
-			[3] = CreateObject(2347, 1962.02, 992.28, 992.98, 0, 0, 235, nil, 10),
-			["timer"] = false
-		},
-		["SLOT6"] = {
-			[1] = CreateObject(2347, 1957.33, 987.58, 992.98, 0, 0, 213, nil, 10),
-			[2] = CreateObject(2347, 1957.43, 987.65, 992.98, 0, 0, 213, nil, 10),
-			[3] = CreateObject(2347, 1957.53, 987.72, 992.98, 0, 0, 213, nil, 10),
-			["timer"] = false
-		}, 
-		["SLOT7"] = {
-			[1] = CreateObject(2347, 1965.12, 1037.24, 992.98, 0, 0, 101, nil, 10),
-			[2] = CreateObject(2347, 1965.01, 1037.36, 992.98, 0, 0, 101, nil, 10),
-			[3] = CreateObject(2347, 1965.07, 1037.47, 992.98, 0, 0, 101, nil, 10),
-			["timer"] = false
-		},
-		["SLOT8"] = {
-			[1] = CreateObject(2347, 1962.46, 1043.56, 992.98, 0, 0, 123, nil, 10),
-			[2] = CreateObject(2347, 1962.40, 1043.66, 992.98, 0, 0, 123, nil, 10),
-			[3] = CreateObject(2347, 1962.33, 1043.75, 992.98, 0, 0, 123, nil, 10),
-			["timer"] = false
-		},
-		["SLOT9"] = {
-			[1] = CreateObject(2347, 1957.54, 1048.50, 992.98, 0, 0, 145, nil, 10),
-			[2] = CreateObject(2347, 1957.64, 1048.44, 992.98, 0, 0, 145, nil, 10),
-			[3] = CreateObject(2347, 1957.74, 1048.37, 992.98, 0, 0, 145, nil, 10),
-			["timer"] = false
-		},
-	}
-}
-
-
-
-
-local CasinoObjectInfo = {
-	[2327] = {
-		[0] = "Cherry",
-		[18] = "Bar",
-		[36] = "Cherry",
-		[54] = "Blueberry",
-		[72] = "Seven",
-		[90] = "Melon",
-		[108] = "Seven",
-		[126] = "Blueberry",
-		[144] = "Bell",
-		[162] = "Melon",
-		[180] = "Cherry",
-		[198] = "Double Bar",
-		[216] = "Cherry",
-		[234] = "Tripple Bar",
-		[252] = "Seven",
-		[270] = "Blueberry",
-		[288] = "Bar",
-		[306] = "Seven",
-		[324] = "Melon",
-		[342] = "Bell"
-	},
-	[2347] = {
-		[0] = "Double Gold",
-		[20] = "69",
-		[40] = "Gold",
-		[60] = "Bell",
-		[80] = "Cherry",
-		[100] = "Blueberry",
-		[120] = "Cherry",
-		[140] = "Blueberry",
-		[160] = "Bell",
-		[180] = "69",
-		[200] = "Bell",
-		[220] = "Gold",
-		[240] = "Cherry",
-		[260] = "Blueberry",
-		[280] = "69",
-		[300] = "Blueberry",
-		[320] = "Bell",
-		[340] = "Cherry",
-	}
-}
-
-local CasinoPrice = {
-	["Blueberry"] = 2,
-	["Cherry"] = 4,
-	["Bar"] = 7,
-	["Gold"] = 7,
-	["Bell"] = 10,
-	["Double Bar"] = 15,
-	["Double Gold"] = 15,
-	["69"] = 20,
-	["Tripple Bar"] = 25,
-	["Melon"] = 30,
-	["Seven"] = 30
-
-}
-
--- Возвращает значение
-function RotateBandits(obj, times)
-	local MaxCombo = 360/getArrSize(CasinoObjectInfo[getElementModel(obj)])
-	local rx,ry,rz = getElementRotation(obj)
-	rx = math.round(rx)
-	local out = rx+(times*MaxCombo)
-	if(out >= 360) then
-		out = out-(360*math.floor(out/360))
-	end
-
-	setTimer(function(obj)
-		local x,y,z = getElementPosition(obj)
-		local rx,ry,rz = getElementRotation(obj)
-		rx = math.round(rx)
-		setElementRotation(obj,rx+MaxCombo,ry,rz, "default")
-	end, 50, times, obj)
-	return CasinoObjectInfo[getElementModel(obj)][out]
-end
-
-
-function PlayCasino(casino, game)
-	if(not isTimer(CasinoGame[casino][game]["timer"])) then
-		if(AddPlayerMoney(source, -100)) then
-			local MaxCombo = 360/getArrSize(CasinoObjectInfo[getElementModel(CasinoGame[casino][game][1])])
-			local r1,r2,r3 = math.random(1,MaxCombo), math.random(MaxCombo,MaxCombo*2), math.random(MaxCombo*2,MaxCombo*3)
-			victory = false
-			local ro1, ro2, ro3 = RotateBandits(CasinoGame[casino][game][1], r1), RotateBandits(CasinoGame[casino][game][2], r2), RotateBandits(CasinoGame[casino][game][3], r3)
-			if(ro1 == ro2) then
-				victory = CasinoPrice[ro1]*CasinoPrice[ro2]
-				if(ro2 == ro3) then
-					victory = CasinoPrice[ro1]*CasinoPrice[ro2]*CasinoPrice[ro3]
-				end
-			end
-			CasinoGame[casino][game]["timer"] = setTimer(function(thePlayer, victory)
-				if(victory) then
-					AddPlayerMoney(thePlayer, victory, "ВЫИГРЫШ")
-				end
-			end, 1000+(50*r3), 1, source, victory)
-		end
-	end
-end
-addEvent("PlayCasino", true)
-addEventHandler("PlayCasino", root, PlayCasino)
 
 
 
@@ -15418,6 +15185,7 @@ function AddPlayerMoney(thePlayer, count, mission)
 		if(GetPlayerMoney(thePlayer)+count < 0) then
 			local c = count+GetPlayerMoney(thePlayer)
 			ToolTip(thePlayer, "Необходимо еще "..COLOR["DOLLAR"]["HEX"].."$"..c-c-c)
+			cancelEvent()
 			return false
 		end
 	end
@@ -15430,6 +15198,10 @@ function AddPlayerMoney(thePlayer, count, mission)
 	end
 	return true
 end
+addEvent("AddPlayerMoney", true)
+addEventHandler("AddPlayerMoney", getRootElement(), AddPlayerMoney)
+
+
 
 
 
