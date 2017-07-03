@@ -5488,7 +5488,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2021.8, 1006.1, 10.8, 0, 0 --
+		local x,y,z,i,d  = 1658.5, 2250, 11.1, 0, 0 --
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5500,7 +5500,16 @@ function tp(thePlayer, command, h)
 end
 addCommandHandler("tp", tp)
 
+local dat = {
+	[1] = true, 
+}	
 
+local h = 23
+for slot = -h, 0 do
+	if(dat[-slot]) then
+		outputServerLog(-slot)
+	end
+end
 
 
 function StopAnimation(thePlayer, key)
@@ -5591,6 +5600,7 @@ CreateEnter(-2026.7, -102.1, 35.2, 270, 0, 0, false, -2026.9, -103.6, 1035.2, 18
 CreateEnter(-2029.7, -120.5, 35.2, 270, 0, 0, false, -2029.7, -119.4, 1035.2, 0, 3, 0) -- Автошкола SF 2
 CreateEnter(2019.4, 1007.8, 10.8, 270, 0, 0, false, 2018.9, 1017.8, 996.9, 90, 10, 0, "Казино «The Four Dragons»")
 CreateEnter(2197, 1677.1, 12.4, 90, 0, 0, false, 2233.9, 1714.7, 1012.4, 180, 1, 0, "Казино «Caligulas»")
+CreateEnter(1658.5, 2250, 11.1, 0, 0, 0, false, 1133.1, -15.8, 1000.7, 0, 12, 0, "Казино")
 
 CreateEnter(1689.6, -1518.4, 13.5, 270, 0, 0, false, -787.6, 445.4, 1362.4, 90, 1, 0, "Liberty City")
 CreateEnter(966.2, 2160.7, 10.8, 270, 0, 0, false, 965.4, 2107.8, 1011, 90, 1, 0, "Sindacco Abattoir")
@@ -12299,6 +12309,8 @@ addCommandHandler("seti", seti)
 
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
+	local res = getResourceFromName("original_casino")
+	 restartResource(res)
 	--triggerClientEvent(thePlayer, "GameSky", thePlayer, "Red County", 8, false)
  --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)
 
