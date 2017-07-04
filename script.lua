@@ -5488,7 +5488,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 1658.5, 2250, 11.1, 0, 0 --
+		local x,y,z,i,d  =  8152, -9143, 6.3, 0, 0 -- 8152, -9143, 6.3
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5499,17 +5499,6 @@ function tp(thePlayer, command, h)
 	end
 end
 addCommandHandler("tp", tp)
-
-local dat = {
-	[1] = true, 
-}	
-
-local h = 23
-for slot = -h, 0 do
-	if(dat[-slot]) then
-		outputServerLog(-slot)
-	end
-end
 
 
 function StopAnimation(thePlayer, key)
@@ -5599,7 +5588,24 @@ CreateEnter(193.4, 1931.4, 17.6, 270, 0, 0, false, 264.3, 1857.9, 8.86, 0, 0, 0)
 CreateEnter(-2026.7, -102.1, 35.2, 270, 0, 0, false, -2026.9, -103.6, 1035.2, 180, 3, 0) -- Автошкола SF
 CreateEnter(-2029.7, -120.5, 35.2, 270, 0, 0, false, -2029.7, -119.4, 1035.2, 0, 3, 0) -- Автошкола SF 2
 CreateEnter(2019.4, 1007.8, 10.8, 270, 0, 0, false, 2018.9, 1017.8, 996.9, 90, 10, 0, "Казино «The Four Dragons»")
+CreateDialogBot(194, 1964.8, 1010.5, 992.5, 90, 10, 0, "", "Крупье")
+CreateDialogBot(194, 1960.5, 1010.5, 992.5, 90, 10, 0, "", "Крупье")
+CreateDialogBot(194, 1964.8, 1026, 992.5, 90, 10, 0, "", "Крупье")
+CreateDialogBot(194, 1960.5, 1026.1, 992.5, 90, 10, 0, "", "Крупье")
+
 CreateEnter(2197, 1677.1, 12.4, 90, 0, 0, false, 2233.9, 1714.7, 1012.4, 180, 1, 0, "Казино «Caligulas»")
+CreateDialogBot(194, 2230.2, 1620.7, 1006.2, 180, 1, 0, "", "Крупье")
+CreateDialogBot(194, 2231, 1613.5, 1006.2, 0, 1, 0, "", "Крупье")
+CreateDialogBot(194, 2241, 1620.7, 1006.2, 180, 1, 0, "", "Крупье")
+CreateDialogBot(194, 2241.9, 1613.5, 1006.2, 0, 1, 0, "", "Крупье")
+CreateDialogBot(194, 2231, 1593.7, 1006.2, 0, 1, 0, "", "Крупье")
+CreateDialogBot(194, 2231, 1588.1, 1006.2, 0, 1, 0, "", "Крупье")
+CreateDialogBot(194, 2242.8, 1588.1, 1006.2, 0, 1, 0, "", "Крупье")
+CreateDialogBot(194, 2242.8, 1593.7, 1006.2, 0, 1, 0, "", "Крупье")
+
+
+
+
 CreateEnter(1658.5, 2250, 11.1, 0, 0, 0, false, 1133.1, -15.8, 1000.7, 0, 12, 0, "Казино")
 
 CreateEnter(1689.6, -1518.4, 13.5, 270, 0, 0, false, -787.6, 445.4, 1362.4, 90, 1, 0, "Liberty City")
@@ -12310,7 +12316,7 @@ addCommandHandler("seti", seti)
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	local res = getResourceFromName("original_casino")
-	 restartResource(res)
+	restartResource(res)
 	--triggerClientEvent(thePlayer, "GameSky", thePlayer, "Red County", 8, false)
  --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)
 

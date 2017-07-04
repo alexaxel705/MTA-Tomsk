@@ -17,6 +17,10 @@ local COLOR = {
 	}
 }
 
+
+
+
+
 local NewsPaper = {false, false, false, false}
 local GroundMaterial = {}
 local ZonesDisplay = {}
@@ -1076,6 +1080,12 @@ local Collections = {
 
 
 function save()
+	--txd = engineLoadTXD("1.txd")
+	--engineImportTXD(txd, 439)
+	--dff = engineLoadDFF("1.dff")
+	--engineReplaceModel(dff, 439)
+
+
 	local x,y,z = getElementPosition(localPlayer)
 	local rx,ry,rz = getElementRotation(localPlayer)
 	if(getPedOccupiedVehicle(localPlayer)) then
@@ -5295,7 +5305,7 @@ function intro()
 	local i = 1
 	setTimer(function()
 		local text = string.sub(prints, 0, i*2)
-		if math.fmod(i,2) ~=0 then
+		if math.fmod(i,2) ~= 0 then
 			text=text.."■"
 		end
 		PText["HUD"][1] = {text, 320*scalex, 160*scaley, 0, 0, tocolor(255,140,0, 255), scale*5, "default-bold", "left", "top", false, false, false, true, true, 0, 0, 0, {}}
@@ -6885,7 +6895,6 @@ function ShakeLevel(level)
 end
 addEvent("ShakeLevel", true)
 addEventHandler("ShakeLevel", localPlayer, ShakeLevel)
-
 
 
 
