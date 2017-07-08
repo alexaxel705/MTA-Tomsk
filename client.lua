@@ -1080,12 +1080,6 @@ local Collections = {
 
 
 function save()
-	--txd = engineLoadTXD("1.txd")
-	--engineImportTXD(txd, 439)
-	--dff = engineLoadDFF("1.dff")
-	--engineReplaceModel(dff, 439)
-
-
 	local x,y,z = getElementPosition(localPlayer)
 	local rx,ry,rz = getElementRotation(localPlayer)
 	if(getPedOccupiedVehicle(localPlayer)) then
@@ -1180,7 +1174,6 @@ local items = {
 	["Подкова"] = {false, "Старая подкова, антиквариат", 1, false, 350, 5000, false, false, false},
 	["Ракушка"] = {false, "Просто ракушка", 1, false, 10, 50, false, false, false},
 	["Телефон"] = {false, "Телефон", 1, "usecellphone", 350, 1500, false, false, false},
-	["47 Хромосома"] = {"invobject/chroma.png", "47 Хромосома игрока", 1, false, 100, 5000, false, false, false},
 	["Рюкзак"] = {false, "Обычный рюкзак", 1, "SetupBackpack", 2500, 5000, false, true, false},
 	["Чемодан"] = {false, "Обычный чемодан", 1, "SetupBackpack", 1000, 1000, false, true, false},
 	["Пакет"] = {false, "Обычный пакет", 1, "SetupBackpack", 10, 1, false, true, false},
@@ -1888,6 +1881,13 @@ local Upgrading = {
 			{"Slamin ver.5", 1193, 10000}
 		}
 	},
+	--[[[23] = {
+		["text"] = "Цвет",
+		["data"] = {
+			{"Цвет 1", "color1", 100},
+			{"Цвет 2", "color2", 100},
+		}
+	}, --]]
 }
 
 
@@ -2308,7 +2308,7 @@ addEventHandler("BuyUpgrade", getRootElement(), BuyUpgrade)
 
 function UpgradePreload(razdel, name, upgr, cost) 
 	helpmessage("")
-	local theVehicle=getPedOccupiedVehicle(localPlayer)
+	local theVehicle = getPedOccupiedVehicle(localPlayer)
 
 
 	if(tonumber(upgr)) then
@@ -5290,55 +5290,6 @@ CreateBlip(2441, -1376, 0, 49, 0, 0, 0, 0, 0, 0, 300, "Attica Bar")
 CreateBlip(2460, -1344, 0, 49, 0, 0, 0, 0, 0, 0, 300, "Attica Bar")
 CreateBlip(2361, -1332, 0, 49, 0, 0, 0, 0, 0, 0, 300, "Attica Bar")
 CreateBlip(2441, 2065, 0, 49, 0, 0, 0, 0, 0, 0, 300, "The Craw Bar")
-
-
-
-
-function intro()
-	stopSound(GTASound)
-	PEDChangeSkin = "nowTime"
-	showChat(false)
-	showCursor(false)
-	
-	setTimer(function() MyVoice("gg", md5("наше время")) end, 1000, 1)
-	local prints = Text("наше время")
-	local i = 1
-	setTimer(function()
-		local text = string.sub(prints, 0, i*2)
-		if math.fmod(i,2) ~= 0 then
-			text=text.."■"
-		end
-		PText["HUD"][1] = {text, 320*scalex, 160*scaley, 0, 0, tocolor(255,140,0, 255), scale*5, "default-bold", "left", "top", false, false, false, true, true, 0, 0, 0, {}}
-	
-		i=i+1
-		if(i == 16) then
-			setTimer(function() MyVoice("gg", md5("наши дни")) end, 1000, 1)
-			
-			prints = Text("наши дни")
-			i=1
-			setTimer(function()
-				local text = string.sub(prints, 0, i*2)
-				if math.fmod(i,2) ~=0 then
-					text=text.."■"
-				end
-				if(i == 17) then
-					PText["HUD"][1] = nil
-					playSFX("script", 20, 2, false)
-					showChat(true)
-					PEDChangeSkin="play"
-					triggerServerEvent("SpawnedAfterChangeEvent", localPlayer, localPlayer, "street", "Zone 51 Prison")
-				else
-					PText["HUD"][1] = {text, 640*scalex, 880*scaley, 0, 0, tocolor(255,140,0, 255), scale*5, "default-bold", "left", "top", false, false, false, true, true, 0, 0, 0, {}}
-				end
-				i=i+1
-			end, 170, 17, source)
-		end
-	end, 170, 15, source)
-end
-addEvent("intro", true)
-addEventHandler("intro", localPlayer, intro)
-
-
 
 
 

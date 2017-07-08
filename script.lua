@@ -2874,6 +2874,23 @@ local VComp = {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 -- Высота от земли, Двигатель, турбо, трансмиссия, подвеска, тормоза, резина, бензобак, год выпуска, прекращение выпуска (CYear - наши дни), завод (Export - Неизвестные)
 local NowTime = getRealTime()
@@ -5488,7 +5505,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  =  8152, -9143, 6.3, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 2522.0080566406,-1272.9241943359,35.668983459473, 0, 0 -- 8152, -9143, 6.3
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6572,6 +6589,7 @@ CreateBarber(824, -1588.3, 13.5, 3) -- LS
 CreateBarber(672.1, -496.9, 16.3, 12) -- LS
 CreateBarber(2080.3, 2122.9, 10.8, 12) -- LV
 CreateBarber(-1449.8, 2591.9, 55.8, 12) -- LV
+
 
 
 
@@ -9809,7 +9827,7 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 					local rot = rand[4]
 					local randrot = math.random(1,2)
 					if(randrot == 1) then rot = rot+180 end
-					CreateRandomBot(rand[1], rand[2], rand[3]+1,rot,nil,nil,zone, slot)
+					CreateRandomBot(rand[1], rand[2], rand[3]+1.1,rot,nil,nil,zone, slot)
 					table.remove(availzones, randnum)
 				end
 			end
@@ -11722,7 +11740,7 @@ CreateBar(2441.4, -1376, 24,270, "Attica Bar")
 CreateBar(2460.7, -1344, 24,90, "Attica Bar")
 CreateBar(2361.4, -1332.5, 24,270, "Attica Bar")
 CreateBar(2441.2, 2065.5, 10.8,180, "The Craw Bar")
-
+CreateBar(-2242.1, -88.2, 35.3,180, "Misty's")
 
 
 
@@ -12562,8 +12580,6 @@ function wipe()
 	end
 end
 
-
-
 function GetDatabaseAccount(thePlayer, str)
 	local node = xmlFindChild(PlayerNode, "P"..md5(getPlayerName(thePlayer)), 0)
 	if(node) then
@@ -12608,18 +12624,14 @@ function AddDatabaseAccount(thePlayer, password)
 	xmlNodeSetAttribute(NewNode, "inv", StandartInventory)
 	setElementData(thePlayer, "inv", StandartInventory)
 	xmlNodeSetAttribute(NewNode, "Collections", Collections)
-	xmlNodeSetAttribute(NewNode, "prisoninv", StandartInventory)
-	xmlNodeSetAttribute(NewNode, "PrisonTime", 500)
-	xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
 	xmlNodeSetAttribute(NewNode, "password", md5(password))
 	xmlNodeSetAttribute(NewNode, "skill", toJSON({[24] = 569}))
 	xmlNodeSetAttribute(NewNode, "zone", StandartClosedMap)
 	xmlNodeSetAttribute(NewNode, "wardrobe", toJSON({[252] = 999, [145] = 999}))
-	xmlNodeSetAttribute(NewNode, "bolezni", toJSON({["CHROMA"] = 1}))
-	xmlNodeSetAttribute(NewNode, "skin", 213)
+	xmlNodeSetAttribute(NewNode, "bolezni", toJSON({}))
+	xmlNodeSetAttribute(NewNode, "skin", 14)
 	xmlNodeSetAttribute(NewNode, "about", toJSON({["Birthday"] = ServerDate.timestamp}))
-	
-	xmlNodeSetAttribute(NewNode, "team", "Уголовники")
+	xmlNodeSetAttribute(NewNode, "team", "Мирные жители")
 end
 
 
@@ -12664,7 +12676,8 @@ function loginPlayer(thePlayer, password)
 		PData[thePlayer]["auth"] = true
 		AddDatabaseAccount(thePlayer, password)
 		Respect(thePlayer)
-		triggerClientEvent(thePlayer, "intro", thePlayer)
+		SpawnedAfterChange(thePlayer)
+		PData[thePlayer]["auth"] = true
 		AuthComplete(thePlayer)
 	end
 end
@@ -13082,6 +13095,8 @@ addEventHandler("PoliceArrestCar", root, PoliceArrestCar)
 
 
 
+local wall = createObject(3059, 2522, -1272.9301, 35.61, 0,0,0)
+setElementFrozen(wall, true)
 PrisonMainGate = createObject(10184, 188.9,1919, 19.2, 0,0,0)
 setElementData(PrisonMainGate, "gates", toJSON({188.9,1919, 23}))
 setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
