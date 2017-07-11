@@ -5505,7 +5505,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2522.0080566406,-1272.9241943359,35.668983459473, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 9304.16, 8380.234, 12.336201, 0, 0 -- 8152, -9143, 6.3
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5620,11 +5620,12 @@ CreateDialogBot(194, 2231, 1588.1, 1006.2, 0, 1, 0, "", "Крупье")
 CreateDialogBot(194, 2242.8, 1588.1, 1006.2, 0, 1, 0, "", "Крупье")
 CreateDialogBot(194, 2242.8, 1593.7, 1006.2, 0, 1, 0, "", "Крупье")
 
-
-
-
 CreateEnter(1658.5, 2250, 11.1, 0, 0, 0, false, 1133.1, -15.8, 1000.7, 0, 12, 0, "Казино")
 
+
+
+
+CreateEnter(2233.3, -1159.8, 25.9, 90, 0, 0, false, 2214.4, -1150.5, 1025.8, 270, 15, 0, "Отель «Jefferson»")
 CreateEnter(1689.6, -1518.4, 13.5, 270, 0, 0, false, -787.6, 445.4, 1362.4, 90, 1, 0, "Liberty City")
 CreateEnter(966.2, 2160.7, 10.8, 270, 0, 0, false, 965.4, 2107.8, 1011, 90, 1, 0, "Sindacco Abattoir")
 CreateEnter(931, 2129.6, 10.8, 90, 0, 0, false, 964.9, 2160.1, 1011, 90, 1, 0, "Sindacco Abattoir")
@@ -12333,7 +12334,7 @@ addCommandHandler("seti", seti)
 
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
-	local res = getResourceFromName("original_casino")
+	local res = getResourceFromName("Interface") -- Interface
 	restartResource(res)
 	--triggerClientEvent(thePlayer, "GameSky", thePlayer, "Red County", 8, false)
  --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)

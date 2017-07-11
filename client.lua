@@ -20,7 +20,6 @@ local COLOR = {
 
 
 
-
 local NewsPaper = {false, false, false, false}
 local GroundMaterial = {}
 local ZonesDisplay = {}
@@ -279,7 +278,6 @@ local MovePlayerTo = {} -- x,y,z,rz,mode [silent, fast],action,args
 local Targets = {}
 local MyHouseBlip = {}
 local SpawnPoints = {}
-local StaminaTimer = false
 local initializedInv = false
 local InventoryWindows = false
 local DragElement = false
@@ -305,7 +303,7 @@ local GPSObject = {}
 local VehicleSpeed = 0
 local SlowTahometer = 0
 local screenSource = dxCreateScreenSource(screenWidth, screenHeight)
-local ScreenGenSource = dxCreateScreenSource(screenWidth/10, screenHeight/10)
+local ScreenGenSource = dxCreateScreenSource(50*scale, 50*scale)
 local IDF, NF, RANG, PING = false
 local TabScroll = 1
 local MAXSCROLL = math.floor((screenHeight/2.8)/dxGetFontHeight(scale/1.8, "default-bold"))
@@ -388,7 +386,7 @@ local trafficlight = {
 local TexturesPosition = {
 	["Кулак"] = {0,0,0, 0,0,0, 0,70, 255}, 
 	["Фекалии"] = {-2,-4,1, 0,0,0, 0,70, 255}, 
-	["АК-47"] = {0.3,1,0, 0.3,0,0, 8,70, 110}, 
+	["АК-47"] = {0.3,1,0, 0.3,0,0, 0,70, 110}, 
 	["Кольт 45"] = {0.2,0.4,0.05, 0.1,-0.2,0.05, 0,70, 110}, 
 	["Узи"] = {0.2,0.4,0, 0,-0.2,0, 0,70, 110}, 
 	["Pissh Gold"] = {0.3,0.6,0.2, 0,0,0.2, 0,70, 170}, 
@@ -556,6 +554,77 @@ function yep()
 
 end
 addCommandHandler("yep", yep)
+
+
+
+
+ 
+
+
+function dxDrawCircle( posX, posY, radius, width, angleAmount, startAngle, stopAngle, color, postGUI, text)
+	if(startAngle == stopAngle) then
+		return false
+	end
+ 
+	local function clamp( val, lower, upper )
+		if ( lower > upper ) then lower, upper = upper, lower end
+		return math.max( lower, math.min( upper, val ) )
+	end
+ 
+	radius = type( radius ) == "number" and radius or 50
+	width = type( width ) == "number" and width or 5
+	angleAmount = type( angleAmount ) == "number" and angleAmount or 1
+	startAngle = clamp( type( startAngle ) == "number" and startAngle or 0, 0, 360 )
+	stopAngle = clamp( type( stopAngle ) == "number" and stopAngle or 360, 0, 360 )
+	color = color or tocolor( 255, 255, 255, 200 )
+	postGUI = type( postGUI ) == "boolean" and postGUI or false
+ 
+	if ( stopAngle < startAngle ) then
+		local tempAngle = stopAngle
+		stopAngle = startAngle
+		startAngle = tempAngle
+	end
+ 
+	local n = 0
+	for i = startAngle, stopAngle, angleAmount do
+		local startX = math.cos( math.rad( i ) ) * ( radius - width )
+		local startY = math.sin( math.rad( i ) ) * ( radius - width )
+		local endX = math.cos( math.rad( i ) ) * ( radius + width )
+		local endY = math.sin( math.rad( i ) ) * ( radius + width )
+		dxDrawLine(startX + posX, startY + posY, endX + posX, endY + posY, color, width, postGUI)
+		if(text) then
+			dxDrawText(n, (startX/1.17)+posX,(startY/1.17)+posY, (startX/1.17)+posX,(startY/1.17)+posY, tocolor(160,160,160,255), scale/2, "default-bold", "center", "center")
+			n=n+1
+		end
+	end
+	return true
+end
+
+
+function math.round(number, decimals, method)
+    decimals = decimals or 0
+    local factor = 10 ^ decimals
+    if (method == "ceil" or method == "floor") then return math[method](number * factor) / factor
+    else return tonumber(("%."..decimals.."f"):format(number)) end
+end
+
+
+function dxDrawBorderedText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded, subPixelPositioning)
+	if(text) then
+		local r,g,b = bitExtract(color, 0, 8), bitExtract(color, 8, 8), bitExtract(color, 16, 8)
+		if(r+g+b >= 100) then r = 0 g = 0 b = 0 else r = 255 g = 255 b = 255 end
+		local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
+		local locsca = math.round(scale, 0)
+		if (locsca == 0) then locsca = 1 end
+		for oX = -locsca, locsca do 
+			for oY = -locsca, locsca do 
+				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false,true)
+			end
+		end
+
+		dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, true, true)
+	end
+end
 
 
 
@@ -1164,7 +1233,6 @@ function Set(list)
 	return set
 end
 
-
 --Путь к картинке, Описание, Стаки, Используемый или нет, вес, цена, {связанные предметы}, Выпадаемый, Объединяемый
 local items = {
 	["hp"] = {"invobject/unknown.png", "", 100, false, 0, 0, false, false, false}, 
@@ -1253,6 +1321,11 @@ local items = {
 	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false, false}, 
 }
 
+
+
+function getItems()
+	return items
+end
 
 local WeaponAmmo = {
 	[30] = "7.62-мм",
@@ -2095,8 +2168,6 @@ function GetValPer(mins, maxs, raw)
     return (raw-mins)/(maxs-mins)*100
 end
  
-
-
 
 
 function GetElementAttacker(element)
@@ -4337,7 +4408,7 @@ function updateWorld()
 		end
 	end
 end
-
+setTimer(updateWorld, 50, 0)
 
 
 function CheckZoneCollect(zone)
@@ -4456,7 +4527,7 @@ function checkKey()
 		end
 	end
 end
-
+setTimer(checkKey,700,0)
 
 
 
@@ -4644,7 +4715,7 @@ function updateStamina()
 		end
 	end
 end
-
+setTimer(updateStamina,1000,0)
 
 
 
@@ -4828,45 +4899,6 @@ end
 
 
 
-function StartLoad() -- Первый этап загрузки
-	setFogDistance(10)
-	setTime(12, 0)
-	setWeather(0)
-	setFarClipDistance(1000)
-	setFogDistance(0)
-	downloadFile("lang/"..PData["LANG"])
-end
-
-function onDownloadFinish(file, success) -- Второй этап загрузки
-	if(file == "lang/"..PData["LANG"]) then
-		PData['loading'] = 2
-		
-		local hFile = fileOpen("lang/"..PData["LANG"], true)
-
-		local ft = fileRead(hFile, 5500)
-		while not fileIsEOF(hFile) do
-			ft = ft .. fileRead(hFile, 5500)
-		end
-		
-		ft = string.gsub(ft, 'msgid ""\n', 'msgid ')
-		ft = string.gsub(ft, 'msgstr ""\n', 'msgstr ')
-		ft = string.gsub(ft, '"\n"', '')
-		LangArr = {}
-		local Lines = split(ft, "\n")
-		for i = 1, #Lines do
-			if(string.sub(Lines[i], 0, 5) == "msgid") then
-				LangArr[string.sub(Lines[i], 8, #Lines[i]-1)] = string.sub(Lines[i+1], 9, #Lines[i+1]-1)
-			end
-		end
-		fileClose(hFile)
-		if(HUDPreload()) then
-			GenerateTexture()
-		end
-	end
-end
-addEventHandler("onClientFileDownloadComplete", root, onDownloadFinish)
-
-
 
 function GenerateTexture() -- Третий этап загрузки
 	PData['loading'] = 10+(92-(92/getArrSize(TexturesPosition))*getArrSize(PreloadTextures))
@@ -4983,6 +5015,56 @@ function HUDPreload()
 	dxSetRenderTarget()
 	return true
 end
+
+
+
+
+
+function onDownloadFinish(file, success) -- Второй этап загрузки
+	if(file == "lang/"..PData["LANG"]) then
+		PData['loading'] = 2
+		
+		local hFile = fileOpen("lang/"..PData["LANG"], true)
+
+		local ft = fileRead(hFile, 5500)
+		while not fileIsEOF(hFile) do
+			ft = ft .. fileRead(hFile, 5500)
+		end
+		
+		ft = string.gsub(ft, 'msgid ""\n', 'msgid ')
+		ft = string.gsub(ft, 'msgstr ""\n', 'msgstr ')
+		ft = string.gsub(ft, '"\n"', '')
+		LangArr = {}
+		local Lines = split(ft, "\n")
+		for i = 1, #Lines do
+			if(string.sub(Lines[i], 0, 5) == "msgid") then
+				LangArr[string.sub(Lines[i], 8, #Lines[i]-1)] = string.sub(Lines[i+1], 9, #Lines[i+1]-1)
+			end
+		end
+		fileClose(hFile)
+		
+		if(HUDPreload()) then
+			GenerateTexture()
+		end
+	end
+end
+addEventHandler("onClientFileDownloadComplete", root, onDownloadFinish)
+
+
+
+
+function StartLoad() -- Первый этап загрузки
+	setTime(12, 0)
+	setWeather(0)
+	setFarClipDistance(1000)
+	setMinuteDuration(1000)
+	setFogDistance(0)
+	downloadFile("lang/"..PData["LANG"])
+end
+StartLoad()
+
+
+
 
 
 
@@ -5387,14 +5469,14 @@ function ToolTip(message)
 		playSoundFrontEnd(11)
 		if(isTimer(ToolTipTimers)) then
 			killTimer(ToolTipTimers)
-			ToolTipText=message
+			ToolTipText = message
 			ToolTipTimers = setTimer(function()
-				ToolTipText=""
+				ToolTipText = ""
 			end, 1000+(#message*50), 1)
 		else
-			ToolTipText=message
+			ToolTipText = message
 			ToolTipTimers = setTimer(function()
-				ToolTipText=""
+				ToolTipText = ""
 			end, 1000+(#message*50), 1)
 		end
 	end
@@ -6141,7 +6223,7 @@ function map()
 	setCameraMatrix(0, 0, 4250, 0, 0, 4000, 0, 70)
 	
 	setFarClipDistance(600)
-	setWeather(0)
+	setWeather(0)--nen
 	showCursor(true)
 end
 addEvent("map", true)
@@ -6441,10 +6523,10 @@ function playerPressedKey(button, press)
 					PData["WaypointBlip"] = createBlip(x*50, y*50, 0, 41)
 					local px,py,pz = getElementPosition(localPlayer)
 					triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x*50, y*50, 20)
-					triggerServerEvent("saveserver", localPlayer, localPlayer, 
+					--[[triggerServerEvent("saveserver", localPlayer, localPlayer, 
 					x*50, y*50, 20, 
 					x*50, y*50, 20, "PedPath"
-					)
+					)--]]
 				end
 			end
 		elseif(button == "mouse1") then
@@ -6479,20 +6561,22 @@ function playerPressedKey(button, press)
 	elseif(button == "mouse1") then
 		if(press) then
 			if(not isCursorShowing()) then
-				if(PInv["player"][usableslot][1]) then
-					if(PInv["player"][usableslot][1] == "Удочка") then
-						if(PData["fishpos"]) then
-							triggerServerEvent("StopFish", localPlayer, localPlayer)
-						else
-							getGroundPositionFish()
-						end
-						cancelEvent()
-					end
+				if(PInv["player"][usableslot]) then
 					if(PInv["player"][usableslot][1]) then
-						if(items[PInv["player"][usableslot][1]][4]) then
-							if(items[PInv["player"][usableslot][1]][4] ~= "useinvweapon") then
-								UseInventoryItem("player", usableslot)
-								cancelEvent()
+						if(PInv["player"][usableslot][1] == "Удочка") then
+							if(PData["fishpos"]) then
+								triggerServerEvent("StopFish", localPlayer, localPlayer)
+							else
+								getGroundPositionFish()
+							end
+							cancelEvent()
+						end
+						if(PInv["player"][usableslot][1]) then
+							if(items[PInv["player"][usableslot][1]][4]) then
+								if(items[PInv["player"][usableslot][1]][4] ~= "useinvweapon") then
+									UseInventoryItem("player", usableslot)
+									cancelEvent()
+								end
 							end
 						end
 					end
@@ -6850,341 +6934,341 @@ addEventHandler("ShakeLevel", localPlayer, ShakeLevel)
 
 
 
-addEventHandler("onClientRender", root,
-	function()
-		if(NewsPaper[1]) then
-			if(NewsPaper[2]) then
-				dxDrawImage(screenWidth/6, screenHeight/6, screenWidth/1.5, screenHeight/1.5, NewsPaper[1], 0, 0, 0, tocolor(255,255,255,255), true)
-			end
+function DrawOnClientRender()
+	if(NewsPaper[1]) then
+		if(NewsPaper[2]) then
+			dxDrawImage(screenWidth/6, screenHeight/6, screenWidth/1.5, screenHeight/1.5, NewsPaper[1], 0, 0, 0, tocolor(255,255,255,255), true)
 		end
-		if(PData['loading']) then
+	end
+	if(PData['loading']) then
+		if(VideoMemory["HUD"]["BlackScreen"]) then
 			dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["BlackScreen"])
-			dxDrawRectangle(200*NewScale, screenHeight-(175*(scaley)),screenWidth-(400*scalex), 30*NewScale, tocolor(45,50,70,255))
-			dxDrawRectangle(200*NewScale, screenHeight-(175*(scaley)),(screenWidth-(400*scalex))*(PData['loading']/100), 30*NewScale, tocolor(83,104,147,255))
-			
-			if(PData['loading'] == 100) then
-				PData['loading'] = nil
-				LoginClient(true)
-				PlaySFXSound(10)
-			end
 		end
-		if(CreateTextureStage) then
-			if(CreateTextureStage[2] == 2) then
-				dxUpdateScreenSource(ScreenGenSource)
-				CreateTextureStage[2] = 3
-			elseif(CreateTextureStage[2] == 4) then
-				dxUpdateScreenSource(ScreenGenSource)
+		dxDrawRectangle(200*NewScale, screenHeight-(175*(scaley)),screenWidth-(400*scalex), 30*NewScale, tocolor(45,50,70,255))
+		dxDrawRectangle(200*NewScale, screenHeight-(175*(scaley)),(screenWidth-(400*scalex))*(PData['loading']/100), 30*NewScale, tocolor(83,104,147,255))
+		
+		if(PData['loading'] == 100) then
+			PData['loading'] = nil
+			LoginClient(true)
+			PlaySFXSound(10)
+		end
+	end
+	if(CreateTextureStage) then
+		if(CreateTextureStage[2] == 2) then
+			dxUpdateScreenSource(ScreenGenSource)
+			CreateTextureStage[2] = 3
+		elseif(CreateTextureStage[2] == 4) then
+			dxUpdateScreenSource(ScreenGenSource)
 
-				local name = CreateTextureStage[1]
-				
-				local pixels = dxGetTexturePixels(ScreenGenSource)
-				local x, y = dxGetPixelsSize(pixels)
-				local texture = dxCreateTexture(x,y, "argb")
-				local pixels2 = dxGetTexturePixels(texture)
-				for y2 = 0, y-1 do
-					for x2 = 0, x-1 do
-						local colors = {dxGetPixelColor(pixels, x2,y2)}
-						if(colors[CreateTextureStage[3]] < TexturesPosition[name][9]) then
-							dxSetPixelColor(pixels2, x2, y2, colors[1],colors[2],colors[3],colors[4])
-						end
+			local name = CreateTextureStage[1]
+			
+			local pixels = dxGetTexturePixels(ScreenGenSource)
+			local x, y = dxGetPixelsSize(pixels)
+			local texture = dxCreateTexture(x,y, "argb")
+			local pixels2 = dxGetTexturePixels(texture)
+			for y2 = 0, y-1 do
+				for x2 = 0, x-1 do
+					local colors = {dxGetPixelColor(pixels, x2,y2)}
+					if(colors[CreateTextureStage[3]] < TexturesPosition[name][9]) then
+						dxSetPixelColor(pixels2, x2, y2, colors[1],colors[2],colors[3],colors[4])
 					end
 				end
-				
-				--[[
-				local pngPixels = dxConvertPixels(pixels2, 'png')
-				local newImg = fileCreate(name..'.png')
-				fileWrite(newImg, pngPixels)
-				fileClose(newImg)
-				--]]
-				
-				
-				
-				dxSetTexturePixels(texture, pixels2)
-				items[CreateTextureStage[1]][1] = texture
-				destroyElement(PreloadTextures[CreateTextureStage[1]])
-				PreloadTextures[CreateTextureStage[1]] = nil
-				CreateTextureStage = false
-				GenerateTexture()
+			end
+			
+			--[[
+			local pngPixels = dxConvertPixels(pixels2, 'png')
+			local newImg = fileCreate(name..'.png')
+			fileWrite(newImg, pngPixels)
+			fileClose(newImg)
+			--]]
+			
+			
+			
+			dxSetTexturePixels(texture, pixels2)
+			items[CreateTextureStage[1]][1] = texture
+			destroyElement(PreloadTextures[CreateTextureStage[1]])
+			PreloadTextures[CreateTextureStage[1]] = nil
+			CreateTextureStage = false
+			GenerateTexture()
+		end
+	end
+	
+	
+
+
+
+	if(PData['CameraMove']) then
+		if(isTimer(PData['CameraMove']['timer'])) then
+			local remaining, _, totalExecutes = getTimerDetails(PData['CameraMove']['timer'])
+			local percent = 100-(remaining/totalExecutes)*100
+			local a1, a2 = PData['CameraMove']['sourcePosition'], PData['CameraMove']['needPosition']
+			local newx, newy, newz, newlx, newly, newlz = a1[1]-a2[1], a1[2]-a2[2], a1[3]-a2[3], a1[4]-a2[4], a1[5]-a2[5], a1[6]-a2[6]
+			newx, newy, newz, newlx, newly, newlz = (newx/100)*percent, (newy/100)*percent, (newz/100)*percent, (newlx/100)*percent, (newly/100)*percent, (newlz/100)*percent 
+			setCameraMatrix(a1[1]-newx, a1[2]-newy, a1[3]-newz, a1[4]-newlx, a1[5]-newly, a1[6]-newlz)
+		end
+	end
+
+	if(isPlayerMapForced()) then
+		return false
+	end
+
+	if(not PData["wasted"]) then
+		if(PData["fishpos"]) then
+			local x2,y2,z2 = getPedWeaponMuzzlePosition(localPlayer)
+			local _, _, rz2 = getElementRotation(localPlayer)
+			local x,y,z = getPointInFrontOfPoint(x2,y2,z2,rz2+90, 1)
+			dxDrawLine3D(x,y,z+0.75,PData["fishpos"]["x"], PData["fishpos"]["y"], PData["fishpos"]["z"], tocolor(255,255,255,255), 0.98)
+		end
+		if(Targets["theVehicle"]) then
+			CreateTarget(Targets["theVehicle"])
+			
+			local fract = ""
+			local color = false
+			local PLText = getVehiclePlateText(Targets["theVehicle"])
+			local ps = string.sub(PLText, 0, 1)
+			local pe = string.sub(PLText, 6, 9)
+			if(PLText == "VAGOS228") then
+				fract="Вагос"
+				color=getTeamVariable("Вагос")
+			elseif(PLText == "RIFA 228") then
+				fract="Рифа"
+				color=getTeamVariable("Вагос")
+			elseif(PLText == "YAZA 228") then
+				fract="Якудзы"
+				color=getTeamVariable("Вагос")
+			elseif(PLText == "METAL228") then
+				fract="Байкеры"
+				color=getTeamVariable("Вагос")
+			elseif(PLText == "TRIA 228") then
+				fract="Триады"
+				color=getTeamVariable("Гроув-стрит")
+			elseif(PLText == "GRST 228" or PLText == "GROVE4L_") then
+				fract="Гроув-стрит"	
+				color=getTeamVariable("Гроув-стрит")
+			elseif(PLText == "AZTC 228") then
+				fract="Ацтекас"	
+				color=getTeamVariable("Гроув-стрит")
+			elseif(PLText == "BALS 228") then
+				fract="Баллас"	
+				color=getTeamVariable("Баллас")
+			elseif(PLText == "RUSM 228") then
+				fract="Русская мафия"
+				color=getTeamVariable("Баллас")
+			elseif(PLText == "COKA 228") then
+				fract="Колумбийский картель"
+				color=getTeamVariable("Баллас")
+			elseif(PLText == "NEWS 228") then
+				fract="СМИ"
+				color=getTeamVariable("Мирные жители")
+			elseif(ps == "I" and pe == "228") then
+				fract="Служебный"
+			elseif(ps == "M" and pe == "228") then
+				fract="МЧС"
+			elseif(ps == "P" and pe == "228" or PLText == "_CUFFS__") then
+				fract="Полиция"
+				color=getTeamVariable("Полиция")
+			elseif(ps == "A" and pe == "228") then
+				fract="Военные"
+				color=getTeamVariable("Полиция")
+			elseif(getElementData(Targets["theVehicle"], "owner")) then
+				fract="Частная собственность"
+			elseif(ps == "U" and pe == "228") then
+				fract="Учебная"
+			elseif(PLText == "KOLHZ228") then
+				fract="Деревенщины"
+				color=getTeamVariable("Уголовники")
+			else
+				color=getTeamVariable("Мирные жители")
+				fract="Мирные жители"
+			end
+			
+			if(color) then
+				if(color >= 0) then
+					color = tocolor(54, 192, 44, 255)
+				else
+					color = tocolor(204, 0, 0, 255)
+				end
+			else
+				color = tocolor(200, 200, 200, 255)
+			end
+			MemText(Text(fract), (screenWidth/2)+(60*scalex), (screenHeight/2)-(70*scaley), color, NewScale*1.5, "default-bold", NewScale*1.5, 0, true)
+						
+			
+			if(getVehiclePlateText(Targets["theVehicle"]) == "SELL 228") then
+				local x,y,z = getElementPosition(Targets["theVehicle"])
+				local price = false
+				if(getElementData(Targets["theVehicle"], "price")) then
+					price = getElementData(Targets["theVehicle"], "price")
+				else
+					price = getVehicleHandlingProperty(Targets["theVehicle"], "monetary")
+				end
+				create3dtext("$"..price, x,y,z+1, scale*2, 60, tocolor(228, 54, 70, 180), "default-bold")
+			end
+		elseif(Targets["thePlayer"]) then		
+			local skin = getElementModel(Targets["thePlayer"])
+			local color = getTeamVariable(ArraySkinInfo[skin][1])
+
+			if(color) then
+				if(color >= 0) then
+					color=tocolor(54, 192, 44, 255)
+				else
+					color=tocolor(204, 0, 0, 255)
+				end
+			else
+				color=tocolor(200, 200, 200, 255)
+			end
+			MemText(Text(getTeamGroup(ArraySkinInfo[skin][1])), (screenWidth/2)+(60*scalex), (screenHeight/2)-(70*scaley), color, NewScale*1.5, "default-bold", NewScale*1.5, 0, true)
+						
+			CreateTarget(Targets["thePlayer"])
+		elseif(Targets["thePed"]) then
+			local team = getElementData(Targets["thePed"], "team")
+			local color = getTeamVariable(team)
+			if(color) then
+				if(color >= 0) then
+					color=tocolor(54, 192, 44, 255)
+				else
+					color=tocolor(204, 0, 0, 255)
+				end
+			else
+				color=tocolor(200, 200, 200, 255)
+			end
+			if(team) then
+				MemText(Text(getTeamGroup(team)), (screenWidth/2)+(60*scalex), (screenHeight/2)-(70*scaley), color, NewScale*1.5, "default-bold", NewScale*1.5, 0, true)
+			end
+			
+			CreateTarget(Targets["thePed"])
+		end
+		
+		for _, ped in pairs(getElementsByType("ped", getRootElement(), true)) do
+			local text = ""
+			
+			local x,y,z = getElementPosition(localPlayer)
+			local pedx, pedy, pedz = getElementPosition(ped)
+			local distance = getDistanceBetweenPoints3D(x,y,z, pedx, pedy, pedz)
+			if(distance < 10) then
+				--text = "『 В разработке 』\n "
+			end
+			if(PlayersMessage[ped]) then
+				text = text.."#EEEEEE"..PlayersMessage[ped]
+			end
+			if(text ~= "") then
+				local hx,hy,hz = getPedBonePosition(ped, 5)
+				create3dtext(text, hx,hy,hz+0.25, NewScale*1.8, 60, tocolor(255,255,255, 220), "default-bold")
+			end
+		end
+		
+		for i, arr in pairs(PData['ExpText']) do
+			if(not arr[4]) then 
+				arr[4] = 0
+				arr[5] = 255
+			end
+			
+			font = "sans"
+			tw = dxGetTextWidth(arr[1], NewScale*1.8, font, true)
+			th = dxGetFontHeight(NewScale*1.8, font)
+
+			dxDrawBorderedText(arr[1], (arr[2]-tw/2), (arr[3]-th/2)+arr[4], screenWidth, screenHeight, tocolor(255, 153, 0 , 255), NewScale*1.8, font, "left", nil, nil, nil, nil, true)
+			arr[4] = arr[4]-0.3
+			arr[5] = arr[5]-1
+			if(arr[5] <= 0) then
+				PData['ExpText'][i] = nil
 			end
 		end
 		
 		
-	
-	
-	
-		if(PData['CameraMove']) then
-			if(isTimer(PData['CameraMove']['timer'])) then
-				local remaining, _, totalExecutes = getTimerDetails(PData['CameraMove']['timer'])
-				local percent = 100-(remaining/totalExecutes)*100
-				local a1, a2 = PData['CameraMove']['sourcePosition'], PData['CameraMove']['needPosition']
-				local newx, newy, newz, newlx, newly, newlz = a1[1]-a2[1], a1[2]-a2[2], a1[3]-a2[3], a1[4]-a2[4], a1[5]-a2[5], a1[6]-a2[6]
-				newx, newy, newz, newlx, newly, newlz = (newx/100)*percent, (newy/100)*percent, (newz/100)*percent, (newlx/100)*percent, (newly/100)*percent, (newlz/100)*percent 
-				setCameraMatrix(a1[1]-newx, a1[2]-newy, a1[3]-newz, a1[4]-newlx, a1[5]-newly, a1[6]-newlz)
-			end
-		end
-	
-		if(isPlayerMapForced()) then
-			return false
-		end
-	
-		if(not PData["wasted"]) then
-			if(PData["fishpos"]) then
-				local x2,y2,z2 = getPedWeaponMuzzlePosition(localPlayer)
-				local _, _, rz2 = getElementRotation(localPlayer)
-				local x,y,z = getPointInFrontOfPoint(x2,y2,z2,rz2+90, 1)
-				dxDrawLine3D(x,y,z+0.75,PData["fishpos"]["x"], PData["fishpos"]["y"], PData["fishpos"]["z"], tocolor(255,255,255,255), 0.98)
-			end
-			if(Targets["theVehicle"]) then
-				CreateTarget(Targets["theVehicle"])
-				
-				local fract = ""
-				local color = false
-				local PLText = getVehiclePlateText(Targets["theVehicle"])
-				local ps = string.sub(PLText, 0, 1)
-				local pe = string.sub(PLText, 6, 9)
-				if(PLText == "VAGOS228") then
-					fract="Вагос"
-					color=getTeamVariable("Вагос")
-				elseif(PLText == "RIFA 228") then
-					fract="Рифа"
-					color=getTeamVariable("Вагос")
-				elseif(PLText == "YAZA 228") then
-					fract="Якудзы"
-					color=getTeamVariable("Вагос")
-				elseif(PLText == "METAL228") then
-					fract="Байкеры"
-					color=getTeamVariable("Вагос")
-				elseif(PLText == "TRIA 228") then
-					fract="Триады"
-					color=getTeamVariable("Гроув-стрит")
-				elseif(PLText == "GRST 228" or PLText == "GROVE4L_") then
-					fract="Гроув-стрит"	
-					color=getTeamVariable("Гроув-стрит")
-				elseif(PLText == "AZTC 228") then
-					fract="Ацтекас"	
-					color=getTeamVariable("Гроув-стрит")
-				elseif(PLText == "BALS 228") then
-					fract="Баллас"	
-					color=getTeamVariable("Баллас")
-				elseif(PLText == "RUSM 228") then
-					fract="Русская мафия"
-					color=getTeamVariable("Баллас")
-				elseif(PLText == "COKA 228") then
-					fract="Колумбийский картель"
-					color=getTeamVariable("Баллас")
-				elseif(PLText == "NEWS 228") then
-					fract="СМИ"
-					color=getTeamVariable("Мирные жители")
-				elseif(ps == "I" and pe == "228") then
-					fract="Служебный"
-				elseif(ps == "M" and pe == "228") then
-					fract="МЧС"
-				elseif(ps == "P" and pe == "228" or PLText == "_CUFFS__") then
-					fract="Полиция"
-					color=getTeamVariable("Полиция")
-				elseif(ps == "A" and pe == "228") then
-					fract="Военные"
-					color=getTeamVariable("Полиция")
-				elseif(getElementData(Targets["theVehicle"], "owner")) then
-					fract="Частная собственность"
-				elseif(ps == "U" and pe == "228") then
-					fract="Учебная"
-				elseif(PLText == "KOLHZ228") then
-					fract="Деревенщины"
-					color=getTeamVariable("Уголовники")
-				else
-					color=getTeamVariable("Мирные жители")
-					fract="Мирные жители"
-				end
-				
-				if(color) then
-					if(color >= 0) then
-						color = tocolor(54, 192, 44, 255)
-					else
-						color = tocolor(204, 0, 0, 255)
-					end
-				else
-					color = tocolor(200, 200, 200, 255)
-				end
-				MemText(Text(fract), (screenWidth/2)+(60*scalex), (screenHeight/2)-(70*scaley), color, NewScale*1.5, "default-bold", NewScale*1.5, 0, true)
-							
-				
-				if(getVehiclePlateText(Targets["theVehicle"]) == "SELL 228") then
-					local x,y,z = getElementPosition(Targets["theVehicle"])
-					local price = false
-					if(getElementData(Targets["theVehicle"], "price")) then
-						price = getElementData(Targets["theVehicle"], "price")
-					else
-						price = getVehicleHandlingProperty(Targets["theVehicle"], "monetary")
-					end
-					create3dtext("$"..price, x,y,z+1, scale*2, 60, tocolor(228, 54, 70, 180), "default-bold")
-				end
-			elseif(Targets["thePlayer"]) then		
-				local skin = getElementModel(Targets["thePlayer"])
-				local color = getTeamVariable(ArraySkinInfo[skin][1])
-
-				if(color) then
-					if(color >= 0) then
-						color=tocolor(54, 192, 44, 255)
-					else
-						color=tocolor(204, 0, 0, 255)
-					end
-				else
-					color=tocolor(200, 200, 200, 255)
-				end
-				MemText(Text(getTeamGroup(ArraySkinInfo[skin][1])), (screenWidth/2)+(60*scalex), (screenHeight/2)-(70*scaley), color, NewScale*1.5, "default-bold", NewScale*1.5, 0, true)
-							
-				CreateTarget(Targets["thePlayer"])
-			elseif(Targets["thePed"]) then
-				local team = getElementData(Targets["thePed"], "team")
-				local color = getTeamVariable(team)
-				if(color) then
-					if(color >= 0) then
-						color=tocolor(54, 192, 44, 255)
-					else
-						color=tocolor(204, 0, 0, 255)
-					end
-				else
-					color=tocolor(200, 200, 200, 255)
-				end
-				if(team) then
-					MemText(Text(getTeamGroup(team)), (screenWidth/2)+(60*scalex), (screenHeight/2)-(70*scaley), color, NewScale*1.5, "default-bold", NewScale*1.5, 0, true)
-				end
-				
-				CreateTarget(Targets["thePed"])
-			end
-			
-			for _, ped in pairs(getElementsByType("ped", getRootElement(), true)) do
-				local text = ""
-				
-				local x,y,z = getElementPosition(localPlayer)
-				local pedx, pedy, pedz = getElementPosition(ped)
-				local distance = getDistanceBetweenPoints3D(x,y,z, pedx, pedy, pedz)
-				if(distance < 10) then
-					--text = "『 В разработке 』\n "
-				end
-				if(PlayersMessage[ped]) then
-					text = text.."#EEEEEE"..PlayersMessage[ped]
-				end
-				if(text ~= "") then
-					local hx,hy,hz = getPedBonePosition(ped, 5)
-					create3dtext(text, hx,hy,hz+0.25, NewScale*1.8, 60, tocolor(255,255,255, 220), "default-bold")
-				end
-			end
-			
-			for i, arr in pairs(PData['ExpText']) do
-				if(not arr[4]) then 
-					arr[4] = 0
-					arr[5] = 255
-				end
-				
-				font = "sans"
-				tw = dxGetTextWidth(arr[1], NewScale*1.8, font, true)
-				th = dxGetFontHeight(NewScale*1.8, font)
-
-				dxDrawBorderedText(arr[1], (arr[2]-tw/2), (arr[3]-th/2)+arr[4], screenWidth, screenHeight, tocolor(255, 153, 0 , 255), NewScale*1.8, font, "left", nil, nil, nil, nil, true)
-				arr[4] = arr[4]-0.3
-				arr[5] = arr[5]-1
-				if(arr[5] <= 0) then
-					PData['ExpText'][i] = nil
-				end
-			end
-			
-			
-			for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
-				if(thePlayer) then
-					local Team = getPlayerTeam(thePlayer)
-					if(Team) then
-						local x,y,z = getPedBonePosition(thePlayer, 5)
-						local text = {}
-						
-						local skin = getElementModel(thePlayer)
-						if(not skin) then return false end
-						
-						
-						if(isPedDoingTask(thePlayer, "TASK_SIMPLE_USE_GUN")) then
-							if(getElementData(thePlayer, "laser")) then
-								local wx,wy,wz = getPedWeaponMuzzlePosition(thePlayer)
-								local x2,y2,z2 = getPedTargetEnd(thePlayer)
-								local arr = fromJSON(getElementData(thePlayer, "laser"))
-								dxDrawLine3D(wx,wy,wz,x2,y2,z2, tocolor(arr["color"][1], arr["color"][2], arr["color"][3], arr["color"][4]), 0.8)
-							end
+		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
+			if(thePlayer) then
+				local Team = getPlayerTeam(thePlayer)
+				if(Team) then
+					local x,y,z = getPedBonePosition(thePlayer, 5)
+					local text = {}
+					
+					local skin = getElementModel(thePlayer)
+					if(not skin) then return false end
+					
+					
+					if(isPedDoingTask(thePlayer, "TASK_SIMPLE_USE_GUN")) then
+						if(getElementData(thePlayer, "laser")) then
+							local wx,wy,wz = getPedWeaponMuzzlePosition(thePlayer)
+							local x2,y2,z2 = getPedTargetEnd(thePlayer)
+							local arr = fromJSON(getElementData(thePlayer, "laser"))
+							dxDrawLine3D(wx,wy,wz,x2,y2,z2, tocolor(arr["color"][1], arr["color"][2], arr["color"][3], arr["color"][4]), 0.8)
 						end
-						
-						if(skin == 285 or skin == 264) then
-							text["nickname"] = "『 неизвестно 』"
+					end
+					
+					if(skin == 285 or skin == 264) then
+						text["nickname"] = "『 неизвестно 』"
+						local r,g,b = getTeamColor(getTeamFromName(ArraySkinInfo[skin][1]))
+						text["nicknamecolor"] = tocolor(r,g,b, 200)
+					else
+						if(not ArraySkinInfo[skin]) then outputChatBox(skin) end
+						if(thePlayer ~= localPlayer) then
+							text["nickname"] = getPlayerName(thePlayer)
 							local r,g,b = getTeamColor(getTeamFromName(ArraySkinInfo[skin][1]))
 							text["nicknamecolor"] = tocolor(r,g,b, 200)
-						else
-							if(not ArraySkinInfo[skin]) then outputChatBox(skin) end
-							if(thePlayer ~= localPlayer) then
-								text["nickname"] = getPlayerName(thePlayer)
-								local r,g,b = getTeamColor(getTeamFromName(ArraySkinInfo[skin][1]))
-								text["nicknamecolor"] = tocolor(r,g,b, 200)
-							end
-							if(skin == 252) then --CENSORED
-								sx, sy, sz = getCameraMatrix()
-								local x2,y2,z2 = getPedBonePosition(thePlayer, 1)
-								local distance = getDistanceBetweenPoints3D(x2,y2,z2, sx, sy, sz)
-								if(isLineOfSightClear(x2,y2,z2, sx, sy, sz, true, true, false, false, false)) then
-									sx,sy = getScreenFromWorldPosition(x2,y2,z2)
-									if(sx) then
-										local CensureColor = {
-											tocolor(50,50,50),
-											tocolor(25,25,25),
-											tocolor(75,75,75),
-											tocolor(150, 90, 60),
-											tocolor(228, 200, 160),
-										}
-										for i = 1, 8 do
-											for i2 = 1, 8 do
-												dxDrawRectangle(sx-(170*scale)/distance+((35*i)*scale/distance), sy-(70*scale)/distance+((35*i2)*scale/distance), (35*scale)/distance,(35*scale)/distance, CensureColor[math.random(#CensureColor)])
-											end
+						end
+						if(skin == 252) then --CENSORED
+							sx, sy, sz = getCameraMatrix()
+							local x2,y2,z2 = getPedBonePosition(thePlayer, 1)
+							local distance = getDistanceBetweenPoints3D(x2,y2,z2, sx, sy, sz)
+							if(isLineOfSightClear(x2,y2,z2, sx, sy, sz, true, true, false, false, false)) then
+								sx,sy = getScreenFromWorldPosition(x2,y2,z2)
+								if(sx) then
+									local CensureColor = {
+										tocolor(50,50,50),
+										tocolor(25,25,25),
+										tocolor(75,75,75),
+										tocolor(150, 90, 60),
+										tocolor(228, 200, 160),
+									}
+									for i = 1, 8 do
+										for i2 = 1, 8 do
+											dxDrawRectangle(sx-(170*scale)/distance+((35*i)*scale/distance), sy-(70*scale)/distance+((35*i2)*scale/distance), (35*scale)/distance,(35*scale)/distance, CensureColor[math.random(#CensureColor)])
 										end
 									end
 								end
-							elseif(skin == 145) then
-								sx, sy, sz = getCameraMatrix()
-								local x2,y2,z2 = getPedBonePosition(thePlayer, 1)
-								local distance = getDistanceBetweenPoints3D(x2,y2,z2, sx, sy, sz)
-								if(isLineOfSightClear(x2,y2,z2, sx, sy, sz, true, true, false, false, false)) then
-									sx,sy = getScreenFromWorldPosition(x2,y2,z2)
-									if(sx) then
-										local CensureColor = {
-											tocolor(50,50,50),
-											tocolor(25,25,25),
-											tocolor(75,75,75),
-											tocolor(150, 90, 60),
-											tocolor(228, 200, 160),
-										}
-										for i = 1, 8 do
-											for i2 = 1, 8 do
-												dxDrawRectangle(sx-(170*scale)/distance+((35*i)*scale/distance), sy-(90*scale)/distance+((35*i2)*scale/distance), (35*scale)/distance,(35*scale)/distance, CensureColor[math.random(#CensureColor)])
-											end
+							end
+						elseif(skin == 145) then
+							sx, sy, sz = getCameraMatrix()
+							local x2,y2,z2 = getPedBonePosition(thePlayer, 1)
+							local distance = getDistanceBetweenPoints3D(x2,y2,z2, sx, sy, sz)
+							if(isLineOfSightClear(x2,y2,z2, sx, sy, sz, true, true, false, false, false)) then
+								sx,sy = getScreenFromWorldPosition(x2,y2,z2)
+								if(sx) then
+									local CensureColor = {
+										tocolor(50,50,50),
+										tocolor(25,25,25),
+										tocolor(75,75,75),
+										tocolor(150, 90, 60),
+										tocolor(228, 200, 160),
+									}
+									for i = 1, 8 do
+										for i2 = 1, 8 do
+											dxDrawRectangle(sx-(170*scale)/distance+((35*i)*scale/distance), sy-(90*scale)/distance+((35*i2)*scale/distance), (35*scale)/distance,(35*scale)/distance, CensureColor[math.random(#CensureColor)])
 										end
 									end
 								end
 							end
 						end
-						
-						local cx,cy,cz = getCameraMatrix()
-						local depth = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
-						if(depth < 60) then
-							local fh = dxGetFontHeight(NewScale*1.8, "default-bold")/(60/(60-depth))
-							local sx,sy = getScreenFromWorldPosition(x,y,z+0.30)
-							if(sx and sy) then
-								if(PlayersMessage[thePlayer]) then
-									x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
-									create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "default-bold")
-								end
-								
-								x, y, z = getWorldFromScreenPosition(sx, sy, depth)
-								create3dtext(text["nickname"], x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "default-bold")
+					end
+					
+					local cx,cy,cz = getCameraMatrix()
+					local depth = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
+					if(depth < 60) then
+						local fh = dxGetFontHeight(NewScale*1.8, "default-bold")/(60/(60-depth))
+						local sx,sy = getScreenFromWorldPosition(x,y,z+0.30)
+						if(sx and sy) then
+							if(PlayersMessage[thePlayer]) then
+								x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
+								create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "default-bold")
+							end
 							
-								if(PlayersAction[thePlayer]) then
-									x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
-									create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "default-bold")
-								end
+							x, y, z = getWorldFromScreenPosition(sx, sy, depth)
+							create3dtext(text["nickname"], x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "default-bold")
+						
+							if(PlayersAction[thePlayer]) then
+								x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
+								create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "default-bold")
 							end
 						end
 					end
@@ -7192,7 +7276,8 @@ addEventHandler("onClientRender", root,
 			end
 		end
 	end
-)
+end
+addEventHandler("onClientRender", root, DrawOnClientRender)
 
 
 
@@ -7222,46 +7307,6 @@ end
 
 function DrawZast(x,y,w,h,zahx,zahy,target)
 	dxDrawImageSection(x,y, w,h , zahx,zahy, w,h, target)
-end
-
-
-function dxDrawCircle( posX, posY, radius, width, angleAmount, startAngle, stopAngle, color, postGUI, text)
-	if(startAngle == stopAngle) then
-		return false
-	end
- 
-	local function clamp( val, lower, upper )
-		if ( lower > upper ) then lower, upper = upper, lower end
-		return math.max( lower, math.min( upper, val ) )
-	end
- 
-	radius = type( radius ) == "number" and radius or 50
-	width = type( width ) == "number" and width or 5
-	angleAmount = type( angleAmount ) == "number" and angleAmount or 1
-	startAngle = clamp( type( startAngle ) == "number" and startAngle or 0, 0, 360 )
-	stopAngle = clamp( type( stopAngle ) == "number" and stopAngle or 360, 0, 360 )
-	color = color or tocolor( 255, 255, 255, 200 )
-	postGUI = type( postGUI ) == "boolean" and postGUI or false
- 
-	if ( stopAngle < startAngle ) then
-		local tempAngle = stopAngle
-		stopAngle = startAngle
-		startAngle = tempAngle
-	end
- 
-	local n = 0
-	for i = startAngle, stopAngle, angleAmount do
-		local startX = math.cos( math.rad( i ) ) * ( radius - width )
-		local startY = math.sin( math.rad( i ) ) * ( radius - width )
-		local endX = math.cos( math.rad( i ) ) * ( radius + width )
-		local endY = math.sin( math.rad( i ) ) * ( radius + width )
-		dxDrawLine(startX + posX, startY + posY, endX + posX, endY + posY, color, width, postGUI)
-		if(text) then
-			dxDrawText(n, (startX/1.17)+posX,(startY/1.17)+posY, (startX/1.17)+posX,(startY/1.17)+posY, tocolor(160,160,160,255), scale/2, "default-bold", "center", "center")
-			n=n+1
-		end
-	end
-	return true
 end
 
 
@@ -7811,10 +7856,10 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 					PData['changezone'][#PData['changezone']][2] = {out[4], out[5], out[6]}
 					
 
-					triggerServerEvent("saveserver", localPlayer, localPlayer, 
+					--[[triggerServerEvent("saveserver", localPlayer, localPlayer, 
 					out[1], out[2], out[3], 
 					out[4], out[5], out[6], "PedPath"
-					)
+					)--]]
 				else
 					PData['changezone'][#PData['changezone']] = nil
 					ToolTip("Разные зоны!!!")
@@ -8529,23 +8574,6 @@ function FoundInventoryItem(itemname)
 	return id
 end
 
- 
-function dxDrawBorderedText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded, subPixelPositioning)
-	if(text) then
-		local r,g,b = bitExtract(color, 0, 8), bitExtract(color, 8, 8), bitExtract(color, 16, 8)
-		if(r+g+b >= 100) then r = 0 g = 0 b = 0 else r = 255 g = 255 b = 255 end
-		local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
-		local locsca = math.round(scale, 0)
-		if (locsca == 0) then locsca = 1 end
-		for oX = -locsca, locsca do 
-			for oY = -locsca, locsca do 
-				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false,true)
-			end
-		end
-
-		dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, true, true)
-	end
-end
 
 
 
@@ -11256,15 +11284,6 @@ end
 
 
 
-function math.round(number, decimals, method)
-    decimals = decimals or 0
-    local factor = 10 ^ decimals
-    if (method == "ceil" or method == "floor") then return math[method](number * factor) / factor
-    else return tonumber(("%."..decimals.."f"):format(number)) end
-end
-
-
-
 
 function onQuitGame(reason)
 	if(isTimer(timers[source])) then
@@ -11278,6 +11297,34 @@ addEventHandler("onClientPlayerQuit", getRootElement(), onQuitGame)
 
 
 
+bindKey("M", "down", openmap)
+bindKey("tab", "down", OpenTAB)
+bindKey("tab", "up", CloseTAB)
+bindKey("h", "down", opengate)
+bindKey("p", "down", park)
+bindKey('1', 'down', inventoryBind)
+bindKey('2', 'down', inventoryBind)
+bindKey('3', 'down', inventoryBind)
+bindKey('4', 'down', inventoryBind)
+bindKey('5', 'down', inventoryBind)
+bindKey('6', 'down', inventoryBind)
+bindKey('7', 'down', inventoryBind)
+bindKey('8', 'down', inventoryBind)
+bindKey('9', 'down', inventoryBind)
+bindKey('0', 'down', inventoryBind)
+bindKey("i", "down", SetupBackpack)
+bindKey('mouse2', 'down', setDoingDriveby)
+bindKey("w", "down", breakMove)
+bindKey("a", "down", breakMove)
+bindKey("s", "down", breakMove)
+bindKey("d", "down", breakMove)
+bindKey("p", "down", autoMove)
+bindKey("r", "down", reload)
+bindKey("F1", "down", ShowInfoKey)
+bindKey("F5", "down", ShowLink)
+bindKey("F10", "down", resourcemap)
+bindKey("F11", "down", openmap)
+bindKey("F12", "down", hideinv)
 
 
 
@@ -11290,42 +11337,4 @@ end
 addEventHandler("onClientPlayerChangeNick", getLocalPlayer(), SwitchNick)
 
 
-addEventHandler("onClientResourceStart",  getRootElement(),
-	function(res)
-		if(getResourceName(res) == "228") then
-			setMinuteDuration(1000)
-			StaminaTimer = setTimer(updateStamina,1000,0)
-			setTimer(checkKey,700,0)
-			setTimer(updateWorld, 50, 0)
-			bindKey("M", "down", openmap)
-			bindKey("tab", "down", OpenTAB)
-			bindKey("tab", "up", CloseTAB)
-			bindKey("h", "down", opengate)
-			bindKey("p", "down", park)
-			bindKey('1', 'down', inventoryBind)
-			bindKey('2', 'down', inventoryBind)
-			bindKey('3', 'down', inventoryBind)
-			bindKey('4', 'down', inventoryBind)
-			bindKey('5', 'down', inventoryBind)
-			bindKey('6', 'down', inventoryBind)
-			bindKey('7', 'down', inventoryBind)
-			bindKey('8', 'down', inventoryBind)
-			bindKey('9', 'down', inventoryBind)
-			bindKey('0', 'down', inventoryBind)
-			bindKey("i", "down", SetupBackpack)
-			bindKey('mouse2', 'down', setDoingDriveby)
-			bindKey("w", "down", breakMove)
-			bindKey("a", "down", breakMove)
-			bindKey("s", "down", breakMove)
-			bindKey("d", "down", breakMove)
-			bindKey("p", "down", autoMove)
-			bindKey("r", "down", reload)
-			bindKey("F1", "down", ShowInfoKey)
-			bindKey("F5", "down", ShowLink)
-			bindKey("F10", "down", resourcemap)
-			bindKey("F11", "down", openmap)
-			bindKey("F12", "down", hideinv)
-			StartLoad()
-		end
-	end
-)
+
