@@ -49,7 +49,6 @@ local PData = {
 		["Collections"] = true
 	}, 
 	['WantedFlashing'] = false, 
-	['loading'] = 0,
 	['Target'] = {}, 
 	['blip'] = {}, 
 	['DublicateRadar'] = {},
@@ -303,7 +302,6 @@ local GPSObject = {}
 local VehicleSpeed = 0
 local SlowTahometer = 0
 local screenSource = dxCreateScreenSource(screenWidth, screenHeight)
-local ScreenGenSource = dxCreateScreenSource(50*scale, 50*scale)
 local IDF, NF, RANG, PING = false
 local TabScroll = 1
 local MAXSCROLL = math.floor((screenHeight/2.8)/dxGetFontHeight(scale/1.8, "default-bold"))
@@ -381,179 +379,6 @@ local trafficlight = {
 	["4"] = "north"
 }
 
-
--- X,Y,Z, look At X, look At Y, look At Z,roll,fov, Порог срабатывания хромокея
-local TexturesPosition = {
-	["Кулак"] = {0,0,0, 0,0,0, 0,70, 255}, 
-	["Фекалии"] = {-2,-4,1, 0,0,0, 0,70, 255}, 
-	["АК-47"] = {0.3,1,0, 0.3,0,0, 0,70, 110}, 
-	["Кольт 45"] = {0.2,0.4,0.05, 0.1,-0.2,0.05, 0,70, 110}, 
-	["Узи"] = {0.2,0.4,0, 0,-0.2,0, 0,70, 110}, 
-	["Pissh Gold"] = {0.3,0.6,0.2, 0,0,0.2, 0,70, 170}, 
-	["Pissh"] = {0.2,0.6,0.2, 0,0,0.2, 0,70, 170}, 
-	["USP-S"] = {0.2,0.4,0.05, 0.2,-0.2,0.05, 0,70, 170}, 
-	["Deagle"] = {0.4,0.35,0.05, 0,-0.5,0.05, 0,70, 170}, 
-	["MP5"] = {0.2,0.5,0.08, 0.2,-0.1,0.08, 0,70, 170}, 
-	["Кока"] = {0,15,5, 0,0,5, 0,70, 160}, 
-	["Конопля"] = {0,10,0, 0,0,0, 0,70, 160}, 
-	["Tec-9"] = {0.4,0.4,0, 0.2,-0.2,0, 0,70, 110}, 
-	["Чемодан"] = {0,0.5,0.03, 0,0,0.03, 0,70, 140}, 
-	["Рюкзак"] = {0.2,-0.7,0, 0.2,0,0, 270,70, 140}, 
-	["М16"] = {0.3,1,0, 0.3,0,0, 8,70, 110}, 
-	["Mossberg"] = {0.3,0.9,0, 0.3,0,0, 8,70, 110}, 
-	["ИЖ-12"] = {0.3,0.9,0, 0.3,0,0, 8,70, 110}, 
-	["SPAS-12"] = {0.4,0.6,0.1, 0.4,0,0.1, 8,70, 110}, 
-	["M40"] = {0.3,0.9,0, 0.3,0,0, 8,70, 110}, 
-	["Sawed-Off"] = {0.3,0.5,0.05, 0.3,0,0.05, 8,70, 110}, 
-	["Парашют"] = {0,-0.7,0.02, 0,0,0.02, 0,70, 110}, 
-	["Бензопила"] = {0.45,0.9,0.12, 0.45,0,0.12, 8,70, 110}, 
-	["Dildo XXL"] = {0,0.7,0.2, 0,0,0.2, 290,70, 110}, 
-	["Dildo"] = {0.06,0.4,0.05, 0.06,0,0.05, 290,70, 110}, 
-	["Вибратор"] = {0.05,0.6,0.1, 0.05,0,0.1, 290,70, 110}, 
-	["Пакет"] = {0,-0.7,0.02, 0,0,0.02, 0,70, 150}, 
-	["Нож"] = {0.1,-0.3,0.1, 0.1,0,0.1, 290,70, 110}, 
-	["Удочка"] = {0.1,-1.4,0.7, 0.1,0,0.7, 290,70, 110}, 
-	["Клюшка"] = {0.1,-0.8,0.4, 0.1,0,0.4, 290,70, 110}, 
-	["Лопата"] = {0.1,-0.8,0.4, 0.1,0,0.4, 290,70, 110}, 
-	["Бита"] = {0.1,-0.7,0.3, 0.1,0,0.3, 290,70, 110}, 
-	["Дубинка"] = {0.1,-0.7,0.2, 0.1,0,0.2, 290,70, 110}, 
-	["Катана"] = {0.1,-0.9,0.4, 0.1,0,0.4, 290,70, 110}, 
-	["Камера"] = {0.15,0.4,0.05, 0.15,0,0.05, 20,70, 110}, 
-	["KBeer"] = {0.3,0.6,0, 0,0,0, 0,70, 250}, 
-	["KBeer Dark"] = {0.3,0.6,0, 0,0,0, 0,70, 250}, 
-	["isabella"] = {0.3,0.5,0, 0,0,0, 0,70, 250}, 
-	["Бронежилет"] = {0,0.6,0.007, 0,0,0.007, 0,70, 140}, 
-	["Спанк"] = {0,1,0.1, 0,0,0.1, 0,70, 255}, 
-	["Кровь"] = {0,0.8,0.1, 0,0,0.1, 0,70, 255}, 
-	["Граната"] = {0.05,0.4,0, 0.05,0,0, 0,70, 255}, 
-	["Молотов"] = {0.2,-0.5,0, 0.1,0,0, 0,70, 255}, 
-	["Канистра"] = {0,-0.6,-0.12, 0,0,-0.12, 0,70, 250}, 
-	["Телефон"] = {0,0.5,0, 0,0,0, 0,70, 250}, 
-	["Подкова"] = {0,0.9,0.04, 0,0,0.04, 0,70, 250}, 
-	["Реликвия"] = {0,1,0.03, 0,0,0.03, 0,70, 250}, 
-	["Запаска"] = {1.5,0,0, 0,0,0, 0,70, 150}, 
-	["CoK"] = {0.14,0.18,0.28, 0.14,0.18,-0.28, 100,70, 250}, 
-	["Сигарета"] = {0.31,0.01,0.08, 0,0.01,0.08, 290,70, 130}, 
-	["Черепаха"] = {0,0,5, 0,0,0, 0,70, 250}, 
-	["Акула"] = {0,0,10, 0,0,0, 60,70, 250}, 
-	["Дельфин"] = {0,0,10, 0,0,0, 60,70, 250}, 
-	["Рыба"] = {1,0,0.1, 0,0,0.1, 0,70, 255}, 	
-	["Косяк"] = {0.31,0.01,0.08, 0,0.01,0.08, 290,70, 130}, 
-	["7.62-мм"] = {-3.3,-3.3,-0.6, 4.5,9,-2.5, 0,70, 250}, 
-	["5.56-мм"] = {-1.2,-3.3,-0.6, 4.5,9,-2.5, 0,70, 250}, 
-	["9-мм"] = {-4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 250}, 
-	["18.5-мм"] = {-4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 250}, 
-	["Скот"] = {10,0,1.2, 0,0,1.2, 0,70, 255}, 
-	["Мясо"] = {0,1.5,0, 0,0,0, 0,70, 255}, 
-	["Нефть"] = {2,0,0, 0,0,0, 0,70, 255}, 
-	["Пропан"] = {2,0,0, 0,0,0, 0,70, 255}, 
-	["Химикаты"] = {2,0,0.1, 0,0,0.1, 0,70, 255}, 
-	["Удобрения"] = {2,0,0.1, 0,0,0.1, 0,70, 255}, 
-	["Бензин"] = {2,0,0.2, 0,0,0.2, 0,70, 255}, 
-	["Зерно"] = {2,0,0, 0,0,0, 0,70, 200},
-	["Газета"] = {0.8,0.2,0.75, 0.8,0.2,0, 0,70, 200},
-	["Деньги"] = {0.2,0.2,0.35, -0.05,-0.05,0, 0,70, 200},
-	["Кредитка"] = {-0.3,0.7,0.6, 0,0,0, 0,70, 200},
-	["Огнетушитель"] = {0.35,0.9,-0.06, 0.35,0,-0.06, 8,70, 110}, 
-	["Базука"] = {0.25,0.9,0.02, 0.25,0,0.02, 8,70, 110}, 
-	["Спрей"] = {0.05,-0.35,-0.05, 0.05,-0.05,-0.05, 0,70, 250}, 
-	["Огнемет"] = {0.45,0.9,0.12, 0.45,0,0.12, 8,70, 110}, 
-	["Ракушка"] = {0,1.2,0, 0,0,0, 0,70, 250}, 
-	["Ракета"] = {0.8,0,0, 0.4,0,0, 0,70, 250}, 
-	["Алкоголь"] = {2.5,0,0.6, 0,0,0.6, 0,70, 255}, 
-	
-	--["Пропуск"] = {0,-0.6,-0.6, 0,0,0, 0,70, 200}, -- Object 1581
-}
-
-local PreloadTextures = {
-	["Кулак"] = createObject(1666, 4000, 4000, 4000),
-	["АК-47"] = createObject(355, 4005, 4000, 4000),
-	["Кольт 45"] = createObject(346, 4010, 4000, 4000),
-	["Узи"] = createObject(352, 4015, 4000, 4000),
-	["Pissh Gold"] = createObject(1544, 4020, 4000, 4000),
-	["Pissh"] = createObject(1543, 4025, 4000, 4000),
-	["USP-S"] = createObject(347, 4030, 4000, 4000),
-	["Deagle"] = createObject(348, 4035, 4000, 4000),
-	["MP5"] = createObject(353, 4040, 4000, 4000),
-	["Кока"] = createObject(782, 4045, 4000, 4000),
-	["Конопля"] = createObject(823, 4060, 4000, 4000),
-	["Tec-9"] = createObject(372, 4075, 4000, 4000),
-	["Чемодан"] = createObject(1210, 4080, 4000, 4000),
-	["Рюкзак"] = createObject(3026, 4085, 4000, 4000),
-	["М16"] = createObject(356, 4090, 4000, 4000),
-	["Mossberg"] = createObject(349, 4095, 4000, 4000),
-	["ИЖ-12"] = createObject(357, 4100, 4000, 4000),
-	["SPAS-12"] = createObject(351, 4105, 4000, 4000),
-	["M40"] = createObject(358, 4110, 4000, 4000),
-	["Sawed-Off"] = createObject(350, 4115, 4000, 4000),
-	["Парашют"] = createObject(371, 4120, 4000, 4000),
-	["Бензопила"] = createObject(341, 4125, 4000, 4000),
-	["Dildo XXL"] = createObject(321, 4130, 4000, 4000),
-	["Dildo"] = createObject(322, 4135, 4000, 4000),
-	["Вибратор"] = createObject(323, 4140, 4000, 4000),
-	["Пакет"] = createObject(2663, 4145, 4000, 4000),
-	["Нож"] = createObject(335, 4150, 4000, 4000),
-	["Удочка"] = createObject(338, 4155, 4000, 4000),
-	["Клюшка"] = createObject(333, 4160, 4000, 4000),
-	["Лопата"] = createObject(337, 4165, 4000, 4000),
-	["Бита"] = createObject(336, 4170, 4000, 4000),
-	["Катана"] = createObject(339, 4175, 4000, 4000),
-	["Камера"] = createObject(367, 4180, 4000, 4000),
-	["KBeer"] = createObject(1950, 4185, 4000, 4000),
-	["KBeer Dark"] = createObject(1951, 4190, 4000, 4000),
-	["isabella"] = createObject(1669, 4195, 4000, 4000),
-	["Бронежилет"] = createObject(1242, 4200, 4000, 4000),
-	["Спанк"] = createObject(1279, 4205, 4000, 4000),
-	["Кровь"] = createObject(1580, 4210, 4000, 4000),
-	["Граната"] = createObject(342, 4215, 4000, 4000),
-	["Молотов"] = createObject(344, 4220, 4000, 4000),
-	["Канистра"] = createObject(1650, 4225, 4000, 4000),
-	["Телефон"] = createObject(330, 4230, 4000, 4000),
-	["Подкова"] = createObject(954, 4235, 4000, 4000),
-	["Реликвия"] = createObject(1276, 4240, 4000, 4000),
-	["Запаска"] = createObject(1025, 4245, 4000, 4000),
-	["CoK"] = createObject(2670, 4250, 4000, 4000),
-	["Сигарета"] = createObject(3027, 4255, 4000, 4000),
-	["Черепаха"] = createObject(1609, 4265, 4000, 4000),
-	["Акула"] = createObject(1608, 4275, 4000, 4000),
-	["Дельфин"] = createObject(1607, 4285, 4000, 4000),
-	["Рыба"] = createObject(1600, 4295, 4000, 4000),
-	["Косяк"] = createObject(3027, 4300, 4000, 4000),
-	["7.62-мм"] = createObject(18044, 4320, 4000, 4000),
-	["5.56-мм"] = createObject(18044, 4330, 4000, 4000),
-	["9-мм"] = createObject(18044, 4330, 4000, 4000),
-	["18.5-мм"] = createObject(18044, 4340, 4000, 4000),
-	["Скот"] = createObject(11470, 4345, 4000, 4010),
-	["Зерно"] = createObject(1453, 4350, 4000, 4020),
-	["Кредитка"] = createObject(1581, 4365, 4000, 4020),
-	["Огнетушитель"] = createObject(366, 4370, 4000, 4020),
-	["Спрей"] = createObject(365, 4375, 4000, 4020),
-	["Ракушка"] = createObject(953, 4380, 4000, 4020),
-	["Дубинка"] = createObject(334, 4385, 4000, 4000),
-	["Огнемет"] = createObject(361, 4390, 4000, 4000),
-	["Базука"] = createObject(359, 4395, 4000, 4000),
-	["Ракета"] = createObject(345, 4400, 4000, 4000),
-	["Деньги"] = createObject(1212, 4410, 4000, 4020),
-	["Газета"] = createObject(2674, 4415, 4000, 4020),
-	["Нефть"] = createObject(3632, 4420, 4000, 4020),
-	["Химикаты"] = createObject(1218, 4425, 4000, 4020),
-	["Бензин"] = createObject(1225, 4430, 4000, 4020),
-	["Удобрения"] = createObject(1222, 4435, 4000, 4020),
-	["Мясо"] = createObject(2805, 4440, 4000, 4020),
-	["Алкоголь"] = createObject(2900, 4445, 4000, 4020),
-	["Фекалии"] = createObject(16444, 4450, 4000, 4020),
-	["Пропан"] = createObject(1370, 4455, 4000, 4020),
-}
-
-local CreateTextureStage = false
-
-function yep()
-	local a = {-4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 0}
-	createObject(18044, 4000, 4000, 4000)
-	setCameraMatrix(4000+a[1], 4000+a[2], 4000+a[3], 4000+a[4], 4000+a[5], 4000+a[6], a[7], a[8])
-
-end
-addCommandHandler("yep", yep)
 
 
 
@@ -1233,92 +1058,92 @@ function Set(list)
 	return set
 end
 
---Путь к картинке, Описание, Стаки, Используемый или нет, вес, цена, {связанные предметы}, Выпадаемый, Объединяемый
+--Путь к картинке, Описание, Стаки, Используемый или нет, вес, цена, {связанные предметы}, Выпадаемый, Объединяемый, размер ячейки
 local items = {
-	["hp"] = {"invobject/unknown.png", "", 100, false, 0, 0, false, false, false}, 
-	["Бронежилет"] = {false, "Военый бронежилет", 1, "usearmor", 4650, 2520, false, false, true},
-	["Канистра"] = {false, "Десяти литровая канистра с бензином", 1, "usekanistra", 10350, 1000, false, false, false},
-	["Реликвия"] = {false, "Древняя статуэтка неизвестного происхождения", 1, false, 760, 10000, false, false, false},
-	["Подкова"] = {false, "Старая подкова, антиквариат", 1, false, 350, 5000, false, false, false},
-	["Ракушка"] = {false, "Просто ракушка", 1, false, 10, 50, false, false, false},
-	["Телефон"] = {false, "Телефон", 1, "usecellphone", 350, 1500, false, false, false},
-	["Рюкзак"] = {false, "Обычный рюкзак", 1, "SetupBackpack", 2500, 5000, false, true, false},
-	["Чемодан"] = {false, "Обычный чемодан", 1, "SetupBackpack", 1000, 1000, false, true, false},
-	["Пакет"] = {false, "Обычный пакет", 1, "SetupBackpack", 10, 1, false, true, false},
-	["АК-47"] = {false, "Автомат Калашникова\nСтрана: СССР", 1, "useinvweapon", 4300, 4500, false, false, true},
-	["Базука"] = {false, "Просто базука", 1, "useinvweapon", 10000, 24500, false, false, true},
-	["Граната"] = {false, "Обычная граната", 25, "useinvweapon", 600, 1700, false, false, true},
-	["Молотов"] = {false, "Коктейль молотова", 25, "useinvweapon", 800, 2200, false, false, true},
-	["М16"] = {false, "Автомат М16\nСтрана: США", 1, "useinvweapon", 2880, 6000, false, false, true},
-	["Кольт 45"] = {false, "Кольт 45 9-мм", 1, "useinvweapon", 1120, 1000, false, false, true},
-	["USP-S"] = {false, "Пистолет USP-S", 1, "useinvweapon", 1043, 1500, false, false, true},
-	["Deagle"] = {false, "Пистолет Deagle", 1, "useinvweapon", 1950, 5500, false, false, true},
-	["Кровь"] = {false, "Используется для лечения больных", 5, false, 450, 800, false, false, true},
-	["Pissh"] = {false, "Шотландское пиво Pissh темное", 1, "usedrink", 450, 140, false, false, false},
-	["Pissh Gold"] = {false, "Шотландское пиво Pissh светлое", 1, "usedrink", 430, 120, false, false, false},
-	["KBeer"] = {false, "3 Литра светлого немецкого пива KBeer", 1, "usedrink", 3084, 615, false, false, false},
-	["KBeer Dark"] = {false, "3 Литра темного немецкого пива KBeer", 1, "usedrink", 3084, 735, false, false, false}, 
-	["isabella"] = {false, "Вино", 1, "usedrink", 1043, 515, false, false, false},
-	["Фекалии"] = {false, "Для одних - обычное говно\nДля других - сладкий хлебушек", 10, "eatcrap", 150, 0, false, false, true},
-	["CoK"] = {false, "Пачка сигарет CoK", 1, "usesmoke", 5, 20, false, false},
-	["Сигарета"] = {false, "Просто сигарета", 20, "usesmoke", 0.2, 1, {["сигареты"] = {"CoK"}}, false, false}, 
-	["Mossberg"] = {false, "Дробовик Mossberg 500", 1, "useinvweapon", 3300, 4700, false, false, true},
-	["Sawed-Off"] = {false, "Дробовик Sawed-Off", 1, "useinvweapon", 2500, 5500, false, false, true},
-	["SPAS-12"] = {false, "Дробовик SPAS-12", 1, "useinvweapon", 4400, 6500, false, false, true},
-	["Узи"] = {false, "Микро Узи", 1, "useinvweapon", 2650, 1750, false, false, true},
-	["MP5"] = {false, "Просто MP5", 1, "useinvweapon", 2660, 2000, false, false, true},
-	["Tec-9"] = {false, "Просто Tec-9", 1, "useinvweapon", 1400, 1500, false, false, true}, 
-	["ИЖ-12"] = {false, "Просто ИЖ-12", 1, "useinvweapon", 3100, 6500, false, false, true},
-	["M40"] = {false, "Просто M40", 1, "useinvweapon", 6570, 10000, false, false, true},
-	["Dildo XXL"] = {false, "Просто Dildo XXL", 1, "useinvweapon", 760, 4350, false, false, true},
-	["Dildo"] = {false, "Просто Dildo", 1, "useinvweapon", 540, 1600, false, false, true},
-	["Вибратор"] = {false, "Просто Vibrator", 1, "useinvweapon", 1100, 3000, false, false, true},
-	["Клюшка"] = {false, "Клюшка для гольфа", 1, "useinvweapon", 2500, 4000, false, false, true},
-	["Лопата"] = {false, "Обычная лопата", 1, "useinvweapon", 1500, 800, false, false, true},
-	["Бита"] = {false, "Бейсбольная бита", 1, "useinvweapon", 3000, 2000, false, false, true},
-	["Дубинка"] = {false, "Полицейская дубинка", 1, "useinvweapon", 2400, 3000, false, false, true},
-	["Нож"] = {false, "Охотничий нож", 1, "useinvweapon", 160, 450, false, false, true},
-	["Катана"] = {false, "Катана настоящего якудзы", 1, "useinvweapon", 750, 1350, false, false, true},
-	["Камера"] = {false, "Обычная любительская фотокамера", 1, "useinvweapon", 570, 12000, false, false, true},
-	["Огнетушитель"] = {false, "Обычный огнетушитель", 1, "useinvweapon", 5000, 150, false, false, true},
-	["Спрей"] = {false, "Обычный спрей", 1, "useinvweapon", 340, 250, false, false, true},
-	["Огнемет"] = {false, "Обычный огнемет", 1, "useinvweapon", 3340, 9250, false, false, true},
-	["Бензопила"] = {false, "Просто бензопила", 1, "useinvweapon", 12500, 7700, false, false, true},
+	["hp"] = {"invobject/unknown.png", "", 100, false, 0, 0, false, false, false, {1,1}}, 
+	["Бронежилет"] = {false, "Военый бронежилет", 1, "usearmor", 4650, 2520, false, false, true, {1,1}}, 
+	["Канистра"] = {false, "Десяти литровая канистра с бензином", 1, "usekanistra", 10350, 1000, false, false, false, {1,1}}, 
+	["Реликвия"] = {false, "Древняя статуэтка неизвестного происхождения", 1, false, 760, 10000, false, false, false, {1,1}}, 
+	["Подкова"] = {false, "Старая подкова, антиквариат", 1, false, 350, 5000, false, false, false, {1,1}}, 
+	["Ракушка"] = {false, "Просто ракушка", 1, false, 10, 50, false, false, false, {1,1}}, 
+	["Телефон"] = {false, "Телефон", 1, "usecellphone", 350, 1500, false, false, false, {1,1}}, 
+	["Рюкзак"] = {false, "Обычный рюкзак", 1, "SetupBackpack", 2500, 5000, false, true, false, {1,1}}, 
+	["Чемодан"] = {false, "Обычный чемодан", 1, "SetupBackpack", 1000, 1000, false, true, false, {1,1}}, 
+	["Пакет"] = {false, "Обычный пакет", 1, "SetupBackpack", 10, 1, false, true, false, {1,1}}, 
+	["АК-47"] = {false, "Автомат Калашникова\nСтрана: СССР", 1, "useinvweapon", 4300, 4500, false, false, true, {4,2}}, 
+	["Базука"] = {false, "Просто базука", 1, "useinvweapon", 10000, 24500, false, false, true, {1,1}}, 
+	["Граната"] = {false, "Обычная граната", 25, "useinvweapon", 600, 1700, false, false, true, {1,1}}, 
+	["Молотов"] = {false, "Коктейль молотова", 25, "useinvweapon", 800, 2200, false, false, true, {1,1}}, 
+	["М16"] = {false, "Автомат М16\nСтрана: США", 1, "useinvweapon", 2880, 6000, false, false, true, {4,2}}, 
+	["Кольт 45"] = {false, "Кольт 45 9-мм", 1, "useinvweapon", 1120, 1000, false, false, true, {1,1}}, 
+	["USP-S"] = {false, "Пистолет USP-S", 1, "useinvweapon", 1043, 1500, false, false, true, {1,1}}, 
+	["Deagle"] = {false, "Пистолет Deagle", 1, "useinvweapon", 1950, 5500, false, false, true, {1,1}}, 
+	["Кровь"] = {false, "Используется для лечения больных", 5, false, 450, 800, false, false, true, {1,1}}, 
+	["Pissh"] = {false, "Шотландское пиво Pissh темное", 1, "usedrink", 450, 140, false, false, false, {1,2}}, 
+	["Pissh Gold"] = {false, "Шотландское пиво Pissh светлое", 1, "usedrink", 430, 120, false, false, false, {1,2}}, 
+	["KBeer"] = {false, "3 Литра светлого немецкого пива KBeer", 1, "usedrink", 3084, 615, false, false, false, {1,2}}, 
+	["KBeer Dark"] = {false, "3 Литра темного немецкого пива KBeer", 1, "usedrink", 3084, 735, false, false, false, {1,2}}, 
+	["isabella"] = {false, "Вино", 1, "usedrink", 1043, 515, false, false, false, {1,2}}, 
+	["Фекалии"] = {false, "Для одних - обычное говно\nДля других - сладкий хлебушек", 10, "eatcrap", 150, 0, false, false, true, {1,1}}, 
+	["CoK"] = {false, "Пачка сигарет CoK", 1, "usesmoke", 5, 20, false, false, {1,1}}, 
+	["Сигарета"] = {false, "Просто сигарета", 20, "usesmoke", 0.2, 1, {["сигареты"] = {"CoK"}}, false, false, {1,1}}, 
+	["Mossberg"] = {false, "Дробовик Mossberg 500", 1, "useinvweapon", 3300, 4700, false, false, true, {1,1}}, 
+	["Sawed-Off"] = {false, "Дробовик Sawed-Off", 1, "useinvweapon", 2500, 5500, false, false, true, {1,1}}, 
+	["SPAS-12"] = {false, "Дробовик SPAS-12", 1, "useinvweapon", 4400, 6500, false, false, true, {1,1}}, 
+	["Узи"] = {false, "Микро Узи", 1, "useinvweapon", 2650, 1750, false, false, true, {1,1}}, 
+	["MP5"] = {false, "Просто MP5", 1, "useinvweapon", 2660, 2000, false, false, true, {1,1}}, 
+	["Tec-9"] = {false, "Просто Tec-9", 1, "useinvweapon", 1400, 1500, false, false, true, {1,1}}, 
+	["ИЖ-12"] = {false, "Просто ИЖ-12", 1, "useinvweapon", 3100, 6500, false, false, true, {5,2}}, 
+	["M40"] = {false, "Просто M40", 1, "useinvweapon", 6570, 10000, false, false, true, {1,1}}, 
+	["Dildo XXL"] = {false, "Просто Dildo XXL", 1, "useinvweapon", 760, 4350, false, false, true, {1,1}}, 
+	["Dildo"] = {false, "Просто Dildo", 1, "useinvweapon", 540, 1600, false, false, true, {1,1}}, 
+	["Вибратор"] = {false, "Просто Vibrator", 1, "useinvweapon", 1100, 3000, false, false, true, {1,1}}, 
+	["Клюшка"] = {false, "Клюшка для гольфа", 1, "useinvweapon", 2500, 4000, false, false, true, {1,1}}, 
+	["Лопата"] = {false, "Обычная лопата", 1, "useinvweapon", 1500, 800, false, false, true, {1,1}}, 
+	["Бита"] = {false, "Бейсбольная бита", 1, "useinvweapon", 3000, 2000, false, false, true, {1,1}}, 
+	["Дубинка"] = {false, "Полицейская дубинка", 1, "useinvweapon", 2400, 3000, false, false, true, {1,1}}, 
+	["Нож"] = {false, "Охотничий нож", 1, "useinvweapon", 160, 450, false, false, true, {1,1}}, 
+	["Катана"] = {false, "Катана настоящего якудзы", 1, "useinvweapon", 750, 1350, false, false, true, {1,1}}, 
+	["Камера"] = {false, "Обычная любительская фотокамера", 1, "useinvweapon", 570, 12000, false, false, true, {1,1}}, 
+	["Огнетушитель"] = {false, "Обычный огнетушитель", 1, "useinvweapon", 5000, 150, false, false, true, {1,1}}, 
+	["Спрей"] = {false, "Обычный спрей", 1, "useinvweapon", 340, 250, false, false, true, {1,1}}, 
+	["Огнемет"] = {false, "Обычный огнемет", 1, "useinvweapon", 3340, 9250, false, false, true, {1,1}}, 
+	["Бензопила"] = {false, "Просто бензопила", 1, "useinvweapon", 12500, 7700, false, false, true, {1,1}}, 
 
-	["Лазерный прицел"] = {"invobject/laser.png", "Лазерный прицел", 1, false, 420, 6800, {["лазер"] = {"M40", "АК-47", "М16", "ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg", "Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false},
+	["Лазерный прицел"] = {"invobject/laser.png", "Лазерный прицел", 1, false, 420, 6800, {["лазер"] = {"M40", "АК-47", "М16", "ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg", "Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false, {1,1}}, 
 
-	["9-мм"] = {false, "В настоящий момент используются во: \nВсех пистолетах, узи", 250, false, 6, 5, {["патроны"] = {"Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false},
-	["5.56-мм"] = {false, "В настоящий момент используются в М16", 250, false, 3, 7, {["патроны"] = {"М16"}}, false, false},
-	["7.62-мм"] = {false, "В настоящий момент используются для снайперской винтовки, АК-47", 250, false, 7, 10, {["патроны"] = {"M40", "АК-47"}}, false, false},
-	["18.5-мм"] = {false, "В настоящий момент используются во всех дробовиках и винтовке ИЖ-12", 250, false, 13, 25, {["патроны"] = {"ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg"}}, false, false}, 
-	["Ракета"] = {false, "Используется для обычной базуки", 250, false, 1200, 500, {["патроны"] = {"Базука"}}, false, false},
+	["9-мм"] = {false, "В настоящий момент используются во: \nВсех пистолетах, узи", 250, false, 6, 5, {["патроны"] = {"Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false, {1,1}}, 
+	["5.56-мм"] = {false, "В настоящий момент используются в М16", 250, false, 3, 7, {["патроны"] = {"М16"}}, false, false, {1,1}}, 
+	["7.62-мм"] = {false, "В настоящий момент используются для снайперской винтовки, АК-47", 250, false, 7, 10, {["патроны"] = {"M40", "АК-47"}}, false, false, {1,1}}, 
+	["18.5-мм"] = {false, "В настоящий момент используются во всех дробовиках и винтовке ИЖ-12", 250, false, 13, 25, {["патроны"] = {"ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg"}}, false, false, {1,1}}, 
+	["Ракета"] = {false, "Используется для обычной базуки", 250, false, 1200, 500, {["патроны"] = {"Базука"}}, false, false, {1,1}}, 
 
-	["Кулак"] = {false, nil, 1, "useinvweapon", 0, 0, false, false, false},
+	["Кулак"] = {false, nil, 1, "useinvweapon", 0, 0, false, false, false, {1,1}}, 
 
-	["Конопля"] = {false, "Сырые листья конопли, могут быть посажены на землю или траву.\nТак же используются для получения шмали.", 100, "CreateCanabis", 260, 760, false, true, false}, 
-	["Кока"] = {false, "Кока приобрела широкую известность как сырьё для изготовления кокаина — наркотика из класса стимуляторов", 25, "CreateCoka", 625, 2500, false, true, false},
-	["Косяк"] = {false, "Косяк, вызывает зависимость, восстанавливает жизни", 20, "usedrugs", 1, 16000, false, true, true},
-	["Спанк"] = {false, "Спанк, вызывает зависимость", 10, "usedrugs", 100, 1000, false, true, true},
-	["Удочка"] = {false, "Рыболовная удочка", 1, "useinvweapon", 400, 700, false, false, true},
-	["Рыба"] = {false, "Рыба", 1, false, 0, 0, false, false, false},
-	["Черепаха"] = {false, "Морская черепаха", 1, false, 0, 15700, false, false, false},
-	["Акула"] = {false, "Морская акула", 1, false, 0, 9800, false, false, false},
-	["Дельфин"] = {false, "Морской дельфин", 1, false, 0, 5300, false, false, false},
-	["Парашют"] = {false, "Парашют", 1, "useinvweapon", 400, 700, false, true, true},
+	["Конопля"] = {false, "Сырые листья конопли, могут быть посажены на землю или траву.\nТак же используются для получения шмали.", 100, "CreateCanabis", 260, 760, false, true, false, {1,1}}, 
+	["Кока"] = {false, "Кока приобрела широкую известность как сырьё для изготовления кокаина — наркотика из класса стимуляторов", 25, "CreateCoka", 625, 2500, false, true, false, {1,1}}, 
+	["Косяк"] = {false, "Косяк, вызывает зависимость, восстанавливает жизни", 20, "usedrugs", 1, 16000, false, true, true, {1,1}}, 
+	["Спанк"] = {false, "Спанк, вызывает зависимость", 10, "usedrugs", 100, 1000, false, true, true, {1,1}}, 
+	["Удочка"] = {false, "Рыболовная удочка", 1, "useinvweapon", 400, 700, false, false, true, {1,1}}, 
+	["Рыба"] = {false, "Рыба", 1, false, 0, 0, false, false, false, {1,1}}, 
+	["Черепаха"] = {false, "Морская черепаха", 1, false, 0, 15700, false, false, false, {1,1}}, 
+	["Акула"] = {false, "Морская акула", 1, false, 0, 9800, false, false, false, {1,1}}, 
+	["Дельфин"] = {false, "Морской дельфин", 1, false, 0, 5300, false, false, false, {1,1}}, 
+	["Парашют"] = {false, "Парашют", 1, "useinvweapon", 400, 700, false, true, true, {1,1}}, 
 	
-	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, true, true},
-	["Алкоголь"] = {false, "Алкоголь", 1, false, 40000, 600, false, true, false},
-	["Скот"] = {false, "Скот", 1, false, 90000, 700, false, true, false},
-	["Мясо"] = {false, "Мясо", 1, false, 36000, 330, false, true, false},
-	["Нефть"] = {false, "Нефть", 1, false, 136000, 1500, false, true, false},
-	["Пропан"] = {false, "Пропан", 1, false, 55000, 175, false, true, false},
-	["Химикаты"] = {false, "Химикаты", 1, false, 92000, 350, false, true, false},
-	["Удобрения"] = {false, "Удобрения", 1, false, 41000, 150, false, true, false},
-	["Бензин"] = {false, "Бензин", 1, false, 56000, 250, false, true, false},
-	["Зерно"] = {false, "Зерно", 1, false, 2500, 50, false, true, false}, 
-	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false},
-	["Деньги"] = {false, "Деньги", 99999999, false, 0.01, 1, false, false, false},
-	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false, false}, 
+	["Запаска"] = {false, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, true, true, {1,1}}, 
+	["Алкоголь"] = {false, "Алкоголь", 1, false, 40000, 600, false, true, false, {1,1}}, 
+	["Скот"] = {false, "Скот", 1, false, 90000, 700, false, true, false, {1,1}}, 
+	["Мясо"] = {false, "Мясо", 1, false, 36000, 330, false, true, false, {1,1}}, 
+	["Нефть"] = {false, "Нефть", 1, false, 136000, 1500, false, true, false, {1,1}}, 
+	["Пропан"] = {false, "Пропан", 1, false, 55000, 175, false, true, false, {1,1}}, 
+	["Химикаты"] = {false, "Химикаты", 1, false, 92000, 350, false, true, false, {1,1}}, 
+	["Удобрения"] = {false, "Удобрения", 1, false, 41000, 150, false, true, false, {1,1}}, 
+	["Бензин"] = {false, "Бензин", 1, false, 56000, 250, false, true, false, {1,1}}, 
+	["Зерно"] = {false, "Зерно", 1, false, 2500, 50, false, true, false, {1,1}}, 
+	["Газета"] = {false, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false, {1,1}}, 
+	["Деньги"] = {false, "Деньги", 99999999, false, 0.01, 1, false, false, false, {1,1}}, 
+	["Кредитка"] = {false, "Банковская кредитная карта", 1, false, 100, 1, false, false, false, {1,1}}, 
 }
 
 
@@ -1326,6 +1151,8 @@ local items = {
 function getItems()
 	return items
 end
+
+
 
 local WeaponAmmo = {
 	[30] = "7.62-мм",
@@ -4814,21 +4641,6 @@ function updateCamera()
 	end
 	
 	
-	if(CreateTextureStage) then
-		if(CreateTextureStage[2] == 1) then
-			local x,y,z = getElementPosition(PreloadTextures[CreateTextureStage[1]])
-			local model = CreateTextureStage[1]
-			setCameraMatrix(x+TexturesPosition[model][1],y+TexturesPosition[model][2],z+TexturesPosition[model][3], x+TexturesPosition[model][4],y+TexturesPosition[model][5],z+TexturesPosition[model][6], TexturesPosition[model][7], TexturesPosition[model][8])
-			
-			if(isElementStreamedIn(PreloadTextures[CreateTextureStage[1]])) then
-				CreateTextureStage[2] = 4
-			else
-				CreateTextureStage[2] = 2
-			end
-		end
-	end
-	
-	
 	if(PData["ResourceMap"]) then
 		setSkyGradient(170,103,0 ,170,103,0) -- ,170,103,0
 	end
@@ -4856,37 +4668,45 @@ end
 addEventHandler("onClientPreRender", getRootElement(), updateCamera)
 
 
---[[
-local mixedSkins = {0, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 68, 69, 70, 71, 72, 73, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312}
 
 
-for id, num in pairs(mixedSkins) do
-	PreloadTextures["skin"..num] = createPed(num, 4000, 4000+(id*20), 4000)
-	TexturesPosition["skin"..num] = {0,4,0, 0,0,0, 0,70, 110}
-	items["skin"..num] = {false}
-	setElementFrozen(PreloadTextures["skin"..num], true)
+function CreateButtonInputInt(func, text, args)
+	if(PText["HUD"][8]) then
+		PText["HUD"][8] = nil
+	else
+		PText["HUD"][8] = {text, screenWidth, screenHeight-(650*scalex), 0, 0, tocolor(0, 0, 0, 255), NewScale*2, "default-bold", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
+
+		BindedKeys["enter"] = {"ServerCall", localPlayer, {func, localPlayer, localPlayer, "", args}}
+	end
 end
---]]
+addEvent("CreateButtonInputInt", true)
+addEventHandler("CreateButtonInputInt", localPlayer, CreateButtonInputInt)
 
 
 
---[[local vehicleIDS = {
-    602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585, 405, 587,
-    409, 466, 550, 492, 566, 546, 540, 551, 421, 516, 529, 592, 553, 577, 488, 511, 497, 548, 563, 512, 476, 593, 447, 425, 519, 520, 460, 417,
-    469, 487, 513, 581, 510, 509, 522, 481, 461, 462, 448, 521, 468, 463, 586, 472, 473, 493, 595, 484, 430, 453, 452, 446, 454, 485, 552, 431,
-    438, 437, 574, 420, 525, 408, 416, 596, 433, 597, 427, 599, 490, 432, 528, 601, 407, 428, 544, 523, 470, 598, 499, 588, 609, 403, 498, 514,
-    524, 423, 532, 414, 578, 443, 486, 515, 406, 531, 573, 456, 455, 459, 543, 422, 583, 482, 478, 605, 554, 530, 418, 572, 582, 413, 440, 536,
-    575, 534, 567, 535, 576, 412, 402, 542, 603, 475, 449, 537, 538, 570, 441, 464, 501, 465, 564, 568, 557, 424, 471, 504, 495, 457, 539, 483,
-    508, 571, 500, 444, 556, 429, 411, 541, 559, 415, 561, 480, 560, 562, 506, 565, 451, 434, 558, 494, 555, 502, 477, 503, 579, 400, 404, 489,
-    505, 479, 442, 458, 606, 607, 610, 590, 569, 611, 584, 608, 435, 450, 591, 594
-}
+function LoginClient(open)
+	if(open) then
+		CreateButtonInputInt("loginPlayerEvent", Text("Регистрация/Вход"))
+		showCursor(true)
+		
+		outputChatBox(Text("Нажми {key} чтобы писать в общий чат", {{"{key}", COLOR["KEY"]["HEX"].."T#FFFFFF"}}),  255, 255, 255,true)
+		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
+		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
+		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
+		
+		PText["INVHUD"][10] = {"Русский", 100*NewScale, 500*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Русский"}}}
+		PText["INVHUD"][11] = {"English", 100*NewScale, 540*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "English"}}}
+		PText["INVHUD"][12] = {"Portuguese", 100*NewScale, 580*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Portuguese"}}}
+		PText["INVHUD"][13] = {"Azerbaijani", 100*NewScale, 620*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Azerbaijani"}}}
+		PText["INVHUD"][14] = {"Turkish", 100*NewScale, 660*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Turkish"}}}
+	else
+		PText["HUD"][8] = nil
+	end
+end
+addEvent("LoginWindow", true)
+addEventHandler("LoginWindow", localPlayer, LoginClient)
 
-for id, num in pairs(vehicleIDS) do
-	PreloadTextures["car"..num] = createVehicle(num, 5000, 5000+(id*50), 5000)
-	TexturesPosition["car"..num] = {-7,5,4, 0,0,0, 0,70, 110}
-	items["car"..num] = {false}
-	setElementFrozen(PreloadTextures["car"..num], true)
-end--]]
+
 
 function StartUnload()
 	LoginClient(false)
@@ -4897,41 +4717,6 @@ function StartUnload()
 	return true
 end
 
-
-
-
-function GenerateTexture() -- Третий этап загрузки
-	PData['loading'] = 10+(92-(92/getArrSize(TexturesPosition))*getArrSize(PreloadTextures))
-	local LoadTexture = false
-
-	for name, _ in pairs(PreloadTextures) do
-		LoadTexture = name
-		break
-	end
-	
-	if(LoadTexture) then
-		if(LoadTexture == "Рыба" or LoadTexture == "Деньги" or LoadTexture == "Газета") then
-			setSkyGradient(0,0,255,0,0,255)
-			CreateTextureStage = {LoadTexture, 1, 3} -- 3 Синий хромакей
-		elseif(LoadTexture == "Скот") then
-			setSkyGradient(255,0,0,255,0,0)
-			CreateTextureStage = {LoadTexture, 1, 1} -- 1 Красный хромакей
-		else
-			setSkyGradient(0,255,0,0,255,0)
-			CreateTextureStage = {LoadTexture, 1, 2} -- 2 Зеленый хромакей
-		end
-	else
-		triggerServerEvent("SyncTime", localPlayer, localPlayer)
-
-		PEDChangeSkin = "intro"
-		showChat(true)
-		fadeCamera(true, 2.0)
-		SetPlayerHudComponentVisible("all", false)
-
-		setCameraMatrix(1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
-		PData['loading'] = 100
-	end
-end
 
 
 
@@ -4959,8 +4744,6 @@ function HUDPreload()
 	dxDrawBorderedText("★★★★★★", 0, 0, 0, 0, tocolor(40,40,40,200), NewScale*2, "pricedown", "left", "top")
 	dxSetBlendMode("blend")
 	
-	PData['loading'] = 4
-	
 	VideoMemory["HUD"]["Cinema"] = dxCreateRenderTarget(screenWidth, screenHeight, true)
 	dxSetRenderTarget(VideoMemory["HUD"]["Cinema"], true)
 	dxSetBlendMode("modulate_add")
@@ -4975,15 +4758,11 @@ function HUDPreload()
 	dxDrawCircle(50*NewScale, 50*NewScale, 40*NewScale, 5*NewScale, 1, 0, 360, tocolor(20,24,20,15))
 	dxSetBlendMode("blend")
 	
-	PData['loading'] = 6
-	
 	VideoMemory["HUD"]["BlackScreen"] = dxCreateRenderTarget(screenWidth, screenHeight, true)
 	dxSetRenderTarget(VideoMemory["HUD"]["BlackScreen"], true)
 	dxSetBlendMode("modulate_add")
 	dxDrawRectangle(0,0,screenWidth,screenHeight,tocolor(0,0,0,255))
 	dxSetBlendMode("blend")
-
-	PData['loading'] = 8
 	
 	VideoMemory["HUD"]["PlayerInv"] = dxCreateRenderTarget((screenWidth)-((80*NewScale)*10), (80*NewScale), true)
 	dxSetRenderTarget(VideoMemory["HUD"]["PlayerInv"], true)
@@ -5010,8 +4789,6 @@ function HUDPreload()
 	
 	dxSetBlendMode("blend")
 
-
-	PData['loading'] = 10
 	dxSetRenderTarget()
 	return true
 end
@@ -5019,11 +4796,31 @@ end
 
 
 
+function GenerateTextureCompleted(textures) -- Третий этап загрузки
+	for name, texture in pairs(textures) do
+		items[name][1] = texture
+	end
+
+	triggerServerEvent("SyncTime", localPlayer, localPlayer)
+
+	PEDChangeSkin = "intro"
+	showChat(true)
+	fadeCamera(true, 2.0)
+	SetPlayerHudComponentVisible("all", false)
+
+	LoginClient(true)
+	PlaySFXSound(10)
+	
+	setCameraMatrix(1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
+end
+addEvent("GenerateTextureCompleted", true)
+addEventHandler("GenerateTextureCompleted", localPlayer, GenerateTextureCompleted)
+
+
+
 
 function onDownloadFinish(file, success) -- Второй этап загрузки
 	if(file == "lang/"..PData["LANG"]) then
-		PData['loading'] = 2
-		
 		local hFile = fileOpen("lang/"..PData["LANG"], true)
 
 		local ft = fileRead(hFile, 5500)
@@ -5042,10 +4839,10 @@ function onDownloadFinish(file, success) -- Второй этап загрузк
 			end
 		end
 		fileClose(hFile)
-		
-		if(HUDPreload()) then
-			GenerateTexture()
-		end
+	end
+	
+	if(HUDPreload()) then
+		exports["Object_Texture_Loader"]:GenerateTexture()
 	end
 end
 addEventHandler("onClientFileDownloadComplete", root, onDownloadFinish)
@@ -5053,12 +4850,13 @@ addEventHandler("onClientFileDownloadComplete", root, onDownloadFinish)
 
 
 
+
 function StartLoad() -- Первый этап загрузки
 	setTime(12, 0)
 	setWeather(0)
-	setFarClipDistance(1000)
+	setFogDistance(300)
+	setFarClipDistance(300)
 	setMinuteDuration(1000)
-	setFogDistance(0)
 	downloadFile("lang/"..PData["LANG"])
 end
 StartLoad()
@@ -5069,28 +4867,6 @@ StartLoad()
 
 
 
-
-function LoginClient(open)
-	if(open) then
-		CreateButtonInputInt("loginPlayerEvent", Text("Регистрация/Вход"))
-		showCursor(true)
-		
-		outputChatBox(Text("Нажми {key} чтобы писать в общий чат", {{"{key}", COLOR["KEY"]["HEX"].."T#FFFFFF"}}),  255, 255, 255,true)
-		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
-		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
-		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
-		
-		PText["INVHUD"][10] = {"Русский", 100*NewScale, 500*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Русский"}}}
-		PText["INVHUD"][11] = {"English", 100*NewScale, 540*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "English"}}}
-		PText["INVHUD"][12] = {"Portuguese", 100*NewScale, 580*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Portuguese"}}}
-		PText["INVHUD"][13] = {"Azerbaijani", 100*NewScale, 620*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Azerbaijani"}}}
-		PText["INVHUD"][14] = {"Turkish", 100*NewScale, 660*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Turkish"}}}
-	else
-		PText["HUD"][8] = nil
-	end
-end
-addEvent("LoginWindow", true)
-addEventHandler("LoginWindow", localPlayer, LoginClient)
 
 
 function AuthComplete(CollectDat)
@@ -6940,61 +6716,6 @@ function DrawOnClientRender()
 			dxDrawImage(screenWidth/6, screenHeight/6, screenWidth/1.5, screenHeight/1.5, NewsPaper[1], 0, 0, 0, tocolor(255,255,255,255), true)
 		end
 	end
-	if(PData['loading']) then
-		if(VideoMemory["HUD"]["BlackScreen"]) then
-			dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["BlackScreen"])
-		end
-		dxDrawRectangle(200*NewScale, screenHeight-(175*(scaley)),screenWidth-(400*scalex), 30*NewScale, tocolor(45,50,70,255))
-		dxDrawRectangle(200*NewScale, screenHeight-(175*(scaley)),(screenWidth-(400*scalex))*(PData['loading']/100), 30*NewScale, tocolor(83,104,147,255))
-		
-		if(PData['loading'] == 100) then
-			PData['loading'] = nil
-			LoginClient(true)
-			PlaySFXSound(10)
-		end
-	end
-	if(CreateTextureStage) then
-		if(CreateTextureStage[2] == 2) then
-			dxUpdateScreenSource(ScreenGenSource)
-			CreateTextureStage[2] = 3
-		elseif(CreateTextureStage[2] == 4) then
-			dxUpdateScreenSource(ScreenGenSource)
-
-			local name = CreateTextureStage[1]
-			
-			local pixels = dxGetTexturePixels(ScreenGenSource)
-			local x, y = dxGetPixelsSize(pixels)
-			local texture = dxCreateTexture(x,y, "argb")
-			local pixels2 = dxGetTexturePixels(texture)
-			for y2 = 0, y-1 do
-				for x2 = 0, x-1 do
-					local colors = {dxGetPixelColor(pixels, x2,y2)}
-					if(colors[CreateTextureStage[3]] < TexturesPosition[name][9]) then
-						dxSetPixelColor(pixels2, x2, y2, colors[1],colors[2],colors[3],colors[4])
-					end
-				end
-			end
-			
-			--[[
-			local pngPixels = dxConvertPixels(pixels2, 'png')
-			local newImg = fileCreate(name..'.png')
-			fileWrite(newImg, pngPixels)
-			fileClose(newImg)
-			--]]
-			
-			
-			
-			dxSetTexturePixels(texture, pixels2)
-			items[CreateTextureStage[1]][1] = texture
-			destroyElement(PreloadTextures[CreateTextureStage[1]])
-			PreloadTextures[CreateTextureStage[1]] = nil
-			CreateTextureStage = false
-			GenerateTexture()
-		end
-	end
-	
-	
-
 
 
 	if(PData['CameraMove']) then
@@ -7463,19 +7184,6 @@ function StopDrag(name, id)
 end
 
 
-
-
-function CreateButtonInputInt(func, text, args)
-	if(PText["HUD"][8]) then
-		PText["HUD"][8] = nil
-	else
-		PText["HUD"][8] = {text, screenWidth, screenHeight-(650*scalex), 0, 0, tocolor(0, 0, 0, 255), NewScale*2, "default-bold", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
-
-		BindedKeys["enter"] = {"ServerCall", localPlayer, {func, localPlayer, localPlayer, "", args}}
-	end
-end
-addEvent("CreateButtonInputInt", true)
-addEventHandler("CreateButtonInputInt", localPlayer, CreateButtonInputInt)
 
 
 function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, clickedElement)
@@ -10500,51 +10208,49 @@ function DrawPlayerMessage()
 		dxDrawRectangle(0,0,screenWidth, screenHeight, tocolor(255,255,255,255))
 	elseif(PEDChangeSkin == "intro") then
 		dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["BlackScreen"])
-		if(not PData['loading']) then
-			dxUpdateScreenSource(screenSource)    
-			local speed2 = 100
-			for i, key in pairs(screenSaver) do
-				sx = (key[1]*(key[9]/speed2))+(key[5]-(key[5]*(key[9]/speed2)))
-				local sy = (key[2]*(key[9]/speed2))+(key[6]-(key[6]*(key[9]/speed2)))
-				if(key[8]) then
-					DrawZast(sx,sy, key[3], key[4], key[1],key[2], screenSource)
-					
-					if(key[9] < speed2) then
-						key[9]=key[9]+1
-					else
-						key[8] = false
-						key[7] = false
-					end
-				else
-					dxDrawBorderedText("#FF9800"..Text("Благодарности").."\n#FFFFFFCrystalMV #69749Abone_attach\n#FFFFFFPioner #69749Aперевод на азербайджанский\n#FFFFFF*Vk*Ricci #69749Aперевод на английский\n\n#C7843C"..Text("Над сервером работали").."#FFFFFF\n800 #194299real_life@sibmail.com#FFFFFF 2006-2011\nTanker #194299tankerktv@mail.ru#FFFFFF 2006-2009\nDark_ALEX #194299dark_alex@sibmail.com#FFFFFF 2009-2017\nMishel' #194299laym101@mail.com#FFFFFF 2017", screenWidth, screenHeight-(340*NewScale), screenWidth-(30*NewScale), screenHeight, tocolor(103,104,107, 255), NewScale*2, "default-bold", "right", "top", false, false, false, true)
-					
-					local x2, y2, z2, lx, ly, lz, rz = getCameraMatrix ()
-					setCameraMatrix (x2+0.0005, y2+0.0005, z2+0.00005, lx+0.0005, ly+0.0005, lz)
-					DrawZast(key[1],key[2], key[3], key[4], key[1],key[2], screenSource)
-					sx = key[1]
-					sy = key[2]
-					if(key[9] > 0) then
-						key[9]=key[9]-0.1
-					else
-						setCameraMatrix (1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
-						key[8] = true
-						key[7] = true
-					end
-				end
+		dxUpdateScreenSource(screenSource)    
+		local speed2 = 100
+		for i, key in pairs(screenSaver) do
+			sx = (key[1]*(key[9]/speed2))+(key[5]-(key[5]*(key[9]/speed2)))
+			local sy = (key[2]*(key[9]/speed2))+(key[6]-(key[6]*(key[9]/speed2)))
+			if(key[8]) then
+				DrawZast(sx,sy, key[3], key[4], key[1],key[2], screenSource)
 				
-				if(i == 1) then
-					DrawTriangle(sx+(key[3])-(130*scalex), sy, sx+(key[3]), sy+key[4], tocolor(0,0,0,255))
-				elseif(i == 4) then
-					DrawTriangle(sx+(key[3])-(10*scalex), sy, sx+(key[3]), sy+key[4], tocolor(0,0,0,255))
-				elseif(i == 5) then
-					DrawTriangle(sx+(50*scalex), sy, sx+(key[3]), sy+key[4]-(30*scaley), tocolor(0,0,0,255))
-					DrawTriangle(sx+key[3]-(20*scalex), sy+key[4]-(60*scaley), sx+(key[3])-(10*scalex), sy+key[4], tocolor(0,0,0,255))
-					dxDrawRectangle(sx+key[3]-(10*scalex), sy+key[4]-(60*scaley), 30*scalex, 61*scaley, tocolor(0,0,0,255))
-				elseif(i == 3) then
-					DrawTriangle(sx, sy+(20*scaley), sx+(key[3]), sy, tocolor(0,0,0,255))
-				elseif(i == 2) then
-					DrawTriangle(sx, sy+(key[4]), sx+(key[3]), sy+(key[4])-(17*scaley), tocolor(0,0,0,255), true)
+				if(key[9] < speed2) then
+					key[9]=key[9]+1
+				else
+					key[8] = false
+					key[7] = false
 				end
+			else
+				dxDrawBorderedText("#FF9800"..Text("Благодарности").."\n#FFFFFFCrystalMV #69749Abone_attach\n#FFFFFFPioner #69749Aперевод на азербайджанский\n#FFFFFF*Vk*Ricci #69749Aперевод на английский\n\n#C7843C"..Text("Над сервером работали").."#FFFFFF\n800 #194299real_life@sibmail.com#FFFFFF 2006-2011\nTanker #194299tankerktv@mail.ru#FFFFFF 2006-2009\nDark_ALEX #194299dark_alex@sibmail.com#FFFFFF 2009-2017\nMishel' #194299laym101@mail.com#FFFFFF 2017", screenWidth, screenHeight-(340*NewScale), screenWidth-(30*NewScale), screenHeight, tocolor(103,104,107, 255), NewScale*2, "default-bold", "right", "top", false, false, false, true)
+				
+				local x2, y2, z2, lx, ly, lz, rz = getCameraMatrix ()
+				setCameraMatrix (x2+0.0005, y2+0.0005, z2+0.00005, lx+0.0005, ly+0.0005, lz)
+				DrawZast(key[1],key[2], key[3], key[4], key[1],key[2], screenSource)
+				sx = key[1]
+				sy = key[2]
+				if(key[9] > 0) then
+					key[9]=key[9]-0.1
+				else
+					setCameraMatrix (1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
+					key[8] = true
+					key[7] = true
+				end
+			end
+			
+			if(i == 1) then
+				DrawTriangle(sx+(key[3])-(130*scalex), sy, sx+(key[3]), sy+key[4], tocolor(0,0,0,255))
+			elseif(i == 4) then
+				DrawTriangle(sx+(key[3])-(10*scalex), sy, sx+(key[3]), sy+key[4], tocolor(0,0,0,255))
+			elseif(i == 5) then
+				DrawTriangle(sx+(50*scalex), sy, sx+(key[3]), sy+key[4]-(30*scaley), tocolor(0,0,0,255))
+				DrawTriangle(sx+key[3]-(20*scalex), sy+key[4]-(60*scaley), sx+(key[3])-(10*scalex), sy+key[4], tocolor(0,0,0,255))
+				dxDrawRectangle(sx+key[3]-(10*scalex), sy+key[4]-(60*scaley), 30*scalex, 61*scaley, tocolor(0,0,0,255))
+			elseif(i == 3) then
+				DrawTriangle(sx, sy+(20*scaley), sx+(key[3]), sy, tocolor(0,0,0,255))
+			elseif(i == 2) then
+				DrawTriangle(sx, sy+(key[4]), sx+(key[3]), sy+(key[4])-(17*scaley), tocolor(0,0,0,255), true)
 			end
 		end
 	elseif(PEDChangeSkin == "cinema") then
@@ -10927,15 +10633,6 @@ end
 
 
 function StreamIn(restream)
-	if(CreateTextureStage) then
-		if(CreateTextureStage[2] == 3) then
-			if(PreloadTextures[CreateTextureStage[1]] == source) then
-				CreateTextureStage[2] = 4
-			end
-		end
-	end
-
-
 	if(getElementType(source) == "player") then
 		if(not StreamData[source]) then
 			StreamData[source] = {["armas"] = {}}

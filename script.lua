@@ -5505,7 +5505,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 9304.16, 8380.234, 12.336201, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 1710, 2171, 9.8, 0, 0 -- 8152, -9143, 6.3
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12334,7 +12334,7 @@ addCommandHandler("seti", seti)
 
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
-	local res = getResourceFromName("Interface") -- Interface
+	local res = getResourceFromName("Object_Texture_Loader") -- Interface
 	restartResource(res)
 	--triggerClientEvent(thePlayer, "GameSky", thePlayer, "Red County", 8, false)
  --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)
