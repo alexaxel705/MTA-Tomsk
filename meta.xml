@@ -10,7 +10,6 @@
     <sync_map_element_data>true</sync_map_element_data>
 	<file src="invobject/laser.png" />
 	<file src="invobject/unknown.png" />
-	<export function="GenerateTextureCompleted" type="client"/>
 	
 	<file src="lang/Ru_ru.po" download="false" />
 	<file src="lang/Ru_en.po" download="false" />
