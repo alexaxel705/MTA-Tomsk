@@ -1067,7 +1067,7 @@ local items = {
 	["Подкова"] = {954, "Старая подкова, антиквариат", 1, false, 350, 5000, false, false, false, {1,1}}, 
 	["Ракушка"] = {953, "Просто ракушка", 1, false, 10, 50, false, false, false, {1,1}}, 
 	["Телефон"] = {330, "Телефон", 1, "usecellphone", 350, 1500, false, false, false, {1,1}}, 
-	["Рюкзак"] = {3026, "Обычный рюкзак", 1, "SetupBackpack", 2500, 5000, false, true, false, {1,1}}, 
+	["Рюкзак"] = {3026, "Обычный рюкзак", 1, "SetupBackpack", 2500, 5000, false, true, false, {2,3}}, 
 	["Чемодан"] = {1210, "Обычный чемодан", 1, "SetupBackpack", 1000, 1000, false, true, false, {1,1}}, 
 	["Пакет"] = {2663, "Обычный пакет", 1, "SetupBackpack", 10, 1, false, true, false, {1,1}}, 
 	["АК-47"] = {355, "Автомат Калашникова\nСтрана: СССР", 1, "useinvweapon", 4300, 4500, false, false, true, {4,2}}, 
@@ -4817,6 +4817,9 @@ addEvent("GenerateTextureCompleted", true)
 addEventHandler("GenerateTextureCompleted", localPlayer, GenerateTextureCompleted)
 
 
+
+
+
 local MyTextures = {
 	["Кулак"] = {1666, 0,0,0, 0,0,0, 0,70, 255}, 
 	["Фекалии"] = {16444, -2,-4,1, 0,0,0, 0,70, 255}, 
@@ -7105,6 +7108,12 @@ end
 function DrawZast(x,y,w,h,zahx,zahy,target)
 	dxDrawImageSection(x,y, w,h , zahx,zahy, w,h, target)
 end
+
+
+
+
+
+
 
 
 
