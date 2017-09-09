@@ -60,7 +60,6 @@ local PData = {
 	['ShakeLVL'] = 0, 
 	['TARR'] = {}, -- Target, по центру, ниже, выше
 	['MultipleAction'] = {},
-	['LANG'] = "Ru_ru.po", 
 	["DisplayCollection"] = {}, -- Отображает на экране количество коллекций в районе
 	['infopath'] = {
 		["Linden Side"] = false,
@@ -235,7 +234,23 @@ local PData = {
 	}, -- Для разработчика
 	['changezone'] = {} -- Для разработчика
 }
+
+
+
+
 local LangArr = {}
+function Text(text, repl)
+	if(LangArr[text]) then
+		text = LangArr[text]
+	end
+	if(repl) then
+		for i, dat in pairs(repl) do
+			text = string.gsub(text, dat[1], dat[2])
+		end
+	end
+	return text
+end
+
 local timers = {}
 local timersAction = {}
 local backpackid = false
@@ -318,12 +333,6 @@ HUD:
 	7 - MissionCompleted
 	8 - input
 	9 - очки ярости
-	
-	10 - Russian
-	11 - English
-	12 - Portuguese
-	13 - Azerbaijani
-	14 - Turkish
 --]]
 local RespawnTimer = false
 local LainOS = false
@@ -356,19 +365,6 @@ function MinusToPlus(var)
 	return var
 end
 
-function Text(text, repl)
-	if(LangArr[text]) then
-		if(LangArr[text] ~= "") then
-			text = LangArr[text]
-		end
-	end
-	if(repl) then
-		for i, dat in pairs(repl) do
-			text = string.gsub(text, dat[1], dat[2])
-		end
-	end
-	return text
-end
 
 
 local trafficlight = {
@@ -1067,7 +1063,7 @@ local items = {
 	["Подкова"] = {954, "Старая подкова, антиквариат", 1, false, 350, 5000, false, false, false, {1,1}}, 
 	["Ракушка"] = {953, "Просто ракушка", 1, false, 10, 50, false, false, false, {1,1}}, 
 	["Телефон"] = {330, "Телефон", 1, "usecellphone", 350, 1500, false, false, false, {1,1}}, 
-	["Рюкзак"] = {3026, "Обычный рюкзак", 1, "SetupBackpack", 2500, 5000, false, true, false, {2,3}}, 
+	["Рюкзак"] = {3026, "Обычный рюкзак", 1, "SetupBackpack", 2500, 5000, false, true, false, {1,1}}, 
 	["Чемодан"] = {1210, "Обычный чемодан", 1, "SetupBackpack", 1000, 1000, false, true, false, {1,1}}, 
 	["Пакет"] = {2663, "Обычный пакет", 1, "SetupBackpack", 10, 1, false, true, false, {1,1}}, 
 	["АК-47"] = {355, "Автомат Калашникова\nСтрана: СССР", 1, "useinvweapon", 4300, 4500, false, false, true, {4,2}}, 
@@ -4223,9 +4219,9 @@ function updateWorld()
 							else -- Для неизвестных значков
 								setBlipIcon(arr[1], arr[2])
 								SetZoneDisplay(getElementData(arr[1], "info"))
-								--[[local x,y,z = getPedBonePosition(localPlayer, 8)
+								local x,y,z = getPedBonePosition(localPlayer, 8)
 								sx,sy = getScreenFromWorldPosition(x,y,z)
-								PData['ExpText'][#PData['ExpText']+1] = {"Открыта новая зона! "..getElementData(arr[1], "info"), sx,sy}--]]
+								PData['ExpText'][#PData['ExpText']+1] = {"Открыта новая зона! "..getElementData(arr[1], "info"), sx,sy}
 							end
 						end
 					end
@@ -4693,12 +4689,6 @@ function LoginClient(open)
 		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
 		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
 		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
-		
-		PText["INVHUD"][10] = {"Русский", 100*NewScale, 500*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Русский"}}}
-		PText["INVHUD"][11] = {"English", 100*NewScale, 540*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "English"}}}
-		PText["INVHUD"][12] = {"Portuguese", 100*NewScale, 580*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Portuguese"}}}
-		PText["INVHUD"][13] = {"Azerbaijani", 100*NewScale, 620*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Azerbaijani"}}}
-		PText["INVHUD"][14] = {"Turkish", 100*NewScale, 660*NewScale, screenWidth, screenHeight, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true}, {"ServerCall", localPlayer, {"SetLang", localPlayer, localPlayer, "Turkish"}}}
 	else
 		PText["HUD"][8] = nil
 	end
@@ -4817,9 +4807,6 @@ addEvent("GenerateTextureCompleted", true)
 addEventHandler("GenerateTextureCompleted", localPlayer, GenerateTextureCompleted)
 
 
-
-
-
 local MyTextures = {
 	["Кулак"] = {1666, 0,0,0, 0,0,0, 0,70, 255}, 
 	["Фекалии"] = {16444, -2,-4,1, 0,0,0, 0,70, 255}, 
@@ -4901,37 +4888,6 @@ local MyTextures = {
 }
 
 
-function onDownloadFinish(file, success) -- Второй этап загрузки
-	if(file == "lang/"..PData["LANG"]) then
-		local hFile = fileOpen("lang/"..PData["LANG"], true)
-
-		local ft = fileRead(hFile, 5500)
-		while not fileIsEOF(hFile) do
-			ft = ft .. fileRead(hFile, 5500)
-		end
-		
-		ft = string.gsub(ft, 'msgid ""\n', 'msgid ')
-		ft = string.gsub(ft, 'msgstr ""\n', 'msgstr ')
-		ft = string.gsub(ft, '"\n"', '')
-		LangArr = {}
-		local Lines = split(ft, "\n")
-		for i = 1, #Lines do
-			if(string.sub(Lines[i], 0, 5) == "msgid") then
-				LangArr[string.sub(Lines[i], 8, #Lines[i]-1)] = string.sub(Lines[i+1], 9, #Lines[i+1]-1)
-			end
-		end
-		fileClose(hFile)
-	end
-	
-	if(HUDPreload()) then
-		triggerEvent("GenerateTexture", root, MyTextures)
-	end
-end
-addEventHandler("onClientFileDownloadComplete", root, onDownloadFinish)
-
-
-
-
 
 function StartLoad() -- Первый этап загрузки
 	setTime(12, 0)
@@ -4939,9 +4895,41 @@ function StartLoad() -- Первый этап загрузки
 	setFogDistance(300)
 	setFarClipDistance(300)
 	setMinuteDuration(1000)
-	downloadFile("lang/"..PData["LANG"])
+	
+	local LangCode = getLocalization()["code"]
+	local Lang = {
+		["ru"] = "Ru_ru.po", 
+		["en_US"] = "Ru_en.po", 
+	}
+
+	if(not Lang[LangCode]) then
+		LangCode = "ru"
+	end
+	local hFile = fileOpen("lang/"..Lang[LangCode], true)
+
+	local ft = fileRead(hFile, 5500)
+	while not fileIsEOF(hFile) do
+		ft = ft .. fileRead(hFile, 5500)
+	end
+	
+	ft = string.gsub(ft, 'msgid ""\n', 'msgid ')
+	ft = string.gsub(ft, 'msgstr ""\n', 'msgstr ')
+	ft = string.gsub(ft, '"\n"', '')
+	LangArr = {}
+	local Lines = split(ft, "\n")
+	for i = 1, #Lines do
+		if(string.sub(Lines[i], 0, 5) == "msgid") then
+			LangArr[string.sub(Lines[i], 8, #Lines[i]-1)] = string.sub(Lines[i+1], 9, #Lines[i+1]-1)
+		end
+	end
+	fileClose(hFile)
+	
+	if(HUDPreload()) then
+		triggerEvent("GenerateTexture", root, MyTextures)
+	end
 end
 StartLoad()
+
 
 
 
@@ -4977,15 +4965,6 @@ addEventHandler("AuthComplete", localPlayer, AuthComplete)
 
 
 
-
-function SetLang(lang)
-	PData["LANG"] = lang
-	if(StartUnload()) then
-		StartLoad()
-	end
-end
-addEvent("SetLang", true)
-addEventHandler("SetLang", localPlayer, SetLang)
 
 
 
@@ -6967,7 +6946,8 @@ function DrawOnClientRender()
 			tw = dxGetTextWidth(arr[1], NewScale*1.8, font, true)
 			th = dxGetFontHeight(NewScale*1.8, font)
 
-			dxDrawBorderedText(arr[1], (arr[2]-tw/2), (arr[3]-th/2)+arr[4], screenWidth, screenHeight, tocolor(255, 153, 0 , 255), NewScale*1.8, font, "left", nil, nil, nil, nil, true)
+			dxDrawBorderedText(arr[1], (arr[2]-tw/2), (arr[3]-th/2)+arr[4], screenWidth, screenHeight, tocolor(255, 153, 0, 255), NewScale*1.8, font, "left", nil, nil, nil, nil, true)
+			
 			arr[4] = arr[4]-0.3
 			arr[5] = arr[5]-1
 			if(arr[5] <= 0) then
@@ -7108,12 +7088,6 @@ end
 function DrawZast(x,y,w,h,zahx,zahy,target)
 	dxDrawImageSection(x,y, w,h , zahx,zahy, w,h, target)
 end
-
-
-
-
-
-
 
 
 
@@ -10046,7 +10020,7 @@ function DrawPlayerMessage()
 						end
 					end
 					if(TotalDamage) then
-						MemText("Ущерб: $"..TotalDamage, posx+dxGetTextWidth("★★★★★★", scale, "pricedown", false), posy+dxGetFontHeight(scale, "pricedown"), tocolor(200, 0, 0, 210), NewScale*1.5, "default-bold", NewScale*1.5, 0, "right", false)
+						--MemText("Ущерб: $"..TotalDamage, posx+dxGetTextWidth("★★★★★★", scale, "pricedown", false), posy+dxGetFontHeight(scale, "pricedown"), tocolor(200, 0, 0, 210), NewScale*1.5, "default-bold", NewScale*1.5, 0, "right", false)
 					end
 				else
 					dxDrawBorderedText(wanted, posx, posy, screenWidth, screenHeight, tocolor(200, 200, 200, 180), scale, "default-bold", "left", "top", nil, nil, nil, true)

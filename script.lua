@@ -245,9 +245,6 @@ addEventHandler("onPlayerJoin", getRootElement(), setCameraOnPlayerJoin)
 local Lang = {
 	["Русский"] = "Ru_ru.po",
 	["English"] = "Ru_en.po",
-	["Portuguese"] = "Ru_pt_BR.po", 
-	["Azerbaijani"] = "Ru_az_AZ.po", 
-	["Turkish"] = "Ru_tr.po", 
 }
 
 local LangArr = {}
@@ -5505,7 +5502,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 7379.5, -6934.6, 6.2, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 1649.9, 1146.2, 9.7, 0, 0 -- 8152, -9143, 6.3
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -12334,8 +12331,8 @@ addCommandHandler("seti", seti)
 
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
-	local res = getResourceFromName("Interface") -- Interface
-	restartResource(res)
+	--local res = getResourceFromName("Interface") -- Interface
+	--restartResource(res)
 	--triggerClientEvent(thePlayer, "GameSky", thePlayer, "Red County", 8, false)
  --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)
 
