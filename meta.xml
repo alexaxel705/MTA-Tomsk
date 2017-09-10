@@ -11,8 +11,8 @@
 	<file src="invobject/laser.png" />
 	<file src="invobject/unknown.png" />
 	
-	<file src="lang/Ru_ru.po" download="false" />
-	<file src="lang/Ru_en.po" download="false" />
+	<file src="lang/Ru_ru.po" />
+	<file src="lang/Ru_en.po" />
 	
 	<file src="GTA3.mp3" />
 	<script src="RailNode.lua" type="client"/>
