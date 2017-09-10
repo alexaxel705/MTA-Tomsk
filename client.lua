@@ -4049,6 +4049,31 @@ function HornPed(thePed, thePlayer)
 end
 
 
+
+local bones = {
+	[1] = {5,4,6}, --head{5,nil,6}
+	[2] = {4,5,8}, --neck
+	[3] = {3,1,31}, --spine {3,nil,31}
+	[4] = {1,2,3}, --pelvis
+	[5] = {4,32,5}, --left clavicle
+	[6] = {4,22,5}, --right clavicle
+	[7] = {32,33,34}, --left shoulder
+	[8] = {22,23,24}, --right shoulder
+	[9] = {33,34,32}, --left elbow
+	[10] = {23,24,22}, --right elbow
+	[11] = {34,35,36}, --left hand
+	[12] = {24,25,26}, --right hand
+	[13] = {41,42,43}, --left hip
+	[14] = {51,52,53}, --right hip
+	[15] = {42,43,44}, --left knee
+	[16] = {52,53,54}, --right knee
+	[17] = {43,42,44}, --left ankle
+	[18] = {53,52,54}, --right angle
+	[19] = {44,43,42}, --left foot
+	[20] = {54,53,52} --right foot
+}
+
+
 function updateWorld()
 	UpdateBot()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
@@ -4612,6 +4637,135 @@ end
 
 
 
+function isnan(x) 
+    if (x ~= x) then 
+        return true 
+    end 
+    if type(x) ~= "number" then 
+       return false 
+    end 
+    if tostring(x) == tostring((-1)^0.5) then 
+        return true 
+    end 
+    return false 
+end 
+
+
+
+
+
+
+-- bone, offx,offy,offz,offrx,offry,offrz
+local ModelPlayerPosition = {
+	[352] = {13, -0.06, 0.05, -0.1, -5, 260, 90},
+	[353] = {13, -0.06, 0.05, -0.1, -5, 260, 90},
+	[372] = {13, -0.06, 0.05, -0.1, -5, 260, 90},
+	[346] = {14, 0.08, 0.05, -0.1, 5, 260, 90},
+	[347] = {14, 0.08, 0.05, -0.1, 5, 260, 90},
+	[348] = {14, 0.08, 0.05, -0.1, 5, 260, 90},
+	[342] = {14, 0.08, 0.05, -0.1, 5, 260, 90},
+	[335] = {14, 0.13, -0.08, -0.04, 5, 0, 90},
+	[367] = {3, 0.11, 0.13, 0.1, 0, 40, 90},
+	[349] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
+	[350] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
+	[351] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
+	[355] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
+	[356] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
+	[357] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
+	[358] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
+	[359] = {3, 0.07, -0.14, 0, 0, 290, 15}, 
+	[341] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
+	[3026] = {3, 0, -0.10, -0.15, 0, 270, 0}, 
+	[339] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
+	[338] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
+	[333] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
+	[336] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
+	[337] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
+	[321] = {4, 0, -0.04, -0.1, 0, 160, 90},
+	[322] = {4, 0, -0.04, -0.1, 0, 160, 90},
+	[323] = {4, 0, -0.04, -0.1, 0, 160, 90},
+	[1484] = {11,0.01,0,0.15,0,140,0},
+	[1950] = {11,-0.14,0.05,0.1,0,100,0},
+	[1951] = {11,-0.14,0.05,0.1,0,100,0},
+	[1669] = {11,-0.14,0.05,0.1,0,100,0},
+	[1543] = {11,-0.22,0.05,0.15,0,100,0},
+	[1544] = {11,-0.15,0.05,0.30,0,140,0},
+	[1546] = {11,0,0.1,0.1,0,90,0},
+	[330] = {12,0,0,0.03,0,-90,0},
+	[2880] = {12,0,0,0,0,-90,0},
+	[2881] = {12,0,0,0,0,-90,0},
+	[2769] = {11,0,0,0.1,0,0,0},
+	[3027] = {1, 0, 0.09, -0.01, 90, 90, 90},
+	[1210] = {12, 0, 0.1, 0.3, 0, 180, 0},
+	[954] = {12, 0, 0.1, 0.3, 0, 180, 0},
+	[1276] = {12, 0, 0.1, 0.3, 0, 180, 0},
+	[2663] = {12, 0, 0, 0.3, 0, 180, 0},
+	[1650] = {12, 0, 0, 0.15, 0, 180, 0},
+	[1609] = {3, 0, 0, -0.25, 90, 0, 0},
+	[1608] = {3, 0, 0, -0.25, 90, 0, 0},
+	[1607] = {3, 0, 0, -0.25, 90, 0, 0},
+	[1025] = {12, 0.2, 0.05, 0, 0, 0, 75},
+	[3632] = {12, 0, 0, 0, 0, 90, 0},
+	[1370] = {12, 0, 0, 0, 0, 90, 0},
+	[1218] = {12, 0, 0, 0, 0, 90, 0},
+	[1222] = {12, 0, 0, 0, 0, 90, 0},
+	[1225] = {12, 0, 0, 0, 0, 90, 0},
+	[1453] = {12, 0.2, 0.1, 0, 0, 90, 345},
+	[2900] = {12, -0.1, 0.3, 0.15, 0, 90, 0},
+}
+
+
+
+
+
+function UpdateDisplayArmas(thePlayer)
+	if(isElementAttached(thePlayer)) then
+		local ATT = getElementAttachedTo(thePlayer)
+		local rx,ry,rz=getElementRotation(ATT)
+		setElementRotation(thePlayer,rx,ry,rz,"default",true)
+	end
+	if(StreamData[thePlayer]) then
+		for model,weapon in pairs(StreamData[thePlayer]["armas"]) do
+			model = tonumber(model)
+			if(ModelPlayerPosition[model]) then
+				local bone, offx,offy,offz,offrx,offry,offrz = unpack(ModelPlayerPosition[model])
+				if(getElementData(thePlayer, "BottleAnus")) then
+					if(model == getElementData(thePlayer, "BottleAnus")) then
+						bone, offx,offy,offz,offrx,offry,offrz = 3, -0.1, 0.1, -0.6, 0, 0, 0
+					end
+				end
+				
+				
+				local x,y,z = getPedBonePosition(thePlayer,bones[bone][1])
+
+
+				local xx,xy,xz,yx,yy,yz,zx,zy,zz = getBoneMatrix(thePlayer,bone)
+				local objx = x+offx*xx+offy*yx+offz*zx
+				local objy = y+offx*xy+offy*yy+offz*zy
+				local objz = z+offx*xz+offy*yz+offz*zz
+				local rxx,rxy,rxz,ryx,ryy,ryz,rzx,rzy,rzz = getMatrixFromEulerAngles(offrx,offry,offrz)
+				
+				local txx = rxx*xx+rxy*yx+rxz*zx
+				local txy = rxx*xy+rxy*yy+rxz*zy
+				local txz = rxx*xz+rxy*yz+rxz*zz
+				local tyx = ryx*xx+ryy*yx+ryz*zx
+				local tyy = ryx*xy+ryy*yy+ryz*zy
+				local tyz = ryx*xz+ryy*yz+ryz*zz
+				local tzx = rzx*xx+rzy*yx+rzz*zx
+				local tzy = rzx*xy+rzy*yy+rzz*zy
+				local tzz = rzx*xz+rzy*yz+rzz*zz
+				offrx,offry,offrz = getEulerAnglesFromMatrix(txx,txy,txz,tyx,tyy,tyz,tzx,tzy,tzz)
+				
+				if(isnan(offrx) or isnan(offry) or isnan(offrz)) then return false end		
+				if(isnan(objx) or isnan(objy) or isnan(objz)) then return false end
+				
+
+				setElementPosition(weapon,objx,objy,objz)
+				setElementRotation(weapon,offrx,offry,offrz,"ZXY")
+			end
+		end
+	end
+end
 
 
 function updateCamera()
@@ -8776,70 +8930,6 @@ end
 
 
 
-
--- bone, offx,offy,offz,offrx,offry,offrz
-local ModelPlayerPosition = {
-	[352] = {13, -0.06, 0.05, -0.1, -5, 260, 90},
-	[353] = {13, -0.06, 0.05, -0.1, -5, 260, 90},
-	[372] = {13, -0.06, 0.05, -0.1, -5, 260, 90},
-	[346] = {14, 0.08, 0.05, -0.1, 5, 260, 90},
-	[347] = {14, 0.08, 0.05, -0.1, 5, 260, 90},
-	[348] = {14, 0.08, 0.05, -0.1, 5, 260, 90},
-	[342] = {14, 0.08, 0.05, -0.1, 5, 260, 90},
-	[335] = {14, 0.13, -0.08, -0.04, 5, 0, 90},
-	[367] = {3, 0.11, 0.13, 0.1, 0, 40, 90},
-	[349] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
-	[350] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
-	[351] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
-	[355] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
-	[356] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
-	[357] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
-	[358] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
-	[359] = {3, 0.07, -0.14, 0, 0, 290, 15}, 
-	[341] = {3, 0, -0.14, -0.25, 0, 290, 15}, 
-	[3026] = {3, 0, -0.10, -0.15, 0, 270, 0}, 
-	[339] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
-	[338] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
-	[333] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
-	[336] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
-	[337] = {3, 0.15, -0.14, 0.2, 0, 200, 15},
-	[321] = {4, 0, -0.04, -0.1, 0, 160, 90},
-	[322] = {4, 0, -0.04, -0.1, 0, 160, 90},
-	[323] = {4, 0, -0.04, -0.1, 0, 160, 90},
-	[1484] = {11,0.01,0,0.15,0,140,0},
-	[1950] = {11,-0.14,0.05,0.1,0,100,0},
-	[1951] = {11,-0.14,0.05,0.1,0,100,0},
-	[1669] = {11,-0.14,0.05,0.1,0,100,0},
-	[1543] = {11,-0.22,0.05,0.15,0,100,0},
-	[1544] = {11,-0.15,0.05,0.30,0,140,0},
-	[1546] = {11,0,0.1,0.1,0,90,0},
-	[330] = {12,0,0,0.03,0,-90,0},
-	[2880] = {12,0,0,0,0,-90,0},
-	[2881] = {12,0,0,0,0,-90,0},
-	[2769] = {11,0,0,0.1,0,0,0},
-	[3027] = {1, 0, 0.09, -0.01, 90, 90, 90},
-	[1210] = {12, 0, 0.1, 0.3, 0, 180, 0},
-	[954] = {12, 0, 0.1, 0.3, 0, 180, 0},
-	[1276] = {12, 0, 0.1, 0.3, 0, 180, 0},
-	[2663] = {12, 0, 0, 0.3, 0, 180, 0},
-	[1650] = {12, 0, 0, 0.15, 0, 180, 0},
-	[1609] = {3, 0, 0, -0.25, 90, 0, 0},
-	[1608] = {3, 0, 0, -0.25, 90, 0, 0},
-	[1607] = {3, 0, 0, -0.25, 90, 0, 0},
-	[1025] = {12, 0.2, 0.05, 0, 0, 0, 75},
-	[3632] = {12, 0, 0, 0, 0, 90, 0},
-	[1370] = {12, 0, 0, 0, 0, 90, 0},
-	[1218] = {12, 0, 0, 0, 0, 90, 0},
-	[1222] = {12, 0, 0, 0, 0, 90, 0},
-	[1225] = {12, 0, 0, 0, 0, 90, 0},
-	[1453] = {12, 0.2, 0.1, 0, 0, 90, 345},
-	[2900] = {12, -0.1, 0.3, 0.15, 0, 90, 0},
-}
-
-
-
-
-
 function outputLoss(attacker)
 	if(getElementType(attacker) == "vehicle") then attacker = getVehicleOccupant(attacker) end
 	if(attacker) then
@@ -8886,29 +8976,6 @@ addEvent("RemovePlayerArmas", true)
 addEventHandler("RemovePlayerArmas", getRootElement(), RemovePlayerArmas)
 
 
-
-local bones = {
-	[1] = {5,4,6}, --head{5,nil,6}
-	[2] = {4,5,8}, --neck
-	[3] = {3,1,31}, --spine {3,nil,31}
-	[4] = {1,2,3}, --pelvis
-	[5] = {4,32,5}, --left clavicle
-	[6] = {4,22,5}, --right clavicle
-	[7] = {32,33,34}, --left shoulder
-	[8] = {22,23,24}, --right shoulder
-	[9] = {33,34,32}, --left elbow
-	[10] = {23,24,22}, --right elbow
-	[11] = {34,35,36}, --left hand
-	[12] = {24,25,26}, --right hand
-	[13] = {41,42,43}, --left hip
-	[14] = {51,52,53}, --right hip
-	[15] = {42,43,44}, --left knee
-	[16] = {52,53,54}, --right knee
-	[17] = {43,42,44}, --left ankle
-	[18] = {53,52,54}, --right angle
-	[19] = {44,43,42}, --left foot
-	[20] = {54,53,52} --right foot
-}
 
 
 function getMatrixFromPoints(x,y,z,x3,y3,z3,x2,y2,z2)
@@ -8970,67 +9037,6 @@ end
 
 
 
-function isnan(x) 
-    if (x ~= x) then 
-        return true 
-    end 
-    if type(x) ~= "number" then 
-       return false 
-    end 
-    if tostring(x) == tostring((-1)^0.5) then 
-        return true 
-    end 
-    return false 
-end 
-
-function UpdateDisplayArmas(thePlayer)
-	if(isElementAttached(thePlayer)) then
-		local ATT = getElementAttachedTo(thePlayer)
-		local rx,ry,rz=getElementRotation(ATT)
-		setElementRotation(thePlayer,rx,ry,rz,"default",true)
-	end
-	if(StreamData[thePlayer]) then
-		for model,weapon in pairs(StreamData[thePlayer]["armas"]) do
-			model = tonumber(model)
-			if(ModelPlayerPosition[model]) then
-				local bone, offx,offy,offz,offrx,offry,offrz = unpack(ModelPlayerPosition[model])
-				if(getElementData(thePlayer, "BottleAnus")) then
-					if(model == getElementData(thePlayer, "BottleAnus")) then
-						bone, offx,offy,offz,offrx,offry,offrz = 3, -0.1, 0.1, -0.6, 0, 0, 0
-					end
-				end
-				
-				
-				local x,y,z = getPedBonePosition(thePlayer,bones[bone][1])
-
-
-				local xx,xy,xz,yx,yy,yz,zx,zy,zz = getBoneMatrix(thePlayer,bone)
-				local objx = x+offx*xx+offy*yx+offz*zx
-				local objy = y+offx*xy+offy*yy+offz*zy
-				local objz = z+offx*xz+offy*yz+offz*zz
-				local rxx,rxy,rxz,ryx,ryy,ryz,rzx,rzy,rzz = getMatrixFromEulerAngles(offrx,offry,offrz)
-				
-				local txx = rxx*xx+rxy*yx+rxz*zx
-				local txy = rxx*xy+rxy*yy+rxz*zy
-				local txz = rxx*xz+rxy*yz+rxz*zz
-				local tyx = ryx*xx+ryy*yx+ryz*zx
-				local tyy = ryx*xy+ryy*yy+ryz*zy
-				local tyz = ryx*xz+ryy*yz+ryz*zz
-				local tzx = rzx*xx+rzy*yx+rzz*zx
-				local tzy = rzx*xy+rzy*yy+rzz*zy
-				local tzz = rzx*xz+rzy*yz+rzz*zz
-				offrx,offry,offrz = getEulerAnglesFromMatrix(txx,txy,txz,tyx,tyy,tyz,tzx,tzy,tzz)
-				
-				if(isnan(offrx) or isnan(offry) or isnan(offrz)) then return false end		
-				if(isnan(objx) or isnan(objy) or isnan(objz)) then return false end
-				
-
-				setElementPosition(weapon,objx,objy,objz)
-				setElementRotation(weapon,offrx,offry,offrz,"ZXY")
-			end
-		end
-	end
-end
 
 
 
