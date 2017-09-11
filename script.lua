@@ -5502,7 +5502,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 1649.9, 1146.2, 9.7, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 2045.5, 975.8, 9.6, 0, 0 -- 8152, -9143, 6.3
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -15530,7 +15530,6 @@ function RaceFinish(thePlayer, times)
 	end
 	
 	
-	triggerClientEvent(thePlayer, "EndRace", thePlayer, besttime)
 	
 	if(#racePlayerFinish == 1) then
 		AddPlayerMoney(getPlayerFromName(racePlayerFinish[1]), raceMoney(SData["RaceArr"]), "МИССИЯ ВЫПОЛНЕНА!")
@@ -15553,8 +15552,15 @@ function RaceFinish(thePlayer, times)
 			end
 			EndRaceTimeout = EndRaceTimeout-1
 		end, 1000, 31)
-	elseif(#racePlayerFinish == 2) then AddPlayerMoney(getPlayerFromName(racePlayerFinish[2]), math.floor(raceMoney(SData["RaceArr"])/2), "МИССИЯ ВЫПОЛНЕНА!")
-	elseif(#racePlayerFinish == 3) then AddPlayerMoney(getPlayerFromName(racePlayerFinish[3]), math.floor(raceMoney(SData["RaceArr"])/3), "МИССИЯ ВЫПОЛНЕНА!")
+		triggerClientEvent(thePlayer, "EndRace", thePlayer, "Выиграл!", besttime)
+	elseif(#racePlayerFinish == 2) then 
+		AddPlayerMoney(getPlayerFromName(racePlayerFinish[2]), math.floor(raceMoney(SData["RaceArr"])/2), "МИССИЯ ВЫПОЛНЕНА!")
+		triggerClientEvent(thePlayer, "EndRace", thePlayer, "Второй", besttime)
+	elseif(#racePlayerFinish == 3) then 
+		AddPlayerMoney(getPlayerFromName(racePlayerFinish[3]), math.floor(raceMoney(SData["RaceArr"])/3), "МИССИЯ ВЫПОЛНЕНА!")
+		triggerClientEvent(thePlayer, "EndRace", thePlayer, "Третий", besttime)
+	else
+		triggerClientEvent(thePlayer, "EndRace", thePlayer, "Проиграл!", besttime)
 	end
 end
 addEvent("RaceFinish", true)

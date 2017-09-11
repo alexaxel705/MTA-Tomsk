@@ -256,6 +256,7 @@ local timersAction = {}
 local backpackid = false
 local titleText = ""
 local ToolTipText = ""
+local ToolTipRaceText = false
 local ToolTipTimers = false
 toggleAllControls(true)
 local screenWidth, screenHeight = guiGetScreenSize()
@@ -5479,6 +5480,8 @@ addEventHandler("ToolTip", root, ToolTip)
 
 
 
+
+
 function CallPoliceEvent()
 	triggerServerEvent("CallPolice", localPlayer, CallPolice)
 end
@@ -8806,8 +8809,13 @@ addEventHandler("StartRace", localPlayer, StartRace)
 
 
 
+function ToolTipRace(pos, message)
+	ToolTipRaceText = {pos, message}
+	setTimer(function() ToolTipRaceText = false end, 4000, 1)
+end
 
-function EndRace(oldbest)
+
+function EndRace(pos, oldbest)
 	if(PData["Race"]) then
 		local seconds = (getTickCount()-PData["Race"]["Start"])/1000
 		local hours = math.floor(seconds/3600)
@@ -8823,8 +8831,8 @@ function EndRace(oldbest)
 		local secs2 = math.floor(seconds2 - hours2*3600 - mins2 *60)
 		local msec2 = math.floor(((oldbest)-(secs2*1000)-(mins2*60000)-(hours2*3600000))/10)
 		
-		ToolTip("Твоё время "..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec).."\n"..
-		"Рекорд трассы: "..string.format("%02.f", mins2)..":"..string.format("%02.f", secs2)..":"..string.format("%02.f", msec2))
+		ToolTipRace(pos, "#828FA0Твоё время: #EEEEEE"..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec).."\n"..
+		"#828FA0Рекорд трассы: #EEEEEE"..string.format("%02.f", mins2)..":"..string.format("%02.f", secs2)..":"..string.format("%02.f", msec2))
 	end
 	
 	
@@ -9800,6 +9808,21 @@ function DrawPlayerMessage()
 				th = (dxGetFontHeight(scale, font)*linecount)+(20*scaley)
 				dxDrawRectangle(25*scalex, 325*scaley, tw, th, tocolor(0, 0, 0, 180))
 				dxDrawText(ToolTipText, 25*scalex+(13*scalex), 325*scaley+(9*scaley), 0, 0, tocolor(255,255,255,255), scale, font, "left", "top", false, false, false, true)
+			end
+			
+			
+			if(ToolTipRaceText) then
+				local linecount = 1
+				for i in string.gfind(ToolTipRaceText[2], "\n") do
+				   linecount = linecount + 1
+				end
+				font = "default-bold"
+				tw = dxGetTextWidth(ToolTipRaceText[2], scale*1.5, font, true)+(26*scalex)
+				th = (dxGetFontHeight(scale*1.8, font)*linecount)+(20*scaley)
+				dxDrawRectangle(screenWidth/2-(tw/2), screenHeight/1.4, tw+(50*scalex), th+(50*scaley), tocolor(0, 0, 0, 180))
+				
+				dxDrawBorderedText(ToolTipRaceText[1],screenWidth/2-(tw/2)+(15*scalex), screenHeight/1.4-(30*scaley), 0, 0, tocolor(255,255,255,255), scale*2, font, "left", "top", false, false, false, true)
+				dxDrawBorderedText(ToolTipRaceText[2],screenWidth/2-(tw/2)+(33*scalex), screenHeight/1.4+(40*scaley), 0, 0, tocolor(130,143,160,255), scale*1.5, font, "left", "top", false, false, false, true)
 			end
 			
 			
