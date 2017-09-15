@@ -12683,15 +12683,6 @@ addEvent("loginPlayerEvent", true)
 addEventHandler("loginPlayerEvent", root, loginPlayer)
 
 
-local PlayersRole = {
-	["alexaxel705"] = "Разработчик",
-	["Mes'yebur"] = "Тестировщик", 
-	["*Vk*Ricci"] = "Корректор английского языка",
-	["Pioner"] = "Корректор азербайджанского языка",
-	["Fucker"] = "Контент менеджер",
-}
-
-
 
 function AddCollections(thePlayer, model, id)
 	local dat = fromJSON(GetDatabaseAccount(thePlayer, "Collections"))
@@ -12714,9 +12705,7 @@ addEventHandler("AddCollections", root, AddCollections)
 
 
 function AuthComplete(thePlayer)
-	if(PlayersRole[getPlayerName(thePlayer)]) then
-		outputChatBox("* На сервер зашел "..getElementData(source, "color")..getPlayerName(thePlayer).."#FFFFFF [#99CC00"..PlayersRole[getPlayerName(thePlayer)].."#FFFFFF]", getRootElement(), 255,255,255,true)
-	end
+	outputChatBox("* На сервер зашел "..getElementData(source, "color")..getPlayerName(thePlayer), getRootElement(), 255,255,255,true)
 	triggerClientEvent(thePlayer, "AuthComplete", thePlayer, GetDatabaseAccount(thePlayer, "Collections"))
 end
 
