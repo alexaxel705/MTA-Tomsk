@@ -34,7 +34,7 @@ local SourceData = {
 		["Вагос"] = {{474,"VAGOS228",{6, 6, 0, 0}}, {467,"VAGOS228",{6, 6, 0, 0}}, {576 ,"VAGOS228",{6, 6, 0, 0}}},
 		["Колумбийский картель"] = {{422,"COKA 228",{116, 116, 116, 116},{2, 2}}, {440,"COKA 228",{116, 116, 116, 116},{1, 1}}, {600 ,"COKA 228",{116, 116, 116, 116},{2, 2}}, {543 ,"COKA 228",{116, 116, 116, 116},{4, 4}}},
 		["Русская мафия"] = {{404,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {560,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {445,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {581,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {409,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}},
-		["Триады"] = {{560,"TRIA 228",{0,0,0,0}}, {445,"TRIA 228",{0,0,0,0}}, {414,"TRIA 228",{83,83,83,83},{5,5}}},
+		["Триады"] = {{466,"TRIA 228",{0,0,0,0}}, {560,"TRIA 228",{0,0,0,0}}, {445,"TRIA 228",{0,0,0,0}}, {414,"TRIA 228",{83,83,83,83},{5,5}}},
 		["Якудзы"] = {{439,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {482,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {467,"YAZA 228",{177,15,11, 255,255,255}, {0, 0}, "createYakuza"}},
 		["Рифа"] = {{536,"RIFA 228",{94, 94, 0, 0}}, {439,"RIFA 228",{94, 94, 0, 0}}, {475 ,"RIFA 228",{94, 94, 0, 0}}},
 		["Деревенщины"] = {{478,"KOLHZ228",{61, 61, 0, 0}}, {543 ,"KOLHZ228",{61, 61, 0, 0}}, {531,"KOLHZ228",{61, 61, 0, 0}}}
@@ -56,7 +56,8 @@ local hFile = fileOpen("serverdata/time.txt")
 local timebuffer = fileRead(hFile, 500)
 fileClose(hFile)
 local ServerDate = getRealTime(timebuffer) -- Сюда записывается виртуальное время игры
-
+local NowTime = getRealTime()
+local CYear = NowTime.year+1900
 
 function GeneratePlayerScore(arr)
 	local count = 0
@@ -200,7 +201,6 @@ end
 
 
 function setCameraOnPlayerJoin()
-	setElementData(source, "color", RGBToHex(math.random(0,255), math.random(0,255), math.random(0,255)))
 	for i=1,getMaxPlayers() do--Даем ID
 		if not ids[i] then
 			ids[i] = source
@@ -209,7 +209,7 @@ function setCameraOnPlayerJoin()
 		end
 	end
 	PData[source] = {
-		['radar'] = createBlipAttachedTo(source, 0, 2, 0, 0, 0, 0),
+		['radar'] = createBlipAttachedTo(source, 0, 2, 0, 0, 0, 255, 2),
 		['Cops'] = {}, -- Хранит ботов, полицейских которые учавствуют в погоне за игроком
 		['lang'] = "Русский", 
 		['CONTROLS'] = {
@@ -245,6 +245,7 @@ addEventHandler("onPlayerJoin", getRootElement(), setCameraOnPlayerJoin)
 local Lang = {
 	["Русский"] = "Ru_ru.po",
 	["English"] = "Ru_en.po",
+	["Азербайджанский"] = "Ru_az.po",
 }
 
 local LangArr = {}
@@ -362,7 +363,20 @@ local EndRaceInfoTimer = false
 local PlayersEnteredPickup = {}
 local Threes = {}
 local ThreesPickup = {}
-local StandartInventory = toJSON({{},{},{},{},{},{},{},{},{},{}})
+
+
+
+function CreateInventory(h,w)
+	local out = {}
+	for x = 1, h do
+		out[x] = {}
+		for y = 1, w do
+			out[x][y] = {}
+		end
+	end
+	return out
+end
+local StandartInventory = toJSON(CreateInventory(7,10))
 local Collections = toJSON({[953] = {}, [954] = {}, [1276] = {}})
 local PlayersPickups = {}
 local VehicleBand = {} -- Заспауненые автомобили фракций
@@ -1498,10 +1512,21 @@ local BotSkinSpecific = {
 
 
 local VehicleRegionSpecific = {
-	["Julius Thruway South"] = {443},
-	["Julius Thruway West"] = {443},
-	["Julius Thruway North"] = {443},
-	["Julius Thruway East"] = {443},
+	["Red County"] = {431,437}, 
+	["Los Santos"] = {431,437}, 
+	["San Fierro"] = {431,437}, 
+	["Las Payasadas"] = {431,437}, 
+	["Whetstone"] = {431,437},
+	["Las Venturas"] = {431,437},
+	["Flint County"] = {431,437}, 
+	["Tierra Robada"] = {431,437},
+	["Bone County"] = {431,437}, 
+	["Julius Thruway South"] = {443, 431,437},
+	["Julius Thruway West"] = {443, 431,437},
+	["Julius Thruway North"] = {443, 431,437},
+	["Julius Thruway East"] = {443, 431,437},
+	["Las Venturas Airport"] = {431,437}, 
+	["Easter Bay Airport"] = {431,437}, 
 	["Ocean Docks"] = {515, 514, 403, 499, 524, 609, 498, 455, 414, 456, 440}, 
 }
 
@@ -2032,9 +2057,9 @@ local SkinData = {
 	[277] = {118, Teams['МЧС'], "Мужчина", nil, nil, {"Пожарный"}},
 	[278] = {118, Teams['МЧС'], "Мужчина", nil, nil, {"Пожарный"}},
 	[279] = {118, Teams['МЧС'], "Мужчина", nil, nil, {"Пожарный"}},
-	[280] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Полицейский"}},
-	[281] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Полицейский"}},
-	[282] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Полицейский"}},
+	[280] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Полицейский", "Мент"}},
+	[281] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Полицейский", "Мент"}},
+	[282] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Полицейский", "Мент"}},
 	[283] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Шериф"}},
 	[284] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Патрульный"}},
 	[285] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"SWAT"}},
@@ -2890,8 +2915,6 @@ local VComp = {
 
 	
 -- Высота от земли, Двигатель, турбо, трансмиссия, подвеска, тормоза, резина, бензобак, год выпуска, прекращение выпуска (CYear - наши дни), завод (Export - Неизвестные)
-local NowTime = getRealTime()
-local CYear = NowTime.year+1900
 local VehicleSystem = {
 	[500] = {1.1, "SFP D 1.3 L", "", "A5 160", "Macpherson V1", "Brembo 230mm", "Brigestone", 43, {11, 1987}, {10, 1995}, "Canis"},
 	[520] = {1.93, "IAE V2600", "", "A1 200", "Macpherson V2", "Brembo 2", "Hankook", 300, {11, 2006}, {0, CYear}, "Mammoth"},
@@ -3020,7 +3043,7 @@ local VehicleSystem = {
 	[429] = {0.68, "BSHEE 3.0 L", "", "R5 200", "Macpherson V116", "Endless 235mm", "Michelin 89", 46, {3, 1992}, {3, 1995}, "Bravado"},
 	[541] = {0.62, "SAF 2.2 L", "", "R5 230", "Macpherson V108", "Endless 230mm", "Michelin 84", 40, {11, 1964}, {9, 1969}, "Vapid"},
 	[415] = {0.77, "SAF 2.0 L v2", "", "R5 230", "Macpherson V167", "Wilwood 275mm", "Michelin 126", 40, {4, 1984}, {0, 1996}, "Grotti"},
-	[431] = {1.1, "TRBD 2.0 L", "", "R4 130", "Macpherson V154", "Wilwood 155mm", "Michelin 118", 183, {11, 1979}, {8, CYear}, "Brute"},
+	[431] = {1.1, "TRBD 2.0 L", "", "R4 130", "Macpherson V154", "Wilwood 155mm", "Michelin 118", 183, {1, 1970}, {8, CYear}, "Brute"},
 	[447] = {1.03, "RR 500", "", "A1 200", "Macpherson V10", "Brembo 10", "Hankook", 100, {7, 1946}, {8, 1974}, "Export"},
 	[463] = {0.67, "HRD 750 CC", "", "R4 190", "Macpherson V14", "Brembo 14", "Michelin 87", 26, {8, 1968}, {1, CYear}, "Western Motorcycle Company"},
 	[479] = {0.8, "RST GLE 2.0 L", "", "F4 165", "Macpherson V111", "Endless 175mm", "Michelin 88", 50, {5, 1984}, {4, 1988}, "Dundreary"},
@@ -3220,7 +3243,6 @@ local News = {
 
 function usearmor(thePlayer, slot)
 	setPedArmor(thePlayer, 100)
-	RemoveInventoryItemNew(thePlayer, "player", slot)
 end
 addEvent("usearmor", true)
 addEventHandler("usearmor", root, usearmor)
@@ -3228,6 +3250,9 @@ addEventHandler("usearmor", root, usearmor)
 
 
 function SetTeam(thePlayer, team)
+	local r, g, b = getTeamColor(getTeamFromName(team))
+	setElementData(source, "color", RGBToHex(r,g,b))
+	setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
 	SetDatabaseAccount(thePlayer, "team", team)
 	setPlayerTeam(thePlayer, getTeamFromName(team))
 end
@@ -3393,6 +3418,9 @@ function CreateVehicle(model, x, y, z, rx, ry, rz, numberplate, bDirection, vari
 		local arr = {}
 		for slot = 1, #VehicleTrunks[model] do
 			arr[slot] = {}
+			for slot2 = 1, 2 do
+				arr[slot][slot2] = {}
+			end
 		end
 		setElementData(theVehicle, "trunk", toJSON(arr))
 	end
@@ -3528,7 +3556,7 @@ createObject(11393, -2043.5166015625, 161.337890625, 29.320350646973, 0,0,0)
 
 
 local ItemsTrade = {
-	["24/7"] = {{"Газета", "Sell", 450, {}}, {"Пакет", "Sell", 750, {["content"] = {{},{},{},{},{},{},{},{}}}}, {"CoK", "Sell", 450, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"Pissh", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Канистра", "Sell", 450, {}}, {"Спрей", "Sell", 450, {}}, {"Рыба", "Trade", 1, {}}},
+	["24/7"] = {{"Газета", "Sell", 450, {}}, {"Пакет", "Sell", 750, {["content"] = {{},{},{},{},{},{},{},{}}}}, {"CoK", "Sell", 450, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"Pissh", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Канистра", "Sell", 450, {}}, {"Спрей", "Sell", 450, {}}},
 	["Zip"] = {{"Чемодан", "Sell", 550, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{}}}}},
 	["ProLaps"] = {{"Бита", "Sell", 450, {}},{"Клюшка", "Sell", 450, {}}, {"Парашют", "Sell", 250, {}}},
 	["Binco"] = {{"Рюкзак", "Sell", 450, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}}}},
@@ -4650,12 +4678,12 @@ function SpawnAllVehicle()
 		local vehinfo = SData["TeamVehicle"]["Мирные жители"][region][math.random(#SData["TeamVehicle"]["Мирные жители"][region])]
 		RandomVehicles[#RandomVehicles+1] = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6], vehinfo[2], true)
 		
-		if(getElementData(RandomVehicles[#RandomVehicles], "trunk")) then
-			local arr = fromJSON(getElementData(RandomVehicles[#RandomVehicles], "trunk"))
-			if(arr[1]) then arr[1] = {"Запаска", 1, math.random(250,550), {}} end
-			if(arr[2]) then arr[2] = {"Огнетушитель", 1, math.random(250,550), {}} end
-			setElementData(RandomVehicles[#RandomVehicles], "trunk", toJSON(arr))
-		end
+		--if(getElementData(RandomVehicles[#RandomVehicles], "trunk")) then
+		--	local arr = fromJSON(getElementData(RandomVehicles[#RandomVehicles], "trunk"))
+		--	if(arr[1]) then arr[1] = {"Запаска", 1, math.random(250,550), {}} end
+		--	if(arr[2]) then arr[2] = {"Огнетушитель", 1, math.random(250,550), {}} end
+		--	setElementData(RandomVehicles[#RandomVehicles], "trunk", toJSON(arr))
+		--end
 	end
 
 
@@ -4680,12 +4708,12 @@ function SpawnAllVehicle()
 						setElementData(k[1], 'name', k[15])
 					end
 					
-					if(getElementData(k[1], "trunk")) then
-						local arr = fromJSON(getElementData(k[1], "trunk"))
-						if(arr[1]) then arr[1] = {"Запаска", 1, math.random(250,550), {}} end
-						if(arr[2]) then arr[2] = {"Огнетушитель", 1, math.random(250,550), {}} end
-						setElementData(k[1], "trunk", toJSON(arr))
-					end
+					--if(getElementData(k[1], "trunk")) then
+					--	local arr = fromJSON(getElementData(k[1], "trunk"))
+					--	if(arr[1]) then arr[1] = {"Запаска", 1, math.random(250,550), {}} end
+					--	if(arr[2]) then arr[2] = {"Огнетушитель", 1, math.random(250,550), {}} end
+					--	setElementData(k[1], "trunk", toJSON(arr))
+					--end
 				end
 			end
 		end
@@ -4908,10 +4936,11 @@ local ModificationVehicle = {
 function UpgradePreload(thePlayer, name, upgr)
 	local comp = fromJSON(PData[thePlayer]["theVehicleTuningHandl"])
 	if(upgr and name) then
+		local oldpart = comp[ModificationVehicle[upgr]]
 		comp[ModificationVehicle[upgr]] = name
 		UpdateVehicleHandling(PData[thePlayer]["theVehicleTuning"], comp)
 		triggerClientEvent(thePlayer, "UpgradeServerPreload", thePlayer)
-		PData[thePlayer]["ShowUpgrade"] = {upgr, name}
+		PData[thePlayer]["ShowUpgrade"] = {upgr, name, oldpart}
 	else
 		UpdateVehicleHandling(PData[thePlayer]["theVehicleTuning"], comp)
 	end
@@ -5069,22 +5098,21 @@ setElementData(MakeSpirt, "funcinfo", "Дистиллятор фекалий")
 
 function SetPlayerPosition(thePlayer,x,y,z,i,d,rz,anim,name)
 	if(anim) then
-		local Speed = 1
+		local Speed = 1000
 		if(getControlState(thePlayer, "sprint")) then
 			StartAnimation(thePlayer, "POLICE","Door_Kick",false,false,false,false)
-			Speed=0.7
+			Speed = 700
 		else
 			PData[thePlayer]["TPTimer"] = setTimer(function() StartAnimation(thePlayer, "ped","Walk_DoorPartial",false,false,false,false)	end, 200, 1)
 		end
-		fadeCamera(thePlayer, false, Speed, 0, 0, 0)
-
+		if(name) then
+			triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, name)
+		end
+		triggerClientEvent(thePlayer, "FadeIn", thePlayer, Speed)
 		UnBindAllKey(thePlayer)
 		PData[thePlayer]["TPTimer"] = setTimer(function() 
-			if(name) then
-				triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, name)
-			end
+			triggerClientEvent(thePlayer, "FadeOut", thePlayer, Speed)
 			BindAllKey(thePlayer)
-			fadeCamera(thePlayer, true, 1, 0, 0, 0)
 			triggerClientEvent(thePlayer, "ChangeInfo", thePlayer)
 			setElementPosition(thePlayer,x,y,z)
 			if(rz) then setElementRotation(thePlayer, 0,0,rz) end
@@ -5098,7 +5126,7 @@ function SetPlayerPosition(thePlayer,x,y,z,i,d,rz,anim,name)
 					setElementInterior(ElementValue, i)
 				end
 			end
-		end, Speed*1000, 1)
+		end, Speed, 1)
 	else
 		if(name) then
 			triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, name)
@@ -5502,7 +5530,7 @@ function tp(thePlayer, command, h)
 		
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2045.5, 975.8, 9.6, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 261.9, 1407.7, 10.5, 0, 0 -- 8152, -9143, 6.3
 		
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5516,13 +5544,6 @@ addCommandHandler("tp", tp)
 
 
 function StopAnimation(thePlayer, key)
-	if(isTimer(PData[thePlayer]["ActionTimer"])) then
-		killTimer(PData[thePlayer]["ActionTimer"])
-		if(PData[thePlayer]["ActionObject"]) then
-			Drop(PData[thePlayer]["ActionObject"][6], PData[thePlayer]["ActionObject"][1],PData[thePlayer]["ActionObject"][2],PData[thePlayer]["ActionObject"][3],PData[thePlayer]["ActionObject"][4],PData[thePlayer]["ActionObject"][5])
-			PData[thePlayer]["ActionObject"] = nil
-		end
-	end
 	if(getElementHealth(thePlayer) > 20) then
 		setPedAnimation(thePlayer, nil,nil)
 	end
@@ -5594,6 +5615,9 @@ addEvent("StartAnimation", true)
 addEventHandler("StartAnimation", root, StartAnimation)
 
 
+ 
+
+CreateEnter(1570.7, -1337.2, 16.5, 312, 0, 0, false, 1548.6, -1363.7, 326.2, 180, 0, 0, "Крыша") -- Крыша LS
 CreateEnter(1642.3, -2286.5, -1.2, 180, 0, 0, false, -1855.6, 41.2, 1061.4, 180, 14, 0, "Аэропорт Los Santos")
 CreateEnter(2495.35, -1690.85, 14.75, 0, 0, 0, false, 2496, -1692.3, 1014.75, 180, 3, 0) -- CJ
 CreateEnter(2459.5, -1691.3, 13.5, 0, 0, 0, false, 2468.5, -1698.2, 1013.5, 180, 2, 0) -- Ryder
@@ -5715,9 +5739,7 @@ CreateEnter(1243.3, 217.4, 23.1, 0, 0, 0, false, 2523.2, -1301.9, 1048.3, 90, 2,
 CreateEnter(1257.3, 241.9, 19.9, 0, 0, 0, false, 2570.8, -1301.8, 1044.1, 90, 2, 0) -- Притон 2
 
 CreateEnter(2696.2, -1707.1, 11.8, 0, 0, 0, false, -1406, -261.4, 1043.7, 351, 7, 0) -- 8-Track Stadium
-
-
-
+CreateEnter(1122.7, -2037, 69.9, 270, 0, 0, false, 2548.8, -1294.6, 1061, 270, 2, 1) -- База Verdant Bluffs
 
 
 function AddMeWanted()
@@ -6283,18 +6305,24 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 		end
 		
 		
+		local TradeArr = {}
 		if(BizInfo[biz][3]) then
-			local TradeArr = {}
 			for _, item in pairs(BizInfo[biz][3]) do
-				TradeArr[#TradeArr+1] = {item[1], item[2], 550, {}}
+				TradeArr[#TradeArr+1] = {
+					["txd"] = item[1], 
+					["name"] = item[1], 
+					["quality"] = item[3],
+					["ForSale"] = true, 
+					["Biz"] = biz
+				}
 			end
-			array["var"]["Торговля"] = TradeArr
 		end
 		
-		
-		
-		triggerClientEvent(thePlayer, "bizControl", thePlayer, biz, array)
-
+		if(#TradeArr > 0) then
+			triggerClientEvent(thePlayer, "TradeWindow", thePlayer, TradeArr, "Магазин")
+		else
+			triggerClientEvent(thePlayer, "bizControl", thePlayer, biz, array)
+		end
 		BizControls[biz][thePlayer] = control
 	end
 end
@@ -6497,21 +6525,16 @@ addEventHandler("StartLainOS", root, StartLainOS)
 
 
 local ShmalTimer = {}
-local ShmalObject = {}
 function CreateSpirt()
 	if(not isTimer(ShmalTimer[source])) then
-		local cannabis = FoundItemsCount(source, "Фекалии")
-		if(cannabis >= 1) then
-			RemoveInventoryItem(source, "Фекалии")
+		local arr = FoundItemsCount(source, "Фекалии")
+		if(arr) then
 			setElementRotation(source, 0,0,180)
 			StartAnimation(source, "RIFLE", "RIFLE_load")
 			UnBindAllKey(source)
-			ShmalObject[source] = createObject(823,2543.3, -1294.7, 1044.6)
-			setObjectScale(ShmalObject[source], 0.25)			
-			setElementInterior(ShmalObject[source], 2)
 			ShmalTimer[source] = setTimer(function(thePlayer)
-				AddInventoryItem(thePlayer, "Pissh Gold", 1, 150, {["hp"] = {"hp", 100, 0, {}}})
-				destroyElement(ShmalObject[thePlayer])
+				RemoveInventoryItemCount(thePlayer, arr[1], arr[2])
+				AddInventoryItem(thePlayer, {["txd"] = "Pissh Gold", ["name"] = "Pissh Gold"})
 				StopAnimation(thePlayer)
 				BindAllKey(thePlayer)
 			end, 10000, 1, source)
@@ -6632,12 +6655,37 @@ CreatePizza(203.5, -202, 1.6)--LS
 CreatePizza(2756.8, 2477.3, 11.1)--lV
 
 
+local DancingArr = {"bd_clap",
+"bd_clap1",
+"dance_loop",
+"DAN_Down_A",
+"DAN_Left_A",
+"DAN_Loop_A",
+"DAN_Right_A",
+"DAN_Up_A",
+"dnce_M_a",
+"dnce_M_b",
+"dnce_M_c",
+"dnce_M_d",
+"dnce_M_e"}
+
+
+
 SData["Strip"] = 1
 function CreateStrip(x,y,z,rz)
 	CreateEnter(x,y,z,rz, 0, 0, false, 1204.8, -13.8, 1000.9, 0, 2, SData["Strip"], "The Pig Pen")
+	
+
+	local ped = CreateDialogBot(87, 1214, -4.2, 1001.3,180, 2, SData["Strip"], "Стриптизерша", "Стриптизерша")
+	StartAnimation(ped, "DANCING", DancingArr[math.random(1, #DancingArr)], -1, true)
+	
+	ped = CreateDialogBot(87, 1208.4, -6.4, 1001.3,90, 2, SData["Strip"], "Стриптизерша", "Стриптизерша")
+	StartAnimation(ped, "DANCING", DancingArr[math.random(1, #DancingArr)], -1, true)
+	
+	CreateDialogBot(188, 1215.1, -15.3, 1000.9, 0, 2, SData["Strip"], "Liquor Shop", "Бармен")
+	
 	SData["Strip"] = SData["Strip"]+1
 end
-
 CreateStrip(2421.6, -1219.2, 25.6, 0)
 CreateStrip(693.7, 1967.7, 5.5, 180)
 
@@ -6773,23 +6821,6 @@ CreateMedic(-2204.1, -2309.5, 31.4, 0)
 
 
 
-
-
-
-
-local DancingArr = {"bd_clap",
-"bd_clap1",
-"dance_loop",
-"DAN_Down_A",
-"DAN_Left_A",
-"DAN_Loop_A",
-"DAN_Right_A",
-"DAN_Up_A",
-"dnce_M_a",
-"dnce_M_b",
-"dnce_M_c",
-"dnce_M_d",
-"dnce_M_e"}
 
 
 
@@ -6982,32 +7013,30 @@ addEventHandler("BankEvent", root, BankEvent)
 
 
 
-function CreateThreePlayer(thePlayer, i, x,y,z)
+function CreateThreePlayer(thePlayer, ix, iy, x,y,z)
 	x,y = math.round(x, 0),math.round(y, 0)
 	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
 	local model = false
 	
-	if(arr[i][1] == "Конопля") then
+	if(arr[ix][iy]["name"] == "Конопля") then
 		model = 823
-	elseif(arr[i][1] == "Кока") then
+	elseif(arr[ix][iy]["name"] == "Кока") then
 		model = 782
 	else
 		return false
 	end
 	
 	
-
+	arr[ix][iy]["count"] = 1
 	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
 		local name = "T"..md5(tostring(x..y..z))
 		StartAnimation(thePlayer, "BOMBER","BOM_Plant", false,false,false,false)
-		arr[i][2] = 1
-		PData[thePlayer]["ActionObject"] = {x,y,z+0.5, getElementInterior(thePlayer), getElementDimension(thePlayer), arr[i]}
-		RemoveInventoryItemNew(thePlayer, "player", i)
 		PData[thePlayer]["ActionTimer"] = setTimer(function()
-			if(CreateThree(model, x,y,z, name, arr[i][3])) then
-				if(arr[i][1] == "Конопля") then
+			if(CreateThree(model, x,y,z, name, GetItemQuality(arr[ix][iy]))) then
+				if(arr[ix][iy]["name"] == "Конопля") then
+					RemoveInventoryItemCount(thePlayer, ix,iy)
+
 					outputChatBox("Ты посадил #558833коноплю",thePlayer,255,255,255,true)
-					WantedLevel(thePlayer, 0.1)
 					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 					if(PlayerTeam == "Баллас") then
 						if(GetDatabaseAccount(thePlayer, "BTUT") == 1) then
@@ -7018,9 +7047,10 @@ function CreateThreePlayer(thePlayer, i, x,y,z)
 						end
 					end
 					times = 3480
-				elseif(arr[i][1] == "Кока") then
+				elseif(arr[ix][iy]["name"] == "Кока") then
+					RemoveInventoryItemCount(thePlayer, ix,iy)
+
 					outputChatBox("Ты посадил коку",thePlayer,255,255,255,true)
-					WantedLevel(thePlayer, 0.1)
 					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 					if(PlayerTeam == "Колумбийский картель") then
 						if(GetDatabaseAccount(thePlayer, "KTUT") == 1) then
@@ -7039,12 +7069,11 @@ function CreateThreePlayer(thePlayer, i, x,y,z)
 				xmlNodeSetAttribute(NewNode, "z", z)
 				xmlNodeSetAttribute(NewNode, "model", model)
 				xmlNodeSetAttribute(NewNode, "stage", 1)
-				xmlNodeSetAttribute(NewNode, "quality", arr[i][3])
+				xmlNodeSetAttribute(NewNode, "quality", GetItemQuality(arr[ix][iy]))
 				xmlNodeSetAttribute(NewNode, "t", times)
 			else
 				outputChatBox("Тут уже посажено растение!", thePlayer, 255, 255, 255, true)
 			end
-			PData[thePlayer]["ActionObject"] = nil
 		end, 2200, 1)
 	end
 end
@@ -7071,7 +7100,7 @@ function HarvestThree(thePlayer, pic)
 			local NewQuality = tonumber(getElementData(pic, "quality"))+100
 			if(NewQuality > 1000) then NewQuality = 1000 end
 			if(t == 0) then
-				AddInventoryItem(thePlayer, "Конопля", math.random(1,3), NewQuality, {})
+				AddInventoryItem(thePlayer, {["txd"] = "Конопля", ["name"] = "Конопля", ["count"] = math.random(1,3), ["quality"] = NewQuality})
 				if(model == 823) then
 					if(xmlNodeGetAttribute(Node, "stage") == "1") then
 						xmlNodeSetAttribute(Node, "stage", 2)
@@ -7087,7 +7116,8 @@ function HarvestThree(thePlayer, pic)
 						end
 					end
 				elseif(model == 782) then
-					AddInventoryItem(thePlayer, "Кока", math.random(2,3), NewQuality, {})
+					AddInventoryItem(thePlayer, {["txd"] = "Кока", ["name"] = "Кока", ["count"] = math.random(2,3), ["quality"] = NewQuality})
+
 					RemoveThree(getElementData(pic, "Three"))
 					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 					if(PlayerTeam == "Колумбийский картель") then
@@ -7098,7 +7128,9 @@ function HarvestThree(thePlayer, pic)
 					end
 				end
 			else
-				AddInventoryItem(thePlayer, ThreesNames[model], 1, tonumber(getElementData(pic, "quality")), {})
+			
+				AddInventoryItem(thePlayer, {["txd"] = ThreesNames[model], ["name"] = ThreesNames[model], ["count"] = 1, ["quality"] = tonumber(getElementData(pic, "quality"))})
+
 				RemoveThree(getElementData(pic, "Three"))
 			end
 			PlayersEnteredPickup[thePlayer] = false
@@ -7117,7 +7149,7 @@ function usekanistra(thePlayer, slot)
 	if(tar) then
 		if(getElementType(tar) == "vehicle") then
 			if(not getElementData(tar, "Fuel")) then
-				setElementData(tar, "Fuel", 10)
+				setElementData(tar, "Fuel", 25)
 			end
 			local model = getElementModel(tar)
 			if(VehicleSystem[model][8] <= getElementData(tar, "Fuel")+10) then
@@ -7125,7 +7157,6 @@ function usekanistra(thePlayer, slot)
 			else
 				setElementData(tar, "Fuel", getElementData(tar, "Fuel")+10)
 			end
-			RemoveInventoryItemNew(thePlayer, "player", slot)
 			ToolTip(thePlayer, "Ты заправил автомобиль на 10 литров!")
 			return true
 		end
@@ -7149,7 +7180,6 @@ function usezapaska(thePlayer, slot)
 					setVehicleWheelStates(tar, wheels[1], wheels[2], wheels[3], wheels[4])
 					
 					ToolTip(thePlayer, "Ты заменил колесо!")
-					RemoveInventoryItemNew(thePlayer, "player", slot)
 					return true
 				end
 			end
@@ -7175,15 +7205,6 @@ addEventHandler("usezapaska", root, usezapaska)
 
 
 function usesmoke(thePlayer, slot)
---1485 сигара
-	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
-	if(arr[slot][1] == "CoK") then
-		if(not arr[slot][4]["сигареты"]) then
-			ToolTip(thePlayer, "Пачка #B4191Dсигарет#FFFFFF пуста")
-			return false
-		end
-	end
-	
 	local theVehicle = getPedOccupiedVehicle(thePlayer)
     if(not PData[thePlayer]["smoke"]) then
 		StartAnimation(thePlayer, "smoking","M_smk_in", false,false,false,false)
@@ -7199,11 +7220,6 @@ function usesmoke(thePlayer, slot)
 				end, 1500, 1, thePlayer)
 			end, 60000, 1, thePlayer)
 		end, 1500, 1, thePlayer)
-		if(arr[slot][1] == "CoK") then
-			RemoveButtonDataNew(thePlayer, "player", slot, "сигареты", -1)
-		else
-			RemoveInventoryItemNew(thePlayer, "player", slot)
-		end
 	else
 		StartAnimation(thePlayer, "smoking","M_smklean_loop", false,false,false,false)
     end
@@ -7214,30 +7230,24 @@ addEventHandler("usesmoke", root, usesmoke)
 
 
 
-function usedrink(thePlayer, slot)
-	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
-	if(arr[slot][4]["hp"]) then
-		StartAnimation(thePlayer, "VENDING","VEND_Drink2_P", 1500, false, true, true, false)
-		setElementHealth(thePlayer, getElementHealth(thePlayer)+5)
-		triggerClientEvent(thePlayer, "ShakeLevel", thePlayer, 25)
-		setPedWalkingStyle(thePlayer, 126)
-		
-		local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-		if(PlayerTeam == "Военные") then
-				if(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
-				setTimer(function()
-					triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
-					triggerClientEvent(thePlayer, "RemoveGPSMarker", thePlayer, "Служба: найди способ нажраться")
-					MissionCompleted(thePlayer, "Полиция +", "МИССИЯ ВЫПОЛНЕНА")
-					Respect(thePlayer, "police", 5)
-					SetDatabaseAccount(thePlayer, "ATUT", 2)
-					triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Посади заключенного на бутылку")
-				end, 1500, 1, thePlayer)
-			end
+function usedrink(thePlayer)
+	StartAnimation(thePlayer, "VENDING","VEND_Drink2_P", 1500, false, true, true, false)
+	setElementHealth(thePlayer, getElementHealth(thePlayer)+5)
+	triggerClientEvent(thePlayer, "ShakeLevel", thePlayer, 25)
+	setPedWalkingStyle(thePlayer, 126)
+	
+	local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+	if(PlayerTeam == "Военные") then
+			if(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
+			setTimer(function()
+				triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
+				triggerClientEvent(thePlayer, "RemoveGPSMarker", thePlayer, "Служба: найди способ нажраться")
+				MissionCompleted(thePlayer, "Полиция +", "МИССИЯ ВЫПОЛНЕНА")
+				Respect(thePlayer, "police", 5)
+				SetDatabaseAccount(thePlayer, "ATUT", 2)
+				triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Посади заключенного на бутылку")
+			end, 1500, 1, thePlayer)
 		end
-		RemoveButtonDataNew(thePlayer, "player", slot, "hp", -20)
-	else
-		ToolTip(thePlayer, "Бутылка пуста!")
 	end
 end
 addEvent("usedrink", true)
@@ -7407,11 +7417,13 @@ function isAmmo(name)
 end
 
 
-function useinvweapon(thePlayer, slot)
+function useinvweapon(thePlayer, slots)
+	if(slots) then
+		PData[thePlayer]["WeaponSlot"] = slots
+	end
+
 	SetControls(thePlayer, "ammo", {["fire"] = false, ["action"] = false, ["vehicle_fire"] = false, ["vehicle_secondary_fire"] = false})
-	if(slot) then PData[thePlayer]["WeaponSlot"]=slot end
-	if(not PData[thePlayer]["WeaponSlot"]) then PData[thePlayer]["WeaponSlot"] = 1 end
-	
+
 	if(PData[thePlayer]["AdvArmasItem"]) then
 		RemovePlayerArmas(thePlayer, PData[thePlayer]["AdvArmasItem"])	
 		PData[thePlayer]["AdvArmasItem"] = nil
@@ -7421,10 +7433,12 @@ function useinvweapon(thePlayer, slot)
 	local arr = fromJSON(getElementData(thePlayer, "inv"))
 	
 	local carry = false
-	for _, a in pairs(arr) do
-		if(a[1]) then
-			if(a[1] == "Запаска" or a[1] == "Зерно" or a[1] == "Нефть" or a[1] == "Химикаты" or a[1] == "Алкоголь" or a[1] == "Пропан") then
-				carry = true
+	for x, data in pairs(arr) do
+		for y, dat in pairs(data) do
+			if(dat["name"]) then
+				if(dat["name"] == "Запаска" or dat["name"] == "Зерно" or dat["name"] == "Нефть" or dat["name"] == "Химикаты" or dat["name"] == "Алкоголь" or dat["name"] == "Пропан") then
+					carry = true
+				end
 			end
 		end
 	end
@@ -7434,48 +7448,55 @@ function useinvweapon(thePlayer, slot)
 	else
 		SetControls(thePlayer, "carry", {["fire"] = false, ["action"] = false, ["jump"] = false, ["aim_weapon"] = false, ["enter_exit"] = false, ["enter_passenger"] = false})
 	end
-
-	local WM = WeaponNamesArr[arr[PData[thePlayer]["WeaponSlot"]][1]]
-	if(WM) then
-		if(arr[PData[thePlayer]["WeaponSlot"]][4]["лазер"]) then
-			setElementData(thePlayer, "laser", arr[PData[thePlayer]["WeaponSlot"]][4]["лазер"][4])
-		else
-			removeElementData(thePlayer, "laser")
+	
+	if(PData[thePlayer]["WeaponSlot"]) then
+		local WM = false
+		if(arr[PData[thePlayer]["WeaponSlot"][1]][PData[thePlayer]["WeaponSlot"][2]]["name"]) then
+			WM = WeaponNamesArr[arr[PData[thePlayer]["WeaponSlot"][1]][PData[thePlayer]["WeaponSlot"][2]]["name"]]
 		end
-		if(WM == 16 or WM == 18 or WM == 46 or WM == 7) then -- Граната, молотов, Парашют, удочка
-			giveWeapon(thePlayer, WM, arr[PData[thePlayer]["WeaponSlot"]][2], true)
-		else
-			local ammo = 0
-			if(WeaponAmmo[arr[PData[thePlayer]["WeaponSlot"]][1]]) then
-				for key, k in pairs(arr[PData[thePlayer]["WeaponSlot"]][4]) do
-					if(k[1] == WeaponAmmo[arr[PData[thePlayer]["WeaponSlot"]][1]]) then
-						ammo=arr[PData[thePlayer]["WeaponSlot"]][4][key][2]
-						break
-					end
-				end
-				if ammo == 0 then
-					SetControls(thePlayer, "ammo", {["fire"] = true, ['action'] = true, ["vehicle_fire"] = true, ["vehicle_secondary_fire"] = true}) 
-				end
-			end
-			if(ammo == 0) then
-				giveWeapon(thePlayer, WM, 10000, true)
-				giveWeapon(thePlayer, WM, 10000, true)
+		if(WM) then
+			--if(arr[PData[thePlayer]["WeaponSlot"]][4]["лазер"]) then
+			--	setElementData(thePlayer, "laser", arr[PData[thePlayer]["WeaponSlot"]][4]["лазер"][4])
+			--else
+			--	removeElementData(thePlayer, "laser")
+			--end
+			if(WM == 16 or WM == 18 or WM == 46 or WM == 7) then -- Граната, молотов, Парашют, удочка
+				giveWeapon(thePlayer, WM, GetItemCount(arr[PData[thePlayer]["WeaponSlot"][1]][PData[thePlayer]["WeaponSlot"][2]]), true) 
 			else
-				giveWeapon(thePlayer, WM, ammo, true)
+				--local ammo = 0
+				--if(WeaponAmmo[arr[PData[thePlayer]["WeaponSlot"]][1]]) then
+				--	for key, k in pairs(arr[PData[thePlayer]["WeaponSlot"]][4]) do
+				--		if(k[1] == WeaponAmmo[arr[PData[thePlayer]["WeaponSlot"]][1]]) then
+				--			ammo=arr[PData[thePlayer]["WeaponSlot"]][4][key][2]
+				--			break
+				--		end
+				--	end
+				--	if ammo == 0 then
+				--		SetControls(thePlayer, "ammo", {["fire"] = true, ['action'] = true, ["vehicle_fire"] = true, ["vehicle_secondary_fire"] = true}) 
+				--	end
+				--end
+				--if(ammo == 0) then
+					giveWeapon(thePlayer, WM, 10000, true)
+					giveWeapon(thePlayer, WM, 10000, true)
+				--else
+				--	giveWeapon(thePlayer, WM, ammo, true)
+				--end
+				--local damage = getOriginalWeaponProperty(WM, "poor", "damage")
+				--setWeaponProperty(WM, "poor", "damage", damage*(arr[PData[thePlayer]["WeaponSlot"]][3]/500))
 			end
-			local damage = getOriginalWeaponProperty(WM, "poor", "damage")
-			setWeaponProperty(WM, "poor", "damage", damage*(arr[PData[thePlayer]["WeaponSlot"]][3]/500))
-		end
-	elseif(arr[PData[thePlayer]["WeaponSlot"]][1]) then
-		local model = ItemsNamesArr[arr[PData[thePlayer]["WeaponSlot"]][1]]
-		if(model) then
-			PData[thePlayer]["AdvArmasItem"] = model
-			AddPlayerArmas(thePlayer, model)
+		--elseif(arr[PData[thePlayer]["WeaponSlot"]][1]) then
+		--	local model = ItemsNamesArr[arr[PData[thePlayer]["WeaponSlot"]][1]]
+		--	if(model) then
+		--		PData[thePlayer]["AdvArmasItem"] = model
+		--		AddPlayerArmas(thePlayer, model)
+		--	end
 		end
 	end
-	
-	
-	triggerClientEvent(thePlayer, "useinvslot", thePlayer, PData[thePlayer]["WeaponSlot"]) 
+	if(PData[thePlayer]["WeaponSlot"]) then
+		setElementData(thePlayer, "WeaponSlot", toJSON(PData[thePlayer]["WeaponSlot"]))
+	else
+		removeElementData(thePlayer, "WeaponSlot")
+	end
 end
 addEvent("useinvweapon", true)
 addEventHandler("useinvweapon", root, useinvweapon)
@@ -7486,30 +7507,86 @@ addEventHandler("useinvweapon", root, useinvweapon)
 
 function FoundItemsCount(thePlayer, itemname)
 	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
-	local count = 0
+	local count = {}
 
-	for i = 1, #arr do
-		if(arr[i][1] == itemname) then
-			count=count+arr[i][2]
+	for x, datas in pairs(arr) do
+		for y, data in pairs(datas) do
+			if(data["name"]) then
+				if(data["name"] == itemname) then
+					count[#count+1] = {x,y}
+				end
+			end
 		end
 	end
-	return count
+	if(#count > 0) then	return count[math.random(#count)]
+	else return false end
+end
+
+
+
+
+
+
+function MinusToPlus(var)
+	if(var < 0) then
+		var = var-var-var
+	end
+	return var
 end
 
 
 function nextweapon(thePlayer, n)
-	if(PData[thePlayer]["WeaponSlot"]) then
-		local count = PData[thePlayer]["WeaponSlot"]
-		if(n == "next_weapon") then
-			count=count+1
-		elseif(n == "previous_weapon") then
-			count=count-1
+	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
+	
+	if(n == "next_weapon") then
+		if(not PData[thePlayer]["WeaponSlot"]) then PData[thePlayer]["WeaponSlot"] = {1,1, true} end
+		for x = PData[thePlayer]["WeaponSlot"][1], #arr do
+			local StartedInd = 1
+			if(x == PData[thePlayer]["WeaponSlot"][1]) then
+				StartedInd = PData[thePlayer]["WeaponSlot"][2]
+			end
+			for y = StartedInd, #arr[x] do
+				if(arr[x][y]["name"]) then
+					if(WeaponNamesArr[arr[x][y]["name"]]) then
+						if(x ~= PData[thePlayer]["WeaponSlot"][1] or y ~= PData[thePlayer]["WeaponSlot"][2] or PData[thePlayer]["WeaponSlot"][3]) then
+							PData[thePlayer]["WeaponSlot"] = {x,y}
+							if(not getControlState(thePlayer, "aim_weapon")) then -- В прицеле
+								useinvweapon(thePlayer)
+							end
+							return
+						end
+					end
+				end
+			end
 		end
-		if(count == 11) then count = 1 
-		elseif(count == 0) then count = 10 end
-		if(not getControlState(thePlayer, "aim_weapon")) then -- В прицеле
-			useinvweapon(thePlayer, count)
+		
+		PData[thePlayer]["WeaponSlot"] = false
+		useinvweapon(thePlayer)
+	elseif(n == "previous_weapon") then
+		if(not PData[thePlayer]["WeaponSlot"]) then PData[thePlayer]["WeaponSlot"] = {#arr,#arr[#arr], true} end
+
+		for x = -PData[thePlayer]["WeaponSlot"][1], -1 do
+			local StartedInd = #arr[MinusToPlus(x)]
+			if(MinusToPlus(x) == PData[thePlayer]["WeaponSlot"][1]) then
+				StartedInd = PData[thePlayer]["WeaponSlot"][2]
+			end
+			for y = -StartedInd, -1 do
+				if(arr[MinusToPlus(x)][MinusToPlus(y)]["name"]) then
+					if(WeaponNamesArr[arr[MinusToPlus(x)][MinusToPlus(y)]["name"]]) then
+						if(MinusToPlus(x) ~= PData[thePlayer]["WeaponSlot"][1] or MinusToPlus(y) ~= PData[thePlayer]["WeaponSlot"][2] or PData[thePlayer]["WeaponSlot"][3]) then
+							PData[thePlayer]["WeaponSlot"] = {MinusToPlus(x),MinusToPlus(y)}
+							if(not getControlState(thePlayer, "aim_weapon")) then -- В прицеле
+								useinvweapon(thePlayer)
+							end
+							return
+						end
+					end
+				end
+			end
 		end
+		
+		PData[thePlayer]["WeaponSlot"] = false
+		useinvweapon(thePlayer)
 	end
 end
 
@@ -7517,21 +7594,18 @@ end
 
 function Drop(item, x,y,z,i,d)
 	local pic = false
-	if(WeaponNamesArr[item[1]]) then
-		pic = createPickup(x, y, z, 2, WeaponNamesArr[item[1]],0, 0)
-	elseif(item[1] == "Рыба") then
-		RemoveInventorySlot(thePlayer, name, item)
-		return true 
-	elseif(isAmmo(item[1])) then
+	if(WeaponNamesArr[item["name"]]) then
+		pic = createPickup(x, y, z, 2, WeaponNamesArr[item["name"]],0, 0)
+	elseif(isAmmo(item["name"])) then
 		pic = createPickup(x, y, z, 3, 2061,0, 0)
-	elseif(item[1] == "Спанк") then
+	elseif(item["name"] == "Спанк") then
 		pic = createPickup(x, y, z, 3, 1279, 0)
-	elseif(item[1] == "Кровь") then
+	elseif(item["name"] == "Кровь") then
 		pic = createPickup(x, y, z, 3, 1580, 0)
-	elseif(ItemsNamesArr[item[1]]) then
-		pic = createPickup(x, y, z, 3, ItemsNamesArr[item[1]], 0)
+	elseif(ItemsNamesArr[item["name"]]) then
+		pic = createPickup(x, y, z, 3, ItemsNamesArr[item["name"]], 0)
 	else
-		if(item[1]) then
+		if(item["name"]) then
 			pic = createPickup(x, y, z, 3, 2037, 0)
 		end
 	end
@@ -7550,7 +7624,7 @@ end
 
 
 function DropHarvest(x,y,z)
-	Drop({"Зерно", 1, 450, {}}, x,y,z,0,0)
+	Drop({["txd"] = "Зерно", ["name"] = "Зерно"}, x,y,z,0,0)
 end
 addEvent("DropHarvest", true)
 addEventHandler("DropHarvest", root, DropHarvest)
@@ -7558,22 +7632,13 @@ addEventHandler("DropHarvest", root, DropHarvest)
 
 
 
-function dropinvitem(thePlayer, name, item, backpack, komu)
-	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
-	if(name == "backpack") then
-		arr = arr[backpack][4]["content"]
-	end
-	if(not komu) then
-		local x,y,z = getElementPosition(thePlayer)
-		x,y = (x-1)+(math.random()*2), (y-1)+(math.random()*2)
-		Drop(arr[item], x, y, z, getElementInterior(thePlayer), getElementDimension(thePlayer))
-	else
-		AddInventoryItem(getPlayerFromName(komu), arr[item][1], arr[item][2], arr[item][3], arr[item][4])
-		triggerEvent("onPlayerChat", thePlayer, "передал что-то "..komu, 1)
-	end	
+function NewDropItem(thePlayer, item)
+	local x,y,z = getElementPosition(thePlayer)
+	x,y = (x-1)+(math.random()*2), (y-1)+(math.random()*2)
+	Drop(item, x, y, z, getElementInterior(thePlayer), getElementDimension(thePlayer))
 end
-addEvent("dropinvitem", true)
-addEventHandler("dropinvitem", root, dropinvitem)
+addEvent("NewDropItem", true)
+addEventHandler("NewDropItem", root, NewDropItem)
 
 
 
@@ -7876,19 +7941,19 @@ function CreateBot(skin,x,y,z,rz,i,d,zone,ind)
 	
 	local botinv = {}
 	if(SkinData[skin][4]) then
-		botinv[#botinv+1] = {FoundWName(SkinData[skin][4]), 1, 1, toJSON({})}
+		botinv[#botinv+1] = {["txd"] = FoundWName(SkinData[skin][4]), ["name"] = FoundWName(SkinData[skin][4])}
 	end
 	
 	local randitem = math.random(20)
 	
 	if(randitem == 1) then
 		if(SkinData[skin][2] == Teams['Мирные жители']) then
-			botinv[#botinv+1] = {"Пакет", 1, 1, toJSON({})}
+			botinv[#botinv+1] = {["txd"] = "Пакет", ["name"] = "Пакет"}
 			name=name.." с пакетом"
 		end
 	elseif(randitem == 2) then
 		if(SkinData[skin][2] == Teams['Мирные жители']) then
-			botinv[#botinv+1] = {"Чемодан", 1, 1, toJSON({})}
+			botinv[#botinv+1] = {["txd"] = "Чемодан", ["name"] = "Чемодан"}
 			name=name.." с чемоданом"
 		end
 	elseif(randitem == 3) then
@@ -7907,7 +7972,7 @@ function CreateBot(skin,x,y,z,rz,i,d,zone,ind)
 	end
 
 	
-	setElementData(BotCreated[zone][ind], "inv", toJSON(botinv))
+	setElementData(BotCreated[zone][ind], "inv", toJSON({botinv}))
 	setElementData(BotCreated[zone][ind], "name", name)
 	return BotCreated[zone][ind]
 end
@@ -7971,11 +8036,10 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 				local weaponName = FoundWName(dropWeapon)
 				if(weaponName) then
 					local pic = createPickup(x+((math.random(-1000,1000))/1000), y+((math.random(-1000,1000)/1000)), z, 2, dropWeapon,0, 0)
-						
 					if(WeaponAmmo[weaponName]) then
-						setElementData(pic, "arr", toJSON({FoundWName(dropWeapon), 1, math.random(0,600), {["патроны"] = {WeaponAmmo[weaponName], math.random(1,100), math.random(0,600), toJSON({})}}}))
+						setElementData(pic, "arr", toJSON({["txd"] = weaponName, ["name"] = weaponName, ["quality"] = math.random(0,600)})) -- Добавить патроны потом
 					else
-						setElementData(pic, "arr", toJSON({FoundWName(dropWeapon), 1, math.random(0,600), {}}))
+						setElementData(pic, "arr", toJSON({["txd"] = weaponName, ["name"] = weaponName, ["quality"] = math.random(0,600)}))
 					end
 					setElementDimension(pic, getElementDimension(source))
 					setElementInterior(pic, getElementInterior(source))
@@ -7995,7 +8059,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 					if(randmoney > 0) then
 						for i = 1, randmoney do
 							local p = createPickup(x+((math.random(-1000,1000))/1000), y+((math.random(-1000,1000)/1000)), z, 3, 1212)
-							setElementData(p, "arr", toJSON({"Деньги", amount, 550, {}}))
+							setElementData(p, "arr", toJSON({["txd"] = "Деньги", ["name"] = "Деньги", ["count"] = amount}))
 						end
 					end
 				elseif(PTeam == "Баллас" or PTeam == "Колумбийский картель" or PTeam == "Русская мафия") then
@@ -9081,6 +9145,14 @@ local Dialogs = {
 			}
 		}
 	},
+	["Стриптизерша"] = {
+		[1] = {
+			["dialog"] = {"[отводит взгляд]"},
+			[1] = {
+				["text"] = "[промолчать]"
+			}
+		}
+	},
 	["Cluckin' Bell"] = {
 		[1] = {
 			["dialog"] = {"Здравствуйте"},
@@ -9253,21 +9325,21 @@ addEventHandler("DialogMoney", getRootElement(), DialogMoney)
 
 
 function TradePlayerWindow(thePlayer, thePed, arg)
-	triggerClientEvent(thePlayer, "TradeWindow", thePlayer, arg[1], arg[2])
+	local TradeArr = {}
+	for _, item in pairs(arg[1]) do
+		TradeArr[#TradeArr+1] = {
+			["txd"] = item[1], 
+			["name"] = item[1], 
+			["quality"] = item[3],
+			["ForSale"] = true, 
+			["Biz"] = arg[2]
+		}
+	end
+
+	triggerClientEvent(thePlayer, "TradeWindow", thePlayer, TradeArr, arg[2])
 end
 addEvent("TradePlayerWindow", true)
 addEventHandler("TradePlayerWindow", getRootElement(), TradePlayerWindow)
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -9288,7 +9360,9 @@ addEventHandler("BandInvite", getRootElement(), BandInvite)
 
 
 function DialogStart(thePlayer, dial, thePed)
-	StartAnimation(thePed, "ped", "factalk", 1, false, true, true, true)
+	if(not getElementData(thePlayer, "anim")) then
+		StartAnimation(thePlayer, "ped", "factalk", 1, false, true, true, true)
+	end
 	triggerClientEvent(thePlayer, "PlayerDialog", thePlayer, dial, thePed)
 	PData[thePlayer]["dialog"] = dial
 end
@@ -9315,8 +9389,9 @@ function DialogRelease(thePlayer, release, thePed)
 		timing = #PData[thePlayer]["dialog"][release]["text"]*50
 	end
 	triggerClientEvent(thePlayer, "MyVoice", thePlayer, 'gg', md5(PData[thePlayer]["dialog"][release]["text"]))
-	StartAnimation(thePlayer, "ped", "factalk", 1, false, true, true, true)
-	
+	if(not getElementData(thePlayer, "anim")) then
+		StartAnimation(thePlayer, "ped", "factalk", 1, false, true, true, true)
+	end
 	PData[thePlayer]["dialogActionTimer"] = setTimer(function()
 		if(PData[thePlayer]["dialog"][release]["action"]) then
 			if(PData[thePlayer]["dialog"][release]["action"][1]) then
@@ -9400,6 +9475,9 @@ addEventHandler("PedDialog", root, PedDialog)
 function PedDamage(ped, weapon, bodypart, loss)
 	local theVehicle = getPedOccupiedVehicle(ped)
 	local Team = getElementData(ped, "team")
+	
+	setElementHealth(ped, getElementHealth(ped)-loss)
+	
 	if(source and weapon) then
 		if(getElementType(source) == "player") then
 			setElementData(ped, "attacker", getPlayerName(source))
@@ -9446,7 +9524,8 @@ function PedDamage(ped, weapon, bodypart, loss)
 		end
 	end
 	
-	if(bodypart == 9) then
+	
+	if(bodypart == 9 and getElementHealth(ped) <= 0) then
 		setPedHeadless(ped, true)
 		killPed(ped, source, weapon, bodypart) 
 	end
@@ -9656,9 +9735,9 @@ function ZoneInfo(thePlayer, zone)
 		
 			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 			if(CapZone[zone]) then
-				setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
+				--setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
 			else
-				setBlipColor(PData[thePlayer]['radar'], r,g,b, 0)
+				--setBlipColor(PData[thePlayer]['radar'], r,g,b, 0)
 			end 
 		
 			if(PlayerTeam == "Военные") then
@@ -9676,7 +9755,12 @@ function ZoneInfo(thePlayer, zone)
 						SetDatabaseAccount(thePlayer, "PrisonTime", nil)
 						SetDatabaseAccount(thePlayer, "Prison", nil)
 						MissionCompleted(thePlayer, "", "СБЕЖАЛ")
-						SetTeam(thePlayer, "Мирные жители")
+						if(GetDatabaseAccount(thePlayer, "OldTeam") ~= 0) then
+							SetTeam(thePlayer, GetDatabaseAccount(thePlayer, "OldTeam"))
+							SetDatabaseAccount(thePlayer, "OldTeam", nil)
+						else
+							SetTeam(thePlayer, "Мирные жители")
+						end
 						WantedLevel(thePlayer, 6)
 						SetDatabaseAccount(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
 						setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
@@ -9684,12 +9768,17 @@ function ZoneInfo(thePlayer, zone)
 						triggerClientEvent(thePlayer, "PlayerSpawn", thePlayer)
 					end
 				else
-					if(getElementDimension(thePlayer) ~= 1) then
+					if(getElementDimension(thePlayer) == 0) then
 						local ptime = GetDatabaseAccount(thePlayer, "PrisonTime")
 						SetDatabaseAccount(thePlayer, "PrisonTime", nil)
 						SetDatabaseAccount(thePlayer, "Prison", nil)
 						MissionCompleted(thePlayer, "", "СБЕЖАЛ")
-						SetTeam(thePlayer, "Мирные жители")
+						if(GetDatabaseAccount(thePlayer, "OldTeam") ~= 0) then
+							SetTeam(thePlayer, GetDatabaseAccount(thePlayer, "OldTeam"))
+							SetDatabaseAccount(thePlayer, "OldTeam", nil)
+						else
+							SetTeam(thePlayer, "Мирные жители")
+						end
 						WantedLevel(thePlayer, 6)
 						SetDatabaseAccount(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
 						setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
@@ -9884,6 +9973,8 @@ end
 function ToolTip(thePlayer, message)
 	triggerClientEvent(thePlayer, "ToolTip", thePlayer, message)
 end
+addEvent("ToolTip", true)
+addEventHandler("ToolTip", root, ToolTip)
 
 
 
@@ -10495,8 +10586,7 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 		spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
 		if(GetDatabaseAccount(thePlayer, "ATUT") == 0) then
 			SetDatabaseAccount(thePlayer, "ATUT", 1)
-			AddInventoryItem(thePlayer, "АК-47", 1, 0, {})
-			AddInventoryItem(thePlayer, "7.62-мм", 100, 0, {})
+			AddInventoryItem(thePlayer, {["name"] = "АК-47", ["txd"] = "АК-47"})
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
 		elseif(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
@@ -10593,37 +10683,36 @@ function UpdateTutorial(thePlayer)
 		outputChatBox("Для получения #FF0000крови#FFFFFF тебе нужно положить донора на кушетку в больнице и начать забор #FF0000крови#FFFFFF", thePlayer, 255, 255, 255, true)
 	elseif(team == "Якудзы") then
 		if(GetDatabaseAccount(thePlayer, "YTUT") == 0) then
-			AddInventoryItem(thePlayer, "Катана", 1, 550, {})
 			SetDatabaseAccount(thePlayer, "YTUT", 1)
 		end
 	elseif(team == "Баллас") then
 		if(GetDatabaseAccount(thePlayer, "BTUT") == 0) then
-			AddInventoryItem(thePlayer, "Конопля", 1, 0, {})
-			outputChatBox("Отправляйся на ферму и посади лист #558833конопли#FFFFFF", thePlayer, 255,255,255,true)
+			HelpMessage(thePlayer, "Отправляйся на ферму и посади лист #558833конопли#FFFFFF")
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, -1107.4, -1094.2, 129.2, "Ферма", "Открой инвентарь #A0A0A0i#FFFFFF и дважды нажми на лист #558833конопли")
+			AddInventoryItem(thePlayer, {["txd"] = "Конопля", ["name"] = "Конопля", ["count"] = 1, ["quality"] = 1})
 			SetDatabaseAccount(thePlayer, "BTUT", 1)
 		elseif(GetDatabaseAccount(thePlayer, "BTUT") == 1) then
-			outputChatBox("Отправляйся на ферму и посади лист #558833конопли#FFFFFF", thePlayer, 255,255,255,true)
+			HelpMessage(thePlayer, "Отправляйся на ферму и посади лист #558833конопли#FFFFFF")
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, -1107.4, -1094.2, 129.2, "Ферма", "Открой инвентарь #A0A0A0i#FFFFFF и дважды нажми на лист #558833конопли")
 		elseif(GetDatabaseAccount(thePlayer, "BTUT") == 2) then
-			outputChatBox("Чтобы продолжить обучение собери урожай #558833конопли",thePlayer, 255,255,255,true)
+			HelpMessage(thePlayer, "Чтобы продолжить обучение собери урожай #558833конопли")
 		elseif(GetDatabaseAccount(thePlayer, "BTUT") == 3) then
-			outputChatBox("Отправляйся в притон и изготовь #558833косяк", thePlayer, 255,255,255,true)
+			HelpMessage(thePlayer, "Отправляйся в притон и изготовь #558833косяк")
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 1257.3, 241.8, 18.9, "Притон", "Зайди в притон и изготовь #558833косяк")
 		end
 	elseif(team == "Колумбийский картель") then
 		if(GetDatabaseAccount(thePlayer, "KTUT") == 0) then
-			AddInventoryItem(thePlayer, "Кока", 1, 0, {})
-			outputChatBox("Отправляйся на плантацию и посади лист коки", thePlayer, 255,255,255,true)
+			HelpMessage(thePlayer, "Отправляйся на плантацию и посади лист коки")
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 1466.6, -80.4, 19.3, "Плантация", "Открой инвентарь #A0A0A0i#FFFFFF и дважды нажми на лист коки")
+			AddInventoryItem(thePlayer, {["txd"] = "Кока", ["name"] = "Кока", ["count"] = 1, ["quality"] = 1})
 			SetDatabaseAccount(thePlayer, "KTUT", 1)
 		elseif(GetDatabaseAccount(thePlayer, "KTUT") == 1) then
-			outputChatBox("Отправляйся на плантацию и посади лист коки", thePlayer, 255,255,255,true)
+			HelpMessage(thePlayer, "Отправляйся на плантацию и посади лист коки")
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 1466.6, -80.4, 19.3, "Плантация", "Открой инвентарь #A0A0A0i#FFFFFF и дважды нажми на лист коки")
 		elseif(GetDatabaseAccount(thePlayer, "KTUT") == 2) then
-			outputChatBox("Чтобы продолжить обучение собери урожай коки",thePlayer, 255,255,255,true)
+			HelpMessage(thePlayer, "Чтобы продолжить обучение собери урожай коки")
 		elseif(GetDatabaseAccount(thePlayer, "KTUT") == 3) then
-			outputChatBox("Отправляйся в притон и изготовь спанк", thePlayer, 255,255,255,true)
+			HelpMessage(thePlayer, "Отправляйся в притон и изготовь спанк")
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, -2624.6, 1412.65, 7.1, "Притон", "Зайди в притон и изготовь спанк")
 		end
 	end
@@ -10656,23 +10745,32 @@ setTimer(function() DatSoviet() end, 600000, 0)
 
 
 
+function GetItemCount(item)
+	return item["count"] or 1
+end
+
+
+
+function GetItemQuality(item)
+	return item["quality"] or 550
+end
 
 
 function moneyPickupHit(thePlayer)
 	if(getElementData(source, "arr")) then
 		PlayersPickups[thePlayer] = source
 		if(getPickupRespawnInterval(source) == 0) then
-			local arr = fromJSON(getElementData(source, "arr"))
-			ToolTip(thePlayer, "Подобрать "..COLOR["KEY"]["HEX"].."TAB#FFFFFF \n#4682B4"..arr[1].." #FFFFFF"..arr[2].." шт")
+			local item = fromJSON(getElementData(source, "arr"))
+			ToolTip(thePlayer, "Подобрать "..COLOR["KEY"]["HEX"].."TAB#FFFFFF \n#4682B4"..item["name"].." #FFFFFF"..GetItemCount(item).." шт")
 		else
 			TABEvent(thePlayer) -- Сразу подбираем, для выпадаемых с ботов денег
 		end
 	elseif(getElementData(source, "biz")) then
-		local name = "Цена: $"..getElementData(source, "price")
+		local text = "Цена: $"..getElementData(source, "price")
 		local advtext = "\nНажми "..COLOR["KEY"]["HEX"].."ALT#FFFFFF чтобы открыть информацию"
 		if(getElementData(source, "bizowner")) then
-			name = "Владелец: "..getElementData(source, "bizowner")
-			if(name == getPlayerName(thePlayer)) then
+			text = "Владелец: "..getElementData(source, "bizowner")
+			if(getElementData(source, "bizowner") == getPlayerName(thePlayer)) then
 				advtext = advtext.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы продать бизнес"
 				
 				if(getElementData(source, "money")) then
@@ -10684,7 +10782,7 @@ function moneyPickupHit(thePlayer)
 			advtext = advtext.."\nНажми "..COLOR["KEY"]["HEX"].."TAB#FFFFFF чтобы купить бизнес"
 		end
 		HelpMessage(thePlayer, advtext)
-		MissionCompleted(thePlayer, name, getElementData(source, "biz"))
+		MissionCompleted(thePlayer, text, getElementData(source, "biz"))
 		PlayersPickups[thePlayer] = source
 	elseif(getElementData(source, "wardrobe")) then
 		PlayersPickups[thePlayer] = source
@@ -10703,8 +10801,6 @@ function moneyPickupHit(thePlayer)
 			if(GetDatabaseAccount(thePlayer, "COPTUT") == 0) then
 				SetDatabaseAccount(thePlayer, "COPTUT", 1)
 				MissionCompleted(thePlayer, "ЭКИПИРОВКА +", "МИССИЯ ВЫПОЛНЕНА")
-				AddInventoryItem(thePlayer, "Кольт 45", 1, 0, {})
-				AddInventoryItem(thePlayer, "9-мм", 100, 0, {})
 				triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
 			end
 		end
@@ -11008,14 +11104,10 @@ function worldtime()
 	
 	PrisonEvent(hour, minutes)
 	
-	
 	if(Events[ServerDate.timestamp]) then
 		triggerEvent(Events[ServerDate.timestamp], root)
 	end
 end
-
-
-
 
 
 
@@ -11259,7 +11351,7 @@ function InitDynamicBot()
 	for district, arr in pairs(PathNodes) do
 		for i, k in pairs(arr) do
 			if(k[1] == true) then
-				local rand = math.random(1,40)
+				local rand = math.random(1,75)
 				if(rand == 1) then 
 					CreateDynamicBot(district, i)
 				end
@@ -11330,7 +11422,17 @@ function PlayerElementSync(thePlayer, obj, state)
 							local zone = getZoneName(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4], false)
 							if(VehicleRegionSpecific[zone]) then
 								for _, model in pairs(VehicleRegionSpecific[zone]) do
-									arr[#arr+1] = {model}
+									if(model == 431) then
+										if(ServerDate.year+1900 <= 1986) then
+											arr[#arr+1] = {model}
+										end
+									elseif(model == 437) then
+										if(ServerDate.year+1900 >= 1986) then
+											arr[#arr+1] = {model}
+										end
+									else
+										arr[#arr+1] = {model}
+									end
 								end
 							end
 							vehinfo = arr[math.random(#arr)]
@@ -11444,6 +11546,9 @@ function CreateClub(x,y,z)
 	setElementInterior(v3, 17)
 	setElementDimension(v3, SData["ClubIds"])
 
+	
+	
+	CreateDialogBot(188, 501.7, -20.3, 1000.7, 90, 17, SData["ClubIds"], "Liquor Shop", "Бармен")
 	
 	SData["ClubIds"]=SData["ClubIds"]+1
 end
@@ -11932,7 +12037,12 @@ function PrisonEvent(hour, minutes)
 			SetDatabaseAccount(playerValue, "prisoninv", nil)
 			SetDatabaseAccount(playerValue, "PrisonTime", nil)
 			SetDatabaseAccount(playerValue, "Prison", nil)
-			SetTeam(playerValue, "Мирные жители")
+			if(GetDatabaseAccount(playerValue, "OldTeam") ~= 0) then
+				SetTeam(playerValue, GetDatabaseAccount(playerValue, "OldTeam"))
+				SetDatabaseAccount(playerValue, "OldTeam", nil)
+			else
+				SetTeam(playerValue, "Мирные жители")
+			end
 			SpawnedAfterChange(playerValue)
 		else
 			if(isTimer(InLabTimer[playerValue])) then
@@ -12329,10 +12439,20 @@ addCommandHandler("seti", seti)
 
 
 
+local VCompVehicleTypes = {}
+for nameparts, data in pairs(VComp) do
+	for name, types in pairs(data) do
+		if(not VCompVehicleTypes[types[1]]) then VCompVehicleTypes[types[1]] = {} end
+		VCompVehicleTypes[types[1]][#VCompVehicleTypes[types[1]]+1] = {nameparts, name}
+	end
+end
 
 function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
-	--local res = getResourceFromName("Interface") -- Interface
-	--restartResource(res)
+	--local res12 = getResourceFromName("object_image") -- Interface
+	--restartResource(res12)
+	--
+	local res = getResourceFromName("Interface") -- Interface
+	restartResource(res)
 	--triggerClientEvent(thePlayer, "GameSky", thePlayer, "Red County", 8, false)
  --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)
 
@@ -12399,7 +12519,6 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--AddInventoryItem(thePlayer, "Базука", 1, 550, {})
 	--RacePriceGeneration(thePlayer)
 	
 	fileDelete("save.txt")
@@ -12673,6 +12792,7 @@ function loginPlayer(thePlayer, password)
 	else
 		PData[thePlayer]["auth"] = true
 		AddDatabaseAccount(thePlayer, password)
+		AddPlayerMoney(thePlayer, 1500)
 		Respect(thePlayer)
 		SpawnedAfterChange(thePlayer)
 		PData[thePlayer]["auth"] = true
@@ -12684,16 +12804,36 @@ addEventHandler("loginPlayerEvent", root, loginPlayer)
 
 
 
+
+
+
+
+function youtubeSong(thePlayer, link)
+	if(getPedOccupiedVehicle(thePlayer)) then
+		setElementData(getPedOccupiedVehicle(thePlayer), "music", link)
+	else
+		ToolTip(thePlayer, "Необходимо быть в транспорте!")
+	end
+end
+addEvent("youtubeSong", true)
+addEventHandler("youtubeSong", root, youtubeSong)
+
+
+
+
+
+
 function AddCollections(thePlayer, model, id)
 	local dat = fromJSON(GetDatabaseAccount(thePlayer, "Collections"))
 	dat[tostring(model)][id] = true
 	SetDatabaseAccount(thePlayer, "Collections", toJSON(dat))
 	
 	local CollectionNames = {
-		[954] = {"Подков", 50}, 
-		[953] = {"Ракушек", 50},
-		[1276] = {"Скрытых пакетов", 100}
+		[954] = {"Подков", 50, "Подкова"}, 
+		[953] = {"Ракушек", 50, "Ракушка"},
+		[1276] = {"Скрытых пакетов", 100, "Реликвия"}
 	}
+	AddInventoryItem(thePlayer, {["txd"] = CollectionNames[model][3], ["name"] = CollectionNames[model][3]})
 	MissionCompleted(thePlayer, "#169AFA"..CollectionNames[model][1].." найдено "..getArrSize(dat[tostring(model)]).." из "..CollectionNames[model][2])
 end
 addEvent("AddCollections", true)
@@ -12706,14 +12846,17 @@ addEventHandler("AddCollections", root, AddCollections)
 
 function AuthComplete(thePlayer)
 	outputChatBox("* На сервер зашел "..getElementData(source, "color")..getPlayerName(thePlayer), getRootElement(), 255,255,255,true)
+	triggerClientEvent(thePlayer, "AuthInterface", thePlayer, GetDatabaseAccount(thePlayer, "inv"))
 	triggerClientEvent(thePlayer, "AuthComplete", thePlayer, GetDatabaseAccount(thePlayer, "Collections"))
 end
 
 
 function SaveInventory(thePlayer, arr)
-	SetDatabaseAccount(thePlayer, "inv", arr)
-	setElementData(thePlayer, "inv", arr)
-	setPlayerMoney(thePlayer, GetPlayerMoney(thePlayer))
+	if(PData[source]["auth"]) then
+		SetDatabaseAccount(thePlayer, "inv", arr)
+		setElementData(thePlayer, "inv", arr)
+		setPlayerMoney(thePlayer, GetPlayerMoney(thePlayer))
+	end
 end
 addEvent("SaveInventory", true)
 addEventHandler("SaveInventory", root, SaveInventory)
@@ -12721,38 +12864,34 @@ addEventHandler("SaveInventory", root, SaveInventory)
 
 
 
-function buyshopitem(thePlayer, count, args)
-	local arg = fromJSON(args)
-	local name, price, quality, data, biz = arg[1], tonumber(arg[2]), arg[3], arg[4], arg[5]
-
-	if(AddBizProduct(biz, name, -count, true)) then -- Для того чтобы в случае нехватки денег лишний раз не дергать сохранение
-		if(AddPlayerMoney(thePlayer, -price*count)) then
-			if(not data) then data = {} end
-			if(name == "CoK") then
-				local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-				if(PlayerTeam == "Мирные жители") then
-					if(GetDatabaseAccount(thePlayer, "CTUT") == 0) then
-						SetDatabaseAccount(thePlayer, "CTUT", 1)
-						MissionCompleted(thePlayer, "СООБРАЗИТЕЛЬНОСТЬ +", "МИССИЯ ВЫПОЛНЕНА")
-						triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
-						UpdateTutorial(thePlayer)
-					end
+function buyshopitem(thePlayer, item, count, x,y)
+	item["ForSale"] = nil
+	
+	if(AddPlayerMoney(thePlayer, -count)) then
+		if(item["name"] == "CoK") then
+			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+			if(PlayerTeam == "Мирные жители") then
+				if(GetDatabaseAccount(thePlayer, "CTUT") == 0) then
+					SetDatabaseAccount(thePlayer, "CTUT", 1)
+					MissionCompleted(thePlayer, "СООБРАЗИТЕЛЬНОСТЬ +", "МИССИЯ ВЫПОЛНЕНА")
+					triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
+					UpdateTutorial(thePlayer)
 				end
-			elseif(name == "Газета") then
-				data = {["date"] = {ServerDate.month+1, ServerDate.year+1900}}
-			elseif(name == "Лазерный прицел") then
-				data = {["color"] = {math.random(0,255), math.random(255,255), math.random(0,255), math.random(180,255)}}
 			end
-			
-			AddInventoryItem(thePlayer, name, 1*count, quality, data)
-			
-			if(biz) then
-				AddBizProduct(biz, name, -count)
-				AddBizMoney(biz, price*count)
-			end
+		elseif(item["name"] == "Газета") then
+			item["date"] = {ServerDate.month+1, ServerDate.year+1900}
+		elseif(item["name"] == "Лазерный прицел") then
+			item["color"] = {math.random(0,255), math.random(255,255), math.random(0,255), math.random(180,255)}
 		end
+		
+		if(item["Biz"]) then
+			AddBizMoney(item["Biz"], math.round((count/3), 0))
+		end
+		item["Biz"] = nil
+		
+		AddInventoryItem(thePlayer, item, x,y)
 	else
-		ToolTip(thePlayer, "Этот товар кончился на предприятии")
+		ToolTip(thePlayer, "Недостаточно средств!")
 	end
 end
 addEvent("buyshopitem", true)
@@ -12761,17 +12900,15 @@ addEventHandler("buyshopitem", root, buyshopitem)
 
 
 
-function SellShopItem(thePlayer, count, args)
-	local arg = fromJSON(args)
-	local name, price, quality, data, biz = arg[1], tonumber(arg[2]), arg[3], arg[4], arg[5]
-
-	if(AddBizProduct(biz, name, count, true)) then -- Для того чтобы в случае нехватки денег лишний раз не дергать сохранение
-		if(AddPlayerMoney(thePlayer, price*count)) then
-			AddBizProduct(biz, name, count)
-		end
-	else
-		ToolTip(thePlayer, "Склады с данным товаром уже переполнены")
-	end
+function SellShopItem(thePlayer, count)
+	AddPlayerMoney(thePlayer, count)	
+	--if(AddBizProduct(biz, name, count, true)) then -- Для того чтобы в случае нехватки денег лишний раз не дергать сохранение
+	--	if(AddPlayerMoney(thePlayer, price*count)) then
+	--		AddBizProduct(biz, name, count)
+	--	end
+	--else
+	--	ToolTip(thePlayer, "Склады с данным товаром уже переполнены")
+	--end
 end
 addEvent("SellShopItem", true)
 addEventHandler("SellShopItem", root, SellShopItem)
@@ -12856,7 +12993,7 @@ function PrisonGavno(x,y,z,rz)
 		end
 		StartAnimation(source,"SILENCED", "SilenceCrouchfire", 1000,false,false,false)
 		PData[source]["ActionTimer"] = setTimer(function(thePlayer)
-			AddInventoryItem(thePlayer, "Фекалии", 1, math.random(0,1000), {})
+			AddInventoryItem(thePlayer, {["txd"] = "Фекалии", ["name"] = "Фекалии", ["quality"] = math.random(0,1000)})
 		end, 1000, 1, source)
 	end
 end
@@ -13025,7 +13162,7 @@ function MCHSEventHealth(thePlayer, thePed)
 			local health = getPedStat(thePed, 24)-(100)
 			if(health >= 1) then
 				Respect(thePlayer, "civilian", 1)
-				AddInventoryItem(thePlayer, "Кровь", 1, 0, {})
+				AddInventoryItem(thePlayer, {["txd"] = "Кровь", ["name"] = "Кровь", ["quality"] = math.random(0,1000)})
 				outputChatBox("У тебя взяли кровь, кровь в организме со временем восполнится", thePed, 255,255,255,true)
 				outputChatBox("Ты взял кровь у "..getPlayerName(thePed), thePlayer, 255,255,255,true)
 				AddSkill(thePed, 24, -100)
@@ -13041,16 +13178,13 @@ function MCHSEventHealth(thePlayer, thePed)
 			if(isPlayerBolezn(thePed, "СПИД")) then
 				addPlayerBolezn(thePed, "СПИД", -1)
 				outputChatBox("Ты вылечил "..getPlayerName(thePed).." от СПИДа",thePlayer ,255,255,255,true)
-				RemoveInventoryItem(thePlayer, "Кровь")
 			elseif(isPlayerBolezn(thePed, "Порванный анус")) then
 				addPlayerBolezn(thePed, "Порванный анус", -1)
 				triggerClientEvent(thePed, "bloodfoot", thePed, false)
 				outputChatBox("Ты зашил анус "..getPlayerName(thePed),thePlayer ,255,255,255,true)
-				RemoveInventoryItem(thePlayer, "Кровь")
 			elseif(isPlayerBolezn(thePed, "Дизентерия")) then
 				addPlayerBolezn(thePed, "Дизентерия", -1)
 				outputChatBox("Ты вылечил от дизентерии "..getPlayerName(thePed),thePlayer ,255,255,255,true)
-				RemoveInventoryItem(thePlayer, "Кровь")
 			else
 				ToolTip(thePlayer, "Пациент не болен!")
 			end
@@ -13254,7 +13388,9 @@ function quitPlayer()
 			if(isTimer(el)) then
 				killTimer(el)
 			elseif(isElement(el)) then
-				destroyElement(el)
+				if(name ~= "LastVehicle") then
+					destroyElement(el)
+				end
 			end
 			if(name == 'Cops') then
 				for _, theVehicle in pairs(el) do
@@ -13532,20 +13668,7 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 	AddSkill(source, 22, -7)
 	if(getPedStat(source, 24) > 5) then AddSkill(source, 24, -5) end
 	
-	local arr = fromJSON(GetDatabaseAccount(source, "inv"))
 
-	for i = 1, #arr do
-		if(arr[i][1]) then
-			if(DroppedItem[arr[i][1]]) then
-				local x,y,z = getElementPosition(source)
-				x,y = (x-1)+(math.random()*2), (y-1)+(math.random()*2)
-				Drop(arr[i], x, y, z, getElementInterior(source), getElementDimension(source))
-				arr[i] = {}
-			end
-		end
-	end
-	
-	SaveInventory(source, toJSON(arr))
 	
 	if(killer) then
 		if(source ~= killer) then
@@ -13569,6 +13692,7 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 						SetDatabaseAccount(source, "inv", StandartInventory)
 						local x,y,z = GetPlayerLocation(source)
 						local zone = getZoneName(x,y,z,true)
+						SetDatabaseAccount(source, "OldTeam", PTeam)
 						SetDatabaseAccount(source, "Prison", PrisonVariable[zone])
 						SetTeam(source, "Уголовники")
 					end
@@ -14193,7 +14317,9 @@ function OpenTuning(thePlayer,x,y,z,rz)
 				local vehh = getVehicleHandling(theVehicle)
 
 				triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 5)
-				local parts = GetPlayerVehiclePart(thePlayer, theVehicle)
+				local parts = GetPlayerVehiclePart(thePlayer, theVehicle) -- Только выигранные детали
+
+				
 				
 				fixVehicle(theVehicle)
 				triggerClientEvent(thePlayer, "CameraTuning", thePlayer, getElementData(theVehicle, "handl"), toJSON(parts))
@@ -14251,6 +14377,14 @@ end
 
 
 function GetPlayerVehiclePart(thePlayer, theVehicle)
+	--local parts = {} -- Разблокирует весь тюнинг
+	--for nameparts, data in pairs(VComp) do
+	--	for name, types in pairs(data) do
+	--		if(not parts[nameparts]) then parts[nameparts] = {} end
+	--		parts[nameparts][name] = types
+	--	end
+	--end
+				
 	local parts = GetDatabaseAccount(thePlayer, "tuning")
 	if(parts == 0) then parts = {} 
 	else parts = fromJSON(parts) end
@@ -14321,7 +14455,7 @@ function TABEvent(thePlayer)
 			else
 				if(getElementData(PlayersPickups[thePlayer], "arr")) then
 					local arr = fromJSON(getElementData(PlayersPickups[thePlayer], "arr"))
-					AddInventoryItem(thePlayer, arr[1], arr[2], arr[3], arr[4])
+					AddInventoryItem(thePlayer, arr)
 					destroyElement(PlayersPickups[thePlayer])
 				end
 			end
@@ -14571,12 +14705,12 @@ function razd(thePlayer, player2)
 					end
 					if(SkinData[new][3] == "Мужчина") then
 						SetDatabaseAccount(thePlayer, "wardrobe", toJSON(arr))
-						SetDatabaseAccount(player2, "skin", 252)
+						if(getElementType(player2) == "player") then SetDatabaseAccount(player2, "skin", 252) end
 						setElementModel(player2, 252)
 						setPedWalkingStyle(player2, SkinData[252][1])
 					elseif(SkinData[new][3] == "Женщина") then
 						SetDatabaseAccount(thePlayer, "wardrobe", toJSON(arr))
-						SetDatabaseAccount(player2, "skin", 145)
+						if(getElementType(player2) == "player") then SetDatabaseAccount(player2, "skin", 145) end
 						setElementModel(player2, 145)
 						setPedWalkingStyle(player2, SkinData[145][1])
 					end
@@ -14646,6 +14780,13 @@ addCommandHandler("race", race)
 function respawnExplodedVehicle()
 	if(isTimer(FuelTimer[source])) then
 		killTimer(FuelTimer[source])
+	end
+	local weapon = getElementData(source, "weapon")
+	local killer = getElementData(source, "killer")
+	if(weapon and killer) then
+		if(WeaponModel[weapon][2]) then 
+			AddSkill(getPlayerFromName(killer), WeaponModel[weapon][2])
+		end
 	end
 
 	if(not getElementData(source, "destroy")) then 
@@ -14774,9 +14915,10 @@ end
 
 
 
-function FireVehicle(theVehicle, weapon)
+function FireVehicle(theVehicle, weapon, loss)
 	setElementData(theVehicle, "killer", getPlayerName(source))
 	setElementData(theVehicle, "weapon", weapon)
+	setElementHealth(theVehicle, getElementHealth(theVehicle)-loss)
 end
 addEvent("FireVehicle", true)
 addEventHandler("FireVehicle", getRootElement(), FireVehicle)
@@ -15011,7 +15153,7 @@ function startfish(thePlayer, lx,ly,lz)
 		local GLUB = math.round(lz, 0)
 		setElementFrozen(thePlayer, true)
 		local x, y, z = getElementPosition (thePlayer)
-		triggerClientEvent(thePlayer, "FishStarted", thePlayer, lx,ly,lz)
+		setElementData(thePlayer, "fishpos", toJSON({lx,ly,lz}))
 		PData[thePlayer]["FishRodTimer2"] = setTimer(function() StopFish(thePlayer) end, 120000, 1) -- лимит времени
 		PData[thePlayer]["FishRodTimer"] = setTimer(function() 
 			local rand = math.random(1,21)
@@ -15043,11 +15185,11 @@ function startfish(thePlayer, lx,ly,lz)
 				if(FishName == "Кошелек") then
 					AddPlayerMoney(thePlayer, VES, "ТЫ ПОЙМАЛ КОШЕЛЕК!")
 				elseif(FishName == "Реликвия" or FishName == "Подкова" or FishName == "Ракушка") then
-					AddInventoryItem(thePlayer, FishName, 1, Qual, {})
+					AddInventoryItem(thePlayer, {["txd"] = FishName, ["name"] = FishName, ["quality"] = Qual})
 				elseif(FishName == "Черепаха" or FishName == "Акула" or FishName == "Дельфин") then
-					AddInventoryItem(thePlayer, FishName, 1, Qual, {["mass"] = VES})
+					AddInventoryItem(thePlayer, {["txd"] = FishName, ["name"] = FishName, ["quality"] = Qual, ["mass"] = VES})
 				else
-					AddInventoryItem(thePlayer, "Рыба", 1, Qual, {["name"] = FishName, ["cost"] = math.floor((VES/maxFish)*2500), ["mass"] = VES, ["quality"] = Qual})
+					AddInventoryItem(thePlayer, {["txd"] = "Рыба", ["name"] = FishName, ["quality"] = Qual, ["mass"] = VES, ["cost"] = math.floor((VES/maxFish)*2500)})
 				end
 			end
 		end, 1000, 0)
@@ -15086,6 +15228,7 @@ addCommandHandler("changepass", ChangePlayerPassword)
 
 function StopFish(thePlayer, dead)
 	triggerClientEvent(thePlayer, "FishStarted", thePlayer)
+	removeElementData(thePlayer, "fishpos")
 	if(isTimer(PData[thePlayer]["FishRodTimer"])) then
 		setElementFrozen(thePlayer, false)
 		killTimer(PData[thePlayer]["FishRodTimer"])
@@ -15150,37 +15293,29 @@ end
 
 
 
-function AddInventoryItem(thePlayer, itemname, count, quality, data)
-	triggerClientEvent(thePlayer, "AddInventoryItem", thePlayer, itemname, count, quality, toJSON(data))
-end
-
-function RemoveInventoryItem(thePlayer, itemname)
-	triggerClientEvent(thePlayer, "RemoveInventoryItem", thePlayer, itemname)
-end
-
-function RemoveInventoryItemNew(thePlayer, name, i)
-	triggerClientEvent(thePlayer, "RemoveInventoryItemNew", thePlayer, name, i)
-end
-
-function RemoveButtonDataNew(thePlayer, name, i, key, count)
-	triggerClientEvent(thePlayer, "RemoveButtonDataNew", thePlayer, name, i, key, count)
+function AddInventoryItem(thePlayer, item, x, y)
+	triggerClientEvent(thePlayer, "AddInventoryItem", thePlayer, "Инвентарь", item, x, y)
 end
 
 
 
-function RemoveInventorySlot(thePlayer, name, itemid)
-	triggerClientEvent(thePlayer, "RemoveInventorySlot", thePlayer, name, itemid)
+function RemoveInventoryItemCount(thePlayer, x,y)
+	triggerClientEvent(thePlayer, "RemoveInventoryItemCount", thePlayer, x,y)
 end
+
+
 
 
 
 function GetPlayerMoney(thePlayer)
 	local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
 	local count = 0
-	for i, v in pairs(arr) do
-		if(v[1]) then
-			if(v[1] == "Деньги") then
-				count = count+v[2]
+	for x, dat in pairs(arr) do
+		for y, v in pairs(dat) do
+			if(v["name"]) then
+				if(v["name"] == "Деньги") then
+					count = count+v["count"]
+				end
 			end
 		end
 	end
@@ -15211,7 +15346,7 @@ function AddPlayerMoney(thePlayer, count, mission)
 	end
 	
 	givePlayerMoney(thePlayer, count)
-	AddInventoryItem(thePlayer, "Деньги", count, 550, {})
+	AddInventoryItem(thePlayer, {["txd"] = "Деньги", ["name"] = "Деньги", ["count"] = count})
 	if(mission) then
 		MissionCompleted(thePlayer, count, mission)
 		triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 6)
@@ -15261,7 +15396,6 @@ local sp46 = createMarker(720.2, -456.9, 15, "corona", 4, 0, 0, 0, 0)
 setElementData(sp46, "type", "SPRAY")
 setElementData(sp46, "id", 46)
 setElementData(sp46, "rz", 180)
-
 
 
 --setElementData(createMarker(-220.5, 2619.3, 61.8, "corona", 4, 0, 0, 0, 0), "type", "RVMarker")
@@ -15356,7 +15490,7 @@ function TrunkOpen(thePlayer, theVehicle)
 		end
 		SData["TrunkUsed"][thePlayer] = theVehicle
 		
-		triggerClientEvent(thePlayer, "TrunkWindow", thePlayer)
+		triggerClientEvent(thePlayer, "TrunkWindow", thePlayer, theVehicle)
 	else
 		ToolTip(thePlayer, "Багажник уже кто-то использует!")
 	end
@@ -15382,6 +15516,7 @@ addEventHandler("TrunkClose", getRootElement(), TrunkClose)
 function SyncTime(thePlayer)
 	local h,m = getTime()
 	triggerClientEvent(thePlayer, "normalspeed", thePlayer, h, m, getWeather())
+	triggerClientEvent(thePlayer, "GameSky", thePlayer)
 end
 addEvent("SyncTime", true)
 addEventHandler("SyncTime", getRootElement(), SyncTime)
@@ -15440,7 +15575,7 @@ function turnEngineOn(theVehicle, leftSeat, jackerPlayer, unbindkey)
 			CheckSiren(theVehicle, source)
 			if(GetVehicleType(getElementModel(theVehicle)) ~= "BMX" and GetVehicleType(getElementModel(theVehicle)) ~= "Train") then
 				if(not getElementData(theVehicle, "Fuel")) then
-					setElementData(theVehicle, "Fuel", 10)
+					setElementData(theVehicle, "Fuel", 25)
 				end
 				
 				if(getElementData(theVehicle, "Fuel") > 0) then
@@ -15518,11 +15653,11 @@ function RaceFinish(thePlayer, times)
 		outputChatBox("#CC9966"..getPlayerName(thePlayer).."#FFFFFF установил новый #FF0000рекорд#FFFFFF на трассе #FFFFCC"..SData["RaceName"].." #FFFFFF"..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec), getRootElement(), 255,255,255, true)
 	end
 	
-	
+
 	
 	if(#racePlayerFinish == 1) then
-		AddPlayerMoney(getPlayerFromName(racePlayerFinish[1]), raceMoney(SData["RaceArr"]), "МИССИЯ ВЫПОЛНЕНА!")
 		killTimer(raceGlobalTimer)
+		AddPlayerMoney(getPlayerFromName(racePlayerFinish[1]), raceMoney(SData["RaceArr"]), "МИССИЯ ВЫПОЛНЕНА!")
 		for slot = 1, #MPPlayerList do
 			if(getPlayerFromName(MPPlayerList[slot])) then
 				outputChatBox("#CC9966"..racePlayerFinish[1].."#FFFFFF Пришел на финиш первым! Гонка закончится через 30 секунд.", getPlayerFromName(MPPlayerList[slot]), 255,255,255,true)
@@ -15563,13 +15698,6 @@ addEventHandler("RaceFinish", getRootElement(), RaceFinish)
 
 
 
-local VCompVehicleTypes = {}
-for nameparts, data in pairs(VComp) do
-	for name, types in pairs(data) do
-		if(not VCompVehicleTypes[types[1]]) then VCompVehicleTypes[types[1]] = {} end
-		VCompVehicleTypes[types[1]][#VCompVehicleTypes[types[1]]+1] = {nameparts, name}
-	end
-end
 
 function RacePriceGeneration(thePlayer)
 	local x,y,z = getElementPosition(thePlayer)
@@ -16476,24 +16604,25 @@ function VehicleUpgrade(upgrade, count)
 	local theVehicle = getPedOccupiedVehicle(source)
 	if(GetPlayerMoney(source) >= count) then
 		if(ModificationVehicle[upgrade]) then
-				PData[source]["theVehicleTuningHandl"] = getElementData(theVehicle, "handl")
+			PData[source]["theVehicleTuningHandl"] = getElementData(theVehicle, "handl")
 		
-				AddPlayerMoney(source, 0, "УСТАНОВЛЕНО!")
-								
-				if(getElementData(theVehicle, "x")) then
-					local CarNodes = xmlNodeGetChildren(CarNode)
-					for i,node in ipairs(CarNodes) do
-						if(getElementData(theVehicle, "owner") == xmlNodeGetValue(node)) then
-							if(getElementData(theVehicle, "x") == xmlNodeGetAttribute(node, "vx") and getElementData(theVehicle, "y") == xmlNodeGetAttribute(node, "vy") and getElementData(theVehicle, "z") == xmlNodeGetAttribute(node, "vz")) then
-								xmlNodeSetAttribute(node, "handl", getElementData(theVehicle, "handl"))
-							end
+			AddPlayerMoney(source, 0, "УСТАНОВЛЕНО!")
+							
+			if(getElementData(theVehicle, "x")) then
+				local CarNodes = xmlNodeGetChildren(CarNode)
+				for i,node in ipairs(CarNodes) do
+					if(getElementData(theVehicle, "owner") == xmlNodeGetValue(node)) then
+						if(getElementData(theVehicle, "x") == xmlNodeGetAttribute(node, "vx") and getElementData(theVehicle, "y") == xmlNodeGetAttribute(node, "vy") and getElementData(theVehicle, "z") == xmlNodeGetAttribute(node, "vz")) then
+							xmlNodeSetAttribute(node, "handl", getElementData(theVehicle, "handl"))
 						end
 					end
-				end	
-				
-				RemovePlayerVehiclePart(source, PData[source]["ShowUpgrade"][1], PData[source]["ShowUpgrade"][2])
-				local parts = GetPlayerVehiclePart(source, theVehicle)
-				triggerClientEvent(source, "BuyUpgrade", source, PData[source]["theVehicleTuningHandl"], toJSON(parts))
+				end
+			end	
+			
+			RemovePlayerVehiclePart(source, PData[source]["ShowUpgrade"][1], PData[source]["ShowUpgrade"][2])
+			AddPlayerVehiclePart(source, PData[source]["ShowUpgrade"][1], PData[source]["ShowUpgrade"][3])
+			local parts = GetPlayerVehiclePart(source, theVehicle)
+			triggerClientEvent(source, "BuyUpgrade", source, PData[source]["theVehicleTuningHandl"], toJSON(parts))
 		elseif(upgrade == 8) then
 			local vehh = getVehicleHandling(theVehicle)
 			if(getElementData(theVehicle, "siren")) then

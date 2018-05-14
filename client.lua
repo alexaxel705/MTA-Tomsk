@@ -20,7 +20,6 @@ local COLOR = {
 
 
 
-local NewsPaper = {false, false, false, false}
 local GroundMaterial = {}
 local ZonesDisplay = {}
 local ClosedZones = false
@@ -53,14 +52,12 @@ local PData = {
 	['blip'] = {}, 
 	['DublicateRadar'] = {},
 	['AlphaRadar'] = {},
-	['ExpText'] = {},
 	['stamina'] = 8,
 	['LVLUPSTAMINA'] = 10,
 	['rage'] = 0, 
 	['ShakeLVL'] = 0, 
 	['TARR'] = {}, -- Target, по центру, ниже, выше
 	['MultipleAction'] = {},
-	["DisplayCollection"] = {}, -- Отображает на экране количество коллекций в районе
 	['infopath'] = {
 		["Linden Side"] = false,
 		["Las Venturas Airport"] = false,
@@ -283,8 +280,7 @@ local upgrades = false
 local TCButton = {}
 local TCButton2 = {}
 local ServerDate = getRealTime(getElementData(root, "ServerTime"))
-local AddITimer = false
-local AddITimerText = ""
+
 local usableslot = 1
 local SprunkObject = false
 local CallPolice = false
@@ -294,7 +290,6 @@ local Targets = {}
 local MyHouseBlip = {}
 local SpawnPoints = {}
 local initializedInv = false
-local InventoryWindows = false
 local DragElement = false
 local DragElementId = false
 local DragElementName = false
@@ -303,8 +298,6 @@ local DragX = false
 local DragY = false
 local ShowInfo = false
 local MouseX, MouseY = 0, 0
-local TrunkWindows = false
-local TradeWindows = false
 local PBut = {["player"] = {}, ["shop"] = {}, ["backpack"] = {}, ["trunk"] = {}}
 local PInv = {["player"] = {}, ["shop"] = {}, ["backpack"] = {}, ["trunk"] = {}}
 local InventoryMass = 0
@@ -996,8 +989,6 @@ function saveauto()
 				save()
 			end
 		end, 50, 0)
-	else
-		ToolTip("Сядь в машину!")
 	end
 end
 
@@ -1054,101 +1045,6 @@ function Set(list)
 	for _, l in ipairs(list) do set[l] = true end
 	return set
 end
-
---Путь к картинке, Описание, Стаки, Используемый или нет, вес, цена, {связанные предметы}, Выпадаемый, Объединяемый, размер ячейки
-local items = {
-	["hp"] = {1240, "", 100, false, 0, 0, false, false, false, {1,1}}, 
-	["Бронежилет"] = {1242, "Военый бронежилет", 1, "usearmor", 4650, 2520, false, false, true, {1,1}}, 
-	["Канистра"] = {1650, "Десяти литровая канистра с бензином", 1, "usekanistra", 10350, 1000, false, false, false, {1,1}}, 
-	["Реликвия"] = {1276, "Древняя статуэтка неизвестного происхождения", 1, false, 760, 10000, false, false, false, {1,1}}, 
-	["Подкова"] = {954, "Старая подкова, антиквариат", 1, false, 350, 5000, false, false, false, {1,1}}, 
-	["Ракушка"] = {953, "Просто ракушка", 1, false, 10, 50, false, false, false, {1,1}}, 
-	["Телефон"] = {330, "Телефон", 1, "usecellphone", 350, 1500, false, false, false, {1,1}}, 
-	["Рюкзак"] = {3026, "Обычный рюкзак", 1, "SetupBackpack", 2500, 5000, false, true, false, {1,1}}, 
-	["Чемодан"] = {1210, "Обычный чемодан", 1, "SetupBackpack", 1000, 1000, false, true, false, {1,1}}, 
-	["Пакет"] = {2663, "Обычный пакет", 1, "SetupBackpack", 10, 1, false, true, false, {1,1}}, 
-	["АК-47"] = {355, "Автомат Калашникова\nСтрана: СССР", 1, "useinvweapon", 4300, 4500, false, false, true, {4,2}}, 
-	["Базука"] = {359, "Просто базука", 1, "useinvweapon", 10000, 24500, false, false, true, {4,2}}, 
-	["Граната"] = {342, "Обычная граната", 25, "useinvweapon", 600, 1700, false, false, true, {1,1}}, 
-	["Молотов"] = {344, "Коктейль молотова", 25, "useinvweapon", 800, 2200, false, false, true, {1,1}}, 
-	["М16"] = {356, "Автомат М16\nСтрана: США", 1, "useinvweapon", 2880, 6000, false, false, true, {4,2}}, 
-	["Кольт 45"] = {346, "Кольт 45 9-мм", 1, "useinvweapon", 1120, 1000, false, false, true, {2,2}}, 
-	["USP-S"] = {347, "Пистолет USP-S", 1, "useinvweapon", 1043, 1500, false, false, true, {2,2}}, 
-	["Deagle"] = {348, "Пистолет Deagle", 1, "useinvweapon", 1950, 5500, false, false, true, {2,2}}, 
-	["Кровь"] = {1580, "Используется для лечения больных", 5, false, 450, 800, false, false, true, {1,1}}, 
-	["Pissh"] = {1543, "Шотландское пиво Pissh темное", 1, "usedrink", 450, 140, false, false, false, {1,2}}, 
-	["Pissh Gold"] = {1544, "Шотландское пиво Pissh светлое", 1, "usedrink", 430, 120, false, false, false, {1,2}}, 
-	["KBeer"] = {1950, "3 Литра светлого немецкого пива KBeer", 1, "usedrink", 3084, 615, false, false, false, {1,2}}, 
-	["KBeer Dark"] = {1951, "3 Литра темного немецкого пива KBeer", 1, "usedrink", 3084, 735, false, false, false, {1,2}}, 
-	["isabella"] = {1669, "Вино", 1, "usedrink", 1043, 515, false, false, false, {1,2}}, 
-	["Фекалии"] = {16444, "Для одних - обычное говно\nДля других - сладкий хлебушек", 10, "eatcrap", 150, 0, false, false, true, {1,1}}, 
-	["CoK"] = {2670, "Пачка сигарет CoK", 1, "usesmoke", 5, 20, false, false, false, {1,1}}, 
-	["Сигарета"] = {3027, "Просто сигарета", 20, "usesmoke", 0.2, 1, {["сигареты"] = {"CoK"}}, false, false, {1,1}}, 
-	["Mossberg"] = {349, "Дробовик Mossberg 500", 1, "useinvweapon", 3300, 4700, false, false, true, {1,1}}, 
-	["Sawed-Off"] = {350, "Дробовик Sawed-Off", 1, "useinvweapon", 2500, 5500, false, false, true, {1,1}}, 
-	["SPAS-12"] = {351, "Дробовик SPAS-12", 1, "useinvweapon", 4400, 6500, false, false, true, {1,1}}, 
-	["Узи"] = {352, "Микро Узи", 1, "useinvweapon", 2650, 1750, false, false, true, {1,1}}, 
-	["MP5"] = {353, "Просто MP5", 1, "useinvweapon", 2660, 2000, false, false, true, {1,1}}, 
-	["Tec-9"] = {372, "Просто Tec-9", 1, "useinvweapon", 1400, 1500, false, false, true, {1,1}}, 
-	["ИЖ-12"] = {357, "Просто ИЖ-12", 1, "useinvweapon", 3100, 6500, false, false, true, {5,2}}, 
-	["M40"] = {358, "Просто M40", 1, "useinvweapon", 6570, 10000, false, false, true, {5,2}}, 
-	["Dildo XXL"] = {321, "Просто Dildo XXL", 1, "useinvweapon", 760, 4350, false, false, true, {1,1}}, 
-	["Dildo"] = {322, "Просто Dildo", 1, "useinvweapon", 540, 1600, false, false, true, {1,1}}, 
-	["Вибратор"] = {323, "Просто Vibrator", 1, "useinvweapon", 1100, 3000, false, false, true, {1,1}}, 
-	["Клюшка"] = {333, "Клюшка для гольфа", 1, "useinvweapon", 2500, 4000, false, false, true, {1,1}}, 
-	["Лопата"] = {337, "Обычная лопата", 1, "useinvweapon", 1500, 800, false, false, true, {1,1}}, 
-	["Бита"] = {336, "Бейсбольная бита", 1, "useinvweapon", 3000, 2000, false, false, true, {1,1}}, 
-	["Дубинка"] = {334, "Полицейская дубинка", 1, "useinvweapon", 2400, 3000, false, false, true, {1,1}}, 
-	["Нож"] = {335, "Охотничий нож", 1, "useinvweapon", 160, 450, false, false, true, {1,1}}, 
-	["Катана"] = {339, "Катана настоящего якудзы", 1, "useinvweapon", 750, 1350, false, false, true, {1,1}}, 
-	["Камера"] = {367, "Обычная любительская фотокамера", 1, "useinvweapon", 570, 12000, false, false, true, {1,1}}, 
-	["Огнетушитель"] = {366, "Обычный огнетушитель", 1, "useinvweapon", 5000, 150, false, false, true, {1,1}}, 
-	["Спрей"] = {365, "Обычный спрей", 1, "useinvweapon", 340, 250, false, false, true, {1,1}}, 
-	["Огнемет"] = {361, "Обычный огнемет", 1, "useinvweapon", 3340, 9250, false, false, true, {1,1}}, 
-	["Бензопила"] = {341, "Просто бензопила", 1, "useinvweapon", 12500, 7700, false, false, true, {3,3}}, 
-
-	["Лазерный прицел"] = {"invobject/laser.png", "Лазерный прицел", 1, false, 420, 6800, {["лазер"] = {"M40", "АК-47", "М16", "ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg", "Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false, {1,1}}, 
-
-	["9-мм"] = {18044, "В настоящий момент используются во: \nВсех пистолетах, узи", 250, false, 6, 5, {["патроны"] = {"Tec-9", "MP5", "Узи", "Кольт 45", "USP-S", "Deagle"}}, false, false, {1,1}}, 
-	["5.56-мм"] = {18044, "В настоящий момент используются в М16", 250, false, 3, 7, {["патроны"] = {"М16"}}, false, false, {1,1}}, 
-	["7.62-мм"] = {18044, "В настоящий момент используются для снайперской винтовки, АК-47", 250, false, 7, 10, {["патроны"] = {"M40", "АК-47"}}, false, false, {1,1}}, 
-	["18.5-мм"] = {18044, "В настоящий момент используются во всех дробовиках и винтовке ИЖ-12", 250, false, 13, 25, {["патроны"] = {"ИЖ-12", "SPAS-12", "Sawed-Off", "Mossberg"}}, false, false, {1,1}}, 
-	["Ракета"] = {345, "Используется для обычной базуки", 250, false, 1200, 500, {["патроны"] = {"Базука"}}, false, false, {1,1}}, 
-
-	["Кулак"] = {1666, nil, 1, "useinvweapon", 0, 0, false, false, false, {1,1}}, 
-
-	["Конопля"] = {823, "Сырые листья конопли, могут быть посажены на землю или траву.\nТак же используются для получения шмали.", 100, "CreateCanabis", 260, 760, false, true, false, {1,1}}, 
-	["Кока"] = {782, "Кока приобрела широкую известность как сырьё для изготовления кокаина — наркотика из класса стимуляторов", 25, "CreateCoka", 625, 2500, false, true, false, {1,1}}, 
-	["Косяк"] = {3027, "Косяк, вызывает зависимость, восстанавливает жизни", 20, "usedrugs", 1, 16000, false, true, true, {1,1}}, 
-	["Спанк"] = {1279, "Спанк, вызывает зависимость", 10, "usedrugs", 100, 1000, false, true, true, {1,1}}, 
-	["Удочка"] = {338, "Рыболовная удочка", 1, "useinvweapon", 400, 700, false, false, true, {1,1}}, 
-	["Рыба"] = {1600, "Рыба", 1, false, 0, 0, false, false, false, {1,1}}, 
-	["Черепаха"] = {1609, "Морская черепаха", 1, false, 0, 15700, false, false, false, {1,1}}, 
-	["Акула"] = {1608, "Морская акула", 1, false, 0, 9800, false, false, false, {1,1}}, 
-	["Дельфин"] = {1607, "Морской дельфин", 1, false, 0, 5300, false, false, false, {1,1}}, 
-	["Парашют"] = {371, "Парашют", 1, "useinvweapon", 400, 700, false, true, true, {2,3}}, 
-	
-	["Запаска"] = {1025, "Запасное автомобильное колесо", 1, "usezapaska", 16300, 5, false, true, true, {1,1}}, 
-	["Алкоголь"] = {2900, "Алкоголь", 1, false, 40000, 600, false, true, false, {2,2}}, 
-	["Скот"] = {11470, "Скот", 1, false, 90000, 700, false, true, false, {1,1}}, 
-	["Мясо"] = {2805, "Мясо", 1, false, 36000, 330, false, true, false, {1,1}}, 
-	["Нефть"] = {3632, "Нефть", 1, false, 136000, 1500, false, true, false, {2,3}}, 
-	["Пропан"] = {1370, "Пропан", 1, false, 55000, 175, false, true, false, {2,3}}, 
-	["Химикаты"] = {1218, "Химикаты", 1, false, 92000, 350, false, true, false, {2,3}}, 
-	["Удобрения"] = {1222, "Удобрения", 1, false, 41000, 150, false, true, false, {2,3}}, 
-	["Бензин"] = {1225, "Бензин", 1, false, 56000, 250, false, true, false, {2,3}}, 
-	["Зерно"] = {1453, "Зерно", 1, false, 2500, 50, false, true, false, {1,1}}, 
-	["Газета"] = {2674, "Обычная газета", 1, "usenewspaper", 45, 20, false, false, false, {1,1}}, 
-	["Деньги"] = {1212, "Деньги", 99999999, false, 0.01, 1, false, false, false, {1,1}}, 
-	["Кредитка"] = {1581, "Банковская кредитная карта", 1, false, 100, 1, false, false, false, {1,1}}, 
-}
-
-
-
-function getItems()
-	return items
-end
-
 
 
 local WeaponAmmo = {
@@ -2268,18 +2164,6 @@ end
 
 
 
-function ValidateMaterialForThree(x,y,z,gz)
-	--Исключить: 26, 27
-	local materials = {9 ,10 ,11 ,12 ,13 ,14 ,15 ,16 ,17 ,20 ,80 ,81 ,82 ,115 ,116 ,117 ,118 ,119 ,120 ,121 ,122 ,125 ,146 ,147 ,148 ,149 ,150 ,151 ,152 ,153 ,160 ,19 ,21 ,22 ,24 ,25 ,40 ,83 ,84 ,87 ,88 ,100 ,110 ,123 ,124 ,126 ,128 ,129 ,130 ,132 ,133 ,141 ,142 ,145 ,155 ,156}
-    local material = GetGroundMaterial(x,y,z,gz)
-	for _,k in pairs(materials) do
-		if(k == material) then
-			return true
-		end
-	end
-	return false
-end 
-
 
 function GetGroundMaterial(x,y,z,gz)
 	x, y = math.round(x, 0), math.round(y, 0)
@@ -2492,14 +2376,16 @@ function MarkerHit(hitPlayer, Dimension)
 						if(not isPedDoingTask(localPlayer, "TASK_SIMPLE_FIGHT") and not isPedDoingTask(thePed, "TASK_SIMPLE_FIGHT")) then
 							if(GetElementAttacker(thePed)) then
 								if(getElementHealth(thePed) < 20) then
-									triggerServerEvent("PedDialog", localPlayer, localPlayer, thePed)
-									setElementData(thePed, "saytome", "true")
+									if(getElementData(thePed,  "dialog")) then
+										triggerServerEvent("PedDialog", localPlayer, localPlayer, thePed)
+									end
 								end
 								return false
 							end
-							triggerServerEvent("PedDialog", localPlayer, localPlayer, thePed)
-							setElementData(thePed, "saytome", "true")
-							PData['dialogPed'] = thePed
+							
+							if(getElementData(thePed,  "dialog")) then
+								triggerServerEvent("PedDialog", localPlayer, localPlayer, thePed)
+							end
 						end
 					end
 				end
@@ -2602,8 +2488,8 @@ function SetGPS(arr)
 		end
 	end
 	
-	local text = Text("На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу {key} для автоматического перемещения", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}})
-	InformTitle(text)
+	--local text = Text("На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу {key} для автоматического перемещения", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}})
+	--InformTitle(text)
 end
 addEvent("SetGPS", true)
 addEventHandler("SetGPS", localPlayer, SetGPS)
@@ -2625,15 +2511,21 @@ function PlayerDialog(array, ped, endl)
 	if(isTimer(dialogTimer)) then killTimer(dialogTimer) end
 	if(isTimer(dialogViewTimer)) then killTimer(dialogViewTimer) end
 	if(array) then
+	
+		setElementData(ped, "saytome", "true")
+		PData['dialogPed'] = ped
+		
 		PText["dialog"] = {}
 		dialogTitle = array["dialog"][math.random(#array["dialog"])]
 		MyVoice("dg", md5(dialogTitle))
 	
 		if(not ped) then
 			showCursor(true)
+			BindedKeys = {}
 			PlayerDialogAction(array, ped)
 		else
 			PlayerSayEvent(dialogTitle, ped)
+			BindedKeys = {}
 			dialogActionTimer = setTimer(function()
 				PlayerDialogAction(array, ped)
 			end, (#dialogTitle*50), 1)
@@ -2641,7 +2533,6 @@ function PlayerDialog(array, ped, endl)
 		end
 
 	else
-		BindedKeys = {}
 		PText["dialog"] = nil
 		dialogTitle = false
 		if(ped) then
@@ -2752,10 +2643,7 @@ function bizControl(name, data)
 		PBut["shop"] = {} 
 		for varname, dats in pairs(data["var"]) do
 			if(varname == "Торговля") then
-				if(not PData["ResourceMap"]) then
-					TradeWindow(dats, name)
-				else
-					TradeWindows = name
+				if(PData["ResourceMap"]) then
 					local Coord = {
 						["Trade"] = {
 							["i"] = 1,
@@ -3549,30 +3437,6 @@ addEventHandler("CreateVehicleAudioEvent", localPlayer, CreateVehicleAudioEvent)
 
 
 
-
-
-
-
-
-function UpdateInventoryMass()
-	local tmp=0
-	for i,val in pairs(PInv["player"]) do
-		if(val[1]) then
-			tmp = tmp+(items[val[1]][5]*val[2])
-		end
-	end
-	InventoryMass = math.round(tmp/1000, 1)
-	MaxMass = math.round((20000+(getPedStat(localPlayer, 22)*30))/1000, 1)
-	if InventoryMass > MaxMass then
-		MassColor = tocolor(184,0,0,255)
-		toggleControl("sprint", false)
-	else
-		MassColor = tocolor(255,255,255,255)
-		toggleControl("sprint", true)
-	end
-end
-
-
 -- ИД обьекта, Навык
 local WeaponModel = {
 	[0] = {nil, 177},
@@ -3648,6 +3512,16 @@ function table.copy(t)
 	return t2;
 end
 
+
+
+function table.empty(self)
+    for _, _ in pairs(self) do
+        return false
+    end
+    return true
+end
+
+
 function UpdateArmas(thePlayer)
 	if(getElementData(thePlayer, "armasplus")) then
 		StreamData[thePlayer]["armasplus"] = fromJSON(getElementData(thePlayer, "armasplus"))
@@ -3659,10 +3533,12 @@ function UpdateArmas(thePlayer)
 		local invars = getElementData(thePlayer, "inv")
 		if(invars) then
 			local ars = fromJSON(invars)
-			for i = 1, #ars do
-				if(ars[i][1]) then
-					if(WeaponNamesArr[ars[i][1]]) then
-						WeaponUseTEMP[WeaponModel[WeaponNamesArr[ars[i][1]]][1]]=true
+			for _, data in pairs(ars) do
+				for _, dat in pairs(data) do
+					if(dat["name"]) then
+						if(WeaponNamesArr[dat["name"]]) then
+							WeaponUseTEMP[WeaponModel[WeaponNamesArr[dat["name"]]][1]]=true
+						end
 					end
 				end
 			end
@@ -4326,7 +4202,7 @@ function updateWorld()
 								SetZoneDisplay(getElementData(arr[1], "info"))
 								local x,y,z = getPedBonePosition(localPlayer, 8)
 								sx,sy = getScreenFromWorldPosition(x,y,z)
-								PData['ExpText'][#PData['ExpText']+1] = {"Открыта новая зона! "..getElementData(arr[1], "info"), sx,sy}
+								--PData['ExpText'][#PData['ExpText']+1] = {"Открыта новая зона! "..getElementData(arr[1], "info"), sx,sy}
 							end
 						end
 					end
@@ -4338,33 +4214,6 @@ function updateWorld()
 end
 setTimer(updateWorld, 50, 0)
 
-
-function CheckZoneCollect(zone)
-	PData["DisplayCollection"] = {}
-
-	local CollectionNames = {
-		[954] = "Подкова", 
-		[953] = "Ракушка",
-		[1276] = "Реликвия"
-	}
-		
-	for model, dat in pairs(Collections) do
-		if(dat[zone]) then
-			local count, total = 0, 0
-			
-			for i, v in pairs(dat[zone]) do
-				if(isElement(v)) then
-					count = count+1
-				end
-				total = total+1
-			end
-			
-			if(count > 0) then
-				PData["DisplayCollection"][CollectionNames[model]] = {total, count}
-			end
-		end
-	end
-end
 
 
 
@@ -4904,13 +4753,13 @@ function CreateButtonInputInt(func, text, args)
 	if(PText["HUD"][8]) then
 		PText["HUD"][8] = nil
 	else
-		PText["HUD"][8] = {text, screenWidth, screenHeight-(650*scalex), 0, 0, tocolor(0, 0, 0, 255), NewScale*2, "default-bold", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
-
 		BindedKeys["enter"] = {"ServerCall", localPlayer, {func, localPlayer, localPlayer, "", args}}
+		
+		PText["HUD"][8] = {text, screenWidth, screenHeight-(650*scalex), 0, 0, tocolor(0, 0, 0, 255), NewScale*2, "default-bold", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
 	end
 end
 addEvent("CreateButtonInputInt", true)
-addEventHandler("CreateButtonInputInt", localPlayer, CreateButtonInputInt)
+addEventHandler("CreateButtonInputInt", root, CreateButtonInputInt)
 
 
 
@@ -4923,6 +4772,7 @@ function LoginClient(open)
 		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
 		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
 		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
+		outputChatBox("Обновление 20.12.2017: Улучшен инвентарь", 255, 150, 150,true)
 	else
 		PText["HUD"][8] = nil
 	end
@@ -4974,152 +4824,16 @@ function HUDPreload()
 	dxDrawRectangle(0,0,screenWidth, screenHeight/9, tocolor(0,0,0,255))
 	dxDrawRectangle(0,screenHeight-(screenHeight/9),screenWidth, screenHeight/9, tocolor(0,0,0,255))
 	dxSetBlendMode("blend")
-
-	VideoMemory["HUD"]["CollectionCircle"] = dxCreateRenderTarget(100*NewScale, 100*NewScale, true)
-	dxSetRenderTarget(VideoMemory["HUD"]["CollectionCircle"], true)
-	dxSetBlendMode("modulate_add")
-	dxDrawCircle(50*NewScale, 50*NewScale, 0, 40*NewScale, 1, 0, 360, tocolor(70,74,70,15))
-	dxDrawCircle(50*NewScale, 50*NewScale, 40*NewScale, 5*NewScale, 1, 0, 360, tocolor(20,24,20,15))
-	dxSetBlendMode("blend")
 	
 	VideoMemory["HUD"]["BlackScreen"] = dxCreateRenderTarget(screenWidth, screenHeight, true)
 	dxSetRenderTarget(VideoMemory["HUD"]["BlackScreen"], true)
 	dxSetBlendMode("modulate_add")
 	dxDrawRectangle(0,0,screenWidth,screenHeight,tocolor(0,0,0,255))
 	dxSetBlendMode("blend")
-	
-	VideoMemory["HUD"]["PlayerInv"] = dxCreateRenderTarget((screenWidth)-((80*NewScale)*10), (80*NewScale), true)
-	dxSetRenderTarget(VideoMemory["HUD"]["PlayerInv"], true)
-	dxSetBlendMode("modulate_add")
-	
-	
-	local x = 0
-	local y = 0
-	for i = 1, 10 do 
-		local CRAM = tocolor(81,81,105,255)
-		dxDrawLine(x, y, x, y+(80*NewScale), CRAM, 1)
-		dxDrawLine(x+(80*NewScale), y, x+(80*NewScale), y+(80*NewScale), CRAM, 1)
-		dxDrawLine(x, y, x+(80*NewScale), y, CRAM, 1)
-		dxDrawLine(x, y+(80*NewScale), x+(80*NewScale), y+(80*NewScale), CRAM, 1)
-		dxDrawLine(x, y+(80*NewScale), x+(80*NewScale), y+(80*NewScale), CRAM, 1)
-		
-		
-		local n = i
-		if(i == 10) then n = "0" end
-		dxDrawText(n, x+(4*NewScale), y, x, y, tocolor(255, 255, 255, 255), NewScale/0.8, "default-bold", "left", "top")
-		
-		x=x+(80.5*NewScale)
-	end
-	
-	dxSetBlendMode("blend")
 
 	dxSetRenderTarget()
 	return true
 end
-
-
-
-
-function GenerateTextureCompleted(textures) -- Третий этап загрузки
-	for name, texture in pairs(textures) do
-		items[name][1] = texture
-	end
-
-	triggerServerEvent("SyncTime", localPlayer, localPlayer)
-
-	PEDChangeSkin = "intro"
-	showChat(true)
-	fadeCamera(true, 2.0)
-	SetPlayerHudComponentVisible("all", false)
-
-	LoginClient(true)
-	PlaySFXSound(10)
-	
-	setCameraMatrix(1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
-end
-addEvent("GenerateTextureCompleted", true)
-addEventHandler("GenerateTextureCompleted", localPlayer, GenerateTextureCompleted)
-
-
-local MyTextures = {
-	["Кулак"] = {1666, 0,0,0, 0,0,0, 0,70, 255}, 
-	["Фекалии"] = {16444, -2,-4,1, 0,0,0, 0,70, 255}, 
-	["АК-47"] = {355, 0.3,1,0, 0.3,0,0, 0,70, 110}, 
-	["Кольт 45"] = {346, 0.2,0.4,0.05, 0.1,-0.2,0.05, 0,70, 110}, 
-	["Узи"] = {352, 0.2,0.4,0, 0,-0.2,0, 0,70, 110}, 
-	["Pissh Gold"] = {1544, 0.3,0.6,0.2, 0,0,0.2, 0,70, 170}, 
-	["Pissh"] = {1543, 0.2,0.6,0.2, 0,0,0.2, 0,70, 170}, 
-	["USP-S"] = {347, 0.2,0.4,0.05, 0.2,-0.2,0.05, 0,70, 170}, 
-	["Deagle"] = {348, 0.4,0.35,0.05, 0,-0.5,0.05, 0,70, 170}, 
-	["MP5"] = {353, 0.2,0.5,0.08, 0.2,-0.1,0.08, 0,70, 170}, 
-	["Кока"] = {782, 0,15,5, 0,0,5, 0,70, 160}, 
-	["Конопля"] = {823, 0,10,0, 0,0,0, 0,70, 160}, 
-	["Tec-9"] = {372, 0.4,0.4,0, 0.2,-0.2,0, 0,70, 110}, 
-	["Чемодан"] = {1210, 0,0.5,0.03, 0,0,0.03, 0,70, 140}, 
-	["Рюкзак"] = {3026, 0.2,-0.7,0, 0.2,0,0, 270,70, 140}, 
-	["М16"] = {356, 0.3,1,0, 0.3,0,0, 0,70, 110},
-	["Mossberg"] = {349, 0.3,0.9,0, 0.3,0,0, 8,70, 110}, 
-	["ИЖ-12"] = {357, 0.3,1,0.05, 0.3,0,0.05, 352,70, 110}, 
-	["SPAS-12"] = {351, 0.4,0.6,0.1, 0.4,0,0.1, 8,70, 110}, 
-	["M40"] = {358, 0.3,0.9,0, 0.3,0,0, 8,70, 110}, 
-	["Sawed-Off"] = {350, 0.3,0.5,0.05, 0.3,0,0.05, 8,70, 110}, 
-	["Парашют"] = {371, 0,-0.7,0.02, 0,0,0.02, 0,70, 110}, 
-	["Бензопила"] = {341, 0.45,0.9,0.12, 0.45,0,0.12, 8,70, 110}, 
-	["Dildo XXL"] = {321, 0,0.7,0.2, 0,0,0.2, 290,70, 110}, 
-	["Dildo"] = {322, 0.06,0.4,0.05, 0.06,0,0.05, 290,70, 110}, 
-	["Вибратор"] = {323, 0.05,0.6,0.1, 0.05,0,0.1, 290,70, 110}, 
-	["Пакет"] = {2663, 0,-0.7,0.02, 0,0,0.02, 0,70, 150}, 
-	["Нож"] = {335, 0.1,-0.3,0.1, 0.1,0,0.1, 290,70, 110}, 
-	["Удочка"] = {338, 0.1,-1.4,0.7, 0.1,0,0.7, 290,70, 110}, 
-	["Клюшка"] = {333, 0.1,-0.8,0.4, 0.1,0,0.4, 290,70, 110}, 
-	["Лопата"] = {337, 0.1,-0.8,0.4, 0.1,0,0.4, 290,70, 110}, 
-	["Бита"] = {336, 0.1,-0.7,0.3, 0.1,0,0.3, 290,70, 110}, 
-	["Дубинка"] = {334, 0.1,-0.7,0.2, 0.1,0,0.2, 290,70, 110}, 
-	["Катана"] = {339, 0.1,-0.9,0.4, 0.1,0,0.4, 290,70, 110}, 
-	["Камера"] = {367, 0.15,0.4,0.05, 0.15,0,0.05, 20,70, 110}, 
-	["KBeer"] = {1950, 0.3,0.6,0, 0,0,0, 0,70, 250}, 
-	["KBeer Dark"] = {1951, 0.3,0.6,0, 0,0,0, 0,70, 250}, 
-	["isabella"] = {1669, 0.3,0.5,0, 0,0,0, 0,70, 250}, 
-	["Бронежилет"] = {1242, 0,0.6,0.007, 0,0,0.007, 0,70, 140}, 
-	["Спанк"] = {1279, 0,1,0.1, 0,0,0.1, 0,70, 255}, 
-	["Кровь"] = {1580, 0,0.8,0.1, 0,0,0.1, 0,70, 255}, 
-	["Граната"] = {342, 0.05,0.4,0, 0.05,0,0, 0,70, 255}, 
-	["Молотов"] = {344, 0.2,-0.5,0, 0.1,0,0, 0,70, 255}, 
-	["Канистра"] = {1650, 0,-0.6,-0.12, 0,0,-0.12, 0,70, 250}, 
-	["Телефон"] = {330, 0,0.5,0, 0,0,0, 0,70, 250}, 
-	["Подкова"] = {954, 0,0.9,0.04, 0,0,0.04, 0,70, 250}, 
-	["Реликвия"] = {1276, 0,1,0.03, 0,0,0.03, 0,70, 250}, 
-	["Запаска"] = {1025, 1.5,0,0, 0,0,0, 0,70, 150}, 
-	["CoK"] = {2670, 0.14,0.18,0.28, 0.14,0.18,-0.28, 100,70, 250}, 
-	["Сигарета"] = {3027, 0.31,0.01,0.08, 0,0.01,0.08, 290,70, 130}, 
-	["Черепаха"] = {1609, 0,0,5, 0,0,0, 0,70, 250}, 
-	["Акула"] = {1608, 0,0,10, 0,0,0, 60,70, 250}, 
-	["Дельфин"] = {1607, 0,0,10, 0,0,0, 60,70, 250}, 
-	["Рыба"] = {1600, 1,0,0.1, 0,0,0.1, 0,70, 255}, 	
-	["Косяк"] = {3027, 0.31,0.01,0.08, 0,0.01,0.08, 290,70, 130}, 
-	["7.62-мм"] = {18044, -3.3,-3.3,-0.6, 4.5,9,-2.5, 0,70, 250}, 
-	["5.56-мм"] = {18044, -1.2,-3.3,-0.6, 4.5,9,-2.5, 0,70, 250}, 
-	["9-мм"] = {18044, -4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 250}, 
-	["18.5-мм"] = {18044, -4.5,1.2,-0.5, 4.5,4,-2.5, 0,70, 250}, 
-	["Скот"] = {11470, 10,0,1.2, 0,0,1.2, 0,70, 255}, 
-	["Мясо"] = {2805, 0,1.5,0, 0,0,0, 0,70, 255}, 
-	["Нефть"] = {3632, 2,0,0, 0,0,0, 0,70, 255}, 
-	["Пропан"] = {1370, 2,0,0, 0,0,0, 0,70, 255}, 
-	["Химикаты"] = {1218, 2,0,0.1, 0,0,0.1, 0,70, 255}, 
-	["Удобрения"] = {1222, 2,0,0.1, 0,0,0.1, 0,70, 255}, 
-	["Бензин"] = {1225, 2,0,0.2, 0,0,0.2, 0,70, 255}, 
-	["Зерно"] = {1453, 2,0,0, 0,0,0, 0,70, 200},
-	["Газета"] = {2674, 0.8,0.2,0.75, 0.8,0.2,0, 0,70, 200},
-	["Деньги"] = {1212, 0.2,0.2,0.35, -0.05,-0.05,0, 0,70, 200},
-	["Кредитка"] = {1581, -0.3,0.7,0.6, 0,0,0, 0,70, 200},
-	["Огнетушитель"] = {366, 0.35,0.9,-0.06, 0.35,0,-0.06, 8,70, 110}, 
-	["Базука"] = {359, -0.1,1.2,0.05, -0.1,0,0.05, 0,70, 110}, 
-	["Спрей"] = {365, 0.05,-0.35,-0.05, 0.05,-0.05,-0.05, 0,70, 250}, 
-	["Огнемет"] = {361, 0.45,0.9,0.12, 0.45,0,0.12, 8,70, 110}, 
-	["Ракушка"] = {953, 0,1.2,0, 0,0,0, 0,70, 250}, 
-	["Ракета"] = {345, 0.8,0,0, 0.4,0,0, 0,70, 250}, 
-	["Алкоголь"] = {2900, 2.5,0,0.6, 0,0,0.6, 0,70, 255}, 
-}
 
 
 
@@ -5134,6 +4848,7 @@ function StartLoad() -- Первый этап загрузки
 	local Lang = {
 		["ru"] = "Ru_ru.po", 
 		["en_US"] = "Ru_en.po", 
+		["az"] = "Ru_az.po", 
 	}
 
 	if(not Lang[LangCode]) then
@@ -5159,10 +4874,24 @@ function StartLoad() -- Первый этап загрузки
 	fileClose(hFile)
 	
 	if(HUDPreload()) then
-		triggerEvent("GenerateTexture", root, MyTextures)
+		PEDChangeSkin = "intro"
+		showChat(true)
+		fadeCamera(true, 2.0)
+		SetPlayerHudComponentVisible("all", false)
+
+		LoginClient(true)
+		PlaySFXSound(10)
+		
+		setCameraMatrix(1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
 	end
 end
-StartLoad()
+
+function displayLoadedRes(res)
+	if(getResourceName(res) == "228") then
+		StartLoad()
+	end
+end
+addEventHandler("onClientResourceStart", getRootElement(), displayLoadedRes)
 
 
 
@@ -5206,7 +4935,7 @@ addEventHandler("AuthComplete", localPlayer, AuthComplete)
 
 
 function CallPhoneInput()
-	CreateButtonInputInt("CallPhoneOutput", Text("Введи номер или ИД игрока"))
+	CreateButtonInputInt("CallPhoneOutput", "Введи номер или ИД игрока")
 end
 addEvent("CallPhoneInput", true)
 addEventHandler("CallPhoneInput", localPlayer, CallPhoneInput)
@@ -5246,37 +4975,6 @@ function CreateBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance, 
 	PData['blip'][#PData['blip']+1] = createBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance)
 	setElementData(PData['blip'][#PData['blip']], 'info', Text(info))
 	return PData['blip'][#PData['blip']]
-end
-
-
-function ReadNewsPaper(y,m)
-	PData["WebLink"] = "http://109.227.228.4/engine/include/MTA/newspaper.php?y="..y.."&m="..m
-	if(not isBrowserDomainBlocked(PData["WebLink"], true)) then
-		if(not NewsPaper[1]) then
-			NewsPaper[1] = createBrowser(screenWidth/1.5, screenHeight/1.5, false, false)
-			NewsPaper[3] = PData["WebLink"]
-		else
-			CloseNewsPaper()
-		end
-	else
-		requestBrowserDomains({PData["WebLink"], true})
-	end
-end
-addEventHandler("onClientBrowserWhitelistChange", root, ReadNewsPaper)
-
-
-function onClientBrowserCreated()
-	loadBrowserURL(source, NewsPaper[3])
-	NewsPaper[2] = true
-end
-addEventHandler("onClientBrowserCreated", root, onClientBrowserCreated)
-
-
-
-
-
-function CloseNewsPaper()
-	NewsPaper = {false,false,false,false}
 end
 
 
@@ -5558,9 +5256,6 @@ addEventHandler("ToolTip", root, ToolTip)
 
 
 
-
-
-
 function CallPoliceEvent()
 	triggerServerEvent("CallPolice", localPlayer, CallPolice)
 end
@@ -5574,40 +5269,6 @@ function PoliceArrestEvent()
 		ArrestTimerEvent=setTimer(function() end, 4000, 1)
 	end
 end
-
-
-
-function TrunkWindow()
-	if(Targets["theVehicle"]) then
-		if(PEDChangeSkin == "play") then
-			if(not TrunkWindows and not InventoryWindows) then
-				PInv["trunk"] = fromJSON(getElementData(Targets["theVehicle"], "trunk"))
-				DragElementId = false
-				DragElementName = false
-				TrunkWindows = Targets["theVehicle"]
-				showCursor(true)
-				local StPosx = 640*scalex
-				local StPosxy = 360*scaley-(30*scaley)
-				local binvx = (2.5*scalex)
-				local binvy = (80.5*scaley)
-				for i, _ in pairs(PInv["trunk"]) do
-					PBut["trunk"][i] = {StPosx+binvx, StPosxy+binvy, 80*scalex, 60*scaley}
-					binvx=binvx+(80.5*scalex)
-					if(i == 8 or i == 16 or i == 24 or i == 32) then
-						StPosx = 640*scalex
-						StPosxy = 360*scaley-(30*scaley)
-						binvx = (2.5*scalex)
-						binvy = binvy+(80.5*scaley)
-					end
-				end
-			end
-		end
-	end
-end
-addEvent("TrunkWindow", true)
-addEventHandler("TrunkWindow", localPlayer, TrunkWindow)
-
-
 
 
 
@@ -5628,7 +5289,7 @@ addEventHandler("CarJack", localPlayer, CarJack)
 
 
 function PedDialog()
-	triggerServerEvent("PedDialog", localPlayer, localPlayer, Targets["thePlayer"])
+	triggerServerEvent("PedDialog", localPlayer, localPlayer, Targets["thePlayer"] or Targets["thePed"])
 end
 addEvent("PedDialog", true)
 addEventHandler("PedDialog", localPlayer, PedDialog)
@@ -5915,37 +5576,6 @@ addEventHandler("onClientPlayerTarget", getRootElement(), targetingActivated)
  
 
 
-function handleVehicleDamage(attacker, weapon, loss, x, y, z, tyre)
-	if(attacker) then
-		if(getElementType(attacker) == "vehicle") then
-			local acc = getVehicleOccupant(attacker)
-			if(acc) then
-				if(getElementType(acc) == "player") then
-					attacker = acc
-				end
-			end
-		end
-		if(attacker == localPlayer) then
-			local occupants = getVehicleOccupants(source) or {}
-			for seat, occupant in pairs(occupants) do
-				if(getElementType(occupant) == "player") then
-					if(getTeamName(getPlayerTeam(occupant)) == "Полиция" 
-					or getTeamName(getPlayerTeam(occupant)) == "Военные"
-					or getTeamName(getPlayerTeam(occupant)) == "ФБР") then
-						triggerServerEvent("AddMeWanted", localPlayer)
-					end
-				elseif(getElementType(occupant) == "ped") then
-					triggerServerEvent("PedDamage", localPlayer, occupant, 228, 0, 0)
-				end
-			end
-			triggerServerEvent("FireVehicle", localPlayer, source, weapon)
-		end
-	end
-end
-addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
-
-
-
 function getVehicleHandlingProperty(theVehicle, property)
     local HT = getVehicleHandling(theVehicle) 
 	return HT[property]
@@ -6006,81 +5636,6 @@ local idleTime
 local multTime
 local mult = 1
 
-
-
-function SetupBackpack(num)
-	if(num == "i") then
-		num = 10
-		if(not PInv["player"][num][4]) then 
-			if(not InventoryWindows) then
-				ActivateInventory(true, "шарится по карманам")
-			else
-				ActivateInventory(false)
-			end
-			return false
-		else
-			if(not PInv["player"][num][4]["content"]) then
-				if(not InventoryWindows) then
-					ActivateInventory(true, "шарится по карманам")
-				else
-					ActivateInventory(false)
-				end
-				return false
-			end
-		end
-	end
-	if(not InventoryWindows) then
-		local StPosx = 640*scalex
-		local StPosxy = 360*scaley-(30*scaley)
-		local binvx = (2.5*scalex)
-		local binvy = (80.5*scaley)
-		PInv["backpack"] = PInv["player"][num][4]["content"]
-		for i,val in pairs(PInv["player"][num][4]["content"]) do
-			PBut["backpack"][i] = {StPosx+binvx, StPosxy+binvy, 80*scalex, 60*scaley}
-			binvx=binvx+(80.5*scalex)
-			if(i == 8 or i == 16 or i == 24 or i == 32) then
-				binvx=(2.5*scalex)
-				binvy=binvy+(80.5*scaley)
-			end
-		end
-		backpackid=num
-		if(PInv["player"][num][1] == "Рюкзак") then
-			ActivateInventory(true, "шарится в рюкзаке")
-		elseif(PInv["player"][num][1] == "Чемодан") then
-			ActivateInventory(true, "шарится в чемодане")
-		elseif(PInv["player"][num][1] == "Пакет") then
-			ActivateInventory(true, "шарится в пакете")
-		end
-	else
-		ActivateInventory(false)
-	end
-end
-addEvent("SetupBackpack", true)
-addEventHandler("SetupBackpack", localPlayer, SetupBackpack)
-
-
-
-function ActivateInventory(enable, action)
-	if(enable) then
-		triggerServerEvent("CliendSideonPlayerChat", localPlayer, action, 1)
-		InventoryWindows = true
-		DragElementId = false
-		DragElementName = false
-		showCursor(true)
-		UpdateInventoryMass()
-	else
-		if(not DragElement) then
-			PBut["backpack"] = {}
-			InventoryWindows = false
-			backpackid = false
-			DragElementId = false
-			DragElementName = false
-			PText["INVHUD"] = {}
-			showCursor(false)
-		end
-	end
-
-end
 
 
 
@@ -6200,7 +5755,6 @@ function resourcemap()
 			PData["BizControlName"] = nil
 			PInv["shop"] = {} 
 			PBut["shop"] = {} 
-			TradeWindows = false
 		end
 		
 		
@@ -6379,44 +5933,11 @@ addEventHandler("ShowInfoKey", localPlayer, ShowInfoKey)
 
 
 
-function ShowLink()
-	if(PData["WebLink"]) then
-		if(not isBrowserDomainBlocked(PData["WebLink"], true)) then
-			if(not NewsPaper[1]) then
-				NewsPaper[1] = createBrowser(screenWidth/1.5, screenHeight/1.5, false, false)
-				NewsPaper[3] = PData["WebLink"]
-			else
-				CloseNewsPaper()
-			end
-		else
-			requestBrowserDomains({PData["WebLink"]}, true)
-		end
-	end
-end
-addEvent("ShowLink", true)
-addEventHandler("ShowLink", localPlayer, ShowLink)
-
-
-
-function onClientBrowserWhitelistChange()
-	ShowLink()
-end
-addEventHandler("onClientBrowserWhitelistChange", root, onClientBrowserWhitelistChange)
 
 
 
 
 
-
-
-function inventoryBind(key)
-	if(not BindedKeys[key]) then
-		if(key == "0") then 
-			key = 10 
-		end
-		UseInventoryItem("player", tonumber(key))
-	end
-end
 
 
 function opengate()
@@ -6469,36 +5990,6 @@ function onClientPlayerWeaponFireFunc(weapon, ammo, ammoInClip, hitX, hitY, hitZ
 			end
 			destroyElement(col)
 		end
-		
-		
-		if(weapon == 41) then
-			if(GetObjectType(hitElement) == "Графити") then
-				ToolTip("Доделаю потом")
-			end
-		elseif(weapon == 42) then
-			if(getElementModel(hitElement) == 1362) then
-				triggerServerEvent("RemoveFire", localPlayer, localPlayer, hitElement)
-			end
-		elseif(weapon == 43 and getElementModel(source) == 60) then
-			triggerServerEvent("doTakeScreenShot", localPlayer)
-		else
-			if WeaponAmmo[weapon] then
-				for key, k in pairs(PInv["player"][usableslot][4]) do
-					if(k[1] == WeaponAmmo[weapon]) then
-						RemoveInventoryItemID(usableslot, key)
-						break
-					end
-				end --Для патронов
-				
-				if(PInv["player"][usableslot][1] == WeaponAmmo[weapon]) then
-					RemoveInventoryItemID(usableslot)
-				end-- Для гранат
-				
-			end
-			if(getPedTotalAmmo(localPlayer) == 0) then
-				triggerServerEvent("useinvweapon", localPlayer, localPlayer)
-			end
-		end
 	end
 end
 addEventHandler("onClientPlayerWeaponFire", localPlayer, onClientPlayerWeaponFireFunc)
@@ -6521,7 +6012,6 @@ function SetupInventory()
 		end
 		
 		initializedInv = true
-		UpdateInventoryMass()
 	end
 end
 addEvent("SetupInventory", true)
@@ -6611,7 +6101,6 @@ function playerPressedKey(button, press)
 					PData["BizControlName"] = nil
 					PInv["shop"] = {} 
 					PBut["shop"] = {} 
-					TradeWindows = false
 				end
 				if(PData["MapHitElement"]) then
 					PData["MapShowInfo"] = getElementData(PData["MapHitElement"], "NameInMap")
@@ -6629,31 +6118,6 @@ function playerPressedKey(button, press)
 				showCursor(true)
 			else
 				showCursor(false)
-			end
-		end
-	elseif(button == "mouse1") then
-		if(press) then
-			if(not isCursorShowing()) then
-				if(PInv["player"][usableslot]) then
-					if(PInv["player"][usableslot][1]) then
-						if(PInv["player"][usableslot][1] == "Удочка") then
-							if(PData["fishpos"]) then
-								triggerServerEvent("StopFish", localPlayer, localPlayer)
-							else
-								getGroundPositionFish()
-							end
-							cancelEvent()
-						end
-						if(PInv["player"][usableslot][1]) then
-							if(items[PInv["player"][usableslot][1]][4]) then
-								if(items[PInv["player"][usableslot][1]][4] ~= "useinvweapon") then
-									UseInventoryItem("player", usableslot)
-									cancelEvent()
-								end
-							end
-						end
-					end
-				end
 			end
 		end
 	end
@@ -6706,21 +6170,6 @@ function playerPressedKey(button, press)
 			end
 		end
 		
-		
-		if(NewsPaper[1]) then
-			if(NewsPaper[2]) then
-				if button == "mouse_wheel_down" then
-					injectBrowserMouseWheel(NewsPaper[1], -40, 0)
-					cancelEvent()
-				elseif button == "mouse_wheel_up" then
-					injectBrowserMouseWheel(NewsPaper[1], 40, 0)
-					cancelEvent()
-				elseif button == "escape" then
-					CloseNewsPaper()
-					cancelEvent()
-				end
-			end
-		end
 
 		if(tuningList) then
 			if(button == "s" or button == "arrow_d") then
@@ -6769,29 +6218,6 @@ function playerPressedKey(button, press)
 			UpdateLainOSCursor()
 		end
 		if(button == "escape") then
-			if(InventoryWindows) then
-				cancelEvent()
-				SetupBackpack()
-			elseif(TradeWindows) then
-				if(not DragElement) then
-					DragElementId = false
-					DragElementName = false
-					showCursor(false)
-					TradeWindows = false
-					PBut["shop"] = {}
-					cancelEvent()
-				end
-			elseif(TrunkWindows) then
-				if(not DragElement) then
-					DragElementId = false
-					DragElementName = false
-					showCursor(false)
-					TrunkWindows = false
-					PBut["trunk"] = {}
-					triggerServerEvent("TrunkClose", localPlayer, localPlayer)
-					cancelEvent()
-				end
-			end
 			if(PData["BizControlName"]) then
 				cancelEvent()
 				triggerServerEvent("StopBizControl", localPlayer, PData["BizControlName"][1]) 
@@ -6841,46 +6267,6 @@ addEventHandler("onClientKey", root, playerPressedKey)
 
 
 
-function TradeWindow(Trade, biz)
-	if(PEDChangeSkin == "play") then
-		if(not TradeWindows and not InventoryWindows) then
-			PInv["shop"] = Trade
-			PBut["shop"] = {} 
-			TradeWindows = biz
-			DragElementId = false
-			DragElementName = false
-			showCursor(true)
-			local Coord = {
-				["Trade"] = {
-					["i"] = 1,
-					["x"] = 640*scalex,
-					["y"] = 500*scaley-(30*scaley), 
-					["vx"] = (2.5*scalex),
-					["vy"] = (80.5*scaley)
-				},
-				["Sell"] = {
-					["i"] = 1,
-					["x"] = 640*scalex,
-					["y"] = 360*scaley-(30*scaley), 
-					["vx"] = (2.5*scalex),
-					["vy"] = (80.5*scaley)
-				}
-			}
-			for _, dat in pairs(PInv["shop"]) do
-				PBut["shop"][#PBut["shop"]+1] = {Coord[dat[2]]["x"]+Coord[dat[2]]["vx"], Coord[dat[2]]["y"]+Coord[dat[2]]["vy"], 80*scalex, 60*scaley}
-				Coord[dat[2]]["vx"] = Coord[dat[2]]["vx"]+(80.5*scalex)
-				if(Coord[dat[2]]["i"] == 8 or Coord[dat[2]]["i"] == 16 or Coord[dat[2]]["i"] == 24 or Coord[dat[2]]["i"] == 32) then
-					Coord[dat[2]]["x"], Coord[dat[2]]["y"] = 640*scalex, 360*scaley-(30*scaley)
-					Coord[dat[2]]["vx"], Coord[dat[2]]["vy"] = (2.5*scalex), Coord[dat[2]]["vy"]+(80.5*scaley)
-				end
-				Coord[dat[2]]["i"] = Coord[dat[2]]["i"]+1
-			end
-		end
-	end
-end
-addEvent("TradeWindow", true)
-addEventHandler("TradeWindow", localPlayer, TradeWindow)
-
 
 function CreateTarget(el)
 	local ex,ey,ez = getElementPosition(el)
@@ -6896,7 +6282,7 @@ function CreateTarget(el)
 						PData["MultipleAction"]["f"] = {"CarJack", false, false, false}
 					end
 				end
-			elseif(types == "player") then
+			elseif(types == "player" or types == "ped") then
 				sx,sy = getScreenFromWorldPosition(ex,ey,ez)
 				if(sx and sy) then
 					PData["MultipleAction"]["e"] = {"PedDialog", "Начать разговор", sx,sy}
@@ -7004,14 +6390,7 @@ addEventHandler("ShakeLevel", localPlayer, ShakeLevel)
 
 
 
-function DrawOnClientRender()
-	if(NewsPaper[1]) then
-		if(NewsPaper[2]) then
-			dxDrawImage(screenWidth/6, screenHeight/6, screenWidth/1.5, screenHeight/1.5, NewsPaper[1], 0, 0, 0, tocolor(255,255,255,255), true)
-		end
-	end
-
-
+function DrawOnClientRender()	
 	if(PData['CameraMove']) then
 		if(isTimer(PData['CameraMove']['timer'])) then
 			local remaining, _, totalExecutes = getTimerDetails(PData['CameraMove']['timer'])
@@ -7028,12 +6407,6 @@ function DrawOnClientRender()
 	end
 
 	if(not PData["wasted"]) then
-		if(PData["fishpos"]) then
-			local x2,y2,z2 = getPedWeaponMuzzlePosition(localPlayer)
-			local _, _, rz2 = getElementRotation(localPlayer)
-			local x,y,z = getPointInFrontOfPoint(x2,y2,z2,rz2+90, 1)
-			dxDrawLine3D(x,y,z+0.75,PData["fishpos"]["x"], PData["fishpos"]["y"], PData["fishpos"]["z"], tocolor(255,255,255,255), 0.98)
-		end
 		if(Targets["theVehicle"]) then
 			CreateTarget(Targets["theVehicle"])
 			
@@ -7172,24 +6545,6 @@ function DrawOnClientRender()
 			end
 		end
 		
-		for i, arr in pairs(PData['ExpText']) do
-			if(not arr[4]) then 
-				arr[4] = 0
-				arr[5] = 255
-			end
-			
-			font = "sans"
-			tw = dxGetTextWidth(arr[1], NewScale*1.8, font, true)
-			th = dxGetFontHeight(NewScale*1.8, font)
-
-			dxDrawBorderedText(arr[1], (arr[2]-tw/2), (arr[3]-th/2)+arr[4], screenWidth, screenHeight, tocolor(255, 153, 0, 255), NewScale*1.8, font, "left", nil, nil, nil, nil, true)
-			
-			arr[4] = arr[4]-0.3
-			arr[5] = arr[5]-1
-			if(arr[5] <= 0) then
-				PData['ExpText'][i] = nil
-			end
-		end
 		
 		
 		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
@@ -7295,6 +6650,79 @@ function DrawOnClientRender()
 end
 addEventHandler("onClientRender", root, DrawOnClientRender)
 
+
+
+
+
+
+local CameraFade = false
+local FadeUpTime = 0
+function DrawFade()
+	if(CameraFade) then
+		if(CameraFade[3] == "in") then
+			if(CameraFade[1] > CameraFade[2]) then -- Затемнение
+				CameraFade[2] = getTickCount()-FadeUpTime
+			end
+			if(CameraFade[2]/CameraFade[1] > 1) then CameraFade[2] = CameraFade[1] end
+		elseif(CameraFade[3] == "out") then
+			CameraFade[2] = CameraFade[1]-(getTickCount()-FadeUpTime)
+			if(CameraFade[2] < 0) then
+				CameraFade = false
+			end
+		end
+		if(CameraFade) then
+			dxDrawRectangle(0, 0, screenWidth, screenHeight, tocolor(0, 0, 0, 255*(CameraFade[2]/CameraFade[1])))
+		end
+	end
+	
+	if(ZonesDisplay[1]) then
+		if(not PData['Minimize']) then
+			if(PData["Interface"]["AreaName"]) then
+				dxDrawImage(screenWidth-(dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.15)-(25*scalex), (screenHeight-(25*scaley))-dxGetFontHeight(NewScale*4, "default-bold"), (dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.3), dxGetFontHeight(NewScale*4, "default-bold"), DrawLocation(ZonesDisplay[1][1]), 0, 0, 0, tocolor(255, 255, 255, ZonesDisplay[1][2]))
+			end
+		end
+
+		if(tonumber(ZonesDisplay[1][3])) then
+			if(ZonesDisplay[1][3] > 0) then
+				ZonesDisplay[1][3] = ZonesDisplay[1][3]-5
+				if(ZonesDisplay[1][3] <= 255) then
+					ZonesDisplay[1][2] = ZonesDisplay[1][3]
+				end
+			else
+				VideoMemory["HUD"]["LocationTarget"] = nil
+				table.remove(ZonesDisplay, 1)
+			end
+		elseif(ZonesDisplay[1][2] < 255) then
+			ZonesDisplay[1][2] = ZonesDisplay[1][2]+5
+		elseif(ZonesDisplay[1][2] == 255) then
+			if(ZonesDisplay[1][3] == "fast") then
+				ZonesDisplay[1][3] = 255
+			else
+				ZonesDisplay[1][3] = 1200
+			end
+		end
+	end
+end
+addEventHandler("onClientRender", getRootElement(), DrawFade)
+
+function FadeIn(times)
+	if(not CameraFade) then
+		FadeUpTime = getTickCount()
+		CameraFade = {times,0,"in"}
+	end
+end
+addEvent("FadeIn", true)
+addEventHandler("FadeIn", localPlayer, FadeIn)
+
+
+function FadeOut(times)
+	if(CameraFade) then
+		FadeUpTime = getTickCount()
+		CameraFade = {times,times,"out"}
+	end
+end
+addEvent("FadeOut", true)
+addEventHandler("FadeOut", localPlayer, FadeOut)
 
 
 
@@ -7496,342 +6924,6 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 			end
 		end
 	end
-	if(TradeWindows or InventoryWindows or TrunkWindows) then
-		PText["INVHUD"] = {}
-		local drop = true
-		for name,arr in pairs(PBut) do
-			for i,el in pairs(arr) do
-				local x,y = el[1], el[2]
-				local h,w = el[3], el[4]
-				w = w+20*(scaley)
-				if(absoluteX-x <= h and absoluteX-x >= 0) then
-					if(absoluteY-y <= w and absoluteY-y >= 0) then
-						drop=false
-						if(button == "left") then
-							if(state == "up") then
-								if(DragElement) then
-									if(name == "player") then
-										if(DragElementName == "shop") then
-											if(IsItemForSale(PInv[DragElementName][DragElementId][1])) then
-												ToolTip("Этот тип товара предприятие покупает")
-												StopDrag(name, i)
-											else
-												local text = PInv[DragElementName][DragElementId][1]
-												local quality = PInv[DragElementName][DragElementId][3]
-												local data = PInv[DragElementName][DragElementId][4]
-												if(items[text][3] > 1) then
-													CreateButtonInputInt("buyshopitem", Text("Введи количество"), toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
-													StopDrag(name, i)
-												else
-													triggerServerEvent("buyshopitem", localPlayer, localPlayer, 1, toJSON({text, GetItemCost(PInv[DragElementName][DragElementId]), quality, data, TradeWindows}))
-													StopDrag(name, i)
-													break
-												end
-											end
-										elseif(DragElementName == "trunk") then
-											local tmp = table.copy(PInv[DragElementName][DragElementId])
-											local tmp2 = table.copy(PInv[name][i])
-											SetInventoryItem(name, i, tmp[1], tmp[2], tmp[3], toJSON(tmp[4]))
-											SetInventoryItem(DragElementName, DragElementId, tmp2[1], tmp2[2], tmp2[3], toJSON(tmp2[4]))
-											StopDrag(name, i) -- Оставить фокус на ячейке
-											break
-										elseif(DragElementName == "player") then
-											if(PInv[DragElementName][DragElementId][1] == PInv[name][i][1]) then			
-												if(DragElementId == i and DragElementName == name) then
-													StopDrag(name, i)
-													break
-												end
-
-												local TIText = PInv[DragElementName][DragElementId][1]
-		
-												if(items[TIText][9]) then -- Объединяемые предметы
-													if(GetQuality(PInv[DragElementName][DragElementId][3]) == GetQuality(PInv[name][i][3])) then
-														
-														if(PInv[name][i][3]+100 < 1000) then
-															PInv[name][i][3] = PInv[name][i][3]+100
-															SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
-															ToolTip("Качество предмета повысилось")
-															
-															PData['ExpText'][#PData['ExpText']+1] = {"Улучшено", absoluteX, absoluteY}
-															StopDrag(name, i)
-															break
-														else
-															ToolTip("У этого предмета уже максимальное качество")
-														end
-														
-													end
-												end
-												
-												local DragQuality = PInv[DragElementName][DragElementId][3]
-												local ButQuality = PInv[name][i][3]
-												if(GetQuality(DragQuality) == GetQuality(ButQuality) and items[PInv[name][i][1]][3] ~= 1) then
-													if(DragElementId ~= i) then
-														if(items[PInv[name][i][1]][3] >= PInv[name][i][2]+PInv[DragElementName][DragElementId][2]) then
-															SetInventoryItem(name, i, PInv[name][i][1],PInv[name][i][2]+PInv[DragElementName][DragElementId][2],ButQuality, toJSON(PInv[name][i][4]))
-															SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
-														else
-															local count = items[PInv[name][i][1]][3]-PInv[name][i][2]
-															local dragcount = PInv[DragElementName][DragElementId][2]-count
-															local butcount = PInv[name][i][2]+count
-															SetInventoryItem(name, i, PInv[name][i][1],butcount,ButQuality,toJSON(PInv[name][i][4]))
-															SetInventoryItem(DragElementName, DragElementId, PInv[name][i][1],dragcount,DragQuality,toJSON(PInv[name][i][4]))
-														end
-													end
-												else
-													ReplaceInventoryItem(DragElementName, DragElementId, name, i)
-												end
-											else
-												local Data = false --Связанные предметы
-												local TIText = PInv[DragElementName][DragElementId][1]
-												if(TIText) then
-													if(items[TIText][7]) then
-														for razdelname,razdel in pairs(items[TIText][7]) do
-															for _, IT in pairs(razdel) do
-																if IT == PInv[name][i][1] then
-																	Data = razdelname
-																end
-															end
-														end
-													end
-												end
-												if(Data == false) then
-													ReplaceInventoryItem(DragElementName, DragElementId, name, i)
-												else
-													AddButtonData(name, i, DragElementName,DragElementId,Data)
-												end
-											end
-											StopDrag(name, i)
-											if(DragElementId <= 10 or i <= 10) then
-												triggerServerEvent("useinvweapon", localPlayer, localPlayer)
-											end
-											break
-										elseif(DragElementName == "backpack") then
-											if(PInv[DragElementName][DragElementId][1] == PInv[name][i][1]) then			
-												if(DragElementId == i and DragElementName == name) then
-													StopDrag(name, i)
-													break
-												end
-
-												local TIText = PInv[DragElementName][DragElementId][1]
-		
-												if(items[TIText][9]) then -- Объединяемые предметы
-													if(GetQuality(PInv[DragElementName][DragElementId][3]) == GetQuality(PInv[name][i][3])) then
-														
-														if(PInv[name][i][3]+100 < 1000) then
-															PInv[name][i][3] = PInv[name][i][3]+100
-															SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
-															ToolTip("Качество предмета повысилось")
-															
-															PData['ExpText'][#PData['ExpText']+1] = {"Улучшено", absoluteX, absoluteY}
-															StopDrag(name, i)
-															break
-														else
-															ToolTip("У этого предмета уже максимальное качество")
-														end
-														
-													end
-												end
-												
-												local DragQuality = PInv[DragElementName][DragElementId][3]
-												local ButQuality = PInv[name][i][3]
-												if(GetQuality(DragQuality) == GetQuality(ButQuality)) then
-													if(DragElementId ~= i) then
-														if(items[PInv[name][i][1]][3] >= PInv[name][i][2]+PInv[DragElementName][DragElementId][2]) then
-															SetInventoryItem(name, i, PInv[name][i][1],PInv[name][i][2]+PInv[DragElementName][DragElementId][2],ButQuality, toJSON(PInv[name][i][4]))
-															SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
-														else
-															local count = items[PInv[name][i][1]][3]-PInv[name][i][2]
-															local dragcount = PInv[DragElementName][DragElementId][2]-count
-															local butcount = PInv[name][i][2]+count
-															SetInventoryItem(name, i, PInv[name][i][1],butcount,ButQuality,toJSON(PInv[name][i][4]))
-															SetInventoryItem(DragElementName, DragElementId, PInv[name][i][1],dragcount,DragQuality,toJSON(PInv[name][i][4]))
-														end
-													end
-												else
-													if(PInv[name][i][4]) then
-														if(PInv[name][i][4]["content"]) then
-															StopDrag(name, i)
-															break
-														end
-													end
-													ReplaceInventoryItem(DragElementName, DragElementId, name, i)
-												end
-											else
-												local Data = false --Связанные предметы
-												local TIText = PInv[DragElementName][DragElementId][1]
-												if(TIText) then
-													if(items[TIText][7]) then
-														for razdelname,razdel in pairs(items[TIText][7]) do
-															for _, IT in pairs(razdel) do
-																if IT == PInv[name][i][1] then
-																	Data = razdelname
-																end
-															end
-														end
-													end
-												end
-												if(Data == false) then
-													if(PInv[name][i][4]) then
-														if(PInv[name][i][4]["content"]) then
-															StopDrag(name, i)
-															break
-														end
-													end
-													ReplaceInventoryItem(DragElementName, DragElementId, name, i)
-												else
-													AddButtonData(name, i, DragElementName,DragElementId,Data)
-												end
-											end
-											StopDrag(name, i)
-											if(DragElementId <= 10 or i <= 10) then
-												triggerServerEvent("useinvweapon", localPlayer, localPlayer)
-											end
-											break
-										end
-									elseif(name == "shop") then
-										if(DragElementName ~= "shop") then
-											if(IsItemForSale(PInv[DragElementName][DragElementId][1])) then
-												local count = PInv[DragElementName][DragElementId][2]
-												triggerServerEvent("SellShopItem", localPlayer, localPlayer, PInv[DragElementName][DragElementId][2], toJSON({PInv[DragElementName][DragElementId][1], GetItemCost(PInv[DragElementName][DragElementId]), PInv[DragElementName][DragElementId][3], PInv[DragElementName][DragElementId][4], TradeWindows}))
-												SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
-												StopDrag()--Оставить фокус на ячейке
-												break
-											else
-												ToolTip("Этот тип товара предприятие не принимает")
-												StopDrag()--Оставить фокус на ячейке
-												break
-											end
-										else
-											StopDrag(name, i)
-										end
-									elseif(name == "trunk") then
-										local tmp = table.copy(PInv[DragElementName][DragElementId])
-										local tmp2 = table.copy(PInv[name][i])
-										SetInventoryItem(name, i, tmp[1], tmp[2], tmp[3], toJSON(tmp[4]))
-										SetInventoryItem(DragElementName, DragElementId, tmp2[1], tmp2[2], tmp2[3], toJSON(tmp2[4]))
-										StopDrag(name, i) -- Оставить фокус на ячейке
-										break
-									elseif(name == "backpack") then
-										if(PInv[DragElementName][DragElementId][4]) then
-											if(not PInv[DragElementName][DragElementId][4]["content"]) then
-												ReplaceInventoryItem(DragElementName, DragElementId, name, i)
-											end
-											StopDrag()
-										else
-											ReplaceInventoryItem(DragElementName, DragElementId, name, i)
-											StopDrag(name, i)
-										end
-									end
-								end
-							else
-								DragStart[1] = absoluteX-x
-								DragStart[2] = absoluteY-y
-								DragX = x
-								DragY = y
-								DragElement = el
-								DragElementId = i
-								DragElementName = name
-							end
-						elseif(button == "right") then
-							if(state == "down") then
-								if(name == "player") then
-									if(DragElement) then --Ручной стак
-										if(PInv[name][i][1] == PInv[DragElementName][DragElementId][1] or not PInv[name][i][1]) then
-											local DragQuality = PInv[DragElementName][DragElementId][3]
-											local ButQuality = PInv[name][i][3]
-											if(PInv[DragElementName][DragElementId][2] > 1) then
-												if(not PInv[name][i][1]) then -- В пустой слот
-													if(DragElementId ~= i) then
-														local ValCeil = math.ceil(PInv[DragElementName][DragElementId][2]/2)
-														local dragcount = PInv[DragElementName][DragElementId][2]-ValCeil
-														PInv[DragElementName][DragElementId][2] = dragcount
-														SetInventoryItem(name, i, PInv[DragElementName][DragElementId][1], ValCeil, DragQuality, toJSON(PInv[DragElementName][DragElementId][4]))
-													end
-												else
-													if(items[PInv[DragElementName][DragElementId][1]][3] > PInv[name][i][2]) then
-														if(GetQuality(DragQuality) == GetQuality(ButQuality)) then
-															PInv[DragElementName][DragElementId][2] = PInv[DragElementName][DragElementId][2]-1
-															PInv[name][i][2] = PInv[name][i][2]+1
-														end
-													end
-												end
-											else
-												if(items[PInv[name][i][1]][3] > PInv[name][i][2]) then
-													if(GetQuality(DragQuality) == GetQuality(ButQuality)) then
-														if(DragElementId ~= i) then
-															PInv[name][i][2] = PInv[name][i][2]+1
-															SetInventoryItem(DragElementName, DragElementId, nil,nil,nil,nil)
-														end
-														StopDrag(name, i)
-													end
-												end
-											end
-										end
-									end
-									break
-								end
-							else
-								if(name == "player" or name == "backpack") then
-									if(not DragElement) then 
-										if(PInv[name][i][1]) then
-											DragElementId = i
-											DragElementName = name
-											local FH = dxGetFontHeight(scale*0.6, "default-bold")
-											PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Использовать"), absoluteX, absoluteY, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"UseInventoryItem", localPlayer, name, i}}	
-											PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Выбросить"), absoluteX, absoluteY-FH, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"DropInvItem", localPlayer, name, i}}	
-
-											local lx, ly, lz = getElementPosition(localPlayer)
-											for id, player in pairs(getElementsByType("player", getRootElement(), true)) do
-												if(player ~= localPlayer) then
-													local x2, y2, z2 = getElementPosition(player)
-													local distance = getDistanceBetweenPoints3D(lx,ly,lz,x2,y2,z2)
-													if(distance < 3) then
-														PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Передать {name}", {{"{name}", getPlayerName(player)}}), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"DropInvItem", localPlayer, name, i, getPlayerName(player)}}	
-													end
-												end
-											end
-											
-											if(PInv[name][i][1] == "Pissh Gold" 
-											or PInv[name][i][1] == "Pissh"
-											or PInv[name][i][1] == "KBeer"
-											or PInv[name][i][1] == "KBeer Dark"
-											or PInv[name][i][1] == "isabella") then
-												for id, player in pairs(getElementsByType("player", getRootElement(), true)) do
-													local x2, y2, z2 = getElementPosition(player)
-													local distance = getDistanceBetweenPoints3D(lx,ly,lz,x2,y2,z2)
-													if(distance < 3) then
-														PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Посадить {name}", {{"{name}", getPlayerName(player)}}), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"ServerCall", localPlayer, {"butilka", localPlayer, localPlayer, name, i, player}}}
-													end
-												end
-											end
-											
-											local bannedNames = {["hp"] = true, ["date"] = true, ["cost"] = true, ["color"] = true, ["content"] = true, ["name"] = true, ["quality"] = true, ["mass"] = true}
-											for razdelname, razdeldata in pairs(PInv[name][i][4]) do --Для bannedNames запустить еще цикл
-												if(not bannedNames[razdelname]) then
-													PText["INVHUD"][#PText["INVHUD"]+1] = {Text("Извлечь {item}", {{"{item}", razdelname}}), absoluteX, absoluteY-(FH*#PText["INVHUD"]), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.6, "default-bold", "left", "top", false, false, true, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"RemoveButtonData", localPlayer, name, i, razdelname}}
-												end
-											end
-										end
-									end
-								end
-							end
-						end		
-					end
-				end
-			end
-		end
-		
-		if(state == "up") then
-			if(DragElement and drop) then 
-				if(DragElementName ~= "shop") then
-					DropInvItem(DragElementName, DragElementId)
-				end
-				StopDrag()
-			end
-		end
-	end
-	
-	
 	if(getPlayerName(localPlayer) == "alexaxel705") then
 		worldX = math.round(worldX, 0)
 		worldY = math.round(worldY, 0)
@@ -7865,7 +6957,6 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 					)--]]
 				else
 					PData['changezone'][#PData['changezone']] = nil
-					ToolTip("Разные зоны!!!")
 				end
 			end
 		end
@@ -7993,54 +7084,10 @@ function SetInventoryItem(name, i, item, count, quality, data)
 		end
 		
 		
-		if(name == "trunk") then
-			triggerServerEvent("SaveTrunk", localPlayer, TrunkWindows, toJSON(PInv["trunk"]))
-		end
-		triggerServerEvent("SaveInventory", localPlayer, localPlayer, toJSON(PInv["player"]))
-
-		UpdateInventoryMass()
-		triggerServerEvent("useinvweapon", localPlayer, localPlayer)
 	end
 end
 
 
-
-
-
-function onMyMouseDoubleClick(button, absoluteX, absoluteY, worldX, worldY,  worldZ, clickedWorld)
-	if button == "left" and DragElement then 
-		for name,arr in pairs(PBut) do
-			for i,el in pairs(arr) do
-				local x,y = el[1], el[2]
-				local h,w = el[3], el[4]
-				w = w+20*(scaley)
-				if(absoluteX-x <= h and absoluteX-x >= 0) then
-					if(absoluteY-y <= w and absoluteY-y >= 0) then
-						if(name == "player" or name == "backpack") then
-							if(items[PInv[name][i][1]][4]) then
-								UseInventoryItem(name, i)
-							end
-						elseif(name == "shop") then
-							if(IsItemForSale(PInv[name][i][1])) then
-								ToolTip("Этот тип товара предприятие покупает")
-							else
-								local text = PInv[name][i][1]
-								local quality = PInv[name][i][3]
-								local data = PInv[name][i][4]
-								if(items[text][3] > 1) then
-									CreateButtonInputInt("buyshopitem", Text("Введи количество"), toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
-								else
-									triggerServerEvent("buyshopitem", localPlayer, localPlayer, 1, toJSON({text, GetItemCost(PInv[name][i]), quality, data, TradeWindows}))
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-end
-addEventHandler("onClientDoubleClick", root, onMyMouseDoubleClick)
 
 
 
@@ -8066,107 +7113,6 @@ addEventHandler("useinvslot", localPlayer, useinvslot)
 
 
 
-
-
-function GetQualityInfo(it)
-	local name = it[1]
-	local quality = it[3]
-	if(it[4]) then
-		if(it[4]["quality"]) then quality = it[4]["quality"] end
-	end
-	if(not quality) then quality = 0 end
-	if(name) then
-		local text=""
-		text=text..Text("Цена")..": $"..GetItemCost(it).."\n"
-		text=text..Text("Масса")..": "..GetItemMass(it).."\n"
-		if(items[name][4] == "useinvweapon") then	
-			if(getWeaponProperty(WeaponNamesArr[name], "poor", "damage")) then
-				text=text..Text("Урон")..": "..
-				math.round(getOriginalWeaponProperty(WeaponNamesArr[name], "poor", "damage")*(quality/500), 0)-(2).." - "..
-				math.round(getOriginalWeaponProperty(WeaponNamesArr[name], "poor", "damage")*(quality/500), 0)+(2)..
-				"\n"
-			end
-			if(getWeaponProperty(WeaponNamesArr[name], "poor", "weapon_range")) then
-				text=text..Text("Расстояние")..": "..getWeaponProperty(WeaponNamesArr[name], "poor", "weapon_range").."\n"
-			end
-			if(getWeaponProperty(WeaponNamesArr[name], "poor", "maximum_clip_ammo")) then
-				text=text..Text("Магазин")..": "..getWeaponProperty(WeaponNamesArr[name], "poor", "maximum_clip_ammo").."\n"
-			end
-			if(WeaponAmmo[WeaponNamesArr[name]]) then
-				text=text..Text("Калибр")..": "..WeaponAmmo[WeaponNamesArr[name]].."\n"
-			end
-		elseif(items[name][4] == "usedrugs") then	
-			text=text..Text("Здоровье")..": "..math.floor((10+(quality/10))).."\n"
-		elseif(items[name][4] == "usesmoke") then	
-			text=text..Text("Здоровье")..": 5\n"
-		end
-		text = text..Text("Качество")..": "..GetQuality(quality)
-		if(items[name][8]) then text = text.."\n#FFFFFF"..Text("Выпадает после смерти") end
-		return text
-	end
-end
-
-function GetItemMass(item)
-	local gr = false
-	if(item[4]["mass"]) then gr = item[4]["mass"] end
-	if(not gr) then gr = items[item[1]][5] end
-	
-	if(gr >= 1000) then
-		return (gr/1000)..Text("кг")
-	else
-		return gr..Text("г")
-	end
-end
-
-function GetItemCost(it)
-	if(it[4]) then
-		if(it[4]["cost"]) then return it[4]["cost"] end
-	end
-	cost = items[it[1]][6]
-	
-	local Economics = fromJSON(getElementData(root, "Economics"))
-	
-	if(Economics[it[1]]) then cost = cost*Economics[it[1]] end
-	
-	
-	if(it[2] == "Sell") then
-		cost = cost*0.75 -- Цена покупки меньше на четверть
-	end
-	
-	
-	if(cost <= 0) then cost = 1 end
-	
-	return math.round(cost*(it[3]/450), 0)
-end
-
-
-function GetQuality(quality)
-	local out = ""
-	if(not quality or quality <= 99) then
-		out = "отвратительное"
-	elseif(quality <= 199 and quality > 99) then
-		out = "мерзкое"
-	elseif(quality <= 299 and quality > 199) then
-		out = "гадкое"
-	elseif(quality <= 399 and quality > 299) then
-		out = "плохое"
-	elseif(quality <= 499 and quality > 399) then
-		out = "обычное"
-	elseif(quality <= 599 and quality > 499) then
-		out = "хорошее"
-	elseif(quality <= 699 and quality > 599) then
-		out = "очень хорошее"
-	elseif(quality <= 799 and quality > 699) then
-		out = "отличное"
-	elseif(quality <= 899 and quality > 799) then
-		out = "высокое"
-	elseif(quality <= 999 and quality > 899) then
-		out =  "великолепное"
-	elseif(quality >= 1000) then
-		out = "превосходное"
-	end
-	return GetQualityColor(quality)..Text(out)
-end
 
 
 function GetQualityColor(quality)
@@ -8216,366 +7162,10 @@ addEventHandler("vibori", localPlayer, vibori)
 
 
 
-function InformTitle(text, types)
-	if(types) then
-		if(types == "wardrobe") then
-			AddITimerText = "В #4682B4гардероб#FFFFFF добавлен костюм "..COLOR["KEY"]["HEX"]..ArraySkinInfo[tonumber(text)][2]
-		end
-	else
-		AddITimerText = text
-	end
-	if(isTimer(AddITimer)) then
-		killTimer(AddITimer)
-	end
-	AddITimer = setTimer(function() AddITimerText = "" end, 3500, 1)
-	PlaySFXSound(15)
-end
-addEvent("InformTitle", true)
-addEventHandler("InformTitle", localPlayer, InformTitle)
-
-
-
-function AddInventoryItem(itemname, count, quality, data)
-	if(not data) then data = toJSON({}) end
-	local stacked = false
-	if count > 0 then 
-		stacked = math.round(count/items[itemname][3], 0)
-		if(itemname ~= "Деньги") then
-			InformTitle(Text("В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы посмотреть", {{"{item}", COLOR["KEY"]["HEX"]..itemname.."#FFFFFF"}, {"{key}", "#C00000i#FFFFFF"}}))
-		end
-	else
-		stacked = math.ceil(count/items[itemname][3])
-	end
-	
-	
-	for slot = 1, 10 do
-		if(stacked >= 1) then
-			for v = 1, stacked do
-				AddInventoryItemNewStack(itemname, items[itemname][3], quality, data)
-				count = count - items[itemname][3]
-			end
-		elseif(stacked <= -1) then
-			for v = stacked-stacked-stacked, 1 do
-				local NumberStack = FoundFullStackedInventoryItem(itemname, quality)
-				if(NumberStack) then
-					RemoveInventorySlot("player", NumberStack)
-					count = count + items[itemname][3]
-				end
-			end
-		end
-		if(count == 0) then
-			break
-		elseif(count > 0) then
-			local NumberStack = FoundStackedInventoryItem(itemname, quality)
-			if(NumberStack) then
-				if(PInv["player"][NumberStack][2]+count <= items[itemname][3]) then
-					SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], PInv["player"][NumberStack][2]+count, PInv["player"][NumberStack][3], data)
-					count = 0
-					break
-				else
-					count = count - (items[itemname][3]-PInv["player"][NumberStack][2])
-					SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], items[itemname][3], PInv["player"][NumberStack][3], data)
-				end
-			end
-	
-			if(count > 0) then
-				AddInventoryItemNewStack(itemname, count, quality, data) --Докладываем остаток
-			end
-			break
-		elseif(count < 0) then
-			local NumberStack = FoundStackedInventoryItem(itemname, quality)
-			if(not NumberStack) then NumberStack = FoundFullStackedInventoryItem(itemname, quality) end
-			if(NumberStack) then
-				if(PInv["player"][NumberStack][2]+count <= 0) then
-					count = count + PInv["player"][NumberStack][2]
-					RemoveInventorySlot("player", NumberStack)
-				else
-					SetInventoryItem("player", NumberStack, PInv["player"][NumberStack][1], PInv["player"][NumberStack][2]+count, PInv["player"][NumberStack][3], data)
-					break
-				end
-			end
-		end
-	end
-end
-addEvent("AddInventoryItem", true)
-addEventHandler("AddInventoryItem", localPlayer, AddInventoryItem)
 
 
 
 
-function AddInventoryItemNewStack(itemname, count, quality, data)
-	for i = 1, 10 do
-		if(not PInv["player"][i][1]) then
-			SetInventoryItem("player", i, itemname, count, quality, data)
-			return true
-		end
-	end
-	ToolTip(Text("Закончилось место в инвентаре"))
-end
-
-
-
-function UseInventoryItem(name, i)
-	local text = PInv[name][i][1] or "Кулак"
-	
-	if(PData["fishpos"]) then
-		triggerServerEvent("StopFish", localPlayer, localPlayer)
-	end
-	
-	if(name == "backpack") then return ToolTip(Text("Чтобы использовать этот предмет возьми его в руки")) end
-	
-	triggerServerEvent("useinvweapon", localPlayer, localPlayer, i)
-	if(items[text][4] == "useinvweapon") then
-		return true
-	elseif(items[text][4] == "CreateCanabis") then
-		local x, y, z = getElementPosition(localPlayer)
-		local gz = getGroundPosition(x, y, z)
-		if(ValidateMaterialForThree(x,y,z, gz)) then
-			triggerServerEvent("CreateThreePlayer", localPlayer, localPlayer, i, x,y,gz)
-		else
-			outputChatBox("Здесь нельзя садить #558833коноплю",255,255,255,true)
-		end
-	elseif(items[text][4] == "CreateCoka") then
-		local x, y, z = getElementPosition(localPlayer)
-		local gz = getGroundPosition(x, y, z)
-		if(ValidateMaterialForThree(x,y,z, gz)) then
-			triggerServerEvent("CreateThreePlayer", localPlayer, localPlayer, i, x,y,gz)
-		else
-			outputChatBox("Здесь нельзя садить коку",255,255,255,true)
-		end
-	elseif(items[text][4] == "SetupBackpack") then
-		SetupBackpack(i)
-	elseif(items[text][4] == "usecellphone") then
-		triggerServerEvent(items[text][4], localPlayer, localPlayer)
-	elseif(items[text][4] == "usenewspaper") then
-		ReadNewsPaper(PInv[name][i][4]["date"][2], PInv[name][i][4]["date"][1])
-	elseif(items[text][4] == "usesmoke" 
-		or items[text][4] == "usekanistra" 
-		or items[text][4] == "usezapaska" 
-		or items[text][4] == "usedrink") then
-		triggerServerEvent(items[text][4], localPlayer, localPlayer, i)
-	else
-		if(text == "Косяк") then
-			DrugsPlayerEffect()
-		elseif(text == "Спанк") then
-			SpunkPlayerEffect()
-		else
-			if(not items[text][4]) then
-				return true
-			end
-		end
-		
-		local count = PInv[name][i][2]-1
-		if(count == 0) then
-			SetInventoryItem(name, i, nil,nil,nil,nil)
-		else
-			SetInventoryItem(name, i, PInv[name][i][1],count,PInv[name][i][3],toJSON(PInv[name][i][4]))
-		end
-		
-		triggerServerEvent(items[text][4], localPlayer, localPlayer)
-	end
-end
-addEvent("UseInventoryItem", true)
-addEventHandler("UseInventoryItem", localPlayer, UseInventoryItem)
-
-
-local BannedReasons = {
-	[19] = "Rocket",
-	[37] = "Burnt",
-	[50] = "Ranover/Helicopter Blades",
-	[51] = "Explosion",
-	[53] = "Drowned",
-	[54] = "Fall",
-	[55] = "Unknown",
-	[56] = "Melee",
-	[57] = "Weapon",
-	[59] = "Tank Grenade",
-	[63] = "Blown"
-}
-
-function PedDamage(attacker, weapon, bodypart, loss)
-	if(BannedReasons[weapon]) then 
-		cancelEvent()
-	end
-	if(attacker) then
-		if(getElementType(attacker) == "vehicle") then
-			if(getElementModel(attacker) == 532) then
-				bodypart = 9
-				weapon = 160
-			end
-			attacker = getVehicleOccupant(attacker)
-		end
-		
-		if(attacker == localPlayer) then
-			triggerServerEvent("PedDamage", attacker, source, weapon, bodypart, loss)
-			for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
-				if(source ~= thePed) then
-					local team = getElementData(thePed, "team")
-					if(team) then
-						if(getTeamName(getTeamFromName(team)) ~= "Мирные жители") then
-							triggerServerEvent("PedDamage", attacker, thePed, weapon, 0, 0)
-						end
-					end
-				end
-			end
-		elseif(getElementType(attacker) == "ped") then
-			if(isElementSyncer(source)) then
-				triggerServerEvent("PedDamage", attacker, source, weapon, bodypart, loss)
-			end
-		end
-	end
-end
-addEventHandler("onClientPedDamage", getRootElement(), PedDamage)
-
-
-function RemoveInventoryItemNew(name, i)
-	local count = PInv[name][i][2]-1
-	if(count == 0) then
-		SetInventoryItem(name, i, nil,nil,nil,nil)
-	else
-		SetInventoryItem(name, i, PInv[name][i][1],count,PInv[name][i][3],toJSON(PInv[name][i][4]))
-	end
-	triggerServerEvent("useinvweapon", localPlayer, localPlayer)
-end
-addEvent("RemoveInventoryItemNew", true)
-addEventHandler("RemoveInventoryItemNew", localPlayer, RemoveInventoryItemNew)
-
-
-
-function RemoveInventoryItem(itemname)
-	for i = 1, #PInv["player"] do
-		if(itemname == PInv["player"][i][1]) then
-			local count = PInv["player"][i][2]-1
-			
-			if(count == 0) then
-				SetInventoryItem("player", i, nil, nil, nil, nil)
-			else
-				SetInventoryItem("player", i, PInv["player"][i][1], count, PInv["player"][i][3], toJSON(PInv["player"][i][4]))
-			end
-			break
-		end
-	end
-end
-addEvent("RemoveInventoryItem", true)
-addEventHandler("RemoveInventoryItem", localPlayer, RemoveInventoryItem)
-
-
-
-function RemoveInventoryItemID(i,dataid)
-	if(dataid) then
-		local count = PInv["player"][i][4][dataid][2]-1
-		
-		if(count == 0) then
-			PInv["player"][i][4][dataid] = nil
-			SetInventoryItem("player", i, PInv["player"][i][1], PInv["player"][i][2], PInv["player"][i][3], toJSON(PInv["player"][i][4]))
-		else
-			PInv["player"][i][4][dataid][2] = count
-			SetInventoryItem("player", i, PInv["player"][i][1], PInv["player"][i][2], PInv["player"][i][3], toJSON(PInv["player"][i][4]))
-		end
-	else
-		local count = PInv["player"][i][2]-1
-		
-		if(count == 0) then
-			SetInventoryItem("player", i, nil, nil, nil, nil)
-		else
-			SetInventoryItem("player", i, PInv["player"][i][1], count, PInv["player"][i][3], toJSON(PInv["player"][i][4]))
-		end
-		triggerServerEvent("useinvweapon", localPlayer, localPlayer)
-	end
-end
-addEvent("RemoveInventoryItemID", true)
-addEventHandler("RemoveInventoryItemID", localPlayer, RemoveInventoryItemID)
-
-
-function getGroundPositionFish()
-	if(not getPedOccupiedVehicle(localPlayer)) then
-		if(not isCursorShowing()) then
-			local x,y,z = getPositionInFront(localPlayer,10)
-			local lvl = getWaterLevel(x,y,z)
-			if(lvl) then
-				local result = lvl-getGroundPosition(x, y, z)
-				if(result > 0) then
-					local z = getGroundPosition(x, y, z)
-					triggerServerEvent("startfish", localPlayer, localPlayer, x,y,z)
-					return
-				end
-			end
-			local r,g,b,a = getWaterColor()
-			ToolTip("Подойди к "..RGBToHex(r,g,b).."воде")
-		end
-	end
-end
-addEvent("getGroundPositionFish", true)
-addEventHandler("getGroundPositionFish", localPlayer, getGroundPositionFish)
-
-
-function FishStarted(lx,ly,lz)
-	if(lx) then
-		PData["fishpos"] = {["x"] = lx, ["y"] = ly, ["z"] = lz}
-	else
-		PData["fishpos"] = false
-	end
-end
-addEvent("FishStarted", true)
-addEventHandler("FishStarted", localPlayer, FishStarted)
-
-
-
-
-function RemoveInventorySlot(name, i)
-	SetInventoryItem(name, i, nil, nil, nil, nil)
-	triggerServerEvent("useinvweapon", localPlayer, localPlayer)
-end
-addEvent("RemoveInventorySlot", true)
-addEventHandler("RemoveInventorySlot", localPlayer, RemoveInventorySlot)
-
-
-function FoundStackedInventoryItem(itemname, quality)
-	local id = false
-	for i = 1, #PInv["player"] do
-		if(PInv["player"][i][1] == itemname) then
-			if(items[itemname][3] > PInv["player"][i][2]) then
-				if(GetQuality(quality) == GetQuality(PInv["player"][i][3])) then
-					id=i
-					break
-				end
-			end
-		end
-	end
-	if(id) then return id
-	else return false end
-end
-
- 
-function FoundFullStackedInventoryItem(itemname, quality)
-	local id = false
-	for i = 1, #PInv["player"] do
-		if(PInv["player"][i][1] == itemname) then
-			if(items[itemname][3] == PInv["player"][i][2]) then
-				if(GetQuality(quality) == GetQuality(PInv["player"][i][3])) then
-					id=i
-					break
-				end
-			end
-		end
-	end
-	if(id) then return id
-	else return false end
-end
- 
- 
-
- 
-function FoundInventoryItem(itemname)
-	local id = false
-	for i, k in pairs(PInv["player"]) do
-		if(k[1] == itemname) then
-			id = i
-			break
-		end
-	end
-	return id
-end
 
 
 
@@ -8663,6 +7253,10 @@ end
 
 
 function normalspeed(h,m,weather)
+	if(PEDChangeSkin == "intro") then -- Костыль
+		setCameraMatrix(1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
+	end
+	
 	if(isTimer(DrugsTimer)) then
 		killTimer(DrugsTimer)
 	end
@@ -8689,13 +7283,9 @@ function onWasted(killer, weapon, bodypart)
 			ClientVehicleExit(localPlayer, getPedOccupiedVehicleSeat(localPlayer))
 		end
 		
-		
-		if(InventoryWindows) then
-			SetupBackpack()
-		end
 	
 	
-		if(PData["fishpos"]) then
+		if(getElementData(localPlayer, "fishpos")) then
 			triggerServerEvent("StopFish", localPlayer, localPlayer)
 		end
 		
@@ -8731,8 +7321,6 @@ addEventHandler("onClientPlayerWasted", getRootElement(), onWasted)
 function PlayerNewZone(zone, city, updateweather, interior)
 	if(getElementDimension(localPlayer) == 0) then SetZoneDisplay(zone) end
 	triggerServerEvent("ZoneInfo", localPlayer, localPlayer, zone)
-	
-	CheckZoneCollect(zone)
 end
 addEventHandler("PlayerNewZone", root, PlayerNewZone)
 
@@ -8896,22 +7484,24 @@ end
 
 function EndRace(pos, oldbest)
 	if(PData["Race"]) then
-		local seconds = (getTickCount()-PData["Race"]["Start"])/1000
-		local hours = math.floor(seconds/3600)
-		local mins = math.floor(seconds/60 - (hours*60))
-		local secs = math.floor(seconds - hours*3600 - mins *60)
-		local msec = math.floor(((getTickCount()-PData["Race"]["Start"])-(secs*1000)-(mins*60000)-(hours*3600000))/10)
-
-		
-		oldbest = tonumber(oldbest)
-		local seconds2 = (oldbest)/1000
-		local hours2 = math.floor(seconds2/3600)
-		local mins2 = math.floor(seconds2/60 - (hours2*60))
-		local secs2 = math.floor(seconds2 - hours2*3600 - mins2 *60)
-		local msec2 = math.floor(((oldbest)-(secs2*1000)-(mins2*60000)-(hours2*3600000))/10)
-		
-		ToolTipRace(pos, "#828FA0Твоё время: #EEEEEE"..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec).."\n"..
-		"#828FA0Рекорд трассы: #EEEEEE"..string.format("%02.f", mins2)..":"..string.format("%02.f", secs2)..":"..string.format("%02.f", msec2))
+		if(oldbest and pos) then
+			local seconds = (getTickCount()-PData["Race"]["Start"])/1000
+			local hours = math.floor(seconds/3600)
+			local mins = math.floor(seconds/60 - (hours*60))
+			local secs = math.floor(seconds - hours*3600 - mins *60)
+			local msec = math.floor(((getTickCount()-PData["Race"]["Start"])-(secs*1000)-(mins*60000)-(hours*3600000))/10)
+	
+			
+			oldbest = tonumber(oldbest)
+			local seconds2 = (oldbest)/1000
+			local hours2 = math.floor(seconds2/3600)
+			local mins2 = math.floor(seconds2/60 - (hours2*60))
+			local secs2 = math.floor(seconds2 - hours2*3600 - mins2 *60)
+			local msec2 = math.floor(((oldbest)-(secs2*1000)-(mins2*60000)-(hours2*3600000))/10)
+			
+			ToolTipRace(pos, "#828FA0Твоё время: #EEEEEE"..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec).."\n"..
+			"#828FA0Рекорд трассы: #EEEEEE"..string.format("%02.f", mins2)..":"..string.format("%02.f", secs2)..":"..string.format("%02.f", msec2))
+		end
 	end
 	
 	
@@ -9169,7 +7759,7 @@ end
 
 
 function setDoingDriveby()
-	if(getPedOccupiedVehicle(localPlayer) and not InventoryWindows) then
+	if(getPedOccupiedVehicle(localPlayer)) then
 		if not isPedDoingGangDriveby(localPlayer) then
 			setPedDoingGangDriveby(localPlayer, true)
 		else
@@ -9327,25 +7917,6 @@ end
 
 
 
-function reload()
-	local found = false
-	local item = PInv["player"][usableslot][1] or "Кулак"
-	if(WeaponAmmo[WeaponNamesArr[item]]) then
-		for key, k in pairs(PInv["player"][usableslot][4]) do
-			if(k[1] == PInv["player"][usableslot][4][key][1]) then
-				found = true
-				break
-			end
-		end
-		if(not found) then
-			local AmmoSlot = FoundInventoryItem(WeaponAmmo[WeaponNamesArr[PInv["player"][usableslot][1]]])
-			if(AmmoSlot) then
-				AddButtonData("player", usableslot, "player", AmmoSlot, "патроны")
-				triggerServerEvent("useinvweapon", localPlayer, localPlayer)
-			end
-		end
-	end
-end
 
 
 
@@ -9362,235 +7933,6 @@ local screenSaver = {
 
 
 
-function DrawPlayerInventory()
-	local sx, sy, font, tw, th, color
-	--[[ 
-		Уберешь потом PData["Interface"]["Full"]
-		когда сделаешь все зависимости
-		возможно помимо отображения работают какие либо вычисления
-	-- ]] 
-	if(PData["Interface"]["Full"] and PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer) and not isPlayerMapForced()) then
-		titleText = Text("Информация")
-		qualityInfo = ""
-		if(InventoryWindows) then
-			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
-			if(backpackid) then
-				dxDrawBorderedText(PInv["player"][backpackid][1], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-			else
-				dxDrawBorderedText(getPlayerName(localPlayer), 660*scalex, 325*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-				local Birthday = getRealTime(getElementData(localPlayer, "Birthday"))
-				qualityInfo = Text("Дата рождения")..
-				": "..Birthday.monthday.."."..Birthday.month+(1).."."..Birthday.year+(1882)..
-				" ("..Text("{age} лет", {{"{age}", ServerDate.year-(Birthday.year-18)}})..
-				")\n"..Text("Фракция")..": "..Text(getTeamName(getPlayerTeam(localPlayer)))..
-				"\n"..Text("Работа")..": "..Text(getElementData(localPlayer, "job"))
-			end
-			
-			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(50*scaley), 640*scalex+(949*scalex), 360*scaley+(50*scaley), tocolor(120,120,120,255), 1)	
-			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(90*scaley), 640*scalex+(949*scalex), 360*scaley+(90*scaley), tocolor(120,120,120,255), 1)	
-			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(320*scaley), 640*scalex+(949*scalex), 360*scaley+(320*scaley), tocolor(120,120,120,255), 1)
-			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(372*scaley), 640*scalex+(949*scalex), 360*scaley+(372*scaley), tocolor(120,120,120,255), 1)
-			
-			dxDrawBorderedText(InventoryMass.."/"..MaxMass..Text("кг"), screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
-		elseif(PData["BizControlName"]) then
-			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(20, 25, 20, 245))
-			dxDrawBorderedText(PData["BizControlName"][2], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-		elseif(TradeWindows) then			
-			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
-			dxDrawBorderedText("Продажа", 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-		
-			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(50*scaley), 640*scalex+(949*scalex), 360*scaley+(50*scaley), tocolor(120,120,120,255), 1)	
-			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(90*scaley), 640*scalex+(949*scalex), 360*scaley+(90*scaley), tocolor(120,120,120,255), 1)	
-			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(320*scaley), 640*scalex+(949*scalex), 360*scaley+(320*scaley), tocolor(120,120,120,255), 1)
-			dxDrawLine(640*scalex+(646*scalex), 360*scaley+(372*scaley), 640*scalex+(949*scalex), 360*scaley+(372*scaley), tocolor(120,120,120,255), 1)
-			
-			dxDrawBorderedText(InventoryMass.."/"..MaxMass..Text("кг"), screenWidth+(950*scalex), 695*scaley, 0, 0, MassColor, scale/1.2, "clear", "center", "top", false, false, false, true)
-		elseif(TrunkWindows) then			
-			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 425*scaley, tocolor(0, 0, 20, 150))
-			dxDrawBorderedText("Багажник", 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-		elseif(BANKCTL) then
-			dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(25, 20, 20, 245))
-			dxDrawBorderedText(BANKCTL, 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
-		end
-
-		
-		dxDrawImage((screenWidth)-((80*NewScale)*10), screenHeight-(80*NewScale),(screenWidth)-((80*NewScale)*10), (80*NewScale), VideoMemory["HUD"]["PlayerInv"])
-
-		for name,arr in pairs(PBut) do
-			for i,el in pairs(arr) do
-				sx,sy = el[1], el[2]
-				local h,w = el[3], el[4]
-				
-				local CRAM = false
-				local CTBACK = tocolor(81,81,105,140)
-				local SystemName = PInv[name][i][1]
-				local DrawText = Text(SystemName)
-				if(PInv[name][i][4]) then
-					if(PInv[name][i][4]["name"]) then
-						DrawText = Text(PInv[name][i][4]["name"])
-					end
-				end
-
-				if(name == "player") then
-					if(i == usableslot) then
-						CRAM = tocolor(230,230,255,255)
-					end
-				else
-					CRAM = tocolor(120,120,120,255)
-				end
-
-
-				if(DragElementId) then
-					local TIText = PInv[DragElementName][DragElementId][1]
-					if(TIText) then
-						if(items[TIText][7]) then -- Связанные предметы
-							for razdelname,razdel in pairs(items[TIText][7]) do
-								for _, IT in pairs(razdel) do
-									if IT == SystemName then
-										dxDrawRectangle(sx, sy, h, w,  tocolor(0,255,0,50))
-									end
-								end
-							end
-						end
-						
-						if(items[TIText][9]) then -- Объединяемые предметы
-							if(DragElementId ~= i and DragElementName == name) then
-								if(TIText == SystemName) then
-									if(GetQuality(PInv[DragElementName][DragElementId][3]) == GetQuality(PInv[name][i][3])) then
-										dxDrawRectangle(sx, sy, h, w,  tocolor(255,153,0,50))
-									end
-								end
-							end
-						end
-					end
-					if(DragElementId == i and DragElementName == name) then
-						CRAM = tocolor(255,255,255,255)
-						qualityInfo = GetQualityInfo(PInv[DragElementName][DragElementId])
-						if(SystemName) then
-							dxDrawText(items[SystemName][2], 640*scalex+(5*scalex), 740*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale/1.8, "default", "left", "top", false, false, false, true)
-							titleText=DrawText
-						end
-					end
-				end
-
-				if(PInv[name][i][3]) then
-					if(DragElement ~= el) then
-						local r2,g2,b2 = hex2rgb(GetQualityColor(PInv[name][i][3]):sub(2,7))
-						if(PInv[name][i][4]["quality"]) then
-							r2,g2,b2 = hex2rgb(GetQualityColor(PInv[name][i][4]["quality"]):sub(2,7))
-						end
-						CTBACK = tocolor(r2,g2,b2,140)
-					end
-				end
-				
-				
-				dxDrawRectangle(sx, sy+(80*NewScale), h, w-(80*NewScale), CTBACK)
-					
-				if(CRAM) then
-					dxDrawLine(sx, sy, sx, sy+(80*NewScale), CRAM, 1)
-					dxDrawLine(sx+(80*NewScale), sy, sx+(80*NewScale), sy+(80*NewScale), CRAM, 1)
-					dxDrawLine(sx, sy, sx+(80*NewScale), sy, CRAM, 1)
-					dxDrawLine(sx, sy+(80*NewScale), sx+(80*NewScale), sy+(80*NewScale), CRAM, 1)
-					dxDrawLine(sx, sy+(80*NewScale), sx+(80*NewScale), sy+(80*NewScale), CRAM, 1)
-				end
-				
-
-				if(DragElement == el and DragX) then
-				
-				else
-					if(PInv[name][i][4]) then
-						dxDrawImage(sx,sy,h,w,items[SystemName][1])
-
-						local fontsize = NewScale
-						tw = dxGetTextWidth(DrawText, fontsize, "default-bold", true)
-						if(tw > w) then
-							fontsize=fontsize*(w/tw)
-						end
-						MemText(DrawText, sx+(40*scalex), sy+(70*scaley), tocolor(255, 255, 255, 255), fontsize, "default-bold", NewScale, 0.1, true, true)
-							
-						if(name == "player" or name == "backpack" or name == "trunk") then
-							if(items[SystemName][3] > 1) then
-								local sht = {"", " шт"}
-								if(SystemName == "Деньги") then sht = {"$", ""} end
-								dxDrawBorderedText(sht[1]..PInv[name][i][2]..sht[2], sx, sy, sx+(76*NewScale), sy, tocolor(255, 255, 255, 255), scale/2, "default-bold", "right", "top", false, false, false, false)
-							end
-						elseif(name == "shop") then
-							dxDrawBorderedText("$"..GetItemCost(PInv[name][i]), sx, sy, sx+(76*NewScale), sy, tocolor(100, 255, 100, 255), scale/2.5, "pricedown", "right", "top", false, false, false, false)
-						end
-						
-						if(PInv[name][i][4]["патроны"]) then
-							dxDrawImage(sx+(h-(25*NewScale)), sy, 25*NewScale, 25*NewScale, items[PInv[name][i][4]["патроны"][1]][1])
-						end
-						
-						if(PInv[name][i][4]["лазер"]) then
-							dxDrawImage(sx+(h-(50*NewScale)), sy, 25*NewScale, 25*NewScale, items[PInv[name][i][4]["лазер"][1]][1])
-						end
-						
-						if(PInv[name][i][4]["сигареты"]) then
-							dxDrawImage(sx+(h-(25*NewScale)), sy, 25*NewScale, 25*NewScale, items[PInv[name][i][4]["сигареты"][1]][1])
-						end
-					end
-				end
-			end
-		end
-		
-		if(DragElement and DragX) then
-			sx, sy = PBut[DragElementName][DragElementId][3], PBut[DragElementName][DragElementId][4]
-			
-			dxDrawImage(DragX, DragY, sx, sy, items[PInv[DragElementName][DragElementId][1]][1], nil,nil,nil,true)
-			if(PInv[DragElementName][DragElementId][4]) then -- Экипированные в предмет вещи аля патроны
-				if(PInv[DragElementName][DragElementId][4]["патроны"]) then
-					dxDrawImage(DragX+(sx-(25*NewScale)), DragY, 25*NewScale, 25*NewScale, items[PInv[DragElementName][DragElementId][4]["патроны"][1]][1], nil,nil,nil,true)
-				elseif(PInv[DragElementName][DragElementId][4]["сигареты"]) then
-					dxDrawImage(DragX+(sx-(25*NewScale)), DragY, 25*NewScale, 25*NewScale, items[PInv[DragElementName][DragElementId][4]["сигареты"][1]][1], nil,nil,nil,true)
-				end
-			end
-			
-			local CTBACK = tocolor(81,81,105, 140)
-			if(PInv[DragElementName][DragElementId][3]) then
-				local r2,g2,b2 = hex2rgb(GetQualityColor(PInv[DragElementName][DragElementId][3]):sub(2,7))
-				if(PInv[DragElementName][DragElementId][4]["quality"]) then
-					r2,g2,b2 = hex2rgb(GetQualityColor(PInv[DragElementName][DragElementId][4]["quality"]):sub(2,7))
-				end
-				CTBACK = tocolor(r2,g2,b2,140)
-			end
-			dxDrawRectangle(DragX, DragY+(80*NewScale), sx, sy-(80*NewScale), CTBACK)
-			
-			if(DragElementName ~= "shop") then
-				if(items[PInv[DragElementName][DragElementId][1]][3] > 1) then
-					local sht = {"", " шт"}
-					if(PInv[DragElementName][DragElementId][1] == "Деньги") then sht = {"$", ""} end
-					dxDrawBorderedText(sht[1]..PInv[DragElementName][DragElementId][2]..sht[2], DragX, DragY, DragX+(76*NewScale), DragY, tocolor(255, 255, 255, 255), scale/2, "default-bold", "right", "top", false, false, true, true)
-				end
-			else
-				dxDrawBorderedText("$"..GetItemCost(PInv[DragElementName][DragElementId]), DragX, DragY, DragX+(76*NewScale), DragY, tocolor(100, 255, 100, 255), scale/2.5, "pricedown", "right", "top", false, false, true, true)
-			end
-			
-			local dragText = PInv[DragElementName][DragElementId][1]
-			if(PInv[DragElementName][DragElementId][4]) then
-				if(PInv[DragElementName][DragElementId][4]["name"]) then
-					dragText = PInv[DragElementName][DragElementId][4]["name"]
-				end
-			end
-			local fontsize = NewScale
-			tw = dxGetTextWidth(dragText, fontsize, "default-bold", true)
-			if(tw > (60*NewScale)) then
-				fontsize=fontsize*((60*NewScale)/tw)
-			end
-			MemText(dragText, DragX+(40*scalex), DragY+(70*scaley), tocolor(255, 255, 255, 255), fontsize, "default-bold", NewScale, 0.1, true, true)
-
-			titleText=dragText
-		end
-		if(InventoryWindows or TradeWindows) then
-			dxDrawBorderedText(titleText, screenWidth+(970*NewScale), 415*NewScale, 0, 0, tocolor(255, 255, 255, 255), scale/1.2, "default-bold", "center", "top", false, false, false, true)
-			dxDrawBorderedText(qualityInfo, 640*NewScale+(660*NewScale), (screenHeight/2.4), 0, 0, tocolor(255, 255, 255, 255), scale/1.5, "default-bold", "left", "top", false, false, false, true)
-		end
-
-	end	
-end
-
-
-
 
 
 
@@ -9600,22 +7942,6 @@ end
 addEventHandler("onClientVehicleCollision", root,
     function(HitElement,force, bodyPart, x, y, z, nx, ny, nz, hitElementForce)
          if(source == getPedOccupiedVehicle(localPlayer)) then
-			if(HitElement) then
-				local fDamageMultiplier = getVehicleHandling(source).collisionDamageMultiplier
-				if(isTimer(PData["Driver"]["Collision"])) then
-					killTimer(PData["Driver"]["Collision"])
-				else
-					PData["Driver"]["CollisionPoint"] = 0
-				end
-				
-				PData["Driver"]["CollisionPoint"] = PData["Driver"]["CollisionPoint"]+(force*fDamageMultiplier)
-
-				PData["Driver"]["Collision"] = setTimer(function(targetafter)
-					triggerServerEvent("DestroyObject", localPlayer, localPlayer, PData["Driver"]["CollisionPoint"])
-					PData["Driver"]["CollisionPoint"] = nil
-				end, 200, 1)
-			end
-			
 			if(force > 500) then
 				triggerServerEvent("ForceRemoveFromVehicle", localPlayer, localPlayer, force/1000)
 			end
@@ -9811,7 +8137,7 @@ function DrawPlayerMessage()
 				if(owner == getPlayerName(localPlayer)) then
 					if(getElementData(thePickup, "money")) then
 						local x,y,z = getElementPosition(thePickup)
-						create3dtext("$"..getElementData(thePickup, "money"), x,y,z+0.5, NewScale*3, 60, tocolor(54, 228, 70, 70), "pricedown")
+						create3dtext("$"..getElementData(thePickup, "money"), x,y,z+0.5, NewScale*3, 60, tocolor(54, 228, 70, 150), "pricedown")
 					end
 				end
 			end
@@ -9820,51 +8146,24 @@ function DrawPlayerMessage()
 				dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["BlackScreen"])
 			end
 
-			if(PData["Interface"]["Collections"]) then
-				local cposx, cposy = 100*NewScale, screenHeight/1.6
-				for name, dat in pairs(PData["DisplayCollection"]) do
-					dxDrawImage(cposx-(20*NewScale), cposy-(25*NewScale), 100*NewScale, 100*NewScale, VideoMemory["HUD"]["CollectionCircle"])
-
-					dxDrawImage(cposx, cposy-(5*NewScale), 60*NewScale, 40*NewScale, items[name][1])
-					dxDrawBorderedText(dat[1]-dat[2].."/"..dat[1], cposx+(165*NewScale), cposy+(35*NewScale), 0, 0, tocolor(255, 255, 255, 255), NewScale*1.5, "default-bold", "center", "top", nil, nil, nil, true)
-					cposy = cposy-(100*NewScale)
-				end
-			end
-
 			if(PData["Interface"]["Inventory"]) then
-				DrawPlayerInventory()
+				local sx, sy, font, tw, th, color
+				--[[ 
+					Уберешь потом PData["Interface"]["Full"]
+					когда сделаешь все зависимости
+					возможно помимо отображения работают какие либо вычисления
+				-- ]] 
+				if(PData["Interface"]["Full"] and PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer) and not isPlayerMapForced()) then
+					if(PData["BizControlName"]) then
+						dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(20, 25, 20, 245))
+						dxDrawBorderedText(PData["BizControlName"][2], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
+					elseif(BANKCTL) then
+						dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(25, 20, 20, 245))
+						dxDrawBorderedText(BANKCTL, 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
+					end
+				end	
 			end
 			
-			
-			dxDrawBorderedText(AddITimerText, 44*scalex, screenHeight-(60*scaley), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale, "sans")
-
-			if(ZonesDisplay[1]) then
-				if(not PData['Minimize']) then
-					if(PData["Interface"]["AreaName"]) then
-						dxDrawImage(screenWidth-(dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.15)-(25*scalex), screenHeight-(140*scaley), (dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.3), dxGetFontHeight(NewScale*4, "default-bold"), DrawLocation(ZonesDisplay[1][1]), 0, 0, 0, tocolor(255, 255, 255, ZonesDisplay[1][2]))
-					end
-				end
-
-				if(tonumber(ZonesDisplay[1][3])) then
-					if(ZonesDisplay[1][3] > 0) then
-						ZonesDisplay[1][3] = ZonesDisplay[1][3]-5
-						if(ZonesDisplay[1][3] <= 255) then
-							ZonesDisplay[1][2] = ZonesDisplay[1][3]
-						end
-					else
-						VideoMemory["HUD"]["LocationTarget"] = nil
-						table.remove(ZonesDisplay, 1)
-					end
-				elseif(ZonesDisplay[1][2] < 255) then
-					ZonesDisplay[1][2] = ZonesDisplay[1][2]+5
-				elseif(ZonesDisplay[1][2] == 255) then
-					if(ZonesDisplay[1][3] == "fast") then
-						ZonesDisplay[1][3] = 255
-					else
-						ZonesDisplay[1][3] = 1200
-					end
-				end
-			end
 			
 			if(PData['dialogPed']) then
 				CreateTarget(PData['dialogPed'])
@@ -10350,7 +8649,7 @@ function DrawPlayerMessage()
 					dxDrawText(Text(SkillName[Skill]),  490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
 					DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, Skill), nil, 150)
 				else
-					if(PData["fishpos"]) then
+					if(getElementData(localPlayer, "fishpos")) then
 						Skill = 157
 					else
 						Skill = 22
@@ -10438,6 +8737,7 @@ function DrawPlayerMessage()
 
 	if(PText["HUD"][8]) then
 		dxDrawRectangle(screenWidth/2-(150*scaley), screenHeight-(660*scalex), 300*NewScale, 150*NewScale, tocolor(233, 165, 58, 180))	
+
 		if(BindedKeys["enter"][3][1] == "loginPlayerEvent") then
 			local text = ""
 			for _ = 1, #BindedKeys["enter"][3][4] do
@@ -10860,12 +9160,14 @@ function StreamIn(restream)
 	elseif(getElementType(source) == "pickup") then
 		if(getElementData(source, "arr")) then
 			local arr = fromJSON(getElementData(source, "arr"))
-			local r,g,b = hex2rgb(GetQualityColor(arr[3]):sub(2,7))
-			local x,y,z = getElementPosition(source)
-			ObjectInStream[source] = {}
-			ObjectInStream[source]["light"] = createMarker(x,y,z,"corona",1, r,g,b,30)
-			setElementInterior(ObjectInStream[source]["light"], getElementInterior(source))
-			setElementDimension(ObjectInStream[source]["light"], getElementDimension(source))
+			if(arr["quality"]) then
+				local r,g,b = hex2rgb(GetQualityColor(arr["quality"]):sub(2,7))
+				local x,y,z = getElementPosition(source)
+				ObjectInStream[source] = {}
+				ObjectInStream[source]["light"] = createMarker(x,y,z,"corona",1, r,g,b,30)
+				setElementInterior(ObjectInStream[source]["light"], getElementInterior(source))
+				setElementDimension(ObjectInStream[source]["light"], getElementDimension(source))
+			end
 		end
 	elseif(getElementType(source) == "ped") then
 		local x,y,z = getElementPosition(source)
@@ -11033,9 +9335,10 @@ function clientPickupHit(thePlayer, matchingDimension)
 		local zone = getZoneName(x,y,z)
 		local model = getElementModel(source)
 		if(model == 954 or model == 1276 or model == 953) then
-			triggerServerEvent("AddCollections", localPlayer, localPlayer, model, getElementData(source, "id"))
-			destroyElement(source)
-			CheckZoneCollect(zone)
+			if(getElementData(source, "id")) then
+				triggerServerEvent("AddCollections", localPlayer, localPlayer, model, getElementData(source, "id"))
+				destroyElement(source)
+			end
 		end
 	end
 end
@@ -11166,26 +9469,13 @@ bindKey("tab", "down", OpenTAB)
 bindKey("tab", "up", CloseTAB)
 bindKey("h", "down", opengate)
 bindKey("p", "down", park)
-bindKey('1', 'down', inventoryBind)
-bindKey('2', 'down', inventoryBind)
-bindKey('3', 'down', inventoryBind)
-bindKey('4', 'down', inventoryBind)
-bindKey('5', 'down', inventoryBind)
-bindKey('6', 'down', inventoryBind)
-bindKey('7', 'down', inventoryBind)
-bindKey('8', 'down', inventoryBind)
-bindKey('9', 'down', inventoryBind)
-bindKey('0', 'down', inventoryBind)
-bindKey("i", "down", SetupBackpack)
 bindKey('mouse2', 'down', setDoingDriveby)
 bindKey("w", "down", breakMove)
 bindKey("a", "down", breakMove)
 bindKey("s", "down", breakMove)
 bindKey("d", "down", breakMove)
 bindKey("p", "down", autoMove)
-bindKey("r", "down", reload)
 bindKey("F1", "down", ShowInfoKey)
-bindKey("F5", "down", ShowLink)
 bindKey("F10", "down", resourcemap)
 bindKey("F11", "down", openmap)
 bindKey("F12", "down", hideinv)
