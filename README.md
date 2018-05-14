@@ -4,3 +4,4 @@
 Зависимости: 
 https://github.com/alexaxel705/PS2_Weather
 https://github.com/alexaxel705/Object_Image
+https://github.com/alexaxel705/Inventory
