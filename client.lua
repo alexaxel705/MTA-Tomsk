@@ -22,12 +22,10 @@ local COLOR = {
 
 local GroundMaterial = {}
 local ZonesDisplay = {}
-local ClosedZones = false
 local PedSyncObj = {}
 local ObjectInStream = {}
 local VehiclesInStream = {}
 local VehicleTrunk = {}
-local DestroyedBlip = {}
 local SkinList,SwitchButtonL,SwitchButtonR,SwitchButtonAccept,PEDChangeSkin = false
 local SkinFlag = true
 local PlayersMessage = {}
@@ -376,7 +374,7 @@ local trafficlight = {
  
 
 
-function dxDrawCircle( posX, posY, radius, width, angleAmount, startAngle, stopAngle, color, postGUI, text)
+function dxDrawCircleCustom( posX, posY, radius, width, angleAmount, startAngle, stopAngle, color, postGUI, text)
 	if(startAngle == stopAngle) then
 		return false
 	end
@@ -1275,54 +1273,6 @@ function SetZoneDisplay(zone)
 end
 addEvent("SetZoneDisplay", true)
 addEventHandler("SetZoneDisplay", getRootElement(), SetZoneDisplay)
-
-
-
-
-function UpdateZones(zones)
-	if(zones) then
-		if(not ClosedZones) then
-			ClosedZones = {}
-			local arr = fromJSON(zones)
-			for name, v in pairs(arr) do
-				if(v[5]) then -- Неизвестные значки
-					ClosedZones[name] = createRadarArea(v[1], v[2], v[3], v[4], 0, 0, 0,0)
-					for key,theBlips in pairs(PData['blip']) do
-						local x,y = getElementPosition(theBlips)
-						if(isInsideRadarArea(ClosedZones[name], x, y)) then
-							if(not DestroyedBlip[name]) then DestroyedBlip[name] = {} end
-							DestroyedBlip[name][#DestroyedBlip[name]+1] = {theBlips, getBlipIcon(theBlips)}
-							setBlipIcon(theBlips, 37)
-						end
-					end
-				else
-					ClosedZones[name] = createRadarArea(v[1], v[2], v[3], v[4], 0, 0, 0,255)
-					for key,theBlips in pairs(PData['blip']) do
-						local x,y = getElementPosition(theBlips)
-						if(not x) then
-							createRadarArea(v[1], v[2], 50,50, 255,0,0,255) 
-						end
-						if(isInsideRadarArea(ClosedZones[name], x, y)) then
-							if(not DestroyedBlip[name]) then DestroyedBlip[name] = {} end
-							DestroyedBlip[name][#DestroyedBlip[name]+1] = {getBlipIcon(theBlips), x, y, getElementData(theBlips, 'info')}
-							destroyElement(theBlips)
-							PData['blip'][key] = nil
-						end
-					end
-				end
-			end
-		end
-	end
-end
-addEvent("UpdateZones", true)
-addEventHandler("UpdateZones", getRootElement(), UpdateZones)
-
-
-
-
-
-
-
 
 
 
@@ -3022,12 +2972,15 @@ function wardrobe(arr,types)
 	setCameraMatrix(255.5, -41.4, 1002.5,  258.3, -41.8, 1002.5)
 	PEDChangeSkin=true
 
+	GTASound = playSound("http://109.227.228.4/engine/include/MTA/music/Bossa-Nova.mp3", true)
+	setSoundVolume(GTASound, 0.25)
+	
 	SwitchButtonL = guiCreateButton(0.5-(0.08), 0.8, 0.04, 0.04, "<-", true)
 	SwitchButtonR = guiCreateButton(0.5+(0.04), 0.8, 0.04, 0.04, "->", true)
 	if(wardprobeType == "house") then
 		SwitchButtonAccept = guiCreateButton(0.5-(0.04), 0.8, 0.08, 0.04, "ВЫБРАТЬ", true)
 		local curskin = tostring(getElementModel(localPlayer))
-		if(wardprobeArr[curskin]) then wardprobeArr[curskin] = wardprobeArr[curskin]+1 else wardprobeArr[curskin] = 1 end
+		if(not wardprobeArr[curskin]) then wardprobeArr[curskin] = 1 end
 		local i = 0
 		for v, key in pairs(wardprobeArr) do
 			i=i+1
@@ -3117,6 +3070,7 @@ function NewNextSkinEnter(_, _, closed)
 	unbindKey ("arrow_l", "down", NewNextSkinMinus) 
 	unbindKey ("arrow_r", "down", NewNextSkinPlus) 
 	unbindKey ("enter", "down", NewNextSkinEnter) 
+	stopSound(GTASound)
 	PEDChangeSkin = "play"
 	showCursor(false)
 	if(closed) then 
@@ -4053,7 +4007,7 @@ function updateWorld()
 						PData["Driver"]["jump"][8], PData["Driver"]["jump"][9], PData["Driver"]["jump"][10] = 0, 0, 0
 					end
 					PData["Driver"]["jump"][1] = PData["Driver"]["jump"][1]+0.5
-					if(PData["Driver"]["jump"][1] >= 20) then
+					if(PData["Driver"]["jump"][1] >= 10) then
 						RageInfo(Text("Отрыв от земли +{points}", {{"{points}", math.round(PData["Driver"]["jump"][1], 0)}}))
 						
 						local rx,ry,rz = getElementRotation(theVehicle)
@@ -4066,8 +4020,8 @@ function updateWorld()
 					end
 				else
 					if(PData["Driver"]["jump"]) then
-						if(PData["Driver"]["jump"][1] >= 20) then
-							AddRage(math.round(PData["Driver"]["jump"][1], 0))
+						if(PData["Driver"]["jump"][1] >= 10) then
+							AddRage(math.round(PData["Driver"]["jump"][1]*10, 0))
 							local x,y,z = getElementPosition(theVehicle)
 							local jumph = math.floor(PData["Driver"]["jump"][4]-z, 1)
 							if(jumph < 0) then jumph = jumph-jumph-jumph end
@@ -4174,39 +4128,6 @@ function updateWorld()
 							end
 						end
 					end
-				end
-			end
-		end
-	end
-	local x,y,z = getElementPosition(localPlayer)
-	if(PEDChangeSkin == "play") then
-		if(ClosedZones) then
-			local i,d = getElementInterior(localPlayer), getElementDimension(localPlayer)
-			if(i ~= 0 or d ~= 0) then return false end
-			for name, area in pairs(ClosedZones) do
-				if(isInsideRadarArea(area, x, y)) then
-					ClosedZones[name] = nil
-					DestroyRadar(name, area)
-					local add = {}
-					if(DestroyedBlip[name]) then
-						for _, arr in pairs(DestroyedBlip[name]) do
-							if(arr[3]) then -- Для обычных зон
-								local theBlips = CreateBlip(arr[2], arr[3], 0, 37, 0, 0, 0, 0, 0, 0, 300, arr[4])
-								local index = tostring(arr[2]..'_'..arr[3])
-								if(not DestroyedBlip[index]) then DestroyedBlip[index] = {} end
-								DestroyedBlip[index][#DestroyedBlip[index]+1] = {theBlips, arr[1]}
-								ClosedZones[index] = createRadarArea(arr[2]-40, arr[3]-40, 80, 80, 0, 0, 0,0)
-								add[index] = {arr[2]-40, arr[3]-40, 80, 80, index}
-							else -- Для неизвестных значков
-								setBlipIcon(arr[1], arr[2])
-								SetZoneDisplay(getElementData(arr[1], "info"))
-								local x,y,z = getPedBonePosition(localPlayer, 8)
-								sx,sy = getScreenFromWorldPosition(x,y,z)
-								--PData['ExpText'][#PData['ExpText']+1] = {"Открыта новая зона! "..getElementData(arr[1], "info"), sx,sy}
-							end
-						end
-					end
-					triggerServerEvent("SaveClosedZones", localPlayer, localPlayer, name, toJSON(add))
 				end
 			end
 		end
@@ -4539,17 +4460,30 @@ function UpdateTabEvent()
 	IDF, NF, RANG, PING = "","","",""
 	TABCurrent = 0
 	
-
-	
 	local thePlayers = getElementsByType("player")
+	for i, v in pairs(getElementData(root, "ChatOnline")) do
+		thePlayers[#thePlayers+1] = v
+	end
+	
+	
 	if(TabScroll > #thePlayers) then TabScroll = #thePlayers end
 	for slot = TabScroll, #thePlayers do
 		if(TABCurrent < MAXSCROLL) then
-			RANG=RANG.."".."\n"
-			IDF = IDF..getElementData(thePlayers[slot], "id").."\n"
-			NF = NF..getElementData(thePlayers[slot], "color")..getPlayerName(thePlayers[slot]):gsub('#%x%x%x%x%x%x', '').."\n"
-			PING = PING..getPlayerPing(thePlayers[slot]).."\n"
-			TABCurrent=TABCurrent+1
+			if(isElement(thePlayers[slot])) then
+				if(getElementData(thePlayers[slot], "color")) then
+					RANG=RANG.."".."\n"
+					IDF = IDF..getElementData(thePlayers[slot], "id").."\n"
+					NF = NF..getElementData(thePlayers[slot], "color")..getPlayerName(thePlayers[slot]):gsub('#%x%x%x%x%x%x', '').."\n"
+					PING = PING..getPlayerPing(thePlayers[slot]).."\n"
+					TABCurrent=TABCurrent+1
+				end
+			else
+				RANG=RANG.."".."\n"
+				IDF = IDF..(TABCurrent+1).."\n"
+				NF = NF.."#FFFFFF"..thePlayers[slot].."\n"
+				PING = PING.."0".."\n"
+				TABCurrent=TABCurrent+1
+			end
 		end
 	end
 end
@@ -4772,7 +4706,7 @@ function LoginClient(open)
 		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
 		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
 		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
-		outputChatBox("Обновление 20.12.2017: Улучшен инвентарь", 255, 150, 150,true)
+		outputChatBox("Обновление 29.05.2018: Мелкие исправления", 255, 150, 150,true)
 	else
 		PText["HUD"][8] = nil
 	end
@@ -4824,18 +4758,21 @@ function HUDPreload()
 	dxDrawRectangle(0,0,screenWidth, screenHeight/9, tocolor(0,0,0,255))
 	dxDrawRectangle(0,screenHeight-(screenHeight/9),screenWidth, screenHeight/9, tocolor(0,0,0,255))
 	dxSetBlendMode("blend")
-	
-	VideoMemory["HUD"]["BlackScreen"] = dxCreateRenderTarget(screenWidth, screenHeight, true)
-	dxSetRenderTarget(VideoMemory["HUD"]["BlackScreen"], true)
-	dxSetBlendMode("modulate_add")
-	dxDrawRectangle(0,0,screenWidth,screenHeight,tocolor(0,0,0,255))
-	dxSetBlendMode("blend")
 
 	dxSetRenderTarget()
 	return true
 end
 
 
+	
+local SoundsTheme = {
+	[1] = "http://109.227.228.4/engine/include/MTA/music/Blue-In-Green.mp3", 
+	[2] = "http://109.227.228.4/engine/include/MTA/music/Autumn-Leaves.mp3",
+	[3] = "http://109.227.228.4/engine/include/MTA/music/Almost-blue.mp3", 
+	[4] = "http://109.227.228.4/engine/include/MTA/music/GTA3.mp3", 
+	
+	
+}
 
 function StartLoad() -- Первый этап загрузки
 	setTime(12, 0)
@@ -4875,14 +4812,17 @@ function StartLoad() -- Первый этап загрузки
 	
 	if(HUDPreload()) then
 		PEDChangeSkin = "intro"
+
 		showChat(true)
 		fadeCamera(true, 2.0)
 		SetPlayerHudComponentVisible("all", false)
 
 		LoginClient(true)
-		PlaySFXSound(10)
+
+		GTASound = playSound(SoundsTheme[math.random(#SoundsTheme)], true)
+		setSoundVolume(GTASound, 0.5)
 		
-		setCameraMatrix(1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
+		call(getResourceFromName("Draw_Intro"), "StartIntro", "intro")
 	end
 end
 
@@ -4922,6 +4862,9 @@ function AuthComplete(CollectDat)
 	PText["INVHUD"][12] = nil
 	PText["INVHUD"][13] = nil
 	PText["INVHUD"][14] = nil
+	
+	
+	call(getResourceFromName("Draw_Intro"), "StopIntro")
 end
 addEvent("AuthComplete", true)
 addEventHandler("AuthComplete", localPlayer, AuthComplete)
@@ -4972,9 +4915,10 @@ addEventHandler("onClientVehicleStartEnter",getRootElement(),stopVehicleEntry)
 
 
 function CreateBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance, info)
-	PData['blip'][#PData['blip']+1] = createBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance)
-	setElementData(PData['blip'][#PData['blip']], 'info', Text(info))
-	return PData['blip'][#PData['blip']]
+	createBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance)
+	--PData['blip'][#PData['blip']+1] = createBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance)
+	--setElementData(PData['blip'][#PData['blip']], 'info', Text(info))
+	--return PData['blip'][#PData['blip']]
 end
 
 
@@ -6128,7 +6072,7 @@ function playerPressedKey(button, press)
 				if(PData['rage'] > 0) then
 					if(press) then
 						PData['ragetimer'] = setTimer(function() 
-							AddRage(-4)
+							AddRage(-2)
 						end, 50, 0)
 						triggerServerEvent("Acceleration", localPlayer, localPlayer)
 					else
@@ -6545,6 +6489,28 @@ function DrawOnClientRender()
 			end
 		end
 		
+	
+		local x,y,z = getElementPosition(localPlayer)
+		local zone = getZoneName(x,y,z, false)
+		if(zone == "Restricted Area") then
+			for key,thePlayer in pairs(getElementsByType "player") do
+				local team = getPlayerTeam(thePlayer)
+				if(team) then
+					local r,g,b = getTeamColor(team)
+					local px,py,pz = getElementPosition(thePlayer)
+					
+					local xp = (px/3000)*1
+					local yp = (py/3000)*1
+					local zp = (pz/3000)*1
+					
+					local mx2,my2,mz2 = 220-(1.7*yp), 1822.8+(1.7*xp), 6.5+(zp)
+					dxDrawLine3D(220, 1822.8, 12.5,mx2,my2,mz2, tocolor(r,g,b,180))
+					
+					--create3dtext(getPlayerName(thePlayer), mx2,my2,mz2+0.1, scale, 60, tocolor(r,g,b,180), "default-bold")
+
+				end
+			end
+		end
 		
 		
 		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
@@ -6725,33 +6691,6 @@ addEvent("FadeOut", true)
 addEventHandler("FadeOut", localPlayer, FadeOut)
 
 
-
-function DrawTriangle(a,b,c,d,color,revers)
-	if(d > b) then
-		b,d = b-(1*scaley), d+(1*scaley)
-		for i=0, d-b do
-			if(revers) then
-				dxDrawLine(a,b+i,c,d,color, 1)
-			else
-				dxDrawLine(a,b,c,d-i,color, 1)
-			end
-		end
-	else
-		d,b,a = d-(1*scaley), b+(1*scaley),a-(1*scalex)
-		for i=0, b-d do
-			if(revers) then
-				dxDrawLine(c,d+i,a,b,color, 1)
-			else
-				dxDrawLine(c,d,a,b-i,color, 1)
-			end
-		end
-	end
-end
-
-
-function DrawZast(x,y,w,h,zahx,zahy,target)
-	dxDrawImageSection(x,y, w,h , zahx,zahy, w,h, target)
-end
 
 
 
@@ -7256,7 +7195,6 @@ function normalspeed(h,m,weather)
 	if(PEDChangeSkin == "intro") then -- Костыль
 		setCameraMatrix(1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
 	end
-	
 	if(isTimer(DrugsTimer)) then
 		killTimer(DrugsTimer)
 	end
@@ -7323,26 +7261,6 @@ function PlayerNewZone(zone, city, updateweather, interior)
 	triggerServerEvent("ZoneInfo", localPlayer, localPlayer, zone)
 end
 addEventHandler("PlayerNewZone", root, PlayerNewZone)
-
-
---[[
-	if(PlayerZone == "Restricted Area") then
-		for key,thePlayer in pairs(getElementsByType "player") do
-			local team = getPlayerTeam(thePlayer)
-			if(team) then
-				local r,g,b = getTeamColor(team)
-				local px,py,pz = getElementPosition(thePlayer)
-				
-				local xp = (px/3000)*1
-				local yp = (py/3000)*1
-				local zp = (pz/3000)*1
-				
-				local mx2,my2,mz2 = 220-(1.7*yp), 1822.8+(1.7*xp), 6.5+(zp)
-				dxDrawLine3D(220, 1822.8, 12.5,mx2,my2,mz2, tocolor(r,g,b,180))
-			end
-		end
-	end
---]]
 
 
 
@@ -7797,7 +7715,6 @@ function DrawProgressBar(x,y,count,bool,size)
 end
 
 
-
 function PlaySFXSound(event)
 	if(event==1) then
 		playSFX("script", 146, 4, false)--Вступление в картель
@@ -7816,8 +7733,6 @@ function PlaySFXSound(event)
 	elseif(event==9) then
 		playSFX("genrl", 131, 2, false)--engine starter
 	elseif(event==10) then
-		GTASound = playSound("GTA3.mp3")
-		setSoundVolume(GTASound, 0.5)
 	elseif(event==11) then 
 		playSFX("script", 151, 0, false) -- Еда
 	elseif(event==12) then
@@ -7920,21 +7835,6 @@ end
 
 
 
---1,2,5,6 - размеры x,y
-local screenSaver = {
-	{340*scalex, 330*scaley, 165*scalex, 150*scaley, screenWidth/2, 0, true, true, 0},
-	{340*scalex, 500*scaley, 90*scalex, 220*scaley, 0, 0, true, true, 0},
-	{340*scalex, 720*scaley, 100*scalex, 200*scaley, 0, screenHeight, true, true, 0},
-	{460*scalex, 720*scaley, 175*scalex, 120*scaley, screenWidth/2, screenHeight, true, true, 0},
-	{470*scalex, 500*scaley, 165*scalex, 200*scaley, screenWidth, 0, true, true, 0},
-}
-
-
-
-
-
-
-
 
 
 
@@ -7948,8 +7848,6 @@ addEventHandler("onClientVehicleCollision", root,
          end
     end
 )
-
-
 
 
 
@@ -7981,7 +7879,7 @@ function DrawPlayerMessage()
 		mx,my,mz = GetCoordOnMap(x,y,z)
 		sx,sy = getScreenFromWorldPosition(mx,my,mz)
 		if(sx and sy) then
-			dxDrawCircle(sx,sy, 6*NewScale, 2*NewScale, 1, 0, 360, tocolor(255,24,20,150))
+			dxDrawCircle(sx,sy, 12*NewScale, 0, 360, tocolor(255,24,20,150))
 			if(getDistanceBetweenPoints2D(mx,my,mousex,mousey) < 1) then
 				Create3DTextOnMap("ТЫ",mousex*50,mousey*50,mousez,NewScale*2,2000,tocolor(230,230,230,255),"default-bold")
 			end
@@ -7993,7 +7891,7 @@ function DrawPlayerMessage()
 			mx,my,mz = GetCoordOnMap(x,y,z)
 			sx,sy = getScreenFromWorldPosition(mx,my,mz)
 			if(sx and sy) then
-				dxDrawCircle(sx,sy, 6*NewScale, 6*NewScale, 1, 0, 360, tocolor(255,24,20,150))
+				dxDrawCircle(sx,sy, 12*NewScale, 0, 360, tocolor(255,24,20,150))
 			end
 		
 		end
@@ -8143,7 +8041,7 @@ function DrawPlayerMessage()
 			end
 		
 			if(LainOS) then
-				dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["BlackScreen"])
+				dxDrawRectangle(0,0,screenWidth,screenHeight,tocolor(0,0,0,255))
 			end
 
 			if(PData["Interface"]["Inventory"]) then
@@ -8515,31 +8413,31 @@ function DrawPlayerMessage()
 					sx = screenWidth-(150*scalex)
 					sy = screenHeight-(247*scaley)
 					local TS = NewScale
-					dxDrawCircle(sx,sy, 88*TS, 23*TS, 1, 0, 360, tocolor(0,0,0,5))
-					dxDrawCircle(sx,sy, 100*TS, 5*TS, 4, 120, 120+RedRPMZone, tocolor(0,0,0,200))
-					dxDrawCircle(sx,sy, 100*TS, 5*TS, 4, 120+RedRPMZone, 345, tocolor(255,51,51,200))
-					dxDrawCircle(sx,sy, 100*TS, 5*TS, 4, 120, 120+math.floor(SlowTahometer), tocolor(255,255,255,255))
+					dxDrawCircle(sx,sy, 108*TS, 0, 360, tocolor(0,0,0,50))
+					dxDrawCircleCustom(sx,sy, 100*TS, 5*TS, 4, 120, 120+RedRPMZone, tocolor(0,0,0,200))
+					dxDrawCircleCustom(sx,sy, 100*TS, 5*TS, 4, 120+RedRPMZone, 345, tocolor(255,51,51,200))
+					dxDrawCircleCustom(sx,sy, 100*TS, 5*TS, 4, 120, 120+math.floor(SlowTahometer), tocolor(255,255,255,255))
 					if(getVehicleNitroCount(theVehicle)) then
-						dxDrawCircle(sx,sy, 120*TS, 9*TS, 1, 118, 158, tocolor(0,0,0,20))
-						dxDrawCircle(sx,sy, 120*TS, 5*TS, 4, 120, 157, tocolor(100,100,100,200))
-						dxDrawCircle(sx,sy, 120*TS, 5*TS, 4, 120, 120+(3.7*getVehicleNitroCount(theVehicle)), tocolor(40,200,255,160))
+						dxDrawCircleCustom(sx,sy, 120*TS, 9*TS, 1, 118, 158, tocolor(0,0,0,20))
+						dxDrawCircleCustom(sx,sy, 120*TS, 5*TS, 4, 120, 157, tocolor(100,100,100,200))
+						dxDrawCircleCustom(sx,sy, 120*TS, 5*TS, 4, 120, 120+(3.7*getVehicleNitroCount(theVehicle)), tocolor(40,200,255,160))
 					end
 					
-					dxDrawCircle(sx,sy, 120*TS, 9*TS, 1, 158, 345, tocolor(0,0,0,20)) -- тут
-					dxDrawCircle(sx,sy, 120*TS, 5*TS, 4, 160, 344, tocolor(100,100,100,200))
-					dxDrawCircle(sx,sy, 120*TS, 5*TS, 4, 160, 160+(184*(PData['rage']/1000)), tocolor(255,200,40,160))
+					dxDrawCircleCustom(sx,sy, 120*TS, 9*TS, 1, 158, 345, tocolor(0,0,0,20))
+					dxDrawCircleCustom(sx,sy, 120*TS, 5*TS, 4, 160, 344, tocolor(100,100,100,200))
+					dxDrawCircleCustom(sx,sy, 120*TS, 5*TS, 4, 160, 160+(184*(PData['rage']/1000)), tocolor(255,200,40,160))
 					
-					dxDrawCircle(sx,sy, 90*TS, 2*TS, RPMMeter, 120, 345, tocolor(255,255,255,255), nil, true)
-					dxDrawCircle(sx,sy, 87*TS, 1*TS, 0.8, 120, 345, tocolor(255,255,255,255))
+					dxDrawCircleCustom(sx,sy, 90*TS, 2*TS, RPMMeter, 120, 345, tocolor(255,255,255,255), nil, true)
+					dxDrawCircleCustom(sx,sy, 87*TS, 1*TS, 0.8, 120, 345, tocolor(255,255,255,255))
 					
-					dxDrawCircle(sx,sy, 30*TS, 35*TS, 1, 0, 360, tocolor(0,0,0,20))
+					dxDrawCircle(sx,sy, 65*TS, 0, 360, tocolor(0,0,0,150))
 					dxDrawText(getVehicleGear(theVehicle, PData["Driver"]["Handling"]["engineAcceleration"], PData["Driver"]["Handling"]["dragCoeff"], PData["Driver"]["Handling"]["numberOfGears"]), sx,sy-(30*scaley),sx,sy-(30*scaley), tocolor(255,255,255,255), scale*2.5, "default-bold", "center", "center")
 
 					if(getElementData(theVehicle, "Fuel")) then
 						local handlingTable = getOriginalHandling(getElementModel(theVehicle))
-						dxDrawCircle(sx,sy, 90*TS, 4*TS, 1, 10, 90, tocolor(0,0,0,60))
+						dxDrawCircleCustom(sx,sy, 90*TS, 4*TS, 1, 10, 90, tocolor(0,0,0,60))
 						local maxfuel = math.floor(handlingTable["mass"]/30)
-						dxDrawCircle(sx,sy, 90*TS, 4*TS, 1, 10+math.floor(80-(80*(getElementData(theVehicle, "Fuel")/maxfuel))), 90, tocolor(255,255,255,60))
+						dxDrawCircleCustom(sx,sy, 90*TS, 4*TS, 1, 10+math.floor(80-(80*(getElementData(theVehicle, "Fuel")/maxfuel))), 90, tocolor(255,255,255,60))
 					end
 
 					dxDrawText(string.format("%03.f", VehicleSpeed), sx,sy+(15*scaley),sx,sy+(15*scaley), tocolor(120,120,120,255), scale*1.25, "default-bold", "center", "center")
@@ -8611,8 +8509,10 @@ function DrawPlayerMessage()
 			end
 		else
 			for i, v in pairs (teams) do
-				dxDrawBorderedText(getTeamGroupColor(v)..Text(getTeamGroup(v)), 0, 530*scaley+(FH*(i-1)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
-				DrawProgressBar(screenWidth-160*scalex, 530*scaley+(FH*(i-1)), 500+(getTeamVariable(v)/2), nil, 150)
+				if(getTeamVariable(v)) then
+					dxDrawBorderedText(getTeamGroupColor(v)..Text(getTeamGroup(v)), 0, 530*scaley+(FH*(i-1)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
+					DrawProgressBar(screenWidth-160*scalex, 530*scaley+(FH*(i-1)), 500+(getTeamVariable(v)/2), nil, 150)
+				end
 			end
 		end
 		
@@ -8638,6 +8538,7 @@ function DrawPlayerMessage()
 				count=count+1
 				
 				local Skill = false
+				local theVehicle = getPedOccupiedVehicle(localPlayer)
 				if(theVehicle) then
 					local VehType = GetVehicleType(theVehicle)
 					Skill = VehTypeSkill[VehType]
@@ -8672,53 +8573,6 @@ function DrawPlayerMessage()
 		end
 	elseif(PEDChangeSkin == "nowTime") then
 		dxDrawRectangle(0,0,screenWidth, screenHeight, tocolor(255,255,255,255))
-	elseif(PEDChangeSkin == "intro") then
-		dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["BlackScreen"])
-		dxUpdateScreenSource(screenSource)    
-		local speed2 = 100
-		for i, key in pairs(screenSaver) do
-			sx = (key[1]*(key[9]/speed2))+(key[5]-(key[5]*(key[9]/speed2)))
-			local sy = (key[2]*(key[9]/speed2))+(key[6]-(key[6]*(key[9]/speed2)))
-			if(key[8]) then
-				DrawZast(sx,sy, key[3], key[4], key[1],key[2], screenSource)
-				
-				if(key[9] < speed2) then
-					key[9]=key[9]+1
-				else
-					key[8] = false
-					key[7] = false
-				end
-			else
-				dxDrawBorderedText("#FF9800"..Text("Благодарности").."\n#FFFFFFCrystalMV #69749Abone_attach\n#FFFFFFPioner #69749Aперевод на азербайджанский\n#FFFFFF*Vk*Ricci #69749Aперевод на английский\n\n#C7843C"..Text("Над сервером работали").."#FFFFFF\n800 #194299real_life@sibmail.com#FFFFFF 2006-2011\nTanker #194299tankerktv@mail.ru#FFFFFF 2006-2009\nDark_ALEX #194299dark_alex@sibmail.com#FFFFFF 2009-2017\nMishel' #194299laym101@mail.com#FFFFFF 2017", screenWidth, screenHeight-(340*NewScale), screenWidth-(30*NewScale), screenHeight, tocolor(103,104,107, 255), NewScale*2, "default-bold", "right", "top", false, false, false, true)
-				
-				local x2, y2, z2, lx, ly, lz, rz = getCameraMatrix ()
-				setCameraMatrix (x2+0.0005, y2+0.0005, z2+0.00005, lx+0.0005, ly+0.0005, lz)
-				DrawZast(key[1],key[2], key[3], key[4], key[1],key[2], screenSource)
-				sx = key[1]
-				sy = key[2]
-				if(key[9] > 0) then
-					key[9]=key[9]-0.1
-				else
-					setCameraMatrix (1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
-					key[8] = true
-					key[7] = true
-				end
-			end
-			
-			if(i == 1) then
-				DrawTriangle(sx+(key[3])-(130*scalex), sy, sx+(key[3]), sy+key[4], tocolor(0,0,0,255))
-			elseif(i == 4) then
-				DrawTriangle(sx+(key[3])-(10*scalex), sy, sx+(key[3]), sy+key[4], tocolor(0,0,0,255))
-			elseif(i == 5) then
-				DrawTriangle(sx+(50*scalex), sy, sx+(key[3]), sy+key[4]-(30*scaley), tocolor(0,0,0,255))
-				DrawTriangle(sx+key[3]-(20*scalex), sy+key[4]-(60*scaley), sx+(key[3])-(10*scalex), sy+key[4], tocolor(0,0,0,255))
-				dxDrawRectangle(sx+key[3]-(10*scalex), sy+key[4]-(60*scaley), 30*scalex, 61*scaley, tocolor(0,0,0,255))
-			elseif(i == 3) then
-				DrawTriangle(sx, sy+(20*scaley), sx+(key[3]), sy, tocolor(0,0,0,255))
-			elseif(i == 2) then
-				DrawTriangle(sx, sy+(key[4]), sx+(key[3]), sy+(key[4])-(17*scaley), tocolor(0,0,0,255), true)
-			end
-		end
 	elseif(PEDChangeSkin == "cinema") then
 		dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["Cinema"])
 	else
@@ -9099,6 +8953,17 @@ end
 
 
 
+
+
+
+function GetItemQuality(item)
+	return item["quality"] or 550
+end
+
+
+
+
+
 function StreamIn(restream)
 	if(getElementType(source) == "player") then
 		if(not StreamData[source]) then
@@ -9160,14 +9025,12 @@ function StreamIn(restream)
 	elseif(getElementType(source) == "pickup") then
 		if(getElementData(source, "arr")) then
 			local arr = fromJSON(getElementData(source, "arr"))
-			if(arr["quality"]) then
-				local r,g,b = hex2rgb(GetQualityColor(arr["quality"]):sub(2,7))
-				local x,y,z = getElementPosition(source)
-				ObjectInStream[source] = {}
-				ObjectInStream[source]["light"] = createMarker(x,y,z,"corona",1, r,g,b,30)
-				setElementInterior(ObjectInStream[source]["light"], getElementInterior(source))
-				setElementDimension(ObjectInStream[source]["light"], getElementDimension(source))
-			end
+			local r,g,b = hex2rgb(GetQualityColor(GetItemQuality(arr)):sub(2,7))
+			local x,y,z = getElementPosition(source)
+			ObjectInStream[source] = {}
+			ObjectInStream[source]["light"] = createMarker(x,y,z,"corona",1, r,g,b,30)
+			setElementInterior(ObjectInStream[source]["light"], getElementInterior(source))
+			setElementDimension(ObjectInStream[source]["light"], getElementDimension(source))
 		end
 	elseif(getElementType(source) == "ped") then
 		local x,y,z = getElementPosition(source)

@@ -796,4 +796,18 @@
     <h794 x="2039.6" y="2766.5" z="10.8" price="750000" locked="1" type="Дом 2 этаж (богатый)" int="Burglary House 15"></h794>
     <h795 x="2049.7" y="2764.3" z="10.8" price="750000" locked="1" type="Дом 2 этаж (богатый)" int="Modern safe house"></h795>
     <h796 x="1929.5" y="2774.3" z="10.8" price="890000" locked="1" type="Дом 2 этаж (богатый)" int="Safe House 18"></h796>
+	<h797 x="1695.5" y="-2125.8" z="13.8" price="170000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h797>
+    <h798 x="1673.7" y="-2122.4" z="14.1" price="155000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h798>
+    <h799 x="1667.5" y="-2106.9" z="14.1" price="165000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h799>
+    <h800 x="1684.8" y="-2098.2" z="13.8" price="200000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" Garage="[ [ [ 1699.1, -2089.2, 13.5, 181.6, 1 ] ] ]"></h800>
+    <h801 x="1711.6" y="-2101.2" z="14" price="180000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h801>
+    <h802 x="1734" y="-2098" z="14" price="160000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h802>
+    <h803 x="1762.4" y="-2102" z="13.9" price="165000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h803>
+    <h804 x="1781.4" y="-2101.3" z="14.1" price="155000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h804>
+    <h805 x="1801.9" y="-2098.9" z="14" price="165000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h805>
+    <h806 x="1804.2" y="-2124.9" z="13.9" price="220000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h806>
+    <h807 x="1782.2" y="-2126.5" z="14.1" price="190000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h807>
+    <h808 x="1761.2" y="-2125.5" z="14.1" price="170000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h808>
+    <h809 x="1734.7" y="-2130.3" z="14" price="140000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h809>
+    <h810 x="1715.1" y="-2125.4" z="14.1" price="150000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h810>
 </house>
