@@ -1076,6 +1076,8 @@ local WeaponTiming = {
 local WeaponNamesArr = {
 	["АК-47"] = 30,
 	["Граната"] = 16,
+	["Газовая граната"] = 17, 
+	["Взрывчатка"] = 39,
 	["Молотов"] = 18,
 	["Кольт 45"] = 22,
 	["USP-S"] = 23,
@@ -1096,10 +1098,15 @@ local WeaponNamesArr = {
 	["Бита"] = 5,
 	["Дубинка"] = 3,
 	["Лопата"] = 6,
+	["Кастет"] = 1,
+	["Миниган"] = 38,
+	["Цветы"] = 14, 
+	["Трость"] = 15, 
 	["Камера"] = 43,
 	["Огнетушитель"] = 42,
 	["Спрей"] = 41,
 	["Базука"] = 35,
+	["Ракетная установка"] = 36, 
 	["Огнемет"] = 37,
 	["Бензопила"] = 9,
 	["Нож"] = 4,
@@ -2340,11 +2347,17 @@ function MarkerHit(hitPlayer, Dimension)
 					end
 				end
 			end
+		else 
+			local Attached = getElementParent(source)
+			if(Attached) then
+				if(getElementData(Attached, "gates")) then
+					triggerServerEvent("opengate", localPlayer, Attached, "Enter")
+				end
+			end
 		end
 	end
 end
 addEventHandler("onClientMarkerHit", getRootElement(), MarkerHit)
-
 
 
 function markerLeave(hitPlayer, Dimension)
@@ -2353,6 +2366,13 @@ function markerLeave(hitPlayer, Dimension)
 		if(getElementData(source, "TriggerBot")) then
 			local thePed = FoundPedByTINF(source)
 			triggerServerEvent("DialogBreak", localPlayer, localPlayer, false, thePed)
+		else 
+			local Attached = getElementParent(source)
+			if(Attached) then
+				if(getElementData(Attached, "gates")) then
+					triggerServerEvent("opengate", localPlayer, Attached, "Leave")
+				end
+			end
 		end
 	end
 end
@@ -3094,6 +3114,10 @@ function NewNextSkinEnter(_, _, closed)
 	guiSetVisible(SwitchButtonAccept, false)
 	guiSetVisible(SwitchButtonL, false)
 	guiSetVisible(SwitchButtonR, false)
+	PlayerChangeSkinTeam=""
+	PlayerChangeSkinTeamRang=""
+	PlayerChangeSkinTeamRespect=""
+	PlayerChangeSkinTeamRespectNextLevel=""
 end
 
 
@@ -3541,6 +3565,13 @@ local WardrobeObject = {
 
 
 
+function getPointFromDistanceRotation(x, y, dist, angle)
+    local a = math.rad(90 - angle);
+    local dx = math.cos(a) * dist;
+    local dy = math.sin(a) * dist;
+    return x+dx, y+dy;
+end
+
 
 
 
@@ -3549,12 +3580,21 @@ local ActualBones = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33,
 
 
 
+function GetTurretPosition(x,y,z, vx,vy,vz,rz)
+	local dist = getDistanceBetweenPoints3D(vx, vy, vz, x,y,z)/50
+	local angle = math.rad(z-vz)/dist
+	local vry = GetMarrot(findRotation(x,y,vx,vy),rz-180)
+	return -math.rad(vry), angle
+end
+
+
+local FirePos = {}
 function UpdateBot()
 	for _,thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
 		local theVehicle = getPedOccupiedVehicle(thePed)
 		local attacker = GetElementAttacker(thePed)
 		if(theVehicle) then
-			local x,y,z = getElementPosition(theVehicle)
+			local vx,vy,vz = getElementPosition(theVehicle)
 			local rx,ry,rz = getElementRotation(theVehicle)
 			local brakes = false
 			local path = false
@@ -3572,7 +3612,7 @@ function UpdateBot()
 
 				nextpath = {arr[5],arr[6],arr[7]}
 				
-				local distance = getDistanceBetweenPoints2D(path[1], path[2], x, y)
+				local distance = getDistanceBetweenPoints2D(path[1], path[2], vx, vy)
 				if(distance < PointDistance) then
 					if(arr[4]) then
 						if(trafficlight[tostring(getTrafficLightState())] == arr[4]) then
@@ -3593,7 +3633,7 @@ function UpdateBot()
 					local tmpx, tmpy, tmpz = getPointInFrontOfPoint(arr[5],arr[6],arr[7], rz+90, 20) -- Создает плавность до того как станет известно положение следующей точки
 					
 					nextpath = {tmpx, tmpy, tmpz}
-					distance = getDistanceBetweenPoints2D(path[1], path[2], x,y)
+					distance = getDistanceBetweenPoints2D(path[1], path[2], vx,vy)
 					if(distance < PointDistance) then
 						brakes = true
 					end
@@ -3602,7 +3642,7 @@ function UpdateBot()
 								
 				if(not attacker) then-- Ближнее торможение аля пробки
 					local x2,y2,z2 = getPositionInFront(theVehicle, 6)
-					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(x,y,z, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
+					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vx,vy,vz, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
 					if(hitElement) then
 						if(getElementType(hitElement) == "vehicle") then
 							brakes = true
@@ -3613,17 +3653,68 @@ function UpdateBot()
 					end
 				end
 			else
+				if(getElementModel(theVehicle) == 407) then
+					if(not FirePos[thePed]) then
+						for _,object in ipairs(getElementsByType("object", getRootElement(), true)) do 
+							if(getElementData(object, "fireid")) then
+								FirePos[thePed] = object
+								if(not getElementData(FirePos[thePed], "tick")) then 
+									setElementData(FirePos[thePed], "tick", 0) 
+								end
+							end
+						end
+					end
+				
+					if(FirePos[thePed]) then
+						if(not isElement(FirePos[thePed])) then
+							FirePos[thePed] = nil
+						else
+							attacker = FirePos[thePed]
+							local fx,fy,fz = getElementPosition(FirePos[thePed])
+							local _,_,rz = getElementRotation(theVehicle)
+							local tt1, tt2 = GetTurretPosition(fx,fy,fz, vx,vy,vz,rz)
+							setVehicleTurretPosition(theVehicle, tt1, tt2)
+							
+							setPedControlState(thePed, "vehicle_fire", true)
+							
+							setElementData(FirePos[thePed], "tick", getElementData(FirePos[thePed], "tick")+1)
+							
+							if(getElementData(FirePos[thePed], "tick") < 4) then
+								local ox, oy, oz = getElementPosition(FirePos[thePed])
+								local effect = createEffect("waterfall_end", ox, oy, oz+1)
+								setElementParent(effect, FirePos[thePed])
+							end
+							
+							if(getElementData(FirePos[thePed], "tick") >= 150) then
+								triggerServerEvent("RemoveFire", localPlayer, localPlayer, FirePos[thePed])
+								FirePos[thePed] = nil
+							end
+						end
+					else
+						FirePos[thePed] = nil
+						setVehicleSirensOn(theVehicle, false)
+						setVehicleTurretPosition(theVehicle, 0, 0)
+						setPedControlState(thePed, "vehicle_fire", false)
+						triggerServerEvent("SetDynamicBot", localPlayer, thePed, vx, vy, vz)
+					end
+				end
+				
 				if(attacker) then
 					local x2,y2,z2 = getElementPosition(attacker)
 					path = {x2,y2,z2}
 					local tmpx, tmpy, tmpz = getPointInFrontOfPoint(x2,y2,z2, rz+90, 20) -- Создает плавность до того как станет известно положение следующей точки
 					nextpath = {tmpx, tmpy, tmpz}
+					
+					
+					if(getDistanceBetweenPoints2D(x2,y2, vx, vy) < 20) then
+						brakes = true
+					end
 				end
 			end
 			
 			if(path) then
-				local vx, vy, vz = getElementVelocity(theVehicle)
-				local s = (vx^2 + vy^2 + vz^2)^(0.5)*156
+				local vxv, vyv, vzv = getElementVelocity(theVehicle)
+				local s = (vxv^2 + vyv^2 + vzv^2)^(0.5)*156
 
 				
 				local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)
@@ -3641,7 +3732,7 @@ function UpdateBot()
 					setPedControlState(thePed, "handbrake", true)
 					setElementVelocity (theVehicle, 0,0,0)
 				else
-					local rot = GetMarrot(findRotation(x,y,path[1], path[2]),rz)
+					local rot = GetMarrot(findRotation(vx,vy,path[1], path[2]),rz)
 					if(rot > 80) then 
 						if(rot > 100) then mreverse = true end
 						rot = 20 
@@ -4147,14 +4238,14 @@ function checkKey()
 				PData["LVLUPSTAMINA"] = PData["LVLUPSTAMINA"]-1
 				if(PData["LVLUPSTAMINA"] == 0) then
 					triggerServerEvent("StaminaOut", localPlayer, true)
-					PData["LVLUPSTAMINA"]=10
+					PData["LVLUPSTAMINA"] = 10
 				end
 			end
 		end
 		if(PData["stamina"] <= 0) then
 			triggerServerEvent("StaminaOut", localPlayer)
 			setPedControlState(localPlayer, "sprint", false)
-			PData["ShakeLVL"] = PData["ShakeLVL"]+5
+			PData["ShakeLVL"] = PData["ShakeLVL"]+3
 		end
 		
 		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
@@ -4655,7 +4746,8 @@ function updateCamera()
 	
 	
 	if(PData["ResourceMap"]) then
-		setSkyGradient(170,103,0 ,170,103,0) -- ,170,103,0
+		--setSkyGradient(170,103,0 ,170,103,0)
+		setSkyGradient(0,0,0 ,0,0,0)
 	end
 	
 	
@@ -4706,7 +4798,7 @@ function LoginClient(open)
 		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
 		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
 		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
-		outputChatBox("Обновление 29.05.2018: Мелкие исправления", 255, 150, 150,true)
+		outputChatBox("Обновление 23.12.2018: Добавлены уникальные прыжки, добавлено 19 новых гоночных трасс", 255, 150, 150,true)
 	else
 		PText["HUD"][8] = nil
 	end
@@ -4821,13 +4913,23 @@ function StartLoad() -- Первый этап загрузки
 
 		GTASound = playSound(SoundsTheme[math.random(#SoundsTheme)], true)
 		setSoundVolume(GTASound, 0.5)
-		
-		call(getResourceFromName("Draw_Intro"), "StartIntro", "intro")
 	end
 end
 
 function displayLoadedRes(res)
 	if(getResourceName(res) == "228") then
+		if(tonumber(getElementData(root, "ServerTime")) < 696902400) then
+			txd = engineLoadTXD("models/copcarvg.txd")
+			engineImportTXD(txd, 596)
+			dff = engineLoadDFF("models/copcarvg.dff")
+			engineReplaceModel(dff, 596)
+			
+			txd = engineLoadTXD("models/copcarvg.txd")
+			engineImportTXD(txd, 597)
+			dff = engineLoadDFF("models/copcarvg.dff")
+			engineReplaceModel(dff, 597)
+		end
+		
 		StartLoad()
 	end
 end
@@ -4928,9 +5030,7 @@ CreateBlip(824, -1588, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерска�
 CreateBlip(672, -496, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерская")
 CreateBlip(2080, 2123, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерская")
 CreateBlip(-1450, 2592, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерская")
-
-
-
+CreateBlip(-2571, 246, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерская")
 CreateBlip(2067, -1780, 0, 39, 0, 0, 0, 0, 0, 0, 300, "Тату салон")
 CreateBlip(2095, 2123, 0, 39, 0, 0, 0, 0, 0, 0, 300, "Тату салон")
 CreateBlip(-2491, -39, 0, 39, 0, 0, 0, 0, 0, 0, 300, "Тату салон")
@@ -5089,6 +5189,22 @@ CreateBlip(2441, 2065, 0, 49, 0, 0, 0, 0, 0, 0, 300, "The Craw Bar")
 
 
 
+function onClientColShapeHit(thePlayer, matchingDimension)
+	if getElementType(thePlayer) == "player" then 
+		if(thePlayer == localPlayer) then
+			if(getElementData(source, "type")) then
+				if(getElementData(source, "type") == "PetrolFuelCol") then
+					if(getPedOccupiedVehicle(localPlayer)) then
+						triggerServerEvent("PetrolFuelColEnter", localPlayer, localPlayer, source)
+					end
+				end
+			end
+		end
+	end	
+end
+addEventHandler("onClientColShapeHit", root, onClientColShapeHit)
+
+
 function RespectMessage(group, count) 
 	if(PData["wasted"]) then
 		SpawnAction[#SpawnAction+1] = {"RespectMessage", localPlayer, group, count}
@@ -5176,7 +5292,6 @@ addEvent("MissionCompleted", true)
 addEventHandler("MissionCompleted", localPlayer, MissionCompleted)
 
 
-
 function ToolTip(message)
 	if(message ~= ToolTipText) then
 		playSoundFrontEnd(11)
@@ -5245,17 +5360,25 @@ addEventHandler("PedDialog", localPlayer, PedDialog)
 
 
 function PrisonSleepEv()
-	local x,y,z = getElementPosition(PrisonSleep)
-	local rx,ry,rz = getElementRotation(PrisonSleep)
-	triggerServerEvent("PrisonSleep", localPlayer, x,y,z,rz)
-	fadeCamera(false, 4.0, 0, 0, 0)
-	bindKey("space", "down", StopSleep)
-	SleepTimer = setTimer(function()
-		SleepSound("script",  39, math.random(0,114), false)
-	end, 5000, 0)
-	
-	PText["HUD"][2] = {Text("Нажми {key} чтобы встать", {{"{key}", COLOR["KEY"]["HEX"].."Space#FFFFFF"}}), screenWidth, screenHeight-(150*scalex), 0, 0, tocolor(255, 255, 255, 255), scale*2, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
+	local x,y, _ = getElementPosition(localPlayer)
+	local x2,y2,_ = getElementPosition(PrisonSleep)
+	local Dist = getDistanceBetweenPoints2D(x,y,x2,y2)
 
+	if(Dist < 3) then
+		local x,y,z = getElementPosition(PrisonSleep)
+		local rx,ry,rz = getElementRotation(PrisonSleep)
+		triggerServerEvent("PrisonSleep", localPlayer, x,y,z,rz)
+		fadeCamera(false, 4.0, 0, 0, 0)
+		bindKey("space", "down", StopSleep)
+		SleepTimer = setTimer(function()
+			SleepSound("script",  39, math.random(0,114), false)
+		end, 5000, 0)
+		
+		PText["HUD"][2] = {Text("Нажми {key} чтобы встать", {{"{key}", COLOR["KEY"]["HEX"].."Space#FFFFFF"}}), screenWidth, screenHeight-(150*scalex), 0, 0, tocolor(255, 255, 255, 255), scale*2, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
+	else
+		unbindKey("e", "down", PrisonSleepEv) 
+	end
+	PrisonSleep = false
 end
 
 function PrisonGavnoEv()
@@ -5411,10 +5534,6 @@ function targetingActivated(target)
 		end
 		
 		
-		if(PrisonSleep) then
-			PrisonSleep = false
-			unbindKey("e", "down", PrisonSleepEv) 
-		end
 		
 		if(PrisonGavno) then
 			PrisonGavno = false
@@ -5484,20 +5603,14 @@ function targetingActivated(target)
 					SprunkObject = target
 					bindKey ("f", "down", SprunkFunk)
 				elseif(getElementModel(target) == 1812) then
-					ChangeInfo(Text("Нажми {key} чтобы лечь", {{"{key}", COLOR["KEY"]["HEX"].."E#FFFFFF"}}))
+					ToolTip(Text("Нажми {key} чтобы лечь", {{"{key}", COLOR["KEY"]["HEX"].."E#FFFFFF"}}))
 					PrisonSleep = target
-					bindKey ("e", "down", PrisonSleepEv)
+					bindKey("e", "down", PrisonSleepEv)
 				elseif(getElementModel(target) == 2525) then
 					ChangeInfo("Нажми #A0A0A0F#FFFFFF чтобы справить нужду\nНажми #A0A0A0E#FFFFFF чтобы чистить говно")
 					PrisonGavno = target
 					bindKey ("e", "down", PrisonGavnoEv)
 					bindKey ("f", "down", PrisonPiss)
-				elseif(getElementModel(target) == 10149 or getElementModel(target) == 10184 or getElementModel(target) == 2930 or getElementModel(target) == 11327 or getElementModel(target) == 975 or getElementModel(target) == 988) then
-					ChangeInfo("Нажми #A0A0A0H#FFFFFF чтобы управлять воротами")
-					Targets["object"] = target
-				elseif(getElementModel(target) == 17566 or getElementModel(target) == 10671) then
-					ChangeInfo("Нажми #A0A0A0H#FFFFFF чтобы управлять гаражом")
-					Targets["object"] = target
 				end
 			elseif(tostring(getElementType(target)) == "ped") then
 				if(getElementData(target, "team")) then
@@ -5884,12 +5997,8 @@ addEventHandler("ShowInfoKey", localPlayer, ShowInfoKey)
 
 
 
-function opengate()
-	if(Targets["object"]) then
-		triggerServerEvent("opengate", localPlayer, Targets["object"])
-	else
-		triggerServerEvent("handsup", localPlayer, localPlayer)	
-	end
+function handsup()
+	triggerServerEvent("handsup", localPlayer, localPlayer)	
 end
 
 function park()
@@ -5930,9 +6039,14 @@ function onClientPlayerWeaponFireFunc(weapon, ammo, ammoInClip, hitX, hitY, hitZ
 			for _, v in pairs(getElementsByType("colshape", getRootElement(), true)) do
 				if(isElementWithinColShape(col, v)) then
 					hitElement = getElementAttachedTo(v)
+				--	ToolTip("Графити")
 				end
 			end
 			destroyElement(col)
+		end
+		
+		if(weapon == 39) then
+			 helpmessage("Используй ПКМ чтобы взорвать взрывчатку")
 		end
 	end
 end
@@ -5961,6 +6075,519 @@ end
 addEvent("SetupInventory", true)
 addEventHandler("SetupInventory", localPlayer, SetupInventory)
 
+
+
+local Cheatkeys = {}
+local Cheats = {
+	["hesoyam"] = true,
+	["afzllqll"] = true,
+	["icikpyh"] = true,
+	["auifrvqs"] = true, 
+	["mghxyrm"] = true, 
+	["cfvfgmj"] = true, 
+	["cwjxuoc"] = true, 
+	["alnsfmzo"] = true, 
+	["ysohnul"] = true,
+	["liyoaay"] = true, 
+	["aezakmi"] = true, -- В разработке
+	["ripazha"] = true,
+	["jbgvnb"] = true,
+	["lxgiwyl"] = true,
+	["professionalskit"] = true,
+	["kjkszpj"] = true,
+	["uzumymw"] = true,
+	["fullclip"] = true, -- В разработке
+	["wanrltw"] = true, -- В разработке
+	["ncsgdag"] = true, 
+	["professionalkiller"] = true, 
+	["quiqdmw"] = true, -- В разработке
+	["aiwprton"] = true, 
+	["cqzijmb"] = true, 
+	["pdnejoh"] = true, 
+	["vpjtqwv"] = true, 
+	["aqtbcodx"] = true, 
+	["krijebr"] = true, 
+	["ubhyzhq"] = true, 
+	["rzhsuew"] = true, 
+	["akjjyglc"] = true, 
+	["fourwheelfun"] = true, 
+	["amomhrer"] = true, 
+	["eegcyxt"] = true, 
+	["agbdlcid"] = true, 
+	["jqntdmh"] = true, 
+	["jumpjet"] = true, 
+	["ohdude"] = true, 
+	["urkqsrk"] = true, 
+	["kgggdkp"] = true, 
+	["rocketman"] = true, 
+	["yecgaa"] = true, 
+	["aiypwzqp"] = true, 
+	["vkypqcf"] = true, 
+	["szcmawo"] = true,
+	["cpktnwt"] = true,
+	["jhjoecw"] = true,
+	["ljspqk"] = true,
+	["bringiton"] = true,
+	["osrblhh"] = true,
+	["turnuptheheat"] = true, 
+	["asnaeb"] = true,
+	["turndowntheheat"] = true, 
+}     
+
+
+function CheatCode(code)
+	local x,y,z = getElementPosition(localPlayer)
+	if(code == "hesoyam") then
+		setElementHealth(localPlayer, 1000)
+		triggerServerEvent("AddPlayerMoney", localPlayer, localPlayer, 25000)
+		triggerServerEvent("AddPlayerArmor", localPlayer, localPlayer)
+		local theVehicle = getPedOccupiedVehicle(localPlayer)
+		if(theVehicle) then fixVehicle(theVehicle) end
+	elseif(code == "ljspqk" or code == "bringiton") then
+		triggerServerEvent("WantedLevel", localPlayer, localPlayer, 6)
+	elseif(code == "osrblhh" or code == "turnuptheheat") then
+		triggerServerEvent("WantedLevel", localPlayer, localPlayer, 2)
+	elseif(code == "asnaeb" or code == "turndowntheheat") then
+		triggerServerEvent("WantedLevel", localPlayer, localPlayer, -6)
+	elseif(code == "aezakmi") then
+		triggerServerEvent("WantedLevel", localPlayer, localPlayer, "AEZAKMI")
+		if(getElementData(localPlayer, "AEZAKMI")) then
+			ToolTip("Чит деактивирован") 
+			return true
+		end
+	elseif(code == "cpktnwt") then
+		for _, Vehicle in pairs(getElementsByType("vehicle", getRootElement(), true)) do
+			local x,y,z = getElementPosition(Vehicle)
+			createExplosion(x,y,z, 0, true)
+		end
+	elseif(code == "szcmawo") then
+		triggerServerEvent("kill", localPlayer, localPlayer)
+	elseif(code == "vkypqcf") then
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 22, 1000)
+	elseif(code == "afzllqll") then
+		setWeather(1)
+		setSkyGradient(30,117,210, 53,162,227)
+		setFogDistance(500)
+		setFarClipDistance(3000)
+		setRainLevel(0)
+	elseif(code == "icikpyh") then
+		setWeather(0)
+		setSkyGradient(68,117,210, 36,117,199)
+		setFogDistance(500)
+		setFarClipDistance(3000)
+		setRainLevel(0)
+	elseif(code == "auifrvqs") then
+		setWeather(4)
+		setSkyGradient(80,80,80, 70,70,70)
+		setFogDistance(500)
+		setFarClipDistance(3000)
+		setRainLevel(math.random(0.5,1))
+	elseif(code == "mghxyrm") then
+		setWeather(8)
+		setSkyGradient(80,80,80, 70,70,70)
+		setFogDistance(500)
+		setFarClipDistance(3000)
+		setRainLevel(math.random(0.5,1))
+	elseif(code == "alnsfmzo") then
+		setWeather(4)
+		setSkyGradient(125,145,151, 125,145,151)
+		setFogDistance(500)
+		setFarClipDistance(3000)
+		setRainLevel(0)
+	elseif(code == "cfvfgmj") then
+		setWeather(9)
+		setSkyGradient(146,155,155, 127,144,144)
+		setFogDistance(300)
+		setFarClipDistance(600)
+		setRainLevel(0)
+	elseif(code == "cwjxuoc") then
+		setWeather(19)
+		setSkyGradient(166,163,140, 166,163,140)
+		setFogDistance(50)
+		setFarClipDistance(300)
+		setRainLevel(0)
+	elseif(code == "ysohnul") then
+		if(getGameSpeed() == 2) then 
+			ToolTip("Чит деактивирован") 
+			setGameSpeed(1.2)
+			return true 
+		else
+			setGameSpeed(2)
+		end
+	elseif(code == "liyoaay") then
+		if(getGameSpeed() == 0.5) then 
+			ToolTip("Чит деактивирован") 
+			setGameSpeed(1.2)
+			return true 
+		else
+			setGameSpeed(0.5)
+		end
+	elseif(code == "jhjoecw") then
+		setWorldSpecialPropertyEnabled("extrabunny", not isWorldSpecialPropertyEnabled("extrabunny"))
+		if(not isWorldSpecialPropertyEnabled("extrabunny")) then ToolTip("Чит деактивирован") return false end
+	elseif(code == "ripazha") then
+		setWorldSpecialPropertyEnabled("aircars", not isWorldSpecialPropertyEnabled("aircars"))
+		if(not isWorldSpecialPropertyEnabled("aircars")) then ToolTip("Чит деактивирован") return false end
+	elseif(code == "jbgvnb") then
+		setWorldSpecialPropertyEnabled("hovercars", not isWorldSpecialPropertyEnabled("hovercars"))
+		if(not isWorldSpecialPropertyEnabled("hovercars")) then ToolTip("Чит деактивирован") return false end
+	elseif(code == "lxgiwyl") then
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Кастет", ["txd"] = "Кастет"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Бита", ["txd"] = "Бита"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Кольт 45", ["txd"] = "Кольт 45"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Mossberg", ["txd"] = "Mossberg"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Узи", ["txd"] = "Узи"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "АК-47", ["txd"] = "АК-47"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "ИЖ-12", ["txd"] = "ИЖ-12"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Базука", ["txd"] = "Базука"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Молотов", ["txd"] = "Молотов"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Спрей", ["txd"] = "Спрей"})
+	elseif(code == "professionalskit" or code == "kjkszpj") then	
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Нож", ["txd"] = "Нож"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Deagle", ["txd"] = "Deagle"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Sawed-Off", ["txd"] = "Sawed-Off"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Tec-9", ["txd"] = "Tec-9"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "М16", ["txd"] = "М16"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "M40", ["txd"] = "M40"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Огнетушитель", ["txd"] = "Огнетушитель"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Огнемет", ["txd"] = "Огнемет"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Граната", ["txd"] = "Граната"})
+	elseif(code == "uzumymw") then
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Бензопила", ["txd"] = "Бензопила"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "USP-S", ["txd"] = "USP-S"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "SPAS-12", ["txd"] = "SPAS-12"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "MP5", ["txd"] = "MP5"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Ракетная установка", ["txd"] = "Ракетная установка"})
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Взрывчатка", ["txd"] = "Взрывчатка"})
+	elseif(code == "professionalkiller" or code == "ncsgdag") then	
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 177, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 69, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 70, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 71, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 72, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 73, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 74, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 75, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 76, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 77, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 78, 1000)
+		triggerServerEvent("AddSkill", localPlayer, localPlayer, 79, 1000)
+	elseif(code == "aiwprton") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 432, x, y, z)
+	elseif(code == "cqzijmb") then
+		local x,y,z = getElementPosition(localPlayer)
+		triggerServerEvent("vpc", localPlayer, localPlayer, 504, x, y, z)
+	elseif(code == "pdnejoh") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 494, x, y, z)
+	elseif(code == "vpjtqwv") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 503, x, y, z)
+	elseif(code == "aqtbcodx") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 442, x, y, z)
+	elseif(code == "krijebr") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 409, x, y, z)
+	elseif(code == "ubhyzhq") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 408, x, y, z)
+	elseif(code == "rzhsuew") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 457, x, y, z)
+	elseif(code == "akjjyglc" or code == "fourwheelfun") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 471, x, y, z)
+	elseif(code == "amomhrer") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 514, x, y, z)
+	elseif(code == "eegcyxt") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 486, x, y, z)
+	elseif(code == "agbdlcid") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 556, x, y, z)
+	elseif(code == "jqntdmh") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 489, x, y, z)
+	elseif(code == "jumpjet") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 520, x, y, z)
+	elseif(code == "ohdude") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 425, x, y, z)
+	elseif(code == "urkqsrk") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 513, x, y, z)
+	elseif(code == "kgggdkp") then
+		triggerServerEvent("vpc", localPlayer, localPlayer, 539, x, y, z)
+	elseif(code == "rocketman" or code == "yecgaa") then
+		triggerServerEvent("JetPack", localPlayer, localPlayer)
+		if(isPedWearingJetpack(localPlayer)) then
+			ToolTip("Чит деактивирован")
+			return true
+		end
+	elseif(code == "aiypwzqp") then
+		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Парашют", ["txd"] = "Парашют"})
+	end
+	ToolTip("Чит активирован")
+end
+
+
+
+local StandartObjects = {
+	[2956] = { -- #IMMMCRAN
+		{2194.438, -1912.756, 11.907, 0,0,0}
+	}, 
+	[5678] = { -- #LAE_SMOKECUTSCENE
+		{2055.0, -1695.0, 15.0, 0,0,0}, 
+	}, 
+	[2904] = { -- #WAREHOUSE_DOOR1
+		{2799.75, -2405.394, 14.58, 0,0,0}, 
+		{2799.75, -2430.215, 14.58, 0,0,0}, 
+		{2799.75, -2443.487, 14.58, 0,0,0}, 
+		{2799.75, -2468.254, 14.58, 0,0,0}, 
+		{2799.75, -2481.711, 14.58, 0,0,0}, 
+		{2799.75, -2506.313, 14.58, 0,0,0}, 
+	}, 
+	[3109] = { -- #IMY_LA_DOOR
+		{2118.088, -2274.635, 20.867, 0,0,225.0}, 
+	}, 
+	[3061] = { -- #AD_FLATDOOR
+		{1833.36, -1995.45, 13.2, 0,0,270}, 
+		{1819.81, -1994.66, 13.2,0,0,0},  
+		{1827.68, -1980.0, 13.2,0,0,270},  
+		{1851.84, -1990.67, 13.2,0,0,0},  
+		{1867.29, -1984.96, 13.2,0,0,270},  
+		{1866.52, -1998.53, 13.2,0,0,90},  
+		{1899.75, -1984.95, 13.2,0,0,270},  
+		{1914.39, -1992.82, 13.2,0,0,180},  
+		{1899.01, -1998.5, 13.2,0,0,90},  
+		{1900.89, -2020.11, 13.2,0,0,0},  
+		{1914.4, -2020.91, 13.2,0,0,180},  
+		{1906.54, -2035.52, 13.2,0,0,90},  
+		{1851.86, -2020.14, 13.2,0,0,0},  
+		{1865.42, -2020.89, 13.2,0,0,180},  
+		{1857.55, -2035.52, 13.2,0,0,90},  
+	},
+	[3029] = { -- #CR1_DOOR
+		{2352.851, -1171.027, 26.9669, 0, 0, 90},
+	}, 
+	[1965] = { -- #IMCMPTRKDRL_LAS
+		{2192.925, -2231.824, 15.69,0,0,315}, 
+		{2195.072, -2229.589, 15.69,0,0,85}, 
+		{2200.184, -2224.419, 15.69,0,0,315}, 
+		{2202.432, -2222.266, 15.69,0,0,85}, 
+		{2207.766, -2217.281, 15.69,0,0,315}, 
+		{2210.014, -2215.058, 15.69,0,0,85}, 
+		{2215.096, -2210.761, 15.69,0,0,315}, 
+		{2217.344, -2208.537, 15.69,0,0,85}, 
+	}, 
+	[2893] = { -- #KMB_RAMP
+		{2193.418, -2231.352, 14.183,0,0,45}, 
+		{2194.642, -2230.128, 14.183,0,0,45}, 
+		{2200.686, -2224.019, 14.183,0,0,45}, 
+		{2201.91, -2222.795, 14.183,0,0,45}, 
+		{2208.243, -2216.833, 14.183,0,0,45}, 
+		{2209.468, -2215.609, 14.183,0,0,45}, 
+		{2215.489, -2210.406, 14.183,0,0,45}, 
+		{2216.713, -2209.182, 14.183,0,0,45}, 
+	}, 
+	[3058] = { -- #storm_drain_cover
+		{2631.852, -1482.75, 18.109, 0,0,0}
+	}, 
+	[3125] = { -- #WD_FENCE_ANIM
+		{2167.763, -1470.354, 25.328, 0,0,90}, 
+		{2167.763, -1465.688, 25.328, 0,0,90}, 
+		{2167.763, -1461.021, 25.328, 0,0,90}, 
+		{2174.328, -1470.354, 25.328, 0,0,270}, 
+		{2174.328, -1465.688, 25.328, 0,0,270}, 
+		{2174.328, -1461.021, 25.328, 0,0,270}, 
+	}, 
+	[3083] = { -- #md_poster
+		{2167.82, -1518.193, 20.237,0,0,0}
+	},
+	[2947] = { -- #cr_door_01
+		{2322.845, 8.304, 25.483, 0,0,0}, 
+		{2316.233, 0.712, 25.742, 0,0,270}
+	}, 
+	[2946] = { -- #cr_door_03
+		{2304.257, -17.744, 25.742, 0,0,0}, 
+		{2304.257, -14.583, 25.742, 0,0,180}
+	}, 
+	[3374] = { -- #SW_HAYBREAK02
+		{-1053.792, -1187.624, 129.396, 0,0,0}, 
+		{-1038.506, -1154.722, 129.699, 0,0,0}, 
+		{-1105.419, -1112.451, 128.864, 0,0,0}, 
+		{-1182.346, -1043.797, 129.699, 0,0,0}, 
+		{-1141.389, -1008.254, 129.735, 0,0,0}, 
+		{-1197.385, -1084.951, 129.743, 0,0,0}, 
+		{-1161.353, -1117.198, 129.049, 0,0,0}, 
+	},
+	[2984] = { -- #PORTALOO
+		{-2087.861, 178.2922, 35.3947, 0,0,3.3302}, 
+		{-2114.903, 156.9329, 35.4667, 0,0,271.6719}, 
+		{-2116.425, 157.4618, 35.7225, 0,0,269.1095}, 
+		{-2054.474, 222.6438, 35.8767, 0,0,0}, 
+		{-2069.262, 285.8519, 35.8543, 0,0,51.0305}, 
+		{-2134.873, 293.1065, 35.4117, 0,0, 175.9489}, 
+	}, 
+	[3041] = { -- #CT_TABLE
+		{-2201.436, 647.109, 48.413, 0,0,0}
+	}, 
+	[3039] = { -- #CT_STALL1
+		{-2213.413, 640.908, 48.43, 0,0,90}
+	}, 
+	[3035] = { -- #TMP_BIN
+		{-2183.968, 647.055, 49.185, 0,0,0}, 
+		{-2172.813, 654.019, 49.185, 0,0,270}, 
+		{-2172.813, 649.293, 49.185, 0,0,270}, 
+	}, 
+	[2935] = { -- KMB_CONTAINER_YEL
+		{-1649.476, 9.1182, 4.060, 0,0, 315.1249}, 
+	},
+	[2934] = { -- #KMB_CONTAINER_RED
+		{-1658.85, 44.8514, 4.06, 0,0,315.2922}, 
+		{1023.181, 2106.604, 14.7301, 0,0,0}, 
+		{1077.014, 2070.743, 14.7635, 0,0,0}, 
+		{-820.3694, 1933.666, 7.3952, 0,0,11.8154}, 
+		{-822.3879, 1945.519, 7.4836, 0,0,11.8154}, 
+	},
+	[2932] = { -- #KMB_CONTAINER_BLUE
+		{-1570.986, 55.2009, 17.746, 0,0,40.4082}, 
+		{-1564.401, 62.1434, 17.7537, 0,0,235.0724}, 
+		{-1582.202, 54.1735, 17.7537, 0,0,0}, 
+	}, 
+	[959] = { -- #CJ_CHIP_MAKER_BITS
+		{1074.903, 2139.611, 10.7203, 0,0,180}, 
+		{1069.485, 2139.611, 10.7203, 0,0,180}, 
+		{1062.456, 2139.611, 10.7203, 0,0,180}, 
+		{1081.268, 2123.686, 10.7203, 0,0,90}, 
+		{1081.236, 2130.681, 10.7203, 0,0,90}, 
+		{1086.855, 2077.532, 10.7203, 0,0,0}, 
+		{1091.818, 2121.257, 10.7203, 0,0,180}, 
+		{1094.163, 2102.352, 10.7203, 0,0,90}, 
+		{1094.163, 2092.352, 10.7203, 0,0,90}, 
+	},
+	[958] = { -- #CJ_CHIP_MAKER
+		{1074.903, 2139.611, 10.7203, 0,0,180}, 		
+		{1069.485, 2139.611, 10.7203, 0,0,180}, 
+		{1062.456, 2139.611, 10.7203, 0,0,180}, 
+		{1081.268, 2123.686, 10.7203, 0,0,90}, 
+		{1081.236, 2130.681, 10.7203, 0,0,90}, 
+		{1086.855, 2077.532, 10.7203, 0,0,0}, 
+		{1091.818, 2121.257, 10.7203, 0,0,180}, 
+		{1094.163, 2102.352, 10.7203, 0,0,90}, 
+		{1094.163, 2092.352, 10.7203, 0,0,90}, 
+	}, 
+	[1299] = { -- #SMASHBOXPILE
+		{-829.8794, 1957.827, 6.4364, 0,0,7.1004}, 
+		{-824.9033, 1958.443, 6.5048, 0,0,9.1604}, 
+	}, 
+	[2974] = { -- #K_CARGO1
+		{-828.3333, 1952.527, 5.9651, 0,0,102.0394}, 
+		{-825.9227, 1953.171, 5.9651, 0,0,100.9489}, 
+	}, 
+	[2972] = { -- #K_CARGO4
+		{-827.6044, 1958.276, 5.9873, 0,0,101.9089}
+	}, 
+	[1498] = { -- #GEN_DOOREXT03
+		{2401.75, -1714.477, 13.125, 0,0,0}, 
+		{2038.036, 2721.37, 10.53, 0,0,-180}, 
+	},
+	[1505] = { -- #GEN_DOOREXT07
+		{-2574.495, 1153.023, 54.669, 0,0,-19.444}, 
+	},
+	[1496] = { -- #GEN_DOORSHOP02
+		{-1800.706, 1201.041, 24.12, 0,0,0}, 
+	},
+	[1501] = { -- #GEN_DOOREXT04
+		{-383.46, -1439.64, 25.33, 0,0,90}, 
+	}, 
+	[1522] = { -- #GEN_DOORSHOP3
+		{-1390.79, 2639.33, 54.973, 0,0,0}, 
+	}, 
+	[3093] = { -- #CUNTGIRLDOOR
+		{-371.4, -1429.42, 26.47, 0,0,0}, 
+	},
+	[2896] = { -- #CASKET_LAW
+		{885.6575, -1077.412, 23.3188, 0,0,0}
+	},
+	
+}
+
+
+
+
+
+for model, dat in pairs(StandartObjects) do
+	for _, v in pairs(dat) do
+		createObject(model, v[1], v[2], v[3], v[4], v[5], v[6])
+	end
+end
+
+
+
+
+local SearchLights = {
+	[1] = {
+		["A51_SPOTBULB"] = createObject(2887, 166.003, 1849.937, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 166.003, 1849.937, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 166.003, 1849.937, 36.246), 
+		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
+	}, 
+	[2] = {
+		["A51_SPOTBULB"] = createObject(2887, 262.145, 1807.62, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 262.145, 1807.62, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 262.145, 1807.62, 36.246), 
+		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
+	},
+	[3] = {
+		["A51_SPOTBULB"] = createObject(2887, 267.116, 1895.241, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 267.116, 1895.241, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 267.116, 1895.241, 36.246), 
+		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
+	}, 
+	[4] = {
+		["A51_SPOTBULB"] = createObject(2887, 233.486, 1934.789, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 233.486, 1934.789, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 233.486, 1934.789, 36.246), 
+		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
+	}, 
+	[5] = {
+		["A51_SPOTBULB"] = createObject(2887, 161.962, 1933.043, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 161.962, 1933.043, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 161.962, 1933.043, 36.246), 
+		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
+	}, 
+	[6] = {
+		["A51_SPOTBULB"] = createObject(2887, 103.946, 1901.047, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 103.946, 1901.047, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 103.946, 1901.047, 36.246), 
+		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
+	}, 
+	[7] = {
+		["A51_SPOTBULB"] = createObject(2887, 113.439, 1814.405, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 113.439, 1814.405, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 113.439, 1814.405, 36.246), 
+		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
+	}
+}
+
+function getPositionFromElementOffset(element,offX,offY,offZ)
+    local m = getElementMatrix ( element )  -- Get the matrix
+    local x = offX * m[1][1] + offY * m[2][1] + offZ * m[3][1] + m[4][1]  -- Apply transform
+    local y = offX * m[1][2] + offY * m[2][2] + offZ * m[3][2] + m[4][2]
+    local z = offX * m[1][3] + offY * m[2][3] + offZ * m[3][3] + m[4][3]
+    return x, y, z                               -- Return the transformed point
+end
+
+for _, v in pairs(SearchLights) do
+	local rx,ry,rz = getElementRotation(v["A51_SPOTBULB"])
+	setElementRotation(v["A51_SPOTBULB"], 330,ry,math.random(0,360))
+end
+
+function updateSearchLight()
+	for _, v in pairs(SearchLights) do
+		local rx,ry,rz = getElementRotation(v["A51_SPOTBULB"])
+		setElementRotation(v["A51_SPOTHOUSING"], rx,ry,rz+0.1)
+		setElementRotation(v["A51_SPOTBULB"], rx,ry,rz+0.1)
+	
+		local sx, sy, sz = getPositionFromElementOffset(v["A51_SPOTBULB"], 0, 1.181, 0.768)
+		local ex, ey, ez = getPositionFromElementOffset(v["A51_SPOTBULB"], 0, 30, 0)
+
+		
+		setSearchLightStartPosition(v["attach_searchlight"], sx, sy, sz)
+		setSearchLightEndPosition(v["attach_searchlight"], ex, ey, ez)
+	end
+end
+addEventHandler("onClientPreRender", root, updateSearchLight)
 
 
 
@@ -6086,6 +6713,24 @@ function playerPressedKey(button, press)
 	
 	
     if (press) then
+		if(#Cheatkeys > 99) then
+			table.remove(Cheatkeys, 1)
+		end
+		table.insert(Cheatkeys, button)
+		local CheatLabel = ""
+		for _, text in pairs(Cheatkeys) do
+			CheatLabel = CheatLabel..text
+		end
+		
+		for k, _ in pairs(Cheats) do
+			if(string.find(CheatLabel, k)) then
+				CheatCode(k)
+				Cheatkeys = {}
+				break
+			end
+		end
+		
+	
 		if(BindedKeys[button]) then
 			triggerEvent(unpack(BindedKeys[button]))
 			if(button == "enter") then
@@ -6700,6 +7345,16 @@ function vp(command, h)
 end
 addCommandHandler("vp", vp)
 
+function vpr(command, h)
+	local x,y,z = getElementPosition(localPlayer)
+	triggerServerEvent("vpr", localPlayer, localPlayer, h, x, y, z)
+end
+addCommandHandler("vpr", vpr)
+
+
+
+
+
 
 
 
@@ -7189,12 +7844,17 @@ end
 
 
 
+function GenerateTextureCompleted(textures) 
+	if(PEDChangeSkin == "intro") then
+		call(getResourceFromName("Draw_Intro"), "StartIntro")
+	end
+end
+addEvent("GenerateTextureCompleted", true)
+addEventHandler("GenerateTextureCompleted", localPlayer, GenerateTextureCompleted)
+
 
 
 function normalspeed(h,m,weather)
-	if(PEDChangeSkin == "intro") then -- Костыль
-		setCameraMatrix(1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
-	end
 	if(isTimer(DrugsTimer)) then
 		killTimer(DrugsTimer)
 	end
@@ -7257,7 +7917,7 @@ addEventHandler("onClientPlayerWasted", getRootElement(), onWasted)
 
 
 function PlayerNewZone(zone, city, updateweather, interior)
-	if(getElementDimension(localPlayer) == 0) then SetZoneDisplay(zone) end
+	SetZoneDisplay(zone)
 	triggerServerEvent("ZoneInfo", localPlayer, localPlayer, zone)
 end
 addEventHandler("PlayerNewZone", root, PlayerNewZone)
@@ -7345,7 +8005,8 @@ function NextRaceMarker()
 	if(PData["Race"]["Blip"]) then destroyElement(PData["Race"]["Blip"]) end
 		
 	if(#PData["Race"]["Track"] >= 1) then
-		PData["Race"]["Marker"] = createMarker(PData["Race"]["Track"][1][1], PData["Race"]["Track"][1][2], PData["Race"]["Track"][1][3], "checkpoint", 20, 255, 0, 0, 170)
+		playSoundFrontEnd(43)
+		PData["Race"]["Marker"] = createMarker(PData["Race"]["Track"][1][1], PData["Race"]["Track"][1][2], PData["Race"]["Track"][1][3]+2.5, "checkpoint", 20, 255, 0, 0, 170)
 		setElementData(PData["Race"]["Marker"], "type", "Race")
 		PData["Race"]["Blip"] = createBlipAttachedTo(PData["Race"]["Marker"],0,2,255,0,0, 255,0, 99999)
 		if(PData["Race"]["Track"][2]) then
@@ -7359,12 +8020,11 @@ end
 
 
 function GetRacePosition()
-	local pos = #PData["Race"]["Racers"]
+	local pos = getArrSize(PData["Race"]["Racers"])
 	local x,y,z = getElementPosition(localPlayer)
 	local mydist = getDistanceBetweenPoints2D(x,y, PData["Race"]["Track"][#PData["Race"]["Track"]][1], PData["Race"]["Track"][#PData["Race"]["Track"]][2])
-	for _, name in pairs(PData["Race"]["Racers"]) do
-		local thePlayer = getPlayerFromName(name)
-		if(thePlayer) then
+	for thePlayer, _ in pairs(PData["Race"]["Racers"]) do
+		if(isElement(thePlayer)) then
 			if(thePlayer ~= localPlayer) then
 				x,y,z = getElementPosition(thePlayer)
 				if(mydist < getDistanceBetweenPoints2D(x,y, PData["Race"]["Track"][#PData["Race"]["Track"]][1], PData["Race"]["Track"][#PData["Race"]["Track"]][2])) then
@@ -7396,7 +8056,7 @@ addEventHandler("StartRace", localPlayer, StartRace)
 
 function ToolTipRace(pos, message)
 	ToolTipRaceText = {pos, message}
-	setTimer(function() ToolTipRaceText = false end, 4000, 1)
+	setTimer(function() ToolTipRaceText = false end, 7000, 1)
 end
 
 
@@ -7419,6 +8079,8 @@ function EndRace(pos, oldbest)
 			
 			ToolTipRace(pos, "#828FA0Твоё время: #EEEEEE"..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec).."\n"..
 			"#828FA0Рекорд трассы: #EEEEEE"..string.format("%02.f", mins2)..":"..string.format("%02.f", secs2)..":"..string.format("%02.f", msec2))
+		else
+			 MissionCompleted("#A2151AМИССИЯ ПРОВАЛЕНА!")
 		end
 	end
 	
@@ -7432,8 +8094,6 @@ function EndRace(pos, oldbest)
 end
 addEvent("EndRace", true)
 addEventHandler("EndRace", localPlayer, EndRace)
-
-
 
 
 
@@ -7677,6 +8337,7 @@ end
 
 
 function setDoingDriveby()
+	detonateSatchels()
 	if(getPedOccupiedVehicle(localPlayer)) then
 		if not isPedDoingGangDriveby(localPlayer) then
 			setPedDoingGangDriveby(localPlayer, true)
@@ -8296,7 +8957,7 @@ function DrawPlayerMessage()
 			
 			local wanted = getElementData(localPlayer, "WantedLevel") or ""
 			local TotalDamage = getElementData(localPlayer, "Damage")
-			if(PData["Interface"]["WantedLevel"]) then
+			if(PData["Interface"]["WantedLevel"] and not getElementData(localPlayer, "AEZAKMI")) then
 				if(PData["WantedLevel"]) then
 					if(PData["WantedLevel"] ~= wanted) then
 						VideoMemory["HUD"]["Wanted"] = nil
@@ -8450,7 +9111,7 @@ function DrawPlayerMessage()
 						dxDrawRectangle(sx-(320*scalex),sy-(75*scaley), 125*NewScale, 140*NewScale, tocolor(0,0,0))
 						dxDrawText(pos, sx-(305*scalex),sy-(82*scaley),0,0, tocolor(121,137,153,255), NewScale*7, "default-bold", "left", "top")
 						dxDrawText(PosVar[pos] or "ый", sx-(255*scalex),sy-(70*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
-						dxDrawText("/"..#PData["Race"]["Racers"], sx-(255*scalex),sy-(35*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
+						dxDrawText("/"..getArrSize(PData["Race"]["Racers"]), sx-(255*scalex),sy-(35*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
 						
 						local seconds = (getTickCount()-PData["Race"]["Start"])/1000
 						local hours = math.floor(seconds/3600)
@@ -8963,7 +9624,6 @@ end
 
 
 
-
 function StreamIn(restream)
 	if(getElementType(source) == "player") then
 		if(not StreamData[source]) then
@@ -9016,6 +9676,16 @@ function StreamIn(restream)
 			ObjectInStream[source]["collision"] = createColSphere(x,y,z+1, 1)
 			attachElements(ObjectInStream[source]["collision"], source)
 			setElementAttachedOffsets(ObjectInStream[source]["collision"], 0,0,1)
+		elseif(getElementData(source, "gates")) then
+			local gates = fromJSON(getElementData(source, "gates"))
+			local x,y,z = getElementPosition(source)
+			ObjectInStream[source] = {}
+			if(getElementData(source,  "NativePos")) then
+				local datCord = fromJSON(getElementData(source, "NativePos"))
+				x,y,z = datCord[1], datCord[2], datCord[3]
+			end
+			ObjectInStream[source]["collision"] = createMarker(x,y,z, "corona", getElementRadius(source)*2, 0,0,0,0)
+			setElementParent(ObjectInStream[source]["collision"], source)	
 		elseif(GetObjectType(source) == "Графити") then
 			ObjectInStream[source] = {}
 			local x,y,z = getElementPosition(source)
@@ -9330,7 +10000,7 @@ addEventHandler("onClientPlayerQuit", getRootElement(), onQuitGame)
 bindKey("M", "down", openmap)
 bindKey("tab", "down", OpenTAB)
 bindKey("tab", "up", CloseTAB)
-bindKey("h", "down", opengate)
+bindKey("h", "down", handsup)
 bindKey("p", "down", park)
 bindKey('mouse2', 'down', setDoingDriveby)
 bindKey("w", "down", breakMove)

@@ -14,6 +14,9 @@
 	<file src="lang/Ru_ru.po" />
 	<file src="lang/Ru_en.po" />
 	
+	<file src="models/copcarvg.dff" download="true" />
+	<file src="models/copcarvg.txd" download="true" />
+	
 	<file src="GTA3.mp3" />
 	<script src="RailNode.lua" type="client"/>
 	<script src="client.lua" type="client" validate="true" />
