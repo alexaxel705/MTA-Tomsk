@@ -8,8 +8,6 @@
 	<script src="VehicleNode.lua" type="server"/>
 	<!--<script src="DynamicObject.lua" type="server" />-->
     <sync_map_element_data>true</sync_map_element_data>
-	<file src="invobject/laser.png" />
-	<file src="invobject/unknown.png" />
 	
 	<file src="lang/Ru_ru.po" download="true" />
 	<file src="lang/Ru_az.po" download="true" />

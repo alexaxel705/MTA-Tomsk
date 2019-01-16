@@ -4004,7 +4004,6 @@ local RandVeh = {
 	{2076.3, 1402.3, 9.7, 0, 0, 0},
 	{2038.5, 1579, 9.7, 0, 0, 180},
 	{2361.9, 2079.3, 9.7, 0, 0, 0},
-	{1351.9, 1949.4, 10.5, 0, 0, 270},
 	{1463.7, 2773, 9.7, 0, 0, 0},
 	{-896.7, 2005.8, 59.9, 0, 0, 313},
 	{-911.5, 2022.3, 59.9, 0, 0, 313},
@@ -4969,7 +4968,7 @@ function tp(thePlayer, command, h)
 
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 1387.3, 2055.4, 9.8, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 2099, 2019.8, 9.7, 0, 0 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -10459,10 +10458,14 @@ function Udobrenya(thePlayer, x,y)
 		if(getElementData(PlayersEnteredPickup[thePlayer], "Three")) then
 			local Node = xmlFindChild(ThreesNode, getElementData(PlayersEnteredPickup[thePlayer], "Three"), 0)
 			local t = tonumber(xmlNodeGetAttribute(Node, "t"))
-			
-			local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
-			xmlNodeSetAttribute(Node, "t", t-arr[x][y]["quality"])
-			HelpMessage(thePlayer, "Ты сократил рост растения на #ffff00"..arr[x][y]["quality"].."#FFFFFF сек.")
+			if(t > 0 ) then
+				local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
+				xmlNodeSetAttribute(Node, "t", t-arr[x][y]["quality"])
+				HelpMessage(thePlayer, "Ты сократил рост растения на #ffff00"..arr[x][y]["quality"].."#FFFFFF сек.")
+				RemoveInventoryItemCount(thePlayer, x, y)
+			else
+				HelpMessage(thePlayer, "Растение не нуждается в #ffff00удобрении")
+			end
 			return true
 		end
 	end
@@ -12656,7 +12659,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	--local res12 = getResourceFromName("draw_intro") -- Interface
 	--restartResource(res12)
 
-	--local res = getResourceFromName("ps2_weather") -- Interface
+	--local res = getResourceFromName("object_image") -- Interface
 	--restartResource(res)
     --
 	--local res = getResourceFromName("interface") -- Interface
@@ -13087,10 +13090,12 @@ addEventHandler("SaveInventory", root, SaveInventory)
 
 
 
-function buyshopitem(thePlayer, item, count, x,y)
+function buyshopitem(thePlayer, count, args)
+	if(not tonumber(count)) then return false end
+	local item, cost, x,y = args[1], args[2]*count, args[3], args[4]
 	item["ForSale"] = nil
-
-	if(AddPlayerMoney(thePlayer, -count)) then
+	
+	if(AddPlayerMoney(thePlayer, -cost)) then
 		if(item["name"] == "CoK") then
 			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 			if(PlayerTeam == "Мирные жители") then
@@ -13108,11 +13113,13 @@ function buyshopitem(thePlayer, item, count, x,y)
 		end
 
 		if(item["Biz"]) then
-			AddBizMoney(item["Biz"], math.round((count/3), 0))
+			AddBizMoney(item["Biz"], math.round((cost/3), 0))
 		end
 		item["Biz"] = nil
 
-		AddInventoryItem(thePlayer, item, x,y)
+		for i = 1, count do
+			AddInventoryItem(thePlayer, item, x,y)
+		end
 	else
 		ToolTip(thePlayer, "Недостаточно средств!")
 	end
