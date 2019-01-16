@@ -226,6 +226,7 @@ local PData = {
 		["Greenglass College"] = false,
 		["Unity Station"] = false,
 		["Downtown"] = false,
+		["The Farm"] = false
 	}, -- Для разработчика
 	['changezone'] = {} -- Для разработчика
 }
@@ -458,47 +459,43 @@ end
 
 
 
-local sens = 0.1
 
-function minusx()
-	local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-	setCameraMatrix(x-sens,y,z,rx,ry,rz,r,f )
-	outputChatBox((x-4000).." "..(y-4000).." "..z-4000)
+local abx,aby,abz = false
+local air_brake = false
+
+
+
+function putPlayerInPosition(timeslice)
+	local cx,cy,cz,ctx,cty,ctz = getCameraMatrix()
+	ctx,cty = ctx-cx,cty-cy
+	timeslice = timeslice*0.1
+	if getKeyState("num_7") then timeslice = timeslice*4 end
+	if getKeyState("num_9") then timeslice = timeslice*0.25 end
+	local mult = timeslice/math.sqrt(ctx*ctx+cty*cty)
+	ctx,cty = ctx*mult,cty*mult
+	if getKeyState("w") then abx,aby = abx+ctx,aby+cty end
+	if getKeyState("s") then abx,aby = abx-ctx,aby-cty end
+	if getKeyState("d") then abx,aby = abx+cty,aby-ctx end
+	if getKeyState("a") then abx,aby = abx-cty,aby+ctx end
+	if getKeyState("space") then abz = abz+timeslice end
+	if getKeyState("lshift") then abz = abz-timeslice end
+	setElementRotation(localPlayer,0,0, getPedCameraRotation(localPlayer), "ZXY", true)
+	setElementPosition(localPlayer,abx,aby,abz)
 end
 
-function minusy()
-	local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-	setCameraMatrix(x,y-sens,z,rx,ry,rz,r,f )
-	outputChatBox((x-4000).." "..(y-4000).." "..z-4000)
+function toggleAirBrake()
+	if(getPlayerName(localPlayer) == "alexaxel705") then
+		air_brake = not air_brake or nil
+		if air_brake then
+			abx,aby,abz = getElementPosition(localPlayer)
+			addEventHandler("onClientPreRender",root,putPlayerInPosition)
+		else
+			abx,aby,abz = nil
+			removeEventHandler("onClientPreRender",root,putPlayerInPosition)
+		end
+	end
 end
-
-
-function plusx()
-	local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-	setCameraMatrix(x+sens,y,z,rx,ry,rz,r,f )
-	outputChatBox((x-4000).." "..(y-4000).." "..z-4000)
-end
-
-function plusy()
-	local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-	setCameraMatrix(x,y+sens,z,rx,ry,rz,r,f )
-	outputChatBox((x-4000).." "..(y-4000).." "..z-4000)
-end
-
-function plusz()
-	local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-	setCameraMatrix(x,y,z+sens,rx,ry,rz,r,f )
-	outputChatBox((x-4000).." "..(y-4000).." "..z-4000)
-end
-
-function minusz()
-	local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-	setCameraMatrix(x,y,z-sens,rx,ry,rz,r,f )
-	outputChatBox((x-4000).." "..(y-4000).." "..z-4000)
-end
-
-
-
+addCommandHandler("noclip", toggleAirBrake)
 
 
 
@@ -966,8 +963,9 @@ function save()
 	local rx,ry,rz = getElementRotation(localPlayer)
 	if(getPedOccupiedVehicle(localPlayer)) then
 		x,y,z = getElementPosition(getPedOccupiedVehicle(localPlayer))
-		outputChatBox(z-getGroundPosition(x,y,z))
-		z = getGroundPosition(x,y,z)
+		if(not getElementData(localPlayer, "City")) then 
+			z = getGroundPosition(x,y,z)
+		end
 		outputChatBox(math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)) 
 		rx,ry,rz = getElementRotation(getPedOccupiedVehicle(localPlayer))
 		outputChatBox(math.round(rz, 0))
@@ -1002,12 +1000,6 @@ end
 
 
 if getPlayerName(localPlayer) == "alexaxel705" or getPlayerName(localPlayer) == "Mishel'"  then
-	--[[bindKey("num_6", "down", plusx) 
-	bindKey("num_4", "down", minusx) 
-	bindKey("num_8", "down", plusy) 
-	bindKey("num_2", "down", minusy) 
-	bindKey("num_7", "down", plusz) 
-	bindKey("num_1", "down", minusz) --]]
 	bindKey("num_1", "down", saveauto) 
 	bindKey("F2", "down", cursor) 
 end
@@ -3579,6 +3571,17 @@ local ActualBones = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33,
 
 
 
+local CopCar = {
+	[433] = true, 
+	[470] = true, 
+	[596] = true, 
+	[597] = true, 
+	[598] = true, 
+	[599] = true, 
+	[427] = true, 
+	[490] = true, 
+	[523] = true, 
+}
 
 function GetTurretPosition(x,y,z, vx,vy,vz,rz)
 	local dist = getDistanceBetweenPoints3D(vx, vy, vz, x,y,z)/50
@@ -3651,9 +3654,25 @@ function UpdateBot()
 							HornPed(thePed, hitElement)
 						end
 					end
+					
+					if(CopCar[getElementModel(theVehicle)]) then -- Патрульный
+						for _,player in ipairs(getElementsByType("player", getRootElement(), true)) do 
+						if(getElementData(player, "WantedLevel") > 0) then
+								local ax, ay, az = getElementPosition(player)
+								if(isLineOfSightClear(vx,vy,vz, ax, ay, az, true, false, false, false, false, false, false)) then
+									triggerServerEvent("PedDamage", player, thePed, -1, 160, 0)
+								end
+							end
+						end
+					end
+				else
+					local ax, ay, az = getElementPosition(attacker)
+					if(isLineOfSightClear(vx,vy,vz, ax, ay, az, true, false, false, false, false, false, false)) then
+						triggerServerEvent("RemoveDynamicBot", localPlayer, thePed)
+					end
 				end
 			else
-				if(getElementModel(theVehicle) == 407) then
+				if(getElementModel(theVehicle) == 407) then -- Пожарники
 					if(not FirePos[thePed]) then
 						for _,object in ipairs(getElementsByType("object", getRootElement(), true)) do 
 							if(getElementData(object, "fireid")) then
@@ -3706,8 +3725,42 @@ function UpdateBot()
 					nextpath = {tmpx, tmpy, tmpz}
 					
 					
-					if(getDistanceBetweenPoints2D(x2,y2, vx, vy) < 20) then
-						brakes = true
+					if(CopCar[getElementModel(theVehicle)]) then
+						if(getElementData(attacker, "WantedLevel") > 0) then
+							local speedx, speedy, speedz = getElementVelocity(attacker)
+							if(getPedOccupiedVehicle(attacker)) then
+								speedx, speedy, speedz = getElementVelocity(getPedOccupiedVehicle(attacker))
+							end
+							local actualattakerspeed = (speedx^2 + speedy^2 + speedz^2)^(0.5)
+							if(actualattakerspeed < 0.1) then
+								local pedspeedx, pedspeedy, pedspeedz = getElementVelocity(theVehicle)
+								local actualpedspeed = (pedspeedx^2 + pedspeedy^2 + pedspeedz^2)^(0.5)
+								if(getDistanceBetweenPoints2D(x2,y2, vx, vy) < 10) then
+									if(actualpedspeed < 0.1) then
+										triggerServerEvent("WarpPedIntoVehicle", localPlayer, getVehicleOccupant(theVehicle), localPlayer)
+									else
+										brakes = true
+									end
+								end
+							else
+								brakes = false -- Давить нахер нарушителя
+							end
+						else
+							setVehicleSirensOn(theVehicle, false)
+							triggerServerEvent("SetDynamicBot", localPlayer, thePed, vx, vy, vz)
+						end
+					elseif(getElementModel(theVehicle) == 497) then
+						if(VehiclesInStream[theVehicle]["attach_searchlight"]) then
+							local x2,y2,z2 = getElementPosition(attacker)
+							local vvx, vvy, vvz = getPositionFromElementOffset(theVehicle, 0, 3.5, -0.5)
+							setSearchLightStartPosition(VehiclesInStream[theVehicle]["attach_searchlight"], vvx, vvy, vvz)
+							
+							setSearchLightEndPosition(VehiclesInStream[theVehicle]["attach_searchlight"], x2,y2,z2)
+						end
+					else
+						if(getDistanceBetweenPoints2D(x2,y2, vx, vy) < 20) then
+							brakes = true
+						end
 					end
 				end
 			end
@@ -3787,6 +3840,12 @@ function UpdateBot()
 										triggerServerEvent("PoliceArrest", localPlayer, thePed, attacker)
 									end
 								end
+							end
+							
+							
+							if(getElementData(attacker, "WantedLevel") == 0) then
+								triggerServerEvent("NoAttack", localPlayer, attacker, thePed)
+								setPedControlState(thePed, "aim_weapon", false) 
 							end
 						end
 					else
@@ -4245,7 +4304,6 @@ function checkKey()
 		if(PData["stamina"] <= 0) then
 			triggerServerEvent("StaminaOut", localPlayer)
 			setPedControlState(localPlayer, "sprint", false)
-			PData["ShakeLVL"] = PData["ShakeLVL"]+3
 		end
 		
 		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
@@ -4315,6 +4373,9 @@ function checkKey()
 			PData["Target"][i] = nil
 		end
 	end
+	
+	
+
 end
 setTimer(checkKey,700,0)
 
@@ -4498,10 +4559,10 @@ function updateStamina()
 		if PData["stamina"] ~= 8+math.floor(getPedStat(localPlayer, 22)/40) and getPedControlState(localPlayer, "sprint") == false then
 			PData["stamina"] = PData["stamina"] +1
 		end
-		if(PData["ShakeLVL"] > 1) then
-			PData["ShakeLVL"]=PData["ShakeLVL"]-1
+		if(PData["ShakeLVL"] > 0) then
+			PData["ShakeLVL"] = PData["ShakeLVL"]-1
 			setCameraShakeLevel(PData["ShakeLVL"])
-		end
+		end	
 	end
 end
 setTimer(updateStamina,1000,0)
@@ -4520,7 +4581,8 @@ function DrugsPlayerEffect()
 		end, 1000+math.random(0,4000), 0 )
 	end
 end
-
+addEvent("DrugsPlayerEffect", true)
+addEventHandler("DrugsPlayerEffect", root, DrugsPlayerEffect)
 
 
 function SpunkPlayerEffect()
@@ -4532,6 +4594,8 @@ function SpunkPlayerEffect()
 		end, 1000+math.random(0,4000), 0 )
 	end
 end
+addEvent("SpunkPlayerEffect", true)
+addEventHandler("SpunkPlayerEffect", root, SpunkPlayerEffect)
 
 
 
@@ -4562,14 +4626,14 @@ function UpdateTabEvent()
 		if(TABCurrent < MAXSCROLL) then
 			if(isElement(thePlayers[slot])) then
 				if(getElementData(thePlayers[slot], "color")) then
-					RANG=RANG.."".."\n"
+					RANG=RANG..(getElementData(thePlayers[slot], "City") or "San Andreas").."\n"
 					IDF = IDF..getElementData(thePlayers[slot], "id").."\n"
 					NF = NF..getElementData(thePlayers[slot], "color")..getPlayerName(thePlayers[slot]):gsub('#%x%x%x%x%x%x', '').."\n"
 					PING = PING..getPlayerPing(thePlayers[slot]).."\n"
 					TABCurrent=TABCurrent+1
 				end
 			else
-				RANG=RANG.."".."\n"
+				RANG=RANG.."World Wide Web".."\n"
 				IDF = IDF..(TABCurrent+1).."\n"
 				NF = NF.."#FFFFFF"..thePlayers[slot].."\n"
 				PING = PING.."0".."\n"
@@ -4746,8 +4810,12 @@ function updateCamera()
 	
 	
 	if(PData["ResourceMap"]) then
-		--setSkyGradient(170,103,0 ,170,103,0)
-		setSkyGradient(0,0,0 ,0,0,0)
+		setSkyGradient(170,103,0 ,170,103,0)
+		--setSkyGradient(0,0,0 ,0,0,0)
+		setCloudsEnabled(false)
+		setFarClipDistance(3000)
+		setFogDistance(3000)
+		setWeather(0)
 	end
 	
 	
@@ -4831,11 +4899,14 @@ function HUDPreload()
 	dxDrawBorderedText("RPG RealLife (Russian Federation/Tomsk)", 540*scalex, 285*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawBorderedText(Text("ид"), x+(15*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawBorderedText(Text("ник"), x+(60*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawBorderedText("", x+(300*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
+	dxDrawBorderedText("локация", x+(310*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawBorderedText(Text("пинг"), x+(710*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawLine(510*scalex, 329*scaley, x+(750*NewScale), 329*scaley, tocolor(120,120,120,255), 1)
 	dxDrawRectangle(475*scalex, 810*scaley, 470*NewScale, 215*NewScale, tocolor(0, 0, 0, 170))
 	dxDrawBorderedText(Text("Итоги"), 500*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
+	
+	dxDrawRectangle(975*scalex, 810*scaley, 470*NewScale, 215*NewScale, tocolor(0, 0, 0, 170))
+	dxDrawBorderedText(Text("Банда"), 1000*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
 	dxSetBlendMode("blend")
 
 	VideoMemory["HUD"]["WantedBackground"] = dxCreateRenderTarget(dxGetTextWidth("★★★★★★", NewScale*2, "pricedown", false), dxGetFontHeight(NewScale*2, "pricedown"), true)
@@ -4918,6 +4989,12 @@ end
 
 function displayLoadedRes(res)
 	if(getResourceName(res) == "228") then
+		local col = engineLoadCOL("models/des_a51infenc.col")
+		engineReplaceCOL(col, 16094)
+		local dff = engineLoadDFF("models/des_a51infenc.dff")
+		engineReplaceModel(dff, 16094)
+		
+		
 		if(tonumber(getElementData(root, "ServerTime")) < 696902400) then
 			txd = engineLoadTXD("models/copcarvg.txd")
 			engineImportTXD(txd, 596)
@@ -5091,7 +5168,6 @@ CreateBlip(1172, -1323, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
 CreateBlip(2034, -1401, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
 CreateBlip(1225, 313, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
 CreateBlip(-2204, -2309, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
-CreateBlip(189, 1929, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
 CreateBlip(-2655, 640, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Медицинский центр San Fierro")
 CreateBlip(2644, -2044, 0, 27, 0, 0, 0, 0, 0, 0, 300, "Тюнинг")
 CreateBlip(1041, -1015, 0, 27, 0, 0, 0, 0, 0, 0, 300, "TransFender")
@@ -5847,9 +5923,9 @@ function map()
 				if(PData["infopath"][arr3[1]]) then
 					local dat = PData["infopath"][arr3[1]][tostring(arr3[2])]
 					if(dat) then
-						local color = tocolor(120,105,103,255)
+						local color = tocolor(60,60,60,255)
 						if(dat[1] == "Closed" or arr2[1] == "Closed") then
-							color = tocolor(140,125,123,255)
+							color = tocolor(90,90,90,255)
 						end
 						
 						x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
@@ -5981,7 +6057,7 @@ function ShowInfoKey()
 	else
 		setDevelopmentMode(true)
 		ShowInfo = true
-		GPS(math.random(-3000,3000), math.random(-3000,3000), math.random(-3000,3000), "Случайная точка ")
+		--GPS(math.random(-3000,3000), math.random(-3000,3000), math.random(-3000,3000), "Случайная точка ")
 	end
 end
 addEvent("ShowInfoKey", true)
@@ -6138,11 +6214,7 @@ local Cheats = {
 function CheatCode(code)
 	local x,y,z = getElementPosition(localPlayer)
 	if(code == "hesoyam") then
-		setElementHealth(localPlayer, 1000)
-		triggerServerEvent("AddPlayerMoney", localPlayer, localPlayer, 25000)
-		triggerServerEvent("AddPlayerArmor", localPlayer, localPlayer)
-		local theVehicle = getPedOccupiedVehicle(localPlayer)
-		if(theVehicle) then fixVehicle(theVehicle) end
+		triggerServerEvent("hesoyam", localPlayer, localPlayer)
 	elseif(code == "ljspqk" or code == "bringiton") then
 		triggerServerEvent("WantedLevel", localPlayer, localPlayer, 6)
 	elseif(code == "osrblhh" or code == "turnuptheheat") then
@@ -6152,7 +6224,7 @@ function CheatCode(code)
 	elseif(code == "aezakmi") then
 		triggerServerEvent("WantedLevel", localPlayer, localPlayer, "AEZAKMI")
 		if(getElementData(localPlayer, "AEZAKMI")) then
-			ToolTip("Чит деактивирован") 
+			ToolTip("Чит деактивирован")
 			return true
 		end
 	elseif(code == "cpktnwt") then
@@ -6164,48 +6236,15 @@ function CheatCode(code)
 		triggerServerEvent("kill", localPlayer, localPlayer)
 	elseif(code == "vkypqcf") then
 		triggerServerEvent("AddSkill", localPlayer, localPlayer, 22, 1000)
-	elseif(code == "afzllqll") then
-		setWeather(1)
-		setSkyGradient(30,117,210, 53,162,227)
-		setFogDistance(500)
-		setFarClipDistance(3000)
-		setRainLevel(0)
-	elseif(code == "icikpyh") then
-		setWeather(0)
-		setSkyGradient(68,117,210, 36,117,199)
-		setFogDistance(500)
-		setFarClipDistance(3000)
-		setRainLevel(0)
-	elseif(code == "auifrvqs") then
-		setWeather(4)
-		setSkyGradient(80,80,80, 70,70,70)
-		setFogDistance(500)
-		setFarClipDistance(3000)
-		setRainLevel(math.random(0.5,1))
-	elseif(code == "mghxyrm") then
-		setWeather(8)
-		setSkyGradient(80,80,80, 70,70,70)
-		setFogDistance(500)
-		setFarClipDistance(3000)
-		setRainLevel(math.random(0.5,1))
-	elseif(code == "alnsfmzo") then
-		setWeather(4)
-		setSkyGradient(125,145,151, 125,145,151)
-		setFogDistance(500)
-		setFarClipDistance(3000)
-		setRainLevel(0)
-	elseif(code == "cfvfgmj") then
-		setWeather(9)
-		setSkyGradient(146,155,155, 127,144,144)
-		setFogDistance(300)
-		setFarClipDistance(600)
-		setRainLevel(0)
-	elseif(code == "cwjxuoc") then
-		setWeather(19)
-		setSkyGradient(166,163,140, 166,163,140)
-		setFogDistance(50)
-		setFarClipDistance(300)
-		setRainLevel(0)
+	elseif(code == "afzllqll" or
+		   code == "icikpyh" or
+		   code == "auifrvqs" or
+		   code == "mghxyrm" or
+		   code == "alnsfmzo" or
+		   code == "cfvfgmj" or
+		   code == "cwjxuoc") then
+		local zone = GetZoneName(x,y,z, true, getElementData(localPlayer, "City"))
+		triggerServerEvent("CheatWeather", localPlayer, zone, code)
 	elseif(code == "ysohnul") then
 		if(getGameSpeed() == 2) then 
 			ToolTip("Чит деактивирован") 
@@ -8500,6 +8539,127 @@ end
 
 
 
+
+
+--[Необходимое уважение = {Звание, id скина}
+local BandRangs = {
+	["Гроув-стрит"] = {
+		[1] = {0, "Укурыш", 293},
+		[2] = {30, "Красавчик Флиззи", 105},
+		[3] = {60, "Гангстерлительный", 106},
+		[4] = {120, "Джин Рамми", 107},
+		[5] = {180, "Big Smoke", 269},
+		[6] = {310, "Консильери", 270}
+	},
+	["Баллас"] = {
+		[1] = {0, "Жаба", 102},
+		[2] = {30, "Гусь", 103},
+		[3] = {60, "Бык", 104}
+	},
+	["Колумбийский картель"] = {
+		[1] = {0, "La Mugre", 222},
+		[2] = {50, "Sombras", 95},
+		[3] = {75, "Sureno", 30},
+		[4] = {120, "Cacos", 242},
+		[5] = {180, "Guerrero", 179},
+		[6] = {250, "Лейтенант колумбийского картеля", 43}
+	},
+	["Вагос"] = {
+		[1] = {0, "Отмычка", 108},
+		[2] = {30, "Браток", 109},
+		[3] = {60, "Комендант", 110}
+	},
+	["Байкеры"] = {
+		[1] = {0, "Тусовщик", 181},
+		[2] = {30, "Вольный ездок", 247},
+		[3] = {75, "Шустрила", 248},
+		[4] = {130, "Дорожный капитан", 100}
+	},
+	["Русская мафия"] = {
+		[1] = {0, "Клоп", 111},
+		[2] = {30, "Вор", 112},
+		[3] = {75, "Пахан", 113},
+	},
+	["Ацтекас"] = {
+		[1] = {0, "Сопляк", 114},
+		[2] = {30, "Кирпич", 115},
+		[3] = {75, "Башка", 116},
+		[4] = {130, "Громоотвод", 292}
+	},
+	["Триады"] = {
+		[1] = {0, "Моль", 117},
+		[2] = {30, "Баклан", 118},
+		[3] = {75, "Зам. Лидера", 120},
+		[4] = {130, "Желтый дракон (Лидер)", 294}
+	},
+	["Якудзы"] = {
+		[1] = {0, "Куми-ин", 121},
+		[2] = {30, "Сансита", 122},
+		[3] = {75, "Дэката", 123},
+		[4] = {130, "Кумитё (Лидер)", 169}
+	},
+	["Деревенщины"] = {
+		[1] = {0, "Опущенный", 162},
+		[2] = {50, "Чёрт", 160},
+		[3] = {75, "Шнырь", 159},
+		[4] = {120, "Блатной", 161},
+		[5] = {180, "Папаша", 158}
+	},
+	["Рифа"] = {
+		[1] = {0, "Упырь", 173},
+		[2] = {30, "Баклан", 174},
+		[3] = {75, "Капореджиме", 175},
+	},
+	["Полиция"] = {
+		[1] = {0, "Рядовой", 280},
+		[2] = {25, "Инспектор ДПС", 284},
+		[3] = {100, "Сержант", 281},
+		[4] = {250, "Лейтенант", 282},
+		[5] = {300, "SWAT", 285},
+		[6] = {400, "Офицер 1 класса", 267},
+		[7] = {500, "Офицер 2 класса", 266},
+	}, 
+	["Уголовники"] = {
+		[1] = {0, "Потраченный", 252}, 
+		[2] = {25, "Черт", 213}, 
+		[3] = {50, "Шпана", 268}, 
+		[4] = {100, "Блатной", 62}, 
+	}, 
+	["Мирные жители"] = {
+		[1] = {0, "Житель", 252}
+	}, 
+}
+
+
+function GetBandRang(gang,reps)
+	local maks = {BandRangs[gang][1]}
+	for rang, k in ipairs(BandRangs[gang]) do
+		if(k[1] <= reps) then
+			maks[1] = k
+		else
+			if(rang ~= 1) then
+				maks[2] = k
+				break
+			end
+		end
+	end
+	return maks
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 addEventHandler("onClientVehicleCollision", root,
     function(HitElement,force, bodyPart, x, y, z, nx, ny, nz, hitElementForce)
          if(source == getPedOccupiedVehicle(localPlayer)) then
@@ -9181,12 +9341,20 @@ function DrawPlayerMessage()
 		if(PING) then
 			dxDrawImage(0,0,screenWidth,screenHeight, VideoMemory["HUD"]["TABPanel"])
 
+			
+			local team = getTeamName(getPlayerTeam(localPlayer))
+			dxDrawText("Наименование: "..team, 1000*scalex, 840*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
+			local carrier = GetBandRang(team, getTeamVariable(team))
+			dxDrawText("Текущий ранг: "..carrier[1][2], 1000*scalex, 875*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
+			if(carrier[2]) then
+				dxDrawText("До повышения "..(carrier[2][1]-getTeamVariable(team)).." репутации", 1000*scalex, 910*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
+			end
 	
 			dxDrawBorderedText(Text("Игроков")..": "..#getElementsByType("player"), 0, 285*scaley, 510*scalex+(730*NewScale), 0, tocolor(180, 180, 180, 255), NewScale*1.2, "default-bold", "right", "top", false, false, false, true)
 		
 			dxDrawBorderedText(IDF,510*scalex+(15*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
 			dxDrawBorderedText(NF, 510*scalex+(60*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
-			dxDrawBorderedText(RANG, 510*scalex+(300*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
+			dxDrawBorderedText(RANG, 510*scalex+(310*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
 			dxDrawBorderedText(PING, 510*scalex+(710*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
 		
 			
@@ -9194,7 +9362,7 @@ function DrawPlayerMessage()
 			if(getTeamVariable("Мирные жители")) then
 				local count=0
 				
-				dxDrawText(Text(SkillName[24]),  490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
+				dxDrawText(Text(SkillName[24]), 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
 				DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, 24), nil, 150)
 				count=count+1
 				
@@ -9641,8 +9809,8 @@ function StreamIn(restream)
 	elseif(getElementType(source) == "vehicle") then
 		local occupant = getVehicleOccupant(source)
 		VehiclesInStream[source] = {}
-		if(not getElementData(source, "owner")) then
-			VehiclesInStream[source]["blip"] = createBlipAttachedTo(source, 0, 1, 170,170,170,255,1)
+		if(not getElementData(source, "owner") and not getVehicleOccupant(source)) then
+			VehiclesInStream[source]["blip"] = createBlipAttachedTo(source, 0, 1, 170,170,170,170,1)
 		end
 
 		if(occupant) then
@@ -9667,6 +9835,17 @@ function StreamIn(restream)
 			end
 		end
 		initTrunk(source)
+		
+		if(occupant) then
+			if(getElementType(occupant) == "ped") then
+				if(getElementModel(source) == 488 or getElementModel(source) == 497) then
+					setHelicopterRotorSpeed(source, 0.2)
+					if(getElementModel(source) == 497) then
+						VehiclesInStream[source]["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 1.5)
+					end
+				end
+			end
+		end
 	elseif(getElementType(source) == "object") then
 		if(getElementModel(source) == 1362) then
 			local x,y,z = getElementPosition(source)
@@ -9980,6 +10159,216 @@ function getPositionInFL(element,meters)
    y = y + math.cos ( math.rad(r+45) ) * meters
    return x,y,z
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local OffsetLiberty = {[1] = -8000, [2] = -8000, [3] = 0}
+local LibertySmall = {
+	--["WHOLEVC"] = {
+	--	{"WHOLEVC", 5977.83, -10413.5, 10069.9, -6351.89}, 
+	--	{"WHOLELC", 6109.65, 6902.24, 10069.9, 10206.4}
+	--}, 
+	--["COPS_1"] = {
+	--	{"COPS_1", 9050.8, 8304.98, 9097.36, 8368.98}
+	--}, 
+	--["HOSPI_1"] = {
+	--	{"HOSPI_1", 9051.09, 8390.02, 9097.09, 8478.83}
+	--}, 
+	--["FILLIN1"] = {
+	--	{"FILLIN1", 9278.77, 8386.66, 9304.17, 8487.46}
+	--}, 
+	--["MAIN_D1"] = {
+	--	{"MAIN_D1", 8952.53, 8092.73, 8980.16, 8362.31}
+	--}, 
+	--["MAIN_D2"] = {
+	--	{"MAIN_D2", 8881.08, 8362.63, 8979.83, 8390.44}
+	--}, 
+	--["FISHFAC"] = {
+	--	{"FISHFAC", 8859.21, 7850.19, 8931.14, 7923.99}
+	--}, 
+	--["MAIN_D3"] = {
+	--	{"MAIN_D3", 8880.79, 8391.01, 8910.31, 8529.77}
+	--}, 
+	--["MAIN_D4"] = {
+	--	{"MAIN_D4", 8910.59, 8488.91, 8980.11, 8529.77}
+	--}, 
+	--["MAIN_D5"] = {
+	--	{"MAIN_D5", 8950.88, 8536.44, 8979.83, 8717.14}
+	--}, 
+	--["MAIN_D6"] = {
+	--	{"MAIN_D6", 8951.15, 8718.04, 8979.85, 8820.78}
+	--}, 
+	--["WEE_DAM"] = {
+	--	{"WEE_DAM", 6676.41, 9306.84, 7004.55, 9504.65}
+	--}, 
+	["ROADBR1"] = {
+		{"Callahan Bridge", 8532.77, 8041.65, 8980.44, 8091.65}
+	}, 
+	["PORT_W"] = {
+		{"Callahan Point", 8666.68, 7821.78, 8980.68, 8041.27}
+	}, 
+	["PORT_S"] = {
+		{"Atlantic Quays", 8980.88, 7748.45, 9416.88, 7930.07}
+	}, 
+	["PORT_E"] = {
+		{"Portland Harbor", 9278.68, 7930.35, 9730.68, 8386.35}
+	}, 
+	["PORT_I"] = {
+		{"Trenton", 8980.88, 7930.15, 9278.38, 8257.95}
+	}, 
+	["LCHINA"] = {
+		{"Chinatown", 8660.42, 8091.71, 8965.42, 8551.31}
+	}, 
+	["REDLIGH"] = {
+		{"Red Light District", 8660.38, 8536.38, 8980.38, 8717.38}
+	}, 
+	["TOWERS"] = {
+		{"Hepburn Heights", 8660.42, 8717.6, 8980.42, 8921.23}
+	}, 
+	["LITTLEI"] = {
+		{"Saint Mark's", 8980.9, 8487.68, 9303.9, 8921.68}
+	}, 
+	["HARWOOD"] = {
+		{"Harwood", 8660.98, 8921.82, 9303.98, 9322.68}
+	}, 
+	["EASTBAY"] = {
+		{"Portland Beach", 9304.37, 8386.53, 9712.6, 9199.63}
+	}, 
+	["S_VIEW"] = {
+		{"Portland View", 8981.1, 8258.19, 9278.6, 8487.19}
+	}, 
+	["ROADBR2"] = {
+		{"Callahan Bridge", 8359.77, 8041.7, 8529.88, 8091.7}
+	}, 
+	["CONSTRU"] = {
+		{"Fort Staunton", 8154.88, 8588.38, 8529.32, 8938.38}
+	}, 
+	["LCADIUM"] = {
+		{"Aspatria", 7689.24, 8587.4, 8031.24, 9160.5}
+	}, 
+	["YAKUSA"] = {
+		{"Torrington", 8114.77, 7327.58, 8492.77, 7940.07}
+	}, 
+	["LCOPING"] = {
+		{"Bedford Point", 7690.56, 7327.95, 8114.56, 7995.55}
+	}, 
+	["COM_EAS"] = {
+		{"Newport", 8115.11, 7940.81, 8530.11, 8587.81}
+	}, 
+	["PARK"] = {
+		{"Belleville Park", 7793.43, 7996.93, 8114.27, 8586.93}
+	}, 
+	["UNIVERS"] = {
+		{"Liberty Campus", 8032.27, 8588.38, 8154.27, 8938.38}
+	}, 
+	["HOSPI_2"] = {
+		{"Rockford", 8032.24, 8938.89, 8530.24, 9268.89}
+	}, 
+	["LCRPORT"] = {
+		{"Francis Intl. Airport", 6282.03, 7655.29, 7446.37, 8731.56}
+	}, 
+	["PROJECT"] = {
+		{"Wichita Gardens", 7103.17, 8731.93, 7543.96, 9092.73}
+	}, 
+	["SWANKS"] = {
+		{"Cedar Grove", 7047.77, 9093.39, 7648.09, 9650.06}
+	}, 
+	["SUB_IND"] = {
+		{"Pike Creek", 6507.43, 8732.03, 7102.69, 9092.76}
+	}, 
+	["BIG_DAM"] = {
+		{"Cochrane Dam", 6520.5, 9093.44, 7047.48, 9704.54}
+	}, 
+}
+
+local LibertyBig = {
+	["IND_ZON"] = {
+		{"Portland", 8532.15, 7670.28, 9817.66, 9434.12}
+	}, 
+	["COM_ZON"] = {
+		{"Staunton Island", 7649.52, 7280.03, 8530.52, 9367.26}
+	}, 
+	["SUB_ZON"] = {
+		{"Shoreside Vale", 6270.36, 7648.62, 7648.1, 10206.4}
+	}, 
+	--["SUB_ZO2"] = {
+	--	{"Shoreside Vale", 7649.56, 9161.11, 7793.71, 9367.04}
+	--}, 
+	--["SUB_ZO3"] = {
+	--	{"Shoreside Vale", 7649.57, 9079.09, 7688.67, 9161.06}
+	--}, 
+}
+
+for _,dat in pairs(LibertySmall) do
+	for _, v in pairs(dat) do
+		v[2] = v[2] + OffsetLiberty[1]
+		v[3] = v[3] + OffsetLiberty[2]
+		
+		v[4] = v[4] + OffsetLiberty[1]
+		v[5] = v[5] + OffsetLiberty[2]
+	end
+end
+
+
+for _,dat in pairs(LibertyBig) do
+	for _, v in pairs(dat) do
+		v[2] = v[2] + OffsetLiberty[1]
+		v[3] = v[3] + OffsetLiberty[2]
+		
+		v[4] = v[4] + OffsetLiberty[1]
+		v[5] = v[5] + OffsetLiberty[2]
+	end
+end
+
+
+
+function GetZoneName(x,y,z, citiesonly, City)
+	if(City) then
+		if(City == "Liberty City") then 
+			if(not citiesonly) then -- Если ничего не находит отображает название больших районов
+				for _, dist in pairs(LibertySmall) do
+					for _, v in pairs(dist) do
+						if(v[2] <= x and v[3] <= y) then
+							if(v[4] >= x and v[5] >= y) then
+								return v[1]
+							end
+						end
+					end
+				end
+			end 
+			
+			for _, dist in pairs(LibertyBig) do -- Если не находит тут то пишет просто Liberty City
+				for _, v in pairs(dist) do
+					if(v[2] <= x and v[3] <= y) then
+						if(v[4] >= x and v[5] >= y) then
+							return v[1]
+						end
+					end
+				end
+			end
+			return "Liberty City"
+		elseif(City == "Vice City") then
+			return "Vice City"
+		end
+	end
+	return getZoneName(x,y,z, citiesonly)
+end
+
+
+
+
+
 
 
 

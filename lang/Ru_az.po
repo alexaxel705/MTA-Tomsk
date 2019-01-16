@@ -1,147 +1,152 @@
 # Alexey516 <alexaxel705@gmail.com>, 2017
+# Translators:
+# Erkin Sendzher <sanjar.erkin@gmail.com>, 2017
+# Алексей <alexaxel705@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: MTA-Tomsk\n"
 "Report-Msgid-Bugs-To: http://109.227.228.4/\n"
 "POT-Creation-Date: 2011-06-23 11:00+0200\n"
 "PO-Revision-Date: 2012-07-26 13:31+0000\n"
-"Last-Translator: Alexey516 <alexaxel705@gmail.com>\n"
-"Language-Team: Russian (http://109.227.228.4/)\n"
+"Last-Translator: Алексей <alexaxel705@gmail.com>, 2017\n"
+"Language-Team: Azerbaijani (Azerbaijan) (https://www.transifex.com/multi-theft-auto-tomsk/teams/73682/az_AZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: az_AZ\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Регистрация/Вход"
-msgstr "Регистрация/Вход"
+msgstr "Qeyd ol/Daxil ol"
 
 msgid "Служба - Найди способ нажраться"
-msgstr "Служба - Найди способ нажраться"
+msgstr "Hərbi xidmət - Sərxoş olmaq üçün bir yol tap"
 
 msgid "Посади заключенного на бутылку"
-msgstr "Посади заключенного на бутылку"
+msgstr "Məhbusu butulkanın üstündə otuzdur"
 
 msgid "МИССИЯ ВЫПОЛНЕНА"
-msgstr "МИССИЯ ВЫПОЛНЕНА"
+msgstr "MİSSİYA BAŞA ÇATDIRILIB"
 
 msgid "Дойди до магазина"
-msgstr "Дойди до магазина"
+msgstr "Dükanacan çat"
 
 msgid "Зайди в магазин и купи пачку #596289сигарет"
-msgstr "Зайди в магазин и купи пачку #596289сигарет"
+msgstr "Dükana gir və #596289sigaret #ffffffpaçkasın al"
 
 msgid "Посети участок"
-msgstr "Посети участок"
+msgstr "Polis məntəqəsin ziyarət et"
 
 msgid "Зайди в раздевалку и получи #596289экипировку"
-msgstr "Зайди в раздевалку и получи #596289экипировку"
+msgstr "Qarderoba gir və #596289silah #ffffff al"
 
 msgid "Плантация"
-msgstr "Плантация"
+msgstr "Plantasiya"
 
 msgid "Притон"
-msgstr "Притон"
+msgstr "Priton"
 
 msgid "СЛОМАНО"
-msgstr "СЛОМАНО"
+msgstr "QIRILDI"
 
 msgid "ПОТРАЧЕНО"
-msgstr "ПОТРАЧЕНО"
+msgstr "SƏRF EDİLDİ"
 
 msgid "Игроков"
-msgstr "Игроков"
+msgstr "Oyunçular"
 
 msgid "Благодарности"
-msgstr "Благодарности"
+msgstr "Təşəkkürlər"
 
 msgid "Над сервером работали"
-msgstr "Над сервером работали"
+msgstr "Serverin üstündə işləyiblər"
 
 msgid "пинг"
-msgstr "пинг"
+msgstr "ping"
 
 msgid "Не авторизирован"
-msgstr "Не авторизирован"
+msgstr "Girməyib"
 
 msgid "место в рейтинге"
-msgstr "место в рейтинге"
+msgstr "reytingdə yer"
 
 msgid "ник"
-msgstr "ник"
+msgstr "nik"
 
 msgid "Масса"
-msgstr "Масса"
+msgstr "Çəki"
 
 msgid "Цена"
-msgstr "Цена"
+msgstr "Qiymət"
 
 msgid "ид"
-msgstr "ид"
+msgstr "id"
 
 msgid "Итоги"
-msgstr "Итоги"
+msgstr "Nəticələr"
 
 msgid "Введи номер или ИД игрока"
-msgstr "Введи номер или ИД игрока"
+msgstr "Oyunçunun nomrəsin və ya ID-sin yaz"
 
 msgid "наше время"
-msgstr "наше время"
+msgstr "bizim vaxtlarda"
 
 msgid "наши дни"
-msgstr "наши дни"
+msgstr "bizim günlərdə"
 
 msgid "#FFA500Психиатрическая больница"
-msgstr "#FFA500Психиатрическая больница"
+msgstr "#FFA500Psixiatrik xəstəxana"
 
 msgid "До освобождения"
-msgstr "До освобождения"
+msgstr "Azadlığa gədər"
 
 msgid "До выписки"
-msgstr "До выписки"
+msgstr "Çıxarışa gədər"
 
 msgid "hp"
-msgstr "hp"
+msgstr "can"
 
 msgid "Бронежилет"
-msgstr "Бронежилет"
+msgstr "Zirəh"
 
 msgid "Канистра"
-msgstr "Канистра"
+msgstr "Kanistra"
 
 msgid "Реликвия"
-msgstr "Реликвия"
+msgstr "Relikt"
 
 msgid "Подкова"
-msgstr "Подкова"
+msgstr "At nalı"
 
 msgid "Телефон"
-msgstr "Телефон"
+msgstr "Telefon"
 
 msgid "47 Хромосома"
-msgstr "47 Хромосома"
+msgstr "47 Xromosom"
 
 msgid "Рюкзак"
-msgstr "Рюкзак"
+msgstr "Çanta"
 
 msgid "Чемодан"
-msgstr "Чемодан"
+msgstr "Çamadan"
 
 msgid "Пакет"
-msgstr "Пакет"
+msgstr "Paket"
 
 msgid "АК-47"
-msgstr "АК-47"
+msgstr "AK-47"
 
 msgid "Граната"
-msgstr "Граната"
+msgstr "Qumbara"
 
 msgid "Молотов"
-msgstr "Молотов"
+msgstr "Molotof"
 
 msgid "М16"
-msgstr "М16"
+msgstr "M16"
 
 msgid "Кольт 45"
-msgstr "Кольт 45"
+msgstr "Kolt 45"
 
 msgid "USP-S"
 msgstr "USP-S"
@@ -150,7 +155,7 @@ msgid "Deagle"
 msgstr "Deagle"
 
 msgid "Кровь"
-msgstr "Кровь"
+msgstr "Qan"
 
 msgid "Pissh"
 msgstr "Pissh"
@@ -168,25 +173,25 @@ msgid "isabella"
 msgstr "isabella"
 
 msgid "Фекалии"
-msgstr "Фекалии"
+msgstr "Pox"
 
 msgid "CoK"
 msgstr "CoK"
 
 msgid "Сигарета"
-msgstr "Сигарета"
+msgstr "Sigaret"
 
 msgid "Mossberg"
-msgstr "Mossberg"
+msgstr "Ov tufəngi Mossberg"
 
 msgid "Sawed-Off"
-msgstr "Sawed-Off"
+msgstr "Kəsilmiş tufəng"
 
 msgid "SPAS-12"
 msgstr "SPAS-12"
 
 msgid "Узи"
-msgstr "Узи"
+msgstr "Uzi"
 
 msgid "MP5"
 msgstr "MP5"
@@ -195,566 +200,587 @@ msgid "Tec-9"
 msgstr "Tec-9"
 
 msgid "ИЖ-12"
-msgstr "ИЖ-12"
+msgstr "İJ-12"
 
 msgid "M40"
 msgstr "M40"
 
 msgid "Dildo XXL"
-msgstr "Dildo XXL"
+msgstr "Yekə dildo"
 
 msgid "Dildo"
 msgstr "Dildo"
 
 msgid "Вибратор"
-msgstr "Вибратор"
+msgstr "Vibrator"
 
 msgid "Клюшка"
-msgstr "Клюшка"
+msgstr "Kluşka"
 
 msgid "Лопата"
-msgstr "Лопата"
+msgstr "Kürək"
 
 msgid "Бита"
-msgstr "Бита"
+msgstr "Çomağ"
 
 msgid "Нож"
-msgstr "Нож"
+msgstr "Bıcağ"
 
 msgid "Катана"
-msgstr "Катана"
+msgstr "Katana"
 
 msgid "Камера"
-msgstr "Камера"
+msgstr "Kamera"
 
 msgid "Бензопила"
-msgstr "Бензопила"
+msgstr "Matorlu mişar"
 
 msgid "Лазерный прицел"
-msgstr "Лазерный прицел"
+msgstr "Lazer nişanı"
 
 msgid "9-мм"
-msgstr "9-мм"
+msgstr "9-mm"
 
 msgid "5.56-мм"
-msgstr "5.56-мм"
+msgstr "5.56-mm"
 
 msgid "7.62-мм"
-msgstr "7.62-мм"
+msgstr "7.62-mm"
 
 msgid "18.5-мм"
-msgstr "18.5-мм"
+msgstr "18.5-mm"
 
 msgid "Кулак"
-msgstr "Кулак"
+msgstr "Yumuruq"
 
 msgid "Конопля"
-msgstr "Конопля"
+msgstr "Cətənək"
 
 msgid "Кока"
-msgstr "Кока"
+msgstr "Koka"
 
 msgid "Косяк"
-msgstr "Косяк"
+msgstr "Nəşə"
 
 msgid "Спанк"
-msgstr "Спанк"
+msgstr "Spank"
 
 msgid "Удочка"
-msgstr "Удочка"
+msgstr "Qarmağ"
 
 msgid "Рыба"
-msgstr "Рыба"
+msgstr "Balıq"
 
 msgid "Черепаха"
-msgstr "Черепаха"
+msgstr "tısbağa"
 
 msgid "Акула"
-msgstr "Акула"
+msgstr "Köpəkbalığı"
 
 msgid "Дельфин"
-msgstr "Дельфин"
+msgstr "Delfin"
 
 msgid "Парашют"
-msgstr "Парашют"
+msgstr "Paraşüt"
 
 msgid "Запаска"
-msgstr "Запаска"
+msgstr "Ehtiyat təkəri"
 
 msgid "Скот"
-msgstr "Скот"
+msgstr "Mal-qara"
 
 msgid "Сено"
-msgstr "Сено"
+msgstr "Ot"
 
 msgid "Газета"
-msgstr "Газета"
+msgstr "Qəzet"
 
 msgid "Деньги"
-msgstr "Деньги"
+msgstr "Pul"
 
 msgid "Кредитка"
-msgstr "Кредитка"
+msgstr "Kredit kartı"
 
 msgid "Передать {name}"
-msgstr "Передать {name}"
+msgstr "{name}-ə ver"
 
 msgid "Посадить {name}"
-msgstr "Посадить {name}"
+msgstr "{name}-i otuzdur"
 
 msgid "Извлечь {item}"
-msgstr "Извлечь {item}"
+msgstr "{item} çıxard"
 
 msgid "Использовать"
-msgstr "Использовать"
+msgstr "İşlətmək"
 
 msgid "Выбросить"
-msgstr "Выбросить"
+msgstr "Tullamaq"
 
 msgid "Введи количество"
-msgstr "Введи количество"
+msgstr "Miqdarını daxil et"
 
 msgid "Урон"
-msgstr "Урон"
+msgstr "Ziyan"
 
 msgid "Расстояние"
-msgstr "Расстояние"
+msgstr "Məsafə"
 
 msgid "Магазин"
-msgstr "Магазин"
+msgstr "Dükan"
 
 msgid "Калибр"
-msgstr "Калибр"
+msgstr "Kalibr"
 
 msgid "Здоровье"
-msgstr "Здоровье"
+msgstr "Can"
 
 msgid "Вождение"
-msgstr "Вождение"
+msgstr "Sürücülük"
 
 msgid "Мотоциклист"
-msgstr "Мотоциклист"
+msgstr "Motosikletçi"
 
 msgid "Велосипедист"
-msgstr "Велосипедист"
+msgstr "Velosipedçi"
 
 msgid "Летчик"
-msgstr "Летчик"
+msgstr "Pilot"
 
 msgid "Грузоперевозки"
-msgstr "Грузоперевозки"
+msgstr "Yük daşınması"
 
 msgid "Рыболов"
-msgstr "Рыболов"
+msgstr "Balıqçı"
 
 msgid "Рукопашный бой"
-msgstr "Рукопашный бой"
+msgstr "Döyüşmə"
 
 msgid "Пистолет"
-msgstr "Пистолет"
+msgstr "Pistolet"
 
 msgid "Пистолет с глуш."
-msgstr "Пистолет с глуш."
+msgstr "Səsboğucu ilə pistolet"
 
 msgid "Дигл"
-msgstr "Дигл"
+msgstr "Deagle"
 
 msgid "Дробовик"
-msgstr "Дробовик"
+msgstr "Tüfəng"
 
 msgid "Sawn-Off"
-msgstr "Sawn-Off"
+msgstr "Kəs. Tüfəng"
 
 msgid "SPAZ-12"
 msgstr "SPAZ-12"
 
 msgid "УЗИ"
-msgstr "УЗИ"
+msgstr "UZİ"
 
 msgid "Винтовка"
-msgstr "Винтовка"
+msgstr "Ov tüfəngi"
 
 msgid "Выносливость"
-msgstr "Выносливость"
+msgstr "Dözümlük"
 
 msgid "Качество"
-msgstr "Качество"
+msgstr "Keyfiyət"
 
 msgid "Выпадает после смерти"
-msgstr "Выпадает после смерти"
+msgstr "Ölumdən sonra düşür"
 
 msgid "Чтобы использовать этот предмет возьми его в руки"
-msgstr "Чтобы использовать этот предмет возьми его в руки"
+msgstr "Bu şeyi istifadə etmək üçün əlivizə alın"
 
 msgid "кг"
-msgstr "кг"
+msgstr "kg"
 
 msgid "г"
-msgstr "г"
+msgstr "g"
 
 msgid "км"
-msgstr "км"
+msgstr "km"
 
 msgid "м"
-msgstr "м"
+msgstr "m"
 
 msgid "КМ/Ч"
-msgstr "КМ/Ч"
+msgstr "KM/S"
+
+msgid "Л.С."
+msgstr "L.S."
+
+msgid "Макс скорость"
+msgstr "Maks sürət"
+
+msgid "Мощность"
+msgstr "At gücü"
+
+msgid "Ускорение"
+msgstr "sürətlənmə"
+
+msgid "Тормоза"
+msgstr "Tormozlar"
 
 msgid "отвратительное"
-msgstr "отвратительное"
+msgstr "nifrətəlayı"
 
 msgid "мерзкое"
-msgstr "мерзкое"
+msgstr "çirkin"
 
 msgid "гадкое"
-msgstr "гадкое"
+msgstr "murdar"
 
 msgid "плохое"
-msgstr "плохое"
+msgstr "pis"
 
 msgid "обычное"
-msgstr "обычное"
+msgstr "sadə"
 
 msgid "хорошее"
-msgstr "хорошее"
+msgstr "yaxşı"
 
 msgid "очень хорошее"
-msgstr "очень хорошее"
+msgstr "çox yaxşı"
 
 msgid "отличное"
-msgstr "отличное"
+msgstr "əla"
 
 msgid "высокое"
-msgstr "высокое"
+msgstr "yüksək"
 
 msgid "великолепное"
-msgstr "великолепное"
+msgstr "mükəmməl"
 
 msgid "превосходное"
-msgstr "превосходное"
+msgstr "mükəmməldən yaxşı"
 
 msgid "Закончилось место в инвентаре"
-msgstr "Закончилось место в инвентаре"
+msgstr "İnventrada yer sona çatdı"
 
 msgid ""
 "Для сбора урожая удерживай\n"
 "скорость в пределах зеленой зоны"
-msgstr ""
-"Для сбора урожая удерживай\n"
-"скорость в пределах зеленой зоны"
+msgstr "Məhsulu yiğmaq üçün sürəti yaşıl zonanın icində saxla"
 
 msgid "Мирные жители"
-msgstr "Мирные жители"
+msgstr "Sakinlər"
 
 msgid "Уголовники"
-msgstr "Уголовники"
+msgstr "Cinayətkarlar"
 
 msgid "Официалы"
-msgstr "Официалы"
+msgstr "Rəsmilər"
 
 msgid "Бандиты"
-msgstr "Бандиты"
+msgstr "Banditlər"
 
 msgid "Колумбийский картель"
-msgstr "Колумбийский картель"
+msgstr "Kolumbiya karteli"
 
 msgid "Синдикат Локо"
-msgstr "Синдикат Локо"
+msgstr "Loko Sindikatı"
 
 msgid "Наркомафия"
-msgstr "Наркомафия"
+msgstr "Narkomafiya"
 
 msgid "Баллас"
-msgstr "Баллас"
+msgstr "Ballas"
 
 msgid "Гроув-стрит"
-msgstr "Гроув-стрит"
+msgstr "Grove-street"
 
 msgid "МЧС"
-msgstr "МЧС"
+msgstr "FHN"
 
 msgid "Полиция"
-msgstr "Полиция"
+msgstr "Polis"
 
 msgid "ЦРУ"
-msgstr "ЦРУ"
+msgstr "CIA"
 
 msgid "Военные"
-msgstr "Военные"
+msgstr "Hərbi"
 
 msgid "Триады"
-msgstr "Триады"
+msgstr "Triada"
 
 msgid "Якудзы"
-msgstr "Якудзы"
+msgstr "Yakudza"
 
 msgid "Русская мафия"
-msgstr "Русская мафия"
+msgstr "Rus mafiyası"
 
 msgid "Байкеры"
-msgstr "Байкеры"
+msgstr "Baykerlər"
 
 msgid "Вагос"
-msgstr "Вагос"
+msgstr "Vagos"
 
 msgid "ФБР"
-msgstr "ФБР"
+msgstr "FBI"
 
 msgid "Рифа"
-msgstr "Рифа"
+msgstr "Rifa"
 
 msgid "Деревенщины"
-msgstr "Деревенщины"
+msgstr "Kəndçilər"
 
 msgid "Ацтекас"
-msgstr "Ацтекас"
+msgstr "Aztek"
 
 msgid "Частная собственность"
-msgstr "Частная собственность"
+msgstr "Xüsusi Mülkiyyət"
 
 msgid "Января"
-msgstr "Января"
+msgstr "Yanvar"
 
 msgid "Февраля"
-msgstr "Февраля"
+msgstr "Fevral"
 
 msgid "Марта"
-msgstr "Марта"
+msgstr "Mart"
 
 msgid "Апреля"
-msgstr "Апреля"
+msgstr "Aprel"
 
 msgid "Мая"
-msgstr "Мая"
+msgstr "May"
 
 msgid "Июня"
-msgstr "Июня"
+msgstr "İyun"
 
 msgid "Июля"
-msgstr "Июля"
+msgstr "İyul"
 
 msgid "Августа"
-msgstr "Августа"
+msgstr "Avgust"
 
 msgid "Сентября"
-msgstr "Сентября"
+msgstr "Sentyabr"
 
 msgid "Октября"
-msgstr "Октября"
+msgstr "Oktyabr"
 
 msgid "Ноября"
-msgstr "Ноября"
+msgstr "Noyabr"
 
 msgid "Декабря"
-msgstr "Декабря"
+msgstr "Dekabr"
 
 msgid "КУПЛЕНО"
-msgstr "КУПЛЕНО"
+msgstr "ALINDI"
 
 msgid "БЕСПЛАТНО"
-msgstr "БЕСПЛАТНО"
+msgstr "PULSUZ"
 
 msgid ""
 "Поступил новый вызов!\n"
 " #FFFFFFОтправляйся на #FF0000красный маркер"
 msgstr ""
-"Поступил новый вызов!\n"
-" #FFFFFFОтправляйся на #FF0000красный маркер"
+"Təzə zəng gəldi\n"
+"#FFFFFFGet #FF0000gırmızı markerə"
 
 msgid "пополнить"
-msgstr "пополнить"
+msgstr "artır"
 
 msgid "снять"
-msgstr "снять"
+msgstr "çıxard"
 
 msgid "Карьер «Hunter Quarry»"
-msgstr "Карьер «Hunter Quarry»"
+msgstr "«Hunter Quarry» karyeri"
 
 msgid "Свалка Angel Pine"
-msgstr "Свалка Angel Pine"
+msgstr "Angel Pine zibilliki"
 
 msgid "Аэропорт Los Santos"
-msgstr "Аэропорт Los Santos"
+msgstr "Los Santos Hava Limanı"
 
 msgid "Аэропорт San Fierro"
-msgstr "Аэропорт San Fierro"
+msgstr "San Fierro Hava Limanı"
 
 msgid "Аэропорт Las Venturas"
-msgstr "Аэропорт Las Venturas"
+msgstr "Las Venturas Hava Limanı"
 
 msgid "Пожарная станция Los Santos"
-msgstr "Пожарная станция Los Santos"
+msgstr "Los Santos yanğın deposu"
 
 msgid "Пожарная станция San Fierro"
-msgstr "Пожарная станция San Fierro"
+msgstr "San Fierro yanğın deposu"
 
 msgid "Пожарная станция Las Venturas №3"
-msgstr "Пожарная станция Las Venturas №3"
+msgstr "Las Venturas yanğın deposu №3"
 
 msgid "База грузоперевозок"
-msgstr "База грузоперевозок"
+msgstr "Yük daşıma bazası"
 
 msgid "НПЗ «Green Palms»"
-msgstr "НПЗ «Green Palms»"
+msgstr "NEZ «Green Palms»"
 
 msgid "Тренажерный зал"
-msgstr "Тренажерный зал"
+msgstr "Məşg zalı"
 
 msgid "Больница"
-msgstr "Больница"
+msgstr "Həstəxana"
 
 msgid "Медицинский центр San Fierro"
-msgstr "Медицинский центр San Fierro"
+msgstr "San Fierro tibb mərkəzi"
 
 msgid "Тюнинг"
-msgstr "Тюнинг"
+msgstr "Sazlama"
 
 msgid "Закусочная"
-msgstr "Закусочная"
+msgstr "Yeməkxana"
 
 msgid "Ресторан"
-msgstr "Ресторан"
+msgstr "Restoran"
 
 msgid "Банк"
-msgstr "Банк"
+msgstr "Bank"
 
 msgid "Полицейский участок Los Santos"
-msgstr "Полицейский участок Los Santos"
+msgstr "Los Santos polis məntəqəsi"
 
 msgid "Полицейский участок Las Venturas"
-msgstr "Полицейский участок Las Venturas"
+msgstr "Las Venturas polis məntəqəsi"
 
 msgid "Полицейский участок San Fierro"
-msgstr "Полицейский участок San Fierro"
+msgstr "San Fierro polis məntəqəsi"
 
 msgid "Медицинский центр Fort Caston"
-msgstr "Медицинский центр Fort Caston"
+msgstr "Fort Caston tibb mərkəzi"
 
 msgid "Клуб"
-msgstr "Клуб"
+msgstr "Klub"
 
 msgid "Автосалон «Wang Cars»"
-msgstr "Автосалон «Wang Cars»"
+msgstr "«Wang Cars» avtosalonu"
 
 msgid "Склад «Redsands West»"
-msgstr "Склад «Redsands West»"
+msgstr "«Redsands West» anbarı"
 
 msgid "Мотосалон «Dillmore»"
-msgstr "Мотосалон «Dillmore»"
+msgstr "«Dillmore» motosalonu"
 
 msgid "ВС"
-msgstr "ВС"
+msgstr "B."
 
 msgid "ПН"
-msgstr "ПН"
+msgstr "B.E."
 
 msgid "ВТ"
-msgstr "ВТ"
+msgstr "Ç.A."
 
 msgid "СР"
-msgstr "СР"
+msgstr "Ç."
 
 msgid "ЧТ"
-msgstr "ЧТ"
+msgstr "C.A."
 
 msgid "ПТ"
-msgstr "ПТ"
+msgstr "C."
 
 msgid "СБ"
-msgstr "СБ"
+msgstr "Ş."
 
 msgid "Нажми {key} чтобы припарковать машину"
-msgstr "Нажми {key} чтобы припарковать машину"
+msgstr "Maşını park etmək üçün {key} bas"
 
 msgid "Нажми {key} чтобы переодеться"
-msgstr "Нажми {key} чтобы переодеться"
+msgstr "Paltarıvı dəyişmək üçün {key} bas"
 
 msgid "Нажми {key} чтобы встать"
-msgstr "Нажми {key} чтобы встать"
+msgstr "Durmak üçün {key} bas"
 
 msgid "Нажми {key} чтобы купить"
-msgstr "Нажми {key} чтобы купить"
+msgstr "Almaq üçün {key} bas"
 
 msgid "Sprunk стоимость #3B7231$20#FFFFFF"
-msgstr "Sprunk стоимость #3B7231$20#FFFFFF"
+msgstr "Sprunk qiyməti #3B7231$20#FFFFFF"
 
 msgid "Нажми {key} чтобы лечь"
-msgstr "Нажми {key} чтобы лечь"
+msgstr "Uzanmaq üçün {key} bas"
 
 msgid "Информация"
-msgstr "Информация"
+msgstr "Məlumat"
 
 msgid "Дата рождения"
-msgstr "Дата рождения"
+msgstr "Təvəllüd"
 
 msgid "Фракция"
-msgstr "Фракция"
+msgstr "Fraksiya"
 
 msgid "Работа"
-msgstr "Работа"
+msgstr "İş"
 
 msgid "{age} лет"
-msgstr "{age} лет"
+msgstr "{age} il"
 
 msgid ""
 "На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу "
 "{key} для автоматического перемещения"
 msgstr ""
-"На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу "
-"{key} для автоматического перемещения"
+"#4682B4xəriyəyə#FFFFFF #ff0000nöqtə#FFFFFF əlavə olunub! Avtopilotu qurmaq "
+"üçün {key} bas"
 
 msgid "Группа ВКонтакте {link}"
-msgstr "Группа ВКонтакте {link}"
+msgstr "Vkontakte gruppu {link}"
 
 msgid "Исходный код сервера {link}"
-msgstr "Исходный код сервера {link}"
+msgstr "Serverin ana kodu {link}"
 
 msgid "Нажми {key} чтобы писать в общий чат"
-msgstr "Нажми {key} чтобы писать в общий чат"
+msgstr "Ümumi çata yazmaq üçün {key} bas"
 
 msgid "Нажми {key} чтобы писать в командный чат"
-msgstr "Нажми {key} чтобы писать в командный чат"
+msgstr "Komandanın çatına yazmaq üçün {key} bas"
 
 msgid "Нажми {key} чтобы войти"
-msgstr "Нажми {key} чтобы войти"
+msgstr "Girmək üçün {key} bas"
 
 msgid "Нажми {key} чтобы выйти"
-msgstr "Нажми {key} чтобы выйти"
+msgstr "Çıxmaq üçün {key} bas"
 
 msgid "Нажми {key} чтобы купить дом"
-msgstr "Нажми {key} чтобы купить дом"
+msgstr "Evi almaq üçün {key} bas"
 
 msgid "Нажми {key} чтобы открыть дом"
-msgstr "Нажми {key} чтобы открыть дом"
+msgstr "Evi açmaq üçün {key} bas"
 
 msgid "Нажми {key} чтобы закрыть дом"
-msgstr "Нажми {key} чтобы закрыть дом"
+msgstr "Evi bağlamaq üçün {key} bas"
 
 msgid "Нажми {key} чтобы продать дом {money}"
-msgstr "Нажми {key} чтобы продать дом {money}"
+msgstr "Evi satmaq üçün {key} bas {money}"
 
 msgid "Нажми {key} чтобы открыть гараж"
-msgstr "Нажми {key} чтобы открыть гараж"
+msgstr "Qarajı açmaq üçün {key} bas"
 
 msgid "Нажми {key} чтобы закрыть гараж"
-msgstr "Нажми {key} чтобы закрыть гараж"
+msgstr "Qarajı bağlamaq üçün {key} bas"
 
 msgid "ЗАКРЫТО НА РЕМОНТ"
-msgstr "ЗАКРЫТО НА РЕМОНТ"
+msgstr "TƏMİRƏ BAĞLANIB"
 
 msgid "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА"
-msgstr "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА"
+msgstr "TƏZƏ MOTOR VƏ RƏNG"
 
 msgid "Нажми {key} чтобы начать заправку"
-msgstr "Нажми {key} чтобы начать заправку"
+msgstr "Yanacağ doldurması üçün {key} bas"
 
 msgid "Нажми {key} чтобы остановить заправку"
-msgstr "Нажми {key} чтобы остановить заправку"
+msgstr "Yanacağ doldurması saxlamaq üçün {key} bas"
 
 msgid ""
 "В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы "
 "посмотреть"
 msgstr ""
-"В #4682B4инвентарь#FFFFFF добавлен предмет {item}, нажми {key} чтобы "
-"посмотреть"
+"#4682B4inventara#FFFFFF {item} obyekti əlavə olunub, baxmaq üçün {key} bas"
+
+msgid "Обгон +{points}"
+msgstr ""
+
+msgid "Опасное вождение +{points}"
+msgstr ""
+
+msgid "Отрыв от земли +{points}"
+msgstr ""

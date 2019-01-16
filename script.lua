@@ -209,7 +209,6 @@ function setCameraOnPlayerJoin()
 	end
 	PData[source] = {
 		['radar'] = createBlipAttachedTo(source, 0, 2, 0, 0, 0, 255, 2),
-		['Cops'] = {}, -- Хранит ботов, полицейских которые учавствуют в погоне за игроком
 		['lang'] = "Русский",
 		['PayDay'] = 0, -- С каждой зарплатой множитель растет (Продолжительность игры на сервере)
 		['CONTROLS'] = {
@@ -533,15 +532,22 @@ local SpawnPoint = {
 }
 
 local ClinicSpawn = {
-	["Los Santos"] = {1183, -1323.7, 13.6, 270, "MEDLS"},
-	["Red County"] = {1224.4, 306.8, 19.7, 180, "MEDRC"},
-	["Whetstone"] = {-2198.6, -2309.4, 30.6, 0, "MEDWS"},
-	["Flint County"] = {-2198.6, -2309.4, 30.6, 0, "MEDWS"},
-	["San Fierro"] = {-2659, 627, 14.5, 180, "MEDSF"},
-	["Bone County"] = {-316.1, 1056.8, 19.79, 0, "MEDBC"},
-	["Tierra Robada"] = {-1514, 2528, 55.7, 0, "MEDTR"},
-	["Las Venturas"] = {1605, 1820,  10.9, 0, "MEDLV"},
-	["Unknown"] = {2033, -1415, 17, 180, "MEDUN"}
+	["Los Santos"] = {1183, -1323.7, 13.6, 270, 0, "MEDLS"},
+	["Red County"] = {1224.4, 306.8, 19.7, 180, 0, "MEDRC"},
+	["Whetstone"] = {-2198.6, -2309.4, 30.6, 0, 0, "MEDWS"},
+	["Flint County"] = {-2198.6, -2309.4, 30.6, 0, 0, "MEDWS"},
+	["San Fierro"] = {-2659, 627, 14.5, 180, 0, "MEDSF"},
+	["Bone County"] = {-316.1, 1056.8, 19.79, 0, 0, "MEDBC"},
+	["Tierra Robada"] = {-1514, 2528, 55.7, 0, 0, "MEDTR"},
+	["Las Venturas"] = {1605, 1820,  10.9, 0, 0, "MEDLV"},
+	["Unknown"] = {2033, -1415, 17, 180, 0, "MEDUN"}, 
+	
+	["Liberty City"] = {1055.7, 405.2, 14.9, 90, 1, "MEDUN"}, 
+	["Portland"] = {1055.7, 405.2, 14.9, 90, 1, "MEDUN"}, 
+	["Staunton Island"] = {99.3, 978, 16.2, 180, 1, "MEDUN"}, 
+	["Shoreside Vale"] = {-1340.6, 855.3, 58.8, 90, 1, "MEDUN"}, 
+	
+	["Vice City"] = {319.3, -188, 0, 90, 2, "MEDUN"}, 
 }
 
 
@@ -1187,8 +1193,8 @@ local SkinData = {
 	[282] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Полицейский", "Мент"}},
 	[283] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Шериф"}},
 	[284] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Патрульный"}},
-	[285] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"SWAT"}},
-	[286] = {128, Teams['ФБР'], "Мужчина", 22, nil, {"ФБР"}},
+	[285] = {128, Teams['Полиция'], "Мужчина", 32, nil, {"SWAT"}},
+	[286] = {128, Teams['ФБР'], "Мужчина", 30, nil, {"ФБР"}},
 	[287] = {0, Teams['Военные'], "Мужчина", 31, nil, {"Военный"}},
 	[288] = {128, Teams['Полиция'], "Мужчина", 22, nil, {"Шериф"}},
 	[290] = {118, Teams['Мирные жители'], "Мужчина"},
@@ -1295,86 +1301,110 @@ end
 
 
 
+
 --[Необходимое уважение = {Звание, id скина}
 local BandRangs = {
 	["Гроув-стрит"] = {
-		[0] = {"Укурыш", 293},
-		[30] = {"Красавчик Флиззи", 105},
-		[60] = {"Гангстерлительный", 106},
-		[120] = {"Джин Рамми", 107},
-		[180] = {"Big Smoke", 269},
-		[310] = {"Консильери", 270}
+		[1] = {0, "Укурыш", 293},
+		[2] = {30, "Красавчик Флиззи", 105},
+		[3] = {60, "Гангстерлительный", 106},
+		[4] = {120, "Джин Рамми", 107},
+		[5] = {180, "Big Smoke", 269},
+		[6] = {310, "Консильери", 270}
 	},
 	["Баллас"] = {
-		[0] = {"Жаба", 102},
-		[30] = {"Гусь", 103},
-		[60] = {"Бык", 104}
+		[1] = {0, "Жаба", 102},
+		[2] = {30, "Гусь", 103},
+		[3] = {60, "Бык", 104}
 	},
 	["Колумбийский картель"] = {
-		[0] = {"La Mugre", 222},
-		[50] = {"Sombras", 95},
-		[75] = {"Sureno", 30},
-		[120] = {"Cacos", 242},
-		[180] = {"Guerrero", 179},
-		[250] = {"Лейтенант колумбийского картеля", 43}
+		[1] = {0, "La Mugre", 222},
+		[2] = {50, "Sombras", 95},
+		[3] = {75, "Sureno", 30},
+		[4] = {120, "Cacos", 242},
+		[5] = {180, "Guerrero", 179},
+		[6] = {250, "Лейтенант колумбийского картеля", 43}
 	},
 	["Вагос"] = {
-		[0] = {"Отмычка", 108},
-		[30] = {"Браток", 109},
-		[60] = {"Комендант", 110}
+		[1] = {0, "Отмычка", 108},
+		[2] = {30, "Браток", 109},
+		[3] = {60, "Комендант", 110}
 	},
 	["Байкеры"] = {
-		[0] = {"Тусовщик", 181},
-		[30] = {"Вольный ездок", 247},
-		[75] = {"Шустрила", 248},
-		[130] = {"Дорожный капитан", 100}
+		[1] = {0, "Тусовщик", 181},
+		[2] = {30, "Вольный ездок", 247},
+		[3] = {75, "Шустрила", 248},
+		[4] = {130, "Дорожный капитан", 100}
 	},
 	["Русская мафия"] = {
-		[0] = {"Клоп", 111},
-		[30] = {"Вор", 112},
-		[75] = {"Пахан", 113},
+		[1] = {0, "Клоп", 111},
+		[2] = {30, "Вор", 112},
+		[3] = {75, "Пахан", 113},
 	},
 	["Ацтекас"] = {
-		[0] = {"Сопляк", 114},
-		[30] = {"Кирпич", 115},
-		[75] = {"Башка", 116},
-		[130] = {"Громоотвод", 292}
+		[1] = {0, "Сопляк", 114},
+		[2] = {30, "Кирпич", 115},
+		[3] = {75, "Башка", 116},
+		[4] = {130, "Громоотвод", 292}
 	},
 	["Триады"] = {
-		[0] = {"Моль", 117},
-		[30] = {"Баклан", 118},
-		[75] = {"Зам. Лидера", 120},
-		[130] = {"Желтый дракон (Лидер)", 294}
+		[1] = {0, "Моль", 117},
+		[2] = {30, "Баклан", 118},
+		[3] = {75, "Зам. Лидера", 120},
+		[4] = {130, "Желтый дракон (Лидер)", 294}
 	},
 	["Якудзы"] = {
-		[0] = {"Куми-ин", 121},
-		[30] = {"Сансита", 122},
-		[75] = {"Дэката", 123},
-		[130] = {"Кумитё (Лидер)", 169}
+		[1] = {0, "Куми-ин", 121},
+		[2] = {30, "Сансита", 122},
+		[3] = {75, "Дэката", 123},
+		[4] = {130, "Кумитё (Лидер)", 169}
 	},
 	["Деревенщины"] = {
-		[0] = {"Опущенный", 162},
-		[50] = {"Чёрт", 160},
-		[75] = {"Шнырь", 159},
-		[120] = {"Блатной", 161},
-		[180] = {"Папаша", 158}
+		[1] = {0, "Опущенный", 162},
+		[2] = {50, "Чёрт", 160},
+		[3] = {75, "Шнырь", 159},
+		[4] = {120, "Блатной", 161},
+		[5] = {180, "Папаша", 158}
 	},
 	["Рифа"] = {
-		[0] = {"Упырь", 173},
-		[30] = {"Баклан", 174},
-		[75] = {"Капореджиме", 175},
+		[1] = {0, "Упырь", 173},
+		[2] = {30, "Баклан", 174},
+		[3] = {75, "Капореджиме", 175},
 	},
+	["Полиция"] = {
+		[1] = {0, "Рядовой", 280},
+		[2] = {25, "Инспектор ДПС", 284},
+		[3] = {100, "Сержант", 281},
+		[4] = {250, "Лейтенант", 282},
+		[5] = {300, "SWAT", 285},
+		[6] = {400, "Офицер 1 класса", 267},
+		[7] = {500, "Офицер 2 класса", 266},
+	}, 
+	["Уголовники"] = {
+		[1] = {0, "Потраченный", 252}, 
+		[2] = {25, "Черт", 213}, 
+		[3] = {50, "Шпана", 268}, 
+		[4] = {100, "Блатной", 62}, 
+	}, 
+	["Мирные жители"] = {
+		[1] = {0, "Житель", 252}
+	}, 
 }
 
+
+
+
 function GetBandRangSkin(gang,reps)
-	local maks = BandRangs[gang][0][2]
-	for v, k in pairs(BandRangs[gang]) do
-		if(v <= reps) then
-			maks = k[2]
+	local maks = {BandRangs[gang][1]}
+	for rang, k in ipairs(BandRangs[gang]) do
+		if(k[1] <= reps) then
+			maks[1] = k
 		end
 	end
-	return maks
+	return maks[1][3]
 end
+
+
 
 
 
@@ -3161,8 +3191,6 @@ CreateVehicle(433, -1350, 458.7, 7.2, 0, 0, 0, "ABC6 228")
 --Зона 51 лаборатория
 local o = createObject(17058, 280, 1829,7,0,180,0)--Пол
 setObjectScale(o, 0)
-local o = createObject(17058, 280, 1829,10,0,0)--Потолок
-setObjectScale(o, 0)
 createObject(1556, 280, 1828.3, 7,0,0,90)--Дверь вход LAB 1
 createObject(1556, 283.4, 1828.3, 7,0,0,90)--Дверь выход LAB 1
 
@@ -3364,7 +3392,98 @@ local Parkings = { -- Доработать потом, добавить спау
 			[84] = {false, -1847.5, 1302.6, 58.7, 200},
 			[85] = {false, -1853.2, 1300.5, 58.7, 200},
 		},
-	}
+	}, 
+	["Las Venturas"] = {
+		["Big Parking"] = {
+			[1] = {false, 2351.8, 1405, 9.8, 90}, 
+			[2] = {false, 2351.8, 1408.57, 9.8, 90}, 
+			[3] = {false, 2351.8, 1412.15, 9.8, 90}, 
+			[4] = {false, 2351.8, 1415.72, 9.8, 90}, 
+			[5] = {false, 2351.8, 1419.3, 9.8, 90}, 
+			
+			[6] = {false, 2351.8, 1426.45, 9.8, 90}, 
+			[7] = {false, 2351.8, 1430.025, 9.8, 90}, 
+			[8] = {false, 2351.8, 1433.6, 9.8, 90}, 
+			[9] = {false, 2351.8, 1437.17, 9.8, 90}, 
+			[10] = {false, 2351.8, 1440.75, 9.8, 90}, 
+			[11] = {false, 2351.8, 1444.35, 9.8, 90}, 
+			[12] = {false, 2351.8, 1447.9, 9.8, 90}, 
+			[13] = {false, 2351.8, 1451.47, 9.8, 90}, 
+			[14] = {false, 2351.8, 1455.04, 9.8, 90}, 
+			[15] = {false, 2351.8, 1458.62, 9.8, 90}, 
+			[16] = {false, 2351.8, 1462.2, 9.8, 90}, 
+			[17] = {false, 2351.8, 1465.77, 9.8, 90}, 
+			[18] = {false, 2351.8, 1469.35, 9.8, 90}, 
+			[19] = {false, 2351.8, 1472.92, 9.8, 90}, 
+			[20] = {false, 2351.8, 1476.5, 9.8, 90}, 
+			[21] = {false, 2351.8, 1480.07, 9.8, 90}, 
+			
+			[22] = {false, 2351.8, 1487.22, 9.8, 90}, 
+			[23] = {false, 2351.8, 1490.8, 9.8, 90}, 
+			[24] = {false, 2351.8, 1494.37, 9.8, 90}, 
+			[25] = {false, 2351.8, 1497.95, 9.8, 90}, 
+			[26] = {false, 2351.8, 1501.52, 9.8, 90}, 
+			
+			
+			[27] = {false, 2332.1, 1405, 9.8, 90}, 
+			[28] = {false, 2332.1, 1408.57, 9.8, 90}, 
+			[29] = {false, 2332.1, 1412.15, 9.8, 90}, 
+			[30] = {false, 2332.1, 1415.72, 9.8, 90}, 
+			[31] = {false, 2332.1, 1419.3, 9.8, 90}, 
+			[32] = {false, 2332.1, 1422.875, 9.8, 90}, 
+			[33] = {false, 2332.1, 1426.45, 9.8, 90}, 
+			[34] = {false, 2332.1, 1430.025, 9.8, 90}, 
+			[35] = {false, 2332.1, 1433.6, 9.8, 90}, 
+			[36] = {false, 2332.1, 1437.17, 9.8, 90}, 
+			[37] = {false, 2332.1, 1440.75, 9.8, 90}, 
+			[38] = {false, 2332.1, 1444.35, 9.8, 90}, 
+			[39] = {false, 2332.1, 1447.9, 9.8, 90}, 
+			[40] = {false, 2332.1, 1451.47, 9.8, 90}, 
+			[41] = {false, 2332.1, 1455.04, 9.8, 90}, 
+			[42] = {false, 2332.1, 1458.62, 9.8, 90}, 
+			[43] = {false, 2332.1, 1462.2, 9.8, 90}, 
+			[44] = {false, 2332.1, 1465.77, 9.8, 90}, 
+			[45] = {false, 2332.1, 1469.35, 9.8, 90}, 
+			[46] = {false, 2332.1, 1472.92, 9.8, 90}, 
+			[47] = {false, 2332.1, 1476.5, 9.8, 90}, 
+			[48] = {false, 2332.1, 1480.07, 9.8, 90}, 
+			[49] = {false, 2332.1, 1483.64, 9.8, 90}, 
+			[50] = {false, 2332.1, 1487.22, 9.8, 90}, 
+			[51] = {false, 2332.1, 1490.8, 9.8, 90}, 
+			[52] = {false, 2332.1, 1494.37, 9.8, 90}, 
+			[53] = {false, 2332.1, 1497.95, 9.8, 90}, 
+			[54] = {false, 2332.1, 1501.52, 9.8, 90}, 
+			
+			[55] = {false, 2302.7, 1405, 9.8, 90}, 
+			[56] = {false, 2302.7, 1408.57, 9.8, 90}, 
+			[57] = {false, 2302.7, 1412.15, 9.8, 90}, 
+			[58] = {false, 2302.7, 1415.72, 9.8, 90}, 
+			[59] = {false, 2302.7, 1419.3, 9.8, 90}, 
+			[60] = {false, 2302.7, 1422.875, 9.8, 90}, 
+			[61] = {false, 2302.7, 1426.45, 9.8, 90}, 
+			[62] = {false, 2302.7, 1430.025, 9.8, 90}, 
+			[63] = {false, 2302.7, 1433.6, 9.8, 90}, 
+			[64] = {false, 2302.7, 1437.17, 9.8, 90}, 
+			[65] = {false, 2302.7, 1440.75, 9.8, 90}, 
+			[66] = {false, 2302.7, 1444.35, 9.8, 90}, 
+			[67] = {false, 2302.7, 1447.9, 9.8, 90}, 
+			[68] = {false, 2302.7, 1451.47, 9.8, 90}, 
+			[69] = {false, 2302.7, 1455.04, 9.8, 90}, 
+			[70] = {false, 2302.7, 1458.62, 9.8, 90}, 
+			[71] = {false, 2302.7, 1462.2, 9.8, 90}, 
+			[72] = {false, 2302.7, 1465.77, 9.8, 90}, 
+			[73] = {false, 2302.7, 1469.35, 9.8, 90}, 
+			[74] = {false, 2302.7, 1472.92, 9.8, 90}, 
+			[75] = {false, 2302.7, 1476.5, 9.8, 90}, 
+			[76] = {false, 2302.7, 1480.07, 9.8, 90}, 
+			[77] = {false, 2302.7, 1483.64, 9.8, 90}, 
+			[78] = {false, 2302.7, 1487.22, 9.8, 90}, 
+			[79] = {false, 2302.7, 1490.8, 9.8, 90}, 
+			[80] = {false, 2302.7, 1494.37, 9.8, 90}, 
+			[81] = {false, 2302.7, 1497.95, 9.8, 90}, 
+			[82] = {false, 2302.7, 1501.52, 9.8, 90}, 
+		},
+	}, 
 }
 
 --[[
@@ -3380,6 +3499,78 @@ for name, dat in pairs(Parkings) do
 	end
 
 end--]]
+
+
+
+
+local LibertyVeh = {
+	{416, 1054.9, 370.6, 14.9, 0,0,0}, 
+	{416, 113.2, 958.9, 16.3, 0,0,0}, 
+	{416, -1331.7, 905.3, 58.8, 0,0,90}, 
+	{419, 127.4, 958, 16, 0,0,180}, 
+	{429, 1148.4, 871.8, 14.6, 0,0,33}, 
+	{429, 392.4, 266.4, 15.8, 0,0,90}, 
+	{429, 382.9, -501, 18.3, 0,0,180}, 
+	{429, -840, 1204.3, 28.4, 0,0,180}, 
+	{424, 845.7, 731, 4.7, 0,0,0}, 
+	{422, 1261.9, 551.2, 49.8, 0,0,0}, 
+	{422, 1056.7, 904.3, 7.4, 0,0,180}, 
+	{422, 1130.6, 929.4, 11.1, 0,0,0}, 
+	{422, 1375.7, 665.7, 13, 0,0,267}, 
+	{438, 1156.8, 270.1, 15.1, 0,0,315}, 
+	{419, 921.6, 161.5, 14.7, 0,0,90}, 
+	{407, 1021.9, 942.3, 7.7, 0,0,270}, 
+	{585, 1198.7, 379.2, 11.8, 0,0,0}, 
+	{566, 771.6, 6, 4.8, 0,0,0}, 
+	{566, 1341.7, 200.3, 11.6, 0,0,270}, 
+	{566, 1139.1, 673.9, 25.9, 0,0,180}, 
+	{566, 1143.6, 932.3, 10.7, 0,0,0}, 
+	{566, 897.5, 962.6, 7.2, 0,0,90}, 
+	{403, 813, 3.5, 5.6, 0,0,90}, 
+	{403, 1282.3, -26.7, 12.5, 0,0,0}, 
+	{426, 1327.6, 822, 50.3, 0,0,151}, 
+	{426, 1325.2, 843.9, 52.9, 0,0,265}, 
+	{426, 1200.1, 692.6, 39.6, 0,0,270},
+	{418, 789.3, 16.3, 5.1, 0,0,90},
+	{418, 1124.1, 741.6, 25, 0,0,270},
+	{418, 888.6, 942.6, 7.4, 0,0,270}, 
+	{423, 781.1, 334.4, 15, 0,0, 270}, 
+	{414, 1322.9, 209.1, 11.9, 0,0,270}, 
+	{414, 1410.7, 189.3, 11.9, 0,0,180}, 
+	{470, 1212.4, 357, 12.2, 0,0,0}, 
+	{404, 1033.8, 230.3, 14.5, 0,0,180}, 
+	{404,  887.9, 587.6, 14.7, 0,0,0}, 
+	{404, 1144.2, 903, 13.5, 0,0,0}, 
+	{404, 1340.4, 213, 11.5, 0,0,90}, 
+	{413, 1140.5, 117, 15.1, 0,0,313}, 
+	{413, 1282.2, 388.5, 12.4, 0,0,180}, 
+	{413, 772.4, 196.8, 15, 0,0,0}, 
+	{596, 1054.4, 318.5, 14.7, 0,0,270},
+	{596, 1054.4, 346.6, 14.6, 0,0,90}, 
+	{440, 1017.2, 14.8, 15, 0,0,270}, 
+	{405, 1250.9, 547.8, 49.6, 0,0,270}, 
+	{439, 1136.1, 101.7, 15, 0,0,177}, 
+	{439, 901.6, 853, 4.8, 0,0,270}, 
+	{420, 1253.6, 743.2, 49.4, 0,0,270}, 
+	{414, 902.5, -96.8, 13.2, 0,0,0}, 
+	{456, 1460.2, 155.6, 12, 0,0,270}, 
+	{456, 1490.4, 285.1, 12, 0,0,90}, 
+}
+
+for _, v in pairs(LibertyVeh) do
+	local veh = CreateVehicle(v[1], v[2], v[3], v[4], v[5], v[6], v[7])
+	setElementDimension(veh, 1)
+	
+	if(v[1] == 426) then
+		setVehicleColor(veh, 0,0,0,0,0,0)
+	end
+end
+
+
+
+
+
+
 
 
 -- theVehicle, model, x,y,z,rx,ry,rz, plateNumber, {характеристики}, "название"
@@ -3431,13 +3622,16 @@ local NonRandVeh = {
 	{false, 432, 275, 1990.5, 16.6, 0,0,270, "ARMY 228"},
 	{false, 432, 275, 1956.5, 16.6, 0,0,270, "ARMY 228"},
 	{false, 432, 275, 2023.5, 16.6, 0,0,270, "ARMY 228"},
-	{false, 470, 298, 2050, 16.6, 0,0,180, "ARMY 228"},
 	{false, 470, 302, 2050, 16.6, 0,0,180, "ARMY 228"},
-	{false, 470, 306, 2050, 16.6, 0,0,180, "ARMY 228"},
-	{false, 470, 310, 2050, 16.6, 0,0,180, "ARMY 228"},
-	{false, 470, 314, 2050, 16.6, 0,0,180, "ARMY 228"},
 	{false, 470, 269, 1937, 16.6, 0,0,270, "ARMY 228"},
-
+	{false, 470, 158.5, 1843.5, 16.6, 0,0,0, "ARMY 228"},
+	{false, 470, 226, 1822.6, 16.6, 0,0,180, "ARMY 228"},
+	{false, 433, 141.7, 1829.1, 16.6, 0,0,90, "ARMY 228"},
+	{false, 490, 131, 1891.5, 17.4, 0,0,90, "ARMY 228", false, nil, nil, {120, 120, 0, 0}},
+	{false, 428, 211.4, 1919.8, 16.6, 0,0,180, "ARMY 228", false, nil, nil, {120, 120, 0, 0}},
+	
+	
+	
 	-- Аэропорт
 	{false, 476, 325, 2537.1, 15.7,0,0,180},
 	{false, 513, 348, 2537.1, 15.7,0,0,180},
@@ -3578,10 +3772,14 @@ local NonRandVeh = {
 
 -- Red County
 	{false, 431, 658.8, -452.8, 15.3, 0, 0, 90}, -- Автобус
-
+	
 	-- Ферма
 	{false, 532, -104.6, -22.2, 2.1,0,0,70},
-
+	{false, 531, -126.8, -77.7, 2.1, 0,0,11}, 
+	{false, 610, -126.1, -81.7, 2.1, 0,0,11}, 
+	{false, 531, -22.5, 95.4, 2.1, 0,0,90}, 
+	{false, 610, -19.7, 95.5, 2.1, 0,0,90}, 
+	
 	-- Ферма 2
 	{false, 532, 1995.1, 228.3, 26.3,0,0,85},
 
@@ -4771,7 +4969,7 @@ function tp(thePlayer, command, h)
 
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = -1704.1, 1191.3, 24, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 1387.3, 2055.4, 9.8, 0, 0 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5026,8 +5224,10 @@ function WantedLevel(thePlayer, count)
 	
 		local wanted = GetDatabaseAccount(thePlayer, "wanted")
 	
-		if(count > 0) then
-			count = math.round(count/(wanted+1), 2)
+		
+		if(count == 0.01) then
+			if(wanted == 0) then count = 1 
+			else count = 0 end
 		end
 		wanted = wanted+(count)
 	
@@ -5037,15 +5237,17 @@ function WantedLevel(thePlayer, count)
 	
 		if(wanted > 0) then
 			if(wanted >= 5) then
-				local rand = math.random(1,2)
-				if(rand == 1) then
-					kr(thePlayer, 433, 287) -- Армия
-				else
-					kr(thePlayer, 470, 287) -- Армия
-				end
-	
+			local rand = math.random(1,4)
+			if(rand == 1) then
+				kr(thePlayer, 433, 287) -- Армия
+			elseif(rand == 2) then
+				kr(thePlayer, 470, 287) -- Армия
+			elseif(rand == 3) then
+				kr(thePlayer, 488, 170) -- San News
+			elseif(rand == 4) then
+				kr(thePlayer, 497, 280) -- Вертолет
+			end
 			elseif(wanted >= 4) then
-				--kr(thePlayer, 497, 280) -- Вертолет
 				kr(thePlayer, 490, 286) -- ФБР
 			elseif(wanted >= 3) then
 				kr(thePlayer, 427, 285) -- SWAT
@@ -6596,6 +6798,7 @@ function usedrugs(thePlayer)
 	setElementHealth(thePlayer, getElementHealth(thePlayer)+50)
 	StartAnimation(thePlayer,"SMOKING", "M_smk_in",false,false,false,false)
 	triggerClientEvent(thePlayer, "ShakeLevel", thePlayer, 100)
+	triggerClientEvent(thePlayer, "DrugsPlayerEffect", thePlayer)
 	if(isTimer(DrugsTimer[thePlayer])) then
 		resetTimer(DrugsTimer[thePlayer])
 	else
@@ -6609,6 +6812,22 @@ addEventHandler("usedrugs", root, usedrugs)
 
 
 
+
+local SpunkTimer = {}
+function usespunk(thePlayer)
+	setElementHealth(thePlayer, getElementHealth(thePlayer)+50)
+	StartAnimation(thePlayer,"SMOKING", "M_smk_in",false,false,false,false)
+	triggerClientEvent(thePlayer, "SpunkPlayerEffect", thePlayer)
+	if(isTimer(SpunkTimer[thePlayer])) then
+		resetTimer(SpunkTimer[thePlayer])
+	else
+		SpunkTimer[thePlayer] = setTimer(function()
+			SyncTime(thePlayer)
+		end, 60000, 1)
+	end
+end
+addEvent("usespunk", true)
+addEventHandler("usespunk", root, usespunk)
 
 
 
@@ -7286,6 +7505,7 @@ function CreateBot(skin,x,y,z,rz,i,d,zone,ind)
 	local botinv = {}
 	if(SkinData[skin][4]) then
 		botinv[#botinv+1] = {["txd"] = FoundWName(SkinData[skin][4]), ["name"] = FoundWName(SkinData[skin][4])}
+		giveWeapon(BotCreated[zone][ind], SkinData[skin][4], 9999, true)
 	end
 
 	local randitem = math.random(20)
@@ -8804,6 +9024,10 @@ function PedDamage(ped, weapon, bodypart, loss)
 
 	if(source and weapon) then
 		if(getElementType(source) == "player") then
+			if(getPedOccupiedVehicle(ped) and Team == "Полиция") then 
+				WantedLevel(source, 0.01)
+				setVehicleSirensOn(getPedOccupiedVehicle(ped), true)
+			end
 			setElementData(ped, "attacker", getPlayerName(source))
 			if(weapon >= 0 and weapon <=9) then
 				AddSkill(source, 177)
@@ -8855,7 +9079,7 @@ function PedDamage(ped, weapon, bodypart, loss)
 	if(weapon == 49) then
 		if(loss) then
 			if(loss*11 > 100) then
-				killPed(ped, source, weapon, bodypart, true)
+				killPed(ped, source, weapon, bodypart, false)
 			end
 		end
 	end
@@ -9057,6 +9281,10 @@ end
 function ZoneInfo(thePlayer, zone)
 	if(thePlayer) then
 		if(getPlayerTeam(thePlayer)) then
+			if(GetDatabaseAccount(thePlayer, "wanted") > 0) then
+				WantedLevel(thePlayer, 0)
+			end
+			
 			local r,g,b = getTeamColor(getPlayerTeam(thePlayer))
 
 			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
@@ -9942,8 +10170,9 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 
 	if(not zone) then
 		local x,y,z = GetPlayerLocation(thePlayer)
-		zone = getZoneName(x,y,z,true)
+		zone = GetZoneName(x,y,z,true, getElementData(thePlayer, "City"))
 	end
+	
 	local skin = GetDatabaseAccount(thePlayer, "skin")
 	local frname = GetDatabaseAccount(thePlayer, "team")
 
@@ -9980,10 +10209,11 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 		if(typespawn == "death") then
 			if(GetPlayerMoney(thePlayer) >= 500) then
 				AddPlayerMoney(thePlayer, -500)
-				AddBizMoney(ClinicSpawn[zone][5], 500)
+				AddBizMoney(ClinicSpawn[zone][6], 500)
 				ToolTip(thePlayer, "Клиника #CC99EE"..zone.."\n#FFFFFFСчёт за лечение "..COLOR["DOLLAR"]["HEX"].."$500")
 			end
-			spawnPlayer(thePlayer, ClinicSpawn[zone][1]+math.random(-2,2), ClinicSpawn[zone][2]+math.random(-2,2), ClinicSpawn[zone][3], ClinicSpawn[zone][4], skin, 0, 0)
+			
+			spawnPlayer(thePlayer, ClinicSpawn[zone][1]+math.random(-2,2), ClinicSpawn[zone][2]+math.random(-2,2), ClinicSpawn[zone][3], ClinicSpawn[zone][4], skin, 0, ClinicSpawn[zone][5])
 		elseif(typespawn == "house") then
 			spawnPlayer(thePlayer, 0, 0, 0, 0, skin, 0, 0)
 			triggerEvent("EnterHouse", thePlayer, zone, true)
@@ -10024,7 +10254,7 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 			end
 
 			if(isPlayerBolezn(thePlayer, "Дизентерия")) then
-				local rand = math.random(1,2)
+				local rand = math.random(1,20)
 				if(rand == 1) then
 					StartAnimation(thePlayer, "FOOD", "EAT_Vomit_P",false,false,false,false)
 				end
@@ -10221,6 +10451,29 @@ function moneyPickupHit(thePlayer)
 end
 addEvent("onPickupUse", true)
 addEventHandler("onPickupUse", getRootElement(), moneyPickupHit)
+
+
+
+function Udobrenya(thePlayer, x,y) 
+	if(PlayersEnteredPickup[thePlayer]) then
+		if(getElementData(PlayersEnteredPickup[thePlayer], "Three")) then
+			local Node = xmlFindChild(ThreesNode, getElementData(PlayersEnteredPickup[thePlayer], "Three"), 0)
+			local t = tonumber(xmlNodeGetAttribute(Node, "t"))
+			
+			local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
+			xmlNodeSetAttribute(Node, "t", t-arr[x][y]["quality"])
+			HelpMessage(thePlayer, "Ты сократил рост растения на #ffff00"..arr[x][y]["quality"].."#FFFFFF сек.")
+			return true
+		end
+	end
+	return ToolTip(thePlayer, "Для удобрения необходимо находится возле растения")
+end
+addEvent("Udobrenya", true)
+addEventHandler("Udobrenya", getRootElement(), Udobrenya)
+
+
+
+
 
 
 function PickupHit(thePlayer)
@@ -10584,10 +10837,10 @@ function kr(thePlayer, vmodel, pedmodel)
 		local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
 		if(i == 0 and d == 0) then
 			local arr = {
-				["west"] = NEWGPSFound(x-120,y,z, x,y,z),
-				["east"] = NEWGPSFound(x+120,y,z, x,y,z),
-				["south"] = NEWGPSFound(x,y+120,z, x,y,z),
-				["north"] = NEWGPSFound(x,y-120,z, x,y,z)
+				["west"] = NEWGPSFound(x-100,y,z, x,y,z),
+				["east"] = NEWGPSFound(x+100,y,z, x,y,z),
+				["south"] = NEWGPSFound(x,y+100,z, x,y,z),
+				["north"] = NEWGPSFound(x,y-100,z, x,y,z)
 			}
 
 			for name, dat in pairs(arr) do
@@ -10606,8 +10859,11 @@ function kr(thePlayer, vmodel, pedmodel)
 					ind = ind+1
 					if(ind == minarrindex) then
 						local bx,by,bz = PathNodes[arr[name][1][1]][arr[name][1][2]][2], PathNodes[arr[name][1][1]][arr[name][1][2]][3], PathNodes[arr[name][1][1]][arr[name][1][2]][4]
-						PData[thePlayer]['Cops'][#PData[thePlayer]['Cops']+1] = CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[name], thePlayer)
-						PData[thePlayer]["PoliceTimer"] = setTimer(function(thePlayer) end, 10000, 1, thePlayer)
+						if(vmodel == 497 or vmodel == 488) then
+							bz = bz+25
+						end
+						CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[name], thePlayer)
+						PData[thePlayer]["PoliceTimer"] = setTimer(function(thePlayer) end, 3000, 1, thePlayer)
 					end
 				end
 			end
@@ -10622,9 +10878,21 @@ end
 
 
 
+local FireTruckModel = {
+	["Los Santos"] = 277,
+	["San Fierro"] = 279,
+	["Las Venturas"] = 278,
+	["Red County"] = 277,
+	["Whetstone"] = 279,
+	["Flint County"] = 277, 
+	["Bone County"] = 278,
+	["Tierra Robada"] = 278,
+}
 
 function FireTruck(x,y,z,i,d)
-	if(i == 0 and d == 0) then
+	local zone = getZoneName(x,y,z, true)
+	
+	if(FireTruckModel[zone] and d == 0) then
 		local arr = {
 			["west"] = NEWGPSFound(x-120,y,z, x,y,z),
 			["east"] = NEWGPSFound(x+120,y,z, x,y,z),
@@ -10648,7 +10916,7 @@ function FireTruck(x,y,z,i,d)
 				ind = ind+1
 				if(ind == minarrindex) then
 					local bx,by,bz = PathNodes[arr[name][1][1]][arr[name][1][2]][2], PathNodes[arr[name][1][1]][arr[name][1][2]][3], PathNodes[arr[name][1][1]][arr[name][1][2]][4]
-					return CreateDriverBot(407, 277, bx, by, bz, 0, 0, arr[name])
+					return CreateDriverBot(407, FireTruckModel[zone], bx, by, bz, 0, 0, arr[name])
 				end
 			end
 		end
@@ -10694,6 +10962,7 @@ end
 
 
 
+
 local trafficlight = {
 	["0"] = "west",
 	["1"] = "west",
@@ -10701,6 +10970,23 @@ local trafficlight = {
 	["3"] = "north",
 	["4"] = "north"
 }
+
+
+
+
+
+function RemoveDynamicBot(thePed)
+	if(thePed) then
+		removeElementData(thePed, "DynamicBot")
+		SData["DriverBot"][thePed] = nil
+	end
+end
+addEvent("RemoveDynamicBot", true)
+addEventHandler("RemoveDynamicBot", root, RemoveDynamicBot)
+
+
+
+
 
 function SetNextDynamicNode(thePed, forced)
 	if(thePed) then
@@ -10753,8 +11039,7 @@ function SetNextDynamicNode(thePed, forced)
 							SData["DriverBot"][thePed][2][1], SData["DriverBot"][thePed][2][2], SData["DriverBot"][thePed][2][3], false
 						}))
 					else
-						removeElementData(thePed, "DynamicBot")
-						SData["DriverBot"][thePed] = nil
+						RemoveDynamicBot(thePed)
 					end
 				end
 			end
@@ -10788,15 +11073,20 @@ function SetDynamicBot(thePed, x,y,z)
 		end
 		
 		if(id) then
+			removeElementData(thePed, "attacker")
 			CreateDynamicBot(thePed, node, id)
 		else
 			destroyElement(thePed)
 		end
 	end
 end
-
 addEvent("SetDynamicBot", true)
 addEventHandler("SetDynamicBot", root, SetDynamicBot)
+
+
+
+
+
 
 
 
@@ -10954,6 +11244,7 @@ function PlayerElementSync(thePlayer, obj, state)
 					end
 				end
 			end
+			
 			SData["PlayerElementSync"][obj][getPlayerName(thePlayer)] = state
 			if state == true then
 				setElementSyncer(obj, thePlayer)
@@ -10977,6 +11268,12 @@ function PlayerElementSync(thePlayer, obj, state)
 					if(theVehicle) then
 						destroyElement(theVehicle)
 					end
+					destroyElement(obj)
+				end
+			end
+		elseif(getElementType(obj, "vehicle")) then
+			if(getElementData(obj, "DestroyAfterStreamOut")) then
+				if(not getElementSyncer(obj)) then
 					destroyElement(obj)
 				end
 			end
@@ -12346,6 +12643,7 @@ addCommandHandler("seti", seti)
 
 
 
+
 local VCompVehicleTypes = {}
 for nameparts, data in pairs(VComp) do
 	for name, types in pairs(data) do
@@ -12358,11 +12656,11 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	--local res12 = getResourceFromName("draw_intro") -- Interface
 	--restartResource(res12)
 
-	--AddInventoryItem(thePlayer, {["txd"] = "Кровь", ["name"] = "Кровь", ["quality"] = math.random(0,1000)})
-
-	local res = getResourceFromName("Radar") -- Interface
-	restartResource(res)
-
+	--local res = getResourceFromName("ps2_weather") -- Interface
+	--restartResource(res)
+    --
+	--local res = getResourceFromName("interface") -- Interface
+	--restartResource(res)
 
 	--triggerClientEvent(thePlayer, "GameSky", thePlayer, "Red County", 8, false)
  --  setPedAnimation (source, "ped", "seat_down", -1, false, false, false, true)
@@ -12370,7 +12668,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	--[[
 	--]]
 	--RacePriceGeneration(thePlayer)
-	local zone = getZoneName(x,y,z)
+	local zone = GetZoneName(x,y,z, false, getElementData(thePlayer, "City"))
 	if(savetype == "PedPath") then
 		local angle = findRotation(x,y, x,ry)
 		if(angle <= 0) then angle = 0 end
@@ -12453,12 +12751,21 @@ end
 addEvent("fightstyle", true)
 addEventHandler("fightstyle", root, fightstyle)
 
-
 function WarpPedIntoVehicle(thePed, thePlayer)
-	local theVehicle = getPedOccupiedVehicle(thePed)
-	setElementSyncer(theVehicle, thePlayer)
-	setElementSyncer(thePed, thePlayer)
-	removePedFromVehicle(thePed)
+	if(thePed) then
+		local theVehicle = getPedOccupiedVehicle(thePed)
+		if(theVehicle) then
+			local x,y,z = getElementPosition(theVehicle)
+			local _,_,rz = getElementRotation(theVehicle)
+			setElementSyncer(theVehicle, thePlayer)
+			setElementData(theVehicle, "DestroyAfterStreamOut", "true", false)
+			setElementSyncer(thePed, thePlayer)
+			removePedFromVehicle(thePed)
+			
+			local x1,y1,z1 = getPointInFrontOfPoint(x, y, z, rz-180, 1)
+			setElementPosition(thePed, x1,y1,z1, true)
+		end
+	end
 end
 addEvent("WarpPedIntoVehicle", true)
 addEventHandler("WarpPedIntoVehicle", root, WarpPedIntoVehicle)
@@ -12761,7 +13068,7 @@ addEventHandler("AddCollections", root, AddCollections)
 
 
 function AuthComplete(thePlayer)
-	outputChatBox("* На сервер зашел "..getElementData(source, "color")..getPlayerName(thePlayer), getRootElement(), 255,255,255,true)
+	outputChatBox("* ["..getElementData(source, "id").."] "..getElementData(source, "color")..getPlayerName(thePlayer).." #FFFFFFПодключился к серверу", getRootElement(), 255,255,255,true)
 	triggerClientEvent(thePlayer, "AuthInterface", thePlayer, GetDatabaseAccount(thePlayer, "inv"))
 	triggerClientEvent(thePlayer, "AuthComplete", thePlayer, GetDatabaseAccount(thePlayer, "Collections"))
 end
@@ -12978,7 +13285,7 @@ function PoliceArrest(thePlayer, thePed)
 		setTimer(function()
 			removeElementData(thePed, "NoFireMePolice")
 			WastedPoliceTimer[thePed] = nil
-		end, 4000, 1)
+		end, 5000, 1)
 	end
 end
 addEvent("PoliceArrest", true)
@@ -13125,7 +13432,7 @@ function PoliceArrestCar()
 		if(getElementModel(theVehicle) == 596 or getElementModel(theVehicle) == 597 or getElementModel(theVehicle) == 598 or getElementModel(theVehicle) == 599 or getElementModel(theVehicle) == 523) then
 			local x,y,z = getElementPosition(source)
 			for key,thePlayers in pairs(getElementsByType "player") do
-				triggerClientEvent(thePlayers, "PlayerSayEvent", thePlayers, "Немедленно остановите машину или мы открываем огонь!", source)
+				triggerClientEvent(thePlayers, "PlayerSayEvent", thePlayers, "Немедленно остановите машину или мы откроем огонь!", source)
 				triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "script", 58, math.random(36, 41),x,y,z, false, 25,100,reverb,true)
 			end
 		end
@@ -13139,6 +13446,19 @@ addEventHandler("PoliceArrestCar", root, PoliceArrestCar)
 
 
 
+createObject(3749, 135.2, 1941.1, 23.5, 0,0,180)
+PrisonMainGate = createObject(10184, 135.2, 1941.1, 20.9, 0,0,90)
+setElementData(PrisonMainGate, "gates", toJSON({135.2, 1941.1, 25.1, 0,0,0}))
+setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+
+
+createObject(3749, 285.6, 1821.3, 21.8, 0,0,270)
+PrisonMainGate = createObject(10184, 285.6, 1821.3, 19.1, 0,0,180)
+setElementData(PrisonMainGate, "gates", toJSON({285.6, 1821.3, 23.3, 0,0,0}))
+setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+
+createObject(1412, 96.7, 1920.9, 18.4, 0,0,90)
+createObject(1412, 96.7, 1920.9, 20.4, 0,0,90)
 
 
 local wall = createObject(3059, 2522, -1272.9301, 35.61, 0,0,0)
@@ -13271,6 +13591,12 @@ setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "П
 
 
 
+function NoAttack(thePlayer, thePed)
+	removeElementData(thePed, "attacker")
+end
+addEvent("NoAttack", true)
+addEventHandler("NoAttack", root, NoAttack)
+
 function handsup(thePlayer)
 	if(getElementHealth(thePlayer) > 20 and not getPedOccupiedVehicle(thePlayer)) then
 		if(WastedPoliceTimer[thePlayer]) then
@@ -13280,7 +13606,7 @@ function handsup(thePlayer)
 				toggleAllControls(thePlayer,false)
 				UnBindAllKey(thePlayer)
 			else
-				removeElementData(WastedPoliceTimer[thePlayer], "attacker")
+				NoAttack(thePlayer, WastedPoliceTimer[thePlayer])
 				setElementData(thePlayer, "NoFireMePolice", "0")
 			end
 		end
@@ -13291,6 +13617,7 @@ function handsup(thePlayer)
 end
 addEvent("handsup", true)
 addEventHandler("handsup", root, handsup)
+
 
 
 
@@ -13430,21 +13757,6 @@ function quitPlayer()
 			elseif(isElement(el)) then
 				if(name ~= "LastVehicle") then
 					destroyElement(el)
-				end
-			end
-			if(name == 'Cops') then
-				for _, theVehicle in pairs(el) do
-					if(isElement(theVehicle)) then
-						local thePed = getVehicleOccupant(theVehicle)
-						if(isElement(thePed)) then
-							if(getElementType(thePed) == "ped") then
-								destroyElement(thePed)
-								destroyElement(theVehicle)
-							end
-						else
-							destroyElement(theVehicle)
-						end
-					end
 				end
 			end
 		end
@@ -14995,13 +15307,13 @@ addEventHandler("FireVehicle", getRootElement(), FireVehicle)
 local AllFires = {}
 function CreateFire(arr)
 	arr = fromJSON(arr)
+	local x, y, z = false
 	for v, k in pairs(arr) do
+		x, y, z = k[1], k[2], k[3]
 		local fireId = #AllFires+1
 		AllFires[fireId] = {}
 		AllFires[fireId]["obj"] = createObject(1362, k[1],k[2],k[3]-0.6)
 		setElementData(AllFires[fireId]["obj"], "fireid", fireId)
-
-		local thePed = FireTruck(k[1], k[2], k[3], 0, 0)
 		
 		AllFires[fireId]["mar"] = createMarker(k[1], k[2], k[3], "checkpoint", 1, 0,0,0,0)
 		setElementVisibleTo(AllFires[fireId]["mar"], root, false)
@@ -15011,6 +15323,9 @@ function CreateFire(arr)
 			destroyElement(obj)
 			destroyElement(mar)
 		end, 120000, 1, AllFires[fireId]["obj"], AllFires[fireId]["mar"]) -- 120000
+	end
+	if(x) then
+		FireTruck(x, y, z, 0, 0)
 	end
 end
 addEvent("CreateFire", true)
@@ -15087,15 +15402,17 @@ function playerDamage(attacker, weapon, bodypart, loss)
 		SetControls(source, "crack", {["fire"] = false, ["action"] = false, ["jump"] = false})
 	end
 	if(bodypart == 9) then
-		setPedHeadless(source, true)
-		killPed(source, attacker, weapon, 9)
+		if(getElementType(attacker) == "player") then -- Боты не ставят хеды
+			setPedHeadless(source, true)
+			killPed(source, attacker, weapon, 9)
+		end
 	end
 
 
 	if(weapon == 49) then
 		if(loss) then
 			if(loss*11 > 100) then
-				killPed(source, getVehicleOccupant(attacker), weapon, bodypart, true)
+				killPed(source, getVehicleOccupant(attacker), weapon, bodypart, false)
 			end
 		end
 	end
@@ -15427,14 +15744,6 @@ end
 addEvent("AddPlayerMoney", true)
 addEventHandler("AddPlayerMoney", getRootElement(), AddPlayerMoney)
 
-
-
-
-function AddPlayerArmor(thePlayer)
-	setPedArmor(thePlayer, 100)
-end
-addEvent("AddPlayerArmor", true)
-addEventHandler("AddPlayerArmor", getRootElement(), AddPlayerArmor)
 
 
 
@@ -16368,12 +16677,12 @@ function startBizVacancy(thePlayer, name, args)
 				if(not IsPlayerJob(getPlayerName(thePlayer))) then
 					if(VacancyDATA[arg[2]]) then
 						if(GetDatabaseAccount(thePlayer, getTeamVariable(VacancyDATA[arg[2]][2])) < VacancyDATA[arg[2]][1]) then
-							outputChatBox("Необходимо "..VacancyDATA[arg[2]][1].." репутации "..getTeamGroup(VacancyDATA[arg[2]][2]), thePlayer, 255,255,255,true)
+							HelpMessage(thePlayer, "Необходимо "..VacancyDATA[arg[2]][1].." репутации "..getTeamGroup(VacancyDATA[arg[2]][2]))
 							return false
 						end
 					end
 
-					outputChatBox("Тебе дали новую должность! теперь ты #EEEEEE"..arg[2], thePlayer, 255, 255, 255, true)
+					HelpMessage(thePlayer, "Тебе дали новую должность! теперь ты #EEEEEE"..arg[2])
 					SetTeam(thePlayer, VacancyDATA[arg[2]][2])
 					setElementData(thePlayer, "job", arg[2])
 					if(xmlNodeGetAttribute(ChildNode, "jobbiz")) then
@@ -16389,7 +16698,7 @@ function startBizVacancy(thePlayer, name, args)
 
 					xmlNodeSetValue(ChildNode, getPlayerName(thePlayer))
 				else
-					outputChatBox("Ты уже работаешь "..IsPlayerJob(getPlayerName(thePlayer)), thePlayer, 255, 255, 255, true)
+					HelpMessage(thePlayer, "Ты уже работаешь "..IsPlayerJob(getPlayerName(thePlayer)), thePlayer)
 				end
 
 				UpdateBiz(arg[3])
@@ -16412,7 +16721,7 @@ function stopBizVacancy(thePlayer, name, args)
 			if(xmlNodeGetName(node) == arg[3]) then
 				local ChildNode = xmlNodeGetChildren(node, arg[4])
 
-				outputChatBox("Ты уволился с должности #EEEEEE"..arg[2], thePlayer, 255, 255, 255, true)
+				HelpMessage(thePlayer, "Ты уволился с должности #EEEEEE"..arg[2])
 				SetDatabaseAccount(thePlayer, "team", "Мирные жители")
 				if(xmlNodeGetAttribute(ChildNode, "jobbiz")) then
 					for z, v in pairs(vacancy) do
@@ -16644,6 +16953,20 @@ addEvent("repairVeh", true)
 addEventHandler("repairVeh", root, repairVeh)
 
 
+function hesoyam(thePlayer)
+	setElementHealth(thePlayer, 1000)
+	AddPlayerMoney(thePlayer, 25000)
+	setPedArmor(thePlayer, 100)
+	local theVehicle = getPedOccupiedVehicle(thePlayer)
+	if(theVehicle) then fixVehicle(theVehicle) end
+end
+addEvent("hesoyam", true)
+addEventHandler("hesoyam", root, hesoyam)
+
+
+
+
+
 function ExitTuning(theVehicle)
 	setElementDimension(theVehicle, 0)
 	setElementInterior(theVehicle, 0, PData[source]["oldposition"][1], PData[source]["oldposition"][2], PData[source]["oldposition"][3]+VehicleSystem[getElementModel(theVehicle)][1])
@@ -16835,6 +17158,230 @@ function createNewHome(thePlayer, command, h)
 	end
 end
 addCommandHandler("newhome", createNewHome)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local OffsetLiberty = {[1] = -8000, [2] = -8000, [3] = 0}
+local LibertySmall = {
+	--["WHOLEVC"] = {
+	--	{"WHOLEVC", 5977.83, -10413.5, 10069.9, -6351.89}, 
+	--	{"WHOLELC", 6109.65, 6902.24, 10069.9, 10206.4}
+	--}, 
+	--["COPS_1"] = {
+	--	{"COPS_1", 9050.8, 8304.98, 9097.36, 8368.98}
+	--}, 
+	--["HOSPI_1"] = {
+	--	{"HOSPI_1", 9051.09, 8390.02, 9097.09, 8478.83}
+	--}, 
+	--["FILLIN1"] = {
+	--	{"FILLIN1", 9278.77, 8386.66, 9304.17, 8487.46}
+	--}, 
+	--["MAIN_D1"] = {
+	--	{"MAIN_D1", 8952.53, 8092.73, 8980.16, 8362.31}
+	--}, 
+	--["MAIN_D2"] = {
+	--	{"MAIN_D2", 8881.08, 8362.63, 8979.83, 8390.44}
+	--}, 
+	--["FISHFAC"] = {
+	--	{"FISHFAC", 8859.21, 7850.19, 8931.14, 7923.99}
+	--}, 
+	--["MAIN_D3"] = {
+	--	{"MAIN_D3", 8880.79, 8391.01, 8910.31, 8529.77}
+	--}, 
+	--["MAIN_D4"] = {
+	--	{"MAIN_D4", 8910.59, 8488.91, 8980.11, 8529.77}
+	--}, 
+	--["MAIN_D5"] = {
+	--	{"MAIN_D5", 8950.88, 8536.44, 8979.83, 8717.14}
+	--}, 
+	--["MAIN_D6"] = {
+	--	{"MAIN_D6", 8951.15, 8718.04, 8979.85, 8820.78}
+	--}, 
+	--["WEE_DAM"] = {
+	--	{"WEE_DAM", 6676.41, 9306.84, 7004.55, 9504.65}
+	--}, 
+	["ROADBR1"] = {
+		{"Callahan Bridge", 8532.77, 8041.65, 8980.44, 8091.65}
+	}, 
+	["PORT_W"] = {
+		{"Callahan Point", 8666.68, 7821.78, 8980.68, 8041.27}
+	}, 
+	["PORT_S"] = {
+		{"Atlantic Quays", 8980.88, 7748.45, 9416.88, 7930.07}
+	}, 
+	["PORT_E"] = {
+		{"Portland Harbor", 9278.68, 7930.35, 9730.68, 8386.35}
+	}, 
+	["PORT_I"] = {
+		{"Trenton", 8980.88, 7930.15, 9278.38, 8257.95}
+	}, 
+	["LCHINA"] = {
+		{"Chinatown", 8660.42, 8091.71, 8965.42, 8551.31}
+	}, 
+	["REDLIGH"] = {
+		{"Red Light District", 8660.38, 8536.38, 8980.38, 8717.38}
+	}, 
+	["TOWERS"] = {
+		{"Hepburn Heights", 8660.42, 8717.6, 8980.42, 8921.23}
+	}, 
+	["LITTLEI"] = {
+		{"Saint Mark's", 8980.9, 8487.68, 9303.9, 8921.68}
+	}, 
+	["HARWOOD"] = {
+		{"Harwood", 8660.98, 8921.82, 9303.98, 9322.68}
+	}, 
+	["EASTBAY"] = {
+		{"Portland Beach", 9304.37, 8386.53, 9712.6, 9199.63}
+	}, 
+	["S_VIEW"] = {
+		{"Portland View", 8981.1, 8258.19, 9278.6, 8487.19}
+	}, 
+	["ROADBR2"] = {
+		{"Callahan Bridge", 8359.77, 8041.7, 8529.88, 8091.7}
+	}, 
+	["CONSTRU"] = {
+		{"Fort Staunton", 8154.88, 8588.38, 8529.32, 8938.38}
+	}, 
+	["LCADIUM"] = {
+		{"Aspatria", 7689.24, 8587.4, 8031.24, 9160.5}
+	}, 
+	["YAKUSA"] = {
+		{"Torrington", 8114.77, 7327.58, 8492.77, 7940.07}
+	}, 
+	["LCOPING"] = {
+		{"Bedford Point", 7690.56, 7327.95, 8114.56, 7995.55}
+	}, 
+	["COM_EAS"] = {
+		{"Newport", 8115.11, 7940.81, 8530.11, 8587.81}
+	}, 
+	["PARK"] = {
+		{"Belleville Park", 7793.43, 7996.93, 8114.27, 8586.93}
+	}, 
+	["UNIVERS"] = {
+		{"Liberty Campus", 8032.27, 8588.38, 8154.27, 8938.38}
+	}, 
+	["HOSPI_2"] = {
+		{"Rockford", 8032.24, 8938.89, 8530.24, 9268.89}
+	}, 
+	["LCRPORT"] = {
+		{"Francis Intl. Airport", 6282.03, 7655.29, 7446.37, 8731.56}
+	}, 
+	["PROJECT"] = {
+		{"Wichita Gardens", 7103.17, 8731.93, 7543.96, 9092.73}
+	}, 
+	["SWANKS"] = {
+		{"Cedar Grove", 7047.77, 9093.39, 7648.09, 9650.06}
+	}, 
+	["SUB_IND"] = {
+		{"Pike Creek", 6507.43, 8732.03, 7102.69, 9092.76}
+	}, 
+	["BIG_DAM"] = {
+		{"Cochrane Dam", 6520.5, 9093.44, 7047.48, 9704.54}
+	}, 
+}
+
+local LibertyBig = {
+	["IND_ZON"] = {
+		{"Portland", 8532.15, 7670.28, 9817.66, 9434.12}
+	}, 
+	["COM_ZON"] = {
+		{"Staunton Island", 7649.52, 7280.03, 8530.52, 9367.26}
+	}, 
+	["SUB_ZON"] = {
+		{"Shoreside Vale", 6270.36, 7648.62, 7648.1, 10206.4}
+	}, 
+	--["SUB_ZO2"] = {
+	--	{"Shoreside Vale", 7649.56, 9161.11, 7793.71, 9367.04}
+	--}, 
+	--["SUB_ZO3"] = {
+	--	{"Shoreside Vale", 7649.57, 9079.09, 7688.67, 9161.06}
+	--}, 
+}
+
+for _,dat in pairs(LibertySmall) do
+	for _, v in pairs(dat) do
+		v[2] = v[2] + OffsetLiberty[1]
+		v[3] = v[3] + OffsetLiberty[2]
+		
+		v[4] = v[4] + OffsetLiberty[1]
+		v[5] = v[5] + OffsetLiberty[2]
+	end
+end
+
+
+for _,dat in pairs(LibertyBig) do
+	for _, v in pairs(dat) do
+		v[2] = v[2] + OffsetLiberty[1]
+		v[3] = v[3] + OffsetLiberty[2]
+		
+		v[4] = v[4] + OffsetLiberty[1]
+		v[5] = v[5] + OffsetLiberty[2]
+	end
+end
+
+
+
+function GetZoneName(x,y,z, citiesonly, City)
+	if(City) then
+		if(City == "Liberty City") then 
+			if(not citiesonly) then -- Если ничего не находит отображает название больших районов
+				for _, dist in pairs(LibertySmall) do
+					for _, v in pairs(dist) do
+						if(v[2] <= x and v[3] <= y) then
+							if(v[4] >= x and v[5] >= y) then
+								return v[1]
+							end
+						end
+					end
+				end
+			end 
+			
+			for _, dist in pairs(LibertyBig) do -- Если не находит тут то пишет просто Liberty City
+				for _, v in pairs(dist) do
+					if(v[2] <= x and v[3] <= y) then
+						if(v[4] >= x and v[5] >= y) then
+							return v[1]
+						end
+					end
+				end
+			end
+			return "Liberty City"
+		elseif(City == "Vice City") then
+			return "Vice City"
+		end
+	end
+	return getZoneName(x,y,z, citiesonly)
+end
+
+
+
+
+
+
 
 
 
@@ -17176,7 +17723,6 @@ for i, v in pairs(StantardWeapon) do
 		end
 	end
 end
-
 
 
 
