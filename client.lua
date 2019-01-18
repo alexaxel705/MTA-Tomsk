@@ -36,6 +36,7 @@ local FireTimer = {}
 local StreamData = {}
 local AnimatedMarker = {}
 local VideoMemory = {["HUD"] = {}}
+local RailRoads = exports["vehicle_node"]:GetRailnodes()
 
 local PData = {
 	["Interface"] = {
@@ -278,7 +279,6 @@ local ToC1, ToC2, ToC3, ToC4 = false, false, false, false
 local upgrades = false
 local TCButton = {}
 local TCButton2 = {}
-local ServerDate = getRealTime(getElementData(root, "ServerTime"))
 
 local usableslot = 1
 local SprunkObject = false
@@ -976,15 +976,21 @@ function save()
 	triggerServerEvent("saveserver", localPlayer, localPlayer, x,y,z,rx,ry,rz)
 end
 
+local SaveTimer = false
 function saveauto()
 	if(PData["Driver"]) then
-		helpmessage("Запись начата!")
-		setTimer(function() 
-			if(PData["Driver"]["Distance"] > 10) then
-				PData["Driver"]["Distance"] = 0
-				save()
-			end
-		end, 50, 0)
+		if(not isTimer(SaveTimer)) then
+			helpmessage("Запись начата")
+			SaveTimer = setTimer(function() 
+				if(PData["Driver"]["Distance"] > 10) then
+					PData["Driver"]["Distance"] = 0
+					save()
+				end
+			end, 50, 0)
+		else
+			helpmessage("Запись остановлена")
+			killTimer(SaveTimer)
+		end
 	end
 end
 
@@ -1036,26 +1042,6 @@ function Set(list)
 	return set
 end
 
-
-local WeaponAmmo = {
-	[30] = "7.62-мм",
-	[31] = "5.56-мм",
-	[16] = "Граната",
-	[18] = "Молотов",
-	[22] = "9-мм",
-	[23] = "9-мм",
-	[24] = "9-мм",
-	[25] = "18.5-мм",
-	[26] = "18.5-мм",
-	[27] = "18.5-мм",
-	[28] = "9-мм",
-	[29] = "9-мм",
-	[32] = "9-мм",
-	[33] = "18.5-мм",
-	[34] = "7.62-мм",
-	[35] = "Ракета", 
-	[46] = "Парашют",
-}
 
 
 local WeaponTiming = {
@@ -2278,7 +2264,7 @@ function MarkerHit(hitPlayer, Dimension)
 			end
 			destroyElement(source)
 		elseif(getElementData(source, "TrailerInfo")) then
-			ChangeInfo(getElementData(source, "TrailerInfo"))
+			ChangeInfo(getElementData(source, "TrailerInfo"), 5000)
 		elseif(getElementData(source, "type") == "Race") then
 			NextRaceMarker()
 		elseif(getElementData(source, "type") == "RVMarker") then
@@ -3596,6 +3582,23 @@ function UpdateBot()
 	for _,thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
 		local theVehicle = getPedOccupiedVehicle(thePed)
 		local attacker = GetElementAttacker(thePed)
+		
+		local hx,hy,hz = getPedBonePosition(thePed, 8)
+
+		if(not attacker) then
+			if(getTeamGroup(getElementData(thePed, "team")) == "Официалы") then
+				for _,player in ipairs(getElementsByType("player", getRootElement(), true)) do 
+					if(getElementData(player, "WantedLevel") > 0) then
+						local ax, ay, az = getElementPosition(player)
+						if(isLineOfSightClear(hx,hy,hz, ax, ay, az, true, false, false, false, false, false, false)) then
+							triggerServerEvent("PedDamage", player, thePed, -1, 160, 0)
+						end
+					end
+				end
+			end
+		end
+		
+		
 		if(theVehicle) then
 			local vx,vy,vz = getElementPosition(theVehicle)
 			local rx,ry,rz = getElementRotation(theVehicle)
@@ -3652,17 +3655,6 @@ function UpdateBot()
 						elseif(getElementType(hitElement) == "player" or getElementType(hitElement) == "ped") then
 							brakes = true
 							HornPed(thePed, hitElement)
-						end
-					end
-					
-					if(CopCar[getElementModel(theVehicle)]) then -- Патрульный
-						for _,player in ipairs(getElementsByType("player", getRootElement(), true)) do 
-						if(getElementData(player, "WantedLevel") > 0) then
-								local ax, ay, az = getElementPosition(player)
-								if(isLineOfSightClear(vx,vy,vz, ax, ay, az, true, false, false, false, false, false, false)) then
-									triggerServerEvent("PedDamage", player, thePed, -1, 160, 0)
-								end
-							end
 						end
 					end
 				else
@@ -3737,7 +3729,7 @@ function UpdateBot()
 								local actualpedspeed = (pedspeedx^2 + pedspeedy^2 + pedspeedz^2)^(0.5)
 								if(getDistanceBetweenPoints2D(x2,y2, vx, vy) < 10) then
 									if(actualpedspeed < 0.1) then
-										triggerServerEvent("WarpPedIntoVehicle", localPlayer, getVehicleOccupant(theVehicle), localPlayer)
+										triggerServerEvent("RemovePedFromVehicle", localPlayer, getVehicleOccupant(theVehicle), localPlayer)
 									else
 										brakes = true
 									end
@@ -3832,7 +3824,7 @@ function UpdateBot()
 					if(attacker) then
 						local x,y,z = getPedBonePosition(attacker, ActualBones[math.random(#ActualBones)])
 						MovePlayerTo[thePed] = {x,y,z,0,"fast",false,false,true} -- x,y,z,rz,speed,event,args,fire
-						if(getElementData(thePed, "team") == "Полиция") then
+						if(getTeamGroup(getElementData(thePed, "team")) == "Официалы") then
 							if(getElementData(attacker, "NoFireMePolice")) then
 								MovePlayerTo[thePed][8] = false
 								if(GetDistance(thePed, attacker) < 15) then
@@ -4145,7 +4137,7 @@ function updateWorld()
 			if(PData["Driver"]["Distance"] >= 2000) then
 				local VehType = GetVehicleType(theVehicle)
 				PData["Driver"]["Distance"] = 0
-				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 10)
+				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 5)
 			end
 			
 			if(GetVehicleType(theVehicle) == "Automobile" or GetVehicleType(theVehicle) == "Bike") then
@@ -5008,6 +5000,12 @@ function displayLoadedRes(res)
 		end
 		
 		StartLoad()
+	elseif(getResourceName(res) == "vehicle_node") then
+		for zone, state in pairs(PData["infopath"]) do
+			if(state) then
+				triggerServerEvent("CreateVehicleNodeMarker", localPlayer, zone)
+			end
+		end
 	end
 end
 addEventHandler("onClientResourceStart", getRootElement(), displayLoadedRes)
@@ -5417,7 +5415,7 @@ addEventHandler("TrunkReq", localPlayer, TrunkReq)
 
 
 function CarJack()
-	triggerServerEvent("WarpPedIntoVehicle", localPlayer, getVehicleOccupant(Targets["theVehicle"]), localPlayer) 
+	triggerServerEvent("RemovePedFromVehicle", localPlayer, getVehicleOccupant(Targets["theVehicle"]), localPlayer) 
 end
 addEvent("CarJack", true)
 addEventHandler("CarJack", localPlayer, CarJack)
@@ -5453,14 +5451,17 @@ function PrisonSleepEv()
 		PText["HUD"][2] = {Text("Нажми {key} чтобы встать", {{"{key}", COLOR["KEY"]["HEX"].."Space#FFFFFF"}}), screenWidth, screenHeight-(150*scalex), 0, 0, tocolor(255, 255, 255, 255), scale*2, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
 	else
 		unbindKey("e", "down", PrisonSleepEv) 
+		PrisonSleep = false
 	end
-	PrisonSleep = false
 end
 
 function PrisonGavnoEv()
 	local x,y,z = getElementPosition(PrisonGavno)
+	local px, py, pz = getElementPosition(localPlayer)
 	local rx,ry,rz = getElementRotation(PrisonGavno)
-	triggerServerEvent("PrisonGavno", localPlayer, x,y,z,rz)
+	if(getDistanceBetweenPoints2D(x,y, px, py) < 2) then
+		triggerServerEvent("PrisonGavno", localPlayer, x,y,z,rz)
+	end
 end
 
 function PrisonPiss() triggerServerEvent("PrisonPiss", localPlayer) end
@@ -5639,7 +5640,7 @@ function targetingActivated(target)
 				if(CallPolice) then
 					message = message.."Нажми #A0A0A0F3#FFFFFF чтобы позвонить в полицию\n"	
 				end
-				ChangeInfo(message)
+				ChangeInfo(message, 5000)
 			elseif(tostring(getElementType(target)) == "vehicle") then
 				if(theVehicle) then
 					if(theVehicle ~= target) then
@@ -5668,7 +5669,7 @@ function targetingActivated(target)
 						t=t.."\nНажми #A0A0A0ALT#FFFFFF чтобы управлять сигнализацией"
 					end
 				end
-				ChangeInfo(t)
+				ChangeInfo(t, 5000)
 			elseif(tostring(getElementType(target)) == "object") then
 				if(getElementModel(target) == 955 or getElementModel(target) == 956 
 				or getElementModel(target) == 1977 or getElementModel(target) == 1775
@@ -5683,7 +5684,7 @@ function targetingActivated(target)
 					PrisonSleep = target
 					bindKey("e", "down", PrisonSleepEv)
 				elseif(getElementModel(target) == 2525) then
-					ChangeInfo("Нажми #A0A0A0F#FFFFFF чтобы справить нужду\nНажми #A0A0A0E#FFFFFF чтобы чистить говно")
+					ChangeInfo("Нажми #A0A0A0F#FFFFFF чтобы справить нужду\nНажми #A0A0A0E#FFFFFF чтобы чистить говно", 5000)
 					PrisonGavno = target
 					bindKey ("e", "down", PrisonGavnoEv)
 					bindKey ("f", "down", PrisonPiss)
@@ -5693,7 +5694,7 @@ function targetingActivated(target)
 					local team=getElementData(target, "team")
 					color=getTeamVariable(team)
 					if(team == getTeamName(getPlayerTeam(localPlayer))) then
-						ChangeInfo("Нажми #A0A0A0P #FFFFFFчтобы пригласить в группу")
+						ChangeInfo("Нажми #A0A0A0P #FFFFFFчтобы пригласить в группу", 5000)
 					end
 				end
 				Targets["thePed"] = target
@@ -6698,8 +6699,7 @@ function playerPressedKey(button, press)
 					triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x*50, y*50, 20)
 					--[[triggerServerEvent("saveserver", localPlayer, localPlayer, 
 					x*50, y*50, 20, 
-					x*50, y*50, 20, "PedPath"
-					)--]]
+					x*50, y*50, 20, "PedPath")--]]
 				end
 			end
 		elseif(button == "mouse1") then
@@ -7213,7 +7213,7 @@ function DrawOnClientRender()
 							local wx,wy,wz = getPedWeaponMuzzlePosition(thePlayer)
 							local x2,y2,z2 = getPedTargetEnd(thePlayer)
 							local arr = fromJSON(getElementData(thePlayer, "laser"))
-							dxDrawLine3D(wx,wy,wz,x2,y2,z2, tocolor(arr["color"][1], arr["color"][2], arr["color"][3], arr["color"][4]), 0.8)
+							dxDrawLine3D(wx,wy,wz,x2,y2,z2, tocolor(arr[1], arr[2], arr[3], arr[4]), 0.8)
 						end
 					end
 					
@@ -8543,6 +8543,10 @@ end
 
 --[Необходимое уважение = {Звание, id скина}
 local BandRangs = {
+	["Военные"] = {
+		[1] = {0, "Призывник", 312},
+		[2] = {30, "Контрактник", 287},
+	},
 	["Гроув-стрит"] = {
 		[1] = {0, "Укурыш", 293},
 		[2] = {30, "Красавчик Флиззи", 105},
@@ -9289,7 +9293,7 @@ function DrawPlayerMessage()
 				end
 				
 				if(getElementData(hardtruck, "product")) then
-					ChangeInfo("Груз: "..getElementData(hardtruck, "product").."\nСостояние: "..math.floor(getElementHealth(hardtruck)/10).."%")
+					ChangeInfo("Груз: "..getElementData(hardtruck, "product").."\nСостояние: "..math.floor(getElementHealth(hardtruck)/10).."%", 5000)
 				end			
 			end
 		end
@@ -9394,6 +9398,7 @@ function DrawPlayerMessage()
 					dxDrawText(Text(SkillName[WeaponModel[weapon][2]]), 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
 					DrawProgressBar(780*scalex, 840*scaley+((35*scaley)*count), getPedStat(localPlayer, WeaponModel[weapon][2]), nil, 150)
 				end
+				local ServerDate = getRealTime(getElementData(root, "ServerTime"))
 				dxDrawBorderedText(ServerDate.monthday.." "..Text(Month[ServerDate.month+1]).." "..ServerDate.year+1900, 490*scalex, 960*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*2.4, "default-bold", "left", "top", nil, nil, nil, true)		
 				
 
@@ -9841,7 +9846,7 @@ function StreamIn(restream)
 				if(getElementModel(source) == 488 or getElementModel(source) == 497) then
 					setHelicopterRotorSpeed(source, 0.2)
 					if(getElementModel(source) == 497) then
-						VehiclesInStream[source]["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 1.5)
+						VehiclesInStream[source]["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.25, 3.5)
 					end
 				end
 			end
