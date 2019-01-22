@@ -1,7 +1,7 @@
 <biz>
     <ELSF owner="" xyz="[-2521.2, -624.5, 132.7]" price="2000000" money="0"></ELSF>
     <SPRUNK owner="" xyz="[1324.2, 286.4, 20]" price="400000" money="0"></SPRUNK>
-    <SPRAYSA owner="" xyz="[1942.1, 2184.7, 10.8]" price="100000" money="300"></SPRAYSA>
+    <SPRAYSA owner="" xyz="[1942.1, 2184.7, 10.8]" price="100000" money="0"></SPRAYSA>
     <SOLIN owner="" xyz="[-1844.5, 125.3, 15.1]" price="6700000" money="0" var='[ { &quot;Бензин&quot;: 0, &quot;lvl&quot;: 1 } ]'></SOLIN>
     <NPZSF owner="" xyz="[-1015.3, -689.2, 32]" price="9000000" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Химикаты&quot;: 0, &quot;Нефть&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 1 } ]'></NPZSF>
     <PETLV owner="" xyz="[261.7, 1408.4, 10.5]" price="40000000" money="0" var='[ { &quot;Нефть&quot;: 100, &quot;lvl&quot;: 1 } ]'></PETLV>
@@ -44,7 +44,7 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDRA>
-    <MEDBC owner="" xyz="[-314.2, 1049.4, 20.34]" price="680000" money="500">
+    <MEDBC owner="" xyz="[-314.2, 1049.4, 20.34]" price="680000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
@@ -58,21 +58,21 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDTR>
-    <MEDRC owner="" xyz="[1229.3, 308.7, 19.8]" price="900000" money="1500">
+    <MEDRC owner="" xyz="[1229.3, 308.7, 19.8]" price="900000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDRC>
-    <MEDUN owner="" xyz="[2041.3, -1408.9, 17.2]" price="1400000" money="1500">
+    <MEDUN owner="" xyz="[2041.3, -1408.9, 17.2]" price="1400000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDUN>
-    <MEDLS owner="" xyz="[1181.7, -1318, 13.6]" price="1670000" money="6500">
+    <MEDLS owner="" xyz="[1181.7, -1318, 13.6]" price="1670000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
@@ -86,12 +86,12 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDWS>
-    <MEDLV owner="" xyz="[1619.4, 1819.7, 10.8]" price="2300000" money="1000">
+    <MEDLV owner="" xyz="[1619.4, 1819.7, 10.8]" price="2300000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDLV>
-    <MEDSF owner="" xyz="[-2675.4, 634.3, 14.5]" price="1900000" money="3000">
+    <MEDSF owner="" xyz="[-2675.4, 634.3, 14.5]" price="1900000" money="0">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
