@@ -1,39 +1,39 @@
 <biz>
     <ELSF owner="" xyz="[-2521.2, -624.5, 132.7]" price="2000000" money="0"></ELSF>
     <SPRUNK owner="" xyz="[1324.2, 286.4, 20]" price="400000" money="0"></SPRUNK>
-    <SPRAYSA owner="" xyz="[1942.1, 2184.7, 10.8]" price="100000" money="0"></SPRAYSA>
+    <SPRAYSA owner="" xyz="[1942.1, 2184.7, 10.8]" price="100000" money="300"></SPRAYSA>
     <SOLIN owner="" xyz="[-1844.5, 125.3, 15.1]" price="6700000" money="0" var='[ { &quot;Бензин&quot;: 0, &quot;lvl&quot;: 1 } ]'></SOLIN>
     <NPZSF owner="" xyz="[-1015.3, -689.2, 32]" price="9000000" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Химикаты&quot;: 0, &quot;Нефть&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 1 } ]'></NPZSF>
-    <PETLV owner="" xyz="[261.7, 1408.4, 10.5]" price="40000000" money="0" var='[ { &quot;Нефть&quot;: 0, &quot;lvl&quot;: 1 } ]'></PETLV>
+    <PETLV owner="" xyz="[261.7, 1408.4, 10.5]" price="40000000" money="0" var='[ { &quot;Нефть&quot;: 100, &quot;lvl&quot;: 1 } ]'></PETLV>
     <BIOEN owner="" xyz="[1352.1, 348.4, 20.5]" price="1000000" money="0" var='[ { &quot;Удобрения&quot;: 0, &quot;Химикаты&quot;: 0, &quot;lvl&quot;: 1 } ]'></BIOEN>
-   
-	<FARMFR owner="" xyz="[-382, -1437, 26]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 0, &quot;Удобрения&quot;: 0, &quot;lvl&quot;:  0.3 } ]' price="340000" money="0"></FARMFR>
-    <FARMPK owner="" xyz="[1925.5, 170.1, 37.3]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 0, &quot;Удобрения&quot;: 0, &quot;lvl&quot;: 0.2 } ]' price="510000" money="0"></FARMPK>
-    <FARMBA owner="" xyz="[-44.4, 78.7, 3.1]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 0, &quot;Удобрения&quot;: 0, &quot;lvl&quot;: 0.32 } ]' price="510000" money="0"></FARMBA>
+    
+    <FARMFR owner="" xyz="[-382, -1437, 26]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 30, &quot;Удобрения&quot;: 0, &quot;lvl&quot;: 0.3 } ]' price="340000" money="0"></FARMFR>
+    <FARMPK owner="" xyz="[1925.5, 170.1, 37.3]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 20, &quot;Удобрения&quot;: 0, &quot;lvl&quot;: 0.2 } ]' price="510000" money="0"></FARMPK>
+    <FARMBA owner="" xyz="[-44.4, 78.7, 3.1]" var='[ { &quot;Качество земли&quot;: 0, &quot;Зерно&quot;: 32, &quot;Удобрения&quot;: 0, &quot;lvl&quot;: 0.32 } ]' price="510000" money="0"></FARMBA>
     <FARMWS owner="" xyz="[-1431.6, -1528.9, 101.7]" price="694000" money="0" var='[ { &quot;Скот&quot;: 0, &quot;Зерно&quot;: 0, &quot;lvl&quot;: 0.12 } ]'></FARMWS>
     
-	<MEATFA owner="" xyz="[960.8, 2099.7, 1011, 1, 0]" price="3185000" money="0" var='[ { &quot;Мясо&quot;: 0, &quot;Скот&quot;: 0, &quot;lvl&quot;: 0.25 } ]'></MEATFA>
+    <MEATFA owner="" xyz="[960.8, 2099.7, 1011, 1, 0]" price="3185000" money="0" var='[ { &quot;Мясо&quot;: 0, &quot;Скот&quot;: 0, &quot;lvl&quot;: 0.25 } ]'></MEATFA>
     <MARIH owner="" xyz="[2548.3, -1297.6, 1044.1, 2, 0]" price="5000000" money="0" var='[ { &quot;Конопля&quot;: 0, &quot;Косяк&quot;: 0, &quot;lvl&quot;: 1 } ]'></MARIH>
     <SPUNK owner="" xyz="[-2653.8, 1428.4, 912.4, 3, 0]" price="30000000" money="0" var='[ { &quot;Кока&quot;: 0, &quot;Спанк&quot;: 0, &quot;lvl&quot;: 1 } ]'></SPUNK>
     <FLEIS owner="" xyz="[-49.9, -269.4, 6.6]" price="6080000" money="0" var='[ { &quot;Зерно&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;lvl&quot;: 1 } ]'></FLEIS>
     <FOSOI owner="" xyz="[2483.8, -2115.9, 13.5]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Химикаты&quot;: 0, &quot;Нефть&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 1 } ]'></FOSOI>
     
-	<LASPA owner="" xyz="[-300.5, 2658.7, 63]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.1, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></LASPA>
+    <LASPA owner="" xyz="[-300.5, 2658.7, 63]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.1, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></LASPA>
     <ANLPI owner="" xyz="[-2192.6, -2433.5, 30.9]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.135, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></ANLPI>
-	<ELQUE owner="" xyz="[-1507.5, 2560.8, 55.8]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.075, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></ELQUE>
+    <ELQUE owner="" xyz="[-1507.5, 2560.8, 55.8]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.075, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></ELQUE>
     <LASBA owner="" xyz="[-818.2, 1560.6, 27.1]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.025, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></LASBA>
     <FORCA owner="" xyz="[-135.1, 1116.8, 20.2]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.19, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></FORCA>
     <BAYSA owner="" xyz="[-2455.7, 2293, 5]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.05, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></BAYSA>
-	<LOSSA owner="" xyz="[2179.5, -2256.2, 14.8]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.3, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></LOSSA>
+    <LOSSA owner="" xyz="[2179.5, -2256.2, 14.8]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.3, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></LOSSA>
     <DILLI owner="" xyz="[710.9, -569.4, 16.3]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.05, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></DILLI>
     <BLUEB owner="" xyz="[169.1, -34.3, 1.6]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.15, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></BLUEB>
     <LASVE owner="" xyz="[1708.6, 1073.7, 10.8]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.5, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></LASVE>
     <MONTG owner="" xyz="[1228.1, 182.7, 20.3]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.17, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></MONTG>
-	<PALOM owner="" xyz="[2246.4, 52.4, 26.7]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.23, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></PALOM>
-	<SANFI owner="" xyz="[-2101.6, -15.9, 35.3]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.45, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></SANFI>
+    <PALOM owner="" xyz="[2246.4, 52.4, 26.7]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.23, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></PALOM>
+    <SANFI owner="" xyz="[-2101.6, -15.9, 35.3]" price="0" money="0" var='[ { &quot;Пропан&quot;: 0, &quot;Бензин&quot;: 0, &quot;lvl&quot;: 0.45, &quot;Мясо&quot;: 0, &quot;Алкоголь&quot;: 0, &quot;Зерно&quot;: 0 } ]'></SANFI>
     
-	
-	
+    
+    
     <SANNEWS owner="" xyz="[783.4, -1329, 13.5]" price="550000" money="0">
         <VAC name="Репортер"></VAC>
     </SANNEWS>
@@ -44,7 +44,7 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDRA>
-    <MEDBC owner="" xyz="[-314.2, 1049.4, 20.34]" price="680000" money="0">
+    <MEDBC owner="" xyz="[-314.2, 1049.4, 20.34]" price="680000" money="500">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
@@ -58,21 +58,21 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDTR>
-    <MEDRC owner="" xyz="[1229.3, 308.7, 19.8]" price="900000" money="0">
+    <MEDRC owner="" xyz="[1229.3, 308.7, 19.8]" price="900000" money="1500">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDRC>
-    <MEDUN owner="" xyz="[2041.3, -1408.9, 17.2]" price="1400000" money="0">
+    <MEDUN owner="" xyz="[2041.3, -1408.9, 17.2]" price="1400000" money="1500">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDUN>
-    <MEDLS owner="" xyz="[1181.7, -1318, 13.6]" price="1670000" money="500">
+    <MEDLS owner="" xyz="[1181.7, -1318, 13.6]" price="1670000" money="6500">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
@@ -86,12 +86,12 @@
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDWS>
-    <MEDLV owner="" xyz="[1619.4, 1819.7, 10.8]" price="2300000" money="0">
+    <MEDLV owner="" xyz="[1619.4, 1819.7, 10.8]" price="2300000" money="1000">
         <VAC name="Санитар"></VAC>
         <VAC name="Ученик"></VAC>
         <VAC name="Врач"></VAC>
     </MEDLV>
-    <MEDSF owner="" xyz="[-2675.4, 634.3, 14.5]" price="1900000" money="0">
+    <MEDSF owner="" xyz="[-2675.4, 634.3, 14.5]" price="1900000" money="3000">
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
         <VAC name="Санитар"></VAC>
@@ -99,14 +99,14 @@
         <VAC name="Врач"></VAC>
     </MEDSF>
     <AMMOLS owner="" xyz="[1366.5, -1274.2, 13.5]" price="2500000" money="0"></AMMOLS>
-    <MERLS owner="" price="0" money="0" srok="348">
+    <MERLS owner="" price="0" money="0" srok="420" biz="Мэр Los Santos">
         <VAC name="Начальник LSPD" jobbiz="PLSPD"></VAC>
     </MERLS>
-    <MERSF owner="" price="0" money="0" srok="409">
+    <MERSF owner="" price="0" money="0" srok="48" biz="Мэр San Fierro">
         <VAC name="ФБР" jobbiz="FBISF"></VAC>
         <VAC name="Начальник SFPD" jobbiz="PSFPD"></VAC>
     </MERSF>
-    <MERLV owner="" price="0" money="0" srok="49">
+    <MERLV owner="" price="0" money="0" srok="118" biz="Мэр Las Venturas">
         <VAC name="Директор ЦРУ" jobbiz="CIASA"></VAC>
     </MERLV>
     <CIASA owner="" xyz="[213.1, 1822.8, 6.4]" price="0" money="0">
@@ -156,25 +156,25 @@
     <CERBC owner="" xyz="[-207.9, 1119.2, 20.4, 0, 0]" price="6250000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERBC>
-    <CERLV owner="" xyz="[2520.4, 918.5, 11, 0, 0]" price="4650000" money="0">
+    <CERLV owner="" xyz="[2520.4, 918.5, 11, 0, 0]" price="46500" money="0">
         <VAC name="Патриарх"></VAC>
     </CERLV>
-    <CERLV2 owner="" xyz="[2519.4, 2033.4, 11.2, 0, 0]" price="4600000" money="0">
+    <CERLV2 owner="" xyz="[2519.4, 2033.4, 11.2, 0, 0]" price="46000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERLV2>
-    <CERLV3 owner="" xyz="[2439.5, 1293.3, 11, 0, 0]" price="4620000" money="0">
+    <CERLV3 owner="" xyz="[2439.5, 1293.3, 11, 0, 0]" price="46200" money="0">
         <VAC name="Патриарх"></VAC>
     </CERLV3>
-    <CERSF owner="" xyz="[-1989.9, 1117.9, 54.5, 0, 0]" price="12000000" money="0">
+    <CERSF owner="" xyz="[-1989.9, 1117.9, 54.5, 0, 0]" price="120000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERSF>
-    <CERRC owner="" xyz="[2256.8, -44.6, 26.9, 0, 0]" price="3500000" money="0">
+    <CERRC owner="" xyz="[2256.8, -44.6, 26.9, 0, 0]" price="35000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERRC>
-    <CERLS owner="" xyz="[2234, -1333.3, 24, 0, 0]" price="8400000" money="0">
+    <CERLS owner="" xyz="[2234, -1333.3, 24, 0, 0]" price="84000" money="0">
         <VAC name="Патриарх"></VAC>
     </CERLS>
-    <DALBC owner="" xyz="[-323.5, 2675.6, 63.7, 0, 0]" price="8400000" money="0">
+    <DALBC owner="" xyz="[-323.5, 2675.6, 63.7, 0, 0]" price="84000" money="0">
         <VAC name="Дальнобойщик"></VAC>
         <VAC name="Дальнобойщик"></VAC>
         <VAC name="Дальнобойщик"></VAC>

@@ -2444,8 +2444,9 @@ addEventHandler("SetGPS", localPlayer, SetGPS)
 
 
 
-function MyVoice(voicebank, voice)
-	local voi = playSound("http://109.227.228.4/engine/include/MTA/"..voicebank.."/"..voice..".wav")
+function MyVoice(voice, voicebank)
+	triggerServerEvent("CheckVoice", localPlayer, voice, voicebank)
+	local voi = playSound("http://109.227.228.4/engine/include/MTA/"..voicebank.."/"..md5(voice)..".wav")
 	setSoundVolume(voi, 0.7)
 end
 addEvent("MyVoice", true)
@@ -2465,7 +2466,7 @@ function PlayerDialog(array, ped, endl)
 		
 		PText["dialog"] = {}
 		dialogTitle = array["dialog"][math.random(#array["dialog"])]
-		MyVoice("dg", md5(dialogTitle))
+		MyVoice(dialogTitle, "dg")
 	
 		if(not ped) then
 			showCursor(true)
@@ -2485,7 +2486,7 @@ function PlayerDialog(array, ped, endl)
 		dialogTitle = false
 		if(ped) then
 			if(endl) then
-				MyVoice("dg", md5(endl))
+				MyVoice(endl, "dg")
 				PlayerSayEvent(endl, ped)
 			end
 			setElementData(ped, "saytome", nil)
@@ -3119,7 +3120,7 @@ local CityColor = {
 function LookHouse(h)
 	setElementDimension(localPlayer, 0)
 	setElementInterior(localPlayer, 0) 
-	local x,y,z= h[1],h[2],h[3] 
+	local x,y,z = h[1], h[2], h[3]
 	local zone = getZoneName(x,y,z,true)
 	local color = {"#9EDA46", "#FFFFFF"}
 	if(CityColor[zone]) then color[1] = CityColor[zone] end
@@ -3287,7 +3288,7 @@ function StartLookZonesBeta(zones, update)
 	bindKey ("9", "down", sendEditHome, 9)
 	
 	
-	SpawnPoints=fromJSON(zones)
+	SpawnPoints = fromJSON(zones)
 	HomeEditor = true
 	for i = 1, #SpawnPoints do
 		if(SpawnPoints[i][4] == "house") then
@@ -3588,10 +3589,12 @@ function UpdateBot()
 		if(not attacker) then
 			if(getTeamGroup(getElementData(thePed, "team")) == "Официалы") then
 				for _,player in ipairs(getElementsByType("player", getRootElement(), true)) do 
-					if(getElementData(player, "WantedLevel") > 0) then
-						local ax, ay, az = getElementPosition(player)
-						if(isLineOfSightClear(hx,hy,hz, ax, ay, az, true, false, false, false, false, false, false)) then
-							triggerServerEvent("PedDamage", player, thePed, -1, 160, 0)
+					if(not isPedDead(player)) then
+						if(getElementData(player, "WantedLevel") > 0) then
+							local ax, ay, az = getElementPosition(player)
+							if(isLineOfSightClear(hx,hy,hz, ax, ay, az, true, false, false, false, false, false, false)) then
+								triggerServerEvent("PedDamage", player, thePed, -1, 160, 0)
+							end
 						end
 					end
 				end
@@ -3838,6 +3841,7 @@ function UpdateBot()
 							if(getElementData(attacker, "WantedLevel") == 0) then
 								triggerServerEvent("NoAttack", localPlayer, attacker, thePed)
 								setPedControlState(thePed, "aim_weapon", false) 
+								setPedControlState(thePed, "sprint", false)
 							end
 						end
 					else
@@ -4226,15 +4230,15 @@ function updateWorld()
 								local _, _, brz = getElementRotation(hitElement)
 								if(brz-rz >= 40 or brz-rz <= -40) then
 									if(not isTimer(PData["VehicleBonus"])) then
-										AddRage(math.round(VehicleSpeed-100, 0))
-										RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
+										AddRage(math.round(VehicleSpeed-50, 0))
+										RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-50, 0)}}))
 										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 									end
 									HornPed(occ)
 								else
 									if(not isTimer(PData["VehicleBonus"])) then
-										AddRage(math.round(VehicleSpeed-100, 0))
-										RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
+										AddRage(math.round(VehicleSpeed-50, 0))
+										RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-50, 0)}}))
 										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 									end
 									HornPed(occ)
@@ -5003,6 +5007,8 @@ function displayLoadedRes(res)
 	elseif(getResourceName(res) == "vehicle_node") then
 		for zone, state in pairs(PData["infopath"]) do
 			if(state) then
+				PData['changezone'] = {}
+				triggerServerEvent("ZonesGroundPosition", localPlayer, zone)
 				triggerServerEvent("CreateVehicleNodeMarker", localPlayer, zone)
 			end
 		end
@@ -5045,9 +5051,6 @@ function AuthComplete(CollectDat)
 end
 addEvent("AuthComplete", true)
 addEventHandler("AuthComplete", localPlayer, AuthComplete)
-
-
-
 
 
 
@@ -5352,9 +5355,10 @@ function MissionCompleted(job, money, removetarget, cinema)
 	end, 3500, 1)
 	
 	if(cinema) then
+		cinema = fromJSON(cinema)
 		playSFX("genrl", 75, 1, false)
 		local x,y,z = getElementPosition(localPlayer)
-		setCameraMatrix(x+20, y-20, z+30, x, y, z)
+		LookHouse(cinema[1])
 		PEDChangeSkin = "cinema"
 		setTimer(function(thePlayer)
 			setCameraTarget(localPlayer)
@@ -5456,10 +5460,11 @@ function PrisonSleepEv()
 end
 
 function PrisonGavnoEv()
-	local x,y,z = getElementPosition(PrisonGavno)
-	local px, py, pz = getElementPosition(localPlayer)
+	local ox,oy,oz = getElementPosition(PrisonGavno)
 	local rx,ry,rz = getElementRotation(PrisonGavno)
-	if(getDistanceBetweenPoints2D(x,y, px, py) < 2) then
+	local px,py,pz = getElementPosition(localPlayer)
+	local x,y,z = getPointInFrontOfPoint(ox,oy,oz+1,rz-90,0.8)
+	if(getDistanceBetweenPoints2D(ox,oy, px, py) < 2) then
 		triggerServerEvent("PrisonGavno", localPlayer, x,y,z,rz)
 	end
 end
@@ -5568,6 +5573,34 @@ local effectNames = {"blood_heli","boat_prop","camflash","carwashspray","cement"
 
 
 
+local o = createObject(2525, 262.9, 79, 1000, 0,0,90)
+setElementInterior(o, 6)
+setElementDimension(o, 1)
+
+o = createObject(2525, 317.25, 317.2, 998.12, 0,0,30)
+setElementInterior(o, 5)
+setElementDimension(o, 1)
+
+o = createObject(2525, 317.25, 317.2, 998.12, 0,0,30)
+setElementInterior(o, 5)
+setElementDimension(o, 2)
+
+o = createObject(2525, 317.25, 317.2, 998.12, 0,0,30)
+setElementInterior(o, 5)
+setElementDimension(o, 3)
+
+o = createObject(2525, 317.25, 317.2, 998.12, 0,0,30)
+setElementInterior(o, 5)
+setElementDimension(o, 4)
+
+o = createObject(2525, 218.4, 107.6, 997.9, 0,0,180)
+setElementInterior(o, 10)
+setElementDimension(o, 1)
+
+o = createObject(2525, 192.8, 173, 1002, 0,0,180)
+setElementInterior(o, 3)
+setElementDimension(o, 1)
+
 
 DrugsEffect = {}
 DrugsAnimation = {"PLY_CASH","PUN_CASH","PUN_HOLLER","PUN_LOOP","strip_A","strip_B","strip_C","strip_D","strip_E","strip_F","strip_G","STR_A2B","STR_B2A","STR_B2C","STR_C1","STR_C2", "STR_C2B", "STR_Loop_A","STR_Loop_B","STR_Loop_C"}
@@ -5622,7 +5655,7 @@ function targetingActivated(target)
 			if(tostring(getElementType(target)) == "player") then
 				Targets["thePlayer"] = target
 				if(PTeam == "Мирные жители" or PTeam == "МЧС" and PTeam ~= "Полиция") then
-					if(getElementData(target, "WantedLevel") ~= "Уровень розыска 0") then
+					if(getElementData(target, "WantedLevel") ~= 0) then
 						bindKey ("F3", "down", CallPoliceEvent)
 						CallPolice=getPlayerName(target)
 					end
@@ -6029,21 +6062,19 @@ addEventHandler("InfoPath", localPlayer, InfoPath)
 
 
 function InfoPathPed(zone, arr)
-	if(not GroundMaterial[zone]) then
-		local arr = fromJSON(arr)
-		GroundMaterial[zone] = {}
-		for i, dat2 in pairs(arr) do
-			for slotx = dat2[1], dat2[4] do
-				if(not GroundMaterial[zone][slotx]) then GroundMaterial[zone][slotx] = {} end
-				for sloty = dat2[2], dat2[5] do
-					GroundMaterial[zone][slotx][sloty] = 4
-				end
+	local arr = fromJSON(arr)
+	GroundMaterial[zone] = {}
+	for i, dat2 in pairs(arr) do
+		for slotx = dat2[1], dat2[4] do
+			if(not GroundMaterial[zone][slotx]) then GroundMaterial[zone][slotx] = {} end
+			for sloty = dat2[2], dat2[5] do
+				GroundMaterial[zone][slotx][sloty] = 4
 			end
-			PData['changezone'][zone.." "..i] = {
-				[1] = {dat2[1], dat2[2], dat2[3], zone}, 
-				[2] = {dat2[4], dat2[5], dat2[6]}
-			}
 		end
+		PData['changezone'][zone.." "..i] = {
+			[1] = {dat2[1], dat2[2], dat2[3], zone}, 
+			[2] = {dat2[4], dat2[5], dat2[6]}
+		}
 	end
 end
 addEvent("InfoPathPed", true)
@@ -6209,6 +6240,8 @@ local Cheats = {
 	["turnuptheheat"] = true, 
 	["asnaeb"] = true,
 	["turndowntheheat"] = true, 
+	["ogxsdag"] = true, 
+	["worshipme"] = true, 
 }     
 
 
@@ -6216,6 +6249,13 @@ function CheatCode(code)
 	local x,y,z = getElementPosition(localPlayer)
 	if(code == "hesoyam") then
 		triggerServerEvent("hesoyam", localPlayer, localPlayer)
+	elseif(code == "ogxsdag" or code == "worshipme") then
+		triggerServerEvent("Respect", localPlayer, localPlayer, "civilian", 1000)
+		triggerServerEvent("Respect", localPlayer, localPlayer, "vagos", 1000)
+		triggerServerEvent("Respect", localPlayer, localPlayer, "police", 1000)
+		triggerServerEvent("Respect", localPlayer, localPlayer, "grove", 1000)
+		triggerServerEvent("Respect", localPlayer, localPlayer, "ugol", 1000)
+		triggerServerEvent("Respect", localPlayer, localPlayer, "ballas", 1000)
 	elseif(code == "ljspqk" or code == "bringiton") then
 		triggerServerEvent("WantedLevel", localPlayer, localPlayer, 6)
 	elseif(code == "osrblhh" or code == "turnuptheheat") then
@@ -6613,23 +6653,6 @@ for _, v in pairs(SearchLights) do
 	setElementRotation(v["A51_SPOTBULB"], 330,ry,math.random(0,360))
 end
 
-function updateSearchLight()
-	for _, v in pairs(SearchLights) do
-		local rx,ry,rz = getElementRotation(v["A51_SPOTBULB"])
-		setElementRotation(v["A51_SPOTHOUSING"], rx,ry,rz+0.1)
-		setElementRotation(v["A51_SPOTBULB"], rx,ry,rz+0.1)
-	
-		local sx, sy, sz = getPositionFromElementOffset(v["A51_SPOTBULB"], 0, 1.181, 0.768)
-		local ex, ey, ez = getPositionFromElementOffset(v["A51_SPOTBULB"], 0, 30, 0)
-
-		
-		setSearchLightStartPosition(v["attach_searchlight"], sx, sy, sz)
-		setSearchLightEndPosition(v["attach_searchlight"], ex, ey, ez)
-	end
-end
-addEventHandler("onClientPreRender", root, updateSearchLight)
-
-
 
 
 function playerPressedKey(button, press)
@@ -6737,6 +6760,7 @@ function playerPressedKey(button, press)
 			if(button == "lshift") then
 				if(PData['rage'] > 0) then
 					if(press) then
+						AddRage(-2)
 						PData['ragetimer'] = setTimer(function() 
 							AddRage(-2)
 						end, 50, 0)
@@ -7018,7 +7042,59 @@ addEventHandler("ShakeLevel", localPlayer, ShakeLevel)
 
 
 
+local CameraFade = false
+local FadeUpTime = 0
 function DrawOnClientRender()	
+	if(CameraFade) then
+		if(CameraFade[3] == "in") then
+			if(CameraFade[1] > CameraFade[2]) then -- Затемнение
+				CameraFade[2] = getTickCount()-FadeUpTime
+			end
+			if(CameraFade[2]/CameraFade[1] > 1) then CameraFade[2] = CameraFade[1] end
+		elseif(CameraFade[3] == "out") then
+			CameraFade[2] = CameraFade[1]-(getTickCount()-FadeUpTime)
+			if(CameraFade[2] < 0) then
+				CameraFade = false
+			end
+		end
+		if(CameraFade) then
+			dxDrawRectangle(0, 0, screenWidth, screenHeight, tocolor(0, 0, 0, 255*(CameraFade[2]/CameraFade[1])))
+		end
+	end
+	
+	if(ZonesDisplay[1]) then
+		if(not PData['Minimize']) then
+			if(PData["Interface"]["AreaName"]) then
+				if(getElementData(localPlayer, "City")) then
+					dxDrawImage(screenWidth-(dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.15)-(25*scalex), (screenHeight-(25*scaley))-dxGetFontHeight(NewScale*4, "default-bold"), (dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.3), dxGetFontHeight(NewScale*4, "default-bold"), DrawLocationLiberty(ZonesDisplay[1][1]), 0, 0, 0, tocolor(255, 255, 255, ZonesDisplay[1][2]))
+				else
+					dxDrawImage(screenWidth-(dxGetTextWidth(ZonesDisplay[1][1], NewScale*4, "diploma", true))-(25*scalex), (screenHeight)-dxGetFontHeight(NewScale*4, "diploma")-(25*scaley), dxGetTextWidth(ZonesDisplay[1][1], NewScale*4, "diploma", true), dxGetFontHeight(NewScale*4, "diploma"), DrawLocation(ZonesDisplay[1][1]), 0, 0, 0, tocolor(255, 255, 255, ZonesDisplay[1][2]))
+				end
+			end
+		end
+
+		if(tonumber(ZonesDisplay[1][3])) then
+			if(ZonesDisplay[1][3] > 0) then
+				ZonesDisplay[1][3] = ZonesDisplay[1][3]-5
+				if(ZonesDisplay[1][3] <= 255) then
+					ZonesDisplay[1][2] = ZonesDisplay[1][3]
+				end
+			else
+				VideoMemory["HUD"]["LocationTarget"] = nil
+				table.remove(ZonesDisplay, 1)
+			end
+		elseif(ZonesDisplay[1][2] < 255) then
+			ZonesDisplay[1][2] = ZonesDisplay[1][2]+5
+		elseif(ZonesDisplay[1][2] == 255) then
+			if(ZonesDisplay[1][3] == "fast") then
+				ZonesDisplay[1][3] = 255
+			else
+				ZonesDisplay[1][3] = 1200
+			end
+		end
+	end
+
+
 	if(PData['CameraMove']) then
 		if(isTimer(PData['CameraMove']['timer'])) then
 			local remaining, _, totalExecutes = getTimerDetails(PData['CameraMove']['timer'])
@@ -7173,10 +7249,22 @@ function DrawOnClientRender()
 			end
 		end
 		
-	
 		local x,y,z = getElementPosition(localPlayer)
 		local zone = getZoneName(x,y,z, false)
 		if(zone == "Restricted Area") then
+			for _, v in pairs(SearchLights) do
+				local rx,ry,rz = getElementRotation(v["A51_SPOTBULB"])
+				setElementRotation(v["A51_SPOTHOUSING"], rx,ry,rz+0.1)
+				setElementRotation(v["A51_SPOTBULB"], rx,ry,rz+0.1)
+			
+				local sx, sy, sz = getPositionFromElementOffset(v["A51_SPOTBULB"], 0, 1.181, 0.768)
+				local ex, ey, ez = getPositionFromElementOffset(v["A51_SPOTBULB"], 0, 30, 0)
+				
+				setSearchLightStartPosition(v["attach_searchlight"], sx, sy, sz)
+				setSearchLightEndPosition(v["attach_searchlight"], ex, ey, ez)
+			end
+		
+		
 			for key,thePlayer in pairs(getElementsByType "player") do
 				local team = getPlayerTeam(thePlayer)
 				if(team) then
@@ -7304,56 +7392,6 @@ addEventHandler("onClientRender", root, DrawOnClientRender)
 
 
 
-
-local CameraFade = false
-local FadeUpTime = 0
-function DrawFade()
-	if(CameraFade) then
-		if(CameraFade[3] == "in") then
-			if(CameraFade[1] > CameraFade[2]) then -- Затемнение
-				CameraFade[2] = getTickCount()-FadeUpTime
-			end
-			if(CameraFade[2]/CameraFade[1] > 1) then CameraFade[2] = CameraFade[1] end
-		elseif(CameraFade[3] == "out") then
-			CameraFade[2] = CameraFade[1]-(getTickCount()-FadeUpTime)
-			if(CameraFade[2] < 0) then
-				CameraFade = false
-			end
-		end
-		if(CameraFade) then
-			dxDrawRectangle(0, 0, screenWidth, screenHeight, tocolor(0, 0, 0, 255*(CameraFade[2]/CameraFade[1])))
-		end
-	end
-	
-	if(ZonesDisplay[1]) then
-		if(not PData['Minimize']) then
-			if(PData["Interface"]["AreaName"]) then
-				dxDrawImage(screenWidth-(dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.15)-(25*scalex), (screenHeight-(25*scaley))-dxGetFontHeight(NewScale*4, "default-bold"), (dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.3), dxGetFontHeight(NewScale*4, "default-bold"), DrawLocation(ZonesDisplay[1][1]), 0, 0, 0, tocolor(255, 255, 255, ZonesDisplay[1][2]))
-			end
-		end
-
-		if(tonumber(ZonesDisplay[1][3])) then
-			if(ZonesDisplay[1][3] > 0) then
-				ZonesDisplay[1][3] = ZonesDisplay[1][3]-5
-				if(ZonesDisplay[1][3] <= 255) then
-					ZonesDisplay[1][2] = ZonesDisplay[1][3]
-				end
-			else
-				VideoMemory["HUD"]["LocationTarget"] = nil
-				table.remove(ZonesDisplay, 1)
-			end
-		elseif(ZonesDisplay[1][2] < 255) then
-			ZonesDisplay[1][2] = ZonesDisplay[1][2]+5
-		elseif(ZonesDisplay[1][2] == 255) then
-			if(ZonesDisplay[1][3] == "fast") then
-				ZonesDisplay[1][3] = 255
-			else
-				ZonesDisplay[1][3] = 1200
-			end
-		end
-	end
-end
-addEventHandler("onClientRender", getRootElement(), DrawFade)
 
 function FadeIn(times)
 	if(not CameraFade) then
@@ -7584,10 +7622,10 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 					PData['changezone'][#PData['changezone']][2] = {out[4], out[5], out[6]}
 					
 
-					--[[triggerServerEvent("saveserver", localPlayer, localPlayer, 
+					triggerServerEvent("saveserver", localPlayer, localPlayer, 
 					out[1], out[2], out[3], 
 					out[4], out[5], out[6], "PedPath"
-					)--]]
+					)
 				else
 					PData['changezone'][#PData['changezone']] = nil
 				end
@@ -7956,8 +7994,10 @@ addEventHandler("onClientPlayerWasted", getRootElement(), onWasted)
 
 
 function PlayerNewZone(zone, city, updateweather, interior)
-	SetZoneDisplay(zone)
-	triggerServerEvent("ZoneInfo", localPlayer, localPlayer, zone)
+	if(not PData["ResourceMap"]) then
+		SetZoneDisplay(zone)
+		triggerServerEvent("ZoneInfo", localPlayer, localPlayer, zone)
+	end
 end
 addEventHandler("PlayerNewZone", root, PlayerNewZone)
 
@@ -7979,7 +8019,11 @@ function PlayerVehicleEnter(theVehicle, seat)
 			if(getElementData(theVehicle, "year")) then
 				name = name.." "..getElementData(theVehicle, "year")
 			end
-			SetZoneDisplay("#9b7c52"..name)
+			if(getElementData(localPlayer, "City")) then
+				SetZoneDisplay("#9b7c52"..name)
+			else
+				SetZoneDisplay("#66935C"..name)
+			end
 		end
 	end
 end
@@ -8492,6 +8536,9 @@ function PlayerSayEvent(message,thePlayer)
 end
 addEvent("PlayerSayEvent", true)
 addEventHandler("PlayerSayEvent", localPlayer, PlayerSayEvent)
+
+
+
 
 function PlayerActionEvent(message,thePlayer)
 	PlayersAction[thePlayer]=message
@@ -9119,7 +9166,8 @@ function DrawPlayerMessage()
 				dxDrawRectangle(screenWidth/2-(sx/2)+(HS*NewScale), screenHeight/1.2+(sy/2), 10*NewScale, -(NewScale*PData["HarvestDisplay"]), tocolor(255, 153, 0, 255))
 			end
 			
-			local wanted = getElementData(localPlayer, "WantedLevel") or ""
+			local wanted = getElementData(localPlayer, "WantedLevel")
+			if(getElementData(localPlayer, "WantedLevelPrison")) then wanted = getElementData(localPlayer, "WantedLevelPrison") end
 			local TotalDamage = getElementData(localPlayer, "Damage")
 			if(PData["Interface"]["WantedLevel"] and not getElementData(localPlayer, "AEZAKMI")) then
 				if(PData["WantedLevel"]) then
@@ -9183,7 +9231,7 @@ function DrawPlayerMessage()
 				if tick - (idleTime or 0) < 50 then
 					if(score > 500) then
 						AddRage(1)
-						RageInfo("Занос +"..math.round(score/100, 0))
+						RageInfo("Дрифт +"..math.round(score/100, 0))
 					end
 				end
 
@@ -9347,7 +9395,7 @@ function DrawPlayerMessage()
 
 			
 			local team = getTeamName(getPlayerTeam(localPlayer))
-			dxDrawText("Наименование: "..team, 1000*scalex, 840*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
+			dxDrawText("Название: "..team, 1000*scalex, 840*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
 			local carrier = GetBandRang(team, getTeamVariable(team))
 			dxDrawText("Текущий ранг: "..carrier[1][2], 1000*scalex, 875*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
 			if(carrier[2]) then
@@ -9712,7 +9760,25 @@ end
 
 
 
+
 function DrawLocation(location)
+	if(not VideoMemory["HUD"]["LocationTarget"]) then
+		VideoMemory["HUD"]["LocationTarget"] = dxCreateRenderTarget(dxGetTextWidth(location, NewScale*4, "diploma", true)+(20*scalex), dxGetFontHeight(NewScale*4, "diploma"), true)
+		dxSetRenderTarget(VideoMemory["HUD"]["LocationTarget"], true)
+		
+		dxSetBlendMode("modulate_add")
+		
+		dxDrawBorderedText(location, dxGetTextWidth(location, NewScale*4, "diploma", true)+(10*scalex), 0, 0, 0, tocolor(147, 160, 168, 255), NewScale*4, "diploma", "center", "top", nil, nil, nil, true)
+
+		dxSetBlendMode("blend")
+		dxSetRenderTarget()
+	end
+	return VideoMemory["HUD"]["LocationTarget"]
+end
+
+
+
+function DrawLocationLiberty(location) 
 	if(not VideoMemory["HUD"]["LocationTarget"]) then
 		VideoMemory["HUD"]["LocationTarget"] = dxCreateRenderTarget((dxGetTextWidth(location, NewScale*6, "default-bold", true)*1.3), dxGetFontHeight(NewScale*6, "default-bold")+4, true)
 		dxSetRenderTarget(VideoMemory["HUD"]["LocationTarget"], true)
@@ -9740,13 +9806,6 @@ function DrawLocation(location)
 			end
 			pady = pady+0.15
 		end
-		
-		--[[
-		  local pngPixels = dxConvertPixels(pixels2, 'png')
-  local newImg = fileCreate('img.png')
-  fileWrite(newImg, pngPixels)
-  fileClose(newImg)
-		]]
 		
 		dxSetTexturePixels(texture, pixels2)
 		VideoMemory["HUD"]["LocationTarget"] = texture
@@ -9869,6 +9928,8 @@ function StreamIn(restream)
 				x,y,z = datCord[1], datCord[2], datCord[3]
 			end
 			ObjectInStream[source]["collision"] = createMarker(x,y,z, "corona", getElementRadius(source)*2, 0,0,0,0)
+			setElementInterior(ObjectInStream[source]["collision"], getElementInterior(source))
+			setElementDimension(ObjectInStream[source]["collision"], getElementDimension(source))
 			setElementParent(ObjectInStream[source]["collision"], source)	
 		elseif(GetObjectType(source) == "Графити") then
 			ObjectInStream[source] = {}
@@ -9929,7 +9990,7 @@ function StreamIn(restream)
 			setPedAnimation(source, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame)
 			local rz = tonumber(getElementData(source, "dialogrz"))
 			if(rz) then --Костыль
-				setElementRotation(source, 0, 0, 90-rz)
+				setElementRotation(source, 0, 0, rz, "default", true)
 			end
 		end
 	end

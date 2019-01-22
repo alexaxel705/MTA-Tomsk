@@ -499,7 +499,7 @@ local SpawnPoint = {
 	["AREA51"] = {212, 1865, 13, 90, false, false,0, 0, "#FFA500Психиатрическая больница", "До выписки"},
 	["LSPD"] = {264.5, 77.6, 1001, 90, false, false, 6, 1, "#FFA500Тюрьма Los Santos", "До освобождения"},
 	["SFPD"] = {219.5, 110, 999, 0, false, false, 10, 1, "#FFA500Тюрьма San Fierro", "До освобождения"},
-	["LVPD"] = {264.5, 77.6, 1001, 90, false, false, 6, 1, "#FFA500Тюрьма Las Venturas", "До освобождения"},
+	["LVPD"] = {193.5, 174.8, 1003, 0, false, false, 3, 1, "#FFA500Тюрьма Las Venturas", "До освобождения"},
 	["RCPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 4, "#FFA500Тюрьма Red County", "До освобождения"},
 	["WSPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 1, "#FFA500Тюрьма Whetstone", "До освобождения"},
 	["FCPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 1, "#FFA500Тюрьма Flint County", "До освобождения"},
@@ -530,7 +530,8 @@ local SpawnPoint = {
 	["Las Venturas Police"] = {2272, 2446, 3.52, 180, false, false, 0, 0},
 	["Verdant Bluffs"] = {1209, -2037, 69, 270, false, false, 0, 0},
 	["Caligula's Palace"] = {2170.6, 1684, 10.8, 0, false, false, 0, 0},
-	["Pershing Square Meria"] = {1481.6, -1765.4, 18.8, 0, false, false, 0, 0}
+	["Pershing Square Meria"] = {1481.6, -1765.4, 18.8, 0, false, false, 0, 0}, 
+	["Avispa Country Club"] = {-2724.2, -314.4, 7.2, 48, false, false, 0, 0}
 }
 
 local ClinicSpawn = {
@@ -1285,7 +1286,7 @@ function CreateDialogBot(skin,x,y,z,rz,i,d,dialog,name)
 	setElementInterior(ped, i)
 	setElementDimension(ped, d)
 	setElementData(ped, "dialog", dialog)
-	setElementData(ped, "dialogrz", rz+90)
+	setElementData(ped, "dialogrz", rz)
 	setElementData(ped, "TINF", "DialogBot"..SData["DialogBot"])
 
 	if(not name) then
@@ -2827,10 +2828,14 @@ local CarsForSaleModel = {
 	["LV Center"] = {400, 422, 402, 405, 419, 421, 426, 445, 580},
 	["LV Center 2"] = {489, 480, 533, 554, 579, 409, 586, 463},
 	["LV Trash"] = {474, 500, 518, 542, 549, 575, 600, 404, 555, 478},
+	["LS AERO"] = {487}, 
 }
 
 -- {theVehicle, x, y, z, rx,ry,rz}
 local CarsForSale = {
+	["LS AERO"] = {
+		[1] = {false, 1892.5, -2628.7, 12.5, 0,0,0},
+	}, 
 	["HARD TRUCK"] = {
 		[1] = {false, 2782.6, -2392.4, 12.6, 0,0,180},
 		[2] = {false, -26.1, -1125.1, 0.1, 0,0,156},
@@ -3900,7 +3905,6 @@ local RandVeh = {
 	{2264.7, -83.8, 25.5, 0, 0, 0},
 	{2359.2, -654.5, 127.8, 0, 0, 270},
 	{-16.7, -2521.2, 36.4, 0, 0, 210},
-	{2445.5, -1340.8, 23, 0, 0, 180},
 	{-2093.9, -83.7, 34.2, 0, 0, 0},
 	{-2076.8, -84, 34.2, 0, 0, 0},
 	{-2068.7, -83.7, 34.2, 0, 0, 0},
@@ -4185,7 +4189,7 @@ local WARGANGPURE = {
 	["Rockshore East"] = {{2537, 676, 365, 267}},
 	["The Mako Span"] = {{1664, 401, 121, 166}},
 	["Hilltop Farm"] = {{967, -450, 209, 233}},
-	["Avispa Country Club"] = {{-2646, -355, 376, 133}, {-2831, -430, 185, 208}, {-2361, -417, 91, 62}, {-2667, -302, 21, 40}, {-2470, -355, 200, 37}, {-2550, -355, 80, 37}},
+	["Avispa Country Club"] = {{-2646, -355, 376, 133}, {-2831, -430, 185, 208}, {-2361, -417, 91, 62}},
 	["The Sherman Dam"] = {{-968, 1929, 487, 226}},
 	["Verdant Bluffs"] = {{930, -2488, 319, 482}, {1073, -2006, 176, 164}, {1249, -2179, 443, 337}},
 	["Fisher's Lagoon"] = {{1916, -233, 215, 246}},
@@ -4307,6 +4311,7 @@ local WARGANG = {}
 
 -- Первая обычная, вторая символ банды, третья грузовая, четвертая большая
 local VehicleSpawnPoint = {
+	["Avispa Country Club"] = {{-2763.2, -312, 6,0,0,3}}, 
 	["Ganton"] = {{2486.5, -1654.9, 12.3, 0, 0, 90}, {2489.9, -1682.9, 12.3, 0, 0, 270}, {2298.8, -1646.1, 13.7, 0, 0, 270}, {2508.2, -1672.5, 12.3, 0, 0, 347}},
 	["El Corona"] = {{1803.4, -1931, 12.4, 0, 0, 0}, {1782.2, -1886.1, 12.4, 0, 0, 270}, {1834.9, -1871.3, 12.4, 0, 0, 0}, {1775.5, -1907.9, 12.4, 0, 0, 180}, {1752.8, -1858.9, 12.4, 0, 0, 270}},
 	["Willowfield"] = {{2479.5, -1953.9, 12.4,0,0,0}, {2489, -1953.9, 12.4,0,0,0}, {2492.4, -1953.9, 12.4,0,0,0}, {2483, -1944.5, 12.4,0,0,270}, {2495.6, -1953.9, 12.4,0,0,0}, {2502, -1953.9, 12.4,0,0,0}},
@@ -4442,14 +4447,17 @@ local PoliceLSGates = createObject(2930, 245.5, 72.5, 1005.2, 0,0,90)
 setObjectScale(PoliceLSGates,1.1)
 setElementInterior(PoliceLSGates, 6)
 setElementDimension(PoliceLSGates, 1)
-setElementData(PoliceLSGates, "gates", toJSON({247, 72.5, 1005.2}))
-
+setElementData(PoliceLSGates, "gates", toJSON({247, 72.5, 1005.2, 0,0,0}))
+setElementData(PoliceLSGates, "team",  toJSON({"Военные", "Полиция", "ФБР"}))
 
 local PoliceLSGates2 = createObject(2930, 248.1, 76.8, 1005.2, 0,0,0)
 setObjectScale(PoliceLSGates2,1.1)
 setElementInterior(PoliceLSGates2, 6)
 setElementDimension(PoliceLSGates2, 1)
 setElementData(PoliceLSGates2, "gates", toJSON({248.1, 78.3, 1005.2, 0,0,0}))
+setElementData(PoliceLSGates2, "team",  toJSON({"Военные", "Полиция", "ФБР"}))
+
+
 local ArmourPickup = createPickup(253.9, 79.6, 1003.69, 3, 1275, 0)
 setElementData(ArmourPickup, "type", "armour")
 setElementInterior(ArmourPickup, 6)
@@ -4485,14 +4493,6 @@ StreetGates = createObject(968, 2238.2, 2450.4, 10.6, 0,90,90) -- Police LV
 setElementData(StreetGates, "gates", toJSON({2238.2, 2450.4, 10.6, 0,-90,0}))
 setElementData(StreetGates, "team",  toJSON({"Военные", "Полиция", "ФБР"}))
 
-
-StreetGates = createObject(2957, -2184.415, 711.556, 54.523) -- Chinatown
-setElementData(StreetGates, "gates", toJSON({-2184.415, 711.556, 57.523, 0,0,0}))
-setElementData(StreetGates, "team",  toJSON({"Военные", "Полиция", "ФБР"}))
-
-StreetGates = createObject(2957, -2178.87, 711.556, 54.523) -- Chinatown
-setElementData(StreetGates, "gates", toJSON({-2178.87, 711.556, 57.523, 0,0,0}))
-setElementData(StreetGates, "team",  toJSON({"Военные", "Полиция", "ФБР"}))
 
 
 
@@ -4552,7 +4552,7 @@ function SetPlayerPosition(thePlayer,x,y,z,i,d,rz,anim,name)
 			BindAllKey(thePlayer)
 			triggerClientEvent(thePlayer, "ChangeInfo", thePlayer)
 			setElementPosition(thePlayer,x,y,z)
-			if(rz) then setElementRotation(thePlayer, 0,0,rz) end
+			if(rz) then setElementRotation(thePlayer, 0,0,rz,"default",true) end--asd
 			if(i and d) then
 				setElementDimension(thePlayer, d)
 				setElementInterior(thePlayer, i)
@@ -4570,7 +4570,7 @@ function SetPlayerPosition(thePlayer,x,y,z,i,d,rz,anim,name)
 		end
 		triggerClientEvent(thePlayer, "ChangeInfo", thePlayer)
 		setElementPosition(thePlayer,x,y,z)
-		if(rz) then setElementRotation(thePlayer, 0,0,rz) end
+		if(rz) then setElementRotation(thePlayer, 0,0,rz,"default",true) end
 		if(i and d) then
 			setElementDimension(thePlayer, d)
 			setElementInterior(thePlayer, i)
@@ -4972,7 +4972,7 @@ function tp(thePlayer, command, h)
 
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2072.8, -1244.5, 22.8, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 2720.2, -2504, 13.5, 0, 0 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5061,7 +5061,6 @@ addEventHandler("StartAnimation", root, StartAnimation)
 
 CreateEnter(-1749.2, 868.7, 25.1, 180, 0, 0, false, -1753.7, 883.9, 295.6, 0, 0, 0, "Крыша") -- Крыша SF
 CreateEnter(1570.7, -1337.2, 16.5, 312, 0, 0, false, 1548.6, -1363.7, 326.2, 180, 0, 0, "Крыша") -- Крыша LS
-CreateEnter(1642.3, -2286.5, -1.2, 180, 0, 0, false, -1855.6, 41.2, 1061.4, 180, 14, 0, "Аэропорт Los Santos")
 CreateEnter(2495.35, -1690.85, 14.75, 0, 0, 0, false, 2496, -1692.3, 1014.75, 180, 3, 0) -- CJ
 CreateEnter(2459.5, -1691.3, 13.5, 0, 0, 0, false, 2468.5, -1698.2, 1013.5, 180, 2, 0) -- Ryder
 CreateEnter(279.5, 1829, 8.14, 90, 0, 0, false, 283.9, 1829, 8.14, 270, 0, 0) -- Zone 51 кабинет ученого
@@ -5195,6 +5194,8 @@ CreateEnter(1257.3, 241.9, 19.9, 0, 0, 0, false, 2570.8, -1301.8, 1044.1, 90, 2,
 
 CreateEnter(2696.2, -1707.1, 11.8, 0, 0, 0, false, -1406, -261.4, 1043.7, 351, 7, 0) -- 8-Track Stadium
 CreateEnter(1122.7, -2037, 69.9, 270, 0, 0, false, 2548.8, -1294.6, 1061, 270, 2, 1) -- База Verdant Bluffs
+CreateEnter(-2719.4, -319.2, 7.8, 270, 0, 0, false, 2548.8, -1294.6, 1061, 270, 2, 2) -- База Avispa Country Club
+CreateEnter(-2172.4, 679.9, 55.2, 270, 0, 0, false, 2548.8, -1294.6, 1061, 270, 2, 3) -- База Chinatown
 
 
 
@@ -5261,11 +5262,7 @@ function WantedLevel(thePlayer, count)
 			end
 		end
 		SetDatabaseAccount(thePlayer, "wanted", wanted)
-		if(GetDatabaseAccount(thePlayer, "PrisonTime") <= 0) then
-			setElementData(thePlayer, "WantedLevel", wanted)
-		else
-	
-		end
+		setElementData(thePlayer, "WantedLevel", wanted)
 	end
 end
 addEvent("WantedLevel", true)
@@ -5816,6 +5813,62 @@ addEventHandler("StartLookBiz", root, StartLookBiz)
 
 
 
+
+function Travel(thePlayer, thePed, City)
+	if(thePlayer) then
+		if(City == "San Andreas") then
+			if(not getElementData(thePlayer, "City")) then
+				DialogBreak(thePlayer, "Мы уже находимся в "..City, thePed)
+			else
+				triggerEvent("sa", thePlayer, thePlayer)
+			end
+		elseif(City == "Liberty City") then
+			if(getElementData(thePlayer, "City") == City) then
+				DialogBreak(thePlayer, "Мы уже находимся в "..City, thePed)
+			else
+				triggerEvent("lc", thePlayer, thePlayer)
+				setElementPosition(thePlayer, 1.8, 26.7, 1199.6)
+				setElementInterior(thePlayer, 1)
+				setElementDimension(thePlayer, 1)
+			end
+		elseif(City == "Vice City") then
+			if(getElementData(thePlayer, "City") == City) then
+				DialogBreak(thePlayer, "Мы уже находимся в "..City, thePed)
+			else
+				DialogBreak(thePlayer, "К сожалению рейс "..City.." в данный момент не доступен", thePed)
+			end
+		end
+	end
+end
+addEvent("Travel", true)
+addEventHandler("Travel", root, Travel)
+
+
+
+
+function sa(thePlayer, thePed, City)
+	if(thePlayer) then
+		setElementFrozen(thePlayer, true)
+		triggerClientEvent(thePlayer, "restoreWorld", thePlayer)
+	end
+end
+addEvent("sa", true)
+addEventHandler("sa", root, sa)
+
+
+function LeaveLC(thePlayer, thePed, City)
+	if(thePlayer) then
+		setElementFrozen(thePlayer, false)
+		removeElementData(thePlayer, "City")
+		setElementInterior(thePlayer, 0)
+		setElementDimension(thePlayer, 0)
+		setElementPosition(thePlayer, 1642.3, -2286.5, -1.2)
+	end
+end
+addEvent("LeaveLC", true)
+addEventHandler("LeaveLC", root, LeaveLC)
+
+
 function WhoBizOwner(thePlayer,thePed,biz,vibori)
 	if(thePlayer) then
 		local node = xmlFindChild(BizNode, biz, 0)
@@ -5823,13 +5876,13 @@ function WhoBizOwner(thePlayer,thePed,biz,vibori)
 			local srok = tonumber(xmlNodeGetAttribute(node, "srok"))
 			local times = getRealTime()
 			local dates = getRealTime(times.timestamp+((srok*24)*60)-10800)
-			DialogBreak(thePlayer, "Выборы состоятся "..("%02d"):format(dates.monthday).."."..("%02d"):format(dates.month+1).."."..(dates.year+1900).." в "..("%02d"):format(dates.hour)..":"..("%02d"):format(dates.minute).." (МСК)", thePed)
+			outputChatBox("Выборы состоятся "..("%02d"):format(dates.monthday).."."..("%02d"):format(dates.month+1).."."..(dates.year+1900).." в "..("%02d"):format(dates.hour)..":"..("%02d"):format(dates.minute).." (МСК)", thePlayer)
 		else
 			local val = xmlNodeGetAttribute(node, "owner")
 			if(val ~= "") then
 				DialogBreak(thePlayer, val, thePed)
 			else
-				DialogBreak(thePlayer, "В настоящее владелец отсутствует", thePed)
+				DialogBreak(thePlayer, "В настоящее время владелец отсутствует", thePed)
 			end
 		end
 	end
@@ -6117,6 +6170,30 @@ CreateTatto(-2491, -38.9, 25.6, 17) -- SF
 
 
 
+
+
+
+
+SData["Airport"] = 10
+function CreateAirport(x,y,z,rz,name)
+	CreateEnter(x, y, z, rz, 0, 0, false, 367.4, 162.2, 1025.8, 90, 3, SData["Airport"], name)
+	local o = createObject(5422, 368.7, 162.3, 1025.8, 0,0,0)
+	setElementInterior(o, 3)
+	setElementDimension(o, SData["Airport"])
+	
+	local ss = CreateDialogBot(240, 354.2, 171.6, 1025.8,142, 3, SData["Airport"], "Airport", "Продавец билетов")
+	StartAnimation(ss, "INT_OFFICE", "OFF_Sit_Read", -1, true)
+	
+	SData["Airport"] = SData["Airport"]+1
+end
+CreateAirport(1642.4, -2288.2, -1.2, 180, "Airport Los Santos") 
+CreateAirport(-1421.2, -286.9, 14.1, 140, "Airport San Fierro")
+CreateAirport(1672.8, 1447.8, 10.8, 270, "Airport Las Venturas")
+
+
+
+ped = CreateDialogBot(223, -853.7, 394.6, 11.3,270, 0, 1, "Airport", "Продавец билетов")
+StartAnimation(ped,"smoking", "m_smk_loop", -1, true, false,false,true)
 
 
 
@@ -7031,7 +7108,6 @@ function useinvweapon(thePlayer, slots)
 						setWeaponAmmo(thePlayer, WM, arr[PData[thePlayer]["WeaponSlot"][1]][PData[thePlayer]["WeaponSlot"][2]][WNA]["count"])
 					else
 						SetControls(thePlayer, "ammo", {["fire"] = true, ['action'] = true, ["vehicle_fire"] = true, ["vehicle_secondary_fire"] = true})
-						HelpMessage(thePlayer, "Нет патронов")
 					end
 				else
 					SetControls(thePlayer, "ammo", {["fire"] = false, ['action'] = false, ["vehicle_fire"] = false, ["vehicle_secondary_fire"] = false})
@@ -7202,8 +7278,25 @@ addEventHandler("NewDropItem", root, NewDropItem)
 
 
 
+local WargangGates = {
+	-- model[obj], x,y,z, rx,ry,rz, OpenX, OpenY, OpenZ, OpenRX, OpenRY, OpenRZ
+	["Chinatown"] = {
+		[1] = {2957, -2184.415,711.556,54.523,0,0,0, -2184.415,711.556,57.523,0,0,0},
+		[2] = {2957, -2178.87,711.556,54.523,0,0,0, -2178.87,711.556,57.523,0,0,0}, 
+		[3] = {3036, -2179.353,661.232,50.214,0,0,0, -2175.353,661.232,50.214,0,0,0}, 
+	},
+	["Ocean Docks"] = {
+		[1] = {2909, 2720.623,-2504.023,13.989,0,0,0, 2720.623,-2494.023,13.989,0,0,0}, 
+		[2] = {2909, 2720.623,-2405.432,13.989,0,0,0, 2720.623,-2395.432,13.989,0,0,0}, 
+		[3] = {3037, 2774.361,-2493.922,14.675,0,0,0, 2774.361,-2493.922,17.675,0,0,0}, 
+		[4] = {3037, 2774.361,-2455.925,14.675,0,0,0, 2774.361,-2455.925,17.675,0,0,0}, 
+		[5] = {3037, 2774.361,-2417.829,14.675,0,0,0, 2774.361,-2417.829,17.675,0,0,0}, 
+	}, 
+}
+
 
 function preLoad(name)
+	setGameType("SAxVCxLC Stories")
 	setElementData(root, "ChatOnline", {})
 	setServerConfigSetting("ped_sync_interval", 50, true)
 	Createkickstart()
@@ -7292,6 +7385,16 @@ function preLoad(name)
 			for v,k in pairs(zones) do
 				WARGANG[name][#WARGANG[name]+1] = createRadarArea(WARGANGPURE[name][v][1], WARGANGPURE[name][v][2], WARGANGPURE[name][v][3], WARGANGPURE[name][v][4], r, g, b, 160)
 			end
+			
+			if(WargangGates[name]) then
+				for _, dat in pairs(WargangGates[name]) do
+					dat[1] = createObject(dat[1], dat[2], dat[3], dat[4], dat[5], dat[6], dat[7])
+					
+					setElementData(dat[1], "gates", toJSON({dat[8], dat[9], dat[10], dat[11], dat[12], dat[13]}))
+					setElementData(dat[1], "team",  toJSON({zoneowner}))
+				end
+			end
+			
 
 			if(SpawnPoint[name]) then
 				SpawnPoint[name][6] = zoneowner
@@ -7856,6 +7959,28 @@ local Dialogs = {
 			}
 		},
 	},
+	
+	["Airport"] = {
+		[1] = {
+			["dialog"] = {"Какой рейс вас интересует?"},
+			[1] = {
+				["text"] = "San Andreas",
+				["action"] = {"Travel", {"San Andreas"}}
+			},
+			[2] = {
+				["text"] = "Vice City",
+				["action"] = {"Travel", {"Vice City"}}
+			},
+			[3] = {
+				["text"] = "Liberty City",
+				["action"] = {"Travel", {"Liberty City"}}
+			},
+			[4] = {
+				["text"] = "Никакой"
+			}
+		},
+	},
+	
 	["MERIA Los Santos"] = {
 		[1] = {
 			["dialog"] = {"Здравствуйте"},
@@ -8127,8 +8252,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу вступить в банду Рифа",
-				["action"] = {"BandInvite", {"Рифа"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Рифа"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8140,8 +8264,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу стать Деревенщиной",
-				["action"] = {"BandInvite", {"Деревенщины"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Деревенщины"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8153,8 +8276,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу вступить в Якудзы",
-				["action"] = {"BandInvite", {"Якудзы"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Якудзы"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8166,8 +8288,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу вступить в Триады",
-				["action"] = {"BandInvite", {"Триады"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Триады"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8179,8 +8300,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу вступить в Ацтекас",
-				["action"] = {"BandInvite", {"Ацтекас"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Ацтекас"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8192,8 +8312,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу вступить в Русскую мафию",
-				["action"] = {"BandInvite", {"Русская мафия"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Русская мафия"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8205,8 +8324,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу присоедениться к Байкерам",
-				["action"] = {"BandInvite", {"Байкеры"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Байкеры"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8218,8 +8336,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу вступить в Колумбийский картель",
-				["action"] = {"BandInvite", {"Колумбийский картель"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Колумбийский картель"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8231,8 +8348,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу вступить в Вагос",
-				["action"] = {"BandInvite", {"Вагос"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Вагос"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8244,8 +8360,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу вступить в гроув-стрит",
-				["action"] = {"BandInvite", {"Гроув-стрит"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Гроув-стрит"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8260,11 +8375,11 @@ local Dialogs = {
 					[1] = {
 						["text"] = "Держи",
 						["action"] = {"DialogMoney", {-150, "grove"}},
-						["end"] = "Спасибо друг"
+						["end"] = {"Спасибо друг"}
 					},
 					[2] = {
 						["text"] = "Отвали!",
-						["end"] = "пфф...",
+						["end"] = {"пфф..."},
 						["action"] = {},
 						["timer"] = 5000
 					}
@@ -8284,8 +8399,7 @@ local Dialogs = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
 				["text"] = "Я хочу вступить в баллас",
-				["action"] = {"BandInvite", {"Баллас"}},
-				["end"] = "Ты принят"
+				["action"] = {"BandInvite", {"Баллас"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8300,11 +8414,11 @@ local Dialogs = {
 					[1] = {
 						["text"] = "Держи",
 						["action"] = {"DialogMoney", {-100, "ballas"}},
-						["end"] = "Спасибо друг"
+						["end"] = {"Спасибо друг"}
 					},
 					[2] = {
 						["text"] = "Отвали!",
-						["end"] = "тварь...",
+						["end"] = {"тварь..."},
 						["action"] = {},
 						["timer"] = 5000
 					}
@@ -8321,11 +8435,11 @@ local Dialogs = {
 	},
 	["Полиция"] = {
 		[1] = {
-			["dialog"] = {"Чего тебе?"},
+			["dialog"] = {"Да?", "Всё в порядке?", "Я вас слушаю"},
 			[1] = {
 				["text"] = "Я хочу работать в полиции",
 				["action"] = {"GPSFoundShop", {"marker", "name", "Полицейский участок Los Santos", "Полицейский участок"}},
-				["end"] = "не благодари",
+				["end"] = {"не благодари"},
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8359,15 +8473,15 @@ local Dialogs = {
 							["dialog"] = {"тогда кто ты?"},
 							[1] = {
 								["text"] = "Экстрасенс",
-								["end"] = "Отвали!"
+								["end"] = {"Отвали!"}
 							},
 							[2] = {
 								["text"] = "Телепат",
-								["end"] = "Отвали!"
+								["end"] = {"Отвали!"}
 							},
 							[3] = {
 								["text"] = "Я из будущего",
-								["end"] = "Отвали!"
+								["end"] = {"Отвали!"}
 							},
 							[4] = {
 								["text"] = "[промолчать]",
@@ -8392,7 +8506,7 @@ local Dialogs = {
 			["dialog"] = {"Шесть этажей лохмотьев!"},
 			[1] = {
 				["text"] = "Я хочу купить одежду",
-				["end"] = "Слева от вас гардероб, в нем вы можете посмотреть ассортимент"
+				["end"] = {"Справа от вас гардероб, в нем вы можете посмотреть ассортимент"}
 			},
 			[2] = {
 				["text"] = "Я хочу купить аксессуары",
@@ -8400,7 +8514,7 @@ local Dialogs = {
 			},
 			[3] = {
 				["text"] = "Какую одежду вы продаете?",
-				["end"] = "Мы продаем недорогую одежду для отдыха"
+				["end"] = {"Мы продаем недорогую одежду для отдыха"}
 			},
 
 			[4] = {
@@ -8417,7 +8531,7 @@ local Dialogs = {
 			["dialog"] = {"Усердно тренироваться!"},
 			[1] = {
 				["text"] = "Я хочу купить одежду",
-				["end"] = "Справа от вас гардероб, в нем вы можете примерить одежду"
+				["end"] = {"Слева от вас гардероб, в нем вы можете примерить одежду"}
 			},
 			[2] = {
 				["text"] = "Я хочу купить снаряжение",
@@ -8425,7 +8539,7 @@ local Dialogs = {
 			},
 			[3] = {
 				["text"] = "Какую одежду вы продаете?",
-				["end"] = "Мы продаем спортивную одежду и снаряжение"
+				["end"] = {"Мы продаем спортивную одежду и снаряжение"}
 			},
 
 			[4] = {
@@ -8437,12 +8551,72 @@ local Dialogs = {
 			}
 		}
 	},
+	["Didier Sachs"] = {
+		[1] = {
+			["dialog"] = {"Высокая мода для высоких людей"},
+			[1] = {
+				["text"] = "Я хочу купить одежду",
+				["end"] = {"Справа от вас гардероб, в нем вы можете примерить одежду"}
+			},
+			[2] = {
+				["text"] = "Какую одежду вы продаете?",
+				["end"] = {"Мы продаем элитную одежду для тех, кто готов потратить много денег, чтобы скрыть свои недостатки. Мода еще никогда не стоила так дорого"}
+			},
+			[3] = {
+				["text"] = "[ограбить]",
+				["action"] = {"RobShop", {}},
+			},
+			[4] = {
+				["text"] = "[промолчать]"
+			}
+		}
+	},
+	["Victum"] = {
+		[1] = {
+			["dialog"] = {"Умереть для"},
+			[1] = {
+				["text"] = "Я хочу купить одежду",
+				["end"] = {"Справа от вас гардероб, в нем вы можете примерить одежду"}
+			},
+			[2] = {
+				["text"] = "Какую одежду вы продаете?",
+				["end"] = {"Если Вы не выборочная жертва, то Victim магазин для вас. Замечательный розничный магазин, где люди могут повысить свою самооценку, благодаря огромному спектру модельер одежды"}
+			},
+			[3] = {
+				["text"] = "[ограбить]",
+				["action"] = {"RobShop", {}},
+			},
+			[4] = {
+				["text"] = "[промолчать]"
+			}
+		}
+	},
+	["SubUrban"] = {
+		[1] = {
+			["dialog"] = {"Хочешь быть рэпером, но живёшь в пригороде и сидишь на шее у мамы?"},
+			[1] = {
+				["text"] = "Я хочу купить одежду",
+				["end"] = {"Справа от вас гардероб, в нем вы можете примерить одежду"}
+			},
+			[2] = {
+				["text"] = "Какую одежду вы продаете?",
+				["end"] = {"Мы продаем пригородную одежду и снаряжение"}
+			},
+			[3] = {
+				["text"] = "[ограбить]",
+				["action"] = {"RobShop", {}},
+			},
+			[4] = {
+				["text"] = "[промолчать]"
+			}
+		}
+	},
 	["Binco"] = {
 		[1] = {
 			["dialog"] = {"Больше хлама за меньшие бабки!"},
 			[1] = {
 				["text"] = "Я хочу купить одежду",
-				["end"] = "Справа от вас гардероб, в нем вы можете примерить одежду"
+				["end"] = {"Справа от вас гардероб, в нем вы можете примерить одежду"}
 			},
 			[2] = {
 				["text"] = "Я хочу купить аксессуары",
@@ -8450,7 +8624,7 @@ local Dialogs = {
 			},
 			[3] = {
 				["text"] = "Какую одежду вы продаете?",
-				["end"] = "Мы продаем секонд-хенд одежду"
+				["end"] = {"Мы продаем секонд-хенд одежду"}
 			},
 
 			[4] = {
@@ -8680,34 +8854,64 @@ local Dialogs = {
 	},
 	["Cluckin' Bell"] = {
 		[1] = {
-			["dialog"] = {"Здравствуйте"},
+			["dialog"] = {"Cluckin' Bell: Страдание ещё никогда не было таким вкусным!", "Здравствуйте", "Кукареку – время для курицы!", "Кукареку – время пировать!", "Съешь баскет из девяноста крылышек, и по тебе будет видно: Он был в Cluckin' Bell!"}, 
 			[1] = {
 				["text"] = "Бургер с курицей ($25)",
 				["action"] = {"EatCluckin", {"Cluckin' Bell", -25}},
-				["end"] = "Приходите к нам еще"
+				["end"] = {"Приходите к нам еще", "Если вам понравилось - цыпленок умер не напрасно!"}
 			},
 			[2] = {
+				["text"] = "Расскажите, как вы готовите курицу?",
+				["next"] = {
+					["dialog"] = {"Мы сворачиваем их головы и быстро разводим, Шесть крыльев, сорок грудок - и на газ!"},
+					[1] = {
+						["text"] = "Но это же так жестоко",
+						["end"] = {"Курица – птица с крошечным мозгом, Поэтому мы можем сказать, что она совсем не чувствует боли."}
+					},
+					[2] = {
+						["text"] = "[промолчать]",
+						["action"] = {},
+						["timer"] = 5000
+					}
+				}
+			},
+			[3] = {
 				["text"] = "[ограбить]",
 				["action"] = {"RobShop", {}},
 			},
-			[3] = {
+			[4] = {
 				["text"] = "[промолчать]"
 			}
 		}
 	},
 	["Burger Shot"] = {
 		[1] = {
-			["dialog"] = {"Здравствуйте"},
+			["dialog"] = {"Здравствуйте", "Умри с улыбкой на лице!", "Убей свой ​​голод!", "Это кровотеченски вкусно!"},
 			[1] = {
-				["text"] = "Бургер <Тройной> ($40)",
-				["action"] = {"EatCluckin", {"Burger Shot", -40}},
-				["end"] = "Всегда рады вам"
+				["text"] = "Гамбургер Bleeder",
+				["action"] = {"EatCluckin", {"Burger Shot", -3}},
+				["end"] = {"Всегда рады вам"}
 			},
 			[2] = {
+				["text"] = "Огромный гамбургер Heart Stopper",
+				["action"] = {"EatCluckin", {"Burger Shot", -6}},
+				["end"] = {"Всегда рады вам"}
+			},
+			[3] = {
+				["text"] = "Гамбургер Money Shot Meal",
+				["action"] = {"EatCluckin", {"Burger Shot", -6}},
+				["end"] = {"Всегда рады вам"}
+			},
+			[4] = {
+				["text"] = "Гамбургер Torpedo Meal",
+				["action"] = {"EatCluckin", {"Burger Shot", -6}},
+				["end"] = {"Всегда рады вам"}
+			},
+			[5] = {
 				["text"] = "[ограбить]",
 				["action"] = {"RobShop", {}},
 			},
-			[3] = {
+			[6] = {
 				["text"] = "[промолчать]"
 			}
 		}
@@ -8718,7 +8922,7 @@ local Dialogs = {
 			[1] = {
 				["text"] = "Пицца <Двойной люкс> ($35)",
 				["action"] = {"EatCluckin", {"The Well Stacked Pizza Co.", -35}},
-				["end"] = "Приятного аппетита"
+				["end"] = {"Приятного аппетита"}
 			},
 			[2] = {
 				["text"] = "[ограбить]",
@@ -8735,7 +8939,7 @@ local Dialogs = {
 			[1] = {
 				["text"] = "Беру",
 				["action"] = {"EatCluckin", {"Chilli Dogs", -10}},
-				["end"] = "Приятного аппетита"
+				["end"] = {"Приятного аппетита"}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -8764,17 +8968,17 @@ local Dialogs = {
 			[1] = {
 				["text"] = "Где поблизости есть магазин?",
 				["action"] = {"GPSFoundShop", {"marker", "name", "24/7", "Местный магазин"}},
-				["end"] = "не благодари",
+				["end"] = {"не благодари"},
 			},
 			[2] = {
 				["text"] = "Где поблизости можно заправиться?",
 				["action"] = {"GPSFoundShop", {"marker", "type", "PetrolFuelCol", "Местная заправка"}},
-				["end"] = "не благодари"
+				["end"] = {"не благодари"}
 			},
 			[3] = {
 				["text"] = "Где можно найти работу?",
 				["action"] = {"GPSFoundShop", {"vehicle", "type", "jobtruck", "База грузоперевозок"}},
-				["end"] = "знаю только базу дальнобойщиков неподалёку"
+				["end"] = {"знаю только базу дальнобойщиков неподалёку"}
 			},
 			[4] = {
 				["text"] = "Как тут играть?",
@@ -8785,14 +8989,14 @@ local Dialogs = {
 					},
 					[2] = {
 						["text"] = "[заплакать]",
-						["end"] = "ска лол",
+						["end"] = {"ска лол"},
 						["timer"] = 5000
 					}
 				}
 			},
 			[5] = {
 				["text"] = "[промолчать]",
-				["end"] = "Как хотите",
+				["end"] = {"Как хотите"},
 				["timer"] = 5000,
 			}
 		},
@@ -8805,11 +9009,11 @@ local Dialogs = {
 					[1] = {
 						["text"] = "Держи",
 						["action"] = {"DialogMoney", {-100, "civilian"}},
-						["end"] = "Спасибо друг"
+						["end"] = {"Спасибо друг"}
 					},
 					[2] = {
 						["text"] = "Отвали!",
-						["end"] = "козел...",
+						["end"] = {"козел..."},
 						["action"] = {},
 						["timer"] = 5000
 					}
@@ -8819,7 +9023,7 @@ local Dialogs = {
 				["text"] = "[игнорировать]",
 				["timer"] = 5000
 			}
-		}
+		}, 
 	}
 }
 
@@ -8869,18 +9073,45 @@ addEventHandler("TradePlayerWindow", getRootElement(), TradePlayerWindow)
 
 
 
-
+local BannedSkin = {
+	[77] = true, 
+	[78] = true, 
+	[79] = true, 
+	[145] = true, 
+	[212] = true, 
+	[213] = true, 
+	[230] = true, 
+	[239] = true, 
+	[252] = true, 
+	[264] = true, 
+}
 
 function BandInvite(thePlayer, thePed, arg)
-	local bandsInv = arg
-	SetTeam(thePlayer, bandsInv)
-	outputChatBox("Поздравляю, теперь ты являешься членом "..RGBToHex(getTeamColor(getTeamFromName(bandsInv)))..bandsInv, thePlayer, 255,255,255,true)
+	if(BannedSkin[getElementModel(thePlayer)]) then
+		triggerClientEvent(thePlayer, "PlayerDialog", thePlayer, false, thePed, "Если кто-то выглядит как черт, ходит как черт и разговаривает как черт, то это, вероятно, и есть черт")
+		HelpMessage(thePlayer, "Для вступления в "..RGBToHex(getTeamColor(getTeamFromName(arg)))..arg.."\n#FFFFFFНужно быть одетым по приличнее")	
+		return false
+	end
+	
+	
+	
+	if(arg == "Триады" or arg == "Колумбийский картель" or arg == "Полиция") then
+		if(GetDatabaseAccount(thePlayer, "ATUT") ~= 3) then
+			triggerClientEvent(thePlayer, "PlayerDialog", thePlayer, false, thePed, "Для вступления в "..arg.." тебе нужно сначала отлужить в армии")
+			HelpMessage(thePlayer, "Для вступления в армию\n#FFFFFFНапиши /arm")	
+			return false
+		end
+	end
+	
+	triggerClientEvent(thePlayer, "PlayerDialog", thePlayer, false, thePed, "Ты принят")
+	SetTeam(thePlayer, arg)
+	outputChatBox("Поздравляю, теперь ты являешься членом "..RGBToHex(getTeamColor(getTeamFromName(arg)))..arg, thePlayer, 255,255,255,true)
 	outputChatBox("Боевая форма выдается в 12:30 по игровому времени..", thePlayer, 255,255,255,true)
-
-	if(BandRangs[bandsInv]) then
-		local new = tostring(GetBandRangSkin(bandsInv, GetDatabaseAccount(thePlayer, getTeamVariable(bandsInv))))
+	
+	if(BandRangs[arg]) then
+		local new = tostring(GetBandRangSkin(arg, GetDatabaseAccount(thePlayer, getTeamVariable(arg))))
 		local arr = fromJSON(GetDatabaseAccount(thePlayer, "wardrobe"))
-
+	
 		if(not arr[new]) then
 			arr[new] = 1
 		elseif(arr[new] < 999) then
@@ -8889,7 +9120,7 @@ function BandInvite(thePlayer, thePed, arg)
 		triggerClientEvent(thePlayer, "InformTitle", thePlayer, new, "wardrobe")
 		SetDatabaseAccount(thePlayer, "wardrobe", toJSON(arr))
 	end
-
+	
 	UpdateTutorial(thePlayer)
 	F4_Load(thePlayer)
 end
@@ -8919,6 +9150,16 @@ addEventHandler("DialogBreak", getRootElement(), DialogBreak)
 
 
 
+function CheckVoice(voice, voicebank)
+	if(string.sub(voice, 0, 1) ~= "[") then
+		callRemote("http://109.227.228.4/engine/include/MTA/govorilka.php", ResultGet, voice, voicebank)
+	end
+end
+addEvent("CheckVoice", true)
+addEventHandler("CheckVoice", getRootElement(), CheckVoice)
+
+
+
 
 
 function DialogRelease(thePlayer, release, thePed)
@@ -8927,7 +9168,9 @@ function DialogRelease(thePlayer, release, thePed)
 		triggerEvent("onPlayerChat", thePlayer, PData[thePlayer]["dialog"][release]["text"], 0, true)
 		timing = #PData[thePlayer]["dialog"][release]["text"]*50
 	end
-	triggerClientEvent(thePlayer, "MyVoice", thePlayer, 'gg', md5(PData[thePlayer]["dialog"][release]["text"]))
+	
+	triggerClientEvent(thePlayer, "MyVoice", thePlayer, PData[thePlayer]["dialog"][release]["text"], 'gg')
+	
 	if(not getElementData(thePlayer, "anim")) then
 		StartAnimation(thePlayer, "ped", "factalk", 1, false, true, true, true)
 	end
@@ -8941,7 +9184,9 @@ function DialogRelease(thePlayer, release, thePed)
 			if(PData[thePlayer]["dialog"][release]["next"]) then
 				DialogStart(thePlayer, PData[thePlayer]["dialog"][release]["next"], thePed)
 			else
-				DialogBreak(thePlayer, PData[thePlayer]["dialog"][release]["end"], thePed)
+				local title = false
+				if(PData[thePlayer]["dialog"][release]["end"]) then title = PData[thePlayer]["dialog"][release]["end"][math.random(#PData[thePlayer]["dialog"][release]["end"])] end
+				DialogBreak(thePlayer, title, thePed)
 			end
 		end
 	end, timing, 1)
@@ -9208,9 +9453,9 @@ function GetZoneSize(zone)
 	local zonesize = 0
 	for i = 1 , #WARGANG[zone] do
 		local p1,p2 = getRadarAreaSize(WARGANG[zone][i])
-		zonesize=zonesize+math.floor((p1+p2))--Искуственное уменьшение
+		zonesize=zonesize+math.floor(p1+p2)--Искуственное уменьшение
 	end
-	return zonesize
+	return zonesize*2
 end
 
 
@@ -9249,8 +9494,11 @@ function buybiz(thePlayer, biz)
 	if(not getElementData(biz, "bizowner")) then
 		if(AddPlayerMoney(thePlayer, -BPrice)) then
 			if(BPrice ~= 0) then
-				MissionCompleted(thePlayer, "КУПЛЕНО!", getElementData(biz, "biz"), false, true)
-
+				local SpawnArr = {}
+				local x,y,z = getElementPosition(biz)
+				SpawnArr[#SpawnArr+1] = {x,y,z, "", "", 270}
+				MissionCompleted(thePlayer, "КУПЛЕНО", getElementData(biz, "biz"), false, toJSON(SpawnArr))
+				
 				local bizNode = xmlFindChild(BizNode, getElementData(biz, "name"), 0)
 				xmlNodeSetAttribute(bizNode, "owner", getPlayerName(thePlayer))
 				setElementData(biz, "bizowner", getPlayerName(thePlayer))
@@ -9263,7 +9511,11 @@ function buybiz(thePlayer, biz)
 		if(getElementData(biz, "bizowner") == getPlayerName(thePlayer)) then
 			if(BPrice ~= 0) then
 				AddPlayerMoney(thePlayer, BPrice/2)
-				MissionCompleted(thePlayer, "ПРОДАНО!", getElementData(biz, "biz"), false, true)
+				local SpawnArr = {}
+				local x,y,z = getElementPosition(biz)
+				SpawnArr[#SpawnArr+1] = {x,y,z, "", "", 270}
+				MissionCompleted(thePlayer, "ПРОДАНО", getElementData(biz, "biz"), false, toJSON(SpawnArr))
+				
 				local bizNode = xmlFindChild(BizNode, getElementData(biz, "name"), 0)
 				xmlNodeSetAttribute(bizNode, "owner", "")
 				removeElementData(biz, "bizowner")
@@ -9285,6 +9537,7 @@ end
 
 function ZoneInfo(thePlayer, zone)
 	if(thePlayer) then
+		if(isPedDead(thePlayer)) then return false end
 		if(getPlayerTeam(thePlayer)) then
 			if(GetDatabaseAccount(thePlayer, "wanted") > 0) then
 				WantedLevel(thePlayer, 0)
@@ -9305,6 +9558,7 @@ function ZoneInfo(thePlayer, zone)
 						MissionCompleted(thePlayer, "ДЕЗЕРТИР", "СБЕЖАЛ")
 						SetTeam(thePlayer, "Мирные жители")
 						WantedLevel(thePlayer, 6)
+						removeElementData(thePlayer, "WantedLevelPrison")
 					end
 				end
 			elseif(PlayerTeam == "Уголовники") then
@@ -9322,6 +9576,7 @@ function ZoneInfo(thePlayer, zone)
 						setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
 						SetDatabaseAccount(thePlayer, "prisoninv", nil)
 						triggerClientEvent(thePlayer, "PlayerSpawn", thePlayer)
+						removeElementData(thePlayer, "WantedLevelPrison")
 					end
 				else
 					if(getElementDimension(thePlayer) == 0) then
@@ -9340,6 +9595,7 @@ function ZoneInfo(thePlayer, zone)
 						setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
 						SetDatabaseAccount(thePlayer, "prisoninv", nil)
 						triggerClientEvent(thePlayer, "PlayerSpawn", thePlayer)
+						removeElementData(thePlayer, "WantedLevelPrison")
 					end
 				end
 			end
@@ -9518,6 +9774,13 @@ function okCap(zone,r,g,b, PlayerTeam)
 			MissionCompleted(thePlayer, "УВАЖЕНИЕ +", "ТЕРРИТОРИЯ ЗАХВАЧЕНА!")
 			Respect(thePlayer, getTeamVariable(PlayerTeam), 1)
 			triggerEvent("ZoneInfo", thePlayer, thePlayer, zone)
+			
+			if(WargangGates[zone]) then
+				for _, dat in pairs(WargangGates[zone]) do
+					setElementData(dat[1], "team", toJSON({PlayerTeam}))
+				end
+			end
+			
 		end
 		ToolTip(thePlayer, "Зарплата "..RGBToHex(r,g,b)..PlayerTeam.."#FFFFFF\nвыросла на "..COLOR["DOLLAR"]["HEX"].."$"..GetZoneSize(zone))
 	end
@@ -9666,13 +9929,14 @@ function opengate(TargetGate, state)
 	local rx,ry,rz = getElementRotation(TargetGate)
 	local speed = 2000
 	local remaining = 0
+	local data = getElementData(TargetGate, "gates")
+	local coord = fromJSON(data)
+	
 	if(OpenGates[TargetGate] and state == "Leave") then
 		if(isTimer(OpenGatesTimer[TargetGate])) then
 			remaining = getTimerDetails(OpenGatesTimer[TargetGate])
 		end
 
-		local data = getElementData(TargetGate, "gates")
-		local coord = fromJSON(data)
 		local datCord = fromJSON(getElementData(TargetGate, "NativePos"))
 		coord[4] = datCord[4]-rx
 		coord[5] = datCord[5]-ry
@@ -9694,9 +9958,7 @@ function opengate(TargetGate, state)
 			triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "genrl", 44, 2,x,y,z, false, 25, 50)
 		end
 	elseif(state == "Enter") then
-		local data = getElementData(TargetGate, "gates")
 		if(data) then
-			local coord = fromJSON(data)
 			if(isTimer(OpenGatesTimer[TargetGate])) then
 				remaining = getTimerDetails(OpenGatesTimer[TargetGate])
 			end
@@ -9856,7 +10118,11 @@ function buyHouse(thePlayer, buyhouse)
 		AddPlayerMoney(thePlayer, GetHousePrice(HouseNode))
 		triggerEvent("onPickupUse", getElementByID(buyhouse), thePlayer)
 		triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))), true)
-		MissionCompleted(thePlayer, "ПРОДАНО!", false, false, true)
+		
+		local SpawnArr = {}
+		local x,y,z = getElementPosition(getElementByID(buyhouse))
+		SpawnArr[#SpawnArr+1] = {x,y,z, "", "", 270}
+		MissionCompleted(thePlayer, "ПРОДАНО", false, false, toJSON(SpawnArr))
 
 		if(xmlNodeGetAttribute(HouseNode, "dolg")) then
 			xmlNodeSetAttribute(HouseNode, "dolg", nil)
@@ -9892,7 +10158,11 @@ function buyHouse(thePlayer, buyhouse)
 				end
 				triggerEvent("onPickupUse", getElementByID(buyhouse), thePlayer)
 				triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))), true)
-				MissionCompleted(thePlayer, "КУПЛЕНО!", false, false, true)
+				
+				local SpawnArr = {}
+				local x,y,z = getElementPosition(getElementByID(buyhouse))
+				SpawnArr[#SpawnArr+1] = {x,y,z, "", "", 270}
+				MissionCompleted(thePlayer, "КУПЛЕНО", false, false, toJSON(SpawnArr))
 			end
 		end
 	end
@@ -10189,8 +10459,6 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 	local About = fromJSON(GetDatabaseAccount(thePlayer, "about"))
 	setElementData(thePlayer, "Birthday", About["Birthday"])
 
-
-
 	setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "inv"))
 	setElementData(thePlayer, "NoFireMePolice", "0")
 
@@ -10198,7 +10466,7 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 		local Prison = GetDatabaseAccount(thePlayer, "Prison")
 		spawnPlayer(thePlayer, SpawnPoint[Prison][1]+math.random(-1,1), SpawnPoint[Prison][2]+math.random(-1,1), SpawnPoint[Prison][3], SpawnPoint[Prison][4], skin, SpawnPoint[Prison][7], SpawnPoint[Prison][8])
 		SetDatabaseAccount(thePlayer, "wanted", 0)
-		setElementData(thePlayer, "WantedLevel", PlayerPrison)
+		setElementData(thePlayer, "WantedLevelPrison", PlayerPrison)
 	elseif(frname == "Военные" and GetDatabaseAccount(thePlayer, "ATUT") <= 2) then
 		spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
 		if(GetDatabaseAccount(thePlayer, "ATUT") == 0) then
@@ -10293,7 +10561,7 @@ function UpdateTutorial(thePlayer)
 		if(GetDatabaseAccount(thePlayer, "CTUT") == 0) then
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, -255, 2603.3, 62.96, "Дойди до магазина", "Зайди в магазин и купи пачку #596289сигарет")
 		elseif(GetDatabaseAccount(thePlayer, "CTUT") == 1) then
-		--	triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 1496.9, -687.9, 95.6, "Найди работу", "Дождись #000000Mishel'#FFFFFF и отсоси у него за пузырь")
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Зайди в бар и вступи в банду")
 		end
 	elseif(team == "Полиция") then
 		outputChatBox("Используй клавишу #A0A0A0B#FFFFFF чтобы вызвать подмогу", thePlayer, 255, 255, 255, true)
@@ -10884,7 +11152,7 @@ function kr(thePlayer, vmodel, pedmodel)
 							bz = bz+25
 						end
 						CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[name], thePlayer)
-						PData[thePlayer]["PoliceTimer"] = setTimer(function(thePlayer) end, 3000, 1, thePlayer)
+						PData[thePlayer]["PoliceTimer"] = setTimer(function(thePlayer) end, 5000, 1, thePlayer)
 					end
 				end
 			end
@@ -11464,6 +11732,8 @@ function CreateBinco(x,y,z,rz,types)
 		CreateEnter(x,y,z,rz, 0, 0, false, 227.5, -8.2, 1002.2, 0, 5, SData["BincoIds"], types)
 		local p = CreatePickup(208.8, -3.9, 1001.2, 3, 1275, 0, 0, 5, SData["BincoIds"])
 		setElementData(p, "wardrobeShop", types)
+		
+		CreateDialogBot(93, 204.9, -7.8, 1001.2, 270, 5, SData["BincoIds"], "Victum", "Продавец")
 	elseif(types == "ProLaps") then
 		CreateRandomBot(215.4, -131.6, 1003.5,146, 3,SData["BincoIds"],"Unknown",nil)
 		CreateDialogBot(124, 207.1, -127.8, 1003.5, 180, 3, SData["BincoIds"], "ProLaps", "Продавец")
@@ -11475,10 +11745,14 @@ function CreateBinco(x,y,z,rz,types)
 		CreateEnter(x,y,z,rz, 0, 0, false, 204.3, -168.9, 1000.5, 0, 14, SData["BincoIds"], types)
 		local p = CreatePickup(216, -155.5, 1000.5, 3, 1275, 0, 0, 14, SData["BincoIds"])
 		setElementData(p, "wardrobeShop", types)
+		
+		CreateDialogBot(55, 204.3, -157.8, 1000.5, 180, 14, SData["BincoIds"], "Didier Sachs", "Продавец")
 	elseif(types == "Sub Urban" or types == "BOBO") then
 		CreateEnter(x,y,z,rz, 0, 0, false, 203.7, -50.7, 1001.8, 0, 1, SData["BincoIds"], types)
 		local p = CreatePickup(214.9, -40.8, 1002, 3, 1275, 0, 0, 1, SData["BincoIds"])
 		setElementData(p, "wardrobeShop", types)
+		
+		CreateDialogBot(60, 204.1, -41.7, 1001.8, 180, 1, SData["BincoIds"], "SubUrban", "Продавец")
 	end
 
 
@@ -11844,18 +12118,20 @@ function PrisonEvent(hour, minutes)
 			else
 				SetTeam(playerValue, "Мирные жители")
 			end
+			
+			removeElementData(playerValue, "WantedLevelPrison")
 			SpawnedAfterChange(playerValue)
 		else
 			if(isTimer(InLabTimer[playerValue])) then
 				remaining, executesRemaining, totalExecutes = getTimerDetails(InLabTimer[playerValue])
-				setElementData(playerValue, "WantedLevel", "Научные опыты еще "..math.floor(remaining/1000).." сек.")
+				setElementData(playerValue, "WantedLevelPrison", "Научные опыты еще "..math.floor(remaining/1000).." сек.")
 			else
 				SetDatabaseAccount(playerValue, "PrisonTime", GetDatabaseAccount(playerValue, "PrisonTime")-1)
 				local Prison = GetDatabaseAccount(playerValue, "Prison")
 				if(Prison == "AREA51") then
-					setElementData(playerValue, "WantedLevel", SpawnPoint[Prison][9].."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(playerValue, "PrisonTime").." сек.\n"..PrisonMessage)
+					setElementData(playerValue, "WantedLevelPrison", SpawnPoint[Prison][9].."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(playerValue, "PrisonTime").." сек.\n"..PrisonMessage)
 				else
-					setElementData(playerValue, "WantedLevel", SpawnPoint[Prison][9].."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(playerValue, "PrisonTime").." сек.")
+					setElementData(playerValue, "WantedLevelPrison", SpawnPoint[Prison][9].."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(playerValue, "PrisonTime").." сек.")
 				end
 			end
 		end
@@ -11874,9 +12150,9 @@ function st(thePlayer)
 			if(getArrSize(kandidats) < 9) then
 				kandidats[getPlayerName(thePlayer)] = 0
 				disableVoice[getPlayerName(thePlayer)] = true
-				outputChatBox("Поздравляю, теперь ты кандидат. Ожидай начала голосования", thePlayer, 255, 255, 255, true)
+				HelpMessage(thePlayer, "Ты предложил свою кандидатуру\nОжидай начала голосования")
 			else
-				outputChatBox("К сожалению ты не успел, число кандидатов превысило 9", thePlayer, 255, 255, 255, true)
+				outputChatBox("К сожалению ты не успел, число кандидатов превысило 9 чел.", thePlayer, 255, 255, 255, true)
 			end
 		else
 			outputChatBox("Ты уже участник выборов!", thePlayer, 255, 255, 255, true)
@@ -11886,6 +12162,31 @@ function st(thePlayer)
 	end
 end
 addCommandHandler("st", st)
+
+
+
+function srok(thePlayer, command, h)
+	if(getPlayerName(thePlayer) == "alexaxel705") then
+		local bizNode = xmlNodeGetChildren(BizNode)
+		for c,node in ipairs(bizNode) do
+			local srok = xmlNodeGetAttribute(node, "srok")
+			if(not h) then
+				if(srok) then
+					outputChatBox(xmlNodeGetName(node)..": "..srok.." мин", thePlayer)
+				end
+			else
+				if(h == xmlNodeGetName(node)) then
+					xmlNodeSetAttribute(node, "srok", 420)--Неделя
+					outputChatBox("Стартуют выборы на пост "..xmlNodeGetAttribute(node, "biz"), getRootElement(), 255, 255, 255, true)
+					outputChatBox("Напиши "..COLOR["KEY"]["HEX"].."/st #FFFFFFчтобы выдвинуть свою кандидатуру", getRootElement(), 255, 255, 255, true)
+					Vibori = xmlNodeGetName(node)
+					setTimer(ststart, 60000, 1)
+				end
+			end
+		end
+	end
+end
+addCommandHandler("srok", srok)
 
 
 
@@ -12779,6 +13080,8 @@ end
 addEvent("fightstyle", true)
 addEventHandler("fightstyle", root, fightstyle)
 
+
+
 function RemovePedFromVehicle(thePed, thePlayer)
 	if(thePed) then
 		if(not thePlayer) then thePlayer = getElementSyncer(thePed) end
@@ -13245,11 +13548,7 @@ addEventHandler("PrisonSleep", root, PrisonSleep)
 
 function PrisonGavno(x,y,z,rz)
 	if(not isTimer(PData[source]["ActionTimer"])) then
-		if(rz == 0) then
-			SetPlayerPosition(source,x-0.1,y-0.5,z+1,nil,nil,rz)
-		else
-			SetPlayerPosition(source,x+0.1,y+0.5,z+1,nil,nil,rz)
-		end
+		SetPlayerPosition(source,x,y,z,nil,nil,rz)
 		StartAnimation(source,"SILENCED", "SilenceCrouchfire", 1000,false,false,false)
 		PData[source]["ActionTimer"] = setTimer(function(thePlayer)
 			AddInventoryItem(thePlayer, {["txd"] = "Фекалии", ["name"] = "Фекалии", ["quality"] = math.random(0,1000)})
@@ -13308,9 +13607,9 @@ WastedPoliceTimer = {}
 function PoliceArrest(thePlayer, thePed)
 	if(not WastedPoliceTimer[thePed]) then
 		local x,y,z = getElementPosition(thePlayer)
+		
 		for key,thePlayers in pairs(getElementsByType "player") do
 			triggerClientEvent(thePlayers, "PlayerSayEvent", thePlayers, "Руки вверх!", thePlayer)
-			triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "script", 210, 82,x,y,z, false)
 		end
 		WastedPoliceTimer[thePed] = thePlayer
 		HelpMessage(thePed, "Нажми "..COLOR["KEY"]["HEX"].."H#FFFFFF чтобы поднять руки")
@@ -13582,40 +13881,11 @@ PrisonFoodGate2 = createObject(3095, 268.664, 1884.06, 15.925, 0, 0, 90)
 setElementData(PrisonFoodGate2, "gates", toJSON({275.664, 1884.06, 15.925, 0, 0, 0}))
 setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
 
-PrisonFoodGate2 = createObject(3036, -2179.353, 661.232, 50.214, 0, 0, 0)
-setElementData(PrisonFoodGate2, "gates", toJSON({-2175.353, 661.232, 50.214, 0, 0, 0}))
-setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
 
 
 PrisonFoodGate2 = createObject(1966, 2178.073, -2254.384, 15.9, 0, 0, 224.0)
 setElementData(PrisonFoodGate2, "gates", toJSON({2178.073, -2254.384, 19.9, 0, 0, 0}))
 setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
-
-
-PrisonFoodGate2 = createObject(2909, 2720.623, -2504.023, 13.989, 0, 0, 0)
-setElementData(PrisonFoodGate2, "gates", toJSON({2720.623, -2494.023, 13.989, 0, 0, 0}))
-setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
-
-PrisonFoodGate2 = createObject(2909, 2720.623, -2405.432 , 13.989, 0, 0, 0)
-setElementData(PrisonFoodGate2, "gates", toJSON({2720.623, -2395.432 , 13.989, 0, 0, 0}))
-setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
-
-
-
-
-PrisonFoodGate2 = createObject(3037, 2774.361, -2493.922, 14.675, 0, 0, 0)
-setElementData(PrisonFoodGate2, "gates", toJSON({2774.361, -2493.922, 17.675, 0, 0, 0}))
-setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
-
-PrisonFoodGate2 = createObject(3037, 2774.361, -2455.925, 14.675, 0, 0, 0)
-setElementData(PrisonFoodGate2, "gates", toJSON({2774.361, -2455.925, 17.675, 0, 0, 0}))
-setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
-
-
-PrisonFoodGate2 = createObject(3037, 2774.361, -2417.829 , 14.675, 0, 0, 0)
-setElementData(PrisonFoodGate2, "gates", toJSON({2774.361, -2417.829, 17.675, 0, 0, 0}))
-setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
-
 
 
 PrisonFoodGate2 = createObject(2951, 268.66, 1864.059, 7.5, 0, 0, 0)
@@ -13903,7 +14173,7 @@ function F4_Loding(thePlayer)
 	outputChatBox("Смена скина будет доступна после смерти.", thePlayer, 255, 255, 255, true)
 end
 
-
+local NoAmmoTitle = {"Кончились патроны", "Нет патрон", "Нужно найти патроны"}
 function Reload(thePlayer)
 	if(PData[thePlayer]["WeaponSlot"]) then
 		local arr = fromJSON(getElementData(thePlayer, "inv"))
@@ -13919,7 +14189,7 @@ function Reload(thePlayer)
 						triggerClientEvent(thePlayer, "Equip", thePlayer, PData[thePlayer]["WeaponSlot"][1], PData[thePlayer]["WeaponSlot"][2], found[1], found[2])
 						reloadPedWeapon(thePlayer)
 					else
-						HelpMessage(thePlayer, "Патроны для зарядки не найдены")
+						triggerClientEvent(thePlayer, "MyVoice", thePlayer, NoAmmoTitle[math.random(#NoAmmoTitle)], 'gg')
 					end
 				end
 			end
@@ -14005,6 +14275,10 @@ function helpcmd(thePlayer)
 	outputChatBox("/piss - обоссать, /wank - подрочить, /dance [1-13] - танцевать", thePlayer)
 	outputChatBox("/arm - служить в армии", thePlayer)
 	outputChatBox("/changepass старый пароль новый пароль", thePlayer)
+	
+	if(getPlayerName(thePlayer) == "alexaxel705") then
+		outputChatBox("/srok - Досрочные выборы", thePlayer)
+	end
 end
 addCommandHandler("cmd", helpcmd)
 
@@ -14139,7 +14413,6 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 			elseif(getElementType(killer) == "player") then
 				local PTeam = getTeamName(getPlayerTeam(source))
 				local KTeam = getTeamName(getPlayerTeam(killer))
-
 
 				if(PTeam ~= "Уголовники" and KTeam == "Полиция" or KTeam == "ФБР" or KTeam == "Военные") then
 					if(GetDatabaseAccount(source, "wanted") > 0) then
@@ -14564,6 +14837,7 @@ function MarkerHit(hitElement, Dimension)
 						MissionCompleted(thePlayer, "$100", Text(thePlayer, "НОВЫЙ ДВИГАТЕЛЬ И ПОКРАСКА"))
 						setVehicleColor(theVehicle, math.random(0,127), math.random(0,127), math.random(0,127), math.random(0,127))
 						AddBizMoney("SPRAYSA", 100)
+						WantedLevel(thePlayer, -6)
 					end
 					setGarageOpen(g, true)
 				end, 3000, 1, thePlayer, theVehicle)
@@ -15084,38 +15358,41 @@ addEventHandler("blowjob", getRootElement(), blowjob)
 
 
 
-function butilka(thePlayer, name, i, thePed)
+function butilka(thePlayer, thePed, model)
 	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
 		local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
 
-		if(getElementHealth(thePed) < 20) then
-			StartAnimation(thePed, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
-			setElementData(thePed, "BottleAnus", ItemsNamesArr[arr[i][1]])
-			AddPlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
-			PData[thePlayer]["ActionTimer"] = setTimer(function()
-				Koryachka(thePed)
-				RemovePlayerArmas(thePed, ItemsNamesArr[arr[i][1]])
-				removeElementData(thePed, "BottleAnus")
-
-				local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-				local PedTeam = getTeamName(getPlayerTeam(thePed))
-				if(PlayerTeam == "Военные" and PedTeam == "Уголовники") then
-					if(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
-						SetTeam(thePlayer, "Мирные жители")
-						SetDatabaseAccount(thePlayer, "skin", 48)
-						triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
-						triggerClientEvent(thePlayer, "RemoveGPSMarker", thePlayer, "Посади заключенного на бутылку")
-						SetDatabaseAccount(thePlayer, "ATUT", 3)
-						MissionCompleted(thePlayer, "Полиция +", "ОТСЛУЖИЛ")
-						Respect(thePlayer, "police", 5)
-						outputChatBox("Ты получил военный билет! Теперь ты можешь работать в #4169E1полиции#FFFFFF, вступить в #000000триаду#FFFFFF или #363D5Aколумбийский картель",thePlayer, 255,255,255,true)
-						SpawnedAfterChange(thePlayer)
-					end
-				end
-			end, 6800, 1)
-		else
-			ToolTip(thePlayer, "Игрок должен быть в #CC3300корячке")
+		if(thePlayer ~= thePed) then
+			if(getElementHealth(thePed) > 20) then
+				return ToolTip(thePlayer, "Игрок должен быть в #CC3300корячке")
+			end
 		end
+		
+		
+		StartAnimation(thePed, "BLOWJOBZ", "BJ_STAND_LOOP_W", 6800, true, false, false, false, true)
+		setElementData(thePed, "BottleAnus", model)
+		AddPlayerArmas(thePed, model)
+		PData[thePlayer]["ActionTimer"] = setTimer(function()
+			Koryachka(thePed)
+			RemovePlayerArmas(thePed, model)
+			removeElementData(thePed, "BottleAnus")
+
+			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+			local PedTeam = getTeamName(getPlayerTeam(thePed))
+			if(PlayerTeam == "Военные" and PedTeam == "Уголовники") then
+				if(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
+					SetTeam(thePlayer, "Мирные жители")
+					SetDatabaseAccount(thePlayer, "skin", 48)
+					triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
+					triggerClientEvent(thePlayer, "RemoveGPSMarker", thePlayer, "Посади заключенного на бутылку")
+					SetDatabaseAccount(thePlayer, "ATUT", 3)
+					MissionCompleted(thePlayer, "Полиция +", "ОТСЛУЖИЛ")
+					Respect(thePlayer, "police", 5)
+					outputChatBox("Ты получил военный билет! Теперь ты можешь работать в #4169E1полиции#FFFFFF, вступить в #000000триаду#FFFFFF или #363D5Aколумбийский картель",thePlayer, 255,255,255,true)
+					SpawnedAfterChange(thePlayer)
+				end
+			end
+		end, 6800, 1)
 	end
 end
 addEvent("butilka", true)
@@ -15738,8 +16015,8 @@ function Respect(thePlayer, Group, count)
 	setElementData(thePlayer, "ugol", GetDatabaseAccount(thePlayer, "ugol"))
 	setElementData(thePlayer, "ballas", GetDatabaseAccount(thePlayer, "ballas"))
 end
-
-
+addEvent("Respect", true)
+addEventHandler("Respect", getRootElement(), Respect)
 
 
 
@@ -17084,7 +17361,7 @@ function VehicleUpgrade(upgrade, count)
 			else
 				setElementData(theVehicle, "siren", "true")
 				ToolTip(source, "Чтобы управлять сигнализацией выйди из машины и наведи на неё прицел.")
-				AddPlayerMoney(source, -count, "КУПЛЕНО!")
+				AddPlayerMoney(source, -count, "КУПЛЕНО")
 				if(getElementData(theVehicle, "x")) then
 					local CarNodes = xmlNodeGetChildren(CarNode)
 					for i,node in ipairs(CarNodes) do
