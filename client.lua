@@ -2436,11 +2436,12 @@ function SetGPS(arr)
 		end
 	end
 	
-	--local text = Text("На #4682B4карту#FFFFFF добавлена #ff0000точка#FFFFFF! Используй клавишу {key} для автоматического перемещения", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}})
-	--InformTitle(text)
 end
 addEvent("SetGPS", true)
 addEventHandler("SetGPS", localPlayer, SetGPS)
+
+
+
 
 
 
@@ -4862,7 +4863,7 @@ function LoginClient(open)
 		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
 		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
 		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
-		outputChatBox("Обновление 23.12.2018: Добавлены уникальные прыжки, добавлено 19 новых гоночных трасс", 255, 150, 150,true)
+		outputChatBox("Обновление 23.01.2019: Исправлен баг с воротами", 255, 150, 150,true)
 	else
 		PText["HUD"][8] = nil
 	end
@@ -7311,11 +7312,11 @@ function DrawOnClientRender()
 						text["nicknamecolor"] = tocolor(r,g,b, 200)
 					else
 						if(not ArraySkinInfo[skin]) then outputChatBox(skin) end
-						if(thePlayer ~= localPlayer) then
+						--if(thePlayer ~= localPlayer) then
 							text["nickname"] = getPlayerName(thePlayer)
 							local r,g,b = getTeamColor(getTeamFromName(ArraySkinInfo[skin][1]))
 							text["nicknamecolor"] = tocolor(r,g,b, 200)
-						end
+						--end
 						if(skin == 252) then --CENSORED
 							sx, sy, sz = getCameraMatrix()
 							local x2,y2,z2 = getPedBonePosition(thePlayer, 1)
@@ -7364,20 +7365,22 @@ function DrawOnClientRender()
 					local cx,cy,cz = getCameraMatrix()
 					local depth = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
 					if(depth < 60) then
-						local fh = dxGetFontHeight(NewScale*1.8, "default-bold")/(60/(60-depth))
-						local sx,sy = getScreenFromWorldPosition(x,y,z+0.30)
-						if(sx and sy) then
-							if(PlayersMessage[thePlayer]) then
-								x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
-								create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "default-bold")
-							end
-							
-							x, y, z = getWorldFromScreenPosition(sx, sy, depth)
-							create3dtext(text["nickname"], x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "default-bold")
-						
-							if(PlayersAction[thePlayer]) then
-								x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
-								create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "default-bold")
+						if(getPedMoveState(thePlayer) ~= "crouch" and getPedMoveState(thePlayer) ~= "crawl") then
+							local fh = dxGetFontHeight(NewScale*1.8, "default-bold")/(60/(60-depth))
+							local sx,sy = getScreenFromWorldPosition(x,y,z+0.30)
+							if(sx and sy) then
+								if(PlayersMessage[thePlayer]) then
+									x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
+									create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "default-bold")
+								end
+								
+								x, y, z = getWorldFromScreenPosition(sx, sy, depth)
+								create3dtext(text["nickname"], x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "default-bold")
+								
+								if(PlayersAction[thePlayer]) then
+									x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
+									create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "default-bold")
+								end
 							end
 						end
 					end
@@ -7427,12 +7430,6 @@ function vpr(command, h)
 	triggerServerEvent("vpr", localPlayer, localPlayer, h, x, y, z)
 end
 addCommandHandler("vpr", vpr)
-
-
-
-
-
-
 
 
 
@@ -8679,6 +8676,12 @@ local BandRangs = {
 	["Мирные жители"] = {
 		[1] = {0, "Житель", 252}
 	}, 
+	["ЦРУ"] = {
+		[1] = {0, "Сотрудник ЦРУ #1", 163}, 
+		[2] = {30, "Сотрудник ЦРУ #2", 164}, 
+		[3] = {60, "Сотрудник ЦРУ #3", 165}, 
+		[4] = {90, "Сотрудник ЦРУ #4", 166}
+	}
 }
 
 
@@ -9962,8 +9965,8 @@ function StreamIn(restream)
 			if(getElementData(source, "dialogrz")) then
 				local px,py,pz = getElementPosition(source)
 				local rz = tonumber(getElementData(source, "dialogrz"))
-				local x,y,z = getPointInFrontOfPoint(px,py,pz, rz, 2)
-				StreamData[source]["ActionMarker"] = createMarker(x,y,z-1,  "corona", 2, 255, 10, 10, 0)
+				local x,y,z = getPointInFrontOfPoint(px,py,pz, rz-270, 2)
+				StreamData[source]["ActionMarker"] = createMarker(x,y,z-1,  "corona", 2, 255, 10, 10, 255)
 				setElementInterior(StreamData[source]["ActionMarker"], getElementInterior(source))
 				setElementDimension(StreamData[source]["ActionMarker"], getElementDimension(source))
 				setElementData(StreamData[source]["ActionMarker"], "TriggerBot", getElementData(source, "TINF"))

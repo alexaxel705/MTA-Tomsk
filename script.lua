@@ -57,9 +57,10 @@ fileClose(hFile)
 local ServerDate = getRealTime(timebuffer) -- Сюда записывается виртуальное время игры
 local NowTime = getRealTime()
 local CYear = NowTime.year+1900
+local OpenGates = {}
+local OpenGatesTimer = {}
 local PathNodes = exports["vehicle_node"]:GetVehicleNodes()
 local PedNodes = exports["vehicle_node"]:GetPedNodes()
-
 
 
 function GeneratePlayerScore(arr)
@@ -212,7 +213,7 @@ function setCameraOnPlayerJoin()
 		end
 	end
 	PData[source] = {
-		['radar'] = createBlipAttachedTo(source, 0, 2, 0, 0, 0, 255, 2),
+		['radar'] = createBlipAttachedTo(source, 0, 2, 0, 0, 0, 0, 2),
 		['lang'] = "Русский",
 		['PayDay'] = 0, -- С каждой зарплатой множитель растет (Продолжительность игры на сервере)
 		['CONTROLS'] = {
@@ -1396,6 +1397,12 @@ local BandRangs = {
 	["Мирные жители"] = {
 		[1] = {0, "Житель", 252}
 	}, 
+	["ЦРУ"] = {
+		[1] = {0, "Сотрудник ЦРУ #1", 163}, 
+		[2] = {30, "Сотрудник ЦРУ #2", 164}, 
+		[3] = {60, "Сотрудник ЦРУ #3", 165}, 
+		[4] = {90, "Сотрудник ЦРУ #4", 166}
+	}
 }
 
 
@@ -2498,7 +2505,7 @@ addEventHandler("usearmor", root, usearmor)
 function SetTeam(thePlayer, team)
 	local r, g, b = getTeamColor(getTeamFromName(team))
 	setElementData(thePlayer, "color", RGBToHex(r,g,b))
-	setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
+	setBlipColor(PData[thePlayer]['radar'], r,g,b, 0)
 	SetDatabaseAccount(thePlayer, "team", team)
 	setPlayerTeam(thePlayer, getTeamFromName(team))
 end
@@ -3133,6 +3140,7 @@ local VacancyDATA = {
 	["Ученик"] = {70, "МЧС", 0, 275},
 	["Врач"] = {120, "МЧС", 0, 274},
 	["Учёный CPC"] = {200, "ЦРУ", 0, 70},
+	["Тайный агент по борьбе с наркотиками"] = {400, "ЦРУ", 0, 295},
 }
 
 
@@ -4504,11 +4512,11 @@ setElementData(CIAGATES, "team", toJSON({"ЦРУ"}))
 
 local Zone51GateMCHS = createObject(975, 245.8, 1842.1, 9, 0,0,0)
 setElementData(Zone51GateMCHS, "gates", toJSON({244, 1842.1, 9, 0,0,0}))
-setElementData(Zone51GateMCHS, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+setElementData(Zone51GateMCHS, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 local Zone51GateMCHS2 = createObject(975, 256, 1845.2, 9, 0,0,90)
 setElementData(Zone51GateMCHS2, "gates", toJSON({256, 1839, 9, 0,0,0}))
-setElementData(Zone51GateMCHS2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+setElementData(Zone51GateMCHS2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 
 local CrackDoor1 = createObject(18553,2522.5, -1301.9, 1048.5)
@@ -4972,7 +4980,7 @@ function tp(thePlayer, command, h)
 
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 2720.2, -2504, 13.5, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 213.6, 1822.5, 6.4, 0, 0 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6486,7 +6494,7 @@ function ad(thePlayer, _, ...)
 		outputChatBox("Используй /ad текст чтобы дать рекламу, стоимость "..COLOR["DOLLAR"]["HEX"].."$500#FFFFFF за символ", thePlayer, 255,255,255,true)
 	end
 end
---addCommandHandler("ad", ad) --Костыль
+addCommandHandler("ad", ad)
 
 
 
@@ -6638,7 +6646,7 @@ function CreateThreePlayer(thePlayer, ix, iy, x,y,z)
 				if(arr[ix][iy]["name"] == "Конопля") then
 					RemoveInventoryItemCount(thePlayer, ix,iy)
 
-					outputChatBox("Ты посадил #558833коноплю",thePlayer,255,255,255,true)
+					HelpMessage(thePlayer, "Ты посадил #558833коноплю")
 					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 					if(PlayerTeam == "Баллас") then
 						if(GetDatabaseAccount(thePlayer, "BTUT") == 1) then
@@ -6652,7 +6660,7 @@ function CreateThreePlayer(thePlayer, ix, iy, x,y,z)
 				elseif(arr[ix][iy]["name"] == "Кока") then
 					RemoveInventoryItemCount(thePlayer, ix,iy)
 
-					outputChatBox("Ты посадил коку",thePlayer,255,255,255,true)
+					HelpMessage(thePlayer, "Ты посадил коку")
 					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 					if(PlayerTeam == "Колумбийский картель") then
 						if(GetDatabaseAccount(thePlayer, "KTUT") == 1) then
@@ -6674,7 +6682,7 @@ function CreateThreePlayer(thePlayer, ix, iy, x,y,z)
 				xmlNodeSetAttribute(NewNode, "quality", GetItemQuality(arr[ix][iy]))
 				xmlNodeSetAttribute(NewNode, "t", times)
 			else
-				outputChatBox("Тут уже посажено растение!", thePlayer, 255, 255, 255, true)
+				HelpMessage(thePlayer, "Тут уже посажено растение!")
 			end
 		end, 2200, 1)
 	end
@@ -9895,8 +9903,6 @@ end
 
 
 
-OpenGates = {}
-OpenGatesTimer = {}
 function opengate(TargetGate, state)
 	if(getElementData(TargetGate, "house")) then
 		local HouseNodes = xmlNodeGetChildren(HouseNode)
@@ -9932,30 +9938,30 @@ function opengate(TargetGate, state)
 	local data = getElementData(TargetGate, "gates")
 	local coord = fromJSON(data)
 	
-	if(OpenGates[TargetGate] and state == "Leave") then
+	if(state == "Leave") then
 		if(isTimer(OpenGatesTimer[TargetGate])) then
 			remaining = getTimerDetails(OpenGatesTimer[TargetGate])
 		end
 
-		local datCord = fromJSON(getElementData(TargetGate, "NativePos"))
-		coord[4] = datCord[4]-rx
-		coord[5] = datCord[5]-ry
-		coord[6] = datCord[6]-rz
-		if(coord[4] < -180) then coord[4] = coord[4] + 360 end
-		if(coord[5] < -180) then coord[5] = coord[5] + 360 end
-		if(coord[6] < -180) then coord[6] = coord[6] + 360 end
-
-		if(coord[4] > 180) then coord[4] = coord[4] - 360 end
-		if(coord[5] > 180) then coord[5] = coord[5] - 360 end
-		if(coord[6] > 180) then coord[6] = coord[6] - 360 end
-
-
-		moveObject(TargetGate, speed-remaining, datCord[1], datCord[2], datCord[3], coord[4], coord[5], coord[6], "Linear", 0.0, 0.0, 0.0 )
-		OpenGates[TargetGate] = nil
-
-
-		for key,thePlayers in pairs(getElementsByType "player") do
-			triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "genrl", 44, 2,x,y,z, false, 25, 50)
+		if(GateTrigger(source, TargetGate, state)) then
+			local datCord = fromJSON(getElementData(TargetGate, "NativePos"))
+			coord[4] = datCord[4]-rx
+			coord[5] = datCord[5]-ry
+			coord[6] = datCord[6]-rz
+			if(coord[4] < -180) then coord[4] = coord[4] + 360 end
+			if(coord[5] < -180) then coord[5] = coord[5] + 360 end
+			if(coord[6] < -180) then coord[6] = coord[6] + 360 end
+	
+			if(coord[4] > 180) then coord[4] = coord[4] - 360 end
+			if(coord[5] > 180) then coord[5] = coord[5] - 360 end
+			if(coord[6] > 180) then coord[6] = coord[6] - 360 end
+	
+	
+			moveObject(TargetGate, speed-remaining, datCord[1], datCord[2], datCord[3], coord[4], coord[5], coord[6], "Linear", 0.0, 0.0, 0.0 )
+			
+			for key,thePlayers in pairs(getElementsByType "player") do
+				triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "genrl", 44, 2,x,y,z, false, 25, 50)
+			end
 		end
 	elseif(state == "Enter") then
 		if(data) then
@@ -9963,26 +9969,28 @@ function opengate(TargetGate, state)
 				remaining = getTimerDetails(OpenGatesTimer[TargetGate])
 			end
 
-			if(not getElementData(TargetGate, "NativePos")) then
-				setElementData(TargetGate, "NativePos", toJSON({x,y,z,rx,ry,rz}))
-			else
-				local datCord = fromJSON(getElementData(TargetGate, "NativePos"))
-				coord[4] = coord[4]-(rx-datCord[4])
-				coord[5] = coord[5]-(ry-datCord[5])
-				coord[6] = coord[6]-(rz-datCord[6])
-
-				if(coord[4] < -180) then coord[4] = coord[4] + 360 end
-				if(coord[5] < -180) then coord[5] = coord[5] + 360 end
-				if(coord[6] < -180) then coord[6] = coord[6] + 360 end
-
-				if(coord[4] > 180) then coord[4] = coord[4] - 360 end
-				if(coord[5] > 180) then coord[5] = coord[5] - 360 end
-				if(coord[6] > 180) then coord[6] = coord[6] - 360 end
-
+			if(GateTrigger(source, TargetGate, state)) then
+				if(not getElementData(TargetGate, "NativePos")) then
+					setElementData(TargetGate, "NativePos", toJSON({x,y,z,rx,ry,rz}))
+				else
+					local datCord = fromJSON(getElementData(TargetGate, "NativePos"))
+					coord[4] = coord[4]-(rx-datCord[4])
+					coord[5] = coord[5]-(ry-datCord[5])
+					coord[6] = coord[6]-(rz-datCord[6])
+	
+					if(coord[4] < -180) then coord[4] = coord[4] + 360 end
+					if(coord[5] < -180) then coord[5] = coord[5] + 360 end
+					if(coord[6] < -180) then coord[6] = coord[6] + 360 end
+	
+					if(coord[4] > 180) then coord[4] = coord[4] - 360 end
+					if(coord[5] > 180) then coord[5] = coord[5] - 360 end
+					if(coord[6] > 180) then coord[6] = coord[6] - 360 end
+	
+				end
+				
+				moveObject(TargetGate, speed-remaining, coord[1],coord[2],coord[3],coord[4],coord[5],coord[6], "Linear", 0.0, 0.0, 0.0)
+				OpenGatesTimer[TargetGate] = setTimer(function() end, speed-remaining, 1)
 			end
-			OpenGates[TargetGate] = true
-			moveObject(TargetGate, speed-remaining, coord[1],coord[2],coord[3],coord[4],coord[5],coord[6], "Linear", 0.0, 0.0, 0.0 )
-			OpenGatesTimer[TargetGate] = setTimer(function() end, speed-remaining, 1)
 		end
 
 
@@ -9999,7 +10007,21 @@ addEventHandler("opengate", root, opengate)
 
 
 
-
+function GateTrigger(thePlayer, gate, state) 
+	if(not OpenGates[gate]) then OpenGates[gate] = {} end
+	if(state == "Leave") then
+		OpenGates[gate][thePlayer] = nil
+		if(getArrSize(OpenGates[gate]) ~= 0) then -- Если в воротах до сих пор кто-то стоит
+			return false
+		end
+	else
+		OpenGates[gate][thePlayer] = state
+		if(getArrSize(OpenGates[gate]) > 1) then -- Если ворота уже открыты другим игроком
+			return false
+		end
+	end
+	return true
+end
 
 
 
@@ -12210,30 +12232,6 @@ addCommandHandler("arm", arm)
 
 
 
--- x,y,z,rz
-local BallsSlots = {
-	[1] = {-1396.2, -184.9, 1042.3, 186},
-	[2] = {-1395.2, -197.2, 1042.1, 186},
-	[3] = {-1394.6, -210.3, 1042.1, 186},
-}
-
-
-
-
-function balls(thePlayer)
-	local hotrings = {502, 494, 503}
-	local track = {}
-	for slot = 1, 57 do
-		track[#track+1] = {"Unknown", slot}
-	end
-	for i, dat in pairs(BallsSlots) do
-		local dr = CreateDriverBot(hotrings[math.random(#hotrings)], 299, dat[1], dat[2], dat[3], 7, 0, track, thePlayer)
-		setElementFrozen(dr, true)
-	end
-end
-addCommandHandler("balls", balls)
-
-
 
 
 
@@ -12310,6 +12308,7 @@ function PayDay()
 				elseif(arr[new] < 999) then
 					arr[new] = arr[new]+1
 				end
+				
 				triggerClientEvent(thePlayer, "InformTitle", thePlayer, new, "wardrobe")
 				SetDatabaseAccount(thePlayer, "wardrobe", toJSON(arr))
 			end
@@ -12996,7 +12995,7 @@ function restartMode(thePlayer)
 end
 
 
-function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
+function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)		
 	local zone = GetZoneName(x,y,z, false, getElementData(thePlayer, "City"))
 	if(savetype == "PedPath") then
 		local angle = findRotation(x,y, x,ry)
@@ -13057,15 +13056,10 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			PathNodes[zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	end
-	--RacePriceGeneration(thePlayer)
-
 	fileDelete("save.txt")
 	local hFile = fileCreate("save.txt")
 	fileWrite(hFile, datess) -- write a text line
 	fileClose(hFile)
-	--StartAnimation(source,"skate", "skate_run", 1000,false,false,false)
-	--[[SetDatabaseAccount(thePlayer, "PrisonTime", 423)
-	SetTeam(thePlayer, "Уголовники")--]]
 end
 addEvent("saveserver", true)
 addEventHandler("saveserver", root, saveserver)
@@ -13781,13 +13775,13 @@ addEventHandler("PoliceArrestCar", root, PoliceArrestCar)
 createObject(3749, 135.2, 1941.1, 23.5, 0,0,180)
 PrisonMainGate = createObject(10184, 135.2, 1941.1, 20.9, 0,0,90)
 setElementData(PrisonMainGate, "gates", toJSON({135.2, 1941.1, 25.1, 0,0,0}))
-setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 
 createObject(3749, 285.6, 1821.3, 21.8, 0,0,270)
 PrisonMainGate = createObject(10184, 285.6, 1821.3, 19.1, 0,0,180)
 setElementData(PrisonMainGate, "gates", toJSON({285.6, 1821.3, 23.3, 0,0,0}))
-setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 createObject(1412, 96.7, 1920.9, 18.4, 0,0,90)
 createObject(1412, 96.7, 1920.9, 20.4, 0,0,90)
@@ -13797,15 +13791,15 @@ local wall = createObject(3059, 2522, -1272.9301, 35.61, 0,0,0)
 setElementFrozen(wall, true)
 PrisonMainGate = createObject(10184, 188.9,1919, 19.2, 0,0,0)
 setElementData(PrisonMainGate, "gates", toJSON({188.9,1919, 23, 0,0,0}))
-setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 PrisonStreetGate = createObject(2927, 215.941, 1874.571, 13.903,0,0,0)
 setElementData(PrisonStreetGate, "gates", toJSON({217.941, 1874.571, 13.903,0,0,0}))
-setElementData(PrisonStreetGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+setElementData(PrisonStreetGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 PrisonStreetGate = createObject(2927,  211.842, 1874.571, 13.903,0,0,0)
 setElementData(PrisonStreetGate, "gates", toJSON({209.842, 1874.571, 13.903,0,0,0}))
-setElementData(PrisonStreetGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+setElementData(PrisonStreetGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 
 PrisonStreetGate = createObject(3115, -1456.719, 501.297, 9.914, 0,0,0) -- SF
@@ -13868,29 +13862,28 @@ setElementData(PrisonStreetGate, "gates", toJSON({1903.383, 967.62, 14.438,0,0,0
 setElementData(PrisonStreetGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
 
 
-
-PrisonFoodGate1 = createObject(2930, 226.6, 1874.1, 15.4)
-setElementData(PrisonFoodGate1, "gates", toJSON({226.6, 1875.1,15.4, 0,0,0}))
-setElementData(PrisonFoodGate1, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
-
-PrisonFoodGate2 = createObject(2930, 226.6, 1872.4, 15.4)
-setElementData(PrisonFoodGate2, "gates", toJSON({226.6, 1871.4, 15.4, 0,0,0}))
-setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
-
-PrisonFoodGate2 = createObject(3095, 268.664, 1884.06, 15.925, 0, 0, 90)
-setElementData(PrisonFoodGate2, "gates", toJSON({275.664, 1884.06, 15.925, 0, 0, 0}))
-setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
-
-
-
 PrisonFoodGate2 = createObject(1966, 2178.073, -2254.384, 15.9, 0, 0, 224.0)
 setElementData(PrisonFoodGate2, "gates", toJSON({2178.073, -2254.384, 19.9, 0, 0, 0}))
 setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
 
 
+
+
+PrisonFoodGate1 = createObject(2930, 226.6, 1874.1, 15.4)
+setElementData(PrisonFoodGate1, "gates", toJSON({226.6, 1875.1,15.4, 0,0,0}))
+setElementData(PrisonFoodGate1, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
+
+PrisonFoodGate2 = createObject(2930, 226.6, 1872.4, 15.4)
+setElementData(PrisonFoodGate2, "gates", toJSON({226.6, 1871.4, 15.4, 0,0,0}))
+setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
+
+PrisonFoodGate2 = createObject(3095, 268.664, 1884.06, 15.925, 0, 0, 90)
+setElementData(PrisonFoodGate2, "gates", toJSON({275.664, 1884.06, 15.925, 0, 0, 0}))
+setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
+
 PrisonFoodGate2 = createObject(2951, 268.66, 1864.059, 7.5, 0, 0, 0)
 setElementData(PrisonFoodGate2, "gates", toJSON({268.66, 1864.059, 10, 0, 0, 0}))
-setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
+setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 
 
@@ -13985,7 +13978,6 @@ function UpReputation(thePlayer, thePed)
 end
 addEvent("UpReputation", true)
 addEventHandler("UpReputation", root, UpReputation)
-addCommandHandler("upreputation", UpReputation)
 
 function DownReputation(thePlayer, thePed)
 	local team = getTeamVariable(getTeamName(getPlayerTeam(thePlayer)))
@@ -14046,6 +14038,14 @@ addEventHandler("SpawnedAfterChangeEvent", root, SpawnedAfterChange)
 
 
 function quitPlayer()
+	for gate, dat in pairs(OpenGates) do
+		for thePlayer, _ in pairs(dat) do
+			if(thePlayer == source) then
+				triggerEvent("opengate", thePlayer, gate, "Leave")
+			end
+		end
+	end
+
 	local id = getElementData(source,"id")
 	if not id then return end
 	ids[id] = nil
