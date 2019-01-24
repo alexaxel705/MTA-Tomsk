@@ -3801,19 +3801,15 @@ function UpdateBot()
 							setPedControlState(thePed, "handbrake", true)
 						else
 							if(rot > 0) then
-								setPedAnalogControlState(thePed, "vehicle_right", 0)
 								setPedAnalogControlState(thePed, "vehicle_left", (rot)/20)
 							else
-								setPedAnalogControlState(thePed, "vehicle_left", 0)
 								setPedAnalogControlState(thePed, "vehicle_right", -(rot)/20)
 							end
 						end
 					else
 						if(rot > 0) then
-							setPedAnalogControlState(thePed, "vehicle_left", 0)
 							setPedAnalogControlState(thePed, "vehicle_right", (rot)/20)
 						else
-							setPedAnalogControlState(thePed, "vehicle_right", 0)
 							setPedAnalogControlState(thePed, "vehicle_left", -(rot)/20)
 						end
 					
