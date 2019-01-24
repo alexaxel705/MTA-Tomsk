@@ -281,7 +281,6 @@ local TCButton = {}
 local TCButton2 = {}
 
 local usableslot = 1
-local SprunkObject = false
 local CallPolice = false
 local BANKCTL = false
 local MovePlayerTo = {} -- x,y,z,rz,mode [silent, fast],action,args
@@ -3591,10 +3590,12 @@ function UpdateBot()
 			if(getTeamGroup(getElementData(thePed, "team")) == "Официалы") then
 				for _,player in ipairs(getElementsByType("player", getRootElement(), true)) do 
 					if(not isPedDead(player)) then
-						if(getElementData(player, "WantedLevel") > 0) then
-							local ax, ay, az = getElementPosition(player)
-							if(isLineOfSightClear(hx,hy,hz, ax, ay, az, true, false, false, false, false, false, false)) then
-								triggerServerEvent("PedDamage", player, thePed, -1, 160, 0)
+						if(getElementData(player, "WantedLevel")) then
+							if(getElementData(player, "WantedLevel") > 0) then
+								local ax, ay, az = getElementPosition(player)
+								if(isLineOfSightClear(hx,hy,hz, ax, ay, az, true, false, false, false, false, false, false)) then
+									triggerServerEvent("PedDamage", player, thePed, -1, 160, 0)
+								end
 							end
 						end
 					end
@@ -3604,6 +3605,7 @@ function UpdateBot()
 		
 		
 		if(theVehicle) then
+			if(MovePlayerTo[thePed]) then MovePlayerTo[thePed] = nil end -- Костыль
 			local vx,vy,vz = getElementPosition(theVehicle)
 			local rx,ry,rz = getElementRotation(theVehicle)
 			local brakes = false
@@ -3790,6 +3792,7 @@ function UpdateBot()
 						rot = -20 
 					end
 
+					
 					if(mreverse) then
 						setPedAnalogControlState(thePed, "brake_reverse", 1-(s*1/limitspeed))
 						setPedAnalogControlState(thePed, "accelerate", 0)
@@ -3798,15 +3801,19 @@ function UpdateBot()
 							setPedControlState(thePed, "handbrake", true)
 						else
 							if(rot > 0) then
+								setPedAnalogControlState(thePed, "vehicle_right", 0)
 								setPedAnalogControlState(thePed, "vehicle_left", (rot)/20)
 							else
+								setPedAnalogControlState(thePed, "vehicle_left", 0)
 								setPedAnalogControlState(thePed, "vehicle_right", -(rot)/20)
 							end
 						end
 					else
 						if(rot > 0) then
+							setPedAnalogControlState(thePed, "vehicle_left", 0)
 							setPedAnalogControlState(thePed, "vehicle_right", (rot)/20)
 						else
+							setPedAnalogControlState(thePed, "vehicle_right", 0)
 							setPedAnalogControlState(thePed, "vehicle_left", -(rot)/20)
 						end
 					
@@ -4340,9 +4347,6 @@ function checkKey()
 					for slot = k, #PData['gps'] do
 						destroyElement(PData['gps'][slot])
 						PData['gps'][slot] = nil
-						if(PData['automove']) then
-							autoMove()
-						end
 					end
 					break
 				end
@@ -5276,11 +5280,41 @@ function onClientColShapeHit(thePlayer, matchingDimension)
 						triggerServerEvent("PetrolFuelColEnter", localPlayer, localPlayer, source)
 					end
 				end
+			elseif(getElementData(source, "Three")) then
+				if(not getPedOccupiedVehicle(localPlayer)) then
+					triggerServerEvent("ThreeColEnter", localPlayer, localPlayer, source)
+				end
+			elseif(getElementData(source, "vending")) then
+				if(not getPedOccupiedVehicle(localPlayer)) then
+					toggleControl("enter_exit", false) 
+					ToolTip(Text("Sprunk стоимость #3B7231$20#FFFFFF").."\n"..Text("Нажми {key} чтобы купить", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
+				
+					triggerServerEvent("VendingColEnter", localPlayer, localPlayer, source)
+				end
 			end
 		end
 	end	
 end
 addEventHandler("onClientColShapeHit", root, onClientColShapeHit)
+
+
+
+
+
+function onClientColShapeLeave(thePlayer, matchingDimension)
+	if getElementType(thePlayer) == "player" then 
+		if(thePlayer == localPlayer) then
+			if(getElementData(source, "vending")) then
+				if(not getPedOccupiedVehicle(localPlayer)) then
+					toggleControl("enter_exit", true) 
+				end
+			end
+		end
+	end	
+end
+addEventHandler("onClientColShapeLeave", root, onClientColShapeLeave)
+
+
 
 
 function RespectMessage(group, count) 
@@ -5470,7 +5504,7 @@ function PrisonGavnoEv()
 	end
 end
 
-function PrisonPiss() triggerServerEvent("PrisonPiss", localPlayer) end
+function PrisonPiss() triggerServerEvent("PrisonPiss", localPlayer, localPlayer) end
 
 
 function SleepSound(bank,id,id2)
@@ -5487,77 +5521,6 @@ function StopSleep()
 end
 
 
-local vending = {
-	{955, 0, -862.82, 1536.60, 21.98, 0, 0, 180},
-	{956, 0, 2271.72, -76.46, 25.96, 0, 0, 0},
-	{955, 0, 1277.83, 372.51, 18.95, 0, 0, 64},
-	{956, 0, 662.42, -552.16, 15.71, 0, 0, 180},
-	{955, 0, 201.01, -107.61, 0.89, 0, 0, 270},
-	{955, 0, -253.73, 2597.95, 62.24, 0, 0, 90},
-	{956, 0, -253.73, 2599.75, 62.24, 0, 0, 90},
-	{956, 0, -76.03, 1227.99, 19.12, 0, 0, 90},
-	{955, 0, -14.70, 1175.36, 18.95, 0, 0, 180},
-	{1977, 7, 316.87, -140.35, 998.58, 0, 0, 270},
-	{956, 0, -1455.11, 2591.665, 55.23, 0, 0, 180},
-	{955, 0, 2352.18, -1357.15, 23.77, 0, 0, 90},
-	{955, 0, 2325.97, -1645.14, 14.21, 0, 0, 0},
-	{956, 0, 2139.52, -1161.48, 23.35, 0, 0, 87},
-	{956, 0, 2153.23, -1016.14, 62.23, 0, 0, 127},
-	{955, 0, 1928.74, -1772.44, 12.94, 0, 0, 90},
-	{1776, 1, 2222.36, 1602.64, 1000.06, 0, 0, 90},
-	{1775, 1, 2222.20, 1606.77, 1000.05, 0, 0, 90},
-	{1775, 1, 2155.90, 1606.77, 1000.05, 0, 0, 90},
-	{1775, 1, 2209.90, 1607.19, 1000.05, 0, 0, 270},
-	{1776, 1, 2155.84, 1607.87, 1000.06, 0, 0, 90},
-	{1776, 1, 2202.45, 1617, 1000.06, 0, 0, 180},
-	{1776, 1, 2209.24, 1621.21, 1000.06, 0, 0, 0},
-	{1776, 3, 330.67, 178.50, 1020.07, 0, 0, 0},
-	{1776, 3, 331.92, 178.50, 1020.07, 0, 0, 0},
-	{1776, 3, 350.91, 206.08, 1008.47, 0, 0, 90},
-	{1776, 3, 361.56, 158.61, 1008.47, 0, 0, 180},
-	{1776, 3, 371.59, 178.45, 1020.07, 0, 0, 0},
-	{1776, 3, 374.89, 188.97, 1008.47, 0, 0, 0},
-	{1775, 2, 2576.70, -1284.43, 1061.09, 0, 0, 270},
-	{1775, 15, 2225.20, -1153.42, 1025.90, 0, 0, 270},
-	{955, 0, 1154.72, -1460.89, 15.15, 0, 0, 270},
-	{956, 0, 2480.85, -1959.27, 12.96, 0, 0, 180},
-	{955, 0, 2060.11, -1897.65, 12.92, 0, 0, 0},
-	{955, 0, 1729.78, -1943.05, 12.94, 0, 0, 0},
-	{956, 0, 1634.10, -2237.53, 12.89, 0, 0, 0},
-	{955, 0, 1789.21, -1369.26, 15.16, 0, 0, 270},
-	{956, 0, -2229.18, 286.41, 34.70, 0, 0, 180},
-	{955, 0, -1980.79, 142.66, 27.07, 0, 0, 270},
-	{955, 0, -2118.96, -423.64, 34.72, 0, 0, 255},
-	{955, 0, -2118.61, -422.41, 34.72, 0, 0, 255},
-	{955, 0, -2097.27, -398.33, 34.72, 0, 0, 180},
-	{955, 0, -2092.08, -490.05, 34.72, 0, 0, 0},
-	{955, 0, -2063.27, -490.05, 34.72, 0, 0, 0},
-	{955, 0, -2005.64, -490.05, 34.72, 0, 0, 0},
-	{955, 0, -2034.46, -490.05, 34.72, 0, 0, 0},
-	{955, 0, -2068.56, -398.33, 34.72, 0, 0, 180},
-	{955, 0, -2039.85, -398.33, 34.72, 0, 0, 180},
-	{955, 0, -2011.14, -398.33, 34.72, 0, 0, 180},
-	{955, 0, -1350.11, 492.28, 10.58, 0, 0, 90},
-	{956, 0, -1350.11, 493.85, 10.58, 0, 0, 90},
-	{955, 0, 2319.99, 2532.85, 10.21, 0, 0, 0},
-	{956, 0, 2845.72, 1295.04, 10.78, 0, 0, 0},
-	{955, 0, 2503.14, 1243.70, 10.21, 0, 0, 180},
-	{956, 0, 2647.69, 1129.66, 10.21, 0, 0, 0},
-	{1209, 0, -2420.21, 984.57, 44.29, 0, 0, 90},
-	{1302, 0, -2420.17, 985.94, 44.29, 0, 0, 90},
-	{955, 0, 2085.77, 2071.35, 10.45, 0, 0, 90},
-	{956, 0, 1398.84, 2222.60, 10.42, 0, 0, 180},
-	{956, 0, 1659.46, 1722.85, 10.21, 0, 0, 0},
-	{955, 0, 1520.14, 1055.26, 10, 0, 0, 270},
-	{1775, 6, -19.03, -57.83, 1003.63, 0, 0, 180},
-	{1776, 6, -36.14, -57.87, 1003.63, 0, 0, 180}
-}
-
-
-for key,theVend in pairs(vending) do
-	local o = createObject(theVend[1], theVend[3], theVend[4], theVend[5], theVend[6], theVend[7],theVend[8],false)
-	setElementInterior(o, theVend[2])
-end
 
 
 
@@ -5623,11 +5586,6 @@ function targetingActivated(target)
 			end
 		end
 
-		if(SprunkObject) then 
-			SprunkObject = false  
-			unbindKey ("f", "down", SprunkFunk) 
-			toggleControl("enter_exit", true) 
-		end
 		if(CallPolice) then
 			CallPolice = false
 			unbindKey ("F3", "down", CallPoliceEvent) 
@@ -5705,15 +5663,7 @@ function targetingActivated(target)
 				end
 				ChangeInfo(t, 5000)
 			elseif(tostring(getElementType(target)) == "object") then
-				if(getElementModel(target) == 955 or getElementModel(target) == 956 
-				or getElementModel(target) == 1977 or getElementModel(target) == 1775
-				or getElementModel(target) == 1776 or getElementModel(target) == 1209
-				or getElementModel(target) == 1302) then
-					toggleControl("enter_exit", false) 
-					ToolTip(Text("Sprunk стоимость #3B7231$20#FFFFFF").."\n"..Text("Нажми {key} чтобы купить", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
-					SprunkObject = target
-					bindKey ("f", "down", SprunkFunk)
-				elseif(getElementModel(target) == 1812) then
+				if(getElementModel(target) == 1812) then
 					ToolTip(Text("Нажми {key} чтобы лечь", {{"{key}", COLOR["KEY"]["HEX"].."E#FFFFFF"}}))
 					PrisonSleep = target
 					bindKey("e", "down", PrisonSleepEv)
@@ -5773,8 +5723,10 @@ addEvent("PlaySFXClient", true)
 addEventHandler("PlaySFXClient", localPlayer, PlaySFXClient)
 
 
-function bloodfoot(bool) 
-	setPedFootBloodEnabled(localPlayer, bool)
+function bloodfoot(thePlayer, bool) 
+	if(isElement(thePlayer)) then
+		setPedFootBloodEnabled(thePlayer, bool)
+	end
 end
 addEvent("bloodfoot", true)
 addEventHandler("bloodfoot", localPlayer, bloodfoot)
@@ -6596,51 +6548,6 @@ end
 
 
 
-local SearchLights = {
-	[1] = {
-		["A51_SPOTBULB"] = createObject(2887, 166.003, 1849.937, 36.246),
-		["A51_SPOTHOUSING"] = createObject(2888, 166.003, 1849.937, 36.246), 
-		["A51_SPOTBASE"] = createObject(2889, 166.003, 1849.937, 36.246), 
-		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
-	}, 
-	[2] = {
-		["A51_SPOTBULB"] = createObject(2887, 262.145, 1807.62, 36.246),
-		["A51_SPOTHOUSING"] = createObject(2888, 262.145, 1807.62, 36.246), 
-		["A51_SPOTBASE"] = createObject(2889, 262.145, 1807.62, 36.246), 
-		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
-	},
-	[3] = {
-		["A51_SPOTBULB"] = createObject(2887, 267.116, 1895.241, 36.246),
-		["A51_SPOTHOUSING"] = createObject(2888, 267.116, 1895.241, 36.246), 
-		["A51_SPOTBASE"] = createObject(2889, 267.116, 1895.241, 36.246), 
-		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
-	}, 
-	[4] = {
-		["A51_SPOTBULB"] = createObject(2887, 233.486, 1934.789, 36.246),
-		["A51_SPOTHOUSING"] = createObject(2888, 233.486, 1934.789, 36.246), 
-		["A51_SPOTBASE"] = createObject(2889, 233.486, 1934.789, 36.246), 
-		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
-	}, 
-	[5] = {
-		["A51_SPOTBULB"] = createObject(2887, 161.962, 1933.043, 36.246),
-		["A51_SPOTHOUSING"] = createObject(2888, 161.962, 1933.043, 36.246), 
-		["A51_SPOTBASE"] = createObject(2889, 161.962, 1933.043, 36.246), 
-		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
-	}, 
-	[6] = {
-		["A51_SPOTBULB"] = createObject(2887, 103.946, 1901.047, 36.246),
-		["A51_SPOTHOUSING"] = createObject(2888, 103.946, 1901.047, 36.246), 
-		["A51_SPOTBASE"] = createObject(2889, 103.946, 1901.047, 36.246), 
-		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
-	}, 
-	[7] = {
-		["A51_SPOTBULB"] = createObject(2887, 113.439, 1814.405, 36.246),
-		["A51_SPOTHOUSING"] = createObject(2888, 113.439, 1814.405, 36.246), 
-		["A51_SPOTBASE"] = createObject(2889, 113.439, 1814.405, 36.246), 
-		["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
-	}
-}
-
 function getPositionFromElementOffset(element,offX,offY,offZ)
     local m = getElementMatrix ( element )  -- Get the matrix
     local x = offX * m[1][1] + offY * m[2][1] + offZ * m[3][1] + m[4][1]  -- Apply transform
@@ -6649,10 +6556,44 @@ function getPositionFromElementOffset(element,offX,offY,offZ)
     return x, y, z                               -- Return the transformed point
 end
 
-for _, v in pairs(SearchLights) do
-	local rx,ry,rz = getElementRotation(v["A51_SPOTBULB"])
-	setElementRotation(v["A51_SPOTBULB"], 330,ry,math.random(0,360))
+
+local effectNames = {
+"blood_heli","boat_prop","camflash","carwashspray","cement","cloudfast","coke_puff","coke_trail","cigarette_smoke",
+"explosion_barrel","explosion_crate","explosion_door","exhale","explosion_fuel_car","explosion_large","explosion_medium",
+"explosion_molotov","explosion_small","explosion_tiny","extinguisher","flame","fire","fire_med","fire_large","flamethrower",
+"fire_bike","fire_car","gunflash","gunsmoke","insects","heli_dust","jetpack","jetthrust","nitro","molotov_flame",
+"overheat_car","overheat_car_electric","prt_blood","prt_boatsplash","prt_bubble","prt_cardebris","prt_collisionsmoke",
+"prt_glass","prt_gunshell","prt_sand","prt_sand2","prt_smokeII_3_expand","prt_smoke_huge","prt_spark","prt_spark_2",
+"prt_splash","prt_wake","prt_watersplash","prt_wheeldirt","petrolcan","puke","riot_smoke","spraycan","smoke30lit","smoke30m",
+"smoke50lit","shootlight","smoke_flare","tank_fire","teargas","teargasAD","tree_hit_fir","tree_hit_palm","vent","vent2",
+"water_hydrant","water_ripples","water_speed","water_splash","water_splash_big","water_splsh_sml","water_swim","waterfall_end",
+"water_fnt_tme","water_fountain","wallbust","WS_factorysmoke"
+}
+
+addCommandHandler("createEffect", function(_, effectIndex)
+   effectIndex = tonumber(effectIndex)
+   if effectIndex and type(effectIndex) == "number" then
+      if effectIndex > 0 and effectIndex <= #effectNames then
+		outputChatBox(effectNames[effectIndex])
+         createEffect(effectNames[effectIndex], Vector3( getElementPosition( getLocalPlayer() ) ), 0, 0, 0)
+      end
+   end
+end)
+
+
+
+function onWastedEffect(killer, weapon, bodypart)
+	local x,y,z = getElementPosition(source)
+	if(weapon == 50) then
+		createEffect("blood_heli", x, y, z, 0, 0, 0, 300, true)
+	end
+	local e = createEffect("insects", x, y, z, 0, 0, 0, 10, true)
+	setElementParent(e, source)
 end
+addEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
+addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
+
+
 
 
 
@@ -7042,6 +6983,26 @@ addEventHandler("ShakeLevel", localPlayer, ShakeLevel)
 
 
 
+local PlayerPissing = {}
+local PlayerPissingTimer = {}
+function PlayerPiss(thePlayer)
+	if(not PlayerPissing[thePlayer]) then
+		local x,y,z = getElementPosition(thePlayer)
+		local rx,ry,rz = getElementRotation(thePlayer)
+		x,y,z = getPointInFrontOfPoint(x, y, z-0.2, rz-270, 0.5)
+		PlayerPissing[thePlayer] = createEffect("petrolcan", x, y, z, 90, 0, -rz, 50, true)
+		
+		PlayerPissingTimer[thePlayer] = setTimer(function()
+			destroyElement(PlayerPissing[thePlayer])
+			PlayerPissing[thePlayer] = nil
+		end, 5000, 1)
+	end
+end
+addEvent("PlayerPiss", true)
+addEventHandler("PlayerPiss", localPlayer, PlayerPiss)
+
+
+
 
 local CameraFade = false
 local FadeUpTime = 0
@@ -7253,16 +7214,14 @@ function DrawOnClientRender()
 		local x,y,z = getElementPosition(localPlayer)
 		local zone = getZoneName(x,y,z, false)
 		if(zone == "Restricted Area") then
-			for _, v in pairs(SearchLights) do
-				local rx,ry,rz = getElementRotation(v["A51_SPOTBULB"])
-				setElementRotation(v["A51_SPOTHOUSING"], rx,ry,rz+0.1)
-				setElementRotation(v["A51_SPOTBULB"], rx,ry,rz+0.1)
-			
-				local sx, sy, sz = getPositionFromElementOffset(v["A51_SPOTBULB"], 0, 1.181, 0.768)
-				local ex, ey, ez = getPositionFromElementOffset(v["A51_SPOTBULB"], 0, 30, 0)
-				
-				setSearchLightStartPosition(v["attach_searchlight"], sx, sy, sz)
-				setSearchLightEndPosition(v["attach_searchlight"], ex, ey, ez)
+			for obj, dat in pairs(ObjectInStream) do
+				if(isElement(dat["attach_searchlight"])) then
+					local sx, sy, sz = getPositionFromElementOffset(obj, 0, 1.181, 0.768)
+					local ex, ey, ez = getPositionFromElementOffset(obj, 0, 30, 0)
+					
+					setSearchLightStartPosition(dat["attach_searchlight"], sx, sy, sz)
+					setSearchLightEndPosition(dat["attach_searchlight"], ex, ey, ez)
+				end
 			end
 		
 		
@@ -7366,20 +7325,20 @@ function DrawOnClientRender()
 					local depth = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
 					if(depth < 60) then
 						if(getPedMoveState(thePlayer) ~= "crouch" and getPedMoveState(thePlayer) ~= "crawl") then
-							local fh = dxGetFontHeight(NewScale*1.8, "default-bold")/(60/(60-depth))
+							local fh = dxGetFontHeight(NewScale*1.8, "clear")/(60/(60-depth))
 							local sx,sy = getScreenFromWorldPosition(x,y,z+0.30)
 							if(sx and sy) then
 								if(PlayersMessage[thePlayer]) then
 									x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
-									create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "default-bold")
+									create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "clear")
 								end
 								
 								x, y, z = getWorldFromScreenPosition(sx, sy, depth)
-								create3dtext(text["nickname"], x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "default-bold")
+								create3dtext(text["nickname"].."("..getElementData(thePlayer, "id")..")", x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "clear")
 								
 								if(PlayersAction[thePlayer]) then
 									x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
-									create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "default-bold")
+									create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "clear")
 								end
 							end
 						end
@@ -7867,6 +7826,7 @@ function MemText(text, left, top, color, scale, font, border, incline, centerX, 
 
 			dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,true)
 
+			
 			dxSetBlendMode("blend")
 			dxSetRenderTarget()
 			
@@ -7955,7 +7915,6 @@ function onWasted(killer, weapon, bodypart)
 			ClientVehicleExit(localPlayer, getPedOccupiedVehicleSeat(localPlayer))
 		end
 		
-	
 	
 		if(getElementData(localPlayer, "fishpos")) then
 			triggerServerEvent("StopFish", localPlayer, localPlayer)
@@ -8548,38 +8507,6 @@ function PlayerActionEvent(message,thePlayer)
 end
 addEvent("PlayerActionEvent", true)
 addEventHandler("PlayerActionEvent", localPlayer, PlayerActionEvent)
-
-
-
-
-function breakMove()
-	if(MovePlayerTo[localPlayer]) then
-		MovePlayerTo[localPlayer] = nil
-		setPedControlState(localPlayer, "forwards", false)
-		PData['automove'] = nil
-	end
-end
-
-
-
-function autoMove()
-	if(PData['gps']) then
-		PData['automove'] = true
-		
-		local arr = fromJSON(getElementData(PData['gps'][#PData['gps']], "coord"))
-		
-		MovePlayerTo[localPlayer] = {arr[1],arr[2],arr[3],0,"silent"}
-	else
-		breakMove()
-	end
-end
-
-
-
-
-
-
-
 
 
 
@@ -9922,6 +9849,9 @@ function StreamIn(restream)
 			ObjectInStream[source]["collision"] = createColSphere(x,y,z+1, 1)
 			attachElements(ObjectInStream[source]["collision"], source)
 			setElementAttachedOffsets(ObjectInStream[source]["collision"], 0,0,1)
+		elseif(getElementModel(source) == 2887) then
+			ObjectInStream[source] = {}
+			ObjectInStream[source]["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
 		elseif(getElementData(source, "gates")) then
 			local gates = fromJSON(getElementData(source, "gates"))
 			local x,y,z = getElementPosition(source)
@@ -9966,7 +9896,7 @@ function StreamIn(restream)
 				local px,py,pz = getElementPosition(source)
 				local rz = tonumber(getElementData(source, "dialogrz"))
 				local x,y,z = getPointInFrontOfPoint(px,py,pz, rz-270, 2)
-				StreamData[source]["ActionMarker"] = createMarker(x,y,z-1,  "corona", 2, 255, 10, 10, 255)
+				StreamData[source]["ActionMarker"] = createMarker(x,y,z-1,  "corona", 2, 255, 10, 10, 0)
 				setElementInterior(StreamData[source]["ActionMarker"], getElementInterior(source))
 				setElementDimension(StreamData[source]["ActionMarker"], getElementDimension(source))
 				setElementData(StreamData[source]["ActionMarker"], "TriggerBot", getElementData(source, "TINF"))
@@ -10168,14 +10098,6 @@ addEventHandler("onClientElementStreamOut", getRootElement(), StreamOut)
 addEventHandler("onClientElementDestroy", getRootElement(), StreamOut)
 			
 
-
-
-function SprunkFunk()
-	local x,y,z = getPositionInFront(SprunkObject, -0.7)
-	local _,_,rz = getElementRotation(SprunkObject)
-	local objmodel = getElementModel(SprunkObject)
-	MovePlayerTo[localPlayer]={x,y,z,180-rz, "silent", "DrinkSprunk", {objmodel}}
-end
 
 
 
@@ -10461,11 +10383,6 @@ bindKey("tab", "up", CloseTAB)
 bindKey("h", "down", handsup)
 bindKey("p", "down", park)
 bindKey('mouse2', 'down', setDoingDriveby)
-bindKey("w", "down", breakMove)
-bindKey("a", "down", breakMove)
-bindKey("s", "down", breakMove)
-bindKey("d", "down", breakMove)
-bindKey("p", "down", autoMove)
 bindKey("F1", "down", ShowInfoKey)
 bindKey("F10", "down", resourcemap)
 bindKey("F11", "down", openmap)

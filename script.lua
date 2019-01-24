@@ -125,6 +125,85 @@ end
 
 
 
+
+local vending = {
+	{955, 0, -862.82, 1536.60, 21.98, 180},
+	{956, 0, 2271.72, -76.46, 25.96, 0},
+	{955, 0, 1277.83, 372.51, 18.95, 64},
+	{956, 0, 662.42, -552.16, 15.71, 180},
+	{955, 0, 201.01, -107.61, 0.89, 270},
+	{955, 0, -253.73, 2597.95, 62.24, 90},
+	{956, 0, -253.73, 2599.75, 62.24, 90},
+	{956, 0, -76.03, 1227.99, 19.12, 90},
+	{955, 0, -14.70, 1175.36, 18.95, 180},
+	{1977, 7, 316.87, -140.35, 998.58, 270},
+	{956, 0, -1455.11, 2591.665, 55.23, 180},
+	{955, 0, 2352.18, -1357.15, 23.77, 90},
+	{955, 0, 2325.97, -1645.14, 14.21, 0},
+	{956, 0, 2139.52, -1161.48, 23.35, 87},
+	{956, 0, 2153.23, -1016.14, 62.23, 127},
+	{955, 0, 1928.74, -1772.44, 12.94, 90},
+	{1776, 1, 2222.36, 1602.64, 1000.06, 90},
+	{1775, 1, 2222.20, 1606.77, 1000.05, 90},
+	{1775, 1, 2155.90, 1606.77, 1000.05, 90},
+	{1775, 1, 2209.90, 1607.19, 1000.05, 270},
+	{1776, 1, 2155.84, 1607.87, 1000.06, 90},
+	{1776, 1, 2202.45, 1617, 1000.06, 180},
+	{1776, 1, 2209.24, 1621.21, 1000.06, 0},
+	{1776, 3, 330.67, 178.50, 1020.07, 0},
+	{1776, 3, 331.92, 178.50, 1020.07, 0},
+	{1776, 3, 350.91, 206.08, 1008.47, 90},
+	{1776, 3, 361.56, 158.61, 1008.47, 180},
+	{1776, 3, 371.59, 178.45, 1020.07, 0},
+	{1776, 3, 374.89, 188.97, 1008.47, 0},
+	{1775, 2, 2576.70, -1284.43, 1061.09, 270},
+	{1775, 15, 2225.20, -1153.42, 1025.90, 270},
+	{955, 0, 1154.72, -1460.89, 15.15, 270},
+	{956, 0, 2480.85, -1959.27, 12.96, 180},
+	{955, 0, 2060.11, -1897.65, 12.92, 0},
+	{955, 0, 1729.78, -1943.05, 12.94, 0},
+	{956, 0, 1634.10, -2237.53, 12.89, 0},
+	{955, 0, 1789.21, -1369.26, 15.16, 270},
+	{956, 0, -2229.18, 286.41, 34.70, 180},
+	{955, 0, -1980.79, 142.66, 27.07, 270},
+	{955, 0, -2118.96, -423.64, 34.72, 255},
+	{955, 0, -2118.61, -422.41, 34.72, 255},
+	{955, 0, -2097.27, -398.33, 34.72, 180},
+	{955, 0, -2092.08, -490.05, 34.72, 0},
+	{955, 0, -2063.27, -490.05, 34.72, 0},
+	{955, 0, -2005.64, -490.05, 34.72, 0},
+	{955, 0, -2034.46, -490.05, 34.72, 0},
+	{955, 0, -2068.56, -398.33, 34.72, 180},
+	{955, 0, -2039.85, -398.33, 34.72, 180},
+	{955, 0, -2011.14, -398.33, 34.72, 180},
+	{955, 0, -1350.11, 492.28, 10.58, 90},
+	{956, 0, -1350.11, 493.85, 10.58, 90},
+	{955, 0, 2319.99, 2532.85, 10.21, 0},
+	{956, 0, 2845.72, 1295.04, 10.78, 0},
+	{955, 0, 2503.14, 1243.70, 10.21, 180},
+	{956, 0, 2647.69, 1129.66, 10.21, 0},
+	{1209, 0, -2420.21, 984.57, 44.29, 90},
+	{1302, 0, -2420.17, 985.94, 44.29, 90},
+	{955, 0, 2085.77, 2071.35, 10.45,90},
+	{956, 0, 1398.84, 2222.60, 10.42, 180},
+	{956, 0, 1659.46, 1722.85, 10.21, 0},
+	{955, 0, 1520.14, 1055.26, 10, 270},
+	{1775, 6, -19.03, -57.83, 1003.63, 180},
+	{1776, 6, -36.14, -57.87, 1003.63, 180}
+}
+
+
+function CreateVending(model, x,y,z,rz,i,d)
+	local col = createColCuboid(x-1,y-1,z-1, 2, 2, 3)
+	setElementInterior(col, i)
+	setElementDimension(col, d)
+	setElementData(col, "vending", model)
+end
+
+for key,theVend in pairs(vending) do
+	CreateVending(theVend[1], theVend[3], theVend[4], theVend[5], theVend[6], 0,0)
+end
+
 -- Дата основания, название, торговля, уровень
 local BizInfo = {
 	["SANFI"] = {1339, "San Fierro", {{"Пропан", "Trade"}, {"Алкоголь", "Trade"}, {"Зерно", "Trade"}, {"Мясо", "Trade"}, {"Бензин", "Trade"}}, 0.45},
@@ -4448,6 +4527,19 @@ setElementData(hg, "gates", toJSON({328, -1183.1, 79.3, 0,0,0}))
 
 
 
+local StreetGates = createObject(975, 777.5, -1385.1, 14.4, 0,0,180)
+setElementData(StreetGates, "gates", toJSON({770.5, -1385.1, 14.4, 0,0,0}))
+setElementData(StreetGates, "team",  toJSON({"Мирные жители"}))
+
+
+
+local StreetGates = createObject(975, 777.5, -1330.2, 14.2, 0,0,0)
+setElementData(StreetGates, "gates", toJSON({770.5, -1330.2, 14.2, 0,0,0}))
+setElementData(StreetGates, "team",  toJSON({"Мирные жители"}))
+
+
+
+
 
 
 
@@ -4980,7 +5072,8 @@ function tp(thePlayer, command, h)
 
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
-		local x,y,z,i,d  = 213.6, 1822.5, 6.4, 0, 0 -- 8152, -9143, 6.3
+
+		local x,y,z,i,d  = 767.6, 2007.6, 6.1, 0, 0 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -4998,6 +5091,8 @@ function StopAnimation(thePlayer, key)
 		setPedAnimation(thePlayer, nil,nil)
 	end
 end
+
+
 
 local ReplaceVehicleAnimation = {
 	["smoking"] = {
@@ -5411,6 +5506,38 @@ addEvent("PetrolFuelColEnter", true)
 addEventHandler("PetrolFuelColEnter", root, PetrolFuelColEnter)
 
 
+function ThreeColEnter(thePlayer, Colshape)
+	PData[thePlayer]["ThreeCol"] = Colshape
+	local Node = xmlFindChild(ThreesNode, getElementData(Colshape, "Three"), 0)
+	local t = tonumber(xmlNodeGetAttribute(Node, "t"))
+	local name = tonumber(xmlNodeGetAttribute(Node, "model"))
+	if(t > 0) then
+		triggerClientEvent(thePlayer, "ChangeInfo", thePlayer, ThreesNames[name].." созреет через #CCCCCC"..math.round(t/60, 0)+(1).." мин.\nНажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы уничтожить", 3000)
+	else
+		triggerClientEvent(thePlayer, "ChangeInfo", thePlayer, ThreesNames[name].." созрела\nНажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы собрать", 3000)
+	end
+end
+addEvent("ThreeColEnter", true)
+addEventHandler("ThreeColEnter", root, ThreeColEnter)
+
+
+
+function VendingColEnter(thePlayer, Colshape)
+	PData[thePlayer]["VendingCol"] = Colshape
+end
+addEvent("VendingColEnter", true)
+addEventHandler("VendingColEnter", root, VendingColEnter)
+
+
+
+function vending(thePlayer)
+	if(PData[thePlayer]["VendingCol"]) then
+		if(isElementWithinColShape(thePlayer, PData[thePlayer]["VendingCol"])) then
+			DrinkSprunk(thePlayer, getElementData(PData[thePlayer]["VendingCol"], "vending"))
+		end
+	end
+end
+
 
 
 function laltEnteredPickup(thePlayer)
@@ -5442,7 +5569,6 @@ function laltEnteredPickup(thePlayer)
 					end
 				end
 			end
-
 
 			if(PetrolFuelMarker[thePlayer]) then
 				local xd,yd,zd = getElementPosition(PetrolFuelMarker[thePlayer])
@@ -5484,6 +5610,13 @@ function laltEnteredPickup(thePlayer)
 			end
 		end
 	else
+		
+		if(PData[thePlayer]["ThreeCol"]) then
+			if(isElementWithinColShape(thePlayer, PData[thePlayer]["ThreeCol"])) then
+				HarvestThree(thePlayer, PData[thePlayer]["ThreeCol"])
+			end
+		end
+
 		local target = getPedTarget(thePlayer)
 		if(target) then
 			if(getElementType(target) == "vehicle") then
@@ -5517,8 +5650,6 @@ function laltEnteredPickup(thePlayer)
 						data = fromJSON(getElementData(pic, "funcdata"))
 					end
 					triggerEvent(getElementData(pic, "funcname"), thePlayer, unpack(data))
-				elseif(getElementData(pic, "Three")) then
-					HarvestThree(thePlayer, pic)
 				elseif(getElementData(pic, "house")) then
 					if(getElementData(pic, "locked")) then
 						if(getElementData(pic, "locked") == 1) then
@@ -6099,13 +6230,8 @@ SData["Donuts"] = 1
 function CreateDonuts(x,y,z, types)
 	CreateEnter(x,y,z, 0, 0, 0, false, 377, -193.3, 1000.6, 0, 17, SData["Donuts"], types)
 
-	local v1 = createObject(1775, 373.83, -178.15, 1000.73, 0, 0, 0,false)
-	local v2 = createObject(1776, 379.03, -178.88, 1000.73, 0, 0, 270,false)
-	setElementInterior(v1, 17)
-	setElementInterior(v2, 17)
-	setElementDimension(v1, SData["Donuts"])
-	setElementDimension(v2, SData["Donuts"])
-
+	CreateVending(1775, 373.83, -178.15, 1000.73, 0, 17, SData["Donuts"])
+	CreateVending(1776, 379.03, -178.88, 1000.73, 270, 17, SData["Donuts"])
 
 	SData["Donuts"]=SData["Donuts"]+1
 end
@@ -6322,6 +6448,7 @@ CreateChilliDogs(-2384.8, -584.4, 132.1, 270, 264) -- San Fierro (come on Kids)
 CreateChilliDogs(-2151, -436.2, 35.3,41, 168) -- San Fierro Roodle Exchange
 CreateChilliDogs(-2692.4, 385.2, 4.4,225, 168) -- San Fierro
 CreateChilliDogs(-2516.5, -16.4, 25.6,304, 168) -- San Fierro Roodle Exchange
+CreateChilliDogs(2537.2, 2291.1, 10.8,90, 168) -- Las Venturas Roodle Exchange
 CreateChilliDogs(1589.7, -1286.2, 17.5, 180, 168) -- Los Santos
 CreateChilliDogs(388.9, -2070.7, 7.8,180, 168) -- Los Santos
 CreateChilliDogs(-2201, -2386.6, 30.6,250, 168) -- AngelPine
@@ -6583,12 +6710,13 @@ function CreateThree(model, x,y,z, name, quality)
 	if(not quality) then quality = 0 end
 	if(not Threes[name]) then
 		if(model == 823) then
-			Threes[name] = createObject(model,x,y,z+0.7)
+			Threes[name] = createObject(model,x,y,z+0.7, 0,0,0, true)
 			setObjectScale(Threes[name], 0.25)
 		else
-			Threes[name] = createObject(model,x,y,z)
+			Threes[name] = createObject(model,x,y,z, 0,0,0, false)
 		end
-		ThreesPickup[name] = createPickup(x,y,z+0.5, 3, 1239, 0)
+		ThreesPickup[name] = createColCuboid(x-1,y-1,z+0.5, 2.0, 2.0, 2.0)
+		
 		setElementData(ThreesPickup[name], "Three", name)
 		setElementData(ThreesPickup[name], "quality", quality)
 		return true
@@ -6692,9 +6820,16 @@ addEventHandler("CreateThreePlayer", root, CreateThreePlayer)
 
 
 function RemoveThree(name)
+	for thePlayer, dat in pairs(PData) do
+		if(dat["ThreeCol"]) then 
+			if(getElementData(dat["ThreeCol"], "Three") == name) then
+				dat["ThreeCol"] = nil
+			end
+		end
+	end
 	destroyElement(ThreesPickup[name])
 	destroyElement(Threes[name])
-	Threes[name]=nil
+	Threes[name] = nil
 
 	local Node = xmlFindChild(ThreesNode, name, 0)
 	xmlDestroyNode(Node)
@@ -6743,7 +6878,6 @@ function HarvestThree(thePlayer, pic)
 
 				RemoveThree(getElementData(pic, "Three"))
 			end
-			PlayersEnteredPickup[thePlayer] = false
 		end, 1000, 1)
 	end
 end
@@ -7793,7 +7927,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 				end
 			end
 		end
-	end, 10000, 1, source)
+	end, 20000, 1, source)
 end
 addEvent("OnPedWasted", true)
 addEventHandler("onPedWasted", root, WastedPed)
@@ -9269,7 +9403,6 @@ function PedDamage(ped, weapon, bodypart, loss)
 	local theVehicle = getPedOccupiedVehicle(ped)
 	local Team = getElementData(ped, "team")
 
-
 	if(source and weapon) then
 		if(getElementType(source) == "player") then
 			if(getPedOccupiedVehicle(ped) and Team == "Полиция") then 
@@ -10403,12 +10536,10 @@ function el(thePlayer, command, h)
 					xmlNodeSetAttribute(node, "dolg", nil)
 					setElementData(getElementByID(xmlNodeGetName(node)), "price", GetHousePrice(node))
 				end
-				out = "Ты заплатил $"..out.." за электричество"
-			else
-				out = "У тебя нет квитанций!"
 			end
 		end
 	end
+	out = "Ты заплатил "..COLOR["DOLLAR"]["HEX"].."$"..out.." #FFFFFFза электричество"
 	ToolTip(thePlayer, out)
 end
 addCommandHandler("el", el)
@@ -10543,7 +10674,7 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 			end
 
 			if(isPlayerBolezn(thePlayer, "Порванный анус")) then
-				triggerClientEvent(thePlayer, "bloodfoot", thePlayer, true)
+				BloodFoot(thePlayer, true)
 				setElementHealth(thePlayer, getElementHealth(thePlayer)-3)
 				Pain(thePlayer)
 			end
@@ -10716,16 +10847,6 @@ function moneyPickupHit(thePlayer)
 				triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
 			end
 		end
-	elseif(getElementData(source, "Three")) then
-		local Node = xmlFindChild(ThreesNode, getElementData(source, "Three"), 0)
-		local t = tonumber(xmlNodeGetAttribute(Node, "t"))
-		local name = tonumber(xmlNodeGetAttribute(Node, "model"))
-		if(t > 0) then
-			triggerClientEvent(thePlayer, "ChangeInfo", thePlayer, ThreesNames[name].." созреет через #CCCCCC"..math.round(t/60, 0)+(1).." мин.\nНажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы уничтожить", 3000)
-		else
-			triggerClientEvent(thePlayer, "ChangeInfo", thePlayer, ThreesNames[name].." созрела\nНажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы собрать", 3000)
-		end
-		PlayersEnteredPickup[thePlayer] = source
 	elseif(getElementData(source, "type") == "enter") then
 		PlayersEnteredPickup[thePlayer] = source
 		local text = Text(thePlayer, "Нажми {key} чтобы войти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}})
@@ -10750,9 +10871,9 @@ addEventHandler("onPickupUse", getRootElement(), moneyPickupHit)
 
 
 function Udobrenya(thePlayer, x,y) 
-	if(PlayersEnteredPickup[thePlayer]) then
-		if(getElementData(PlayersEnteredPickup[thePlayer], "Three")) then
-			local Node = xmlFindChild(ThreesNode, getElementData(PlayersEnteredPickup[thePlayer], "Three"), 0)
+	if(PData[thePlayer]["ThreeCol"]) then
+		if(isElementWithinColShape(thePlayer, PData[thePlayer]["ThreeCol"])) then
+			local Node = xmlFindChild(ThreesNode, getElementData(PData[thePlayer]["ThreeCol"], "Three"), 0)
 			local t = tonumber(xmlNodeGetAttribute(Node, "t"))
 			if(t > 0 ) then
 				local arr = fromJSON(GetDatabaseAccount(thePlayer, "inv"))
@@ -10784,6 +10905,52 @@ addEventHandler("onPickupHit", getRootElement(), PickupHit)
 
 
 
+local SearchLights = {
+	[1] = {
+		["A51_SPOTBULB"] = createObject(2887, 166.003, 1849.937, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 166.003, 1849.937, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 166.003, 1849.937, 36.246), 
+	}, 
+	[2] = {
+		["A51_SPOTBULB"] = createObject(2887, 262.145, 1807.62, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 262.145, 1807.62, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 262.145, 1807.62, 36.246), 
+	},
+	[3] = {
+		["A51_SPOTBULB"] = createObject(2887, 267.116, 1895.241, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 267.116, 1895.241, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 267.116, 1895.241, 36.246), 
+	}, 
+	[4] = {
+		["A51_SPOTBULB"] = createObject(2887, 233.486, 1934.789, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 233.486, 1934.789, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 233.486, 1934.789, 36.246), 
+	}, 
+	[5] = {
+		["A51_SPOTBULB"] = createObject(2887, 161.962, 1933.043, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 161.962, 1933.043, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 161.962, 1933.043, 36.246), 
+	}, 
+	[6] = {
+		["A51_SPOTBULB"] = createObject(2887, 103.946, 1901.047, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 103.946, 1901.047, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 103.946, 1901.047, 36.246), 
+	}, 
+	[7] = {
+		["A51_SPOTBULB"] = createObject(2887, 113.439, 1814.405, 36.246),
+		["A51_SPOTHOUSING"] = createObject(2888, 113.439, 1814.405, 36.246), 
+		["A51_SPOTBASE"] = createObject(2889, 113.439, 1814.405, 36.246), 
+	}
+}
+
+
+for _, v in pairs(SearchLights) do
+	local rx,ry,rz = getElementRotation(v["A51_SPOTBULB"])
+	setElementRotation(v["A51_SPOTBULB"], 330,ry,math.random(0,360))
+	attachElements(v["A51_SPOTHOUSING"], v["A51_SPOTBULB"])
+end
+
+
 
 
 -- [timestamp] = command
@@ -10794,6 +10961,11 @@ local Events = {
 
 
 function worldtime()
+	for _, v in pairs(SearchLights) do
+		local x,y,z = getElementPosition(v["A51_SPOTBULB"])
+		moveObject(v["A51_SPOTBULB"], 1000,  x,y,z, 0,0,math.random(-20,20))
+	end
+
 	for thePed,_ in pairs(SData["DriverBot"]) do
 		if(isElement(thePed)) then
 			if(not isPedDead(thePed)) then
@@ -11423,13 +11595,10 @@ function CreateDynamicBot(thePed, node, id)
 		setElementData(thePed, "CurNode", toJSON({node, id}), false)
 		setElementData(thePed, "NextNode", toJSON({nextnode2, nextid2}), false)
 		--createBlipAttachedTo(thePed,0,2,255,0,0, 255,0, 99999)
-
 	else
 		return false
 	end
 end
-
-
 
 
 function InitDynamicBot()
@@ -11635,19 +11804,9 @@ function CreateClub(x,y,z)
 	end
 
 
-	local v1 = createObject(1775, 495.97, -24.32, 1000.73, 0, 0, 180, false)
-	setElementInterior(v1, 17)
-	setElementDimension(v1, SData["ClubIds"])
-
-	local v2 = createObject(1776, 500.56, -1.37, 1000.73, 0, 0, 0, false)
-	setElementInterior(v2, 17)
-	setElementDimension(v2, SData["ClubIds"])
-
-	local v3 = createObject(1775, 501.82, -1.44, 1000.73, 0, 0, 0, false)
-	setElementInterior(v3, 17)
-	setElementDimension(v3, SData["ClubIds"])
-
-
+	CreateVending(1775, 495.97, -24.32, 1000.73, 180, 17, SData["ClubIds"])
+	CreateVending(1776, 500.56, -1.37, 1000.73, 0, 17, SData["ClubIds"])
+	CreateVending(1775, 501.82, -1.44, 1000.73, 0, 17, SData["ClubIds"])
 
 	CreateDialogBot(188, 501.7, -20.3, 1000.7, 90, 17, SData["ClubIds"], "Liquor Shop", "Бармен")
 
@@ -11998,12 +12157,9 @@ function CreateShop(x,y,z, interior)
 		CreateRandomBot(-28.5, -50, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -27.4, -58.2, 1003.5, 90, interior, SData["Shop"], "24/7", true)
 
-		local v1 = createObject(1775, -19.03, -57.83, 1003.63, 0, 0, 180,false)
-		local v2 = createObject(1776, -36.14, -57.87, 1003.63, 0, 0, 180,false)
-		setElementInterior(v1, interior)
-		setElementInterior(v2, interior)
-		setElementDimension(v1, SData["Shop"])
-		setElementDimension(v2, SData["Shop"])
+		CreateVending(1775, -19.03, -57.83, 1003.63, 180,interior,SData["Shop"])
+		CreateVending(1776, -36.14, -57.87, 1003.63, 180,interior,SData["Shop"])
+
 
 		CreateDialogBot(147, -23, -57.3, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 4) then
@@ -12017,27 +12173,17 @@ function CreateShop(x,y,z, interior)
 		CreateRandomBot(-29, -124.1, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -25.9, -141.3, 1003.55, 90, interior, SData["Shop"], "24/7", true)
 
-		local v1 = createObject(1775, -15.10, -140.22, 1003.63, 0, 0, 180, false)
-		local v2 = createObject(1776, -16.53, -140.29, 1003.63, 0, 0, 180, false)
-		local v3 = createObject(1775, -35.72, -140.22, 1003.63, 0, 0, 180, false)
-		setElementInterior(v1, interior)
-		setElementInterior(v2, interior)
-		setElementInterior(v3, interior)
-		setElementDimension(v1, SData["Shop"])
-		setElementDimension(v2, SData["Shop"])
-		setElementDimension(v3, SData["Shop"])
+		CreateVending(1775, -15.10, -140.22, 1003.63, 180, interior, SData["Shop"])
+		CreateVending(1776, -16.53, -140.29, 1003.63, 180, interior, SData["Shop"])
+		CreateVending(1775, -35.72, -140.22, 1003.63, 180, interior, SData["Shop"])
 		CreateDialogBot(147, -21, -140.3, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 18) then
 		CreateRandomBot(-32.5, -77, 1003.5,180,interior,SData["Shop"],"Unknown",nil)
 		CreateRandomBot(-24.5, -89.7, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -30.95, -91.55, 1003.55, 90, interior, SData["Shop"], "24/7", true)
 
-		local v1 = createObject(1775, -16.11, -91.64, 1003.63, 0, 0, 180, false)
-		local v2 = createObject(1776, -17.54, -91.71, 1003.63, 0, 0, 180, false)
-		setElementInterior(v1, interior)
-		setElementInterior(v2, interior)
-		setElementDimension(v1, SData["Shop"])
-		setElementDimension(v2, SData["Shop"])
+		CreateVending(1775, -16.11, -91.64, 1003.63, 180, interior, SData["Shop"])
+		CreateVending(1776, -17.54, -91.71, 1003.63, 180, interior, SData["Shop"])
 
 		CreateDialogBot(147, -27, -91.6, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 10) then
@@ -12052,12 +12198,8 @@ function CreateShop(x,y,z, interior)
 		CreateRandomBot(-33.6, -171.7, 1003.5,180,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -25.9, -187.87, 1003.55, 0, interior, SData["Shop"], "24/7", true)
 
-		local v1 = createObject(1775, -32.44, -186.69, 1003.63, 0, 0, 180, false)
-		local v2 = createObject(1776, -33.87, -186.76, 1003.63, 0, 0, 180, false)
-		setElementInterior(v1, interior)
-		setElementInterior(v2, interior)
-		setElementDimension(v1, SData["Shop"])
-		setElementDimension(v2, SData["Shop"])
+		CreateVending(1775, -32.44, -186.69, 1003.63, 180, interior, SData["Shop"])
+		CreateVending(1776, -33.87, -186.76, 1003.63, 180, interior, SData["Shop"])
 
 		CreateDialogBot(147, -28.3, -186.8, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	end
@@ -12995,7 +13137,7 @@ function restartMode(thePlayer)
 end
 
 
-function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)		
+function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	local zone = GetZoneName(x,y,z, false, getElementData(thePlayer, "City"))
 	if(savetype == "PedPath") then
 		local angle = findRotation(x,y, x,ry)
@@ -13291,7 +13433,7 @@ function AddDatabaseAccount(thePlayer, password)
 	xmlNodeSetAttribute(NewNode, "Collections", Collections)
 	xmlNodeSetAttribute(NewNode, "password", md5(password))
 	xmlNodeSetAttribute(NewNode, "skill", toJSON({[24] = 569}))
-	xmlNodeSetAttribute(NewNode, "wardrobe", toJSON({[252] = 999, [145] = 999}))
+	xmlNodeSetAttribute(NewNode, "wardrobe", toJSON({[252] = 999, [145] = 999, [0] = 999}))
 	xmlNodeSetAttribute(NewNode, "bolezni", toJSON({}))
 	xmlNodeSetAttribute(NewNode, "skin", 213)
 	xmlNodeSetAttribute(NewNode, "about", toJSON({["Birthday"] = ServerDate.timestamp}))
@@ -13553,20 +13695,18 @@ addEvent("PrisonGavno", true)
 addEventHandler("PrisonGavno", root, PrisonGavno)
 
 
-function PrisonPiss()
-	triggerClientEvent(source, "PlaySFXSoundEvent", source, 8)
-	StartAnimation(source, "PAULNMAC", "Piss_out",false,false,false,false)
-end
-addEvent("PrisonPiss", true)
-addEventHandler("PrisonPiss", root, PrisonPiss)
-
-
 
 
 function piss(thePlayer, command, h)
 	triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 8)
 	StartAnimation(thePlayer, "PAULNMAC", "Piss_out",false,false,false,false)
+	
+	for key,thePlayers in pairs(getElementsByType "player") do
+		triggerClientEvent(thePlayers, "PlayerPiss", thePlayers, thePlayer)
+	end
 end
+addEvent("PrisonPiss", true)
+addEventHandler("PrisonPiss", root, piss)
 addCommandHandler("piss", piss)
 
 
@@ -13733,7 +13873,7 @@ function MCHSEventHealth(thePlayer, thePed)
 				outputChatBox("Ты вылечил "..getPlayerName(thePed).." от СПИДа",thePlayer ,255,255,255,true)
 			elseif(isPlayerBolezn(thePed, "Порванный анус")) then
 				addPlayerBolezn(thePed, "Порванный анус", -1)
-				triggerClientEvent(thePed, "bloodfoot", thePed, false)
+				BloodFoot(thePed, false)
 				outputChatBox("Ты зашил анус "..getPlayerName(thePed),thePlayer ,255,255,255,true)
 			elseif(isPlayerBolezn(thePed, "Дизентерия")) then
 				addPlayerBolezn(thePed, "Дизентерия", -1)
@@ -14215,6 +14355,7 @@ function BindAllKey(thePlayer)
 		bindKey(thePlayer, "previous_weapon", "down", nextweapon)
 		bindKey(thePlayer, "F4", "down", F4_Loding)
 		bindKey(thePlayer, "num_5", "down", restartMode)
+		bindKey(thePlayer, "f", "down", vending)
 	end
 end
 
@@ -14234,6 +14375,7 @@ function UnBindAllKey(thePlayer)
 		unbindKey(thePlayer, "previous_weapon", "down", nextweapon)
 		unbindKey(thePlayer, "F4", "down", F4_Loding)
 		unbindKey(thePlayer,"num_5", "down", restartMode)
+		unbindKey(thePlayer, "f", "down", vending)
 		UnBindAllVehicleKey(thePlayer)
 	end
 end
@@ -15208,7 +15350,7 @@ function iznas2(thePlayer, thePed)
 								addPlayerBolezn(thePed, "СПИД", 1)
 								addPlayerBolezn(thePlayer, "СПИД", 1)
 							elseif(randSpid == 2) then
-								triggerClientEvent(thePed, "bloodfoot", thePed, true)
+								BloodFoot(thePed, true)
 								addPlayerBolezn(thePed, "Порванный анус", 1)
 								outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
 							end
@@ -15223,6 +15365,14 @@ function iznas2(thePlayer, thePed)
 end
 addEvent("iznas2", true)
 addEventHandler("iznas2", getRootElement(), iznas2)
+
+
+
+function BloodFoot(thePlayer, state)
+	for key,thePlayers in pairs(getElementsByType "player") do
+		triggerClientEvent(thePlayers, "bloodfoot", thePlayers, thePlayer, state)
+	end
+end
 
 
 function iznas3(thePlayer, thePed)
@@ -15249,7 +15399,7 @@ function iznas3(thePlayer, thePed)
 						BindAllKey(thePed)
 						Koryachka(thePed)
 						setElementCollisionsEnabled(thePed, true)
-						triggerClientEvent(thePed, "bloodfoot", thePed, true)
+						BloodFoot(thePed, true)
 						addPlayerBolezn(thePed, "Порванный анус", 1)
 						outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
 					end, 5800, 1)
@@ -15297,7 +15447,7 @@ function iznas(thePlayer, thePed)
 								addPlayerBolezn(thePed, "СПИД", 1)
 								addPlayerBolezn(thePlayer, "СПИД", 1)
 							elseif(randSpid == 2) then
-								triggerClientEvent(thePed, "bloodfoot", thePed, true)
+								BloodFoot(thePed, true)
 								addPlayerBolezn(thePed, "Порванный анус", 1)
 								outputChatBox("Ты порвал анус "..getPlayerName(thePed), thePlayer, 255,255,255,true)
 							end
@@ -17460,6 +17610,12 @@ addEventHandler("SetHomeType", root, SetHomeType)
 
 
 
+
+
+
+
+
+
 function edithome(thePlayer, command, h)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
 		local HouseNodes = xmlNodeGetChildren(HouseNode)
@@ -17716,14 +17872,6 @@ function GetZoneName(x,y,z, citiesonly, City)
 	end
 	return getZoneName(x,y,z, citiesonly)
 end
-
-
-
-
-
-
-
-
 
 
 

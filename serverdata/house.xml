@@ -796,18 +796,25 @@
     <h794 x="2039.6" y="2766.5" z="10.8" price="750000" locked="1" type="Дом 2 этаж (богатый)" int="Burglary House 15"></h794>
     <h795 x="2049.7" y="2764.3" z="10.8" price="750000" locked="1" type="Дом 2 этаж (богатый)" int="Modern safe house"></h795>
     <h796 x="1929.5" y="2774.3" z="10.8" price="890000" locked="1" type="Дом 2 этаж (богатый)" int="Safe House 18"></h796>
-	<h797 x="1695.5" y="-2125.8" z="13.8" price="170000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h797>
-    <h798 x="1673.7" y="-2122.4" z="14.1" price="155000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h798>
-    <h799 x="1667.5" y="-2106.9" z="14.1" price="165000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h799>
-    <h800 x="1684.8" y="-2098.2" z="13.8" price="200000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18" Garage="[ [ [ 1699.1, -2089.2, 13.5, 181.6, 1 ] ] ]"></h800>
-    <h801 x="1711.6" y="-2101.2" z="14" price="180000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h801>
-    <h802 x="1734" y="-2098" z="14" price="160000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h802>
-    <h803 x="1762.4" y="-2102" z="13.9" price="165000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h803>
-    <h804 x="1781.4" y="-2101.3" z="14.1" price="155000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h804>
-    <h805 x="1801.9" y="-2098.9" z="14" price="165000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 1"></h805>
-    <h806 x="1804.2" y="-2124.9" z="13.9" price="220000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h806>
-    <h807 x="1782.2" y="-2126.5" z="14.1" price="190000" locked="1" type="Дом 1 этаж (бедный)" int="Unknown safe house"></h807>
-    <h808 x="1761.2" y="-2125.5" z="14.1" price="170000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h808>
-    <h809 x="1734.7" y="-2130.3" z="14" price="140000" locked="1" type="Дом 1 этаж (бедный)" int="The Crack Den"></h809>
-    <h810 x="1715.1" y="-2125.4" z="14.1" price="150000" locked="1" type="Дом 1 этаж (бедный)" int="Burglary House 18"></h810>
+    <h797 x="767.7" y="2007.6" z="6.1" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h797>
+    <h798 x="793.4" y="1991.8" z="5.8" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h798>
+    <h799 x="790.1" y="1973.9" z="5.7" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h799>
+    <h800 x="766.9" y="1989.8" z="5.4" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h800>
+    <h801 x="753.7" y="1973.3" z="5.7" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h801>
+    <h802 x="755.7" y="1958.8" z="5.5" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h802>
+    <h803 x="751" y="1959.6" z="5.5" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h803>
+    <h804 x="784.3" y="1954.3" z="5.7" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h804>
+    <h805 x="782.7" y="1937.2" z="5.6" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h805>
+    <h806 x="778" y="1937.6" z="5.6" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h806>
+    <h807 x="-20.7" y="1388.2" z="9.3" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h807>
+    <h808 x="-17" y="1391.2" z="9.3" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h808>
+    <h809 x="-29.4" y="1363.4" z="9.3" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h809>
+    <h810 x="-21.3" y="1348.1" z="9.2" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h810>
+    <h811 x="4.6" y="1344.4" z="9.3" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h811>
+    <h812 x="21.4" y="1344.1" z="9.3" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h812>
+    <h813 x="25.7" y="1346" z="9.3" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h813>
+    <h814 x="26.8" y="1361.9" z="9.2" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h814>
+    <h815 x="-1.3" y="1394.7" z="9.2" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h815>
+    <h816 x="9.2" y="1382.3" z="9.3" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h816>
+    <h817 x="4.8" y="1380.6" z="9.3" price="35000" locked="1" type="Трейлер" int="Angel Pine Trailer"></h817>
 </house>
