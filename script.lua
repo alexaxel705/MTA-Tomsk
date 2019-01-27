@@ -1305,6 +1305,13 @@ local SkinData = {
 	[312] = {0, Teams['Военные'], "Мужчина"}
 }
 
+local SkinList = {}
+for model, _ in pairs(SkinData) do
+	SkinList[#SkinList+1] = model
+end
+
+
+
 
 
 -- Звезды розыска
@@ -5154,6 +5161,21 @@ function StartAnimation(thePlayer, block, anim, times, loop, updatePosition, int
 		return false
 	end
 	setPedAnimation(thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame)
+	
+	
+	if(block == "FOOD" and anim == "EAT_Vomit_P") then
+		for key,thePlayers in pairs(getElementsByType "player") do
+			triggerClientEvent(thePlayers, "PlayerPuke", thePlayers, thePlayer)
+		end
+	elseif(block == "PAULNMAC" and anim == "Piss_out") then
+		for key,thePlayers in pairs(getElementsByType "player") do
+			triggerClientEvent(thePlayers, "PlayerPiss", thePlayers, thePlayer)
+		end
+	end
+	
+	
+	
+	
 	return true
 end
 addEvent("StartAnimation", true)
@@ -5499,7 +5521,6 @@ end
 
 
 function PetrolFuelColEnter(thePlayer, Colshape)
-	ToolTip(thePlayer, Text(thePlayer, "Нажми {key} чтобы заправиться", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
 	PData[thePlayer]["FuelCol"] = Colshape
 end
 addEvent("PetrolFuelColEnter", true)
@@ -5540,10 +5561,41 @@ end
 
 
 
+
+function GarageColEnter(thePlayer, Colshape)
+	PData[thePlayer]["GarageCol"] = Colshape
+end
+addEvent("GarageColEnter", true)
+addEventHandler("GarageColEnter", root, GarageColEnter)
+
+
+
+
+
+
 function laltEnteredPickup(thePlayer)
 	local theVehicle = getPedOccupiedVehicle(thePlayer)
 	local x,y,z = getElementPosition(thePlayer)
 	if(theVehicle) then
+		if(PData[thePlayer]["GarageCol"]) then
+			if(isElementWithinColShape(thePlayer, PData[thePlayer]["GarageCol"])) then
+				if(getElementData(PData[thePlayer]["GarageCol"], "type") == "GEnter") then
+					if(getElementData(PData[thePlayer]["GarageCol"], "locked")) then
+						if(getElementData(PData[thePlayer]["GarageCol"], "locked") == 1) then
+							HelpMessage(thePlayer, "Дверь закрыта!")
+							return false
+						end
+					end
+					local x,y,z = getElementPosition(theVehicle)
+					local rx,ry,rz = getElementRotation(theVehicle)
+					EnterGarage(thePlayer, getElementData(PData[thePlayer]["GarageCol"], "h"), getElementData(PData[thePlayer]["GarageCol"], "number"),x,y,z,rz)
+				elseif(getElementData(PData[thePlayer]["GarageCol"], "type") == "GExit") then
+					EnterGarage(thePlayer, getElementData(PData[thePlayer]["GarageCol"], "h"), getElementData(PData[thePlayer]["GarageCol"], "number"))
+				end
+			end
+		end
+		
+	
 		if(isTimer(FuelTimer[theVehicle])) then
 			killTimer(FuelTimer[theVehicle])
 			triggerEvent("onPlayerVehicleEnter", thePlayer, theVehicle, 0, 0, true)
@@ -5576,18 +5628,6 @@ function laltEnteredPickup(thePlayer)
 				if(getDistanceBetweenPoints3D(x, y, z, xd,yd,zd) < size) then
 					if(getElementData(PetrolFuelMarker[thePlayer], "type") == "siren") then
 						triggerEvent("VehicleUpgrade", thePlayer, 8, 35000)
-					elseif(getElementData(PetrolFuelMarker[thePlayer], "type") == "GEnter") then -- Переделать потом на клиентскую часть
-						if(getElementData(PetrolFuelMarker[thePlayer], "locked")) then
-							if(getElementData(PetrolFuelMarker[thePlayer], "locked") == 1) then
-								HelpMessage(thePlayer, "Дверь закрыта!")
-								return false
-							end
-						end
-						local x,y,z = getElementPosition(theVehicle)
-						local rx,ry,rz = getElementRotation(theVehicle)
-						EnterGarage(thePlayer, getElementData(PetrolFuelMarker[thePlayer], "h"), getElementData(PetrolFuelMarker[thePlayer], "number"),x,y,z,rz)
-					elseif(getElementData(PetrolFuelMarker[thePlayer], "type") == "GExit") then
-						EnterGarage(thePlayer, getElementData(PetrolFuelMarker[thePlayer], "h"), getElementData(PetrolFuelMarker[thePlayer], "number"))
 					elseif(getElementData(PetrolFuelMarker[thePlayer], "type") == "recyclels") then
 						local CarNodes = xmlNodeGetChildren(CarNode)
 						for i,node in ipairs(CarNodes) do
@@ -5611,12 +5651,22 @@ function laltEnteredPickup(thePlayer)
 		end
 	else
 		
+		
+		if(PData[thePlayer]["GarageCol"]) then
+			if(isElementWithinColShape(thePlayer, PData[thePlayer]["GarageCol"])) then
+				local pic = PData[thePlayer]["GarageCol"]
+				SetPlayerPosition(thePlayer, getElementData(pic, "x"), getElementData(pic, "y"), getElementData(pic, "z"), getElementData(pic, "i"), getElementData(pic, "d"), getElementData(pic, "rz"), true, getElementData(pic, "name"))
+			end
+		end
+		
+		
 		if(PData[thePlayer]["ThreeCol"]) then
 			if(isElementWithinColShape(thePlayer, PData[thePlayer]["ThreeCol"])) then
 				HarvestThree(thePlayer, PData[thePlayer]["ThreeCol"])
 			end
 		end
-
+		
+		
 		local target = getPedTarget(thePlayer)
 		if(target) then
 			if(getElementType(target) == "vehicle") then
@@ -6051,7 +6101,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 		setElementInterior(o, 2)
 		setElementDimension(o, d)
 		Garages[house][n] = {}
-		Garages[house][n]["enter"] = createMarker(x,y,z, "corona", 3, 255, 10, 10, 150)
+		Garages[house][n]["enter"] = createColCuboid(x-2.5,y-2.5,z-1.5, 5.0, 5.0, 3.0)
 		setElementData(Garages[house][n]["enter"], "type", "GEnter")
 		setElementData(Garages[house][n]["enter"], "x", 611, false)
 		setElementData(Garages[house][n]["enter"], "y", -72.3, false)
@@ -6064,7 +6114,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 		setElementData(Garages[house][n]["enter"], "h", house, false)
 		setElementData(Garages[house][n]["enter"], "number", n, false)
 
-		Garages[house][n]["exit"] = createMarker(610, -76.5, 997.5, "corona", 3, 255, 10, 10, 150)
+		Garages[house][n]["exit"] = createColCuboid(610-5, -76.5-5,997.5-1.5, 10.0, 10.0, 3.0)
 		setElementInterior(Garages[house][n]["exit"], 2)
 		setElementDimension(Garages[house][n]["exit"], d)
 		setElementData(Garages[house][n]["exit"], "type", "GExit")
@@ -6082,7 +6132,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 		setElementDimension(o, d)
 
 		Garages[house][n] = {}
-		Garages[house][n]["enter"] = createMarker(x,y,z, "corona", 5, 255, 10, 10, 150)
+		Garages[house][n]["enter"] = createColCuboid(x-2.5,y-2.5,z-1.5, 5.0, 5.0, 3.0)
 		setElementData(Garages[house][n]["enter"], "type", "GEnter")
 		setElementData(Garages[house][n]["enter"], "x", 610.7, false)
 		setElementData(Garages[house][n]["enter"], "y", -120.8, false)
@@ -6095,7 +6145,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 		setElementData(Garages[house][n]["enter"], "h", house, false)
 		setElementData(Garages[house][n]["enter"], "number", n, false)
 
-		Garages[house][n]["exit"] = createMarker(609.9, -126, 998, "corona", 5, 255, 10, 10, 150)
+		Garages[house][n]["exit"] = createColCuboid(609.9-5, -126-5,998-1.5, 10.0, 10.0, 3.0)
 		setElementInterior(Garages[house][n]["exit"], 3)
 		setElementDimension(Garages[house][n]["exit"], d)
 		setElementData(Garages[house][n]["exit"], "type", "GExit")
@@ -6113,7 +6163,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 		setElementDimension(o, d)
 
 		Garages[house][n] = {}
-		Garages[house][n]["enter"] = createMarker(x,y,z, "corona", 5, 255, 10, 10, 150)
+		Garages[house][n]["enter"] = createColCuboid(x-2.5,y-2.5,z-1.5, 5.0, 5.0, 3.0)
 		setElementData(Garages[house][n]["enter"], "type", "GEnter")
 		setElementData(Garages[house][n]["enter"], "x", 610.7, false)
 		setElementData(Garages[house][n]["enter"], "y", -120.8, false)
@@ -6126,7 +6176,7 @@ function CreateGarage(x,y,z,rz,locked,house,owner)
 		setElementData(Garages[house][n]["enter"], "h", house, false)
 		setElementData(Garages[house][n]["enter"], "number", n, false)
 
-		Garages[house][n]["exit"] = createMarker(302.4, 300.4, 999.1, "corona", 5, 255, 10, 10, 150)
+		Garages[house][n]["exit"] = createColCuboid(302.4-5, 300.4-5,999.1-1.5, 10.0, 10.0, 3.0)
 		setElementInterior(Garages[house][n]["exit"], 4)
 		setElementDimension(Garages[house][n]["exit"], d)
 		setElementData(Garages[house][n]["exit"], "type", "GExit")
@@ -7251,9 +7301,13 @@ function useinvweapon(thePlayer, slots)
 					else
 						SetControls(thePlayer, "ammo", {["fire"] = true, ['action'] = true, ["vehicle_fire"] = true, ["vehicle_secondary_fire"] = true})
 					end
-				else
-					SetControls(thePlayer, "ammo", {["fire"] = false, ['action'] = false, ["vehicle_fire"] = false, ["vehicle_secondary_fire"] = false})
 				end
+			end
+			
+			
+			if(getElementData(thePlayer, "FullClip")) then
+				giveWeapon(thePlayer, WM, 10000, true)
+				SetControls(thePlayer, "ammo", {["fire"] = false, ["action"] = false, ["vehicle_fire"] = false, ["vehicle_secondary_fire"] = false})
 			end
 		end
 	end
@@ -7881,7 +7935,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 					Respect(killer, "ugol", 3)
 					Respect(killer, "police", -3)
 					Respect(killer, "civilian", -3)
-					WantedLevel(killer, 2)
+					WantedLevel(killer, 1)
 				elseif(PTeam == "Уголовники" and KTeam == "Уголовники") then
 					Respect(killer, "ugol", 1)
 					SetDatabaseAccount(killer, "PrisonTime", GetDatabaseAccount(killer, "PrisonTime")+100)
@@ -10579,6 +10633,30 @@ addEventHandler("onResourceStop", getResourceRootElement(), ServerOff)
 
 
 
+local DeathMatchs = {-- x,y,z,i,d,rz
+	["Aldea_Malvada"] = {
+		[1] = {-1311.6, 2512.5, 87, 0,0, 180}, 
+		[2] = {-1298.5, 2547.4, 87.7, 0,0, 270}, 
+		[3] = {-1287.8, 2514.1, 87.1, 0,0, 180}, 
+		[4] = {-1334.3, 2525.6, 87, 0,0, 270}, 
+	},
+	["Marco's_Bistro"] = {
+		[1] = {-823.9, 503.1, 1358.9, 1,0, 270}, 
+		[2] = {-834.2, 521.3, 1357.1, 1,0, 180}, 
+		[3] = {-782.4, 506.1, 1371.7, 1,0, 90}, 
+		[4] = {-788.1, 494.1, 1376.2, 1,0, 0}, 
+	}, 
+	["Palomino Creek"] = {
+		[1] = {2312.3, -15.7, 32.5, 0,0, 0}, 
+		[2] = {2330.9, 52.7, 33, 0,0, 90}, 
+		[3] = {2306.4, 79.2, 30.5, 0,0, 270}, 
+		[4] = {2330.2, 18.4, 34.5, 0,0, 0}, 
+		[5] = {2262.8, 70.1, 32, 0,0, 270}, 
+		[6] = {2307.8, -68.6, 34.5, 0,0, 0}, 
+	}
+}
+
+
 function SpawnthePlayer(thePlayer, typespawn, zone)
 	if(not PData[thePlayer]["auth"]) then kickPlayer(thePlayer) return false end
 	toggleAllControls(thePlayer,true)
@@ -10615,37 +10693,51 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 	setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "inv"))
 	setElementData(thePlayer, "NoFireMePolice", "0")
 
-	if(frname == "Уголовники") then
-		local Prison = GetDatabaseAccount(thePlayer, "Prison")
-		spawnPlayer(thePlayer, SpawnPoint[Prison][1]+math.random(-1,1), SpawnPoint[Prison][2]+math.random(-1,1), SpawnPoint[Prison][3], SpawnPoint[Prison][4], skin, SpawnPoint[Prison][7], SpawnPoint[Prison][8])
-		SetDatabaseAccount(thePlayer, "wanted", 0)
-		setElementData(thePlayer, "WantedLevelPrison", PlayerPrison)
-	elseif(frname == "Военные" and GetDatabaseAccount(thePlayer, "ATUT") <= 2) then
-		spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
-		if(GetDatabaseAccount(thePlayer, "ATUT") == 0) then
-			SetDatabaseAccount(thePlayer, "ATUT", 1)
-			AddInventoryItem(thePlayer, {["name"] = "АК-47", ["txd"] = "АК-47"})
-			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
-		elseif(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
-			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
-		elseif(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
-			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Посади заключенного на бутылку")
-		end
+	if(PData[thePlayer]["DeathMatch"]) then
+		local rand = DeathMatchs[SData["DmName"]][math.random(#DeathMatchs[SData["DmName"]])]
+		skin = SkinList[math.random(#SkinList)]
+		
+		local r, g, b = getTeamColor(SkinData[skin][2])
+		setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
+		
+		spawnPlayer(thePlayer, rand[1], rand[2], rand[3], rand[6], skin, rand[4], rand[5])
 	else
-		if(typespawn == "death") then
-			if(GetPlayerMoney(thePlayer) >= 500) then
-				AddPlayerMoney(thePlayer, -500)
-				AddBizMoney(ClinicSpawn[zone][6], 500)
-				ToolTip(thePlayer, "Клиника #CC99EE"..zone.."\n#FFFFFFСчёт за лечение "..COLOR["DOLLAR"]["HEX"].."$500")
+		if(frname == "Уголовники") then
+			local Prison = GetDatabaseAccount(thePlayer, "Prison")
+			spawnPlayer(thePlayer, SpawnPoint[Prison][1]+math.random(-1,1), SpawnPoint[Prison][2]+math.random(-1,1), SpawnPoint[Prison][3], SpawnPoint[Prison][4], skin, SpawnPoint[Prison][7], SpawnPoint[Prison][8])
+			SetDatabaseAccount(thePlayer, "wanted", 0)
+			setElementData(thePlayer, "WantedLevelPrison", PlayerPrison)
+		elseif(frname == "Военные" and GetDatabaseAccount(thePlayer, "ATUT") <= 2) then
+			spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
+			if(GetDatabaseAccount(thePlayer, "ATUT") == 0) then
+				SetDatabaseAccount(thePlayer, "ATUT", 1)
+				AddInventoryItem(thePlayer, {["name"] = "АК-47", ["txd"] = "АК-47"})
+				triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
+			elseif(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
+				triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
+			elseif(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
+				triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Посади заключенного на бутылку")
 			end
-			
-			spawnPlayer(thePlayer, ClinicSpawn[zone][1]+math.random(-2,2), ClinicSpawn[zone][2]+math.random(-2,2), ClinicSpawn[zone][3], ClinicSpawn[zone][4], skin, 0, ClinicSpawn[zone][5])
-		elseif(typespawn == "house") then
-			spawnPlayer(thePlayer, 0, 0, 0, 0, skin, 0, 0)
-			triggerEvent("EnterHouse", thePlayer, zone, true)
-		elseif(typespawn == "street") then
-			spawnPlayer(thePlayer, SpawnPoint[zone][1]+math.random(-2,2), SpawnPoint[zone][2]+math.random(-1,1), SpawnPoint[zone][3], SpawnPoint[zone][4], skin, SpawnPoint[zone][7], SpawnPoint[zone][8])
+		else
+			if(typespawn == "death") then
+				if(GetPlayerMoney(thePlayer) >= 500) then
+					AddPlayerMoney(thePlayer, -500)
+					AddBizMoney(ClinicSpawn[zone][6], 500)
+					ToolTip(thePlayer, "Клиника #CC99EE"..zone.."\n#FFFFFFСчёт за лечение "..COLOR["DOLLAR"]["HEX"].."$500")
+				end
+				
+				spawnPlayer(thePlayer, ClinicSpawn[zone][1]+math.random(-2,2), ClinicSpawn[zone][2]+math.random(-2,2), ClinicSpawn[zone][3], ClinicSpawn[zone][4], skin, 0, ClinicSpawn[zone][5])
+			elseif(typespawn == "house") then
+				spawnPlayer(thePlayer, 0, 0, 0, 0, skin, 0, 0)
+				triggerEvent("EnterHouse", thePlayer, zone, true)
+			elseif(typespawn == "street") then
+				spawnPlayer(thePlayer, SpawnPoint[zone][1]+math.random(-2,2), SpawnPoint[zone][2]+math.random(-1,1), SpawnPoint[zone][3], SpawnPoint[zone][4], skin, SpawnPoint[zone][7], SpawnPoint[zone][8])
+			end
 		end
+		
+		
+		
+		UpdateTutorial(thePlayer)
 	end
 
 
@@ -10660,7 +10752,6 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 	setPedHeadless(thePlayer, false)
 	SyncTime(thePlayer)
 	useinvweapon(thePlayer)
-	UpdateTutorial(thePlayer)
 
 	if(not PData[thePlayer]["Timer"]) then
 		setElementData(thePlayer, "armasplus", toJSON({}))
@@ -13698,12 +13789,7 @@ addEventHandler("PrisonGavno", root, PrisonGavno)
 
 
 function piss(thePlayer, command, h)
-	triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 8)
 	StartAnimation(thePlayer, "PAULNMAC", "Piss_out",false,false,false,false)
-	
-	for key,thePlayers in pairs(getElementsByType "player") do
-		triggerClientEvent(thePlayers, "PlayerPiss", thePlayers, thePlayer)
-	end
 end
 addEvent("PrisonPiss", true)
 addEventHandler("PrisonPiss", root, piss)
@@ -14329,7 +14415,11 @@ function Reload(thePlayer)
 						triggerClientEvent(thePlayer, "Equip", thePlayer, PData[thePlayer]["WeaponSlot"][1], PData[thePlayer]["WeaponSlot"][2], found[1], found[2])
 						reloadPedWeapon(thePlayer)
 					else
-						triggerClientEvent(thePlayer, "MyVoice", thePlayer, NoAmmoTitle[math.random(#NoAmmoTitle)], 'gg')
+						if(getElementData(thePlayer, "FullClip")) then
+							reloadPedWeapon(thePlayer)
+						else
+							triggerClientEvent(thePlayer, "MyVoice", thePlayer, NoAmmoTitle[math.random(#NoAmmoTitle)], 'gg')
+						end
 					end
 				end
 			end
@@ -14519,10 +14609,18 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 
 	UnBindAllKey(source)
 	SetControls(source, "crack", {["fire"] = false,  ["action"] = false, ["jump"] = false})
-	AddSkill(source, 22, -7)
-	if(getPedStat(source, 24) > 5) then AddSkill(source, 24, -5) end
+	
+	if(not PData[source]["DeathMatch"]) then  
+		AddSkill(source, 22, -7)
+		if(getPedStat(source, 24) > 5) then AddSkill(source, 24, -5) end
+	end
 
 
+	if(isElement(TruckMarker[source])) then
+		DestroyTruckMarker(source)
+		TruckMarker[source] = nil
+	end
+	
 
 	if(killer) then
 		if(source ~= killer) then
@@ -14556,6 +14654,14 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 				local PTeam = getTeamName(getPlayerTeam(source))
 				local KTeam = getTeamName(getPlayerTeam(killer))
 
+				if(WeaponModel[weapon][2]) then AddSkill(killer, WeaponModel[weapon][2]) end
+				if(PData[source]["DeathMatch"]) then 
+					if(MPPlayerList[killer]) then
+						MPPlayerList[killer] = MPPlayerList[killer] + 1
+					end
+					return true
+				end
+				
 				if(PTeam ~= "Уголовники" and KTeam == "Полиция" or KTeam == "ФБР" or KTeam == "Военные") then
 					if(GetDatabaseAccount(source, "wanted") > 0) then
 						Respect(killer, "civilian", 1)
@@ -14584,7 +14690,6 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 					end
 				end
 
-				if(WeaponModel[weapon][2]) then AddSkill(killer, WeaponModel[weapon][2]) end
 				if(PTeam == "Мирные жители" and KTeam ~= "Полиция") then
 					Respect(killer, "civilian", -1)
 					WantedLevel(killer, 1)
@@ -14620,11 +14725,6 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 		end
 	end
 
-
-	if(isElement(TruckMarker[source])) then
-		DestroyTruckMarker(source)
-		TruckMarker[source] = nil
-	end
 end
 addEventHandler("onPlayerWasted", getRootElement(), player_Wasted)
 
@@ -14983,12 +15083,6 @@ function MarkerHit(hitElement, Dimension)
 					end
 					setGarageOpen(g, true)
 				end, 3000, 1, thePlayer, theVehicle)
-			elseif(getElementData(source, "type") == "GEnter") then
-				ToolTip(thePlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nзаехать в гараж")
-				PetrolFuelMarker[thePlayer] = source
-			elseif(getElementData(source, "type") == "GExit") then
-				ToolTip(thePlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nвыехать из гаража")
-				PetrolFuelMarker[thePlayer] = source
 			elseif(getElementData(source, "type") == "siren") then
 				HelpMessage(thePlayer, "Установка сигнализации "..COLOR["DOLLAR"]["HEX"].."$35000\n#FFFFFFНажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы установить")
 				PetrolFuelMarker[thePlayer] = source
@@ -15016,22 +15110,7 @@ function MarkerHit(hitElement, Dimension)
 		end
 	elseif(elementType == "player" and Dimension) then
 		thePlayer = hitElement
-		if(getElementData(source, "type") == "GEnter") then
-			local text = Text(thePlayer, "Нажми {key} чтобы войти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}})
-			if(getElementData(source, "owner") == getPlayerName(thePlayer)) then
-				if(getElementData(source, "locked") == 1) then
-					text = text.."\n"..Text(thePlayer, "Нажми {key} чтобы открыть гараж", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}})
-				else
-					text = text.."\n"..Text(thePlayer, "Нажми {key} чтобы закрыть гараж", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}})
-				end
-			end
-			ToolTip(thePlayer, text)
-			PlayersEnteredPickup[thePlayer] = source
-		elseif(getElementData(source, "type") == "GExit") then
-			ToolTip(thePlayer, Text(thePlayer, "Нажми {key} чтобы выйти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
-
-			PlayersEnteredPickup[thePlayer] = source
-		elseif(getElementData(source, "type") == "FIRE") then
+		if(getElementData(source, "type") == "FIRE") then
 			setPedOnFire(thePlayer, true)
 		elseif(getElementData(source, "type") == "enter") then
 		local r,g,b,a = getMarkerColor(source)
@@ -15624,7 +15703,7 @@ function race(thePlayer, command, h)
 			end
 		end
 		if(YouRacer == false) then
-			MPPlayerList[thePlayer] = true
+			MPPlayerList[thePlayer] = 0
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, SData["RaceArr"][1][1], SData["RaceArr"][1][2], SData["RaceArr"][1][3], "Гонка")
 			outputChatBox("* "..getElementData(thePlayer, "color")..getPlayerName(thePlayer).." #FFFFFFприсоединился к гонке!",getRootElement(),255,255,255,true)
 			triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, "#9b7c52Гоночный турнир")
@@ -17071,6 +17150,31 @@ addCommandHandler("smi", smi)
 
 
 function lockhouse(thePlayer)
+	if(PData[thePlayer]["GarageCol"]) then
+		if(isElementWithinColShape(thePlayer, PData[thePlayer]["GarageCol"])) then
+			if(getElementData(PData[thePlayer]["GarageCol"], "type") == "GEnter") then
+				local HouseNodes = xmlNodeGetChildren(HouseNode)
+				local node = xmlFindChild(HouseNode, getElementData(PData[thePlayer]["GarageCol"], "h"), 0)
+				if(getPlayerName(thePlayer) == xmlNodeGetValue(node)) then
+					local arr = fromJSON(xmlNodeGetAttribute(node, "Garage"))
+					if(arr[getElementData(PData[thePlayer]["GarageCol"], "number")][5] == 1) then
+						arr[getElementData(PData[thePlayer]["GarageCol"], "number")][5] = 0
+						HelpMessage(thePlayer, "Ты открыл гараж")
+						triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 17)
+					else
+						arr[getElementData(PData[thePlayer]["GarageCol"], "number")][5] = 1
+						HelpMessage(thePlayer, "Ты закрыл гараж")
+						triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 16)
+					end
+					setElementData(Garages[getElementData(PData[thePlayer]["GarageCol"], "h")][getElementData(PData[thePlayer]["GarageCol"], "number")]["enter"], "locked", arr[getElementData(PData[thePlayer]["GarageCol"], "number")][5])
+					xmlNodeSetAttribute(node, "Garage", toJSON(arr))
+				end
+			end
+		end
+	end
+
+
+
 	if(PlayersEnteredPickup[thePlayer]) then
 		local x,y,z = getElementPosition(PlayersEnteredPickup[thePlayer])
 		local px,py,pz = getElementPosition(thePlayer)
@@ -17078,38 +17182,19 @@ function lockhouse(thePlayer)
 		if(distance < 2) then
 			if(getElementData(PlayersEnteredPickup[thePlayer], "owner")) then
 				if(getElementData(PlayersEnteredPickup[thePlayer], "owner") == getPlayerName(thePlayer)) then
-					if(getElementData(PlayersEnteredPickup[thePlayer], "type") == "GEnter") then
-						local HouseNodes = xmlNodeGetChildren(HouseNode)
-						local node = xmlFindChild(HouseNode, getElementData(PlayersEnteredPickup[thePlayer], "h"), 0)
-						if(getPlayerName(thePlayer) == xmlNodeGetValue(node)) then
-							local arr = fromJSON(xmlNodeGetAttribute(node, "Garage"))
-							if(arr[getElementData(PlayersEnteredPickup[thePlayer], "number")][5] == 1) then
-								arr[getElementData(PlayersEnteredPickup[thePlayer], "number")][5] = 0
-								HelpMessage(thePlayer, "Ты открыл гараж")
-								triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 17)
-							else
-								arr[getElementData(PlayersEnteredPickup[thePlayer], "number")][5] = 1
-								HelpMessage(thePlayer, "Ты закрыл гараж")
-								triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 16)
-							end
-							setElementData(Garages[getElementData(PlayersEnteredPickup[thePlayer], "h")][getElementData(PlayersEnteredPickup[thePlayer], "number")]["enter"], "locked", arr[getElementData(PlayersEnteredPickup[thePlayer], "number")][5])
-							xmlNodeSetAttribute(node, "Garage", toJSON(arr))
-						end
-					else
-						local HouseNodes = xmlNodeGetChildren(HouseNode)
-						local node = xmlFindChild(HouseNode, getElementData(PlayersEnteredPickup[thePlayer], "house"), 0)
-						if(getPlayerName(thePlayer) == xmlNodeGetValue(node)) then
-							if(xmlNodeGetAttribute(node, "locked") == "1") then
-								xmlNodeSetAttribute(node, "locked", "0")
-								setElementData(getElementByID(xmlNodeGetName(node)), "locked", 0, false)
-								HelpMessage(thePlayer, "Ты открыл дом")
-								triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 17)
-							else
-								xmlNodeSetAttribute(node, "locked", "1")
-								setElementData(getElementByID(xmlNodeGetName(node)), "locked", 1, false)
-								HelpMessage(thePlayer, "Ты закрыл дом")
-								triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 16)
-							end
+					local HouseNodes = xmlNodeGetChildren(HouseNode)
+					local node = xmlFindChild(HouseNode, getElementData(PlayersEnteredPickup[thePlayer], "house"), 0)
+					if(getPlayerName(thePlayer) == xmlNodeGetValue(node)) then
+						if(xmlNodeGetAttribute(node, "locked") == "1") then
+							xmlNodeSetAttribute(node, "locked", "0")
+							setElementData(getElementByID(xmlNodeGetName(node)), "locked", 0, false)
+							HelpMessage(thePlayer, "Ты открыл дом")
+							triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 17)
+						else
+							xmlNodeSetAttribute(node, "locked", "1")
+							setElementData(getElementByID(xmlNodeGetName(node)), "locked", 1, false)
+							HelpMessage(thePlayer, "Ты закрыл дом")
+							triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 16)
 						end
 					end
 				end
@@ -17122,17 +17207,112 @@ end
 
 
 
-function StartMP()
-	local rand = math.random(getArrSize(Races))
-	local ind = 1
-	for i, _ in pairs(Races) do
-		if(ind == rand) then
-			rand = i
-			break
+function dm(thePlayer, command, h)
+	if(SData["DmName"]) then
+		local YouRacer = false
+		for Player, _ in pairs(MPPlayerList) do
+			if(Player == thePlayer) then
+				YouRacer = true
+			end
 		end
-		ind = ind+1
+		if(YouRacer == false) then
+			if(getPedOccupiedVehicle(thePlayer)) then removePedFromVehicle(thePlayer) end
+			PData[thePlayer]["DeathMatch"] = true
+			FullClip(thePlayer, true)
+			HelpMessage(thePlayer, "Режим бесконечных патронов включен")
+			local rand = DeathMatchs[SData["DmName"]][math.random(#DeathMatchs[SData["DmName"]])]
+			SetPlayerPosition(thePlayer, rand[1], rand[2], rand[3], rand[4], rand[5], rand[6])
+			MPPlayerList[thePlayer] = 0
+			
+			local randomSkin = SkinList[math.random(#SkinList)]
+			setElementModel(thePlayer, randomSkin)
+			local r, g, b = getTeamColor(SkinData[randomSkin][2])
+			setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
+			
+		end
+	else
+		outputChatBox("В настоящий момент Deathmatch не проходит", thePlayer, 255, 255, 255, true)
 	end
-	race(rand)
+end
+addCommandHandler("dm", dm)
+
+
+
+function deathmatch(matches)
+	SData["DmName"] = matches
+	outputChatBox("Начался Deathmatch на локации #FFFF00"..matches:gsub('_', ' '), getRootElement(), 255,255,255, true)
+	outputChatBox("Для участия в Deathmatch напиши #A0A0A0/dm", getRootElement(), 255,255,255, true)
+	
+	local StartRaceTimeout = 300
+	MPTimer = setTimer(function()
+		if(StartRaceTimeout == 0) then
+			local TopScore = 0
+			local Winner = false
+			for thePlayer, score in pairs(MPPlayerList) do
+				if(isElement(thePlayer)) then
+					local r, g, b = getTeamColor(getPlayerTeam(thePlayer))
+					setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
+				
+					PData[thePlayer]["DeathMatch"] = nil
+					FullClip(thePlayer, false)
+					triggerClientEvent(thePlayer, "deathmatchInfo", thePlayer, false, false)
+					SpawnedAfterChange(thePlayer)
+					
+					if(TopScore <= 0) then
+						TopScore = score
+						Winner = thePlayer
+					end
+				end
+			end
+			if(Winner) then
+				outputChatBox(" *Deathmatch Победитель "..getPlayerName(Winner).." убийств "..TopScore, getRootElement(), 255,255,255, true)
+				RacePriceGeneration(Winner)
+				RacePriceGeneration(Winner)
+				RacePriceGeneration(Winner)
+				AddPlayerMoney(Winner, math.random(500, 1000)*(TopScore+1), "МИССИЯ ВЫПОЛНЕНА!")
+			end
+			MPPlayerList = {}
+			SData["DmName"] = nil
+			setTimer(function()
+					StartMP()
+			end, 10000, 1)
+		else
+			for thePlayer, score in pairs(MPPlayerList) do
+				if(isElement(thePlayer)) then
+					triggerClientEvent(thePlayer, "deathmatchInfo", thePlayer, StartRaceTimeout, score)
+				end
+			end
+		end
+		StartRaceTimeout = StartRaceTimeout-1
+	end, 1000, StartRaceTimeout+1)
+end
+
+
+function StartMP()
+	local randmp = math.random(1,2)
+	if(randmp == 1) then
+		local rand = math.random(getArrSize(DeathMatchs))
+		local ind = 1
+		for i, _ in pairs(DeathMatchs) do
+			if(ind == rand) then
+				rand = i
+				break
+			end
+			ind = ind+1
+		end
+		deathmatch(rand)
+	else
+		local rand = math.random(getArrSize(Races))
+		local ind = 1
+		for i, _ in pairs(Races) do
+			if(ind == rand) then
+				rand = i
+				break
+			end
+			ind = ind+1
+		end
+		race(rand)
+	end
 end
 
 
@@ -17455,6 +17635,18 @@ addEventHandler("hesoyam", root, hesoyam)
 
 
 
+
+function FullClip(thePlayer, state)
+	if(state) then
+		setElementData(thePlayer, "FullClip", "true")
+		useinvweapon(thePlayer)
+	else
+		removeElementData(thePlayer, "FullClip")
+		useinvweapon(thePlayer)
+	end
+end
+addEvent("FullClip", true)
+addEventHandler("FullClip", root, FullClip)
 
 
 function ExitTuning(theVehicle)
