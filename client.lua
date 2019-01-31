@@ -30,13 +30,12 @@ local SkinList,SwitchButtonL,SwitchButtonR,SwitchButtonAccept,PEDChangeSkin = fa
 local SkinFlag = true
 local PlayersMessage = {}
 local PlayersAction = {}
-local HomeEditor = false
 local RobAction = false
 local FireTimer = {}
 local StreamData = {}
-local AnimatedMarker = {}
 local VideoMemory = {["HUD"] = {}}
 local RailRoads = exports["vehicle_node"]:GetRailnodes()
+
 
 local PData = {
 	["Interface"] = {
@@ -47,10 +46,9 @@ local PData = {
 		["Collections"] = true
 	}, 
 	['WantedFlashing'] = false, 
+	['AnimatedMarker'] = {}, 
 	['Target'] = {}, 
 	['blip'] = {}, 
-	['DublicateRadar'] = {},
-	['AlphaRadar'] = {},
 	['stamina'] = 8,
 	['LVLUPSTAMINA'] = 10,
 	['rage'] = 0, 
@@ -279,7 +277,6 @@ local ToC1, ToC2, ToC3, ToC4 = false, false, false, false
 local upgrades = false
 local TCButton = {}
 local TCButton2 = {}
-
 local usableslot = 1
 local CallPolice = false
 local BANKCTL = false
@@ -293,7 +290,6 @@ local DragElementName = false
 local DragStart = {}
 local DragX = false
 local DragY = false
-local ShowInfo = false
 local MouseX, MouseY = 0, 0
 local PBut = {["player"] = {}, ["shop"] = {}, ["backpack"] = {}, ["trunk"] = {}}
 local PInv = {["player"] = {}, ["shop"] = {}, ["backpack"] = {}, ["trunk"] = {}}
@@ -366,7 +362,13 @@ local trafficlight = {
 	["4"] = "north"
 }
 
-
+local TexturesSize = {
+	["HUD"] = {
+		["LocationTarget"] = NewScale*4, 
+		["ArrowTarget"] = NewScale*3, 
+		["Wanted"] = NewScale*2, 
+	}, 
+}
 
 
 
@@ -430,11 +432,11 @@ function dxDrawBorderedText(text, left, top, right, bottom, color, scale, font, 
 		if (locsca == 0) then locsca = 1 end
 		for oX = -locsca, locsca do 
 			for oY = -locsca, locsca do 
-				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false,true)
+				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false, not PData["Interface"]["LowPC"])
 			end
 		end
 
-		dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, true, true)
+		dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, true, not PData["Interface"]["LowPC"])
 	end
 end
 
@@ -1208,25 +1210,6 @@ function getArrSize(arr)
 end
 
 
-function DestroyRadar(name, area)
-	local r,g,b,a = getRadarAreaColor(area)
-	if(a == 255) then --Анимация
-		PData['AlphaRadar'][name] = 255
-		PData['DublicateRadar'][name] = setTimer(function(name, area) 
-			if(PData['AlphaRadar'][name] == 0) then
-				destroyElement(area)
-				PData['AlphaRadar'][name] = nil
-				PData['DublicateRadar'][name] = nil
-			else
-				local r,g,b,a = getRadarAreaColor(area)
-				setRadarAreaColor(area, r,g,b, PData['AlphaRadar'][name])
-				PData['AlphaRadar'][name] = PData['AlphaRadar'][name]-15
-			end
-		end, 50, 18, name, area)
-	else
-		destroyElement(area)
-	end
-end
 
 
 
@@ -2205,6 +2188,125 @@ end
 
 
 
+
+
+function NotForLowPC()
+	for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
+		UpdateDisplayArmas(thePlayer)
+	end
+	for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
+		UpdateDisplayArmas(thePed)
+	end
+
+	for mar, dat in pairs(PData["AnimatedMarker"]) do
+		if(dat[1] == "up") then
+			dat[2] = dat[2]+0.01
+			if(dat[2] >= 0.25) then
+				dat[1] = "down"
+			end
+		else
+			dat[2] = dat[2]-0.01
+			if(dat[2] <= -0.25) then
+				dat[1] = "up"
+			end
+		end
+		if(isElementAttached(mar)) then
+			setElementAttachedOffsets(mar, dat[3], dat[4], dat[5]+dat[2])
+		else
+			setElementPosition(mar, dat[3], dat[4], dat[5]+dat[2])
+		end
+	end
+end
+addEventHandler("onClientPreRender", root, NotForLowPC)
+
+
+
+
+
+
+function onWastedEffect(killer, weapon, bodypart)
+	local x,y,z = getElementPosition(source)
+	if(weapon == 50) then
+		createEffect("blood_heli", x, y, z, 0, 0, 0, 300, true)
+	end
+	local e = createEffect("insects", x, y, z, 0, 0, 0, 10, true)
+	setElementParent(e, source)
+end
+addEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
+addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
+
+
+
+
+local ReplaceShader = dxCreateShader("texreplace.fx")
+local EmptyTexture = dxCreateTexture(1,1)
+function lowPcMode()
+	if(PData["Interface"]["LowPC"]) then
+		PData["Interface"]["LowPC"] = false
+		helpmessage("Режим для #551A8Bслабых#FFFFFF компьютеров выключен")
+		engineRemoveShaderFromWorldTexture(ReplaceShader,"collisionsmoke")
+		engineRemoveShaderFromWorldTexture(ReplaceShader,"bullethitsmoke")
+		engineRemoveShaderFromWorldTexture(ReplaceShader,"bullethitsmoke1")
+		engineRemoveShaderFromWorldTexture(ReplaceShader,"boatsplash")
+		setWorldSpecialPropertyEnabled("randomfoliage", true)
+		resetPedsLODDistance()
+		resetVehiclesLODDistance()
+		setCloudsEnabled(true)
+		setBirdsEnabled(true)
+		addEventHandler("onClientPreRender", root, NotForLowPC)
+		addEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
+		addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
+		
+		for thePlayer, dat in pairs(StreamData) do
+			UpdateArmas(thePlayer)
+		end
+		
+		for category, textrzd in pairs(TexturesSize) do
+			for texname, size in pairs(textrzd) do
+				TexturesSize[category][texname] = size*2
+				VideoMemory[category][texname] = nil
+			end
+		end
+	else
+		PData["Interface"]["LowPC"] = true
+		helpmessage("Режим для #551A8Bслабых#FFFFFF компьютеров включен")
+		dxSetShaderValue(ReplaceShader,"gTexture",EmptyTexture)
+		engineApplyShaderToWorldTexture(ReplaceShader,"collisionsmoke")
+		engineApplyShaderToWorldTexture(ReplaceShader,"bullethitsmoke")
+		engineApplyShaderToWorldTexture(ReplaceShader,"bullethitsmoke1")
+		engineApplyShaderToWorldTexture(ReplaceShader,"boatsplash")
+		setPedsLODDistance(50)
+		setVehiclesLODDistance(50)
+		setWorldSpecialPropertyEnabled("randomfoliage", false)
+		setCloudsEnabled(false)
+		setBirdsEnabled(false)
+		removeEventHandler("onClientPreRender", root, NotForLowPC)
+		removeEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
+		removeEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
+
+		
+		for thePlayer, dat in pairs(StreamData) do
+			if(dat["armas"]) then
+				for _, v in pairs(dat["armas"]) do
+					destroyElement(v)
+				end
+			end
+			dat["armas"] = {}
+		end
+		
+		for category, textrzd in pairs(TexturesSize) do
+			for texname, size in pairs(textrzd) do
+				TexturesSize[category][texname] = size/2
+				VideoMemory[category][texname] = nil
+			end
+		end
+	end
+end
+
+
+
+
+
 function SetPlayerHudComponentVisible(component, show)
 	setPlayerHudComponentVisible(component, show)
 	if(component == "all") then
@@ -2853,7 +2955,7 @@ local SkinData = {
 	[218] = {132, "Мирные жители", "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
 	[219] = {132, "Мирные жители", "Женщина"},
 	[220] = {118, "Мирные жители", "Мужчина"},
-	[221] = {118, "Мирные жители", "Мужчина"},
+	[221] = {118, "Колумбийский картель", "Мужчина"},
 	[222] = {121, "Колумбийский картель", "Мужчина", 29},
 	[223] = {121, "Мирные жители", "Мужчина"},
 	[224] = {134, "Мирные жители", "Женщина"},
@@ -2893,7 +2995,7 @@ local SkinData = {
 	[258] = {124, "Мирные жители", "Мужчина"},
 	[259] = {124, "Мирные жители", "Мужчина"},
 	[260] = {118, "Мирные жители", "Мужчина", nil, nil, {"Строитель"}},
-	[261] = {118, "Мирные жители", "Мужчина"},
+	[261] = {118, "Байкеры", "Мужчина"},
 	[262] = {118, "Мирные жители", "Мужчина"},
 	[263] = {132, "Мирные жители", "Женщина"},
 	[264] = {128, "Мирные жители", "Мужчина"},
@@ -3315,7 +3417,6 @@ function StartLookZonesBeta(zones, update)
 	
 	
 	SpawnPoints = fromJSON(zones)
-	HomeEditor = true
 	for i = 1, #SpawnPoints do
 		if(SpawnPoints[i][4] == "house") then
 			local x,y,z = SpawnPoints[i][1],SpawnPoints[i][2],SpawnPoints[i][3]
@@ -3537,10 +3638,9 @@ function UpdateArmas(thePlayer)
 	end
 	
 	for v,z in pairs(StreamData[thePlayer]["armas"]) do
-	
 		if(not WeaponUseTEMP[v]) then
 			destroyElement(StreamData[thePlayer]["armas"][v])
-			StreamData[thePlayer]["armas"][v]=nil
+			StreamData[thePlayer]["armas"][v] = nil
 		end
 	end
 end
@@ -4295,7 +4395,6 @@ function checkKey()
 		end
 	end
 	
-	
 	if(PData['gps']) then
 		if(#PData['gps'] == 0) then
 			PData['gps'] = nil
@@ -4550,7 +4649,7 @@ function SpunkPlayerEffect()
 	else
 		SpunkTimer = setTimer(function()
 			SleepSound("script", math.random(1,200), math.random(0,55), false)
-		end, 1000+math.random(0,4000), 0 )
+		end, 1000+math.random(0,4000), 0)
 	end
 end
 addEvent("SpunkPlayerEffect", true)
@@ -4748,12 +4847,7 @@ end
 
 
 function updateCamera()
-	for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
-		UpdateDisplayArmas(thePlayer)
-	end
 	for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
-		UpdateDisplayArmas(thePed)
-				
 		local theVehicle = getPedOccupiedVehicle(thePed)
 		if(theVehicle) then -- Костыль 
 			local x,y,z = getElementPosition(theVehicle)
@@ -4779,25 +4873,6 @@ function updateCamera()
 		setWeather(0)
 	end
 	
-	
-	for mar, dat in pairs(AnimatedMarker) do
-		if(dat[1] == "up") then
-			dat[2] = dat[2]+0.01
-			if(dat[2] >= 0.25) then
-				dat[1] = "down"
-			end
-		else
-			dat[2] = dat[2]-0.01
-			if(dat[2] <= -0.25) then
-				dat[1] = "up"
-			end
-		end
-		if(isElementAttached(mar)) then
-			setElementAttachedOffsets(mar, dat[3], dat[4], dat[5]+dat[2])
-		else
-			setElementPosition(mar, dat[3], dat[4], dat[5]+dat[2])
-		end
-	end
 end
 addEventHandler("onClientPreRender", getRootElement(), updateCamera)
 
@@ -4848,7 +4923,7 @@ function LoginClient(open)
 		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
 		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
 		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
-		outputChatBox("Обновление 23.01.2019: Исправлен баг с воротами", 255, 150, 150,true)
+		outputChatBox("Обновление 28.01.2019: Добавлен режим для слабых компьютеров (F9)", 255, 150, 150,true)
 	else
 		PText["HUD"][8] = nil
 	end
@@ -4976,6 +5051,11 @@ function displayLoadedRes(res)
 		local dff = engineLoadDFF("models/des_a51infenc.dff")
 		engineReplaceModel(dff, 16094)
 		
+		col = engineLoadCOL("models/kb_tr_main.col")
+		engineReplaceCOL(col, 14385)
+		
+		col = engineLoadCOL("models/trukstp01.col")
+		engineReplaceCOL(col, 14655)
 		
 		if(tonumber(getElementData(root, "ServerTime")) < 696902400) then
 			txd = engineLoadTXD("models/copcarvg.txd")
@@ -5274,16 +5354,12 @@ function onClientColShapeHit(theElement, matchingDimension)
 					triggerServerEvent("GarageColEnter", localPlayer, localPlayer, source)
 				end
 			elseif(getElementData(source, "Three")) then
-				if(not getPedOccupiedVehicle(localPlayer)) then
-					triggerServerEvent("ThreeColEnter", localPlayer, localPlayer, source)
-				end
+				triggerServerEvent("ThreeColEnter", localPlayer, localPlayer, source)
 			elseif(getElementData(source, "vending")) then
-				if(not getPedOccupiedVehicle(localPlayer)) then
-					toggleControl("enter_exit", false) 
-					ToolTip(Text("Sprunk стоимость #3B7231$20#FFFFFF").."\n"..Text("Нажми {key} чтобы купить", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
+				toggleControl("enter_exit", false) 
+				ToolTip(Text("Sprunk стоимость #3B7231$20#FFFFFF").."\n"..Text("Нажми {key} чтобы купить", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
 				
-					triggerServerEvent("VendingColEnter", localPlayer, localPlayer, source)
-				end
+				triggerServerEvent("VendingColEnter", localPlayer, localPlayer, source)
 			end
 		end
 	elseif getElementType(theElement) == "vehicle" then 
@@ -5298,6 +5374,10 @@ function onClientColShapeHit(theElement, matchingDimension)
 				elseif(getElementData(source, "type") == "GExit") then
 					ToolTip("Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nвыехать из гаража")
 					triggerServerEvent("GarageColEnter", localPlayer, localPlayer, source)
+				end
+			elseif(getElementData(source, "Three")) then
+				if(getElementModel(theElement) == 532) then
+					triggerServerEvent("HarvestThree", localPlayer, localPlayer, source, true)
 				end
 			end
 		end
@@ -5353,17 +5433,14 @@ addEventHandler("RespectMessage", localPlayer, RespectMessage)
 
 
 function helpmessage(message)
-	if(removetarget) then
-		Targets["thePlayer"] = nil
-	end
 	if(isTimer(PData["helpmessageTimer"])) then
 		killTimer(PData["helpmessageTimer"])
 	end
 	
-	PText["HUD"][5] = {Text(message), screenWidth, screenHeight-(200*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2.3, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
+	PData["helpmessage"] = message
 
 	PData["helpmessageTimer"] = setTimer(function()
-		PText["HUD"][5] = nil
+		PData["helpmessage"] = nil
 	end, 3500, 1)
 end
 addEvent("helpmessageEvent", true)
@@ -5486,12 +5563,14 @@ function PrisonSleepEv()
 	local x2,y2,_ = getElementPosition(PrisonSleep)
 	local Dist = getDistanceBetweenPoints2D(x,y,x2,y2)
 
-	if(Dist < 3) then
+	if(Dist < 3 and not isTimer(SleepTimer)) then
 		local x,y,z = getElementPosition(PrisonSleep)
 		local rx,ry,rz = getElementRotation(PrisonSleep)
 		triggerServerEvent("PrisonSleep", localPlayer, x,y,z,rz)
 		fadeCamera(false, 4.0, 0, 0, 0)
 		bindKey("space", "down", StopSleep)
+		
+		
 		SleepTimer = setTimer(function()
 			SleepSound("script",  39, math.random(0,114), false)
 		end, 5000, 0)
@@ -6044,18 +6123,186 @@ addEventHandler("InfoPathPed", localPlayer, InfoPathPed)
 
 
 
+
+
+
+function DevelopmentRender()
+	local x,y,z = getElementPosition(localPlayer)
+	for i, arr in pairs(PData['changezone']) do
+		local wx,wy,wz = false, false, false
+		if(arr[2]) then
+			wx,wy,wz = arr[2][1], arr[2][2], arr[2][3]
+		else
+			local _, _, worldx, worldy, worldz = getCursorPosition()
+			local px, py, pz = getCameraMatrix()
+			_,wx,wy,wz,_ = processLineOfSight(px, py, pz, worldx, worldy, worldz)
+			wx,wy,wz = math.round(wx, 0), math.round(wy, 0), math.round(wz, 1)
+			
+		end
+		local color = tocolor(50,150,200,80)
+		if(arr[1][4] ~= getZoneName(wx,wy,wz, false)) then
+			color = tocolor(200,50,50,80)
+		end
+
+		
+		local point = {arr[1][1], wy, math.round(getGroundPosition(arr[1][1], wy, arr[1][3]+3), 1)}
+		local point2 = {wx, arr[1][2], math.round(getGroundPosition(wx, arr[1][2], wz+3), 1)}
+		
+		dxDrawLine3D(arr[1][1], arr[1][2], arr[1][3], point[1], point[2], point[3], color, 25)
+		
+		dxDrawLine3D(point[1], point[2], point[3], wx,wy,wz, color, 25)
+
+		dxDrawLine3D(wx,wy,wz, point2[1], point2[2], point2[3], color, 25)
+
+		dxDrawLine3D(point2[1], point2[2], point2[3], arr[1][1], arr[1][2], arr[1][3], color, 25)
+		
+		
+		local nx, ny = ((arr[1][1]-arr[2][1])/2), ((arr[1][2]-arr[2][2])/2)
+		create3dtext('[ '..i..' ] ', arr[1][1]-nx, arr[1][2]-ny, arr[1][3]+2, scale, 60, tocolor(228, 70, 70, 180), "default-bold")
+
+	end
+	
+	local material = GetGroundMaterial(x,y,z,z-2)
+	local out = "Материал: "..material.."\nЗона: "..getZoneName(x,y,z)
+	if(isCursorShowing()) then
+		local x,y,z = getCameraMatrix()
+		local sx,sy, cx,cy,cz = getCursorPosition()
+		local theVehicle = getPedOccupiedVehicle(localPlayer)
+		local _,_,_,_,hitElement,_,_,_,_,_,_,model = processLineOfSight(x,y,z, cx,cy,cz, true,true,true, true, true, true, false, true, false, true, false)
+		
+		dxDrawLine3D(x,y,z, cx,cy,cz)
+		if(model) then
+			out = out.."\nЭлемент: "..model
+		end
+	end
+	dxDrawBorderedText(out, 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
+
+	
+	for zone, arr in pairs(PData['infopath']) do
+		if(arr) then
+		for i, arr2 in pairs(arr) do
+			local x,y,z = arr2[2], arr2[3], arr2[4]
+			
+			local px,py,pz = getElementPosition(localPlayer)
+			if(getDistanceBetweenPoints2D(x,y, px, py) < 100) then
+				if(arr2[5]) then
+					create3dtext('['..i..'] '..getZoneName(x,y,z), x,y,z+1, scale, 60, tocolor(228, 70, 250, 180), "default-bold")
+				else
+					create3dtext('['..i..'] '..getZoneName(x,y,z), x,y,z+1, scale, 60, tocolor(228, 250, 70, 180), "default-bold")
+				end
+				local nextmarkers = {}
+				if(arr2[6]) then
+					for _,k in pairs(arr2[6]) do
+						table.insert(nextmarkers, {k[1], k[2]})
+					end
+				end
+				
+				if(PData['infopath'][zone][tostring(i+1)]) then
+					table.insert(nextmarkers, {zone, i+1})
+				end
+				
+				for _, arr3 in pairs(nextmarkers) do
+					if(PData['infopath'][arr3[1]]) then
+						local dat = PData['infopath'][arr3[1]][tostring(arr3[2])]
+						if(dat) then
+							local color = tocolor(50,255,50,150)
+							if(dat[1] == "Closed" or arr2[1] == "Closed") then
+								color = tocolor(255,50,50,150)
+							end
+							local x2,y2,z2 = dat[2], dat[3], dat[4]
+							
+							dxDrawLine3D(x,y,z+0.2,x2,y2,z2+0.2, color, 6)
+							
+							
+							local a3,b3,c3 = getPointInFrontOfPoint(x2,y2,z2, findRotation(x,y,x2,y2)-60, 2)
+							local a4,b4,c4 = getPointInFrontOfPoint(x2,y2,z2, findRotation(x,y,x2,y2)-120, 2)
+							
+							dxDrawLine3D(x2,y2,z2+0.2,a3,b3,c3+0.2, color, 6)
+							dxDrawLine3D(x2,y2,z2+0.2,a4,b4,c4+0.2, color, 6)
+						end
+					end
+				end
+			end
+		end
+		end
+	end
+	
+	
+	for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
+		local theVehicle = getPedOccupiedVehicle(thePed)
+		if(theVehicle) then
+			if(getElementData(thePed, "DynamicBot")) then
+				local arr = fromJSON(getElementData(thePed, "DynamicBot"))
+				local x,y,z = getElementPosition(theVehicle)
+				path = {arr[1],arr[2],arr[3]}
+				nextpath = {arr[5],arr[6],arr[7]}
+				dxDrawLine3D(x,y,z,arr[1],arr[2],arr[3]+1, tocolor(255,50,50,150), 8)
+			end
+		end
+	end
+end
+
+
+
+
+
+
+
+
+function isEventHandlerAdded(sEventName, pElementAttachedTo, func)
+	if 
+		type(sEventName) == 'string' and 
+		isElement(pElementAttachedTo) and 
+		type(func) == 'function' 
+	then
+		local aAttachedFunctions = getEventHandlers( sEventName, pElementAttachedTo )
+		if type(aAttachedFunctions) == 'table' and #aAttachedFunctions > 0 then
+			for i, v in ipairs( aAttachedFunctions ) do
+				if v == func then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+
+
+
 function ShowInfoKey()
-	if(ShowInfo) then
-		ShowInfo = false
+	if(isEventHandlerAdded("onClientRender", root, DevelopmentRender)) then
 		setDevelopmentMode(false)
+		removeEventHandler("onClientRender", root, DevelopmentRender)
 	else
+		outputChatBox("Player model: "..getElementModel(localPlayer))
+		local tar = getPedTarget(localPlayer)
+		if(tar) then
+			outputChatBox("Target model: "..getElementModel(tar))
+		end
+		
+		local w, h = guiGetScreenSize ()
+		local tx, ty, tz = getWorldFromScreenPosition ( w/2, h/2, 50 )
+		local px, py, pz = getCameraMatrix()
+		hit, x, y, z, _, _, _, _, _, _, _, modelid = processLineOfSight ( px, py, pz, tx, ty, tz, true, true, true, true, true, true, true, true, localPlayer, true, true)
+		if modelid then
+			outputChatBox("World model: "..modelid)
+		end
+
+		
+		
+		
+		
+		
+		
+		
 		setDevelopmentMode(true)
-		ShowInfo = true
+		addEventHandler("onClientRender", root, DevelopmentRender)
 		--GPS(math.random(-3000,3000), math.random(-3000,3000), math.random(-3000,3000), "Случайная точка ")
 	end
 end
 addEvent("ShowInfoKey", true)
 addEventHandler("ShowInfoKey", localPlayer, ShowInfoKey)
+
 
 
 
@@ -6159,7 +6406,7 @@ local Cheats = {
 	["alnsfmzo"] = true, 
 	["ysohnul"] = true,
 	["liyoaay"] = true, 
-	["aezakmi"] = true, -- В разработке
+	["aezakmi"] = true,
 	["ripazha"] = true,
 	["jbgvnb"] = true,
 	["lxgiwyl"] = true,
@@ -6170,7 +6417,6 @@ local Cheats = {
 	["wanrltw"] = true, 
 	["ncsgdag"] = true, 
 	["professionalkiller"] = true, 
-	["quiqdmw"] = true, -- В разработке
 	["aiwprton"] = true, 
 	["cqzijmb"] = true, 
 	["pdnejoh"] = true, 
@@ -6572,43 +6818,6 @@ function getPositionFromElementOffset(element,offX,offY,offZ)
     local z = offX * m[1][3] + offY * m[2][3] + offZ * m[3][3] + m[4][3]
     return x, y, z                               -- Return the transformed point
 end
-
-
-local effectNames = {
-"blood_heli","boat_prop","camflash","carwashspray","cement","cloudfast","coke_puff","coke_trail","cigarette_smoke",
-"explosion_barrel","explosion_crate","explosion_door","exhale","explosion_fuel_car","explosion_large","explosion_medium",
-"explosion_molotov","explosion_small","explosion_tiny","extinguisher","flame","fire","fire_med","fire_large","flamethrower",
-"fire_bike","fire_car","gunflash","gunsmoke","insects","heli_dust","jetpack","jetthrust","nitro","molotov_flame",
-"overheat_car","overheat_car_electric","prt_blood","prt_boatsplash","prt_bubble","prt_cardebris","prt_collisionsmoke",
-"prt_glass","prt_gunshell","prt_sand","prt_sand2","prt_smokeII_3_expand","prt_smoke_huge","prt_spark","prt_spark_2",
-"prt_splash","prt_wake","prt_watersplash","prt_wheeldirt","petrolcan","puke","riot_smoke","spraycan","smoke30lit","smoke30m",
-"smoke50lit","shootlight","smoke_flare","tank_fire","teargas","teargasAD","tree_hit_fir","tree_hit_palm","vent","vent2",
-"water_hydrant","water_ripples","water_speed","water_splash","water_splash_big","water_splsh_sml","water_swim","waterfall_end",
-"water_fnt_tme","water_fountain","wallbust","WS_factorysmoke"
-}
-
-addCommandHandler("createEffect", function(_, effectIndex)
-   effectIndex = tonumber(effectIndex)
-   if effectIndex and type(effectIndex) == "number" then
-      if effectIndex > 0 and effectIndex <= #effectNames then
-		outputChatBox(effectNames[effectIndex])
-         createEffect(effectNames[effectIndex], Vector3( getElementPosition( getLocalPlayer() ) ), 0, 0, 0)
-      end
-   end
-end)
-
-
-
-function onWastedEffect(killer, weapon, bodypart)
-	local x,y,z = getElementPosition(source)
-	if(weapon == 50) then
-		createEffect("blood_heli", x, y, z, 0, 0, 0, 300, true)
-	end
-	local e = createEffect("insects", x, y, z, 0, 0, 0, 10, true)
-	setElementParent(e, source)
-end
-addEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
-addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
 
 
 
@@ -7844,11 +8053,15 @@ addEventHandler("vibori", localPlayer, vibori)
 --]]
 function MemText(text, left, top, color, scale, font, border, incline, centerX, centerY, scale3D)
 	if(text) then
-		local w,h = dxGetTextWidth(text, scale, font, true)+(border*2), dxGetFontHeight(scale, font)+(border*2)
 		local index = text..color
+		
+		TexturesSize["HUD"][index] = scale
+		local w,h = dxGetTextWidth(text, scale, font, true)+(border*2), dxGetFontHeight(scale, font)+(border*2)
+		
 		
 		if(not VideoMemory["HUD"][index]) then
 			VideoMemory["HUD"][index] = dxCreateRenderTarget(w+((w*incline)/4),h, true)
+			
 			dxSetRenderTarget(VideoMemory["HUD"][index], true)
 			dxSetBlendMode("modulate_add")
 			
@@ -7862,11 +8075,11 @@ function MemText(text, left, top, color, scale, font, border, incline, centerX, 
 			local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
 			for oX = -border, border do 
 				for oY = -border, border do 
-					dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,true)
+					dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,not PData["Interface"]["LowPC"])
 				end
 			end
 
-			dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,true)
+			dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,not PData["Interface"]["LowPC"])
 
 			
 			dxSetBlendMode("blend")
@@ -8027,6 +8240,7 @@ function PlayerVehicleEnter(theVehicle, seat)
 	end
 end
 addEventHandler("onClientPlayerVehicleEnter",getRootElement(),PlayerVehicleEnter)
+
 
 function PlayerVehicleExit(theVehicle, seat)
 	if(source == localPlayer) then 
@@ -8902,12 +9116,7 @@ function DrawPlayerMessage()
 
 			if(PData["Interface"]["Inventory"]) then
 				local sx, sy, font, tw, th, color
-				--[[ 
-					Уберешь потом PData["Interface"]["Full"]
-					когда сделаешь все зависимости
-					возможно помимо отображения работают какие либо вычисления
-				-- ]] 
-				if(PData["Interface"]["Full"] and PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer) and not isPlayerMapForced()) then
+				if(PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer) and not isPlayerMapForced()) then
 					if(PData["BizControlName"]) then
 						dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(20, 25, 20, 245))
 						dxDrawBorderedText(PData["BizControlName"][2], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
@@ -8958,168 +9167,53 @@ function DrawPlayerMessage()
 			end
 			
 			
-			local line = 1
-			for v,k in pairs(GPSObject) do
-				local x2,y2,z2 = getElementPosition(v)
-				local dist = getDistanceBetweenPoints3D(x,y,z,x2,y2,z2)/2
-				if(dist >= 1000) then
-					dist = math.round((dist/1000), 1).." "..Text("км")
-				else
-					dist = math.round(dist, 0).." "..Text("м")
-				end
-				local _,_,rz = getElementRotation(localPlayer)
-				local marrot = GetMarrot(findRotation(x,y,x2,y2),rz)
-				if(x2 ~= 228 and y2 ~= 228 and z2 ~= 228) then
-					if(not PData['Minimize']) then
-						dxDrawImage(screenWidth-dxGetTextWidth(getElementData(v, "info").." #A9A9A9"..dist, scale, "default-bold", true)-(40*NewScale), screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), dxGetTextWidth("↑", scale, "default-bold", false), dxGetFontHeight(scale, "default-bold"), DrawArrow(), marrot)
-					end
-					dist = " #A9A9A9"..dist.."\n"
-				else
-					dist = ""
-				end
-				dxDrawBorderedText(getElementData(v, "info")..dist, 0, screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), screenWidth-(10*NewScale), screenHeight, tocolor(200, 200, 200, 255), scale, "default-bold", "right", "top", nil, nil, nil, true)
-				line = line+1
-			end
-			
-			if(PData['gps']) then
-				local oldmarker = false
-				local px,py,pz = getElementPosition(localPlayer)
-				for i,v in pairs(PData['gps']) do --тут
-					if(oldmarker) then
-						local x,y,z = unpack(fromJSON(getElementData(v, "coord")))
-
-						if(getDistanceBetweenPoints2D(x,y, px, py) < 100) then
-							local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
-
-							local a3,b3,c3 = getPointInFrontOfPoint(x,y,z, findRotation(x,y,x2,y2)-60, 2)
-							local a4,b4,c4 = getPointInFrontOfPoint(x,y,z, findRotation(x,y,x2,y2)-120, 2)
-							
-							dxDrawLine3D(x,y,z+0.2,a3,b3,c3+0.2, tocolor(50,150,200,80), 6)
-							dxDrawLine3D(x,y,z+0.2,a4,b4,c4+0.2, tocolor(50,150,200,80), 6)
-							dxDrawLine3D(a3,b3,c3+0.2,a4,b4,c4+0.2, tocolor(50,150,200,80), 6)
-						end
-					end
-					oldmarker = v
-				end
-			end
-			
-	
-			if(ShowInfo) then
-				for i, arr in pairs(PData['changezone']) do
-					local wx,wy,wz = false, false, false
-					if(arr[2]) then
-						wx,wy,wz = arr[2][1], arr[2][2], arr[2][3]
+			if(PData["Interface"]["Full"]) then
+				local line = 1
+				for v,k in pairs(GPSObject) do
+					local x2,y2,z2 = getElementPosition(v)
+					local dist = getDistanceBetweenPoints3D(x,y,z,x2,y2,z2)/2
+					if(dist >= 1000) then
+						dist = math.round((dist/1000), 1).." "..Text("км")
 					else
-						local _, _, worldx, worldy, worldz = getCursorPosition()
-						local px, py, pz = getCameraMatrix()
-						_,wx,wy,wz,_ = processLineOfSight(px, py, pz, worldx, worldy, worldz)
-						wx,wy,wz = math.round(wx, 0), math.round(wy, 0), math.round(wz, 1)
-						
+						dist = math.round(dist, 0).." "..Text("м")
 					end
-					local color = tocolor(50,150,200,80)
-					if(arr[1][4] ~= getZoneName(wx,wy,wz, false)) then
-						color = tocolor(200,50,50,80)
+					local _,_,rz = getElementRotation(localPlayer)
+					local marrot = GetMarrot(findRotation(x,y,x2,y2),rz)
+					if(x2 ~= 228 and y2 ~= 228 and z2 ~= 228) then
+						if(not PData['Minimize']) then
+							dxDrawImage(screenWidth-dxGetTextWidth(getElementData(v, "info").." #A9A9A9"..dist, scale, "default-bold", true)-(40*NewScale), screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), dxGetTextWidth("↑", scale, "default-bold", false), dxGetFontHeight(scale, "default-bold"), DrawArrow(), marrot)
+						end
+						dist = " #A9A9A9"..dist.."\n"
+					else
+						dist = ""
 					end
-
-					
-					local point = {arr[1][1], wy, math.round(getGroundPosition(arr[1][1], wy, arr[1][3]+3), 1)}
-					local point2 = {wx, arr[1][2], math.round(getGroundPosition(wx, arr[1][2], wz+3), 1)}
-					
-					dxDrawLine3D(arr[1][1], arr[1][2], arr[1][3], point[1], point[2], point[3], color, 25)
-					
-					dxDrawLine3D(point[1], point[2], point[3], wx,wy,wz, color, 25)
-
-					dxDrawLine3D(wx,wy,wz, point2[1], point2[2], point2[3], color, 25)
-
-					dxDrawLine3D(point2[1], point2[2], point2[3], arr[1][1], arr[1][2], arr[1][3], color, 25)
-					
-					
-					local nx, ny = ((arr[1][1]-arr[2][1])/2), ((arr[1][2]-arr[2][2])/2)
-					create3dtext('[ '..i..' ] ', arr[1][1]-nx, arr[1][2]-ny, arr[1][3]+2, scale, 60, tocolor(228, 70, 70, 180), "default-bold")
-
+					dxDrawBorderedText(getElementData(v, "info")..dist, 0, screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), screenWidth-(10*NewScale), screenHeight, tocolor(200, 200, 200, 255), scale, "default-bold", "right", "top", nil, nil, nil, true)
+					line = line+1
 				end
 				
-				local material = GetGroundMaterial(x,y,z,z-2)
-				local out = "Материал: "..material.."\nЗона: "..getZoneName(x,y,z)
-				if(isCursorShowing()) then
-					local x,y,z = getCameraMatrix()
-					local sx,sy, cx,cy,cz = getCursorPosition()
-					local theVehicle = getPedOccupiedVehicle(localPlayer)
-					local _,_,_,_,hitElement,_,_,_,_,_,_,model = processLineOfSight(x,y,z, cx,cy,cz, true,true,true, true, true, true, false, true, false, true, false)
-					
-					dxDrawLine3D(x,y,z, cx,cy,cz)
-					if(model) then
-						out = out.."\nЭлемент: "..model
-					end
-				end
-				dxDrawBorderedText(out, 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
-
-				
-				for zone, arr in pairs(PData['infopath']) do
-					if(arr) then
-					for i, arr2 in pairs(arr) do
-						local x,y,z = arr2[2], arr2[3], arr2[4]
-						
-						local px,py,pz = getElementPosition(localPlayer)
-						if(getDistanceBetweenPoints2D(x,y, px, py) < 100) then
-							if(arr2[5]) then
-								create3dtext('['..i..'] '..getZoneName(x,y,z), x,y,z+1, scale, 60, tocolor(228, 70, 250, 180), "default-bold")
-							else
-								create3dtext('['..i..'] '..getZoneName(x,y,z), x,y,z+1, scale, 60, tocolor(228, 250, 70, 180), "default-bold")
-							end
-							local nextmarkers = {}
-							if(arr2[6]) then
-								for _,k in pairs(arr2[6]) do
-									table.insert(nextmarkers, {k[1], k[2]})
-								end
-							end
-							
-							if(PData['infopath'][zone][tostring(i+1)]) then
-								table.insert(nextmarkers, {zone, i+1})
-							end
-							
-							for _, arr3 in pairs(nextmarkers) do
-								if(PData['infopath'][arr3[1]]) then
-									local dat = PData['infopath'][arr3[1]][tostring(arr3[2])]
-									if(dat) then
-										local color = tocolor(50,255,50,150)
-										if(dat[1] == "Closed" or arr2[1] == "Closed") then
-											color = tocolor(255,50,50,150)
-										end
-										local x2,y2,z2 = dat[2], dat[3], dat[4]
-										
-										dxDrawLine3D(x,y,z+0.2,x2,y2,z2+0.2, color, 6)
-										
-										
-										local a3,b3,c3 = getPointInFrontOfPoint(x2,y2,z2, findRotation(x,y,x2,y2)-60, 2)
-										local a4,b4,c4 = getPointInFrontOfPoint(x2,y2,z2, findRotation(x,y,x2,y2)-120, 2)
-										
-										dxDrawLine3D(x2,y2,z2+0.2,a3,b3,c3+0.2, color, 6)
-										dxDrawLine3D(x2,y2,z2+0.2,a4,b4,c4+0.2, color, 6)
-									end
-								end
+				if(PData['gps']) then
+					local oldmarker = false
+					local px,py,pz = getElementPosition(localPlayer)
+					for i,v in pairs(PData['gps']) do --тут
+						if(oldmarker) then
+							local x,y,z = unpack(fromJSON(getElementData(v, "coord")))
+	
+							if(getDistanceBetweenPoints2D(x,y, px, py) < 100) then
+								local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
+	
+								local a3,b3,c3 = getPointInFrontOfPoint(x,y,z, findRotation(x,y,x2,y2)-60, 2)
+								local a4,b4,c4 = getPointInFrontOfPoint(x,y,z, findRotation(x,y,x2,y2)-120, 2)
+								
+								dxDrawLine3D(x,y,z+0.2,a3,b3,c3+0.2, tocolor(50,150,200,80), 6)
+								dxDrawLine3D(x,y,z+0.2,a4,b4,c4+0.2, tocolor(50,150,200,80), 6)
+								dxDrawLine3D(a3,b3,c3+0.2,a4,b4,c4+0.2, tocolor(50,150,200,80), 6)
 							end
 						end
-					end
-					end
-				end
-				
-			
-				for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
-					local theVehicle = getPedOccupiedVehicle(thePed)
-					if(theVehicle) then
-						if(getElementData(thePed, "DynamicBot")) then
-							local arr = fromJSON(getElementData(thePed, "DynamicBot"))
-							local x,y,z = getElementPosition(theVehicle)
-							path = {arr[1],arr[2],arr[3]}
-							nextpath = {arr[5],arr[6],arr[7]}
-							dxDrawLine3D(x,y,z,arr[1],arr[2],arr[3]+1, tocolor(255,50,50,150), 8)
-						end
+						oldmarker = v
 					end
 				end
 			end
-			
-			
+
 		
 			if(RobAction) then
 				DrawProgressBar(screenWidth-430*scalex, 420*scaley, RobAction[1], RobAction[2], 250)
@@ -9134,9 +9228,8 @@ function DrawPlayerMessage()
 				dxDrawImage(25*scale, 150*scale, 150*scale, 100*scale, cameraimage) -- Камера
 			end
 			
-
-			if(HomeEditor) then
-				dxDrawBorderedText("1: Трейлер\n2: Маленькая комната\n3: Дом 1 этаж (бедный)\n4: Дом 1 этаж (нормальный)\n5: Дом 1 этаж (богатый)\n6: Дом 2 этажа (бедный)\n7: Дом 2 этажа (нормальный)\n8: Дом 2 этаж (богатый)\n9: Special\n0: Гараж", 10, screenHeight/3, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", false, false, false, true) 
+			if(PData["helpmessage"]) then
+				dxDrawBorderedText(Text(PData["helpmessage"]), screenWidth, screenHeight-(200*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2.3, "sans", "center", "top", false, false, false, true, true, 0, 0, 0)
 			end
 			
 			if(PData["HarvestDisplay"]) then
@@ -9192,7 +9285,7 @@ function DrawPlayerMessage()
 
 		
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
-			if(PData["Driver"] and theVehicle) then
+			if(PData["Driver"] and theVehicle and PData["Interface"]["Full"]) then
 				tick = getTickCount()
 				local angulo,velocidad = angle()
 				
@@ -9714,10 +9807,10 @@ end)
 
 function DrawArrow(rotation)
 	if(not VideoMemory["HUD"]["ArrowTarget"]) then
-		VideoMemory["HUD"]["ArrowTarget"] = dxCreateRenderTarget(dxGetTextWidth("↑", NewScale*2, "default-bold", false), dxGetFontHeight(NewScale*2, "default-bold"), true)
+		VideoMemory["HUD"]["ArrowTarget"] = dxCreateRenderTarget(dxGetTextWidth("↑", TexturesSize["HUD"]["ArrowTarget"], "default-bold", false), dxGetFontHeight(TexturesSize["HUD"]["ArrowTarget"], "default-bold"), true)
 		dxSetRenderTarget(VideoMemory["HUD"]["ArrowTarget"], true)
 		dxSetBlendMode("modulate_add")
-		dxDrawBorderedText("↑", 0, 0, 0, 0, tocolor(200, 0, 0, 255), NewScale*2, "default-bold", "left", "top", nil, nil, nil, true, false)
+		dxDrawBorderedText("↑", 0, 0, 0, 0, tocolor(200, 0, 0, 255), TexturesSize["HUD"]["ArrowTarget"], "default-bold", "left", "top", nil, nil, nil, true, false)
 		dxSetBlendMode("blend")
 		dxSetRenderTarget()
 	end
@@ -9736,11 +9829,11 @@ function DrawWanted(level)
 			elseif(rand == 5) then playSFX("script", 4, math.random(0, 13), false)
 			elseif(rand == 6) then playSFX("script", 5, math.random(0, 57), false) end
 		end
-		VideoMemory["HUD"]["Wanted"] = dxCreateRenderTarget(dxGetTextWidth("★★★★★★", NewScale*2, "pricedown", false), dxGetFontHeight(NewScale*2, "pricedown"), true)
+		VideoMemory["HUD"]["Wanted"] = dxCreateRenderTarget(dxGetTextWidth("★★★★★★", TexturesSize["HUD"]["Wanted"], "pricedown", false), dxGetFontHeight(TexturesSize["HUD"]["Wanted"], "pricedown"), true)
 		dxSetRenderTarget(VideoMemory["HUD"]["Wanted"], true)
 		dxSetBlendMode("modulate_add")
 
-		dxDrawBorderedText("★★★★★★", 0-(dxGetTextWidth("★★★★★★", NewScale*2, "pricedown", false)*((6-level)/6)), 0, 0, 0, tocolor(255,165,0, 200), NewScale*2, "pricedown", "left", "top", nil, nil, nil, true, false)
+		dxDrawBorderedText("★★★★★★", 0-(dxGetTextWidth("★★★★★★", TexturesSize["HUD"]["Wanted"], "pricedown", false)*((6-level)/6)), 0, 0, 0, tocolor(255,165,0, 200),TexturesSize["HUD"]["Wanted"], "pricedown", "left", "top", nil, nil, nil, true, false)
 		dxSetBlendMode("blend")
 		dxSetRenderTarget()
 	end
@@ -9750,15 +9843,14 @@ end
 
 
 
-
 function DrawLocation(location)
 	if(not VideoMemory["HUD"]["LocationTarget"]) then
-		VideoMemory["HUD"]["LocationTarget"] = dxCreateRenderTarget(dxGetTextWidth(location, NewScale*4, "diploma", true)+(20*scalex), dxGetFontHeight(NewScale*4, "diploma"), true)
+		VideoMemory["HUD"]["LocationTarget"] = dxCreateRenderTarget(dxGetTextWidth(location, TexturesSize["HUD"]["LocationTarget"], "diploma", true)+(20*scalex), dxGetFontHeight(TexturesSize["HUD"]["LocationTarget"], "diploma"), true)
 		dxSetRenderTarget(VideoMemory["HUD"]["LocationTarget"], true)
 		
 		dxSetBlendMode("modulate_add")
 		
-		dxDrawBorderedText(location, dxGetTextWidth(location, NewScale*4, "diploma", true)+(10*scalex), 0, 0, 0, tocolor(147, 160, 168, 255), NewScale*4, "diploma", "center", "top", nil, nil, nil, true)
+		dxDrawBorderedText(location, dxGetTextWidth(location, TexturesSize["HUD"]["LocationTarget"], "diploma", true)+(10*scalex), 0, 0, 0, tocolor(147, 160, 168, 255),  TexturesSize["HUD"]["LocationTarget"], "diploma", "center", "top", nil, nil, nil, true)
 
 		dxSetBlendMode("blend")
 		dxSetRenderTarget()
@@ -9854,11 +9946,13 @@ function StreamIn(restream)
 		UpdateArmas(source)
 	elseif(getElementType(source) == "marker") then
 		if(getMarkerType(source) == "arrow") then
-			local mx,my,mz = getElementPosition(source)
-			if(isElementAttached(source)) then
-				mx,my,mz = getElementAttachedOffsets(source)
+			if(not PData["AnimatedMarker"][source]) then
+				local mx,my,mz = getElementPosition(source)
+				if(isElementAttached(source)) then
+					mx,my,mz = getElementAttachedOffsets(source)
+				end
+				PData["AnimatedMarker"][source] = {"up", 0, mx,my,mz}
 			end
-			AnimatedMarker[source] = {"up", 0, mx,my,mz}
 		end
 	elseif(getElementType(source) == "vehicle") then
 		local occupant = getVehicleOccupant(source)
@@ -9889,6 +9983,7 @@ function StreamIn(restream)
 			end
 		end
 		initTrunk(source)
+
 		
 		if(occupant) then
 			if(getElementType(occupant) == "ped") then
@@ -10139,10 +10234,6 @@ function StreamOut(restream)
 					destroyElement(obj)
 				end
 			end
-		end
-	elseif(getElementType(source) == "marker") then
-		if(AnimatedMarker[source]) then
-			AnimatedMarker[source] = nil
 		end
 	end
 	
@@ -10447,6 +10538,7 @@ bindKey("F1", "down", ShowInfoKey)
 bindKey("F10", "down", resourcemap)
 bindKey("F11", "down", openmap)
 bindKey("F12", "down", hideinv)
+bindKey("F9", "down", lowPcMode)
 
 
 

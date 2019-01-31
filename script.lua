@@ -45,9 +45,9 @@ local SData = {
 	["VehAccData"] = {},
 	["DriverBot"] = {},
 	["PlayerElementSync"] = {},
-	["TrunkUsed"] = {}
+	["TrunkUsed"] = {}, 
+	["Vibori"] = false
 }
-local Vibori = false
 local TimersAgain = {}
 local kandidats = {}
 local disableVoice = {}
@@ -438,6 +438,7 @@ local Teams = {
 	['Ацтекас'] = createTeam('Ацтекас', 48, 213, 200)
 }
 local MPPlayerList = {}
+local DMPlayerList = {}
 local racePlayerBlip = {}
 local racePlayerFinish = {}
 local raceGlobalTimer = false
@@ -467,7 +468,8 @@ local DynamicBlip = {}
 local DynamicMar = {}
 local ThreesNames = {
 	[782] = "Кока",
-	[823] = "Конопля"
+	[823] = "Конопля", 
+	[870] = "Роза", 
 }
 local BotCreated = {}
 local CapZone = {}
@@ -636,20 +638,20 @@ local ClinicSpawn = {
 
 
 
-local BotSkin = {}
-BotSkin["Полиция"] = {7,9,10,12,13, 280 ,14,15,17,18,19, 281 ,20,21,22,23,44, 282 ,48,72,236,56} --Каждые 5 педов охраняет 1 коп
-BotSkin["Баллас"] = {102,103,104,28} --Доп. Наркодиллер
-BotSkin["Гроув-стрит"] = {105,106,107}
-BotSkin["Вагос"] = {108,109,110,29} --Доп. Наркодиллер
-BotSkin["Рифа"] = {173,174,175}
-BotSkin["Деревенщины"] = {159,160,161,162}
-BotSkin["Триады"] = {117,118,120,32} --Доп. Оружие
-BotSkin["Якудзы"] = {121,122,123}
-BotSkin["Ацтекас"] = {114,115,116}
-BotSkin["Байкеры"] = {181,247,248,100,64} --Доп. Шлюха
-BotSkin["Русская мафия"] = {111,112,113}
-BotSkin["Колумбийский картель"] = {222,95,30,242,179}
-
+local BotSkin = {
+	["Полиция"] = {7,9,10,12,13, 280 ,14,15,17,18,19, 281 ,20,21,22,23,44, 282 ,48,72,236,56},  --Каждые 5 педов охраняет 1 коп
+	["Баллас"] = {102,103,104,28},  --Доп. Наркодиллер
+	["Гроув-стрит"] = {105,106,107}, 
+	["Вагос"] = {108,109,110,29},  --Доп. Наркодиллер
+	["Рифа"] = {173,174,175}, 
+	["Деревенщины"] = {159,160,161,162}, 
+	["Триады"] = {117,118,120,32},  --Доп. Оружие
+	["Якудзы"] = {121,122,123}, 
+	["Ацтекас"] = {114,115,116}, 
+	["Байкеры"] = {181,247,248,100,261, 64},  --Доп. Шлюха
+	["Русская мафия"] = {111,112,113}, 
+	["Колумбийский картель"] = {222,221,95,30,242,179}, 
+}
 
 -- Старухи, итд
 local BotSkinSpecific = {
@@ -1213,7 +1215,7 @@ local SkinData = {
 	[218] = {132, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
 	[219] = {132, Teams['Мирные жители'], "Женщина"},
 	[220] = {118, Teams['Мирные жители'], "Мужчина"},
-	[221] = {118, Teams['Мирные жители'], "Мужчина"},
+	[221] = {118, Teams['Колумбийский картель'], "Мужчина"},
 	[222] = {121, Teams['Колумбийский картель'], "Мужчина", 29},
 	[223] = {121, Teams['Мирные жители'], "Мужчина"},
 	[224] = {134, Teams['Мирные жители'], "Женщина"},
@@ -1253,7 +1255,7 @@ local SkinData = {
 	[258] = {124, Teams['Мирные жители'], "Мужчина"},
 	[259] = {124, Teams['Мирные жители'], "Мужчина"},
 	[260] = {118, Teams['Мирные жители'], "Мужчина", nil, nil, {"Строитель"}},
-	[261] = {118, Teams['Мирные жители'], "Мужчина"},
+	[261] = {118, Teams['Байкеры'], "Мужчина"},
 	[262] = {118, Teams['Мирные жители'], "Мужчина"},
 	[263] = {132, Teams['Мирные жители'], "Женщина"},
 	[264] = {128, Teams['Мирные жители'], "Мужчина"},
@@ -1413,11 +1415,12 @@ local BandRangs = {
 	},
 	["Колумбийский картель"] = {
 		[1] = {0, "La Mugre", 222},
-		[2] = {50, "Sombras", 95},
-		[3] = {75, "Sureno", 30},
-		[4] = {120, "Cacos", 242},
-		[5] = {180, "Guerrero", 179},
-		[6] = {250, "Лейтенант колумбийского картеля", 43}
+		[2] = {25, "Diego", 221}, 
+		[3] = {50, "Sombras", 95},
+		[4] = {75, "Sureno", 30},
+		[5] = {120, "Cacos", 242},
+		[6] = {180, "Guerrero", 179},
+		[7] = {250, "Лейтенант колумбийского картеля", 43}
 	},
 	["Вагос"] = {
 		[1] = {0, "Отмычка", 108},
@@ -1428,7 +1431,8 @@ local BandRangs = {
 		[1] = {0, "Тусовщик", 181},
 		[2] = {30, "Вольный ездок", 247},
 		[3] = {75, "Шустрила", 248},
-		[4] = {130, "Дорожный капитан", 100}
+		[4] = {130, "Дорожный капитан", 100}, 
+		[5] = {160, "Железная задница", 261}, 
 	},
 	["Русская мафия"] = {
 		[1] = {0, "Клоп", 111},
@@ -2460,9 +2464,9 @@ local VehicleSystem = {
 	[400] = {1.09, "TF D 1.8 L", "", "A5 160", "Macpherson V119", "Endless 200mm", "Michelin 34", 56, {4, 1997}, {1, 2014}, "Dundreary"},
 	[605] = {0.81, "TF D 1.7 L v2", "", "A5 165", "Macpherson V110", "Brembo 245mm", "Michelin 86", 56, {6, 1973}, {7, 1977}, "Vapid"},
 	[519] = {1.92, "IAE V2500", "", "A1 200", "Macpherson V170", "Brembo 79", "Michelin 129", 500, {8, 1979}, {9, 1987}, "Buckingham"},
-	[404] = {0.74, "LPE 1.7 L", "", "F5 150", "Macpherson V171", "Endless 153mm", "Michelin 130", 40, {1, 1962}, {6, 1969}, "Dinka"},
+	[404] = {0.74, "LPE 1.7 L", "", "F5 150", "Macpherson V171", "Endless 153mm", "Michelin 130", 40, {1, 1962}, {6, 1979}, "Dinka"},
 	[583] = {0.54, "RST 1.2 L", "", "R4 170", "Macpherson V172", "Endless 195mm", "Michelin 131", 26, {0, 1950}, {2, CYear}, "Export"},
-	[436] = {0.73, "LPE 2.0 L v2", "", "F4 160", "Macpherson V173", "Endless 234mm", "Michelin 132", 46, {2, 1982}, {9, 2006}, "Export"},
+	[436] = {0.73, "LPE 2.0 L v2", "", "F4 160", "Macpherson V173", "Endless 234mm", "Michelin 132", 46, {2, 1980}, {9, 2006}, "Export"},
 	[452] = {0.51, "BE 400 CC", "", "R5 190", "Macpherson V174", "Brembo 81", "Michelin 133", 73, {3, 1994}, {0, CYear}, "Pegassi"},
 	[468] = {0.77, "HRD 900 CC", "", "R5 190", "Macpherson V5", "Brembo 62", "Michelin 69", 16, {2, 1989}, {8, 1999}, "Maibatsu Corporation"},
 	[484] = {0.54, "BE 900 CC", "", "R5 190", "Macpherson V175", "Brembo 82", "Michelin 134", 166, {9, 1965}, {10, 1987}, "Dinka"},
@@ -2895,7 +2899,7 @@ createObject(11393, -2043.5166015625, 161.337890625, 29.320350646973, 0,0,0)
 
 
 local ItemsTrade = {
-	["24/7"] = {{"Газета", "Sell", 450, {}}, {"Трость", "Sell", 350, {}}, {"Цветы", "Sell", 650, {}}, {"Пакет", "Sell", 750, {["content"] = {{},{},{},{},{},{},{},{}}}}, {"CoK", "Sell", 450, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"Pissh", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Канистра", "Sell", 450, {}}, {"Спрей", "Sell", 450, {}}},
+	["24/7"] = {{"Газета", "Sell", 450, {}}, {"Роза", "Sell", 350, {}}, {"Трость", "Sell", 350, {}}, {"Цветы", "Sell", 650, {}}, {"Пакет", "Sell", 750, {["content"] = {{},{},{},{},{},{},{},{}}}}, {"CoK", "Sell", 450, {["сигареты"] = {"Сигарета", 20, 450, toJSON({})}}}, {"Pissh", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Pissh Gold", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"isabella", "Sell", 350, {["hp"] = {"hp", 100, 0, {}}}}, {"Канистра", "Sell", 450, {}}, {"Спрей", "Sell", 450, {}}},
 	["Zip"] = {{"Чемодан", "Sell", 550, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{}}}}},
 	["ProLaps"] = {{"Бита", "Sell", 450, {}}, {"Клюшка", "Sell", 450, {}}, {"Парашют", "Sell", 250, {}}},
 	["Binco"] = {{"Рюкзак", "Sell", 450, {["content"] = {{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}}}},
@@ -2923,6 +2927,8 @@ local CarsForSaleModel = {
 	["LV Trash"] = {474, 500, 518, 542, 549, 575, 600, 404, 555, 478},
 	["LS AERO"] = {487}, 
 }
+
+
 
 -- {theVehicle, x, y, z, rx,ry,rz}
 local CarsForSale = {
@@ -5080,7 +5086,7 @@ function tp(thePlayer, command, h)
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
 
-		local x,y,z,i,d  = 767.6, 2007.6, 6.1, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 681.1, -480.5, 16.2, 0, 0 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5339,7 +5345,7 @@ local PoliceSpecificZone = {
 }
 
 function WantedLevel(thePlayer, count)
-	if(getElementData(thePlayer, "AEZAKMI")) then
+	if(getElementData(thePlayer, "AEZAKMI") or PData[thePlayer]["DeathMatch"]) then
 		if(count == "AEZAKMI") then
 			removeElementData(thePlayer, "AEZAKMI")
 		end
@@ -6313,6 +6319,18 @@ CreateCluckin(-1816.5, 618.0, 35.1) -- SF
 
 
 
+SData["pump"] = 1
+function CreatePump(x,y,z,rz)
+	CreateEnter(x,y,z, rz, 0, 0, false, 681.6, -446.4, -25.6, 180, 1, SData["pump"], "The Welcome Pump")
+
+	SData["pump"] = SData["pump"]+1
+end
+
+CreatePump(681.6, -473.3, 16.5, 180)
+
+
+
+
 
 SData["Barber"] = 1
 function CreateBarber(x,y,z,types)
@@ -6508,6 +6526,7 @@ CreateChilliDogs(2538.8, 2137.1, 10.8,90, 168) -- Las Venturas
 CreateChilliDogs(2538.9, 2154.1, 10.8,90, 264) -- Las Venturas (come on Kids)
 CreateChilliDogs(2296.6, 2250.6, 10.8,90, 264) -- Las Venturas (come on Kids)
 CreateChilliDogs(2327.8, 2422.3, 10.8,180, 168) -- Las Venturas
+CreateChilliDogs(-800.1, 1625.2, 27.1,198, 168) -- Las Venturas
 
 
 
@@ -6810,10 +6829,11 @@ function CreateThreePlayer(thePlayer, ix, iy, x,y,z)
 		model = 823
 	elseif(arr[ix][iy]["name"] == "Кока") then
 		model = 782
+	elseif(arr[ix][iy]["name"] == "Роза") then
+		model = 870
 	else
 		return false
 	end
-
 
 	arr[ix][iy]["count"] = 1
 	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
@@ -6835,6 +6855,11 @@ function CreateThreePlayer(thePlayer, ix, iy, x,y,z)
 						end
 					end
 					times = 3480
+				elseif(arr[ix][iy]["name"] == "Роза") then
+					RemoveInventoryItemCount(thePlayer, ix,iy)
+
+					HelpMessage(thePlayer, "Ты посадил #B90000розы")
+					times = 6480
 				elseif(arr[ix][iy]["name"] == "Кока") then
 					RemoveInventoryItemCount(thePlayer, ix,iy)
 
@@ -6885,54 +6910,69 @@ function RemoveThree(name)
 	xmlDestroyNode(Node)
 end
 
-function HarvestThree(thePlayer, pic)
-	if(not isTimer(PData[thePlayer]["ActionTimer"])) then
-		StartAnimation(thePlayer, "BOMBER","BOM_Plant_Crouch_Out", false,false,false,false)
-		PData[thePlayer]["ActionTimer"] = setTimer(function()
-			local Node = xmlFindChild(ThreesNode, getElementData(pic, "Three"), 0)
-			local t = tonumber(xmlNodeGetAttribute(Node, "t"))
-			local model = tonumber(xmlNodeGetAttribute(Node, "model"))
-			local NewQuality = tonumber(getElementData(pic, "quality"))+100
-			if(NewQuality > 1000) then NewQuality = 1000 end
-			if(t == 0) then
-				AddInventoryItem(thePlayer, {["txd"] = "Конопля", ["name"] = "Конопля", ["count"] = math.random(1,3), ["quality"] = NewQuality})
-				if(model == 823) then
-					if(xmlNodeGetAttribute(Node, "stage") == "1") then
-						xmlNodeSetAttribute(Node, "stage", 2)
-						xmlNodeSetAttribute(Node, "t", 3480)
-					else
-						RemoveThree(getElementData(pic, "Three"))
-					end
-					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-					if(PlayerTeam == "Баллас") then
-						if(GetDatabaseAccount(thePlayer, "BTUT") == 2) then
-							SetDatabaseAccount(thePlayer, "BTUT", 3)
-							UpdateTutorial(thePlayer)
-						end
-					end
-				elseif(model == 782) then
-					AddInventoryItem(thePlayer, {["txd"] = "Кока", ["name"] = "Кока", ["count"] = math.random(2,3), ["quality"] = NewQuality})
-
-					RemoveThree(getElementData(pic, "Three"))
-					local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-					if(PlayerTeam == "Колумбийский картель") then
-						if(GetDatabaseAccount(thePlayer, "KTUT") == 2) then
-							SetDatabaseAccount(thePlayer, "KTUT", 3)
-							UpdateTutorial(thePlayer)
-						end
-					end
-				end
+function HarvestThree2(thePlayer, pic)
+	local Node = xmlFindChild(ThreesNode, getElementData(pic, "Three"), 0)
+	local t = tonumber(xmlNodeGetAttribute(Node, "t"))
+	local model = tonumber(xmlNodeGetAttribute(Node, "model"))
+	local NewQuality = tonumber(getElementData(pic, "quality"))+100
+	if(NewQuality > 1000) then NewQuality = 1000 end
+	if(t == 0) then
+		AddInventoryItem(thePlayer, {["txd"] = "Конопля", ["name"] = "Конопля", ["count"] = math.random(1,3), ["quality"] = NewQuality})
+		if(model == 823) then
+			if(xmlNodeGetAttribute(Node, "stage") == "1") then
+				xmlNodeSetAttribute(Node, "stage", 2)
+				xmlNodeSetAttribute(Node, "t", 3480)
 			else
-
-				AddInventoryItem(thePlayer, {["txd"] = ThreesNames[model], ["name"] = ThreesNames[model], ["count"] = 1, ["quality"] = tonumber(getElementData(pic, "quality"))})
-
 				RemoveThree(getElementData(pic, "Three"))
 			end
-		end, 1000, 1)
+			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+			if(PlayerTeam == "Баллас") then
+				if(GetDatabaseAccount(thePlayer, "BTUT") == 2) then
+					SetDatabaseAccount(thePlayer, "BTUT", 3)
+					UpdateTutorial(thePlayer)
+				end
+			end
+		elseif(model == 782) then
+			AddInventoryItem(thePlayer, {["txd"] = "Кока", ["name"] = "Кока", ["count"] = math.random(2,3), ["quality"] = NewQuality})
+	
+			RemoveThree(getElementData(pic, "Three"))
+			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+			if(PlayerTeam == "Колумбийский картель") then
+				if(GetDatabaseAccount(thePlayer, "KTUT") == 2) then
+					SetDatabaseAccount(thePlayer, "KTUT", 3)
+					UpdateTutorial(thePlayer)
+				end
+			end
+			
+		elseif(model == 870) then
+			AddInventoryItem(thePlayer, {["txd"] = "Роза", ["name"] = "Роза", ["count"] = math.random(2,3), ["quality"] = NewQuality})
+	
+			RemoveThree(getElementData(pic, "Three"))
+		end
+	else
+	
+		AddInventoryItem(thePlayer, {["txd"] = ThreesNames[model], ["name"] = ThreesNames[model], ["count"] = 1, ["quality"] = tonumber(getElementData(pic, "quality"))})
+	
+		RemoveThree(getElementData(pic, "Three"))
 	end
 end
 
 
+
+function HarvestThree(thePlayer, pic, isVeh)
+	if(isVeh) then
+		HarvestThree2(thePlayer, pic)
+	else
+		if(not isTimer(PData[thePlayer]["ActionTimer"])) then
+			StartAnimation(thePlayer, "BOMBER","BOM_Plant_Crouch_Out", false,false,false,false)
+			PData[thePlayer]["ActionTimer"] = setTimer(function()
+				HarvestThree2(thePlayer, pic)
+			end, 1000, 1)
+		end
+	end
+end
+addEvent("HarvestThree", true)
+addEventHandler("HarvestThree", root, HarvestThree)
 
 
 
@@ -7173,6 +7213,7 @@ local ItemsNamesArr = {
 	["Зерно"] = 1453,
 	["CoK"] = 2670,
 	["Деньги"] = 1212,
+	["Бронежилет"] = 1242,
 }
 
 
@@ -7730,7 +7771,7 @@ function preLoad(name)
 
 
 	-- Пешеходы
-	local CountRandomBot = 1000
+	local CountRandomBot = 500
 	local availzones = {}
 	for name, dat in pairs(PedNodes) do
 		for _, dat2 in pairs(dat) do
@@ -10646,15 +10687,31 @@ local DeathMatchs = {-- x,y,z,i,d,rz
 		[3] = {-782.4, 506.1, 1371.7, 1,0, 90}, 
 		[4] = {-788.1, 494.1, 1376.2, 1,0, 0}, 
 	}, 
-	["Palomino Creek"] = {
+	["Palomino_Creek"] = {
 		[1] = {2312.3, -15.7, 32.5, 0,0, 0}, 
 		[2] = {2330.9, 52.7, 33, 0,0, 90}, 
 		[3] = {2306.4, 79.2, 30.5, 0,0, 270}, 
 		[4] = {2330.2, 18.4, 34.5, 0,0, 0}, 
 		[5] = {2262.8, 70.1, 32, 0,0, 270}, 
 		[6] = {2307.8, -68.6, 34.5, 0,0, 0}, 
-	}
+	}, 
+	["San_Fierro_Bay"] = {
+		[1] = {-2308.9, 1544.9, 18.8, 0,0, 90}, 
+		[2] = {-2357.4, 1553.1, 26, 0,0, 180}, 
+		[3] = {-2473.3, 1544.8, 36.8, 0,0, 270}, 
+		[4] = {-2370.5, 1535.4, 10.8, 0,0, 90}, 
+		[5] = {-2412.8, 1540.6, 10.8, 0,0, 0}, 
+		[6] = {-2474.7, 1548.5, 33.2, 0,0, 270}, 
+	}, 
+	
 }
+local ListDeathmatchs = {}
+for name, _ in pairs(DeathMatchs) do
+	ListDeathmatchs[#ListDeathmatchs+1] = name
+end
+
+
+
 
 
 function SpawnthePlayer(thePlayer, typespawn, zone)
@@ -10873,6 +10930,7 @@ local Soviet = {"Никогда не заводи машину во время �
 "В барах и на улице можно встретить членов различных бандитских группировок, поговорив с которыми есть возможность вступить в банду",
 "Используй клавишу #A0A0A0F12#FFFFFF чтобы скрыть интерфейс",
 "Используй клавишу #A0A0A0F10#FFFFFF чтобы открыть карту ресурсов",
+"Используй клавишу #A0A0A0F9#FFFFFF чтобы выключить режим для слабых компьютеров",
 }
 function DatSoviet() outputChatBox("#4682B4* Совет#FFFFFF "..Soviet[math.random(1,#Soviet)],getRootElement(), 255, 255, 255, true) end
 setTimer(function() DatSoviet() end, 600000, 0)
@@ -11167,11 +11225,11 @@ function worldtime()
 				if(srok) then
 					srok = tonumber(srok)
 					if(srok == 0) then
-						if(not Vibori) then
+						if(not SData["Vibori"]) then
 							xmlNodeSetAttribute(node, "srok", 420)--Неделя
 							outputChatBox("Стартуют выборы на пост "..xmlNodeGetAttribute(node, "biz"), getRootElement(), 255, 255, 255, true)
 							outputChatBox("Напиши "..COLOR["KEY"]["HEX"].."/st #FFFFFFчтобы выдвинуть свою кандидатуру", getRootElement(), 255, 255, 255, true)
-							Vibori=xmlNodeGetName(node)
+							SData["Vibori"]=xmlNodeGetName(node)
 							setTimer(ststart, 60000, 1)
 						end
 					else
@@ -11696,7 +11754,7 @@ function InitDynamicBot()
 	for district, arr in pairs(PathNodes) do
 		for i, k in pairs(arr) do
 			if(k[1] == true) then
-				local rand = math.random(1,35)
+				local rand = math.random(1,70)
 				if(rand == 1) then
 					CreateDynamicBot(false, district, i)
 				end
@@ -12400,7 +12458,7 @@ end
 
 
 function st(thePlayer)
-	if(Vibori) then
+	if(SData["Vibori"]) then
 		if(not kandidats[getPlayerName(thePlayer)]) then
 			if(getArrSize(kandidats) < 9) then
 				kandidats[getPlayerName(thePlayer)] = 0
@@ -12434,7 +12492,7 @@ function srok(thePlayer, command, h)
 					xmlNodeSetAttribute(node, "srok", 420)--Неделя
 					outputChatBox("Стартуют выборы на пост "..xmlNodeGetAttribute(node, "biz"), getRootElement(), 255, 255, 255, true)
 					outputChatBox("Напиши "..COLOR["KEY"]["HEX"].."/st #FFFFFFчтобы выдвинуть свою кандидатуру", getRootElement(), 255, 255, 255, true)
-					Vibori = xmlNodeGetName(node)
+					SData["Vibori"] = xmlNodeGetName(node)
 					setTimer(ststart, 60000, 1)
 				end
 			end
@@ -12488,7 +12546,7 @@ function ststart()
 		end
 		setTimer(ststop, 60000, 1)
 	else
-		Vibori = false
+		SData["Vibori"] = false
 		outputChatBox("Выборы не состоялись из-за отсутствия кандидатов", getRootElement(), 255, 255, 255, true)
 	end
 end
@@ -12497,11 +12555,11 @@ end
 function ststop()
 	for k,v in spairs(kandidats, function(t,a,b) return t[b] < t[a] end) do
 		outputChatBox(k.." победил в выборах!", getRootElement(), 255, 255, 255, true)
-		local bizNode = xmlFindChild(BizNode, Vibori, 0)
+		local bizNode = xmlFindChild(BizNode, SData["Vibori"], 0)
 		xmlNodeSetAttribute(bizNode, "owner", k)
 		setElementData(biz, "bizowner", k)
 		UpdateVacancyList()
-		Vibori = false
+		SData["Vibori"] = false
 		kandidats = {}
 		disableVoice = {}
 		break
@@ -13217,6 +13275,10 @@ function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
 		local res = getResourceFromName("vehicle_node") -- Interface
 		restartResource(res)
+		--local res = getResourceFromName("object_image") -- Interface
+		--restartResource(res)
+		--local res = getResourceFromName("interface") -- Interface
+		--restartResource(res)
 		PathNodes = exports["vehicle_node"]:GetVehicleNodes()
 		PedNodes = exports["vehicle_node"]:GetPedNodes()
 		
@@ -13574,7 +13636,6 @@ function loginPlayer(thePlayer, password)
 	else
 		PData[thePlayer]["auth"] = true
 		AddDatabaseAccount(thePlayer, password)
-		AddPlayerMoney(thePlayer, 1500)
 		Respect(thePlayer)
 		SpawnedAfterChange(thePlayer)
 		PData[thePlayer]["auth"] = true
@@ -13587,18 +13648,6 @@ addEventHandler("loginPlayerEvent", root, loginPlayer)
 
 
 
-
-
-
-function youtubeSong(thePlayer, link)
-	if(getPedOccupiedVehicle(thePlayer)) then
-		setElementData(getPedOccupiedVehicle(thePlayer), "music", link)
-	else
-		ToolTip(thePlayer, "Необходимо быть в транспорте!")
-	end
-end
-addEvent("youtubeSong", true)
-addEventHandler("youtubeSong", root, youtubeSong)
 
 
 
@@ -14630,6 +14679,10 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 						removeElementData(ped, "attacker")
 					end
 				end
+				
+				if(PData[source]["DeathMatch"]) then 
+					return true
+				end
 
 				local KTeam = getElementData(killer, "team")
 				local PTeam = getTeamName(getPlayerTeam(source))
@@ -14656,8 +14709,8 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 
 				if(WeaponModel[weapon][2]) then AddSkill(killer, WeaponModel[weapon][2]) end
 				if(PData[source]["DeathMatch"]) then 
-					if(MPPlayerList[killer]) then
-						MPPlayerList[killer] = MPPlayerList[killer] + 1
+					if(DMPlayerList[killer]) then
+						DMPlayerList[killer] = DMPlayerList[killer] + 1
 					end
 					return true
 				end
@@ -15964,12 +16017,16 @@ function playerDamage(attacker, weapon, bodypart, loss)
 			end
 		end
 	end
-	if(getElementHealth(source) < 20) then
-		Koryachka(source)
-		SetControls(source, "crack", {["fire"] = true, ["action"] = true, ["jump"] = true})
-	else
-		SetControls(source, "crack", {["fire"] = false, ["action"] = false, ["jump"] = false})
+	
+	if(not PData[thePlayer]["DeathMatch"]) then
+		if(getElementHealth(source) < 20) then
+			Koryachka(source)
+			SetControls(source, "crack", {["fire"] = true, ["action"] = true, ["jump"] = true})
+		else
+			SetControls(source, "crack", {["fire"] = false, ["action"] = false, ["jump"] = false})
+		end
 	end
+	
 	if(bodypart == 9) then
 		if(getElementType(attacker) == "player") then -- Боты не ставят хеды
 			setPedHeadless(source, true)
@@ -17064,7 +17121,7 @@ addEventHandler("UPDOnline", getRootElement(), UPDOnline)
 
 
 function ForceRemoveFromVehicle(thePlayer, force)
-	--[[removePedFromVehicle(thePlayer)
+	removePedFromVehicle(thePlayer)
 	local x,y,z = getElementPosition(thePlayer)
 	local rz,ry,rz = getElementRotation(thePlayer)
 	setElementPosition(thePlayer, x,y,z+2)
@@ -17074,7 +17131,7 @@ function ForceRemoveFromVehicle(thePlayer, force)
 
 	setTimer(function(thePlayer)
 		setPedAnimationProgress(thePlayer, "ev_dive", 0.2)
-	end, 50, 1, thePlayer)--]]
+	end, 50, 1, thePlayer)
 end
 addEvent("ForceRemoveFromVehicle", true)
 addEventHandler("ForceRemoveFromVehicle", getRootElement(), ForceRemoveFromVehicle)
@@ -17208,111 +17265,101 @@ end
 
 
 function dm(thePlayer, command, h)
-	if(SData["DmName"]) then
-		local YouRacer = false
-		for Player, _ in pairs(MPPlayerList) do
-			if(Player == thePlayer) then
-				YouRacer = true
-			end
-		end
-		if(YouRacer == false) then
-			if(getPedOccupiedVehicle(thePlayer)) then removePedFromVehicle(thePlayer) end
-			PData[thePlayer]["DeathMatch"] = true
-			FullClip(thePlayer, true)
-			HelpMessage(thePlayer, "Режим бесконечных патронов включен")
-			local rand = DeathMatchs[SData["DmName"]][math.random(#DeathMatchs[SData["DmName"]])]
-			SetPlayerPosition(thePlayer, rand[1], rand[2], rand[3], rand[4], rand[5], rand[6])
-			MPPlayerList[thePlayer] = 0
-			
-			local randomSkin = SkinList[math.random(#SkinList)]
-			setElementModel(thePlayer, randomSkin)
-			local r, g, b = getTeamColor(SkinData[randomSkin][2])
-			setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
-			
-		end
+	if(DMPlayerList[thePlayer]) then
+		LeaveDeathMatch(thePlayer)
 	else
-		outputChatBox("В настоящий момент Deathmatch не проходит", thePlayer, 255, 255, 255, true)
+		if(getPedOccupiedVehicle(thePlayer)) then removePedFromVehicle(thePlayer) end
+		PData[thePlayer]["DeathMatch"] = true
+		FullClip(thePlayer, true)
+		HelpMessage(thePlayer, "Бесконечных патроны включены")
+		SpawnthePlayer(thePlayer)
+		DMPlayerList[thePlayer] = 0
+		
+		local randomSkin = SkinList[math.random(#SkinList)]
+		setElementModel(thePlayer, randomSkin)
+		local r, g, b = getTeamColor(SkinData[randomSkin][2])
+		setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
+		
 	end
 end
 addCommandHandler("dm", dm)
 
 
-
+function LeaveDeathMatch(thePlayer)
+	local r, g, b = getTeamColor(getPlayerTeam(thePlayer))
+	setBlipColor(PData[thePlayer]['radar'], r,g,b, 0)
+	
+	PData[thePlayer]["DeathMatch"] = nil
+	DMPlayerList[thePlayer] = nil
+	FullClip(thePlayer, false)
+	triggerClientEvent(thePlayer, "deathmatchInfo", thePlayer, false, false)
+	SpawnedAfterChange(thePlayer)
+end
+	
 function deathmatch(matches)
 	SData["DmName"] = matches
-	outputChatBox("Начался Deathmatch на локации #FFFF00"..matches:gsub('_', ' '), getRootElement(), 255,255,255, true)
-	outputChatBox("Для участия в Deathmatch напиши #A0A0A0/dm", getRootElement(), 255,255,255, true)
 	
 	local StartRaceTimeout = 300
-	MPTimer = setTimer(function()
+	setTimer(function()
 		if(StartRaceTimeout == 0) then
 			local TopScore = 0
 			local Winner = false
-			for thePlayer, score in pairs(MPPlayerList) do
+			for thePlayer, score in pairs(DMPlayerList) do
 				if(isElement(thePlayer)) then
-					local r, g, b = getTeamColor(getPlayerTeam(thePlayer))
-					setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
-				
-					PData[thePlayer]["DeathMatch"] = nil
-					FullClip(thePlayer, false)
-					triggerClientEvent(thePlayer, "deathmatchInfo", thePlayer, false, false)
-					SpawnedAfterChange(thePlayer)
-					
-					if(TopScore <= 0) then
+					if(TopScore < score) then
 						TopScore = score
 						Winner = thePlayer
 					end
+					DMPlayerList[thePlayer] = 0
+				else
+					DMPlayerList[thePlayer] = nil
 				end
 			end
 			if(Winner) then
-				outputChatBox(" *Deathmatch Победитель "..getPlayerName(Winner).." убийств "..TopScore, getRootElement(), 255,255,255, true)
+				for thePlayer, score in pairs(DMPlayerList) do
+					if(isElement(thePlayer)) then
+						outputChatBox(" *Deathmatch Победитель "..getPlayerName(Winner).." убийств "..TopScore, thePlayer, 255,255,255, true)
+					end
+				end
+			
 				RacePriceGeneration(Winner)
 				RacePriceGeneration(Winner)
 				RacePriceGeneration(Winner)
 				AddPlayerMoney(Winner, math.random(500, 1000)*(TopScore+1), "МИССИЯ ВЫПОЛНЕНА!")
 			end
-			MPPlayerList = {}
-			SData["DmName"] = nil
-			setTimer(function()
-					StartMP()
-			end, 10000, 1)
+			
+			deathmatch(ListDeathmatchs[math.random(#ListDeathmatchs)])
 		else
-			for thePlayer, score in pairs(MPPlayerList) do
+			for thePlayer, score in pairs(DMPlayerList) do
 				if(isElement(thePlayer)) then
 					triggerClientEvent(thePlayer, "deathmatchInfo", thePlayer, StartRaceTimeout, score)
+					if(StartRaceTimeout == 300) then
+						SpawnthePlayer(thePlayer)
+					end
 				end
 			end
 		end
 		StartRaceTimeout = StartRaceTimeout-1
 	end, 1000, StartRaceTimeout+1)
 end
+deathmatch(ListDeathmatchs[math.random(#ListDeathmatchs)])
+
+
+
+
 
 
 function StartMP()
-	local randmp = math.random(1,2)
-	if(randmp == 1) then
-		local rand = math.random(getArrSize(DeathMatchs))
-		local ind = 1
-		for i, _ in pairs(DeathMatchs) do
-			if(ind == rand) then
-				rand = i
-				break
-			end
-			ind = ind+1
+	local rand = math.random(getArrSize(Races))
+	local ind = 1
+	for i, _ in pairs(Races) do
+		if(ind == rand) then
+			rand = i
+			break
 		end
-		deathmatch(rand)
-	else
-		local rand = math.random(getArrSize(Races))
-		local ind = 1
-		for i, _ in pairs(Races) do
-			if(ind == rand) then
-				rand = i
-				break
-			end
-			ind = ind+1
-		end
-		race(rand)
+		ind = ind+1
 	end
+	race(rand)
 end
 
 
