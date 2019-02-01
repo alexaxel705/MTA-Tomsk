@@ -560,19 +560,19 @@ local Interiors = {
 	["Burglary House 18"] = {15, 327.9, 1477.7, 1084.4,0},
 	["Burglary House 19"] = {15, 377, 1417.3, 1081.3,90},
 	["Burglary House 20"] = {15, 387.2, 1471.8, 1080.2,90},
-	["Burglary House 21"] = {15, 295.1, 1472.3, 1080.3,358}
+	["Burglary House 21"] = {15, 295.1, 1472.3, 1080.3,358}, 
 }
 
 
 local InteriorsObject = {
 	["Angel Pine Trailer"] = {{1567, -0.76, 3.1, 998.5, 0, 0, 90}},
-	["Big bear apartament"] = {{1567, 1525.1, -10.2, 1001, 0, 0, 270}},
+	["Big bear apartament"] = {{1567, 1525.1, -10.2, 1001, 0, 0, 270}}, 
 	["Abandonded AC Woter"] = {{1567, 413.1, 2536, 9, 0, 0, 90}},
 	["BDups Crack Palace"] = {{1567, 1528, -47.2, 1001.1, 0, 0, 270}, {1504, 1520.2, -47.2, 1001.1, 0, 0, 270}},
 	["OG Loc's House"] = {{1567, 514.63, -6.8, 1000.6, 0, 0, 180}},
 	["Wu Zi Mu's Betting place"] = {{1504, -2171.1, 640, 1056.6, 0, 0, 0}, {1567, -2171.65, 644.5, 1056.6, 0, 0, 90}},
 	["Unknown safe house"] = {{1567, 2255.5, -1139.2, 1049.6, 0, 0, 270}},
-	["Ryder House"] = {{1567, 2456.4, -1707.1, 1012.5, 0, 0, 180}}
+	["Ryder House"] = {{1567, 2456.4, -1707.1, 1012.5, 0, 0, 180}}, 
 }
 
 
@@ -3341,7 +3341,6 @@ CreateVehicle(471, 1045.5, -302.1, 74, 0, 0, 172)
 CreateVehicle(402, 888.4, -25.8, 64.5, 0, 0, 155)
 CreateVehicle(605, 200.2, -264.8, 1.3, 0, 0, 186)
 CreateVehicle(498, 204, -174.5, 1.1, 0, 0, 34)
-CreateVehicle(604, -472.829, -179.247, 77.2109,0,0,0)
 
 
 
@@ -3882,6 +3881,8 @@ local NonRandVeh = {
 	{false, 442, 931.2, -1081.9, 23.3,0,0,180},
 
 -- Red County
+	{false, 604, -472.8, -179.2, 77.2, 0,0,0}, 
+
 	{false, 431, 658.8, -452.8, 15.3, 0, 0, 90}, -- Автобус
 	
 	-- Ферма
@@ -4812,7 +4813,7 @@ local InteriorsClass = {
 		"The Crack Den",
 		"Burglary House 1",
 		"Unknown safe house",
-		"Burglary House 18"
+		"Burglary House 18",
 	},
 	["Дом 1 этаж (нормальный)"] = {
 		"Wu Zi Mu's Betting place",
@@ -4841,8 +4842,8 @@ local InteriorsClass = {
 		"Burglary House 3",
 	},
 	["Дом 2 этажа (бедный)"] = {
-		"Michelle's Place"
-		--"Helena's Place", -- Забагованный
+		"Michelle's Place", 
+		"Helena's Place", 
 	},
 	["Дом 2 этажа (нормальный)"] = {
 		"Johnson House",
@@ -5086,7 +5087,7 @@ function tp(thePlayer, command, h)
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
 
-		local x,y,z,i,d  = 681.1, -480.5, 16.2, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 		1527.229980,-11.574499,1002.097106, 3, 1 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -13420,14 +13421,14 @@ addCommandHandler("inform", info)
 function GetVehiclePower(mass, acceleration) return math.ceil(mass/(140)*(acceleration)) end
 function saved(thePlayer, command, h)
 
-	--[[local HouseNodes = xmlNodeGetChildren(HouseNode)
+	local HouseNodes = xmlNodeGetChildren(HouseNode)
 	for i,node in ipairs(HouseNodes) do
 		local types = xmlNodeGetAttribute(node, "type")
 		if(InteriorsClass[types]) then
 
 			xmlNodeSetAttribute(node, "int", InteriorsClass[types][math.random(#InteriorsClass[types])])
 		end
-	end--]]
+	end
 
 
 
@@ -16018,7 +16019,7 @@ function playerDamage(attacker, weapon, bodypart, loss)
 		end
 	end
 	
-	if(not PData[thePlayer]["DeathMatch"]) then
+	if(not PData[source]["DeathMatch"]) then
 		if(getElementHealth(source) < 20) then
 			Koryachka(source)
 			SetControls(source, "crack", {["fire"] = true, ["action"] = true, ["jump"] = true})

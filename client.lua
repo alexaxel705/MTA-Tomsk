@@ -5053,9 +5053,16 @@ function displayLoadedRes(res)
 		
 		col = engineLoadCOL("models/kb_tr_main.col")
 		engineReplaceCOL(col, 14385)
-		
 		col = engineLoadCOL("models/trukstp01.col")
 		engineReplaceCOL(col, 14655)
+		col = engineLoadCOL("models/bdupsnew.col")
+		engineReplaceCOL(col, 14803)
+		col = engineLoadCOL("models/mc_straps_int.col")
+		engineReplaceCOL(col, 14821)
+		col = engineLoadCOL("models/kylie_barn.col")
+		engineReplaceCOL(col, 14871)
+		col = engineLoadCOL("models/bdups_main.col")
+		engineReplaceCOL(col, 14801)
 		
 		if(tonumber(getElementData(root, "ServerTime")) < 696902400) then
 			txd = engineLoadTXD("models/copcarvg.txd")
