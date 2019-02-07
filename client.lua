@@ -308,7 +308,7 @@ local IDF, NF, RANG, PING = false
 local TabScroll = 1
 local MAXSCROLL = math.floor((screenHeight/2.8)/dxGetFontHeight(scale/1.8, "default-bold"))
 local TABCurrent = 0
-local PText = {["biz"] = {}, ["bank"] = {}, ["INVHUD"] = {}, ["LainOS"] = {}, ["HUD"] = {}}
+local PText = {["biz"] = {}, ["bank"] = {}, ["INVHUD"] = {}, ["HUD"] = {}}
 --[[ 
 HUD:
 	1 - DeathMatch
@@ -322,16 +322,7 @@ HUD:
 	9 - очки ярости
 --]]
 local RespawnTimer = false
-local LainOS = false
-local LainOSCursorTimer = false
 local RespectMsg = false
-local LainOSInput = ""
-local LainOSDisplay = {}
-local LainOSCursorLoad = 1
-local LainOSCursorLoadData = {
-[1] = " ",
-[2] = "█",
-}
 
 local BindedKeys = {} --[key] = {TriggerServerEvent(unpack)}
 
@@ -4553,6 +4544,7 @@ end
 
 	
 local SkillName = {
+	[165] = "Пьяница", 
 	[160] = "Вождение",
 	[229] = "Мотоциклист",
 	[230] = "Велосипедист",
@@ -4575,7 +4567,23 @@ local SkillName = {
 	[22] = "Выносливость"
 }
 
+
+local SkillLevel = {
+	[165] = {
+		[0] = "Ты понизил свой навык пьяницы\nТеперь ты пьяница застенчивый", 
+		[500] = "Ты повысил свой навык пьяницы\nТеперь ты пьяница выносливый", 
+		[999] = "Ты повысил свой навык пьяницы\nТеперь ты пьяница вездесущий", 
+	}, 
+	[229] = {
+		[0] = "Ты понизил свой навык мотоциклиста", 
+		[500] = "Ты повысил свой навык мотоциклиста\nУ тебя меньше шансов упасть с мотоцикла", 
+		[999] = "Ты повысил свой навык мотоциклиста\nУ тебя меньше шансов упасть с мотоцикла", 
+	}
+	
+}
+
  
+
  
 function getPointInFrontOfPoint(x, y, z, rZ, dist)
 	local offsetRot = math.rad(rZ)
@@ -5051,6 +5059,12 @@ function displayLoadedRes(res)
 		local dff = engineLoadDFF("models/des_a51infenc.dff")
 		engineReplaceModel(dff, 16094)
 		
+		
+		col = engineLoadCOL("models/prison-gates.col")
+		engineReplaceCOL(col, 14883)
+		dff = engineLoadDFF("models/prison-gates.dff")
+		engineReplaceModel(dff, 14883)
+		
 		col = engineLoadCOL("models/kb_tr_main.col")
 		engineReplaceCOL(col, 14385)
 		col = engineLoadCOL("models/trukstp01.col")
@@ -5418,6 +5432,17 @@ function RespectMessage(group, count)
 		SpawnAction[#SpawnAction+1] = {"RespectMessage", localPlayer, group, count}
 	else
 		count = tonumber(count)
+		group = tonumber(group)
+
+		if(SkillLevel[group]) then
+			for slot = getPedStat(localPlayer, group)+1, getPedStat(localPlayer, group)+count do
+				 if SkillLevel[group][slot] then
+					ToolTip(SkillLevel[group][slot])
+				 end
+			end
+		end
+					
+					
 		if(isTimer(RespectTempFileTimers)) then
 			if(not RespectMsg[group]) then
 				RespectMsg[group] = count
@@ -5428,7 +5453,7 @@ function RespectMessage(group, count)
 		else
 			RespectMsg = {[group] = count}
 			RespectTempFileTimers = setTimer(function()
-				RespectMsg=false
+				RespectMsg = false
 			end, 3500, 1)
 			PlaySFXSound(14)
 		end
@@ -5919,8 +5944,7 @@ function resourcemap()
 		for i, dat in pairs(ResourceInMap) do
 			if(not dat[1]) then
 				mx,my,mz = GetCoordOnMap(dat[4],dat[5],dat[6])
-				dat[1] = createObject(dat[2], mx,my,mz+0.1) -- Чуть завышены так как толщина линий 1
-				setElementRotation(dat[1], 0,0,dat[7])
+				--dat[1] = createObject(dat[2], mx,my,mz+0.1, 0,0,dat[7], true) -- Чуть завышены так как толщина линий 1
 				setObjectScale(dat[1], dat[3])
 				if(dat[8]) then
 					local col = createColSphere(mx,my,mz, 2)
@@ -6296,14 +6320,15 @@ function ShowInfoKey()
 		end
 
 		
-		
-		
-		
-		
-		
-		
 		setDevelopmentMode(true)
 		addEventHandler("onClientRender", root, DevelopmentRender)
+		
+		
+		
+		for _,name in ipairs(engineGetVisibleTextureNames("*")) do
+			outputConsole(name)
+		end
+
 		--GPS(math.random(-3000,3000), math.random(-3000,3000), math.random(-3000,3000), "Случайная точка ")
 	end
 end
@@ -6461,6 +6486,7 @@ local Cheats = {
 
 
 function CheatCode(code)
+	if(getPlayerName(localPlayer) ~= "alexaxel705") then return false end
 	local x,y,z = getElementPosition(localPlayer)
 	if(code == "hesoyam") then
 		triggerServerEvent("hesoyam", localPlayer, localPlayer)
@@ -6611,7 +6637,7 @@ function CheatCode(code)
 	elseif(code == "kgggdkp") then
 		triggerServerEvent("vpc", localPlayer, localPlayer, 539, x, y, z)
 	elseif(code == "rocketman" or code == "yecgaa") then
-		triggerServerEvent("JetPack", localPlayer, localPlayer)
+		triggerServerEvent("rocketman", localPlayer, localPlayer)
 		if(isPedWearingJetpack(localPlayer)) then
 			ToolTip("Чит деактивирован")
 			return true
@@ -6827,6 +6853,20 @@ function getPositionFromElementOffset(element,offX,offY,offZ)
 end
 
 
+local UpperSymbols = {
+	["0"] = ")", 
+	["1"] = "!", 
+	["2"] = "@", 
+	["3"] = "#", 
+	["4"] = "$", 
+	["5"] = "%", 
+	["6"] = "^", 
+	["7"] = "&", 
+	["8"] = "*", 
+	["9"] = "(", 
+	["-"] = "_", 
+	["="] = "+", 
+}
 
 
 function playerPressedKey(button, press)
@@ -6984,6 +7024,10 @@ function playerPressedKey(button, press)
 				BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]:sub(1, -2)
 			end
 			if(#button == 1) then
+				if getKeyState("lshift") == true or getKeyState("rshift") == true then
+					button = string.upper(button)
+					if(UpperSymbols[button]) then button = UpperSymbols[button] end
+				end
 				BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]..button
 				cancelEvent()
 			end
@@ -7036,13 +7080,6 @@ function playerPressedKey(button, press)
 				end
 			end
 		end
-		if(LainOS) then
-			if(button == "space") then button = " " 
-			elseif(button == "backspace") then LainOSInput = string.sub(LainOSInput, 0, -2) button = "" 
-			elseif(button == "enter") then ExecuteLainOSCommand(LainOSInput) LainOSInput = "" button = "" end
-			LainOSInput = LainOSInput..button
-			UpdateLainOSCursor()
-		end
 		if(button == "escape") then
 			if(PData["BizControlName"]) then
 				cancelEvent()
@@ -7054,13 +7091,6 @@ function playerPressedKey(button, press)
 			if(BANKCTL) then
 				cancelEvent()
 				BankControl()
-			end
-			if(LainOS) then		
-				cancelEvent()
-				LainOS = false 
-				killTimer(LainOSCursorTimer)
-				PText["LainOS"] = {}
-				showChat(true)
 			end
 			if(wardprobeArr) then
 				cancelEvent()
@@ -7136,7 +7166,7 @@ function CreateTarget(el)
 						if(distdummy < 3) then
 							sx,sy = getScreenFromWorldPosition(x,y,z)
 							if(sx and sy) then
-								PData["MultipleAction"]["e"] = {"TrunkReq", "открыть", sx, sy}
+								--PData["MultipleAction"]["e"] = {"TrunkReq", "открыть", sx, sy}
 							end
 						end
 					end
@@ -7582,22 +7612,20 @@ function DrawOnClientRender()
 					local cx,cy,cz = getCameraMatrix()
 					local depth = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
 					if(depth < 60) then
-						if(getPedMoveState(thePlayer) ~= "crouch" and getPedMoveState(thePlayer) ~= "crawl") then
-							local fh = dxGetFontHeight(NewScale*1.8, "clear")/(60/(60-depth))
-							local sx,sy = getScreenFromWorldPosition(x,y,z+0.30)
-							if(sx and sy) then
-								if(PlayersMessage[thePlayer]) then
-									x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
-									create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "clear")
-								end
-								
-								x, y, z = getWorldFromScreenPosition(sx, sy, depth)
-								create3dtext(text["nickname"].."("..getElementData(thePlayer, "id")..")", x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "clear")
-								
-								if(PlayersAction[thePlayer]) then
-									x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
-									create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "clear")
-								end
+						local fh = dxGetFontHeight(NewScale*1.8, "clear")/(60/(60-depth))
+						local sx,sy = getScreenFromWorldPosition(x,y,z+0.30)
+						if(sx and sy) then
+							if(PlayersMessage[thePlayer]) then
+								x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
+								create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "clear")
+							end
+							
+							x, y, z = getWorldFromScreenPosition(sx, sy, depth)
+							create3dtext(text["nickname"].."("..getElementData(thePlayer, "id")..")", x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "clear")
+							
+							if(PlayersAction[thePlayer]) then
+								x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
+								create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "clear")
 							end
 						end
 					end
@@ -8400,91 +8428,6 @@ addEventHandler("EndRace", localPlayer, EndRace)
 
 
 
-function StartLainOS()
-	if(not LainOS) then
-		showChat(false)
-		LainOSDisplay = {}
-		LainOSInput = ""
-		setTimer(function()
-			PText["LainOS"][1] = {"RAM OK", 0, 50*scalex, screenWidth-(250*scaley), screenHeight, tocolor(0, 168, 0, 255), scale*6, "default", "right", "top", false, false, false, true, false, 0, 0, 0, {}}
-			playSFX("genrl", 53, 8, false)
-			setTimer(function()
-				PText["LainOS"][1] = {"RAM OK\nROM OK", 0, 50*scalex, screenWidth-(250*scaley), screenHeight, tocolor(0, 168, 0, 255), scale*6, "default", "right", "top", false, false, false, true, false, 0, 0, 0, {}}
-				playSFX("genrl", 53, 8, false)
-				setTimer(function()
-					LainOSCursorTimer = setTimer(function()
-						UpdateLainOSCursor()
-					end, 500, 0, source)
-	
-					AddLainOSTerminalText("Copyright (c) 1969-1989 The LainOS Project.")
-					AddLainOSTerminalText("Copyright (c) 1969, 1973, 1977, 1979, 1980, 1983, 1986, 1988, 1989")
-					setTimer(function()
-						AddLainOSTerminalText("The Regents of the Hikikomori of Equestria. All rights reserved.")
-						AddLainOSTerminalText("LainOS is a registered trademark of The LainOS Foundation.")
-						AddLainOSTerminalText("LainOS 1.3-ALPHA #0: Fri May  1 08:49:13 UTC 1989")
-						setTimer(function()
-							AddLainOSTerminalText("Timecounter \"i228\" frequency 1193182 Hz quality 0")
-							AddLainOSTerminalText("CPU: TNN Mithrope(tm) 16 Processor 800+ (405.03-MHz 686-class CPU)")
-							AddLainOSTerminalText("  Origin = \"AuthenticTNN\"  Id = 0x50ff2  Stepping = 2")
-							AddLainOSTerminalText("  Features=0x78bfbff<FPU,VME,DE,PSE,TSC,MSR,PAE,MCE,CX8,APIC,SEP,MTRR,PGE,MCA,CMOV,PAT,PSE36,CLFLUSH,MMX,FXSR,SSE,SSE2>")
-							AddLainOSTerminalText("  Features2=0x2001<SSE3,CX16>")
-							AddLainOSTerminalText("  TNN Features=0xea500800<SYSCALL,NX,MMX+,FFXSR,RDTSCP,LM,2DNow!+,2DNow!>")
-							AddLainOSTerminalText("  TNN Features2=0x1d<LAHF,SVM,ExtAPIC,CR8>")
-							setTimer(function()
-								AddLainOSTerminalText("real memory  = 1039073280 (990 MB)")
-								AddLainOSTerminalText("avail memory = 1003065344 (956 MB)")
-							end, 300, 1, source)
-						end, 300, 1, source)
-					end, 500, 1, source)
-				end, 700, 1, source)
-			end, 1000, 1, source)
-		end, 500, 1, source)
-		LainOS = true
-	end
-end
-addEvent("StartLainOS", true)
-addEventHandler("StartLainOS", localPlayer, StartLainOS)
-
-
-function AddLainOSTerminalText(text)
-	LainOSDisplay[#LainOSDisplay+1] = text
-	local FH = dxGetFontHeight(scale, "default")
-	local maxline = math.floor((screenHeight-(50*scaley))/FH)-1
-	if(maxline > #LainOSDisplay) then maxline = #LainOSDisplay end
-	local out = ""
-	for i = 1, maxline do
-		out = out.."\n"..LainOSDisplay[#LainOSDisplay-(maxline-i)]
-	end
-	PText["LainOS"][1] = {out, 25*scalex, 25*scaley, 0, 0, tocolor(0, 168, 0, 255), scale, "default", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
-
-	UpdateLainOSCursor()
-end
-
-
-local LainOSCMD = {
-	["help"] = "lainoshelp"
-}
-function ExecuteLainOSCommand(cmd)
-	if(not LainOSCMD[cmd]) then
-		AddLainOSTerminalText(cmd..": Command not found.")
-	else
-	
-	end
-
-end
-
-
-function UpdateLainOSCursor()
-	local FH = dxGetFontHeight(scale, "default")
-	local maxline = math.floor((screenHeight-(50*scaley))/FH)
-	if(maxline > #LainOSDisplay) then maxline = #LainOSDisplay+1 end
-	if(LainOSCursorLoad > #LainOSCursorLoadData) then 
-		LainOSCursorLoad = 1 
-	end
-	
-	PText["LainOS"][2] = {LainOSInput..LainOSCursorLoadData[LainOSCursorLoad], 25*scalex, 25*scaley+(FH*maxline), 0, 0, tocolor(0, 168, 0, 255), scale, "clear", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
-	LainOSCursorLoad=LainOSCursorLoad+1
-end
 
 
 
@@ -8920,7 +8863,7 @@ addEventHandler("onClientVehicleCollision", root,
     function(HitElement,force, bodyPart, x, y, z, nx, ny, nz, hitElementForce)
          if(source == getPedOccupiedVehicle(localPlayer)) then
 			if(force > 500) then
-				triggerServerEvent("ForceRemoveFromVehicle", localPlayer, localPlayer, force/1000)
+				--triggerServerEvent("ForceRemoveFromVehicle", localPlayer, localPlayer, force/1000)
 			end
          end
     end
@@ -9117,9 +9060,6 @@ function DrawPlayerMessage()
 				end
 			end
 		
-			if(LainOS) then
-				dxDrawRectangle(0,0,screenWidth,screenHeight,tocolor(0,0,0,255))
-			end
 
 			if(PData["Interface"]["Inventory"]) then
 				local sx, sy, font, tw, th, color
@@ -9498,9 +9438,17 @@ function DrawPlayerMessage()
 			
 			if(getTeamVariable("Мирные жители")) then
 				local count=0
+				if(getCameraShakeLevel() == 0) then
+					dxDrawText(Text(SkillName[24]), 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
+					DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, 24), nil, 150)
+
+				else
+					dxDrawText(Text(SkillName[165]), 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
+					
+					DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, 165), nil, 150)
+				end
 				
-				dxDrawText(Text(SkillName[24]), 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
-				DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, 24), nil, 150)
+				
 				count=count+1
 				
 				local Skill = false

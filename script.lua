@@ -3098,6 +3098,29 @@ local TrailersVaritans = {
 
 
 
+function IsVehicleYear(model)
+	local validate = false
+	if(VehicleSystem[model][9][2] <= ServerDate.year+1900) then -- Начало производства авто
+		if(VehicleSystem[model][9][2] == ServerDate.year+1900) then -- Производство текущего года
+			if(VehicleSystem[model][9][1] > ServerDate.month) then -- Зависимость от месяца
+				validate = true
+			end
+		end
+		
+		if(VehicleSystem[model][10][2] >= ServerDate.year+1900) then -- Конец производства авто
+			if(VehicleSystem[model][10][2] == ServerDate.year+1900) then -- Производство текущего года
+				if(VehicleSystem[model][10][1] < ServerDate.month) then -- Зависимость от месяца
+					validate = true
+				end
+			end
+		end
+	else
+		validate = true
+	end
+	--return validate
+	return true
+end
+
 local BrokenVehicleHandlingPrototype = {404, 604, 467, 401, 543, 478, 474} -- Запчасти с перечисленных авто используются рандомно в б\у авто
 function SpawnCarForSale(update)
 	if(update) then
@@ -3114,30 +3137,9 @@ function SpawnCarForSale(update)
 	local VCL = {}
 	for CompanyName, models in pairs(CarsForSaleModel) do
 		for i, model in pairs(models) do
-			local block = false
-			if(VehicleSystem[model][9][2] <= ServerDate.year+1900) then -- Начало производства авто
-				if(VehicleSystem[model][9][2] == ServerDate.year+1900) then -- Производство текущего года
-					if(VehicleSystem[model][9][1] > ServerDate.month) then -- Зависимость от месяца
-						block = true
-					end
-				end
-				if(VehicleSystem[model][10][2] >= ServerDate.year+1900) then -- Конец производства авто
-					if(VehicleSystem[model][10][2] == ServerDate.year+1900) then -- Производство текущего года
-						if(VehicleSystem[model][10][1] < ServerDate.month) then -- Зависимость от месяца
-							if(CompanyName ~= "LV Trash" and CompanyName ~= "Coutt And Schutz") then -- Для рынка б\у авто
-								block = true
-							end
-						end
-					end
-				else
-					if(CompanyName ~= "LV Trash" and CompanyName ~= "Coutt And Schutz") then -- Для рынка б\у авто
-						block = true
-					end
-				end
-				if(not block) then
-					if(not VCL[CompanyName]) then VCL[CompanyName] = {} end
-					VCL[CompanyName][#VCL[CompanyName]+1] = model
-				end
+			if(IsVehicleYear(model) or CompanyName == "LV Trash" or CompanyName == "Coutt And Schutz") then
+				if(not VCL[CompanyName]) then VCL[CompanyName] = {} end
+				VCL[CompanyName][#VCL[CompanyName]+1] = model
 			end
 		end
 	end
@@ -3158,10 +3160,10 @@ function SpawnCarForSale(update)
 					for slot = 0, 5 do
 						setVehicleDoorState(arr[1], slot, math.random(0,3))
 					end
-					local maxyear = VehicleSystem[model][10][2]
-					if(maxyear > ServerDate.year+1900) then maxyear = ServerDate.year+1900 end
+					--local maxyear = VehicleSystem[model][10][2]
+					--if(maxyear > ServerDate.year+1900) then maxyear = ServerDate.year+1900 end
 
-					setElementData(arr[1], "year", math.random(VehicleSystem[model][9][2], maxyear))
+					--setElementData(arr[1], "year", math.random(VehicleSystem[model][9][2], maxyear))
 					setElementData(arr[1], "price", math.round((HT["monetary"]/2)+math.random(-2000, 2000), 0))
 
 					local comp = { -- Выдаем случайные запчасти
@@ -3210,29 +3212,29 @@ CreateVehicle(460, -959.0813, 2629.206, 43.229, 0, 0, 110)
 
 
 
---[Должность], необходимая репутация, фракция, скин
+--[Должность], {необходимая репутация, фракция, зарплата, скин}
 local VacancyDATA = {
-	["Патриарх"] = {250, "Мирные жители", 0, 68},
-	["Рядовой"] = {10, "Полиция", 0, 280},
-	["Инспектор ДПС"] = {25, "Полиция", 0, 284},
-	["Сержант"] = {100, "Полиция", 0, 281},
-	["Лейтенант"] = {250, "Полиция", 0, 282},
-	["SWAT"] = {300, "Полиция", 0, 285},
-	["Офицер 1 класса"] = {400, "Полиция", 0, 267},
-	["Офицер 2 класса"] = {500, "Полиция", 0, 266},
-	["Шериф округа Red County"] = {600, "Полиция", 0, 283},
-	["Помощник шерифа"] = {700, "Полиция", 0, 288},
-	["Начальник LSPD"] = {0, "Полиция", 0, 265},
-	["Начальник SFPD"] = {0, "Полиция", 0},
-	["Начальник LVPD"] = {0, "Полиция", 0},
-	["ФБР"] = {250, "ФБР", 0, 286},
-	["Директор ЦРУ"] = {0, "ЦРУ", 0, 166},
-	["Санитар"] = {0, "МЧС", 0, 276},
-	["Репортер"] = {500, "Мирные жители", 0},
-	["Ученик"] = {70, "МЧС", 0, 275},
-	["Врач"] = {120, "МЧС", 0, 274},
-	["Учёный CPC"] = {200, "ЦРУ", 0, 70},
-	["Тайный агент по борьбе с наркотиками"] = {400, "ЦРУ", 0, 295},
+	["Патриарх"] = {250, "Мирные жители", 600, 68},
+	["Рядовой"] = {10, "Полиция", 5000, 280},
+	["Инспектор ДПС"] = {25, "Полиция", 8000, 284},
+	["Сержант"] = {100, "Полиция", 10000, 281},
+	["Лейтенант"] = {250, "Полиция", 15000, 282},
+	["SWAT"] = {300, "Полиция", 20000, 285},
+	["Офицер 1 класса"] = {400, "Полиция", 25000, 267},
+	["Офицер 2 класса"] = {500, "Полиция", 28000, 266},
+	["Шериф округа Red County"] = {600, "Полиция", 30000, 283},
+	["Помощник шерифа"] = {700, "Полиция", 15000, 288},
+	["Начальник LSPD"] = {0, "Полиция", 40000, 265},
+	["Начальник SFPD"] = {0, "Полиция", 45000},
+	["Начальник LVPD"] = {0, "Полиция", 50000},
+	["ФБР"] = {250, "ФБР", 60000, 286},
+	["Директор ЦРУ"] = {0, "ЦРУ", 70000, 166},
+	["Санитар"] = {0, "МЧС", 7500, 276},
+	["Репортер"] = {500, "Мирные жители", 25000},
+	["Ученик"] = {70, "МЧС", 7500, 275},
+	["Врач"] = {120, "МЧС", 15000, 274},
+	["Учёный CPC"] = {200, "ЦРУ", 80000, 70},
+	["Тайный агент по борьбе с наркотиками"] = {400, "ЦРУ", 100000, 295},
 }
 
 
@@ -4126,7 +4128,7 @@ local RandomVehicles = {}
 function SpawnAllVehicle()
 	SData["PriceAuto"] = {}
 	for _, model in pairs(SourceData["PriceAuto"]) do
-		if(VehicleSystem[model][9][2] <= ServerDate.year+1900) then
+		if(IsVehicleYear(model)) then
 			SData["PriceAuto"][#SData["PriceAuto"]+1] = model
 		end
 	end
@@ -4136,33 +4138,16 @@ function SpawnAllVehicle()
 	for team, arr in pairs(SourceData["TeamVehicle"]) do
 		for region, arr2 in pairs(arr) do
 			if(tonumber(region)) then -- Если не указана местность
-				local skip = false
-				if(VehicleSystem[arr2[1]][9][2] <= ServerDate.year+1900) then
-					if(ServerDate.year+1900 == VehicleSystem[arr2[1]][9][2]) then -- Проверка на месяц
-						if(VehicleSystem[arr2[1]][9][1] >= ServerDate.month) then
-							skip = true
-						end
-					end
-
-					if(not skip) then
-						if(not SData["TeamVehicle"][team]) then SData["TeamVehicle"][team] = {} end
-						SData["TeamVehicle"][team][#SData["TeamVehicle"][team]+1] = arr2
-					end
+				if(IsVehicleYear(arr2[1])) then
+					if(not SData["TeamVehicle"][team]) then SData["TeamVehicle"][team] = {} end
+					SData["TeamVehicle"][team][#SData["TeamVehicle"][team]+1] = arr2
 				end
 			else
 				for i, arr3 in pairs(arr2) do
-					local skip = false
-					if(VehicleSystem[arr3[1]][9][2] <= ServerDate.year+1900) then
-						if(ServerDate.year+1900 == VehicleSystem[arr3[1]][9][2]) then -- Проверка на месяц
-							if(VehicleSystem[arr3[1]][9][1] >= ServerDate.month) then
-								skip = true
-							end
-						end
-						if(not skip) then
-							if(not SData["TeamVehicle"][team]) then SData["TeamVehicle"][team] = {} end
-							if(not SData["TeamVehicle"][team][region]) then SData["TeamVehicle"][team][region] = {} end
-							SData["TeamVehicle"][team][region][#SData["TeamVehicle"][team][region]+1] = arr3
-						end
+					if(IsVehicleYear(arr3[1])) then
+						if(not SData["TeamVehicle"][team]) then SData["TeamVehicle"][team] = {} end
+						if(not SData["TeamVehicle"][team][region]) then SData["TeamVehicle"][team][region] = {} end
+						SData["TeamVehicle"][team][region][#SData["TeamVehicle"][team][region]+1] = arr3
 					end
 				end
 			end
@@ -4195,33 +4180,25 @@ function SpawnAllVehicle()
 
 
 	for _, k in pairs(NonRandVeh) do
-		local skip = false
-		if(VehicleSystem[k[2]][9][2] <= ServerDate.year+1900) then
-			if(ServerDate.year+1900 == VehicleSystem[k[2]][9][2]) then -- Проверка на месяц
-				if(VehicleSystem[k[2]][9][1] >= ServerDate.month) then
-					skip = true
+		if(IsVehicleYear(k[2])) then
+			if(not k[1]) then
+				k[1] = CreateVehicle(k[2], k[3], k[4], k[5]+VehicleSystem[k[2]][1], k[6], k[7], k[8], k[9], k[10], k[11], k[12])
+				if(k[13]) then
+					setVehicleColor(k[1], unpack(k[13]))
 				end
-			end
-			if(not skip) then
-				if(not k[1]) then
-					k[1] = CreateVehicle(k[2], k[3], k[4], k[5]+VehicleSystem[k[2]][1], k[6], k[7], k[8], k[9], k[10], k[11], k[12])
-					if(k[13]) then
-						setVehicleColor(k[1], unpack(k[13]))
-					end
-					if(k[14]) then
-						UpdateVehicleHandling(k[1], k[14])
-					end
-					if(k[15]) then
-						setElementData(k[1], 'name', k[15])
-					end
+				if(k[14]) then
+					UpdateVehicleHandling(k[1], k[14])
+				end
+				if(k[15]) then
+					setElementData(k[1], 'name', k[15])
+				end
 
-					--if(getElementData(k[1], "trunk")) then
-					--	local arr = fromJSON(getElementData(k[1], "trunk"))
-					--	if(arr[1]) then arr[1] = {"Запаска", 1, math.random(250,550), {}} end
-					--	if(arr[2]) then arr[2] = {"Огнетушитель", 1, math.random(250,550), {}} end
-					--	setElementData(k[1], "trunk", toJSON(arr))
-					--end
-				end
+				--if(getElementData(k[1], "trunk")) then
+				--	local arr = fromJSON(getElementData(k[1], "trunk"))
+				--	if(arr[1]) then arr[1] = {"Запаска", 1, math.random(250,550), {}} end
+				--	if(arr[2]) then arr[2] = {"Огнетушитель", 1, math.random(250,550), {}} end
+				--	setElementData(k[1], "trunk", toJSON(arr))
+				--end
 			end
 		end
 	end
@@ -4458,73 +4435,77 @@ addEventHandler("UpgradePreload", root, UpgradePreload)
 
 
 
+local hg = createObject(3749, 1245.5, -767.2, 96.1, 0,0,0)
+hg = createObject(10184, 1245.5, -767, 93.6, 0,0,90)
+setElementData(hg, "house", "h208")
+setElementData(hg, "gates", toJSON({1245.5, -767, 98, 0,0,0}))
 
 
+hg = createObject(975, 1002.8, -644, 122.2, 0,2,24)
+setElementData(hg, "house", "h221")
+setElementData(hg, "gates", toJSON({996.6, -646.8, 122.4, 0,0,0}))
 
-
-
-local hg = createObject(17566, 2783.3, -1245.6, 48, 0,0,90)
+hg = createObject(17566, 2783.3, -1245.6, 48, 0,0,90)
 setElementData(hg, "house", "h398")
 setElementData(hg, "gates", toJSON({2783.3, -1245.6, 50, 0,60,0}))
 
-local hg = createObject(17566, 2805.1, -1245.7, 46.7, 0,0,90)
+hg = createObject(17566, 2805.1, -1245.7, 46.7, 0,0,90)
 setElementData(hg, "house", "h399")
 setElementData(hg, "gates", toJSON({2805.1, -1245, 48.5, 0,30,0}))
 
-local hg = createObject(17566, 2809.4, -1288.3, 42.2, 0,0,0)
+hg = createObject(17566, 2809.4, -1288.3, 42.2, 0,0,0)
 setElementData(hg, "house", "h400")
 setElementData(hg, "gates", toJSON({2809.4, -1288.3, 44.2, 0,60,0}))
 
-local hg = createObject(17566, 2809.4, -1310.2, 37.2, 0,0,0)
+hg = createObject(17566, 2809.4, -1310.2, 37.2, 0,0,0)
 setElementData(hg, "house", "h401")
 setElementData(hg, "gates", toJSON({2809.3, -1310.2, 39.2, 0,60,0}))
 
-local hg = createObject(17566,2809.4, -1332.2, 32.2, 0,0,0)
+hg = createObject(17566,2809.4, -1332.2, 32.2, 0,0,0)
 setElementData(hg, "house", "h402")
 setElementData(hg, "gates", toJSON({2809.4, -1332.2, 34.2, 0,60,0}))
 
-local hg = createObject(17566,2783, -1288.5, 42.6, 0,0,0)
+hg = createObject(17566,2783, -1288.5, 42.6, 0,0,0)
 setElementData(hg, "house", "h407")
 setElementData(hg, "gates", toJSON({2783, -1288.5, 44.6, 0,-60,0}))
 
-local hg = createObject(17566,2783, -1313.7, 37, 0,0,0)
+hg = createObject(17566,2783, -1313.7, 37, 0,0,0)
 setElementData(hg, "house", "h408")
 setElementData(hg, "gates", toJSON({2783, -1313.7, 39, 0,-60,0}))
 
-local hg = createObject(17566,2783, -1340.6, 30.7, 0,0,0)
+hg = createObject(17566,2783, -1340.6, 30.7, 0,0,0)
 setElementData(hg, "house", "h409")
 setElementData(hg, "gates", toJSON({2783, -1340.6, 32.7, 0,-60,0}))
 
-local hg = createObject(17566,2783, -1365.8, 24.7, 0,0,0)
+hg = createObject(17566,2783, -1365.8, 24.7, 0,0,0)
 setElementData(hg, "house", "h410")
 setElementData(hg, "gates", toJSON({2783, -1365.8, 26.7, 0,-60,0}))
 
-local hg = createObject(975,263.7, -1332.6, 53.92, 0,-1.7,38)
+hg = createObject(975,263.7, -1332.6, 53.92, 0,-1.7,38)
 setElementData(hg, "house", "h280")
 setElementData(hg, "gates", toJSON({270, -1327.8, 54.15, 0,0,0}))
 
-
-local hg = createObject(10184,1535.1, -1451.8, 14.9, 0,0,270)
+hg = createObject(10184,1535.1, -1451.8, 14.9, 0,0,270)
 setElementData(hg, "house", "h544")
 setElementData(hg, "gates", toJSON({1535.1, -1451.8, 18.4, 0,0,0}))
 
-local hg = createObject(975,832.5, -866.4, 69.1, 0,0,200)
+hg = createObject(975,832.5, -866.4, 69.1, 0,0,200)
 setElementData(hg, "house", "h56")
 setElementData(hg, "gates", toJSON({827, -868.6, 69.1, 0,0,0}))
 
-local hg = createObject(975, 200.4, -1386.5, 49.3, 0,354,46)
+hg = createObject(975, 200.4, -1386.5, 49.3, 0,354,46)
 setElementData(hg, "house", "h281")
 setElementData(hg, "gates", toJSON({206, -1380.7, 50.1, 0,2,0}))
 
-local hg = createObject(988, 284.3, -1318.1, 54, 0,1,216)
+hg = createObject(988, 284.3, -1318.1, 54, 0,1,216)
 setElementData(hg, "house", "h279")
 setElementData(hg, "gates", toJSON({287.7, -1315.6, 54, 0,0,0}))
 
-local hg = createObject(988, 279.8, -1321.2, 53.9, 0,1,214)
+hg = createObject(988, 279.8, -1321.2, 53.9, 0,1,214)
 setElementData(hg, "house", "h279")
 setElementData(hg, "gates", toJSON({276, -1323.8, 53.7, 0,0,0}))
 
-local hg = createObject(2990, 321.3, -1188.3, 79.3, 0,359,38)
+hg = createObject(2990, 321.3, -1188.3, 79.3, 0,359,38)
 setElementData(hg, "house", "h261")
 setElementData(hg, "gates", toJSON({328, -1183.1, 79.3, 0,0,0}))
 
@@ -4629,11 +4610,6 @@ local CrackDoor1 = createObject(18553,2522.5, -1301.9, 1048.5)
 setElementInterior(CrackDoor1,2)
 local CrackDoor2 = createObject(18553,2571.2, -1301.9, 1044.3)
 setElementInterior(CrackDoor2,2)
-
-local LainOS = createPickup(213.9, 1827.5, 6.41, 3, 1239, 0)
-setElementData(LainOS, "type", "function")
-setElementData(LainOS, "funcname", "StartLainOS")
-setElementData(LainOS, "funcinfo", "Управление "..COLOR["TEXT"]["HEX"].."компьютером#FFFFFF")
 
 
 
@@ -5087,7 +5063,7 @@ function tp(thePlayer, command, h)
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
 
-		local x,y,z,i,d  = 		1527.229980,-11.574499,1002.097106, 3, 1 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 265.6, 1883.9, -30.1, 0, 0 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -5251,13 +5227,6 @@ local CopsBiz = {
 
 function CreateCop(x,y,z,rz, types, id)
 	CreateEnter(x, y, z, rz, 0, 0, false, 322.2, 302.3, 999.2, 0, 5, id, types)
-	local o = createObject(2930, 320.9, 316.1, 1000.7)
-	setElementDimension(o, id)
-	setElementInterior(o, 5)
-
-	local o = createObject(2930, 320.9, 318, 1000.7)
-	setElementDimension(o, id)
-	setElementInterior(o, 5)
 
 	local o = createObject(1536, 321.45, 301.9, 998.2)
 	setElementDimension(o, id)
@@ -5563,6 +5532,14 @@ function vending(thePlayer)
 		if(isElementWithinColShape(thePlayer, PData[thePlayer]["VendingCol"])) then
 			DrinkSprunk(thePlayer, getElementData(PData[thePlayer]["VendingCol"], "vending"))
 		end
+	end
+	
+	if(isPedWearingJetpack(thePlayer)) then
+		local x,y,z = getElementPosition(thePlayer)
+		local arm = createPickup(x,y,z, 3, 370)
+		setElementData(arm, "type", "jetpack")
+		
+		jetPack(thePlayer, false)
 	end
 end
 
@@ -6248,13 +6225,6 @@ addEventHandler("EnterGarage", root, EnterGarage)
 
 
 
-
-
-function StartLainOS()
-	triggerClientEvent(source, "StartLainOS", source)
-end
-addEvent("StartLainOS", true)
-addEventHandler("StartLainOS", root, StartLainOS)
 
 
 local ShmalTimer = {}
@@ -7070,7 +7040,7 @@ function usedrink(thePlayer)
 	setElementHealth(thePlayer, getElementHealth(thePlayer)+5)
 	triggerClientEvent(thePlayer, "ShakeLevel", thePlayer, 25)
 	setPedWalkingStyle(thePlayer, 126)
-
+	AddSkill(thePlayer, 165, 5)
 	local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 	if(PlayerTeam == "Военные") then
 		if(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
@@ -7365,14 +7335,21 @@ addEventHandler("useinvweapon", root, useinvweapon)
 
 
 
-function JetPack(thePlayer)
+function rocketman(thePlayer)
 	setPedWearingJetpack(thePlayer, not isPedWearingJetpack(thePlayer))
 end
-addEvent("JetPack", true)
-addEventHandler("JetPack", root, JetPack)
+addEvent("rocketman", true)
+addEventHandler("rocketman", root, rocketman)
 
 
 
+function jetPack(thePlayer, state)
+	if(state) then
+		setPedWearingJetpack(thePlayer, true)
+	else
+		setPedWearingJetpack(thePlayer, false)
+	end
+end
 
 
 
@@ -10059,9 +10036,9 @@ function EnterHouse(buyhouse, spawn)
 		local HouseNode = xmlFindChild(HouseNode, buyhouse, 0)
 
 		if(xmlNodeGetAttribute(HouseNode, "locked") == "0" or spawn == true or xmlNodeGetValue(HouseNode) == '') then
-			local owner = "Дом на продажу"
+			local owner = "House for sale"
 			if(xmlNodeGetValue(HouseNode) ~= '') then
-				owner = "Дом "..xmlNodeGetValue(HouseNode)
+				owner = xmlNodeGetValue(HouseNode).." House"
 			end
 			local dolg = getPlayerHouseDolg(source)
 			if(dolg > 0) then
@@ -10521,7 +10498,8 @@ function ParkMyCar(theVehicle)
 
 
 		setVehicleRespawnPosition(theVehicle, x, y, z, rx, ry, rz)
-		outputChatBox("#CC9966Транспорт#FFFFFF успешно припаркован!", source,255,255,255,true)
+		
+		HelpMessage(source, "#CC9966Транспорт#FFFFFF успешно припаркован!")
 	end
 end
 addEvent("ParkMyCar", true)
@@ -10996,7 +10974,7 @@ function moneyPickupHit(thePlayer)
 				MissionCompleted(thePlayer, "ЭКИПИРОВКА +", "МИССИЯ ВЫПОЛНЕНА")
 				triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
 			end
-		end
+		end	
 	elseif(getElementData(source, "type") == "enter") then
 		PlayersEnteredPickup[thePlayer] = source
 		local text = Text(thePlayer, "Нажми {key} чтобы войти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}})
@@ -11012,12 +10990,17 @@ function moneyPickupHit(thePlayer)
 	else
 		if(getElementModel(source) == 1247) then
 			WantedLevel(thePlayer, -1)
+		elseif(getElementModel(source) == 370) then
+			jetPack(thePlayer, true)
+			
+			if(getElementData(source, "type") == "jetpack") then
+				destroyElement(source)
+			end
 		end
 	end
 end
 addEvent("onPickupUse", true)
 addEventHandler("onPickupUse", getRootElement(), moneyPickupHit)
-
 
 
 function Udobrenya(thePlayer, x,y) 
@@ -11141,8 +11124,9 @@ function worldtime()
 	local hour, minutes = getTime()
 	ServerDate = getRealTime(ServerDate.timestamp+60)
 	if(minutes == 0) then
-		callRemote("http://109.227.228.4/engine/include/MTA/get_online.php", ResultGet)
-
+		if(getServerPort() == 22003) then
+			callRemote("http://109.227.228.4/engine/include/MTA/get_online.php", ResultGet)
+		end
 		for name, dat in pairs(BizInfo) do
 			local items = GetBizGeneration(name)
 			if(#items["Sell"] > 0) then -- Если есть создаваемые товары
@@ -11636,7 +11620,7 @@ function SetNextDynamicNode(thePed, forced)
 					return true
 				end
 			end
-			if(PathNodes[nextnode][nextid][1] == true) then
+			if(PathNodes[nextnode][nextid][1] == true or PathNodes[nextnode][nextid][1] == "Closed") then
 				local nextnode2, nextid2 = unpack(FoundNextRandomNode(nextnode, nextid))
 				setElementData(thePed, "DynamicBot", toJSON({
 					PathNodes[nextnode][nextid][2], PathNodes[nextnode][nextid][3], PathNodes[nextnode][nextid][4], PathNodes[nextnode][nextid][5],
@@ -11755,7 +11739,7 @@ function InitDynamicBot()
 	for district, arr in pairs(PathNodes) do
 		for i, k in pairs(arr) do
 			if(k[1] == true) then
-				local rand = math.random(1,70)
+				local rand = math.random(1,75)
 				if(rand == 1) then
 					CreateDynamicBot(false, district, i)
 				end
@@ -11839,15 +11823,7 @@ function PlayerElementSync(thePlayer, obj, state)
 							local zone = getZoneName(PathNodes[node][id][2], PathNodes[node][id][3], PathNodes[node][id][4], false)
 							if(VehicleRegionSpecific[zone]) then
 								for _, model in pairs(VehicleRegionSpecific[zone]) do
-									if(model == 431) then
-										if(ServerDate.year+1900 <= 1986) then
-											arr[#arr+1] = {model}
-										end
-									elseif(model == 437) then
-										if(ServerDate.year+1900 >= 1986) then
-											arr[#arr+1] = {model}
-										end
-									else
+									if(IsVehicleYear(model)) then
 										arr[#arr+1] = {model}
 									end
 								end
@@ -12463,7 +12439,6 @@ function st(thePlayer)
 		if(not kandidats[getPlayerName(thePlayer)]) then
 			if(getArrSize(kandidats) < 9) then
 				kandidats[getPlayerName(thePlayer)] = 0
-				disableVoice[getPlayerName(thePlayer)] = true
 				HelpMessage(thePlayer, "Ты предложил свою кандидатуру\nОжидай начала голосования")
 			else
 				outputChatBox("К сожалению ты не успел, число кандидатов превысило 9 чел.", thePlayer, 255, 255, 255, true)
@@ -12523,6 +12498,18 @@ addCommandHandler("arm", arm)
 
 
 
+function teamleave(thePlayer)
+	local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
+	if(PlayerTeam ~= "Мирные жители" and PlayerTeam ~= "Уголовники") then
+		SetTeam(thePlayer, "Мирные жители")
+	
+		UpdateTutorial(thePlayer)
+		F4_Load(thePlayer)
+	else
+		HelpMessage(thePlayer, "Ты не состоишь в банде")
+	end
+end
+addCommandHandler("teamleave", teamleave)
 
 
 
@@ -12578,9 +12565,13 @@ function PayDay()
 		if(team) then
 			local bankMoney = GetDatabaseAccount(thePlayer, "bank")
 			local price = GetDatabaseZoneTeamPrice(getTeamName(team))
+			local price2 = ""
 			local PTeam = getTeamName(team)
 			if(price > 0) then
 				AddPlayerMoney(thePlayer, price)
+				price = "\n#FFFFFFПрибыль "..RGBToHex(getTeamColor(team))..getTeamName(team)..COLOR["DOLLAR"]["HEX"].." $"..price
+			else
+				price = ""
 			end
 
 			PData[thePlayer]["PayDay"] = PData[thePlayer]["PayDay"]+math.random(1000, 5000)
@@ -12588,9 +12579,6 @@ function PayDay()
 
 			SetDatabaseAccount(thePlayer, "bank", bankMoney+math.ceil((bankMoney/1000)))
 
-			ToolTip(thePlayer, "#FFFFFFБонус за время проведенное в игре "..COLOR["DOLLAR"]["HEX"].."$"..PData[thePlayer]["PayDay"].."\n"..
-			"#FFFFFFБанк "..COLOR["DOLLAR"]["HEX"].."$"..math.ceil((bankMoney/1000)).."#FFFFFF ("..(1/10).."%)\n"..
-			"#FFFFFFЗарплата "..COLOR["DOLLAR"]["HEX"].."$"..price)
 			if(BandRangs[PTeam]) then
 				local new = tostring(GetBandRangSkin(PTeam, GetDatabaseAccount(thePlayer, getTeamVariable(PTeam))))
 				local arr = fromJSON(GetDatabaseAccount(thePlayer, "wardrobe"))
@@ -12608,23 +12596,29 @@ function PayDay()
 			local job = IsPlayerJob(getPlayerName(thePlayer))
 			if(job) then
 				if(VacancyDATA[job]) then
-					local new = tostring(VacancyDATA[job][4])
-					local arr = fromJSON(GetDatabaseAccount(thePlayer, "wardrobe"))
-
-					if(not arr[new]) then
-						arr[new] = 1
-					elseif(arr[new] < 999) then
-						arr[new] = arr[new]+1
+					price2 = VacancyDATA[job][3]
+					AddPlayerMoney(thePlayer, price2)
+					price2 = "\n#FFFFFF"..job.." "..COLOR["DOLLAR"]["HEX"].."$"..price2
+					if(VacancyDATA[job][4]) then -- Выдача униформы
+						local new = tostring(VacancyDATA[job][4])
+						local arr = fromJSON(GetDatabaseAccount(thePlayer, "wardrobe"))
+	
+						if(not arr[new]) then
+							arr[new] = 1
+						elseif(arr[new] < 999) then
+							arr[new] = arr[new]+1
+						end
+						triggerClientEvent(thePlayer, "InformTitle", thePlayer, new, "wardrobe")
+						SetDatabaseAccount(thePlayer, "wardrobe", toJSON(arr))
 					end
-					triggerClientEvent(thePlayer, "InformTitle", thePlayer, new, "wardrobe")
-					SetDatabaseAccount(thePlayer, "wardrobe", toJSON(arr))
 				end
 			end
-
+			
+			ToolTip(thePlayer, "#FFFFFFБанк "..COLOR["DOLLAR"]["HEX"].."$"..math.ceil((bankMoney/1000)).."#FFFFFF ("..(1/10).."%)"..
+			price..price2.."\n#FFFFFFБонус за время проведенное в игре "..COLOR["DOLLAR"]["HEX"].."$"..PData[thePlayer]["PayDay"])
 		end
 	end
-
-
+	
 	local HouseNodes = xmlNodeGetChildren(HouseNode)
 	for i,node in ipairs(HouseNodes) do
 		if(xmlNodeGetValue(node) ~= "") then
@@ -13274,12 +13268,15 @@ local tmpi = 1
 local tmpcity = ""
 function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local res = getResourceFromName("vehicle_node") -- Interface
-		restartResource(res)
+		--local res = getResourceFromName("vehicle_node") -- Interface
+		--restartResource(res)
 		--local res = getResourceFromName("object_image") -- Interface
 		--restartResource(res)
 		--local res = getResourceFromName("interface") -- Interface
 		--restartResource(res)
+		
+		local res = getResourceFromName("interface") -- Interface
+		restartResource(res)
 		PathNodes = exports["vehicle_node"]:GetVehicleNodes()
 		PedNodes = exports["vehicle_node"]:GetPedNodes()
 		
@@ -14496,6 +14493,8 @@ function BindAllKey(thePlayer)
 		bindKey(thePlayer, "F4", "down", F4_Loding)
 		bindKey(thePlayer, "num_5", "down", restartMode)
 		bindKey(thePlayer, "f", "down", vending)
+		bindKey(thePlayer, "enter", "down", vending)
+		
 	end
 end
 
@@ -14516,6 +14515,7 @@ function UnBindAllKey(thePlayer)
 		unbindKey(thePlayer, "F4", "down", F4_Loding)
 		unbindKey(thePlayer,"num_5", "down", restartMode)
 		unbindKey(thePlayer, "f", "down", vending)
+		unbindKey(thePlayer, "enter", "down", vending)
 		UnBindAllVehicleKey(thePlayer)
 	end
 end
@@ -14555,7 +14555,7 @@ end
 
 function helpcmd(thePlayer)
 	outputChatBox("/piss - обоссать, /wank - подрочить, /dance [1-13] - танцевать", thePlayer)
-	outputChatBox("/arm - служить в армии", thePlayer)
+	outputChatBox("/arm - служить в армии, /teamleave - покинуть фракцию", thePlayer)
 	outputChatBox("/changepass старый пароль новый пароль", thePlayer)
 	
 	if(getPlayerName(thePlayer) == "alexaxel705") then
@@ -15760,7 +15760,7 @@ function race(thePlayer, command, h)
 			MPPlayerList[thePlayer] = 0
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, SData["RaceArr"][1][1], SData["RaceArr"][1][2], SData["RaceArr"][1][3], "Гонка")
 			outputChatBox("* "..getElementData(thePlayer, "color")..getPlayerName(thePlayer).." #FFFFFFприсоединился к гонке!",getRootElement(),255,255,255,true)
-			triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, "#9b7c52Гоночный турнир")
+			triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, "#9b7c52RACE TOURNAMENT")
 		end
 	else
 		outputChatBox("В настоящий момент гонки не проходят", thePlayer, 255, 255, 255, true)
@@ -17101,8 +17101,8 @@ addEventHandler("onPlayerChat", getRootElement(), onPlayerChat)
 addEventHandler("CliendSideonPlayerChat", getRootElement(), onPlayerChat)
 
 function BurnChatMSG(name, message, nickcolor)
-	outputChatBox("[WEB] "..nickcolor..name..": #FFFFFF"..message, getRootElement(), 255, 255, 255, true)
-	table.insert(SData['Chat Message'], "[WEB] "..nickcolor..name..": #FFFFFF"..message)
+	outputChatBox(nickcolor..name..": #FFFFFF"..message, getRootElement(), 255, 255, 255, true)
+	table.insert(SData['Chat Message'], nickcolor..name..": #FFFFFF"..message)
 	if(#SData['Chat Message'] > 10) then
 		table.remove(SData['Chat Message'], 1)
 	end
@@ -18183,7 +18183,7 @@ end
 
 
 
-
+createPickup(268.6, 1883.9, -30.1, 3, 370) -- JetPack
 
 
 local StantardWeapon = {
