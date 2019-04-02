@@ -34,7 +34,7 @@ local RobAction = false
 local FireTimer = {}
 local StreamData = {}
 local VideoMemory = {["HUD"] = {}}
-local RailRoads = exports["vehicle_node"]:GetRailnodes()
+local RailRoadsSA = exports["vehicle_node"]:GetRailnodes()
 
 
 local PData = {
@@ -56,176 +56,9 @@ local PData = {
 	['TARR'] = {}, -- Target, по центру, ниже, выше
 	['MultipleAction'] = {},
 	['infopath'] = {
-		["Linden Side"] = false,
-		["Las Venturas Airport"] = false,
-		["Harry Gold Parkway"] = false,
-		["Los Santos International"] = false,
-		["Come-A-Lot"] = false,
-		["Juniper Hill"] = false,
-		["City Hall"] = false,
-		["Julius Thruway North"] = false,
-		["Montgomery"] = false,
-		["El Corona"] = false,
-		["Queens"] = false,
-		["The High Roller"] = false,
-		["K.A.C.C. Military Fuels"] = false,
-		["Pilson Intersection"] = false,
-		["Vinewood"] = false,
-		["Mulholland Intersection"] = false,
-		["The Emerald Isle"] = false,
-		["Flint County"] = false,
-		["El Quebrados"] = false,
-		["Tierra Robada"] = false,
-		["Linden Station"] = false,
-		["Blackfield Chapel"] = false,
-		["San Andreas Sound"] = false,
-		["Conference Center"] = false,
-		["Roca Escalante"] = false,
-		["The Camel's Toe"] = false,
-		["El Castillo del Diablo"] = false,
-		["Lil' Probe Inn"] = false,
-		["Martin Bridge"] = false,
-		["Beacon Hill"] = false,
-		["Battery Point"] = false,
-		["Missionary Hill"] = false,
-		["The Pink Swan"] = false,
-		["Easter Tunnel"] = false,
-		["Red County"] = false,
-		["Commerce"] = false,
-		["Palomino Creek"] = false,
-		["Blueberry"] = false,
-		["Montgomery Intersection"] = false,
-		["Santa Maria Beach"] = false,
-		["Las Barrancas"] = false,
-		["Regular Tom"] = false,
-		["Shady Creeks"] = false,
-		["Kincaid Bridge"] = false,
-		["Los Flores"] = false,
-		["Valle Ocultado"] = false,
-		["Julius Thruway West"] = false,
-		["Jefferson"] = false,
-		["Unknown Bar"] = false,
-		["Hashbury"] = false,
-		["'The Big Ear'"] = false,
-		["Back o Beyond"] = false,
-		["Los Santos"] = false,
-		["Playa del Seville"] = false,
-		["Last Dime Motel"] = false,
-		["Temple"] = false,
-		["San Fierro"] = false,
-		["Rockshore East"] = false,
-		["The Mako Span"] = false,
-		["Hilltop Farm"] = false,
-		["Avispa Country Club"] = false,
-		["The Sherman Dam"] = false,
-		["Ganton"] = false,
-		["Fisher's Lagoon"] = false,
-		["Pirates in Men's Pants"] = false,
-		["Ocean Flats"] = false,
-		["Rockshore West"] = false,
-		["Cranberry Station"] = false,
-		["Hankypanky Point"] = false,
-		["The Clown's Pocket"] = false,
-		["Doherty"] = false,
-		["Unknown"] = false,
-		["Esplanade North"] = false,
-		["North Rock"] = false,
-		["Bayside Marina"] = false,
-		["The Four Dragons Casino"] = false,
-		["Richman"] = false,
-		["Calton Heights"] = false,
-		["The Strip"] = false,
-		["Spinybed"] = false,
-		["Restricted Area"] = false,
-		["Verona Beach"] = false,
-		["King's"] = false,
-		["Garver Bridge"] = false,
-		["Easter Basin"] = false,
-		["LVA Freight Depot"] = false,
-		["Whetstone"] = false,
-		["Aldea Malvada"] = false,
-		["Easter Bay Airport"] = false,
-		["Fallow Bridge"] = false,
-		["Redsands East"] = false,
-		["Royal Casino"] = false,
-		["Las Brujas"] = false,
-		["Dillimore"] = false,
-		["Randolph Industrial Estate"] = false,
-		["Blueberry Acres"] = false,
-		["Willowfield"] = false,
-		["Market"] = false,
-		["Julius Thruway East"] = false,
-		["Palisades"] = false,
-		["Bone County"] = false,
-		["Leafy Hollow"] = false,
-		["Flint Range"] = false,
-		["Sherman Reservoir"] = false,
-		["Hunter Quarry"] = false,
-		["Easter Bay Chemicals"] = false,
-		["Sobell Rail Yards"] = false,
-		["Yellow Bell Station"] = false,
-		["Bayside"] = false,
-		["Paradiso"] = false,
-		["Verdant Meadows"] = false,
-		["Blackfield Intersection"] = false,
-		["Hampton Barns"] = false,
-		["Chinatown"] = false,
-		["Los Santos Inlet"] = false,
-		["Bayside Tunnel"] = false,
-		["Idlewood"] = false,
-		["Rodeo"] = false,
-		["Verdant Bluffs"] = false,
-		["Foster Valley"] = false,
-		["Whitewood Estates"] = false,
-		["Marina"] = false,
-		["Garcia"] = false,
-		["East Los Santos"] = false,
-		["Downtown Los Santos"] = false,
-		["Juniper Hollow"] = false,
-		["Fallen Tree"] = false,
-		["Green Palms"] = false,
-		["Las Venturas"] = false,
-		["Esplanade East"] = false,
-		["Gant Bridge"] = false,
-		["Mount Chiliad"] = false,
-		["Robada Intersection"] = false,
-		["Pilgrim"] = false,
-		["Glen Park"] = false,
-		["Fort Carson"] = false,
-		["Julius Thruway South"] = false,
-		["Angel Pine"] = false,
-		["Mulholland"] = false,
-		["Little Mexico"] = false,
-		["The Visage"] = false,
-		["Financial"] = false,
-		["Market Station"] = false,
-		["Blackfield"] = false,
-		["Yellow Bell Golf Course"] = false,
-		["Las Payasadas"] = false,
-		["Shady Cabin"] = false,
-		["Frederick Bridge"] = false,
-		["Octane Springs"] = false,
-		["The Panopticon"] = false,
-		["East Beach"] = false,
-		["Caligula's Palace"] = false,
-		["Flint Water"] = false,
-		["San Fierro Bay"] = false,
-		["Fern Ridge"] = false,
-		["Creek"] = false,
-		["Las Colinas"] = false,
-		["Santa Flora"] = false,
-		["Starfish Casino"] = false,
-		["Redsands West"] = false,
-		["Flint Intersection"] = false,
-		["Old Venturas Strip"] = false,
-		["Pershing Square"] = false,
-		["Arco del Oeste"] = false,
-		["Prickle Pine"] = false,
-		["Ocean Docks"] = false,
-		["Greenglass College"] = false,
-		["Unity Station"] = false,
-		["Downtown"] = false,
-		["The Farm"] = false
+		["San Andreas"] = {}, 
+		["Liberty City"] = {}, 
+		["Vice City"] = {}
 	}, -- Для разработчика
 	['changezone'] = {} -- Для разработчика
 }
@@ -956,6 +789,8 @@ function save()
 		x,y,z = getElementPosition(getPedOccupiedVehicle(localPlayer))
 		if(not getElementData(localPlayer, "City")) then 
 			z = getGroundPosition(x,y,z)
+		else
+			z = z-1
 		end
 		outputChatBox(math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)) 
 		rx,ry,rz = getElementRotation(getPedOccupiedVehicle(localPlayer))
@@ -1220,8 +1055,8 @@ function SetZoneDisplay(zone)
 		ZonesDisplay[#ZonesDisplay+1] = {zone, 0, false}
 	end
 	
-	if(not PData["infopath"][zone]) then
-		triggerServerEvent("CreateVehicleNodeMarker", localPlayer, zone)
+	if(not PData["infopath"][getPlayerCity(localPlayer)][zone]) then
+		triggerServerEvent("CreateVehicleNodeMarker", localPlayer, getPlayerCity(localPlayer), zone)
 	end
 	
 	if(not GroundMaterial[zone]) then
@@ -2635,7 +2470,6 @@ end
 
 function bizControl(name, data)
 	PText["biz"] = {}
-	helpmessage("")
 	MissionCompleted("", "")
 	if(data["money"]) then
 		local text = "Текущий баланс "..COLOR["DOLLAR"]["HEX"].."$"..data["money"].." "
@@ -4191,7 +4025,7 @@ function updateWorld()
 	UpdateBot()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	if(PData["Driver"] and theVehicle) then
-		if(getElementDimension(localPlayer) == 0) then
+		if(getElementDimension(localPlayer) == 0 or getElementData(localPlayer, "City") == "Liberty City") then
 			local x,y,z = getElementPosition(theVehicle)
 			PData["Driver"]["Distance"] = PData["Driver"]["Distance"]+getDistanceBetweenPoints3D(PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"], x, y, z)
 			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = x,y,z
@@ -4677,6 +4511,11 @@ function OpenTAB()
 end
 
 
+
+function getPlayerCity(thePlayer)
+	return getElementData(thePlayer, "City") or "San Andreas"
+end
+
 function UpdateTabEvent()
 	IDF, NF, RANG, PING = "","","",""
 	TABCurrent = 0
@@ -4694,16 +4533,16 @@ function UpdateTabEvent()
 		if(TABCurrent < MAXSCROLL) then
 			if(isElement(thePlayers[slot])) then
 				if(getElementData(thePlayers[slot], "color")) then
-					RANG=RANG..(getElementData(thePlayers[slot], "City") or "San Andreas").."\n"
+					RANG=RANG..getPlayerCity(thePlayers[slot]).."\n"
 					IDF = IDF..getElementData(thePlayers[slot], "id").."\n"
 					NF = NF..getElementData(thePlayers[slot], "color")..getPlayerName(thePlayers[slot]):gsub('#%x%x%x%x%x%x', '').."\n"
 					PING = PING..getPlayerPing(thePlayers[slot]).."\n"
 					TABCurrent = TABCurrent+1
 				end
 			else
-				RANG=RANG.."World Wide Web".."\n"
+				RANG=RANG..thePlayers[slot][2].."\n"
 				IDF = IDF..(TABCurrent+1).."\n"
-				NF = NF.."#FFFFFF"..thePlayers[slot].."\n"
+				NF = NF.."#FFFFFF"..thePlayers[slot][1].."\n"
 				PING = PING.."0".."\n"
 				TABCurrent = TABCurrent+1
 			end
@@ -4855,21 +4694,21 @@ end
 
 
 function updateCamera()
-	for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
-		local theVehicle = getPedOccupiedVehicle(thePed)
-		if(theVehicle) then -- Костыль 
-			local x,y,z = getElementPosition(theVehicle)
-			local gz = getGroundPosition(x,y,z)
-			local material = GetGroundMaterial(x,y,z+50,gz-3)
-			local material2 = GetGroundMaterial(x+2,y,z+50,gz-3)
-			if(material == 1337 and material2 == 1337) then -- Костыль
-				if(StreamData[thePed]["UpdateRequest"]) then
-					StreamData[thePed]["UpdateRequest"] = false
-					triggerServerEvent("UpdateBotRequest", localPlayer, localPlayer, thePed)
-				end
-			end
-		end
-	end
+	--for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
+	--	local theVehicle = getPedOccupiedVehicle(thePed)
+	--	if(theVehicle) then -- Костыль 
+	--		local x,y,z = getElementPosition(theVehicle)
+	--		local gz = getGroundPosition(x,y,z)
+	--		local material = GetGroundMaterial(x,y,z+50,gz-3)
+	--		local material2 = GetGroundMaterial(x+2,y,z+50,gz-3)
+	--		if(material == 1337 and material2 == 1337) then -- Костыль
+	--			if(StreamData[thePed]["UpdateRequest"]) then
+	--				StreamData[thePed]["UpdateRequest"] = false
+	--				triggerServerEvent("UpdateBotRequest", localPlayer, localPlayer, thePed)
+	--			end
+	--		end
+	--	end
+	--end
 	
 	
 	if(PData["ResourceMap"]) then
@@ -4931,7 +4770,7 @@ function LoginClient(open)
 		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
 		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
 		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
-		outputChatBox("Обновление 28.01.2019: Добавлен режим для слабых компьютеров (F9)", 255, 150, 150,true)
+		outputChatBox("Обновление 02.04.2019: Добавлены боты в Liberty City", 255, 150, 150,true)
 	else
 		PText["HUD"][8] = nil
 	end
@@ -4961,7 +4800,7 @@ function HUDPreload()
 
 	local x,y = 510*scalex, 270*scaley
 	dxDrawRectangle(x,y, 750*NewScale, 500*NewScale, tocolor(0, 0, 0, 180))	
-	dxDrawBorderedText("RPG RealLife (Russian Federation/Tomsk)", 540*scalex, 285*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*1.2, "default-bold", "left", "top")
+	dxDrawBorderedText("Multi Theft Auto: Stories (RPG\\DM) [Russian\Tomsk]", 540*scalex, 285*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawBorderedText(Text("ид"), x+(15*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawBorderedText(Text("ник"), x+(60*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
 	dxDrawBorderedText("локация", x+(310*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
@@ -4971,7 +4810,6 @@ function HUDPreload()
 	dxDrawBorderedText(Text("Итоги"), 500*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
 	
 	dxDrawRectangle(975*scalex, 810*scaley, 470*NewScale, 215*NewScale, tocolor(0, 0, 0, 170))
-	dxDrawBorderedText(Text("Банда"), 1000*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
 	dxSetBlendMode("blend")
 
 	VideoMemory["HUD"]["WantedBackground"] = dxCreateRenderTarget(dxGetTextWidth("★★★★★★", NewScale*2, "pricedown", false), dxGetFontHeight(NewScale*2, "pricedown"), true)
@@ -5060,6 +4898,9 @@ function displayLoadedRes(res)
 		engineReplaceModel(dff, 16094)
 		
 		
+		col = engineLoadCOL("models/des_a51_labs.col")
+		engineReplaceCOL(col, 16639)
+		
 		col = engineLoadCOL("models/prison-gates.col")
 		engineReplaceCOL(col, 14883)
 		dff = engineLoadDFF("models/prison-gates.dff")
@@ -5092,20 +4933,16 @@ function displayLoadedRes(res)
 		
 		StartLoad()
 	elseif(getResourceName(res) == "vehicle_node") then
-		for zone, state in pairs(PData["infopath"]) do
+		for zone, state in pairs(PData["infopath"][getPlayerCity(localPlayer)]) do
 			if(state) then
 				PData['changezone'] = {}
 				triggerServerEvent("ZonesGroundPosition", localPlayer, zone)
-				triggerServerEvent("CreateVehicleNodeMarker", localPlayer, zone)
+				triggerServerEvent("CreateVehicleNodeMarker", localPlayer, getPlayerCity(localPlayer), zone)
 			end
 		end
 	end
 end
 addEventHandler("onClientResourceStart", getRootElement(), displayLoadedRes)
-
-
-
-
 
 
 
@@ -5744,11 +5581,6 @@ function targetingActivated(target)
 				local x2, y2, z2 = getElementPosition(target)
 				local distance = getDistanceBetweenPoints3D(x,y,z,x2,y2,z2)
 				local message=""
-				if(distance < 2) then
-					if(getElementHealth(target) < 20) then
-						message = message.."Нажми #A0A0A0F2#FFFFFF чтобы поднять игрока\n"	
-					end
-				end
 				if(CallPolice) then
 					message = message.."Нажми #A0A0A0F3#FFFFFF чтобы позвонить в полицию\n"	
 				end
@@ -5784,9 +5616,9 @@ function targetingActivated(target)
 				ChangeInfo(t, 5000)
 			elseif(tostring(getElementType(target)) == "object") then
 				if(getElementModel(target) == 1812) then
-					ToolTip(Text("Нажми {key} чтобы лечь", {{"{key}", COLOR["KEY"]["HEX"].."E#FFFFFF"}}))
+					ToolTip(Text("Нажми {key} чтобы лечь", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
 					PrisonSleep = target
-					bindKey("e", "down", PrisonSleepEv)
+					bindKey("f", "down", PrisonSleepEv)
 				elseif(getElementModel(target) == 2525) then
 					ChangeInfo("Нажми #A0A0A0F#FFFFFF чтобы справить нужду\nНажми #A0A0A0E#FFFFFF чтобы чистить говно", 5000)
 					PrisonGavno = target
@@ -5964,25 +5796,9 @@ function resourcemap()
 			setElementFrozen(theVehicle, true)
 		end
 		
-		local loadingzones = {}
-		for name, dat in pairs(PData["infopath"]) do
-			if(not dat) then
-				loadingzones[#loadingzones+1] = name
-			end
-		end
 		
-		if(#loadingzones == 0) then 
-			map()
-		else
-			helpmessage("Идет загрузка...")
-			for slot = 1, #loadingzones do
-				if(slot == #loadingzones) then
-					triggerServerEvent("CreateVehicleNodeMarker", localPlayer, loadingzones[slot], true)
-				else
-					triggerServerEvent("CreateVehicleNodeMarker", localPlayer, loadingzones[slot])
-				end
-			end
-		end
+		
+		triggerServerEvent("getInfoPathList", localPlayer, localPlayer, getPlayerCity(localPlayer))
 	else
 		setCameraTarget(localPlayer)
 		PData["ResourceMap"] = nil
@@ -6008,10 +5824,39 @@ function resourcemap()
 end
 
 
+function InfoPathLoading(city, dat)
+	local loadingzones = {}
+	for name, _ in pairs(dat) do
+		if(not PData["infopath"][city][name]) then
+			loadingzones[#loadingzones+1] = name
+		end
+	end
+	
+	if(#loadingzones == 0) then 
+		map()
+	else
+		helpmessage("Идет загрузка...")
+		for slot = 1, #loadingzones do
+			if(slot == #loadingzones) then
+				triggerServerEvent("CreateVehicleNodeMarker", localPlayer, city, loadingzones[slot], true)
+			else
+				triggerServerEvent("CreateVehicleNodeMarker", localPlayer, city, loadingzones[slot])
+			end
+		end
+	end
+	
+end
+addEvent("InfoPathLoading", true)
+addEventHandler("InfoPathLoading", localPlayer, InfoPathLoading)
+
+
+
+
+
 function map()
 	PData["ResourceMap"] = {[1] = {}, [2] = {}, [3] = {}} -- 1 Roads, 2 Railroads, 3 GPS
 	
-	for zone, arr in pairs(PData["infopath"]) do
+	for zone, arr in pairs(PData["infopath"][getPlayerCity(localPlayer)]) do
 		if(arr) then for i, arr2 in pairs(arr) do
 			
 			local nextmarkers = {}
@@ -6021,13 +5866,13 @@ function map()
 				end
 			end
 			
-			if(PData["infopath"][zone][tostring(i+1)]) then
+			if(PData["infopath"][getPlayerCity(localPlayer)][zone][tostring(i+1)]) then
 				table.insert(nextmarkers, {zone, i+1})
 			end
 			
 			for _, arr3 in pairs(nextmarkers) do
-				if(PData["infopath"][arr3[1]]) then
-					local dat = PData["infopath"][arr3[1]][tostring(arr3[2])]
+				if(PData["infopath"][getPlayerCity(localPlayer)][arr3[1]]) then
+					local dat = PData["infopath"][getPlayerCity(localPlayer)][arr3[1]][tostring(arr3[2])]
 					if(dat) then
 						local color = tocolor(60,60,60,255)
 						if(dat[1] == "Closed" or arr2[1] == "Closed") then
@@ -6058,33 +5903,34 @@ function map()
 		end
 	end
 	
-	for zone, arr in pairs(RailRoads) do
-		for i, arr2 in pairs(arr) do
-			
-			local nextmarkers = {}
-			if(arr2[6]) then
-				for _,k in pairs(arr2[6]) do
-					table.insert(nextmarkers, {k[1], k[2]})
+	if(getPlayerCity(localPlayer) == "San Andreas") then
+		for zone, arr in pairs(RailRoadsSA) do
+			for i, arr2 in pairs(arr) do
+				
+				local nextmarkers = {}
+				if(arr2[6]) then
+					for _,k in pairs(arr2[6]) do
+						table.insert(nextmarkers, {k[1], k[2]})
+					end
 				end
-			end
-			
-			if(RailRoads[zone][i+1]) then
-				table.insert(nextmarkers, {zone, i+1})
-			end
-			
-			for _, arr3 in pairs(nextmarkers) do
-				if(RailRoads[arr3[1]]) then
-					local dat = RailRoads[arr3[1]][arr3[2]]
-					if(dat) then
-						x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
-						x2,y2,z2 = GetCoordOnMap(dat[2], dat[3], dat[4])
-						PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(99,0,0,255), 10}
+				
+				if(RailRoadsSA[zone][i+1]) then
+					table.insert(nextmarkers, {zone, i+1})
+				end
+				
+				for _, arr3 in pairs(nextmarkers) do
+					if(RailRoadsSA[arr3[1]]) then
+						local dat = RailRoadsSA[arr3[1]][arr3[2]]
+						if(dat) then
+							x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
+							x2,y2,z2 = GetCoordOnMap(dat[2], dat[3], dat[4])
+							PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(99,0,0,255), 10}
+						end
 					end
 				end
 			end
 		end
 	end
-	
 	
 	setCameraMatrix(0, 0, 4250, 0, 0, 4000, 0, 70)
 	
@@ -6118,11 +5964,11 @@ function GetCursorPositionOnMap() -- Можно оптимизировать в 
 end
 
 
-function InfoPath(zone, arr, last)
+function InfoPath(city, zone, arr, last)
 	if(arr) then
-		PData['infopath'][zone] = fromJSON(arr)
+		PData['infopath'][city][zone] = fromJSON(arr)
 	else
-		PData['infopath'][zone] = nil
+		PData['infopath'][city][zone] = nil
 	end
 	
 	if(last) then
@@ -6209,7 +6055,7 @@ function DevelopmentRender()
 	dxDrawBorderedText(out, 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
 
 	
-	for zone, arr in pairs(PData['infopath']) do
+	for zone, arr in pairs(PData['infopath'][getPlayerCity(localPlayer)]) do
 		if(arr) then
 		for i, arr2 in pairs(arr) do
 			local x,y,z = arr2[2], arr2[3], arr2[4]
@@ -6217,9 +6063,9 @@ function DevelopmentRender()
 			local px,py,pz = getElementPosition(localPlayer)
 			if(getDistanceBetweenPoints2D(x,y, px, py) < 100) then
 				if(arr2[5]) then
-					create3dtext('['..i..'] '..getZoneName(x,y,z), x,y,z+1, scale, 60, tocolor(228, 70, 250, 180), "default-bold")
+					create3dtext('['..i..'] '..zone, x,y,z+1, scale, 60, tocolor(228, 70, 250, 180), "default-bold")
 				else
-					create3dtext('['..i..'] '..getZoneName(x,y,z), x,y,z+1, scale, 60, tocolor(228, 250, 70, 180), "default-bold")
+					create3dtext('['..i..'] '..zone, x,y,z+1, scale, 60, tocolor(228, 250, 70, 180), "default-bold")
 				end
 				local nextmarkers = {}
 				if(arr2[6]) then
@@ -6228,13 +6074,13 @@ function DevelopmentRender()
 					end
 				end
 				
-				if(PData['infopath'][zone][tostring(i+1)]) then
+				if(PData['infopath'][getPlayerCity(localPlayer)][zone][tostring(i+1)]) then
 					table.insert(nextmarkers, {zone, i+1})
 				end
 				
 				for _, arr3 in pairs(nextmarkers) do
-					if(PData['infopath'][arr3[1]]) then
-						local dat = PData['infopath'][arr3[1]][tostring(arr3[2])]
+					if(PData['infopath'][getPlayerCity(localPlayer)][arr3[1]]) then
+						local dat = PData['infopath'][getPlayerCity(localPlayer)][arr3[1]][tostring(arr3[2])]
 						if(dat) then
 							local color = tocolor(50,255,50,150)
 							if(dat[1] == "Closed" or arr2[1] == "Closed") then
@@ -7246,7 +7092,6 @@ addEventHandler("ShakeLevel", localPlayer, ShakeLevel)
 
 
 
-
 local PlayerPissing = {}
 local PlayerPissingTimer = {}
 function PlayerPiss(thePlayer)
@@ -7254,7 +7099,8 @@ function PlayerPiss(thePlayer)
 		local x,y,z = getElementPosition(thePlayer)
 		local rx,ry,rz = getElementRotation(thePlayer)
 		x,y,z = getPointInFrontOfPoint(x, y, z-0.2, rz-270, 0.5)
-		playSFX("script", 61, 0, false)
+		PlaySFX3DforAll("script", 61, 0, x,y,z, false, 0, 10)
+		
 		PlayerPissing[thePlayer] = createEffect("petrolcan", x, y, z, 90, 0, -rz, 50, true)
 		
 		PlayerPissingTimer[thePlayer] = setTimer(function()
@@ -8803,15 +8649,6 @@ local BandRangs = {
 		[2] = {30, "Баклан", 174},
 		[3] = {75, "Капореджиме", 175},
 	},
-	["Полиция"] = {
-		[1] = {0, "Рядовой", 280},
-		[2] = {25, "Инспектор ДПС", 284},
-		[3] = {100, "Сержант", 281},
-		[4] = {250, "Лейтенант", 282},
-		[5] = {300, "SWAT", 285},
-		[6] = {400, "Офицер 1 класса", 267},
-		[7] = {500, "Офицер 2 класса", 266},
-	}, 
 	["Уголовники"] = {
 		[1] = {0, "Потраченный", 252}, 
 		[2] = {25, "Черт", 213}, 
@@ -8821,12 +8658,6 @@ local BandRangs = {
 	["Мирные жители"] = {
 		[1] = {0, "Житель", 252}
 	}, 
-	["ЦРУ"] = {
-		[1] = {0, "Сотрудник ЦРУ #1", 163}, 
-		[2] = {30, "Сотрудник ЦРУ #2", 164}, 
-		[3] = {60, "Сотрудник ЦРУ #3", 165}, 
-		[4] = {90, "Сотрудник ЦРУ #4", 166}
-	}
 }
 
 
@@ -8915,21 +8746,26 @@ function DrawPlayerMessage()
 			end
 		
 		end
+			tw = dxGetTextWidth(getPlayerCity(localPlayer), scale*1.4, "bankgothic", true)
+		th = dxGetFontHeight(scale*1.4, "bankgothic")
+		dxDrawBorderedText(getPlayerCity(localPlayer), screenWidth/2-tw/2.15, screenHeight-(screenHeight-th/10), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*1.4, "bankgothic", nil, nil, nil, nil, nil, true)
 		
-		Create3DTextOnMap("Los Santos\n#ffff00★★★★",1850,-1600,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("San Fierro\n#ffff00★★★",-2200,400,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Las Venturas\n#ffff00★★★",2200,1650,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Angel Pine\n#ffff00★★",-2150,-2450,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Las Payasadas\n#ffff00★★★",-250,2650,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("El Quebrados\n#ffff00★★★",-1500,2500,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Fort Caston\n#ffff00★★",-245,1100,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Palomino Creek\n#ffff00★★★",2350,30,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Blueberry\n#ffff00★★★",215,-215,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Dillimore\n#ffff00★",670,-540,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Montgomery\n#ffff00★",1310, 310,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Bayside\n#ffff00★",-2537, 2332,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		Create3DTextOnMap("Las Barrancas\n#ffff00★",-763, 1504, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-
+		
+		if(getPlayerCity(localPlayer) == "San Andreas") then
+			Create3DTextOnMap("Los Santos\n#ffff00★★★★",1850,-1600,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("San Fierro\n#ffff00★★★",-2200,400,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Las Venturas\n#ffff00★★★",2200,1650,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Angel Pine\n#ffff00★★",-2150,-2450,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Las Payasadas\n#ffff00★★★",-250,2650,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("El Quebrados\n#ffff00★★★",-1500,2500,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Fort Caston\n#ffff00★★",-245,1100,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Palomino Creek\n#ffff00★★★",2350,30,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Blueberry\n#ffff00★★★",215,-215,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Dillimore\n#ffff00★",670,-540,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Montgomery\n#ffff00★",1310, 310,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Bayside\n#ffff00★",-2537, 2332,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Las Barrancas\n#ffff00★",-763, 1504, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		end
 		
 		PData["MapHitElement"] = false
 		local col = createObject(16635, mousex,mousey,mousez)
@@ -9420,14 +9256,29 @@ function DrawPlayerMessage()
 			
 			local team = getTeamName(getPlayerTeam(localPlayer))
 			if(team) then
-				dxDrawText("Название: "..team, 1000*scalex, 840*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
-				local carrier = GetBandRang(team, getTeamVariable(team))
-				dxDrawText("Текущий ранг: "..carrier[1][2], 1000*scalex, 875*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
-				if(carrier[2]) then
-					dxDrawText("До повышения "..(carrier[2][1]-getTeamVariable(team)).." репутации", 1000*scalex, 910*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
+				if(getElementData(localPlayer, "job")) then
+					dxDrawBorderedText(Text("Работа"), 1000*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
+
+					dxDrawText("Название: "..team, 1000*scalex, 840*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
+					dxDrawText("Текущий ранг: "..getElementData(localPlayer, "job"), 1000*scalex, 875*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
+				else
+					dxDrawBorderedText(Text("Банда"), 1000*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
+
+					dxDrawText("Название: "..team, 1000*scalex, 840*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
+					local carrier = GetBandRang(team, getTeamVariable(team))
+					dxDrawText("Текущий ранг: "..carrier[1][2], 1000*scalex, 875*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
+					if(carrier[2]) then
+						dxDrawText("До повышения "..(carrier[2][1]-getTeamVariable(team)).." репутации", 1000*scalex, 910*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
+					end
 				end
 			end
-			dxDrawBorderedText(Text("Игроков")..": "..#getElementsByType("player"), 0, 285*scaley, 510*scalex+(730*NewScale), 0, tocolor(180, 180, 180, 255), NewScale*1.2, "default-bold", "right", "top", false, false, false, true)
+			local countpl = #getElementsByType("player")
+			
+			for i, v in pairs(getElementData(root, "ChatOnline")) do
+				countpl = countpl + 1
+			end
+			
+			dxDrawBorderedText(Text("Игроков")..": "..countpl, 0, 285*scaley, 510*scalex+(730*NewScale), 0, tocolor(180, 180, 180, 255), NewScale*1.2, "default-bold", "right", "top", false, false, false, true)
 		
 			dxDrawBorderedText(IDF,510*scalex+(15*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
 			dxDrawBorderedText(NF, 510*scalex+(60*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
@@ -10198,7 +10049,11 @@ function StreamOut(restream)
 			return false
 		end
 	end
-	triggerServerEvent("PlayerElementSync", localPlayer, localPlayer, source, nil)
+	
+	
+	if(getElementType(source) == "vehicle" or getElementType(source) == "ped") then
+		triggerServerEvent("PlayerElementSync", localPlayer, localPlayer, source, nil)
+	end
 end
 addEventHandler("onClientElementStreamOut", getRootElement(), StreamOut)
 addEventHandler("onClientElementDestroy", getRootElement(), StreamOut)
