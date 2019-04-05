@@ -19,6 +19,7 @@
 	
 	<file src="models/des_a51infenc.col" download="true" />
 	<file src="models/des_a51infenc.dff" download="true" />
+	<file src="models/des_a51_labs.col" download="true" />
 	
 	<file src="models/prison-gates.col" download="true" />
 	<file src="models/prison-gates.dff" download="true" />
@@ -34,4 +35,5 @@
 	<script src="script.lua" type="server" />
 	<export function='BurnChatMSG' type="server" http='true' />
 	<export function='UPDOnline' type="server" http='true' />
+	<export function='GetZoneName' type="server" />
 </meta>

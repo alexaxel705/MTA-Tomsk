@@ -59,10 +59,7 @@ local NowTime = getRealTime()
 local CYear = NowTime.year+1900
 local OpenGates = {}
 local OpenGatesTimer = {}
-local PathNodes = {
-	["San Andreas"] = exports["vehicle_node"]:GetVehicleNodes(), 
-	["Liberty City"] = exports["vehicle_node"]:GetVehicleNodesLC()
-}
+local PathNodes = exports["vehicle_node"]:GetVehicleNodes()
 
 
 local PedNodes = exports["vehicle_node"]:GetPedNodes()
@@ -5063,7 +5060,7 @@ function tp(thePlayer, command, h)
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
 
-		local x,y,z,i,d  = 748.1, 739.9, 13.5, 0, 1 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 394.6, 400.4, 36, 0, 1 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -11398,8 +11395,8 @@ local PlateNumber = {
 	[523] = "POLI 228", 
 }
 
-function CreateDriverBot(vmodel, pedmodel, x,y,z,i,d, path,attacker)
-	path = exports["vehicle_node"]:GetCoordsByGPS(path)  -- Временное, переделывает ноды в координаты, потом доделать
+function CreateDriverBot(vmodel, pedmodel, x,y,z,i,d, city, path,attacker)
+	path = exports["vehicle_node"]:GetCoordsByGPS(city, path)  -- Временное, переделывает ноды в координаты, потом доделать
 	local rotz = findRotation(path[1][1], path[1][2], path[2][1], path[2][2])
 	local v = CreateVehicle(vmodel, x,y,z+VehicleSystem[vmodel][1], 0, 0, rotz, PlateNumber[vmodel])
 	local thePed = CreateBot(pedmodel,x,y,z,0,i,d,getZoneName(x,y,z))
@@ -11429,6 +11426,7 @@ function CreateDriverBot(vmodel, pedmodel, x,y,z,i,d, path,attacker)
 	setElementData(v, "destroy", "true", false)
 	warpPedIntoVehicle(thePed,v)
 	setVehicleSirensOn(v, true)
+	setElementData(thePed, "City", city)
 	return v
 end
 
@@ -11439,40 +11437,40 @@ function kr(thePlayer, vmodel, pedmodel)
 	if(not isTimer(PData[thePlayer]["PoliceTimer"])) then
 		local x,y,z = getElementPosition(thePlayer)
 		local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
-		if(i == 0 and d == 0) then
-			local arr = {
-				["west"] = exports["vehicle_node"]:NEWGPSFound(x-100,y,z, x,y,z),
-				["east"] = exports["vehicle_node"]:NEWGPSFound(x+100,y,z, x,y,z),
-				["south"] = exports["vehicle_node"]:NEWGPSFound(x,y+100,z, x,y,z),
-				["north"] = exports["vehicle_node"]:NEWGPSFound(x,y-100,z, x,y,z)
-			}
+		local City = getPlayerCity(thePlayer)
+		local arr = {
+			["west"] = exports["vehicle_node"]:NEWGPSFound(City, x-100,y,z, x,y,z),
+			["east"] = exports["vehicle_node"]:NEWGPSFound(City, x+100,y,z, x,y,z),
+			["south"] = exports["vehicle_node"]:NEWGPSFound(City, x,y+100,z, x,y,z),
+			["north"] = exports["vehicle_node"]:NEWGPSFound(City, x,y-100,z, x,y,z)
+		}
 
-			for name, dat in pairs(arr) do
-				if(dat) then
-					if(#dat < 5) then -- Отсекаем слишком короткие пути
-						arr[name] = nil
-					end
-				else
+		for name, dat in pairs(arr) do
+			if(dat) then
+				if(#dat < 5) then -- Отсекаем слишком короткие пути
 					arr[name] = nil
 				end
+			else
+				arr[name] = nil
 			end
-			if(getArrSize(arr) > 0) then
-				local ind = 0
-				local minarrindex = math.random(getArrSize(arr))
-				for name, dat in pairs(arr) do
-					ind = ind+1
-					if(ind == minarrindex) then
-						local bx,by,bz = PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][2], PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][3], PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][4]
-						if(vmodel == 497 or vmodel == 488) then
-							bz = bz+25
-						end
-						CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, 0, arr[name], thePlayer)
-						PData[thePlayer]["PoliceTimer"] = setTimer(function(thePlayer) end, 5000, 1, thePlayer)
+		end
+		if(getArrSize(arr) > 0) then
+			local ind = 0
+			local minarrindex = math.random(getArrSize(arr))
+			for name, dat in pairs(arr) do
+				ind = ind+1
+				if(ind == minarrindex) then
+					local bx,by,bz = PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][2], PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][3], PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][4]
+					if(vmodel == 497 or vmodel == 488) then
+						bz = bz+25
 					end
+					CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, d, City, arr[name], thePlayer)
+					PData[thePlayer]["PoliceTimer"] = setTimer(function(thePlayer) end, 5000, 1, thePlayer)
 				end
 			end
 		end
 	end
+	
 end
 
 
@@ -11497,11 +11495,12 @@ function FireTruck(x,y,z,i,d)
 	local zone = getZoneName(x,y,z, true)
 	
 	if(FireTruckModel[zone] and d == 0) then
+		local City = "San Andreas"
 		local arr = {
-			["west"] = exports["vehicle_node"]:NEWGPSFound(x-120,y,z, x,y,z),
-			["east"] = exports["vehicle_node"]:NEWGPSFound(x+120,y,z, x,y,z),
-			["south"] = exports["vehicle_node"]:NEWGPSFound(x,y+120,z, x,y,z),
-			["north"] = exports["vehicle_node"]:NEWGPSFound(x,y-120,z, x,y,z)
+			["west"] = exports["vehicle_node"]:NEWGPSFound(City, x-120,y,z, x,y,z),
+			["east"] = exports["vehicle_node"]:NEWGPSFound(City, x+120,y,z, x,y,z),
+			["south"] = exports["vehicle_node"]:NEWGPSFound(City, x,y+120,z, x,y,z),
+			["north"] = exports["vehicle_node"]:NEWGPSFound(City, x,y-120,z, x,y,z)
 		}
 
 		for name, dat in pairs(arr) do
@@ -11520,7 +11519,7 @@ function FireTruck(x,y,z,i,d)
 				ind = ind+1
 				if(ind == minarrindex) then
 					local bx,by,bz = PathNodes["San Andreas"][arr[name][1][1]][arr[name][1][2]][2], PathNodes["San Andreas"][arr[name][1][1]][arr[name][1][2]][3], PathNodes["San Andreas"][arr[name][1][1]][arr[name][1][2]][4]
-					return CreateDriverBot(407, FireTruckModel[zone], bx, by, bz, 0, 0, arr[name])
+					return CreateDriverBot(407, FireTruckModel[zone], bx, by, bz, 0, 0, "San Andreas", arr[name])
 				end
 			end
 		end
@@ -11661,7 +11660,7 @@ function SetDynamicBot(thePed, x,y,z)
 		if(not x) then
 			x,y,z = getElementPosition(thePed)
 		end
-		local node = getZoneName(x,y,z, false)
+		local node = GetZoneName(x,y,z, false, getPlayerCity(thePed))
 		local id = false
 		local mindist = 3000
 		if(PathNodes[getPlayerCity(thePed)][node]) then
@@ -11735,7 +11734,7 @@ function InitDynamicBot()
 		for district, arr in pairs(dat) do
 			for i, k in pairs(arr) do
 				if(k[1] == true) then
-					local rand = math.random(1,50)
+					local rand = math.random(1,40)
 					if(rand == 1) then
 						CreateDynamicBot(false, city, district, i)
 					end
@@ -13273,19 +13272,13 @@ function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
 		local res = getResourceFromName("vehicle_node") -- Interface
 		restartResource(res)
-		local res = getResourceFromName("ps2_weather") -- Interface
-		restartResource(res)
+		--local res = getResourceFromName("ps2_weather") -- Interface
+		--restartResource(res)
 		--local res = getResourceFromName("interface") -- Interface
 		--restartResource(res)
 		
-		local res = getResourceFromName("interface") -- Interface
-		restartResource(res)
-		PathNodes = {
-			["San Andreas"] = exports["vehicle_node"]:GetVehicleNodes(), 
-			["Liberty City"] = exports["vehicle_node"]:GetVehicleNodesLC()
-		}
+		PathNodes = exports["vehicle_node"]:GetVehicleNodes()
 		PedNodes = exports["vehicle_node"]:GetPedNodes()
-		
 		
 		datess = ""
 		tmpi = 1

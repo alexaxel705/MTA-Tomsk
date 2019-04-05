@@ -6155,6 +6155,12 @@ function ShowInfoKey()
 		local tar = getPedTarget(localPlayer)
 		if(tar) then
 			outputChatBox("Target model: "..getElementModel(tar))
+			local modelname = getElementData(tar, "objname")
+			if(modelname) then
+				outputChatBox("model name: "..modelname)
+				
+				--destroyElement(tar)
+			end
 		end
 		
 		local w, h = guiGetScreenSize ()
