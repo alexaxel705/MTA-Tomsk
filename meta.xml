@@ -35,5 +35,4 @@
 	<script src="script.lua" type="server" />
 	<export function='BurnChatMSG' type="server" http='true' />
 	<export function='UPDOnline' type="server" http='true' />
-	<export function='GetZoneName' type="server" />
 </meta>

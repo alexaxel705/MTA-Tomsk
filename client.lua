@@ -4025,7 +4025,7 @@ function updateWorld()
 	UpdateBot()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	if(PData["Driver"] and theVehicle) then
-		if(getElementDimension(localPlayer) == 0 or getElementData(localPlayer, "City") == "Liberty City") then
+		if(getElementDimension(localPlayer) == 0 or getElementData(localPlayer, "City")) then
 			local x,y,z = getElementPosition(theVehicle)
 			PData["Driver"]["Distance"] = PData["Driver"]["Distance"]+getDistanceBetweenPoints3D(PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"], x, y, z)
 			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = x,y,z
@@ -6385,7 +6385,7 @@ function CheatCode(code)
 		   code == "alnsfmzo" or
 		   code == "cfvfgmj" or
 		   code == "cwjxuoc") then
-		local zone = GetZoneName(x,y,z, true, getElementData(localPlayer, "City"))
+		local zone = exports["ps2_weather"]:GetZoneName(x,y,z, true, getElementData(localPlayer, "City"))
 		triggerServerEvent("CheatWeather", localPlayer, zone, code)
 	elseif(code == "ysohnul") then
 		if(getGameSpeed() == 2) then 
@@ -8752,7 +8752,7 @@ function DrawPlayerMessage()
 			end
 		
 		end
-			tw = dxGetTextWidth(getPlayerCity(localPlayer), scale*1.4, "bankgothic", true)
+		tw = dxGetTextWidth(getPlayerCity(localPlayer), scale*1.4, "bankgothic", true)
 		th = dxGetFontHeight(scale*1.4, "bankgothic")
 		dxDrawBorderedText(getPlayerCity(localPlayer), screenWidth/2-tw/2.15, screenHeight-(screenHeight-th/10), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*1.4, "bankgothic", nil, nil, nil, nil, nil, true)
 		
@@ -8771,6 +8771,11 @@ function DrawPlayerMessage()
 			Create3DTextOnMap("Montgomery\n#ffff00★",1310, 310,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 			Create3DTextOnMap("Bayside\n#ffff00★",-2537, 2332,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 			Create3DTextOnMap("Las Barrancas\n#ffff00★",-763, 1504, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		elseif(getPlayerCity(localPlayer) == "Liberty City") then
+		
+			Create3DTextOnMap("Portland\n#ffff00★★★",980, 438, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Staunton Island\n#ffff00★★★★",72, 72, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Shoreside Vale\n#ffff00★★",-935, 1050, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 		end
 		
 		PData["MapHitElement"] = false
@@ -10116,211 +10121,6 @@ function getPositionInFL(element,meters)
    x = x - math.sin ( math.rad(r+45) ) * meters
    y = y + math.cos ( math.rad(r+45) ) * meters
    return x,y,z
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-local OffsetLiberty = {[1] = -8000, [2] = -8000, [3] = 0}
-local LibertySmall = {
-	--["WHOLEVC"] = {
-	--	{"WHOLEVC", 5977.83, -10413.5, 10069.9, -6351.89}, 
-	--	{"WHOLELC", 6109.65, 6902.24, 10069.9, 10206.4}
-	--}, 
-	--["COPS_1"] = {
-	--	{"COPS_1", 9050.8, 8304.98, 9097.36, 8368.98}
-	--}, 
-	--["HOSPI_1"] = {
-	--	{"HOSPI_1", 9051.09, 8390.02, 9097.09, 8478.83}
-	--}, 
-	--["FILLIN1"] = {
-	--	{"FILLIN1", 9278.77, 8386.66, 9304.17, 8487.46}
-	--}, 
-	--["MAIN_D1"] = {
-	--	{"MAIN_D1", 8952.53, 8092.73, 8980.16, 8362.31}
-	--}, 
-	--["MAIN_D2"] = {
-	--	{"MAIN_D2", 8881.08, 8362.63, 8979.83, 8390.44}
-	--}, 
-	--["FISHFAC"] = {
-	--	{"FISHFAC", 8859.21, 7850.19, 8931.14, 7923.99}
-	--}, 
-	--["MAIN_D3"] = {
-	--	{"MAIN_D3", 8880.79, 8391.01, 8910.31, 8529.77}
-	--}, 
-	--["MAIN_D4"] = {
-	--	{"MAIN_D4", 8910.59, 8488.91, 8980.11, 8529.77}
-	--}, 
-	--["MAIN_D5"] = {
-	--	{"MAIN_D5", 8950.88, 8536.44, 8979.83, 8717.14}
-	--}, 
-	--["MAIN_D6"] = {
-	--	{"MAIN_D6", 8951.15, 8718.04, 8979.85, 8820.78}
-	--}, 
-	--["WEE_DAM"] = {
-	--	{"WEE_DAM", 6676.41, 9306.84, 7004.55, 9504.65}
-	--}, 
-	["ROADBR1"] = {
-		{"Callahan Bridge", 8532.77, 8041.65, 8980.44, 8091.65}
-	}, 
-	["PORT_W"] = {
-		{"Callahan Point", 8666.68, 7821.78, 8980.68, 8041.27}
-	}, 
-	["PORT_S"] = {
-		{"Atlantic Quays", 8980.88, 7748.45, 9416.88, 7930.07}
-	}, 
-	["PORT_E"] = {
-		{"Portland Harbor", 9278.68, 7930.35, 9730.68, 8386.35}
-	}, 
-	["PORT_I"] = {
-		{"Trenton", 8980.88, 7930.15, 9278.38, 8257.95}
-	}, 
-	["LCHINA"] = {
-		{"Chinatown", 8660.42, 8091.71, 8965.42, 8551.31}
-	}, 
-	["REDLIGH"] = {
-		{"Red Light District", 8660.38, 8536.38, 8980.38, 8717.38}
-	}, 
-	["TOWERS"] = {
-		{"Hepburn Heights", 8660.42, 8717.6, 8980.42, 8921.23}
-	}, 
-	["LITTLEI"] = {
-		{"Saint Mark's", 8980.9, 8487.68, 9303.9, 8921.68}
-	}, 
-	["HARWOOD"] = {
-		{"Harwood", 8660.98, 8921.82, 9303.98, 9322.68}
-	}, 
-	["EASTBAY"] = {
-		{"Portland Beach", 9304.37, 8386.53, 9712.6, 9199.63}
-	}, 
-	["S_VIEW"] = {
-		{"Portland View", 8981.1, 8258.19, 9278.6, 8487.19}
-	}, 
-	["ROADBR2"] = {
-		{"Callahan Bridge", 8359.77, 8041.7, 8529.88, 8091.7}
-	}, 
-	["CONSTRU"] = {
-		{"Fort Staunton", 8154.88, 8588.38, 8529.32, 8938.38}
-	}, 
-	["LCADIUM"] = {
-		{"Aspatria", 7689.24, 8587.4, 8031.24, 9160.5}
-	}, 
-	["YAKUSA"] = {
-		{"Torrington", 8114.77, 7327.58, 8492.77, 7940.07}
-	}, 
-	["LCOPING"] = {
-		{"Bedford Point", 7690.56, 7327.95, 8114.56, 7995.55}
-	}, 
-	["COM_EAS"] = {
-		{"Newport", 8115.11, 7940.81, 8530.11, 8587.81}
-	}, 
-	["PARK"] = {
-		{"Belleville Park", 7793.43, 7996.93, 8114.27, 8586.93}
-	}, 
-	["UNIVERS"] = {
-		{"Liberty Campus", 8032.27, 8588.38, 8154.27, 8938.38}
-	}, 
-	["HOSPI_2"] = {
-		{"Rockford", 8032.24, 8938.89, 8530.24, 9268.89}
-	}, 
-	["LCRPORT"] = {
-		{"Francis Intl. Airport", 6282.03, 7655.29, 7446.37, 8731.56}
-	}, 
-	["PROJECT"] = {
-		{"Wichita Gardens", 7103.17, 8731.93, 7543.96, 9092.73}
-	}, 
-	["SWANKS"] = {
-		{"Cedar Grove", 7047.77, 9093.39, 7648.09, 9650.06}
-	}, 
-	["SUB_IND"] = {
-		{"Pike Creek", 6507.43, 8732.03, 7102.69, 9092.76}
-	}, 
-	["BIG_DAM"] = {
-		{"Cochrane Dam", 6520.5, 9093.44, 7047.48, 9704.54}
-	}, 
-}
-
-local LibertyBig = {
-	["IND_ZON"] = {
-		{"Portland", 8532.15, 7670.28, 9817.66, 9434.12}
-	}, 
-	["COM_ZON"] = {
-		{"Staunton Island", 7649.52, 7280.03, 8530.52, 9367.26}
-	}, 
-	["SUB_ZON"] = {
-		{"Shoreside Vale", 6270.36, 7648.62, 7648.1, 10206.4}
-	}, 
-	--["SUB_ZO2"] = {
-	--	{"Shoreside Vale", 7649.56, 9161.11, 7793.71, 9367.04}
-	--}, 
-	--["SUB_ZO3"] = {
-	--	{"Shoreside Vale", 7649.57, 9079.09, 7688.67, 9161.06}
-	--}, 
-}
-
-for _,dat in pairs(LibertySmall) do
-	for _, v in pairs(dat) do
-		v[2] = v[2] + OffsetLiberty[1]
-		v[3] = v[3] + OffsetLiberty[2]
-		
-		v[4] = v[4] + OffsetLiberty[1]
-		v[5] = v[5] + OffsetLiberty[2]
-	end
-end
-
-
-for _,dat in pairs(LibertyBig) do
-	for _, v in pairs(dat) do
-		v[2] = v[2] + OffsetLiberty[1]
-		v[3] = v[3] + OffsetLiberty[2]
-		
-		v[4] = v[4] + OffsetLiberty[1]
-		v[5] = v[5] + OffsetLiberty[2]
-	end
-end
-
-
-
-function GetZoneName(x,y,z, citiesonly, City)
-	if(City) then
-		if(City == "Liberty City") then 
-			if(not citiesonly) then -- Если ничего не находит отображает название больших районов
-				for _, dist in pairs(LibertySmall) do
-					for _, v in pairs(dist) do
-						if(v[2] <= x and v[3] <= y) then
-							if(v[4] >= x and v[5] >= y) then
-								return v[1]
-							end
-						end
-					end
-				end
-			end 
-			
-			for _, dist in pairs(LibertyBig) do -- Если не находит тут то пишет просто Liberty City
-				for _, v in pairs(dist) do
-					if(v[2] <= x and v[3] <= y) then
-						if(v[4] >= x and v[5] >= y) then
-							return v[1]
-						end
-					end
-				end
-			end
-			return "Liberty City"
-		elseif(City == "Vice City") then
-			return "Vice City"
-		end
-	end
-	return getZoneName(x,y,z, citiesonly)
 end
 
 
