@@ -1059,9 +1059,7 @@ function SetZoneDisplay(zone)
 		triggerServerEvent("CreateVehicleNodeMarker", localPlayer, getPlayerCity(localPlayer), zone)
 	end
 	
-	if(not GroundMaterial[zone]) then
-		triggerServerEvent("ZonesGroundPosition", localPlayer, zone)
-	end
+	CheckGroundMaterial(getPlayerCity(localPlayer), zone)
 end
 addEvent("SetZoneDisplay", true)
 addEventHandler("SetZoneDisplay", getRootElement(), SetZoneDisplay)
@@ -1907,14 +1905,16 @@ end
 
 
 
-function GetGroundMaterial(x,y,z,gz)
+function GetGroundMaterial(x,y,z,gz,city)
 	x, y = math.round(x, 0), math.round(y, 0)
 	local material = false
-	local zone = getZoneName(x,y,z,false)
-	if(GroundMaterial[zone]) then
-		if(GroundMaterial[zone][x]) then
-			if(GroundMaterial[zone][x][y]) then
-				material = GroundMaterial[zone][x][y]
+	local zone = exports["ps2_weather"]:GetZoneName(x,y,z, true, city)
+	if(GroundMaterial[city]) then
+		if(GroundMaterial[city][zone]) then
+			if(GroundMaterial[city][zone][x]) then
+				if(GroundMaterial[city][zone][x][y]) then
+					material = GroundMaterial[city][zone][x][y]
+				end
 			end
 		end
 	end
@@ -1922,6 +1922,17 @@ function GetGroundMaterial(x,y,z,gz)
 	if(not material) then material = 1337 end
 	return material
 end
+
+
+function CheckGroundMaterial(city, zone)
+	if(not GroundMaterial[city]) then GroundMaterial[city] = {} end
+	if(not GroundMaterial[city][zone]) then
+		triggerServerEvent("ZonesGroundPosition", localPlayer, city, zone)
+	end
+	return true
+end
+
+
 
 function LatencyUpgrade(Upgrade)
 	if(not tonumber(Upgrade)) then return true end
@@ -4298,12 +4309,12 @@ local BannedMaterial = {
 
 
 
-function BotCheckPath(x,y,z,x2,y2,z2,zone)
+function BotCheckPath(x,y,z,x2,y2,z2,city,zone)
 	local gz = getGroundPosition(x2,y2,z2)
 	if(isLineOfSightClear(x,y,z-0.45,x2,y2,gz+0.1, true, true, true, true)) then
 		if(zone == getZoneName(x2,y2,z2)) then
 			if(zone ~= "Unknown") then  
-				local material = GetGroundMaterial(x2,y2,z2, gz-2)
+				local material = GetGroundMaterial(x2,y2,z2, gz-2,city)
 				if(not BannedMaterial[material]) then
 					return true
 				end
@@ -4325,6 +4336,7 @@ function FoundBotPath(ped)
 	local x,y,z = getElementPosition(ped)
 	local x2,y2,z2 = getPositionInFront(ped, 8)
 	local zone = getZoneName(x,y,z, false)
+	local city = getPlayerCity(ped)
 	
 	if(getElementData(ped, "GROUP")) then
 		local thePlayer = getPlayerFromName(getElementData(ped, "GROUP"))
@@ -4334,28 +4346,28 @@ function FoundBotPath(ped)
 		end
 	end
 	
-	if(BotCheckPath(x,y,z,x2,y2,z2,zone)) then 
+	if(BotCheckPath(x,y,z,x2,y2,z2,city,zone)) then 
 		return {x2,y2,z2,0,"silent"}
 	else
 		local x3,y3,z3 = getPositionInRight(ped, 2)
 		local a3,b3,c3 = getPositionInFR(ped, 2)
 		local x4,y4,z4 = getPositionInLeft(ped, 2)
 		local a4,b4,c4 = getPositionInFL(ped, 2)
-		if(BotCheckPath(x,y,z, a3,b3,c3,zone)) then
+		if(BotCheckPath(x,y,z, a3,b3,c3,city,zone)) then
 			arr[#arr+1] = {a3,b3,c3,0,"silent"}
-		elseif(BotCheckPath(x,y,z, x3,y3,z3,zone)) then
+		elseif(BotCheckPath(x,y,z, x3,y3,z3,city,zone)) then
 			arr[#arr+1] = {x3,y3,z3,0,"silent"}
 		end
 
-		if(BotCheckPath(x,y,z, a4,b4,c4,zone)) then
+		if(BotCheckPath(x,y,z, a4,b4,c4,city,zone)) then
 			arr[#arr+1] = {a4,b4,c4,0,"silent"}
-		elseif(BotCheckPath(x,y,z, x4,y4,z4,zone)) then
+		elseif(BotCheckPath(x,y,z, x4,y4,z4,city,zone)) then
 			arr[#arr+1] = {x4,y4,z4,0,"silent"}
 		end
 
 		if(#arr == 0) then
 			local x5,y5,z5 = getPositionInBack(ped, 8)
-			if(BotCheckPath(x,y,z, x5,y5,z5,zone)) then -- В крайнем случае идем назад
+			if(BotCheckPath(x,y,z, x5,y5,z5,city,zone)) then -- В крайнем случае идем назад
 				return {x5,y5,z5,0,"silent"}
 			else
 				if(getElementData(ped, "TINF")) then
@@ -4936,7 +4948,7 @@ function displayLoadedRes(res)
 		for zone, state in pairs(PData["infopath"][getPlayerCity(localPlayer)]) do
 			if(state) then
 				PData['changezone'] = {}
-				triggerServerEvent("ZonesGroundPosition", localPlayer, zone)
+				triggerServerEvent("ZonesGroundPosition", localPlayer, getPlayerCity(localPlayer), zone)
 				triggerServerEvent("CreateVehicleNodeMarker", localPlayer, getPlayerCity(localPlayer), zone)
 			end
 		end
@@ -5979,14 +5991,15 @@ addEvent("InfoPath", true)
 addEventHandler("InfoPath", localPlayer, InfoPath)
 
 
-function InfoPathPed(zone, arr)
+function InfoPathPed(city, zone, arr)
 	local arr = fromJSON(arr)
-	GroundMaterial[zone] = {}
+	if(not GroundMaterial[city]) then GroundMaterial[city] = {} end
+	GroundMaterial[city][zone] = {}
 	for i, dat2 in pairs(arr) do
 		for slotx = dat2[1], dat2[4] do
-			if(not GroundMaterial[zone][slotx]) then GroundMaterial[zone][slotx] = {} end
+			if(not GroundMaterial[city][zone][slotx]) then GroundMaterial[city][zone][slotx] = {} end
 			for sloty = dat2[2], dat2[5] do
-				GroundMaterial[zone][slotx][sloty] = 4
+				GroundMaterial[city][zone][slotx][sloty] = 4
 			end
 		end
 		PData['changezone'][zone.." "..i] = {
@@ -6006,6 +6019,7 @@ addEventHandler("InfoPathPed", localPlayer, InfoPathPed)
 function DevelopmentRender()
 	local x,y,z = getElementPosition(localPlayer)
 	for i, arr in pairs(PData['changezone']) do
+		
 		local wx,wy,wz = false, false, false
 		if(arr[2]) then
 			wx,wy,wz = arr[2][1], arr[2][2], arr[2][3]
@@ -6039,7 +6053,7 @@ function DevelopmentRender()
 
 	end
 	
-	local material = GetGroundMaterial(x,y,z,z-2)
+	local material = GetGroundMaterial(x,y,z,z-2, getPlayerCity(localPlayer))
 	local out = "Материал: "..material.."\nЗона: "..getZoneName(x,y,z)
 	if(isCursorShowing()) then
 		local x,y,z = getCameraMatrix()
@@ -6159,7 +6173,7 @@ function ShowInfoKey()
 			if(modelname) then
 				outputChatBox("model name: "..modelname)
 				
-				--destroyElement(tar)
+				destroyElement(tar)
 			end
 		end
 		
@@ -9855,9 +9869,8 @@ function StreamIn(restream)
 	elseif(getElementType(source) == "ped") then
 		local x,y,z = getElementPosition(source)
 		local zone = getZoneName(x,y,z,false)
-		if(not GroundMaterial[zone]) then
-			triggerServerEvent("ZonesGroundPosition", localPlayer, zone)
-		end
+		CheckGroundMaterial(getPlayerCity(source), zone)
+		
 		StreamData[source] = {["armas"] = {}, ["UpdateRequest"] = true}
 		UpdateArmas(source)
 		
@@ -9900,7 +9913,9 @@ function StreamIn(restream)
 		end
 	end
 	if(not restream) then
-		triggerServerEvent("PlayerElementSync", localPlayer, localPlayer, source, true)
+		if(getElementType(source) == "vehicle" or getElementType(source) == "ped") then
+			triggerServerEvent("PlayerElementSync", localPlayer, localPlayer, source, true)
+		end
 	end
 end
 addEvent("onClientElementStreamIn", true)

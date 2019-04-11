@@ -6002,7 +6002,10 @@ function Travel(thePlayer, thePed, City)
 			if(getElementData(thePlayer, "City") == City) then
 				DialogBreak(thePlayer, "Мы уже находимся в "..City, thePed)
 			else
-				DialogBreak(thePlayer, "К сожалению рейс "..City.." в данный момент не доступен", thePed)
+				triggerEvent("vc", thePlayer, thePlayer)
+				setElementPosition(thePlayer, 1.8, 26.7, 1199.6)
+				setElementInterior(thePlayer, 1)
+				setElementDimension(thePlayer, 1)
 			end
 		end
 	end
@@ -7741,10 +7744,13 @@ function preLoad(name)
 	-- Пешеходы
 	local CountRandomBot = 500
 	local availzones = {}
-	for name, dat in pairs(PedNodes) do
-		for _, dat2 in pairs(dat) do
-			for slot = 1, dat2[4]-dat2[1]+dat2[5]-dat2[2] do
-				availzones[#availzones+1] = dat2
+	
+	for city, dat1 in pairs(PedNodes) do
+		for name, dat in pairs(dat1) do
+			for _, dat2 in pairs(dat) do
+				for slot = 1, dat2[4]-dat2[1]+dat2[5]-dat2[2] do
+					availzones[#availzones+1] = dat2
+				end
 			end
 		end
 	end
@@ -9885,7 +9891,7 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 	end
 
 	local availzones = {}
-	for name, dat in pairs(PedNodes[zone]) do
+	for name, dat in pairs(PedNodes["San Andreas"][zone]) do -- доделать
 		for slotx = dat[1], dat[4] do
 			for sloty = dat[2], dat[5] do
 				availzones[#availzones+1] = {slotx, sloty, dat[6], dat[7]}
@@ -13296,10 +13302,10 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 		local angle = findRotation(x,y, x,ry)
 		if(angle <= 0) then angle = 0 end
 		if(tmpcity ~= zone) then
-			if(PedNodes[zone]) then
-				tmpi = #PedNodes[zone]+1
+			if(PedNodes[getPlayerCity(thePlayer)][zone]) then
+				tmpi = #PedNodes[getPlayerCity(thePlayer)][zone]+1
 			else
-				PedNodes[zone] = {}
+				PedNodes[getPlayerCity(thePlayer)][zone] = {}
 				tmpi = 1
 			end
 
@@ -13312,12 +13318,12 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 			datess = datess.."	[\""..zone.."\"] = {\n"
 			datess = datess.."		["..tmpi.."] = {"..math.round(x, 0)..", "..math.round(y, 0)..", "..math.round(z, 1)..
 			", "..math.round(rx, 0)..", "..math.round(ry, 0)..", "..math.round(rz, 1)..", "..angle.."}, "
-			PedNodes[zone][tmpi] = {math.round(x, 0), math.round(y, 0), math.round(z, 1), math.round(rx, 0), math.round(ry, 0), math.round(rz, 1), angle}
+			PedNodes[getPlayerCity(thePlayer)][zone][tmpi] = {math.round(x, 0), math.round(y, 0), math.round(z, 1), math.round(rx, 0), math.round(ry, 0), math.round(rz, 1), angle}
 		else
 			tmpi = tmpi+1
 			datess = datess.."\n		["..tmpi.."] = {"..math.round(x, 0)..", "..math.round(y, 0)..", "..math.round(z, 1)..
 			", "..math.round(rx, 0)..", "..math.round(ry, 0)..", "..math.round(rz, 1)..", "..angle.."}, "
-			PedNodes[zone][tmpi] = {math.round(x, 0), math.round(y, 0), math.round(z, 1), math.round(rx, 0), math.round(ry, 0), math.round(rz, 1), angle}
+			PedNodes[getPlayerCity(thePlayer)][zone][tmpi] = {math.round(x, 0), math.round(y, 0), math.round(z, 1), math.round(rx, 0), math.round(ry, 0), math.round(rz, 1), angle}
 		end
 	else
 		local zone = exports["ps2_weather"]:GetZoneName(x,y,z, false, getElementData(thePlayer, "City"))
