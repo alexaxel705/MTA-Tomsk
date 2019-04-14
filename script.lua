@@ -3890,9 +3890,6 @@ local NonRandVeh = {
 	-- Ферма 2
 	{false, 532, 1995.1, 228.3, 26.3,0,0,85},
 
-	-- Полиция
-	{false, 599, -2166, -2390, 29.6,0,0,50},
-
 	-- Скорая
 	{false, 416, 1229.6, 297.7, 18.6,0,0,155, "MCMG 228"},
 	{false, 416, -2202.5, -2316, 29.6,0,0,319, "MCAP 228"},
@@ -5060,7 +5057,7 @@ function tp(thePlayer, command, h)
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
 
-		local x,y,z,i,d  = 7.7, -724.7, 4.9, 0, 2 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = -1850.9, -2682.6, 53.1, 0, 0 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)

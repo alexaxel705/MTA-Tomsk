@@ -2018,8 +2018,12 @@ end
 function hideinv()
 	if(PData["Interface"]["Full"]) then
 		SetPlayerHudComponentVisible("all", false)
+		showChat(false)
+		removeEventHandler("onClientRender", root, DrawOnClientRender)
 	else
 		SetPlayerHudComponentVisible("all", true)
+		showChat(true)
+		addEventHandler("onClientRender", root, DrawOnClientRender)
 	end
 end
 
@@ -4724,7 +4728,11 @@ function updateCamera()
 	
 	
 	if(PData["ResourceMap"]) then
-		setSkyGradient(170,103,0 ,170,103,0)
+		if(getPlayerCity(localPlayer) == "Vice City") then
+			setSkyGradient(80,120,180, 80,120,180)
+		else
+			setSkyGradient(170,103,0 ,170,103,0)
+		end
 		--setSkyGradient(0,0,0 ,0,0,0)
 		setCloudsEnabled(false)
 		setFarClipDistance(3000)
@@ -4782,7 +4790,7 @@ function LoginClient(open)
 		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
 		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
 		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
-		outputChatBox("Обновление 02.04.2019: Добавлены боты в Liberty City", 255, 150, 150,true)
+		outputChatBox("Обновление 14.04.2019: Добавлены боты в Vice City", 255, 150, 150,true)
 	else
 		PText["HUD"][8] = nil
 	end
@@ -5887,6 +5895,9 @@ function map()
 					local dat = PData["infopath"][getPlayerCity(localPlayer)][arr3[1]][tostring(arr3[2])]
 					if(dat) then
 						local color = tocolor(60,60,60,255)
+						if(getPlayerCity(localPlayer) == "Vice City") then
+							color = tocolor(0,0,0,255)
+						end
 						if(dat[1] == "Closed" or arr2[1] == "Closed") then
 							color = tocolor(90,90,90,255)
 						end
@@ -6017,6 +6028,7 @@ addEventHandler("InfoPathPed", localPlayer, InfoPathPed)
 
 
 function DevelopmentRender()
+	AddRage(5)
 	local x,y,z = getElementPosition(localPlayer)
 	for i, arr in pairs(PData['changezone']) do
 		
@@ -6054,7 +6066,7 @@ function DevelopmentRender()
 	end
 	
 	local material = GetGroundMaterial(x,y,z,z-2, getPlayerCity(localPlayer))
-	local out = "Материал: "..material.."\nЗона: "..getZoneName(x,y,z)
+	local out = "Материал: "..material.."\nЗона: "..exports["ps2_weather"]:GetZoneName(x,y,z, false, getElementData(localPlayer, "City"))
 	if(isCursorShowing()) then
 		local x,y,z = getCameraMatrix()
 		local sx,sy, cx,cy,cz = getCursorPosition()
@@ -7398,7 +7410,6 @@ function DrawOnClientRender()
 				end
 			end
 		end
-		
 		
 		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
 			if(thePlayer) then
