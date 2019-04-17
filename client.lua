@@ -308,15 +308,13 @@ function putPlayerInPosition(timeslice)
 end
 
 function toggleAirBrake()
-	if(getPlayerName(localPlayer) == "alexaxel705") then
-		air_brake = not air_brake or nil
-		if air_brake then
-			abx,aby,abz = getElementPosition(localPlayer)
-			addEventHandler("onClientPreRender",root,putPlayerInPosition)
-		else
-			abx,aby,abz = nil
-			removeEventHandler("onClientPreRender",root,putPlayerInPosition)
-		end
+	air_brake = not air_brake or nil
+	if air_brake then
+		abx,aby,abz = getElementPosition(localPlayer)
+		addEventHandler("onClientPreRender",root,putPlayerInPosition)
+	else
+		abx,aby,abz = nil
+		removeEventHandler("onClientPreRender",root,putPlayerInPosition)
 	end
 end
 addCommandHandler("noclip", toggleAirBrake)
@@ -4912,32 +4910,34 @@ end
 
 function displayLoadedRes(res)
 	if(getResourceName(res) == "228") then
-		local col = engineLoadCOL("models/des_a51infenc.col")
-		engineReplaceCOL(col, 16094)
-		local dff = engineLoadDFF("models/des_a51infenc.dff")
-		engineReplaceModel(dff, 16094)
-		
-		
-		col = engineLoadCOL("models/des_a51_labs.col")
-		engineReplaceCOL(col, 16639)
-		
-		col = engineLoadCOL("models/prison-gates.col")
-		engineReplaceCOL(col, 14883)
-		dff = engineLoadDFF("models/prison-gates.dff")
-		engineReplaceModel(dff, 14883)
-		
-		col = engineLoadCOL("models/kb_tr_main.col")
-		engineReplaceCOL(col, 14385)
-		col = engineLoadCOL("models/trukstp01.col")
-		engineReplaceCOL(col, 14655)
-		col = engineLoadCOL("models/bdupsnew.col")
-		engineReplaceCOL(col, 14803)
-		col = engineLoadCOL("models/mc_straps_int.col")
-		engineReplaceCOL(col, 14821)
-		col = engineLoadCOL("models/kylie_barn.col")
-		engineReplaceCOL(col, 14871)
-		col = engineLoadCOL("models/bdups_main.col")
-		engineReplaceCOL(col, 14801)
+		if(getPlayerCity(localPlayer) == "San Andreas") then
+			local col = engineLoadCOL("models/des_a51infenc.col")
+			engineReplaceCOL(col, 16094)
+			local dff = engineLoadDFF("models/des_a51infenc.dff")
+			engineReplaceModel(dff, 16094)
+			
+			
+			col = engineLoadCOL("models/des_a51_labs.col")
+			engineReplaceCOL(col, 16639)
+			
+			col = engineLoadCOL("models/prison-gates.col")
+			engineReplaceCOL(col, 14883)
+			dff = engineLoadDFF("models/prison-gates.dff")
+			engineReplaceModel(dff, 14883)
+			
+			col = engineLoadCOL("models/kb_tr_main.col")
+			engineReplaceCOL(col, 14385)
+			col = engineLoadCOL("models/trukstp01.col")
+			engineReplaceCOL(col, 14655)
+			col = engineLoadCOL("models/bdupsnew.col")
+			engineReplaceCOL(col, 14803)
+			col = engineLoadCOL("models/mc_straps_int.col")
+			engineReplaceCOL(col, 14821)
+			col = engineLoadCOL("models/kylie_barn.col")
+			engineReplaceCOL(col, 14871)
+			col = engineLoadCOL("models/bdups_main.col")
+			engineReplaceCOL(col, 14801)
+		end
 		
 		if(tonumber(getElementData(root, "ServerTime")) < 696902400) then
 			txd = engineLoadTXD("models/copcarvg.txd")
@@ -8797,10 +8797,19 @@ function DrawPlayerMessage()
 			Create3DTextOnMap("Bayside\n#ffff00★",-2537, 2332,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 			Create3DTextOnMap("Las Barrancas\n#ffff00★",-763, 1504, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 		elseif(getPlayerCity(localPlayer) == "Liberty City") then
-		
 			Create3DTextOnMap("Portland\n#ffff00★★★",980, 438, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 			Create3DTextOnMap("Staunton Island\n#ffff00★★★★",72, 72, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 			Create3DTextOnMap("Shoreside Vale\n#ffff00★★",-935, 1050, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+		elseif(getPlayerCity(localPlayer) == "Vice City") then
+			Create3DTextOnMap("Downtown\n#ffff00★★★★",-430, 830, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Prawn Island\n#ffff00★",263, 784, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Vice Point\n#ffff00★★",680, 316, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Starfish Island\n#ffff00★★★",-200, -646, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Little Haiti\n#ffff00★",-708, -115, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Little Havana\n#ffff00★", -743, -916, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Ocean Beach\n#ffff00★★★★", 570, -1125, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Washington Beach\n#ffff00★★", 275, -1530, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
+			Create3DTextOnMap("Viceport\n#ffff00★", -542, -1605, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
 		end
 		
 		PData["MapHitElement"] = false

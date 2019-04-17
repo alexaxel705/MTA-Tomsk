@@ -904,7 +904,11 @@ local SpawnPoint = {
 	["FCPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 1, "#FFA500Тюрьма Flint County", "До освобождения"},
 	["BCPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 2, "#FFA500Тюрьма Bone County", "До освобождения"},
 	["TRPD"] = {318.5, 316.2, 999.1, 270, false, false, 5, 3, "#FFA500Тюрьма Tierra Robada", "До освобождения"},
-
+	
+	["VCPD"] = {640.7, -757.1, 4.4, 52, false, false, 0, 2, "#FFA500Тюрьма Vice City", "До освобождения"},
+	
+	["LCPD"] = {640.7, -757.1, 4.4, 52, false, false, 0, 1, "#FFA500Тюрьма Liberty City", "До освобождения"},
+	
 	["Ganton"] = {2512, -1671, 13.51, 0, 270, false, 0, 0},
 	["Zone 51 Prison"] = {212, 1865,13, 0, false, false, 0, 0},
 	["Zone 51 Army"] = {133.8, 1920.1,19.1, 0, false, false, 0, 0},
@@ -949,7 +953,7 @@ local ClinicSpawn = {
 	["Staunton Island"] = {99.3, 978, 16.2, 180, 1, "MEDUN"}, 
 	["Shoreside Vale"] = {-1340.6, 855.3, 58.8, 90, 1, "MEDUN"}, 
 	
-	["Vice City"] = {319.3, -188, 0, 90, 2, "MEDUN"}, 
+	["Vice City"] = {142, -1229, 5.4, 280, 2, "MEDUN"}, 
 }
 
 
@@ -11819,7 +11823,9 @@ function PlayerElementSync(thePlayer, obj, state)
 							vehinfo = SData["TeamVehicle"][team][region][math.random(#SData["TeamVehicle"][team][region])]
 						elseif(team == "Мирные жители") then
 							local arr = table.copy(SData["TeamVehicle"][team][region])
-							local zone = getZoneName(PathNodes[getPlayerCity(obj)][node][id][2], PathNodes[getPlayerCity(obj)][node][id][3], PathNodes[getPlayerCity(obj)][node][id][4], false)
+
+							local zone = exports["ps2_weather"]:GetZoneName(PathNodes[getPlayerCity(obj)][node][id][2], PathNodes[getPlayerCity(obj)][node][id][3], PathNodes[getPlayerCity(obj)][node][id][4], false, getElementData(obj, "City"))
+							
 							if(VehicleRegionSpecific[zone]) then
 								for _, model in pairs(VehicleRegionSpecific[zone]) do
 									if(IsVehicleYear(model)) then
@@ -14621,7 +14627,14 @@ local PrisonVariable = {
 	["Bone County"] = "BCPD",
 	["Tierra Robada"] = "TRPD",
 	["UNDERWATER"] = "AREA51",
-	["Unknown"] = "AREA51"
+	["Unknown"] = "AREA51", 
+	
+	["Liberty City"] = "LCPD", 
+	["Portland"] = "LCPD", 
+	["Staunton Island"] = "LCPD", 
+	["Shoreside Vale"] = "LCPD", 
+	
+	["Vice City"] = "VCPD",
 }
 
 local DroppedItem = {
@@ -14700,7 +14713,7 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 						SetDatabaseAccount(source, "prisoninv", GetDatabaseAccount(source, "inv"))
 						SetDatabaseAccount(source, "inv", StandartInventory)
 						local x,y,z = GetPlayerLocation(source)
-						local zone = getZoneName(x,y,z,true)
+						local zone = exports["ps2_weather"]:GetZoneName(x,y,z,true, getElementData(source, "City"))
 						SetDatabaseAccount(source, "OldTeam", PTeam)
 						SetDatabaseAccount(source, "Prison", PrisonVariable[zone])
 						SetTeam(source, "Уголовники")
@@ -14734,7 +14747,7 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 						SetDatabaseAccount(source, "prisoninv", GetDatabaseAccount(source, "inv"))
 						SetDatabaseAccount(source, "inv", StandartInventory)
 						local x,y,z = GetPlayerLocation(source)
-						local zone = getZoneName(x,y,z,true)
+						local zone = exports["ps2_weather"]:GetZoneName(x,y,z,true, getElementData(source, "City"))
 						SetDatabaseAccount(source, "Prison", PrisonVariable[zone])
 						SetTeam(source, "Уголовники")
 					else
