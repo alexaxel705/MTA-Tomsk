@@ -4863,7 +4863,7 @@ function StartLoad() -- Первый этап загрузки
 	setWeather(0)
 	setFogDistance(300)
 	setFarClipDistance(300)
-	setMinuteDuration(1000)
+	setMinuteDuration(100000)
 	
 	local LangCode = getLocalization()["code"]
 	local Lang = {
@@ -6315,6 +6315,7 @@ local Cheats = {
 	["cwjxuoc"] = true, 
 	["alnsfmzo"] = true, 
 	["ysohnul"] = true,
+	["ppgwjht"] = true, 
 	["liyoaay"] = true, 
 	["aezakmi"] = true,
 	["ripazha"] = true,
@@ -6360,14 +6361,22 @@ local Cheats = {
 	["turndowntheheat"] = true, 
 	["ogxsdag"] = true, 
 	["worshipme"] = true, 
+	["xjvsnaj"] = true, 
+	["nightprowler"] = true, 
+	["ofviac"] = true, 
 }     
 
 
 function CheatCode(code)
-	if(getPlayerName(localPlayer) ~= "alexaxel705") then return false end
 	local x,y,z = getElementPosition(localPlayer)
+	local zone = exports["ps2_weather"]:GetZoneName(x,y,z, true, getElementData(localPlayer, "City"))
 	if(code == "hesoyam") then
 		triggerServerEvent("hesoyam", localPlayer, localPlayer)
+	elseif(code == "ofviac") then
+		triggerServerEvent("ofviac", localPlayer, localPlayer)		
+		triggerServerEvent("CheatWeather", localPlayer, zone, code)
+	elseif(code == "xjvsnaj" or code == "nightprowler") then
+		triggerServerEvent("nightprowler", localPlayer, localPlayer)
 	elseif(code == "wanrltw" or code == "fullclip") then
 		if(getElementData(localPlayer, "FullClip")) then
 			triggerServerEvent("FullClip", localPlayer, localPlayer, false)
@@ -6411,8 +6420,9 @@ function CheatCode(code)
 		   code == "alnsfmzo" or
 		   code == "cfvfgmj" or
 		   code == "cwjxuoc") then
-		local zone = exports["ps2_weather"]:GetZoneName(x,y,z, true, getElementData(localPlayer, "City"))
 		triggerServerEvent("CheatWeather", localPlayer, zone, code)
+	elseif(code == "ppgwjht") then
+		triggerServerEvent("ppgwjht", localPlayer, localPlayer)
 	elseif(code == "ysohnul") then
 		if(getGameSpeed() == 2) then 
 			ToolTip("Чит деактивирован") 
@@ -9375,7 +9385,7 @@ function DrawPlayerMessage()
 					dxDrawText(Text(SkillName[WeaponModel[weapon][2]]), 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
 					DrawProgressBar(780*scalex, 840*scaley+((35*scaley)*count), getPedStat(localPlayer, WeaponModel[weapon][2]), nil, 150)
 				end
-				local ServerDate = getRealTime(getElementData(root, "ServerTime"))
+				local ServerDate = getRealTime(getElementData(root, "ServerTime"), false)
 				dxDrawBorderedText(ServerDate.monthday.." "..Text(Month[ServerDate.month+1]).." "..ServerDate.year+1900, 490*scalex, 960*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*2.4, "default-bold", "left", "top", nil, nil, nil, true)		
 				
 

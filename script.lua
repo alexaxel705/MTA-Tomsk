@@ -40,6 +40,7 @@ local SourceData = {
 	},
 }
 local PData = {}
+local WorldTimer = false
 local SData = {
 	['Chat Message'] = {},
 	["VehAccData"] = {},
@@ -54,7 +55,7 @@ local disableVoice = {}
 local hFile = fileOpen("serverdata/time.txt")
 local timebuffer = fileRead(hFile, 500)
 fileClose(hFile)
-local ServerDate = getRealTime(timebuffer) -- Сюда записывается виртуальное время игры
+local ServerDate = getRealTime(timebuffer, false) -- Сюда записывается виртуальное время игры
 local NowTime = getRealTime()
 local CYear = NowTime.year+1900
 local OpenGates = {}
@@ -5061,7 +5062,7 @@ function tp(thePlayer, command, h)
 		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
 		--outputChatBox(cs)
 
-		local x,y,z,i,d  = -1850.9, -2682.6, 53.1, 0, 0 -- 8152, -9143, 6.3
+		local x,y,z,i,d  = 261.1, 284.5, 26.4, 0, 1 -- 8152, -9143, 6.3
 
 		if(theVehicle) then
 			SetPlayerPosition(theVehicle, x,y,z,i,d)
@@ -6046,7 +6047,7 @@ function WhoBizOwner(thePlayer,thePed,biz,vibori)
 		if(vibori) then
 			local srok = tonumber(xmlNodeGetAttribute(node, "srok"))
 			local times = getRealTime()
-			local dates = getRealTime(times.timestamp+((srok*24)*60)-10800)
+			local dates = getRealTime(times.timestamp+((srok*24)*60)-10800, false)
 			outputChatBox("Выборы состоятся "..("%02d"):format(dates.monthday).."."..("%02d"):format(dates.month+1).."."..(dates.year+1900).." в "..("%02d"):format(dates.hour)..":"..("%02d"):format(dates.minute).." (МСК)", thePlayer)
 		else
 			local val = xmlNodeGetAttribute(node, "owner")
@@ -6679,16 +6680,14 @@ addEventHandler("vpc", root, vpc)
 
 
 function vp(thePlayer, model, x,y,z)
-	if(getPlayerName(thePlayer) == "alexaxel705") then
-		if(not model) then model = 439 end
-		local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
-		local v = CreateVehicle(tonumber(model), x,y,z+1)
-		setElementInterior(v, i)
-		setElementDimension(v, d)
+	if(not model) then model = 439 end
+	local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
+	local v = CreateVehicle(tonumber(model), x,y,z+1)
+	setElementInterior(v, i)
+	setElementDimension(v, d)
 
-		warpPedIntoVehicle(thePlayer, v)
-		setElementData(v, "destroy", "true", false)
-	end
+	warpPedIntoVehicle(thePlayer, v)
+	setElementData(v, "destroy", "true", false)
 end
 addEvent("vp", true)
 addEventHandler("vp", root, vp)
@@ -7534,7 +7533,7 @@ function preLoad(name)
 	setGarageOpen(24, true)
 	setGarageOpen(46, true)
 	setGameSpeed(1.2)
-	setMinuteDuration(1000)
+	setMinuteDuration(100000)
 	local players = getElementsByType("player") -- Даем ID
 	for theKey,thePlayer in ipairs(players) do
 		triggerEvent("onPlayerJoin", thePlayer)
@@ -7769,9 +7768,64 @@ function preLoad(name)
 		table.remove(availzones, rand)
 	end
 
-	setTimer(worldtime, 1000, 0)
+	WorldTimer = setTimer(worldtime, 1000, 0)
 end
 addEventHandler("onResourceStart", getResourceRootElement(), preLoad)
+
+
+
+function ppgwjht(thePlayer) 
+	if(isTimer(WorldTimer)) then
+		local _, _, totalExecutes = getTimerDetails(WorldTimer)
+		killTimer(WorldTimer) 
+		if(totalExecutes == 1000) then
+			WorldTimer = setTimer(worldtime, 50, 0)
+		else
+			WorldTimer = setTimer(worldtime, 1000, 0)
+		end
+	end
+end
+addEvent("ppgwjht", true)
+addEventHandler("ppgwjht", root, ppgwjht)
+
+
+function nightprowler(thePlayer) 
+	if(isTimer(WorldTimer)) then
+		killTimer(WorldTimer) 
+		
+		ServerDate = getRealTime((math.ceil(ServerDate.timestamp/43200)*43200)-60, false)
+		setTime(ServerDate.hour, ServerDate.minute)
+		
+		worldtime()
+	else
+		WorldTimer = setTimer(worldtime, 1000, 0)
+	end
+end
+addEvent("nightprowler", true)
+addEventHandler("nightprowler", root, nightprowler)
+
+
+function ofviac(thePlayer) 
+	if(isTimer(WorldTimer)) then
+		killTimer(WorldTimer) 
+		
+		ServerDate = getRealTime((math.ceil(ServerDate.timestamp/86400)*86400)+75600-(60), false)
+		setTime(ServerDate.hour, ServerDate.minute)
+		
+		worldtime(true)
+	else
+		WorldTimer = setTimer(worldtime, 1000, 0)
+	end
+end
+addEvent("ofviac", true)
+addEventHandler("ofviac", root, ofviac)
+
+
+
+
+
+
+
 
 
 function GetZCoord(x,y,dat)
@@ -11086,7 +11140,7 @@ local Events = {
 
 
 
-function worldtime()
+function worldtime(ignoreweather)
 	for _, v in pairs(SearchLights) do
 		local x,y,z = getElementPosition(v["A51_SPOTBULB"])
 		moveObject(v["A51_SPOTBULB"], 1000,  x,y,z, 0,0,math.random(-20,20))
@@ -11114,9 +11168,11 @@ function worldtime()
 	end
 
 
-	local hour, minutes = getTime()
-	ServerDate = getRealTime(ServerDate.timestamp+60)
+	ServerDate = getRealTime(ServerDate.timestamp+60, false)
+	local hour, minutes = ServerDate.hour, ServerDate.minute
+	setTime(hour, minutes)
 	if(minutes == 0) then
+		setElementData(root, "ServerTime", ServerDate.timestamp)
 		callRemote("http://109.227.228.4/engine/include/MTA/get_online.php", ResultGet)
 		for name, dat in pairs(BizInfo) do
 			local items = GetBizGeneration(name)
@@ -11168,7 +11224,7 @@ function worldtime()
 
 
 
-		if(hour == 3 or hour == 9 or hour == 15 or hour == 21) then
+		if(hour == 3 or hour == 9 or hour == 15 or hour == 21 and not ignoreweather) then
 			triggerEvent("NewWeather", root)
 		end
 
@@ -11178,7 +11234,6 @@ function worldtime()
 				SpawnCarForSale(true)
 				SpawnAllVehicle()
 			end
-			setElementData(root, "ServerTime", ServerDate.timestamp)
 		end
 		for v,k in pairs(Threes) do
 			if(isElement(Threes[v])) then
@@ -12203,6 +12258,16 @@ CreateAmmo(2333.1, 61.6, 26.7, 270, 4)--LS
 CreateAmmo(-2093.6, -2464.8, 30.6, 322, 6)--SF
 CreateAmmo(2539.5, 2083.9, 10.8, 90, 6)--LV
 CreateAmmo(243.3, -178.3, 1.6, 90, 6)--LS
+
+
+
+
+
+CreateDialogBot(179, 264.5, 280.5, 26.4, 35, 0, 1, "Ammo Shop 4", "Продавец") -- Liberty City 
+CreateDialogBot(179, 985.3, 602.3, 15.2, 127, 0, 1, "Ammo Shop 3", "Продавец") -- Liberty City 
+
+
+
 
 
 SData["Sex"] = 1
@@ -16535,8 +16600,7 @@ addEventHandler("TrunkClose", getRootElement(), TrunkClose)
 
 
 function SyncTime(thePlayer)
-	local h,m = getTime()
-	triggerClientEvent(thePlayer, "normalspeed", thePlayer, h, m, getWeather())
+	triggerClientEvent(thePlayer, "normalspeed", thePlayer, ServerDate.hour, ServerDate.minute, getWeather())
 	triggerClientEvent(thePlayer, "GameSky", thePlayer)
 end
 addEvent("SyncTime", true)
