@@ -308,6 +308,13 @@ function putPlayerInPosition(timeslice)
 end
 
 function toggleAirBrake()
+	if(getPlayerName(localPlayer) ~= "alexaxel705") then
+		local rand = math.random(1,100)
+		if(rand ~= 1) then
+			ToolTip("Чит код не сработал")
+			return false
+		end
+	end
 	air_brake = not air_brake or nil
 	if air_brake then
 		abx,aby,abz = getElementPosition(localPlayer)
@@ -4854,7 +4861,7 @@ local SoundsTheme = {
 	[2] = "http://109.227.228.4/engine/include/MTA/music/Autumn-Leaves.mp3",
 	[3] = "http://109.227.228.4/engine/include/MTA/music/Almost-blue.mp3", 
 	[4] = "http://109.227.228.4/engine/include/MTA/music/GTA3.mp3", 
-	
+	[5] = "http://109.227.228.4/engine/include/MTA/music/2005.mp3", 
 	
 }
 
@@ -4863,7 +4870,7 @@ function StartLoad() -- Первый этап загрузки
 	setWeather(0)
 	setFogDistance(300)
 	setFarClipDistance(300)
-	setMinuteDuration(100000)
+	setMinuteDuration(10000000)
 	
 	local LangCode = getLocalization()["code"]
 	local Lang = {
@@ -6368,6 +6375,13 @@ local Cheats = {
 
 
 function CheatCode(code)
+	if(getPlayerName(localPlayer) ~= "alexaxel705") then
+		local rand = math.random(1,100)
+		if(rand ~= 1) then
+			ToolTip("Чит код не сработал")
+			return false
+		end
+	end
 	local x,y,z = getElementPosition(localPlayer)
 	local zone = exports["ps2_weather"]:GetZoneName(x,y,z, true, getElementData(localPlayer, "City"))
 	if(code == "hesoyam") then
@@ -7563,6 +7577,12 @@ function vpr(command, h)
 end
 addCommandHandler("vpr", vpr)
 
+
+function sc(command, h)
+	local theVehicle = getPedOccupiedVehicle(localPlayer)
+	setVehicleColor(theVehicle, h, h, h, h)
+end
+addCommandHandler("sc", sc)
 
 
 

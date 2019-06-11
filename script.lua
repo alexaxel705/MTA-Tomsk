@@ -2473,6 +2473,10 @@ local VehicleSystem = {
 	[573] = {1.65, "MT 3", "", "A5 110", "Macpherson V109", "Wilwood 212mm", "Michelin 85", 333, {2, 2002}, {8, CYear}, "MTL"},
 }
 
+
+for slot = 612, 736 do -- For Vehicle script
+	VehicleSystem[slot] = VehicleSystem[411]
+end
 --[[
 -- [Год][Месяц+1] = {{"Событие 1"}, {"Событие 2"}}
 local Style = {
@@ -2595,7 +2599,7 @@ addEventHandler("usearmor", root, usearmor)
 function SetTeam(thePlayer, team)
 	local r, g, b = getTeamColor(getTeamFromName(team))
 	setElementData(thePlayer, "color", RGBToHex(r,g,b))
-	setBlipColor(PData[thePlayer]['radar'], r,g,b, 0)
+	setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
 	SetDatabaseAccount(thePlayer, "team", team)
 	setPlayerTeam(thePlayer, getTeamFromName(team))
 end
@@ -2751,7 +2755,16 @@ function CreateVehicle(model, x, y, z, rx, ry, rz, numberplate, bDirection, vari
 	if(model == 522) then
 		bDirection, variant1, variant2 = false, 4, 4
 	end
-	local theVehicle = createVehicle(model, x, y, z, rx, ry, rz, numberplate, bDirection, variant1, variant2)
+	
+	local Fake = model
+	if(model > 611) then 
+		Fake = 404
+	end
+	
+	local theVehicle = createVehicle(Fake, x, y, z, rx, ry, rz, numberplate, bDirection, variant1, variant2)	
+	setElementData(theVehicle, "model", model) -- For vehicle resource
+
+
 	setVehicleFuelTankExplodable(theVehicle, true)
 	local comp = {VehicleSystem[model][2], VehicleSystem[model][3], VehicleSystem[model][4], VehicleSystem[model][5], VehicleSystem[model][6], VehicleSystem[model][7]}
 	UpdateVehicleHandling(theVehicle, comp)
@@ -7533,7 +7546,7 @@ function preLoad(name)
 	setGarageOpen(24, true)
 	setGarageOpen(46, true)
 	setGameSpeed(1.2)
-	setMinuteDuration(100000)
+	setMinuteDuration(10000000)
 	local players = getElementsByType("player") -- Даем ID
 	for theKey,thePlayer in ipairs(players) do
 		triggerEvent("onPlayerJoin", thePlayer)
@@ -7888,6 +7901,7 @@ function CreateBot(skin,x,y,z,rz,i,d,zone,ind)
 	elseif(randitem == 3) then
 		if(SkinData[skin][3] == "Мужчина") then
 			name="Пьяный "..utf8.lower(name)
+			setElementData(BotCreated[zone][ind], "dialog", "Пьяный Мужчина")
 		elseif(SkinData[skin][3] == "Женщина") then
 			name="Пьяная "..utf8.lower(name)
 		end
@@ -7899,7 +7913,6 @@ function CreateBot(skin,x,y,z,rz,i,d,zone,ind)
 		name=name.." с сигаретой"
 		setElementData(BotCreated[zone][ind], "armasplus", toJSON({[3027] = true}))
 	end
-
 
 	setElementData(BotCreated[zone][ind], "inv", toJSON({botinv}))
 	setElementData(BotCreated[zone][ind], "name", name)
@@ -9275,7 +9288,64 @@ local Dialogs = {
 				["timer"] = 5000
 			}
 		}, 
-	}
+	},
+	["Пьяный Мужчина"] = {
+		[1] = {
+			["dialog"] = {"О горе, меня отвергла женщина"},
+			[1] = {
+				["text"] = "Ну так они твари же",
+				["next"] = {
+					["dialog"] = {"..."},
+					[1] = {
+						["text"] = "Женщина не человек",
+						["next"] = {
+							["dialog"] = {"..."},
+							[1] = {
+								["text"] = "И даже не собака",
+								["next"] = {
+									["dialog"] = {"..."},
+									[1] = {
+										["text"] = "Она не друг",
+										["next"] = {
+											["dialog"] = {"..."},
+											[1] = {
+												["text"] = "Она тварь",
+												["end"] = {"Спасибо друг, теперь мне гораздо легче"}
+											},
+											[2] = {
+												["text"] = "[промолчать]",
+												["timer"] = 5000
+											}
+										}
+									},
+									[2] = {
+										["text"] = "[промолчать]",
+										["timer"] = 5000
+									}
+								}
+							},
+							[2] = {
+								["text"] = "[промолчать]",
+								["timer"] = 5000
+							}
+						}
+					},
+					[2] = {
+						["text"] = "[промолчать]",
+						["timer"] = 5000
+					}
+				}
+			},
+			[2] = {
+				["text"] = "Соболезную",
+				["end"] = {"..."}
+			},
+			[3] = {
+				["text"] = "[промолчать]",
+				["timer"] = 10000
+			}
+		}
+	},
 }
 
 function GPSFoundShop(thePlayer, thePed, bytype, varname, varval, name)
@@ -9802,9 +9872,9 @@ function ZoneInfo(thePlayer, zone)
 
 			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
 			if(CapZone[zone]) then
-				--setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
+				setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
 			else
-				--setBlipColor(PData[thePlayer]['radar'], r,g,b, 0)
+				setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
 			end
 
 			if(PlayerTeam == "Военные") then
@@ -11901,8 +11971,10 @@ function PlayerElementSync(thePlayer, obj, state)
 
 						if(getPlayerCity(obj) == "Liberty City") then
 							setElementDimension(theVehicle, 1)
+							setElementData(theVehicle, "model", math.random(612, 664))
 						elseif(getPlayerCity(obj) == "Vice City") then
 							setElementDimension(theVehicle, 2)
+							setElementData(theVehicle, "model", math.random(665, 736))
 						end
 						
 						if(vehinfo[2]) then
@@ -17375,7 +17447,7 @@ addCommandHandler("dm", dm)
 
 function LeaveDeathMatch(thePlayer)
 	local r, g, b = getTeamColor(getPlayerTeam(thePlayer))
-	setBlipColor(PData[thePlayer]['radar'], r,g,b, 0)
+	setBlipColor(PData[thePlayer]['radar'], r,g,b, 255)
 	
 	PData[thePlayer]["DeathMatch"] = nil
 	DMPlayerList[thePlayer] = nil
