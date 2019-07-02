@@ -20,7 +20,6 @@ local COLOR = {
 
 
 local DeathMatch = false
-local GroundMaterial = {}
 local ZonesDisplay = {}
 local PedSyncObj = {}
 local ObjectInStream = {}
@@ -34,7 +33,6 @@ local RobAction = false
 local FireTimer = {}
 local StreamData = {}
 local VideoMemory = {["HUD"] = {}}
-local RailRoadsSA = exports["vehicle_node"]:GetRailnodes()
 
 
 local PData = {
@@ -45,6 +43,7 @@ local PData = {
 		["AreaName"] = true,
 		["Collections"] = true
 	}, 
+	['Mission'] = false, -- Миссия такси, автобуса, полицейского, пожарника
 	['WantedFlashing'] = false, 
 	['AnimatedMarker'] = {}, 
 	['Target'] = {}, 
@@ -55,12 +54,6 @@ local PData = {
 	['ShakeLVL'] = 0, 
 	['TARR'] = {}, -- Target, по центру, ниже, выше
 	['MultipleAction'] = {},
-	['infopath'] = {
-		["San Andreas"] = {}, 
-		["Liberty City"] = {}, 
-		["Vice City"] = {}
-	}, -- Для разработчика
-	['changezone'] = {} -- Для разработчика
 }
 
 
@@ -1044,7 +1037,7 @@ end
 
 
 
-function SetZoneDisplay(zone)
+function SetZoneDisplay(zone, notzone)
 	if(zone ~= "Unknown") then
 		if(zone == "Yellow Bell Station") then zone = "Koyoen Station" end
 		
@@ -1060,11 +1053,9 @@ function SetZoneDisplay(zone)
 		ZonesDisplay[#ZonesDisplay+1] = {zone, 0, false}
 	end
 	
-	if(not PData["infopath"][getPlayerCity(localPlayer)][zone]) then
-		triggerServerEvent("CreateVehicleNodeMarker", localPlayer, getPlayerCity(localPlayer), zone)
+	if(not notzone) then
+		exports["vehicle_node"]:LoadZone(getPlayerCity(localPlayer), zone)
 	end
-	
-	CheckGroundMaterial(getPlayerCity(localPlayer), zone)
 end
 addEvent("SetZoneDisplay", true)
 addEventHandler("SetZoneDisplay", getRootElement(), SetZoneDisplay)
@@ -1910,32 +1901,6 @@ end
 
 
 
-function GetGroundMaterial(x,y,z,gz,city)
-	x, y = math.round(x, 0), math.round(y, 0)
-	local material = false
-	local zone = exports["ps2_weather"]:GetZoneName(x,y,z, true, city)
-	if(GroundMaterial[city]) then
-		if(GroundMaterial[city][zone]) then
-			if(GroundMaterial[city][zone][x]) then
-				if(GroundMaterial[city][zone][x][y]) then
-					material = GroundMaterial[city][zone][x][y]
-				end
-			end
-		end
-	end
-	if(not material) then _,_,_,_,_,_,_,_,material = processLineOfSight(x,y,z,x,y,gz-1, true,false,false,false,false,true,true,true,localPlayer, true) end
-	if(not material) then material = 1337 end
-	return material
-end
-
-
-function CheckGroundMaterial(city, zone)
-	if(not GroundMaterial[city]) then GroundMaterial[city] = {} end
-	if(not GroundMaterial[city][zone]) then
-		triggerServerEvent("ZonesGroundPosition", localPlayer, city, zone)
-	end
-	return true
-end
 
 
 
@@ -2150,6 +2115,19 @@ function lowPcMode()
 end
 
 
+function StartMission()
+	local theVehicle = getPedOccupiedVehicle(localPlayer)
+	if(not PData["Mission"]) then
+		if(theVehicle) then
+			if(getElementModel(theVehicle) == 431) then
+				triggerServerEvent("FindBusStop", localPlayer, localPlayer, getPlayerCity(localPlayer))
+			end
+		end
+		PData["Mission"] = true
+	else
+		PData["Mission"] = false
+	end
+end
 
 
 
@@ -2239,7 +2217,7 @@ function MarkerHit(hitPlayer, Dimension)
 		elseif(getElementData(source, "type") == "SPRAY") then
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			if(theVehicle) then
-				SetZoneDisplay("Pay 'n' Spray")
+				SetZoneDisplay("Pay 'n' Spray", true)
 				local x,y,z,lx,ly,lz = getCameraMatrix()
 				local x2, y2, z2 = getElementPosition(source)
 				local lx2,ly2,lz2 = getPointInFrontOfPoint(x2, y2, z2+5, 80-tonumber(getElementData(source, "rz")), 20)
@@ -2364,24 +2342,6 @@ function SetGPS(arr)
 		PData['gps'][id] = createRadarArea(k[1]-10, k[2]-10, 20,20, 210,0,0,255)
 		setElementData(PData['gps'][id], "coord", toJSON({k[1],k[2],k[3]}))
 	end
-	
-	if(PData["ResourceMap"]) then
-		PData["ResourceMap"][3] = {}
-		if(PData['gps']) then
-			local oldmarker = false
-			for i,v in pairs(PData['gps']) do
-				if(oldmarker) then
-					local x,y,z = unpack(fromJSON(getElementData(v, "coord")))
-					local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
-					x,y,z = GetCoordOnMap(x,y,z)
-					x2,y2,z2 = GetCoordOnMap(x2,y2,z2)
-					PData["ResourceMap"][3][#PData["ResourceMap"][3]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 10}
-				end
-				oldmarker = v
-			end
-		end
-	end
-	
 end
 addEvent("SetGPS", true)
 addEventHandler("SetGPS", localPlayer, SetGPS)
@@ -2538,35 +2498,7 @@ function bizControl(name, data)
 		PBut["shop"] = {} 
 		for varname, dats in pairs(data["var"]) do
 			if(varname == "Торговля") then
-				if(PData["ResourceMap"]) then
-					local Coord = {
-						["Trade"] = {
-							["i"] = 1,
-							["x"] = 640*scalex,
-							["y"] = 700*scaley-(30*scaley), 
-							["vx"] = (2.5*scalex),
-							["vy"] = (80.5*scaley)
-						},
-						["Sell"] = {
-							["i"] = 1,
-							["x"] = 640*scalex,
-							["y"] = 560*scaley-(30*scaley), 
-							["vx"] = (2.5*scalex),
-							["vy"] = (80.5*scaley)
-						}
-					}
-					for _, dat in pairs(dats) do
-						PInv["shop"][#PInv["shop"]+1] = dat
-						--PText["biz"][#PText["biz"]+1] = {Coord[dat[2]]["i"], screenWidth-Coord[dat[2]]["x"]+Coord[dat[2]]["vx"]+(80.5*scaley), Coord[dat[2]]["y"]+Coord[dat[2]]["vy"]-(25*scaley), 0, screenHeight, tocolor(255, 255, 255, 255), NewScale, "pricedown", "center", "top", false, false, false, true, false, 0, 0, 0, {}}
-						PBut["shop"][#PBut["shop"]+1] = {Coord[dat[2]]["x"]+Coord[dat[2]]["vx"], Coord[dat[2]]["y"]+Coord[dat[2]]["vy"], 80*scalex, 60*scaley}
-						Coord[dat[2]]["vx"] = Coord[dat[2]]["vx"]+(80.5*scalex)
-						if(Coord[dat[2]]["i"] == 8 or Coord[dat[2]]["i"] == 16 or Coord[dat[2]]["i"] == 24 or Coord[dat[2]]["i"] == 32) then
-							Coord[dat[2]]["x"], Coord[dat[2]]["y"] = 640*scalex, 360*scaley-(30*scaley)
-							Coord[dat[2]]["vx"], Coord[dat[2]]["vy"] = (2.5*scalex), Coord[dat[2]]["vy"]+(80.5*scaley)
-						end
-						Coord[dat[2]]["i"] = Coord[dat[2]]["i"]+1
-					end
-				end
+			
 			else
 				local text = "#CCCCCC"..varname..": "..dats.." "
 				PText["biz"][#PText["biz"]+1] = {text, 660*scalex, 370*scaley+(FH*(#PText["biz"]+1)), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
@@ -3602,7 +3534,6 @@ function UpdateBot()
 						if(trafficlight[tostring(getTrafficLightState())] == arr[4]) then
 							brakes = true
 						end
-						
 					end
 					
 					if(brakes == false) then -- Если не ждет на светофоре
@@ -4323,7 +4254,7 @@ function BotCheckPath(x,y,z,x2,y2,z2,city,zone)
 	if(isLineOfSightClear(x,y,z-0.45,x2,y2,gz+0.1, true, true, true, true)) then
 		if(zone == getZoneName(x2,y2,z2)) then
 			if(zone ~= "Unknown") then  
-				local material = GetGroundMaterial(x2,y2,z2, gz-2,city)
+				local material = exports["vehicle_node"]:GetGroundMaterial(x2,y2,z2, gz-2,city)
 				if(not BannedMaterial[material]) then
 					return true
 				end
@@ -4714,41 +4645,6 @@ function UpdateDisplayArmas(thePlayer)
 end
 
 
-function updateCamera()
-	--for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
-	--	local theVehicle = getPedOccupiedVehicle(thePed)
-	--	if(theVehicle) then -- Костыль 
-	--		local x,y,z = getElementPosition(theVehicle)
-	--		local gz = getGroundPosition(x,y,z)
-	--		local material = GetGroundMaterial(x,y,z+50,gz-3)
-	--		local material2 = GetGroundMaterial(x+2,y,z+50,gz-3)
-	--		if(material == 1337 and material2 == 1337) then -- Костыль
-	--			if(StreamData[thePed]["UpdateRequest"]) then
-	--				StreamData[thePed]["UpdateRequest"] = false
-	--				triggerServerEvent("UpdateBotRequest", localPlayer, localPlayer, thePed)
-	--			end
-	--		end
-	--	end
-	--end
-	
-	
-	if(PData["ResourceMap"]) then
-		if(getPlayerCity(localPlayer) == "Vice City") then
-			setSkyGradient(80,120,180, 80,120,180)
-		else
-			setSkyGradient(170,103,0 ,170,103,0)
-		end
-		--setSkyGradient(0,0,0 ,0,0,0)
-		setCloudsEnabled(false)
-		setFarClipDistance(3000)
-		setFogDistance(3000)
-		setWeather(0)
-	end
-	
-end
-addEventHandler("onClientPreRender", getRootElement(), updateCamera)
-
-
 
 
 function CreateButtonInputInt(func, text, args)
@@ -4960,13 +4856,8 @@ function displayLoadedRes(res)
 		
 		StartLoad()
 	elseif(getResourceName(res) == "vehicle_node") then
-		for zone, state in pairs(PData["infopath"][getPlayerCity(localPlayer)]) do
-			if(state) then
-				PData['changezone'] = {}
-				triggerServerEvent("ZonesGroundPosition", localPlayer, getPlayerCity(localPlayer), zone)
-				triggerServerEvent("CreateVehicleNodeMarker", localPlayer, getPlayerCity(localPlayer), zone)
-			end
-		end
+		local x,y,z = getElementPosition(localPlayer)
+		exports["vehicle_node"]:LoadZone(getPlayerCity(localPlayer), exports["ps2_weather"]:GetZoneName(x,y,z, false, getPlayerCity(localPlayer)))
 	end
 end
 addEventHandler("onClientResourceStart", getRootElement(), displayLoadedRes)
@@ -5764,271 +5655,6 @@ end
 
 
 
--- Object, Model, Scale, x,y,z,rz, bizname
-local ResourceInMap = {
-	[1] = {false, 17005, 0.1, -382, -1437, 26,0, "FARMFR"},
-	[2] = {false, 3375, 0.1, 1918, 173, 36, 0, "FARMPK"},
-	[3] = {false, 12915, 0.1, -44.4, 78.7, 3.1, 0, "FARMBA"},
-	[4] = {false, 17335, 0.1, -1439, -1534, 101, 90, "FARMWS"}, 
-	[5] = {false, 10357, 0.05, -2523, -622, 132, 0, "ELSF"}, 
-	--[7] = {false, 8079, 0.02, 1573, 1791, 9.8, 0, "MEDLV"}, 
-	--[8] = {false, 3976, 0.02, 1555.2, -1675.6, 16.2, 0, "PLSPD"},
-	--[9] = {false, 5708, 0.02, 1140, -1342, 15.4, 0, "MEDLS"}, 
-	[10] = {false, 12988, 0.07, 1362, 328, 20.5, 335, "BIOEN"}, 
-	[11] = {false, 3426, 0.1, 187, 1415, 10.6, 335, "PETLV"}, 
-	[12] = {false, 17017, 0.05, -1040, -644, 132, 335, false}, 
-	[13] = {false, 17021, 0.05, -1040, -644, 32, 335, "NPZSF"}, 
-	[14] = {false, 7493, 0.02, 966.9, 2140.8, 10.8, 0, "MEATFA"}, 
-	[15] = {false, 10775, 0.02, -1858, 3, 15.1, 0, "SOLIN"}, 
-	[16] = {false, 12931, 0.02, -70, -270, 5.4, 90, "FLEIS"},  
-	[17] = {false, 16399, 0.02, -300.5, 2658.7, 63, 0, "LASPA"}, 
-	[18] = {false, 18474, 0.02, -2192.1, -2432.9, 31, 0, "ANLPI"}, 
-	[19] = {false, 11456, 0.02, -1520.5, 2573.9, 55.8, 0, "ELQUE"}, 
-	[20] = {false, 11436, 0.02, -818.2, 1560.6, 27.1, 0, "LASBA"}, 
-	[21] = {false, 16385, 0.02, -135.1, 1116.8, 20.2, 0, "FORCA"}, 
-	[22] = {false, 9243, 0.02, -2455.7, 2293, 5, 0, "BAYSA"}, 
-	[23] = {false, 5131, 0.02, 2179.5, -2256.2, 14.8, 0, "LOSSA"}, 
-	[24] = {false, 12863, 0.02, 710.9, -569.4, 16.3, 0, "DILLI"}, 
-	[25] = {false, 13066, 0.02, 169.1, -34.3, 1.6, 0, "BLUEB"}, 
-	[26] = {false, 8060, 0.02, 1708.6, 1073.7, 10.8, 0, "LASVE"}, 
-	[27] = {false, 13078, 0.02, 1228.1, 182.7, 20.3, 0, "MONTG"}, 
-	[28] = {false, 12964, 0.02, 2246.4, 52.4, 26.7, 0, "PALOM"}, 
-	[29] = {false, 11092, 0.02, -2119.9, -26.1, 35.3, 0, "SANFI"}, 
-	[30] = {false, 3755, 0.02, 2483.8, -2115.9, 13.5, 0, "FOSOI"}, 
-}
-
-
-function resourcemap()
-	if(not PData["ResourceMap"]) then
-		for i, dat in pairs(ResourceInMap) do
-			if(not dat[1]) then
-				mx,my,mz = GetCoordOnMap(dat[4],dat[5],dat[6])
-				--dat[1] = createObject(dat[2], mx,my,mz+0.1, 0,0,dat[7], true) -- Чуть завышены так как толщина линий 1
-				setObjectScale(dat[1], dat[3])
-				if(dat[8]) then
-					local col = createColSphere(mx,my,mz, 2)
-					attachElements(col, dat[1])
-					setElementData(dat[1], "NameInMap", dat[8])
-				end
-
-			end
-		end
-		
-		SetPlayerHudComponentVisible("all", false)
-		PData["Interface"]["Full"] = true
-		PData["Interface"]["Inventory"] = true
-		setElementFrozen(localPlayer, true)
-		local theVehicle = getPedOccupiedVehicle(localPlayer)
-		if(theVehicle) then
-			setElementFrozen(theVehicle, true)
-		end
-		
-		
-		
-		triggerServerEvent("getInfoPathList", localPlayer, localPlayer, getPlayerCity(localPlayer))
-	else
-		setCameraTarget(localPlayer)
-		PData["ResourceMap"] = nil
-		
-		if(PData["BizControlName"]) then
-			triggerServerEvent("StopBizControl", localPlayer, PData["BizControlName"][1]) 
-			PText["biz"] = {}
-			PData["MapShowInfo"] = nil
-			PData["BizControlName"] = nil
-			PInv["shop"] = {} 
-			PBut["shop"] = {} 
-		end
-		
-		
-		SetPlayerHudComponentVisible("all", true)
-		setElementFrozen(localPlayer, false)
-		local theVehicle = getPedOccupiedVehicle(localPlayer)
-		if(theVehicle) then
-			setElementFrozen(theVehicle, false)
-		end
-		showCursor(false)
-	end
-end
-
-
-function InfoPathLoading(city, dat)
-	local loadingzones = {}
-	for name, _ in pairs(dat) do
-		if(not PData["infopath"][city][name]) then
-			loadingzones[#loadingzones+1] = name
-		end
-	end
-	
-	if(#loadingzones == 0) then 
-		map()
-	else
-		helpmessage("Идет загрузка...")
-		for slot = 1, #loadingzones do
-			if(slot == #loadingzones) then
-				triggerServerEvent("CreateVehicleNodeMarker", localPlayer, city, loadingzones[slot], true)
-			else
-				triggerServerEvent("CreateVehicleNodeMarker", localPlayer, city, loadingzones[slot])
-			end
-		end
-	end
-	
-end
-addEvent("InfoPathLoading", true)
-addEventHandler("InfoPathLoading", localPlayer, InfoPathLoading)
-
-
-
-
-
-function map()
-	PData["ResourceMap"] = {[1] = {}, [2] = {}, [3] = {}} -- 1 Roads, 2 Railroads, 3 GPS
-	
-	for zone, arr in pairs(PData["infopath"][getPlayerCity(localPlayer)]) do
-		if(arr) then for i, arr2 in pairs(arr) do
-			
-			local nextmarkers = {}
-			if(arr2[6]) then
-				for _,k in pairs(arr2[6]) do
-					table.insert(nextmarkers, {k[1], k[2]})
-				end
-			end
-			
-			if(PData["infopath"][getPlayerCity(localPlayer)][zone][tostring(i+1)]) then
-				table.insert(nextmarkers, {zone, i+1})
-			end
-			
-			for _, arr3 in pairs(nextmarkers) do
-				if(PData["infopath"][getPlayerCity(localPlayer)][arr3[1]]) then
-					local dat = PData["infopath"][getPlayerCity(localPlayer)][arr3[1]][tostring(arr3[2])]
-					if(dat) then
-						local color = tocolor(60,60,60,255)
-						if(getPlayerCity(localPlayer) == "Vice City") then
-							color = tocolor(0,0,0,255)
-						end
-						if(dat[1] == "Closed" or arr2[1] == "Closed") then
-							color = tocolor(90,90,90,255)
-						end
-						
-						x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
-						x2,y2,z2 = GetCoordOnMap(dat[2], dat[3], dat[4])
-						PData["ResourceMap"][1][#PData["ResourceMap"][1]+1] = {x,y,z,x2,y2,z2, color, 10}
-					end
-				end
-			end
-		end end
-	end
-	
-	
-	if(PData['gps']) then
-		local oldmarker = false
-		for i,v in pairs(PData['gps']) do
-			if(oldmarker) then
-				local x,y,z = unpack(fromJSON(getElementData(v, "coord")))
-				local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
-				x,y,z = GetCoordOnMap(x,y,z)
-				x2,y2,z2 = GetCoordOnMap(x2,y2,z2)
-				PData["ResourceMap"][3][#PData["ResourceMap"][3]+1] = {x,y,z,x2,y2,z2, tocolor(255,0,0,255), 10}
-			end
-			oldmarker = v
-		end
-	end
-	
-	if(getPlayerCity(localPlayer) == "San Andreas") then
-		for zone, arr in pairs(RailRoadsSA) do
-			for i, arr2 in pairs(arr) do
-				
-				local nextmarkers = {}
-				if(arr2[6]) then
-					for _,k in pairs(arr2[6]) do
-						table.insert(nextmarkers, {k[1], k[2]})
-					end
-				end
-				
-				if(RailRoadsSA[zone][i+1]) then
-					table.insert(nextmarkers, {zone, i+1})
-				end
-				
-				for _, arr3 in pairs(nextmarkers) do
-					if(RailRoadsSA[arr3[1]]) then
-						local dat = RailRoadsSA[arr3[1]][arr3[2]]
-						if(dat) then
-							x,y,z = GetCoordOnMap(arr2[2], arr2[3], arr2[4])
-							x2,y2,z2 = GetCoordOnMap(dat[2], dat[3], dat[4])
-							PData["ResourceMap"][2][#PData["ResourceMap"][2]+1] = {x,y,z,x2,y2,z2, tocolor(99,0,0,255), 10}
-						end
-					end
-				end
-			end
-		end
-	end
-	
-	setCameraMatrix(0, 0, 4250, 0, 0, 4000, 0, 70)
-	
-	setFarClipDistance(600)
-	setWeather(0)--nen
-	showCursor(true)
-end
-addEvent("map", true)
-addEventHandler("map", localPlayer, map)
-
-
-
-
-function GetCoordOnMap(x,y,z)
-	return x/50,y/50,z/50+(4000)
-end
-
-
-function GetCursorPositionOnMap() -- Можно оптимизировать в дальнейшем
-	local _,_,x,y,z = getCursorPosition()
-	local camx, camy, camz = getCameraMatrix()
-	
-	local x2, y2, z2 = camx-x, camy-y, camz-z
-	for i = 0, math.round(z2, 0) do
-		local per = (i/math.round(z2, 0))
-		if(z+(z2*per) >= 4000) then
-			return x+(x2*per),y+(y2*per),z+(z2*per)
-		end
-	end
-	return x,y,z
-end
-
-
-function InfoPath(city, zone, arr, last)
-	if(arr) then
-		PData['infopath'][city][zone] = fromJSON(arr)
-	else
-		PData['infopath'][city][zone] = nil
-	end
-	
-	if(last) then
-		map()
-	end
-end
-addEvent("InfoPath", true)
-addEventHandler("InfoPath", localPlayer, InfoPath)
-
-
-function InfoPathPed(city, zone, arr)
-	local arr = fromJSON(arr)
-	if(not GroundMaterial[city]) then GroundMaterial[city] = {} end
-	GroundMaterial[city][zone] = {}
-	for i, dat2 in pairs(arr) do
-		for slotx = dat2[1], dat2[4] do
-			if(not GroundMaterial[city][zone][slotx]) then GroundMaterial[city][zone][slotx] = {} end
-			for sloty = dat2[2], dat2[5] do
-				GroundMaterial[city][zone][slotx][sloty] = 4
-			end
-		end
-		PData['changezone'][zone.." "..i] = {
-			[1] = {dat2[1], dat2[2], dat2[3], zone}, 
-			[2] = {dat2[4], dat2[5], dat2[6]}
-		}
-	end
-end
-addEvent("InfoPathPed", true)
-addEventHandler("InfoPathPed", localPlayer, InfoPathPed)
-
 
 
 
@@ -6037,42 +5663,9 @@ addEventHandler("InfoPathPed", localPlayer, InfoPathPed)
 function DevelopmentRender()
 	AddRage(5)
 	local x,y,z = getElementPosition(localPlayer)
-	for i, arr in pairs(PData['changezone']) do
-		
-		local wx,wy,wz = false, false, false
-		if(arr[2]) then
-			wx,wy,wz = arr[2][1], arr[2][2], arr[2][3]
-		else
-			local _, _, worldx, worldy, worldz = getCursorPosition()
-			local px, py, pz = getCameraMatrix()
-			_,wx,wy,wz,_ = processLineOfSight(px, py, pz, worldx, worldy, worldz)
-			wx,wy,wz = math.round(wx, 0), math.round(wy, 0), math.round(wz, 1)
-			
-		end
-		local color = tocolor(50,150,200,80)
-		if(arr[1][4] ~= getZoneName(wx,wy,wz, false)) then
-			color = tocolor(200,50,50,80)
-		end
 
-		
-		local point = {arr[1][1], wy, math.round(getGroundPosition(arr[1][1], wy, arr[1][3]+3), 1)}
-		local point2 = {wx, arr[1][2], math.round(getGroundPosition(wx, arr[1][2], wz+3), 1)}
-		
-		dxDrawLine3D(arr[1][1], arr[1][2], arr[1][3], point[1], point[2], point[3], color, 25)
-		
-		dxDrawLine3D(point[1], point[2], point[3], wx,wy,wz, color, 25)
-
-		dxDrawLine3D(wx,wy,wz, point2[1], point2[2], point2[3], color, 25)
-
-		dxDrawLine3D(point2[1], point2[2], point2[3], arr[1][1], arr[1][2], arr[1][3], color, 25)
-		
-		
-		local nx, ny = ((arr[1][1]-arr[2][1])/2), ((arr[1][2]-arr[2][2])/2)
-		create3dtext('[ '..i..' ] ', arr[1][1]-nx, arr[1][2]-ny, arr[1][3]+2, scale, 60, tocolor(228, 70, 70, 180), "default-bold")
-
-	end
 	
-	local material = GetGroundMaterial(x,y,z,z-2, getPlayerCity(localPlayer))
+	local material = exports["vehicle_node"]:GetGroundMaterial(x,y,z,z-2, getPlayerCity(localPlayer))
 	local out = "Материал: "..material.."\nЗона: "..exports["ps2_weather"]:GetZoneName(x,y,z, false, getElementData(localPlayer, "City"))
 	if(isCursorShowing()) then
 		local x,y,z = getCameraMatrix()
@@ -6087,56 +5680,7 @@ function DevelopmentRender()
 	end
 	dxDrawBorderedText(out, 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
 
-	
-	for zone, arr in pairs(PData['infopath'][getPlayerCity(localPlayer)]) do
-		if(arr) then
-		for i, arr2 in pairs(arr) do
-			local x,y,z = arr2[2], arr2[3], arr2[4]
-			
-			local px,py,pz = getElementPosition(localPlayer)
-			if(getDistanceBetweenPoints2D(x,y, px, py) < 100) then
-				if(arr2[5]) then
-					create3dtext('['..i..'] '..zone, x,y,z+1, scale, 60, tocolor(228, 70, 250, 180), "default-bold")
-				else
-					create3dtext('['..i..'] '..zone, x,y,z+1, scale, 60, tocolor(228, 250, 70, 180), "default-bold")
-				end
-				local nextmarkers = {}
-				if(arr2[6]) then
-					for _,k in pairs(arr2[6]) do
-						table.insert(nextmarkers, {k[1], k[2]})
-					end
-				end
-				
-				if(PData['infopath'][getPlayerCity(localPlayer)][zone][tostring(i+1)]) then
-					table.insert(nextmarkers, {zone, i+1})
-				end
-				
-				for _, arr3 in pairs(nextmarkers) do
-					if(PData['infopath'][getPlayerCity(localPlayer)][arr3[1]]) then
-						local dat = PData['infopath'][getPlayerCity(localPlayer)][arr3[1]][tostring(arr3[2])]
-						if(dat) then
-							local color = tocolor(50,255,50,150)
-							if(dat[1] == "Closed" or arr2[1] == "Closed") then
-								color = tocolor(255,50,50,150)
-							end
-							local x2,y2,z2 = dat[2], dat[3], dat[4]
-							
-							dxDrawLine3D(x,y,z+0.2,x2,y2,z2+0.2, color, 6)
-							
-							
-							local a3,b3,c3 = getPointInFrontOfPoint(x2,y2,z2, findRotation(x,y,x2,y2)-60, 2)
-							local a4,b4,c4 = getPointInFrontOfPoint(x2,y2,z2, findRotation(x,y,x2,y2)-120, 2)
-							
-							dxDrawLine3D(x2,y2,z2+0.2,a3,b3,c3+0.2, color, 6)
-							dxDrawLine3D(x2,y2,z2+0.2,a4,b4,c4+0.2, color, 6)
-						end
-					end
-				end
-			end
-		end
-		end
-	end
-	
+
 	
 	for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
 		local theVehicle = getPedOccupiedVehicle(thePed)
@@ -6772,95 +6316,6 @@ local UpperSymbols = {
 
 
 function playerPressedKey(button, press)
-	if(PData["ResourceMap"]) then
-		if(press) then
-			if(isTimer(PData["MovementMapTimer"])) then
-				killTimer(PData["MovementMapTimer"])
-			end
-			PData["MovementMapSpeed"] = 1
-		else
-			if(isTimer(PData["MovementMapTimer"])) then killTimer(PData["MovementMapTimer"]) end
-		end
-		if(button == "w") then
-			if(press) then
-				PData["MovementMapTimer"] = setTimer(function() 
-					local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-					setCameraMatrix(x,y+PData["MovementMapSpeed"],z,rx,ry+PData["MovementMapSpeed"],rz,r,f)
-					PData["MovementMapSpeed"] = PData["MovementMapSpeed"]+0.3
-				end, 50, 0)
-			end
-		elseif(button == "s") then
-			if(press) then
-				PData["MovementMapTimer"] = setTimer(function() 
-					local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-					setCameraMatrix(x,y-PData["MovementMapSpeed"],z,rx,ry-PData["MovementMapSpeed"],rz,r,f)
-					PData["MovementMapSpeed"] = PData["MovementMapSpeed"]+0.3
-				end, 50, 0)
-			end
-		elseif(button == "a") then
-			if(press) then
-				PData["MovementMapTimer"] = setTimer(function() 
-					local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-					setCameraMatrix(x-PData["MovementMapSpeed"],y,z,rx-PData["MovementMapSpeed"],ry,rz,r,f)
-					PData["MovementMapSpeed"] = PData["MovementMapSpeed"]+0.3
-				end, 50, 0)
-			end
-		elseif(button == "d") then
-			if(press) then
-				PData["MovementMapTimer"] = setTimer(function() 
-					local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-					setCameraMatrix(x+PData["MovementMapSpeed"],y,z,rx+PData["MovementMapSpeed"],ry,rz,r,f)
-					PData["MovementMapSpeed"] = PData["MovementMapSpeed"]+0.3
-				end, 50, 0)
-			end	
-		elseif(button == "mouse_wheel_down") then
-			if(press) then
-				local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-				if(z < 4250) then
-					setCameraMatrix(x,y+2,z+10,rx,ry,rz,r,f)
-				end
-			end
-		elseif(button == "mouse_wheel_up") then
-			if(press) then
-				local x,y,z,rx,ry,rz,r,f = getCameraMatrix()
-				if(z > 4010) then
-					setCameraMatrix(x,y-2,z-10,rx,ry,rz,r,f)
-				end
-			end
-		elseif(button == "mouse2") then
-			if(press) then
-				if(isElement(PData["WaypointBlip"])) then
-					destroyElement(PData["WaypointBlip"])
-				else
-					local x,y,z = GetCursorPositionOnMap()
-					PData["WaypointBlip"] = createBlip(x*50, y*50, 0, 41)
-					local px,py,pz = getElementPosition(localPlayer)
-					triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x*50, y*50, 20)
-					--[[triggerServerEvent("saveserver", localPlayer, localPlayer, 
-					x*50, y*50, 20, 
-					x*50, y*50, 20, "PedPath")--]]
-				end
-			end
-		elseif(button == "mouse1") then
-			if(press) then
-				if(PData["MapShowInfo"]) then
-					triggerServerEvent("StopBizControl", localPlayer, PData["BizControlName"][1]) 
-					PText["biz"] = {}
-					PData["MapShowInfo"] = nil
-					PData["BizControlName"] = nil
-					PInv["shop"] = {} 
-					PBut["shop"] = {} 
-				end
-				if(PData["MapHitElement"]) then
-					PData["MapShowInfo"] = getElementData(PData["MapHitElement"], "NameInMap")
-					playSFX("script", 71, 0, false)
-					triggerServerEvent("StartLookBiz", localPlayer, localPlayer, false, getElementData(PData["MapHitElement"], "NameInMap"), "map")
-				end
-			end
-		end
-	end
-
-
 	if(button == "mouse2") then
 		if(isPlayerMapForced()) then
 			if(press) then
@@ -8148,10 +7603,8 @@ addEventHandler("onClientPlayerWasted", getRootElement(), onWasted)
 
 
 function PlayerNewZone(zone, city, updateweather, interior)
-	if(not PData["ResourceMap"]) then
-		SetZoneDisplay(zone)
-		triggerServerEvent("ZoneInfo", localPlayer, localPlayer, zone)
-	end
+	SetZoneDisplay(zone)
+	triggerServerEvent("ZoneInfo", localPlayer, localPlayer, zone)
 end
 addEventHandler("PlayerNewZone", root, PlayerNewZone)
 
@@ -8174,9 +7627,9 @@ function PlayerVehicleEnter(theVehicle, seat)
 				name = name.." "..getElementData(theVehicle, "year")
 			end
 			if(getElementData(localPlayer, "City")) then
-				SetZoneDisplay("#9b7c52"..name)
+				SetZoneDisplay("#9b7c52"..name, true)
 			else
-				SetZoneDisplay("#66935C"..name)
+				SetZoneDisplay("#66935C"..name, true)
 			end
 		end
 	end
@@ -8476,19 +7929,6 @@ function create3dtext(text,x,y,z,razmer,dist,color,font)
 end
 
 
-function Create3DTextOnMap(text,x,y,z,razmer,dist,color,font)
-	x = x/50
-	y = y/50
-	local px,py,pz = getCameraMatrix()
-    local distance = getDistanceBetweenPoints3D(x,y,z,px,py,pz)
-    if distance <= dist then
-		sx,sy = getScreenFromWorldPosition(x, y, z, 0.06)
-		if not sx then return end
-		dxDrawBorderedText(text, sx, sy, sx, sy, color, (1-(distance/dist))*razmer, font, "center", "bottom", false, false, false,false)
-    end
-end
-
-
 function setDoingDriveby()
 	detonateSatchels()
 	if(getPedOccupiedVehicle(localPlayer)) then
@@ -8779,84 +8219,6 @@ function DrawPlayerMessage()
 	local x,y,z = getElementPosition(localPlayer)
 	
 	local sx, sy, font, tw, th, color
-	
-	if(PData["ResourceMap"]) then
-		for i, dat in pairs(PData["ResourceMap"]) do
-			for name, v in pairs(dat) do
-				dxDrawLine3D(v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8])
-			end
-		end
-	
-		mousex,mousey,mousez = GetCursorPositionOnMap()
-		mx,my,mz = GetCoordOnMap(x,y,z)
-		sx,sy = getScreenFromWorldPosition(mx,my,mz)
-		if(sx and sy) then
-			dxDrawCircle(sx,sy, 12*NewScale, 0, 360, tocolor(255,24,20,150))
-			if(getDistanceBetweenPoints2D(mx,my,mousex,mousey) < 1) then
-				Create3DTextOnMap("ТЫ",mousex*50,mousey*50,mousez,NewScale*2,2000,tocolor(230,230,230,255),"default-bold")
-			end
-		end
-		
-		
-		if(isElement(PData["WaypointBlip"])) then
-			local x,y,z = getElementPosition(PData["WaypointBlip"])
-			mx,my,mz = GetCoordOnMap(x,y,z)
-			sx,sy = getScreenFromWorldPosition(mx,my,mz)
-			if(sx and sy) then
-				dxDrawCircle(sx,sy, 12*NewScale, 0, 360, tocolor(255,24,20,150))
-			end
-		
-		end
-		tw = dxGetTextWidth(getPlayerCity(localPlayer), scale*1.4, "bankgothic", true)
-		th = dxGetFontHeight(scale*1.4, "bankgothic")
-		dxDrawBorderedText(getPlayerCity(localPlayer), screenWidth/2-tw/2.15, screenHeight-(screenHeight-th/10), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*1.4, "bankgothic", nil, nil, nil, nil, nil, true)
-		
-		
-		if(getPlayerCity(localPlayer) == "San Andreas") then
-			Create3DTextOnMap("Los Santos\n#ffff00★★★★",1850,-1600,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("San Fierro\n#ffff00★★★",-2200,400,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Las Venturas\n#ffff00★★★",2200,1650,4000,NewScale*2,600,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Angel Pine\n#ffff00★★",-2150,-2450,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Las Payasadas\n#ffff00★★★",-250,2650,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("El Quebrados\n#ffff00★★★",-1500,2500,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Fort Caston\n#ffff00★★",-245,1100,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Palomino Creek\n#ffff00★★★",2350,30,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Blueberry\n#ffff00★★★",215,-215,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Dillimore\n#ffff00★",670,-540,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Montgomery\n#ffff00★",1310, 310,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Bayside\n#ffff00★",-2537, 2332,4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Las Barrancas\n#ffff00★",-763, 1504, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		elseif(getPlayerCity(localPlayer) == "Liberty City") then
-			Create3DTextOnMap("Portland\n#ffff00★★★",980, 438, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Staunton Island\n#ffff00★★★★",72, 72, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Shoreside Vale\n#ffff00★★",-935, 1050, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		elseif(getPlayerCity(localPlayer) == "Vice City") then
-			Create3DTextOnMap("Downtown\n#ffff00★★★★",-430, 830, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Prawn Island\n#ffff00★",263, 784, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Vice Point\n#ffff00★★",680, 316, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Starfish Island\n#ffff00★★★",-200, -646, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Little Haiti\n#ffff00★",-708, -115, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Little Havana\n#ffff00★", -743, -916, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Ocean Beach\n#ffff00★★★★", 570, -1125, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Washington Beach\n#ffff00★★", 275, -1530, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-			Create3DTextOnMap("Viceport\n#ffff00★", -542, -1605, 4000,NewScale*2,250,tocolor(230,230,230,255),"default-bold")
-		end
-		
-		PData["MapHitElement"] = false
-		local col = createObject(16635, mousex,mousey,mousez)
-		for _, v in pairs(getElementsByType("colshape", getRootElement(), true)) do
-			if(isElementWithinColShape(col, v)) then
-				PData["MapHitElement"] = getElementAttachedTo(v)
-			end
-		end
-		destroyElement(col)
-		
-
-		if(PData["MapHitElement"]) then
-			x,y,z = getElementPosition(PData["MapHitElement"])
-			--Create3DTextOnMap(getElementData(PData["MapHitElement"], "NameInMap"),x*50,y*50,z,NewScale,2000,tocolor(230,230,230,255),"default-bold")
-		end
-	end
 	
 	for key, arr in pairs(PData["MultipleAction"]) do
 		local text = arr[2]
@@ -9919,7 +9281,8 @@ function StreamIn(restream)
 	elseif(getElementType(source) == "ped") then
 		local x,y,z = getElementPosition(source)
 		local zone = getZoneName(x,y,z,false)
-		CheckGroundMaterial(getPlayerCity(source), zone)
+		exports["vehicle_node"]:LoadZone(getPlayerCity(source), zone)
+		
 		
 		StreamData[source] = {["armas"] = {}, ["UpdateRequest"] = true}
 		UpdateArmas(source)
@@ -10216,10 +9579,11 @@ bindKey("h", "down", handsup)
 bindKey("p", "down", park)
 bindKey('mouse2', 'down', setDoingDriveby)
 bindKey("F1", "down", ShowInfoKey)
-bindKey("F10", "down", resourcemap)
 bindKey("F11", "down", openmap)
 bindKey("F12", "down", hideinv)
 bindKey("F9", "down", lowPcMode)
+bindKey("2", "down", StartMission)
+
 
 
 
