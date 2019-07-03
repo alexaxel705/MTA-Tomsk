@@ -11862,7 +11862,7 @@ function InitDynamicBot()
 		for district, arr in pairs(dat) do
 			for i, k in pairs(arr) do
 				if(k[1] == true) then
-					local rand = math.random(1,40)
+					local rand = math.random(1,70)
 					if(rand == 1) then
 						CreateDynamicBot(false, city, district, i)
 					end
@@ -13412,7 +13412,7 @@ local tmpi = 1
 local tmpcity = ""
 function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local res = getResourceFromName("vehicle_node") -- Interface
+		local res = getResourceFromName("Unlimited-object") -- Interface
 		restartResource(res)
 		--local res = getResourceFromName("ps2_weather") -- Interface
 		--restartResource(res)

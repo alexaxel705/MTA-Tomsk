@@ -2329,25 +2329,6 @@ addEventHandler("bankControlUpdate", localPlayer, bankControlUpdate)
 
 
 
-function SetGPS(arr)
-	if(PData['gps']) then
-		for i, el in pairs(PData['gps']) do
-			destroyElement(el)
-		end
-	end
-	PData['gps'] = {}
-	arr = fromJSON(arr)
-	for i, k in pairs(arr) do
-		local id = (#arr+1)-i
-		PData['gps'][id] = createRadarArea(k[1]-10, k[2]-10, 20,20, 210,0,0,255)
-		setElementData(PData['gps'][id], "coord", toJSON({k[1],k[2],k[3]}))
-	end
-end
-addEvent("SetGPS", true)
-addEventHandler("SetGPS", localPlayer, SetGPS)
-
-
-
 
 
 
@@ -4171,23 +4152,6 @@ function checkKey()
 		end
 	end
 	
-	if(PData['gps']) then
-		if(#PData['gps'] == 0) then
-			PData['gps'] = nil
-		else
-			for k,el in pairs(PData['gps']) do
-				if(isInsideRadarArea(el, x, y)) then
-					for slot = k, #PData['gps'] do
-						destroyElement(PData['gps'][slot])
-						PData['gps'][slot] = nil
-					end
-					break
-				end
-			end
-		end
-	end
-	
-	
 	for k, arr in pairs(PData["TARR"]) do
 		if(k) then
 			if(PData["Target"][k]) then
@@ -5662,25 +5626,6 @@ end
 
 function DevelopmentRender()
 	AddRage(5)
-	local x,y,z = getElementPosition(localPlayer)
-
-	
-	local material = exports["vehicle_node"]:GetGroundMaterial(x,y,z,z-2, getPlayerCity(localPlayer))
-	local out = "Материал: "..material.."\nЗона: "..exports["ps2_weather"]:GetZoneName(x,y,z, false, getElementData(localPlayer, "City"))
-	if(isCursorShowing()) then
-		local x,y,z = getCameraMatrix()
-		local sx,sy, cx,cy,cz = getCursorPosition()
-		local theVehicle = getPedOccupiedVehicle(localPlayer)
-		local _,_,_,_,hitElement,_,_,_,_,_,_,model = processLineOfSight(x,y,z, cx,cy,cz, true,true,true, true, true, true, false, true, false, true, false)
-		
-		dxDrawLine3D(x,y,z, cx,cy,cz)
-		if(model) then
-			out = out.."\nЭлемент: "..model
-		end
-	end
-	dxDrawBorderedText(out, 10, screenHeight/3, 10, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", nil, nil, nil, true)
-
-
 	
 	for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
 		local theVehicle = getPedOccupiedVehicle(thePed)
@@ -7199,43 +7144,6 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 			end
 		end
 	end
-	if(getPlayerName(localPlayer) == "alexaxel705") then
-		worldX = math.round(worldX, 0)
-		worldY = math.round(worldY, 0)
-		worldZ = math.round(worldZ, 1)
-		if(button == "left") then
-			if(state == "down") then
-				PData['changezone'][#PData['changezone']+1] = {[1] = {worldX, worldY, worldZ, getZoneName(worldX, worldY, worldZ, false)}}
-			else
-				local zone = getZoneName(worldX, worldY, worldZ, false)
-				if(zone == PData['changezone'][#PData['changezone']][1][4]) then
-					local oldx, oldy, oldz = PData['changezone'][#PData['changezone']][1][1], PData['changezone'][#PData['changezone']][1][2], PData['changezone'][#PData['changezone']][1][3]
-		
-
-					local out = {oldx, oldy, oldz, worldX, worldY, worldZ}
-					if(out[1] > out[4]) then
-						out = {out[4], out[2], math.round(getGroundPosition(out[4], out[2], out[3]+3), 1), out[1], out[5], math.round(getGroundPosition(out[1], out[5], out[6]+3), 1)}
-					end
-					
-					if(out[2] > out[5]) then
-						out = {out[1], out[5], math.round(getGroundPosition(out[1], out[5], out[3]+3), 1), out[4], out[2], math.round(getGroundPosition(out[4], out[2], out[6]+3), 1)}
-					end
-					
-	
-					PData['changezone'][#PData['changezone']][1] = {out[1], out[2], out[3], zone}
-					PData['changezone'][#PData['changezone']][2] = {out[4], out[5], out[6]}
-					
-
-					triggerServerEvent("saveserver", localPlayer, localPlayer, 
-					out[1], out[2], out[3], 
-					out[4], out[5], out[6], "PedPath"
-					)
-				else
-					PData['changezone'][#PData['changezone']] = nil
-				end
-			end
-		end
-	end
 end
 addEventHandler("onClientClick", getRootElement(), addLabelOnClick)
 
@@ -8411,27 +8319,6 @@ function DrawPlayerMessage()
 					line = line+1
 				end
 				
-				if(PData['gps']) then
-					local oldmarker = false
-					local px,py,pz = getElementPosition(localPlayer)
-					for i,v in pairs(PData['gps']) do --тут
-						if(oldmarker) then
-							local x,y,z = unpack(fromJSON(getElementData(v, "coord")))
-	
-							if(getDistanceBetweenPoints2D(x,y, px, py) < 100) then
-								local x2,y2,z2 = unpack(fromJSON(getElementData(oldmarker, "coord")))
-	
-								local a3,b3,c3 = getPointInFrontOfPoint(x,y,z, findRotation(x,y,x2,y2)-60, 2)
-								local a4,b4,c4 = getPointInFrontOfPoint(x,y,z, findRotation(x,y,x2,y2)-120, 2)
-								
-								dxDrawLine3D(x,y,z+0.2,a3,b3,c3+0.2, tocolor(50,150,200,80), 6)
-								dxDrawLine3D(x,y,z+0.2,a4,b4,c4+0.2, tocolor(50,150,200,80), 6)
-								dxDrawLine3D(a3,b3,c3+0.2,a4,b4,c4+0.2, tocolor(50,150,200,80), 6)
-							end
-						end
-						oldmarker = v
-					end
-				end
 			end
 
 		
