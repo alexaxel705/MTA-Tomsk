@@ -34,7 +34,7 @@ local SourceData = {
 		["Колумбийский картель"] = {{422,"COKA 228",{116, 116, 116, 116},{2, 2}}, {440,"COKA 228",{116, 116, 116, 116},{1, 1}}, {600 ,"COKA 228",{116, 116, 116, 116},{2, 2}}, {543 ,"COKA 228",{116, 116, 116, 116},{4, 4}}},
 		["Русская мафия"] = {{404,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {560,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {445,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {581,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {409,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}},
 		["Триады"] = {{466,"TRIA 228",{0,0,0,0}}, {560,"TRIA 228",{0,0,0,0}}, {445,"TRIA 228",{0,0,0,0}}, {414,"TRIA 228",{83,83,83,83},{5,5}}},
-		["Якудзы"] = {{439,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {482,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {467,"YAZA 228",{177,15,11, 255,255,255}, {0, 0}, "createYakuza"}},
+		["Da Nang Boys"] = {{439,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {482,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {467,"YAZA 228",{177,15,11, 255,255,255}, {0, 0}, "createYakuza"}},
 		["Рифа"] = {{536,"RIFA 228",{94, 94, 0, 0}}, {439,"RIFA 228",{94, 94, 0, 0}}, {475 ,"RIFA 228",{94, 94, 0, 0}}},
 		["Деревенщины"] = {{478,"KOLHZ228",{61, 61, 0, 0}}, {543 ,"KOLHZ228",{61, 61, 0, 0}}, {531,"KOLHZ228",{61, 61, 0, 0}}}
 	},
@@ -45,7 +45,6 @@ local SData = {
 	['Chat Message'] = {},
 	["VehAccData"] = {},
 	["DriverBot"] = {},
-	["PlayerElementSync"] = {},
 	["TrunkUsed"] = {}, 
 	["Vibori"] = false
 }
@@ -65,15 +64,6 @@ local PathNodes = exports["vehicle_node"]:GetVehicleNodes()
 
 local PedNodes = exports["vehicle_node"]:GetPedNodes()
 
-
-function GeneratePlayerScore(arr)
-	local count = 0
-	local arr = fromJSON(arr)
-	for skill, val in pairs(arr) do
-		count=count+val
-	end
-	return count
-end
 
 
 function getPlayerID(thePlayer)
@@ -279,6 +269,9 @@ local BizInfo = {
 
 
 local Teams = {
+	["Бездомные"] = createTeam('Бездомные', 120, 120, 120), 
+	["Fast Food"] = createTeam('Fast Food', 255, 218, 185), 
+	["Протагонисты"] = createTeam('Протагонисты', 255, 215, 0), 
 	['Мирные жители'] = createTeam('Мирные жители', 204, 204, 204),
 	['Уголовники'] = createTeam('Уголовники', 133, 133, 133),
 	['Колумбийский картель'] = createTeam('Колумбийский картель', 54, 61, 90),
@@ -289,26 +282,27 @@ local Teams = {
 	['ЦРУ'] = createTeam('ЦРУ', 1, 1, 1),
 	['Военные'] = createTeam('Военные', 75, 83, 32),
 	['Триады'] = createTeam('Триады', 0, 0, 0),
-	['Якудзы'] = createTeam('Якудзы', 168, 0, 0),
+	['Da Nang Boys'] = createTeam('Da Nang Boys', 168, 0, 0),
 	['Русская мафия'] = createTeam('Русская мафия', 255, 255, 255),
 	['Байкеры'] = createTeam('Байкеры', 102, 66, 32),
 	['Вагос'] = createTeam('Вагос', 255, 255, 0),
 	['ФБР'] = createTeam('ФБР', 1, 38, 117),
 	['Рифа'] = createTeam('Рифа', 38, 163, 150),
 	['Деревенщины'] = createTeam('Деревенщины', 255, 157, 75),
-	['Ацтекас'] = createTeam('Ацтекас', 48, 213, 200)
+	['Ацтекас'] = createTeam('Ацтекас', 48, 213, 200), 
+	['Жрицы любви'] = createTeam('Жрицы любви', 255, 105, 180), 
 }
 
 
 --[Скин] = [Стиль походки, команда, пол, оружие, диалоги, {возможные имена ботов},]
 local SkinData = {
-	[0] = {0, Teams['Мирные жители'], "Мужчина"},
+	[0] = {0, Teams['Протагонисты'], "Мужчина", nil, nil, nil, {"playidles", "time"}}, 
 	[7] = {118, Teams['Мирные жители'], "Мужчина"},
-	[9] = {129, Teams['Мирные жители'], "Женщина"},
-	[10] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[11] = {129, Teams['Мирные жители'], "Женщина"},
-	[12] = {132, Teams['Мирные жители'], "Женщина"},
-	[13] = {129, Teams['Мирные жители'], "Женщина"},
+	[9] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[10] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[11] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[12] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[13] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[14] = {118, Teams['Мирные жители'], "Мужчина"},
 	[15] = {118, Teams['Мирные жители'], "Мужчина"},
 	[16] = {118, Teams['Мирные жители'], "Мужчина"},
@@ -326,17 +320,17 @@ local SkinData = {
 	[28] = {118, Teams['Мирные жители'], "Мужчина"},
 	[29] = {118, Teams['Мирные жители'], "Мужчина"},
 	[30] = {121, Teams['Колумбийский картель'], "Мужчина", 29},
-	[31] = {129, Teams['Мирные жители'], "Женщина"},
+	[31] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[32] = {118, Teams['Мирные жители'], "Мужчина"},
 	[33] = {118, Teams['Мирные жители'], "Мужчина"},
 	[34] = {118, Teams['Мирные жители'], "Мужчина"},
 	[35] = {118, Teams['Мирные жители'], "Мужчина"},
 	[36] = {118, Teams['Мирные жители'], "Мужчина", 2},
 	[37] = {118, Teams['Мирные жители'], "Мужчина", 2},
-	[38] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[39] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[40] = {131, Teams['Мирные жители'], "Женщина"},
-	[41] = {129, Teams['Мирные жители'], "Женщина"},
+	[38] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[39] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[40] = {131, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[41] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[43] = {121, Teams['Колумбийский картель'], "Мужчина", 29},
 	[44] = {118, Teams['Мирные жители'], "Мужчина"},
 	[45] = {118, Teams['Мирные жители'], "Мужчина"},
@@ -347,31 +341,31 @@ local SkinData = {
 	[50] = {118, Teams['Мирные жители'], "Мужчина"},
 	[51] = {118, Teams['Мирные жители'], "Мужчина"},
 	[52] = {118, Teams['Мирные жители'], "Мужчина"},
-	[53] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[54] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[55] = {129, Teams['Мирные жители'], "Женщина"},
-	[56] = {129, Teams['Мирные жители'], "Женщина"},
+	[53] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[54] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[55] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[56] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[57] = {120, Teams['Мирные жители'], "Мужчина", nil, nil, {"Дед", "Старик"}},
 	[58] = {118, Teams['Мирные жители'], "Мужчина"},
 	[59] = {118, Teams['Мирные жители'], "Мужчина"},
 	[60] = {118, Teams['Мирные жители'], "Мужчина"},
 	[61] = {118, Teams['Мирные жители'], "Мужчина", nil, nil, {"Пилот"}},
 	[62] = {0, Teams['Уголовники'], "Мужчина"},
-	[63] = {132, Teams['Мирные жители'], "Женщина", nil, nil, {"Шлюха"}},
-	[64] = {132, Teams['Мирные жители'], "Женщина", nil, nil, {"Шлюха"}},
+	[63] = {132, Teams['Жрицы любви'], "Женщина", nil, nil, {"Шлюха"}, {"ped", "woman_walksexy"}},
+	[64] = {132, Teams['Жрицы любви'], "Женщина", nil, nil, {"Шлюха"}, {"ped", "woman_walksexy"}},
 	[66] = {118, Teams['Мирные жители'], "Мужчина"},
 	[67] = {118, Teams['Мирные жители'], "Мужчина"},
 	[68] = {118, Teams['Мирные жители'], "Мужчина"},
-	[69] = {129, Teams['Мирные жители'], "Женщина"},
+	[69] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[70] = {128, Teams['МЧС'], "Мужчина"},
 	[71] = {128, Teams['Мирные жители'], "Мужчина", 22},
 	[72] = {118, Teams['Мирные жители'], "Мужчина"},
 	[73] = {118, Teams['Мирные жители'], "Мужчина"},
-	[75] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[76] = {129, Teams['Мирные жители'], "Женщина"},
-	[77] = {135, Teams['Мирные жители'], "Женщина", nil, "Бомж", {"Бездомная", "Бомжиха"}},
-	[78] = {118, Teams['Мирные жители'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
-	[79] = {118, Teams['Мирные жители'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
+	[75] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[76] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[77] = {135, Teams['Бездомные'], "Женщина", nil, "Бомж", {"Бездомная", "Бомжиха"}, {"ped", "woman_walkold"}},
+	[78] = {118, Teams['Бездомные'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
+	[79] = {118, Teams['Бездомные'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
 	[80] = {118, Teams['Мирные жители'], "Мужчина", nil, nil, {"Боксер"}},
 	[81] = {118, Teams['Мирные жители'], "Мужчина", nil, nil, {"Боксер"}},
 	[82] = {118, Teams['Мирные жители'], "Мужчина"},
@@ -379,26 +373,26 @@ local SkinData = {
 	[84] = {118, Teams['Мирные жители'], "Мужчина"},
 	[85] = {132, Teams['Мирные жители'], "Женщина"},
 	[87] = {132, Teams['Мирные жители'], "Женщина", nil, nil, {"Стриптизерша"}},
-	[88] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[89] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
+	[88] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[89] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
 	[90] = {132, Teams['Мирные жители'], "Женщина"},
 	[91] = {132, Teams['Мирные жители'], "Женщина"},
 	[92] = {138, Teams['Мирные жители'], "Женщина", nil, nil, {"Девушка на роликах"}},
 	[93] = {132, Teams['Мирные жители'], "Женщина"},
 	[94] = {120, Teams['Мирные жители'], "Мужчина", nil, nil, {"Дед", "Старик"}},
 	[95] = {121, Teams['Колумбийский картель'], "Мужчина", 29},
-	[96] = {132, Teams['Мирные жители'], "Женщина"},
-	[97] = {132, Teams['Мирные жители'], "Женщина"},
-	[98] = {132, Teams['Мирные жители'], "Женщина"},
+	[96] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[97] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[98] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[99] = {138, Teams['Мирные жители'], "Мужчина", nil, nil, {"Парень на роликах"}},
 	[100] = {121, Teams['Байкеры'], "Мужчина", 22},
-	[101] = {132, Teams['Мирные жители'], "Женщина"},
-	[102] = {121, Teams['Баллас'], "Мужчина", 5},
-	[103] = {121, Teams['Баллас'], "Мужчина", 22},
-	[104] = {121, Teams['Баллас'], "Мужчина", 22},
-	[105] = {122, Teams['Гроув-стрит'], "Мужчина", 4},
-	[106] = {122, Teams['Гроув-стрит'], "Мужчина", 22},
-	[107] = {122, Teams['Гроув-стрит'], "Мужчина", 22},
+	[101] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[102] = {121, Teams['Баллас'], "Мужчина", 5, nil, nil, {"ped", "walk_gang2"}},
+	[103] = {121, Teams['Баллас'], "Мужчина", 22, nil, nil, {"ped", "walk_gang2"}},
+	[104] = {121, Teams['Баллас'], "Мужчина", 22, nil, nil, {"ped", "walk_gang2"}},
+	[105] = {122, Teams['Гроув-стрит'], "Мужчина", 4, nil, nil, {"ped", "walk_gang2"}},
+	[106] = {122, Teams['Гроув-стрит'], "Мужчина", 22, nil, nil, {"ped", "walk_gang2"}},
+	[107] = {122, Teams['Гроув-стрит'], "Мужчина", 22, nil, nil, {"ped", "walk_gang2"}},
 	[108] = {121, Teams['Вагос'], "Мужчина", 22},
 	[109] = {121, Teams['Вагос'], "Мужчина", 22},
 	[110] = {121, Teams['Вагос'], "Мужчина", 22},
@@ -411,40 +405,40 @@ local SkinData = {
 	[117] = {122, Teams['Триады'], "Мужчина", 22},
 	[118] = {122, Teams['Триады'], "Мужчина", 29},
 	[120] = {122, Teams['Триады'], "Мужчина", 30},
-	[121] = {121, Teams['Якудзы'], "Мужчина", 22, nil, {"Якудза", "Куми-ин"}},
-	[122] = {121, Teams['Якудзы'], "Мужчина", 28, nil, {"Якудза", "Сансита"}},
-	[123] = {121, Teams['Якудзы'], "Мужчина", 25, nil, {"Якудза", "Дэката"}},
+	[121] = {121, Teams['Da Nang Boys'], "Мужчина", 22, nil, {"DNB", "Куми-ин"}},
+	[122] = {121, Teams['Da Nang Boys'], "Мужчина", 28, nil, {"DNB", "Сансита"}},
+	[123] = {121, Teams['Da Nang Boys'], "Мужчина", 25, nil, {"DNB", "Дэката"}},
 	[124] = {118, Teams['Мирные жители'], "Мужчина"},
 	[125] = {121, Teams['Русская мафия'], "Мужчина", 25},
 	[126] = {121, Teams['Русская мафия'], "Мужчина", 25},
 	[127] = {121, Teams['Русская мафия'], "Мужчина", 25},
 	[128] = {118, Teams['Мирные жители'], "Мужчина"},
-	[129] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[130] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[131] = {132, Teams['Мирные жители'], "Женщина"},
+	[129] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[130] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[131] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[132] = {120, Teams['Мирные жители'], "Мужчина", nil, nil, {"Дед", "Старик"}},
 	[133] = {118, Teams['Мирные жители'], "Мужчина"},
-	[134] = {118, Teams['Мирные жители'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
-	[135] = {118, Teams['Мирные жители'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
-	[136] = {118, Teams['Мирные жители'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
-	[137] = {118, Teams['Мирные жители'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
-	[138] = {132, Teams['Мирные жители'], "Женщина"},
-	[139] = {132, Teams['Мирные жители'], "Женщина"},
-	[140] = {132, Teams['Мирные жители'], "Женщина"},
-	[141] = {129, Teams['Мирные жители'], "Женщина"},
+	[134] = {118, Teams['Бездомные'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
+	[135] = {118, Teams['Бездомные'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
+	[136] = {118, Teams['Бездомные'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
+	[137] = {118, Teams['Бездомные'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
+	[138] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[139] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[140] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[141] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[142] = {118, Teams['Мирные жители'], "Мужчина"},
 	[143] = {118, Teams['Мирные жители'], "Мужчина"},
 	[144] = {118, Teams['Мирные жители'], "Мужчина"},
-	[145] = {133, Teams['Мирные жители'], "Женщина"},
-	[146] = {133, Teams['Мирные жители'], "Женщина"},
-	[147] = {118, Teams['Мирные жители'], "Мужчина"},
-	[148] = {129, Teams['Мирные жители'], "Женщина"},
-	[150] = {129, Teams['Мирные жители'], "Женщина"},
-	[151] = {129, Teams['Мирные жители'], "Женщина"},
-	[152] = {132, Teams['Мирные жители'], "Женщина"},
+	[145] = {133, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[146] = {133, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[147] = {118, Teams['Мирные жители'], "Мужчина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[148] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[150] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[151] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[152] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[153] = {118, Teams['Мирные жители'], "Мужчина", nil, nil, {"Строитель"}},
 	[154] = {118, Teams['Мирные жители'], "Мужчина"},
-	[155] = {118, Teams['Мирные жители'], "Мужчина"},
+	[155] = {118, Teams['Fast Food'], "Мужчина"},
 	[158] = {122, Teams['Деревенщины'], "Мужчина", 33},
 	[159] = {119, Teams['Деревенщины'], "Мужчина", 33},
 	[160] = {119, Teams['Деревенщины'], "Мужчина", 33},
@@ -454,18 +448,18 @@ local SkinData = {
 	[164] = {118, Teams['ЦРУ'], "Мужчина", 31},
 	[165] = {118, Teams['ЦРУ'], "Мужчина", 31},
 	[166] = {118, Teams['ЦРУ'], "Мужчина", 31},
-	[167] = {118, Teams['Мирные жители'], "Мужчина"},
+	[167] = {118, Teams['Fast Food'], "Мужчина"},
 	[168] = {118, Teams['Мирные жители'], "Мужчина"},
-	[169] = {129, Teams['Якудзы'], "Женщина", 31, nil, {"Якудза", "Кумитё"}},
+	[169] = {129, Teams['Мирные жители'], "Женщина", 31, nil, nil, {"ped", "woman_walknorm"}},
 	[170] = {118, Teams['Мирные жители'], "Мужчина"},
 	[171] = {118, Teams['Мирные жители'], "Мужчина"},
-	[172] = {129, Teams['Мирные жители'], "Женщина"},
+	[172] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[173] = {121, Teams['Рифа'], "Мужчина", 32},
 	[174] = {121, Teams['Рифа'], "Мужчина", 32},
 	[175] = {121, Teams['Рифа'], "Мужчина", 32},
 	[176] = {118, Teams['Мирные жители'], "Мужчина"},
 	[177] = {118, Teams['Мирные жители'], "Мужчина"},
-	[178] = {132, Teams['Мирные жители'], "Женщина"},
+	[178] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[179] = {121, Teams['Колумбийский картель'], "Мужчина", 29},
 	[180] = {118, Teams['Мирные жители'], "Мужчина"},
 	[181] = {121, Teams['Байкеры'], "Мужчина", 22},
@@ -478,79 +472,79 @@ local SkinData = {
 	[188] = {118, Teams['Мирные жители'], "Мужчина"},
 	[189] = {118, Teams['Мирные жители'], "Мужчина"},
 	[190] = {132, Teams['Мирные жители'], "Женщина"},
-	[191] = {121, Teams['Мирные жители'], "Женщина"},
-	[192] = {121, Teams['Мирные жители'], "Женщина"},
-	[193] = {132, Teams['Мирные жители'], "Женщина"},
-	[194] = {132, Teams['Мирные жители'], "Женщина"},
-	[195] = {132, Teams['Мирные жители'], "Женщина"},
-	[196] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[197] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[198] = {129, Teams['Мирные жители'], "Женщина"},
-	[199] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
+	[191] = {121, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[192] = {121, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[193] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[194] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[195] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[196] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[197] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[198] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[199] = {134, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
 	[200] = {118, Teams['Мирные жители'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
-	[201] = {129, Teams['Мирные жители'], "Женщина"},
+	[201] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[202] = {118, Teams['Мирные жители'], "Мужчина"},
 	[203] = {118, Teams['Мирные жители'], "Мужчина"},
 	[204] = {118, Teams['Мирные жители'], "Мужчина"},
-	[205] = {135, Teams['Мирные жители'], "Женщина"},
+	[205] = {135, Teams['Fast Food'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[206] = {118, Teams['Мирные жители'], "Мужчина"},
-	[207] = {132, Teams['Мирные жители'], "Женщина", nil, nil, {"Шлюха"}},
-	[209] = {118, Teams['Мирные жители'], "Мужчина"},
+	[207] = {132, Teams['Жрицы любви'], "Женщина", nil, nil, {"Шлюха"}, {"ped", "woman_walksexy"}},
+	[209] = {118, Teams['Fast Food'], "Мужчина"},
 	[210] = {118, Teams['Мирные жители'], "Мужчина"},
-	[211] = {132, Teams['Мирные жители'], "Женщина"},
+	[211] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[212] = {118, Teams['Мирные жители'], "Мужчина"},
 	[213] = {0, Teams['Уголовники'], "Мужчина"},
-	[214] = {132, Teams['Мирные жители'], "Женщина"},
-	[215] = {134, Teams['Мирные жители'], "Женщина"},
-	[216] = {132, Teams['Мирные жители'], "Женщина"},
+	[214] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[215] = {134, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[216] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[217] = {118, Teams['Мирные жители'], "Мужчина"},
-	[218] = {132, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[219] = {132, Teams['Мирные жители'], "Женщина"},
+	[218] = {132, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[219] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[220] = {118, Teams['Мирные жители'], "Мужчина"},
 	[221] = {118, Teams['Колумбийский картель'], "Мужчина"},
 	[222] = {121, Teams['Колумбийский картель'], "Мужчина", 29},
 	[223] = {121, Teams['Мирные жители'], "Мужчина"},
-	[224] = {134, Teams['Мирные жители'], "Женщина"},
-	[225] = {134, Teams['Мирные жители'], "Женщина"},
-	[226] = {135, Teams['Мирные жители'], "Женщина"},
+	[224] = {134, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[225] = {134, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[226] = {135, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[227] = {118, Teams['Мирные жители'], "Мужчина"},
 	[228] = {118, Teams['Мирные жители'], "Мужчина"},
 	[229] = {118, Teams['Мирные жители'], "Мужчина"},
-	[230] = {118, Teams['Мирные жители'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
-	[231] = {132, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[232] = {132, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}},
-	[233] = {129, Teams['Мирные жители'], "Женщина"},
+	[230] = {118, Teams['Бездомные'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
+	[231] = {132, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[232] = {132, Teams['Мирные жители'], "Женщина", 16, "Бабка", {"Старуха", "Бабка"}, {"ped", "woman_walkold"}},
+	[233] = {129, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[234] = {120, Teams['Мирные жители'], "Мужчина", nil, nil, {"Дед", "Старик"}},
 	[235] = {120, Teams['Мирные жители'], "Мужчина", nil, nil, {"Дед", "Старик"}},
 	[236] = {120, Teams['Мирные жители'], "Мужчина", nil, nil, {"Дед", "Старик"}},
-	[237] = {132, Teams['Мирные жители'], "Женщина", nil, nil, {"Шлюха"}},
-	[238] = {132, Teams['Мирные жители'], "Женщина", nil, nil, {"Шлюха"}},
+	[237] = {132, Teams['Жрицы любви'], "Женщина", nil, nil, {"Шлюха"}, {"ped", "woman_walksexy"}},
+	[238] = {132, Teams['Жрицы любви'], "Женщина", nil, nil, {"Шлюха"}, {"ped", "woman_walksexy"}},
 	[239] = {118, Teams['Мирные жители'], "Мужчина", nil, "Бомж", {"Бездомный", "Бродяга", "Бомж"}},
 	[240] = {118, Teams['Мирные жители'], "Мужчина"},
 	[241] = {124, Teams['Мирные жители'], "Мужчина"},
 	[242] = {121, Teams['Колумбийский картель'], "Мужчина", 29},
-	[243] = {132, Teams['Мирные жители'], "Женщина", nil, nil, {"Шлюха"}},
-	[244] = {132, Teams['Мирные жители'], "Женщина", nil, nil, {"Шлюха"}},
-	[245] = {135, Teams['Мирные жители'], "Женщина"},
+	[243] = {132, Teams['Жрицы любви'], "Женщина", nil, nil, {"Шлюха"}, {"ped", "woman_walksexy"}},
+	[244] = {132, Teams['Жрицы любви'], "Женщина", nil, nil, {"Шлюха"}, {"ped", "woman_walksexy"}},
+	[245] = {135, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[246] = {132, Teams['Мирные жители'], "Женщина", nil, nil, {"Стриптизерша"}},
 	[247] = {121, Teams['Байкеры'], "Мужчина", 22},
 	[248] = {121, Teams['Байкеры'], "Мужчина", 22},
 	[249] = {118, Teams['Мирные жители'], "Мужчина"},
 	[250] = {118, Teams['Мирные жители'], "Мужчина"},
-	[251] = {132, Teams['Мирные жители'], "Женщина"},
+	[251] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[252] = {133, Teams['Уголовники'], "Мужчина"},
 	[253] = {118, Teams['Мирные жители'], "Мужчина"},
 	[254] = {121, Teams['Байкеры'], "Мужчина", 22},
 	[255] = {118, Teams['Мирные жители'], "Мужчина"},
-	[256] = {132, Teams['Мирные жители'], "Женщина"},
+	[256] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[257] = {132, Teams['Мирные жители'], "Женщина", nil, nil, {"Стриптизерша"}},
 	[258] = {124, Teams['Мирные жители'], "Мужчина"},
 	[259] = {124, Teams['Мирные жители'], "Мужчина"},
 	[260] = {118, Teams['Мирные жители'], "Мужчина", nil, nil, {"Строитель"}},
 	[261] = {118, Teams['Байкеры'], "Мужчина"},
 	[262] = {118, Teams['Мирные жители'], "Мужчина"},
-	[263] = {132, Teams['Мирные жители'], "Женщина"},
-	[264] = {128, Teams['Мирные жители'], "Мужчина"},
+	[263] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[264] = {128, Teams['Fast Food'], "Мужчина"},
 	[265] = {128, Teams['Полиция'], "Мужчина", 22},
 	[266] = {128, Teams['Полиция'], "Мужчина", 22},
 	[267] = {128, Teams['Полиция'], "Мужчина", 22},
@@ -578,17 +572,17 @@ local SkinData = {
 	[291] = {118, Teams['Мирные жители'], "Мужчина"},
 	[292] = {122, Teams['Ацтекас'], "Мужчина", 30},
 	[293] = {122, Teams['Гроув-стрит'], "Мужчина", 22},
-	[294] = {122, Teams['Триады'], "Мужчина", 30},
+	[294] = {122, Teams['Триады'], "Мужчина", 30, nil, nil, {"ped", "walk_wuzi"}},
 	[295] = {118, Teams['Мирные жители'], "Мужчина"},
 	[296] = {118, Teams['Мирные жители'], "Мужчина"},
 	[297] = {118, Teams['Мирные жители'], "Мужчина"},
-	[298] = {132, Teams['Мирные жители'], "Женщина"},
-	[299] = {0, Teams['Мирные жители'], "Мужчина"},
-	[300] = {122, Teams['Гроув-стрит'], "Мужчина", 30},
-	[301] = {122, Teams['Гроув-стрит'], "Мужчина", 30},
+	[298] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
+	[299] = {0, Teams['Протагонисты'], "Мужчина", nil, nil, nil, {"playidles", "time"}}, 
+	[300] = {122, Teams['Гроув-стрит'], "Мужчина", 30, nil, nil, {"shop", "smoke_ryd"}}, 
+	[301] = {122, Teams['Гроув-стрит'], "Мужчина", 30, nil, nil, {"shop", "smoke_ryd"}}, 
 	[302] = {118, Teams['Мирные жители'], "Мужчина"},
 	[303] = {118, Teams['Мирные жители'], "Мужчина"},
-	[304] = {132, Teams['Мирные жители'], "Женщина"},
+	[304] = {132, Teams['Мирные жители'], "Женщина", nil, nil, nil, {"ped", "woman_walknorm"}},
 	[305] = {118, Teams['Мирные жители'], "Мужчина"},
 	[306] = {118, Teams['Мирные жители'], "Мужчина"},
 	[307] = {118, Teams['Мирные жители'], "Мужчина"},
@@ -968,7 +962,7 @@ local BotSkin = {
 	["Рифа"] = {173,174,175}, 
 	["Деревенщины"] = {159,160,161,162}, 
 	["Триады"] = {117,118,120,32},  --Доп. Оружие
-	["Якудзы"] = {121,122,123}, 
+	["Da Nang Boys"] = {121,122,123}, 
 	["Ацтекас"] = {114,115,116}, 
 	["Байкеры"] = {181,247,248,100,261, 64},  --Доп. Шлюха
 	["Русская мафия"] = {111,112,113}, 
@@ -1466,7 +1460,7 @@ local BandRangs = {
 		[3] = {75, "Зам. Лидера", 120},
 		[4] = {130, "Желтый дракон (Лидер)", 294}
 	},
-	["Якудзы"] = {
+	["Da Nang Boys"] = {
 		[1] = {0, "Куми-ин", 121},
 		[2] = {30, "Сансита", 122},
 		[3] = {75, "Дэката", 123},
@@ -4404,7 +4398,7 @@ local VehicleSpawnPoint = {
 	["Idlewood"] = {{1925.9, -1788.6, 12.4, 0, 0, 270}},
 	["Verdant Bluffs"] = {{1245.5, -2028, 58.8,  0, 0, 270}, {1245.5, -2024, 58.8,  0, 0, 270}, {1246, -2044, 58.8, 0, 0, 270}, {1274.9, -2044.7, 58.8,  0, 0, 90}, {1245.5, -2020, 58.8, 0, 0, 270}},
 	["Caligula's Palace"] = {{2160, 1676.6, 9.7, 0, 0, 350}, {2160.2, 1683.5, 9.7, 0, 0, 6}, {2159.6, 1644.7, 10.1, 0, 0, 20}, {2153.4, 1683.6, 9.7, 0, 0, 185}, {2158.8, 1689.7, 9.7,  0, 0, 20}},
-	["El Castillo del Diablo"] = {{-26, 2347, 23.1, 0, 0, 180}, {-12, 2343, 23.1, 0, 0, 90}, {-40, 2344, 23.1, 0, 0, 230}, {-34, 2325, 23.1, 0, 0, 120}},
+	--["El Castillo del Diablo"] = {{-26, 2347, 23.1, 0, 0, 180}, {-12, 2343, 23.1, 0, 0, 90}, {-40, 2344, 23.1, 0, 0, 230}, {-34, 2325, 23.1, 0, 0, 120}},
 	["King's"] = {{-2175.8, 293.2, 34.1, 0, 0, 0}, {-2222.6, 306.2, 34.1, 0, 0, 180}},
 	["The High Roller"] = {{1943.4, 1342.7, 8.1, 0, 0, 180}, {1943.4, 1349.4, 8.1, 0, 0, 180}},
 	["Santa Maria Beach"] = {{343.7, -1809.6, 3.5, 0, 0, 0}},
@@ -5027,7 +5021,7 @@ local TeamTag = {
 	["Колумбийский картель"] = {1524, 1525, 1529},
 	["Русская мафия"] =  {1524, 1525, 1529},
 	["Вагос"] = {1530},
-	["Якудзы"] = {1530},
+	["Da Nang Boys"] = {1530},
 	["Ацтекас"] = {1531},
 	["Гроув-стрит"] = {1528},
 	["Триады"] = {1528},
@@ -7561,7 +7555,6 @@ function preLoad(name)
 
 	SpawnAllVehicle()
 	SpawnCarForSale()
-	InitDynamicBot()
 
 
 	SendWebPlayer()
@@ -8007,7 +8000,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 					Respect(killer, "grove", -1)
 					Respect(killer, "ballas", 1)
 					Respect(killer, "vagos", 1)
-				elseif(PTeam == "Вагос" or PTeam == "Якудзы" or PTeam == "Рифа") then
+				elseif(PTeam == "Вагос" or PTeam == "Da Nang Boys" or PTeam == "Рифа") then
 					Respect(killer, "vagos", -1)
 					Respect(killer, "grove", 1)
 				elseif(getTeamGroup(PTeam) == "Официалы") then
@@ -8531,12 +8524,12 @@ local Dialogs = {
 			}
 		}
 	},
-	["Якудзы"] = {
+	["Da Nang Boys"] = {
 		[1] = {
 			["dialog"] = {"Чего тебе?"},
 			[1] = {
-				["text"] = "Я хочу вступить в Якудзы",
-				["action"] = {"BandInvite", {"Якудзы"}}
+				["text"] = "Я хочу вступить в Da Nang Boys",
+				["action"] = {"BandInvite", {"Da Nang Boys"}}
 			},
 			[2] = {
 				["text"] = "[промолчать]"
@@ -9703,7 +9696,7 @@ function cap(thePlayer, zone)
 			local x,y,z = getElementPosition(thePlayer)
 			if(zone == getZoneName(x,y,z)) then
 				local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-				if(PlayerTeam == "Байкеры" or PlayerTeam == "Вагос" or PlayerTeam == "Рифа" or PlayerTeam == "Деревенщины" or PlayerTeam == "Баллас" or PlayerTeam == "Гроув-стрит" or PlayerTeam == "Колумбийский картель" or PlayerTeam == "Якудзы" or PlayerTeam == "Триады" or PlayerTeam == "Русская мафия" or PlayerTeam == "Ацтекас") then
+				if(PlayerTeam == "Байкеры" or PlayerTeam == "Вагос" or PlayerTeam == "Рифа" or PlayerTeam == "Деревенщины" or PlayerTeam == "Баллас" or PlayerTeam == "Гроув-стрит" or PlayerTeam == "Колумбийский картель" or PlayerTeam == "Da Nang Boys" or PlayerTeam == "Триады" or PlayerTeam == "Русская мафия" or PlayerTeam == "Ацтекас") then
 					local r,g,b,_ = getRadarAreaColor(WARGANG[zone][1])
 					local tr,tg,tb = getTeamColor(getPlayerTeam(thePlayer))
 					if(tr ~= r or tg ~= g or tb ~= b) then
@@ -10418,7 +10411,7 @@ function GetAvailableSpawn(thePlayer, team)
 	end
 
 
-	if(team == "Якудзы") then
+	if(team == "Da Nang Boys") then
 		SpawnArr[#SpawnArr+1] = {SpawnPoint["Koyoen Station"][1], SpawnPoint["Koyoen Station"][2], SpawnPoint["Koyoen Station"][3], "street", "Koyoen Station", SpawnPoint["Koyoen Station"][5]}
 	else
 		SpawnArr[#SpawnArr+1] = {SpawnPoint["Unity Station"][1], SpawnPoint["Unity Station"][2], SpawnPoint["Unity Station"][3], "street", "Unity Station", SpawnPoint["Unity Station"][5]}
@@ -10964,7 +10957,7 @@ function UpdateTutorial(thePlayer)
 	elseif(team == "МЧС") then
 		outputChatBox("Чтобы лечить пациентов тебе нужна донорская #FF0000кровь#FFFFFF", thePlayer, 255, 255, 255, true)
 		outputChatBox("Для получения #FF0000крови#FFFFFF тебе нужно положить донора на кушетку в больнице и начать забор #FF0000крови#FFFFFF", thePlayer, 255, 255, 255, true)
-	elseif(team == "Якудзы") then
+	elseif(team == "Da Nang Boys") then
 		if(GetDatabaseAccount(thePlayer, "YTUT") == 0) then
 			SetDatabaseAccount(thePlayer, "YTUT", 1)
 		end
@@ -11210,27 +11203,6 @@ function worldtime(ignoreweather)
 	for _, v in pairs(SearchLights) do
 		local x,y,z = getElementPosition(v["A51_SPOTBULB"])
 		moveObject(v["A51_SPOTBULB"], 1000,  x,y,z, 0,0,math.random(-20,20))
-	end
-
-	for thePed,_ in pairs(SData["DriverBot"]) do
-		if(isElement(thePed)) then
-			if(not isPedDead(thePed)) then
-				if(SData["PlayerElementSync"][thePed]) then
-					if(TimersAgain[thePed]) then
-						TimersAgain[thePed] = nil
-						SetNextDynamicNode(thePed)
-					end
-				else
-					if(getElementData(thePed, "DynamicBot")) then
-					--	SetNextDynamicNode(thePed)
-					end
-				end
-			else
-				SData["DriverBot"][thePed] = nil
-			end
-		else
-			SData["DriverBot"][thePed] = nil
-		end
 	end
 
 
@@ -11523,41 +11495,6 @@ local PlateNumber = {
 	[523] = "POLI 228", 
 }
 
-function CreateDriverBot(vmodel, pedmodel, x,y,z,i,d, city, path,attacker)
-	path = exports["vehicle_node"]:GetCoordsByGPS(city, path)  -- Временное, переделывает ноды в координаты, потом доделать
-	local rotz = findRotation(path[1][1], path[1][2], path[2][1], path[2][2])
-	local v = CreateVehicle(vmodel, x,y,z+VehicleSystem[vmodel][1], 0, 0, rotz, PlateNumber[vmodel])
-	local thePed = CreateBot(pedmodel,x,y,z,0,i,d,getZoneName(x,y,z))
-	SData["DriverBot"][thePed] = path
-
-	setElementData(thePed, "DynamicBot", toJSON({
-		path[1][1], path[1][2], path[1][3], false,
-		path[2][1], path[2][2], path[2][3], false
-	}))
-	if(i) then
-		setElementInterior(v, i)
-		setElementInterior(thePed, i)
-	end
-	if(d) then
-		setElementDimension(v, d)
-		setElementDimension(thePed, d)
-	end
-
-	if(attacker) then
-		if(getElementType(attacker) == "player") then
-			setElementData(thePed, "attacker", getPlayerName(attacker))
-		end
-	end
-	setElementData(thePed, "SpawnBlock", "true", false)
-	setElementData(thePed, "DestroyAfterStreamOut", "true", false)
-	setPedStat(thePed, 160, 1000)
-	setElementData(v, "destroy", "true", false)
-	warpPedIntoVehicle(thePed,v)
-	setVehicleSirensOn(v, true)
-	setElementData(thePed, "City", city)
-	return v
-end
-
 
 
 
@@ -11589,10 +11526,14 @@ function kr(thePlayer, vmodel, pedmodel)
 				ind = ind+1
 				if(ind == minarrindex) then
 					local bx,by,bz = PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][2], PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][3], PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][4]
-					if(vmodel == 497 or vmodel == 488) then
+					local bx2,by2,bz2 = PathNodes[getPlayerCity(thePlayer)][arr[name][2][1]][arr[name][2][2]][2], PathNodes[getPlayerCity(thePlayer)][arr[name][2][1]][arr[name][2][2]][3], PathNodes[getPlayerCity(thePlayer)][arr[name][2][1]][arr[name][2][2]][4]
+					local rz = findRotation(bx, by, bx2, by2)
+
+					if(vmodel == 497 or vmodel == 488) then -- Вертолеты
 						bz = bz+25
 					end
-					CreateDriverBot(vmodel, pedmodel, bx, by, bz, 0, d, City, arr[name], thePlayer)
+					CreateDriverBot(vmodel, pedmodel, bx, by, bz, rz, 0, d, City, arr[name], thePlayer)
+					
 					PData[thePlayer]["PoliceTimer"] = setTimer(function(thePlayer) end, 5000, 1, thePlayer)
 				end
 			end
@@ -11603,6 +11544,38 @@ end
 
 
 
+
+function CreateDriverBot(vmodel, pedmodel, x, y, z, rz, i, d, City, path, targetPlayer)
+	local theVehicle = CreateVehicle(vmodel, x,y,z+VehicleSystem[vmodel][1], 0,0,rz)
+	setElementInterior(theVehicle, i)
+	setElementDimension(theVehicle, d)
+	local thePed = createPed(pedmodel, x,y,z)
+	setElementInterior(thePed, i)
+	setElementDimension(thePed, d)
+	warpPedIntoVehicle(thePed, theVehicle)
+	
+	local ClientPath = {}
+	for i, v in pairs(path) do
+		ClientPath[i] = {PathNodes[City][v[1]][v[2]][2], PathNodes[City][v[1]][v[2]][3], PathNodes[City][v[1]][v[2]][4]} -- x,y,z
+	end
+	
+	setElementData(thePed, "path", ClientPath)
+end
+
+
+function DriverBotNextPath(thePlayer, thePed)
+	local path = getElementData(thePed, "path")
+	if(path) then
+		table.remove(path, 1)
+		if(#path == 0) then
+			removeElementData(thePed, "path")
+		else
+			setElementData(thePed, "path", path)
+		end
+	end
+end
+addEvent("DriverBotNextPath", true)
+addEventHandler("DriverBotNextPath", root, DriverBotNextPath)
 
 
 
@@ -11647,7 +11620,10 @@ function FireTruck(x,y,z,i,d)
 				ind = ind+1
 				if(ind == minarrindex) then
 					local bx,by,bz = PathNodes["San Andreas"][arr[name][1][1]][arr[name][1][2]][2], PathNodes["San Andreas"][arr[name][1][1]][arr[name][1][2]][3], PathNodes["San Andreas"][arr[name][1][1]][arr[name][1][2]][4]
-					return CreateDriverBot(407, FireTruckModel[zone], bx, by, bz, 0, 0, "San Andreas", arr[name])
+					local bx2,by2,bz2 = PathNodes["San Andreas"][arr[name][2][1]][arr[name][2][2]][2], PathNodes["San Andreas"][arr[name][2][1]][arr[name][2][2]][3], PathNodes["San Andreas"][arr[name][2][1]][arr[name][2][2]][4]
+					local rz = findRotation(bx,by, bx2,by2)
+					
+					return CreateDriverBot(407, FireTruckModel[zone], bx, by, bz, rz, 0, 0, "San Andreas", arr[name])
 				end
 			end
 		end
@@ -11706,181 +11682,6 @@ local trafficlight = {
 
 
 
-function RemoveDynamicBot(thePed)
-	if(thePed) then
-		removeElementData(thePed, "DynamicBot")
-		SData["DriverBot"][thePed] = nil
-	end
-end
-addEvent("RemoveDynamicBot", true)
-addEventHandler("RemoveDynamicBot", root, RemoveDynamicBot)
-
-
-
-
-
-function SetNextDynamicNode(thePed, forced)
-	if(thePed) then
-		local dat = getElementData(thePed, "CurNode")
-		local theVehicle = getPedOccupiedVehicle(thePed)
-		if(dat) then
-			local arr = fromJSON(dat)
-			local node, id = arr[1], arr[2]
-			local oldnode = fromJSON(getElementData(thePed, "NextNode"))
-			local nextnode, nextid = oldnode[1], oldnode[2]
-			if(PathNodes[getPlayerCity(thePed)][nextnode][nextid][4]) then
-				if(trafficlight[tostring(getTrafficLightState())] == PathNodes[getPlayerCity(thePed)][nextnode][nextid][4]) then
-					TimersAgain[thePed] = true
-					return true
-				end
-			end
-			if(PathNodes[getPlayerCity(thePed)][nextnode][nextid][1] == true or PathNodes[getPlayerCity(thePed)][nextnode][nextid][1] == "Closed") then
-				local nextnode2, nextid2 = unpack(FoundNextRandomNode(getPlayerCity(thePed), nextnode, nextid))
-				setElementData(thePed, "DynamicBot", toJSON({
-					PathNodes[getPlayerCity(thePed)][nextnode][nextid][2], PathNodes[getPlayerCity(thePed)][nextnode][nextid][3], PathNodes[getPlayerCity(thePed)][nextnode][nextid][4], PathNodes[getPlayerCity(thePed)][nextnode][nextid][5],
-					PathNodes[getPlayerCity(thePed)][nextnode2][nextid2][2], PathNodes[getPlayerCity(thePed)][nextnode2][nextid2][3], PathNodes[getPlayerCity(thePed)][nextnode2][nextid2][4], PathNodes[getPlayerCity(thePed)][nextnode2][nextid2][5],
-
-					}))
-
-				PathNodes[getPlayerCity(thePed)][node][id][1] = true
-				PathNodes[getPlayerCity(thePed)][nextnode][nextid][1] = false
-				setElementData(thePed, "CurNode", toJSON({nextnode, nextid}), false)
-				setElementData(thePed, "NextNode", toJSON({nextnode2, nextid2}), false)
-				if(not SData["PlayerElementSync"][thePed] or forced) then
-					if(theVehicle) then
-						local model = getElementModel(theVehicle)
-						local rotz = findRotation(PathNodes[getPlayerCity(thePed)][node][id][2], PathNodes[getPlayerCity(thePed)][node][id][3], PathNodes[getPlayerCity(thePed)][nextnode][nextid][2], PathNodes[getPlayerCity(thePed)][nextnode][nextid][3])
-
-						setElementPosition(theVehicle, PathNodes[getPlayerCity(thePed)][nextnode][nextid][2], PathNodes[getPlayerCity(thePed)][nextnode][nextid][3], PathNodes[getPlayerCity(thePed)][nextnode][nextid][4]+VehicleSystem[model][1])
-						setElementRotation(theVehicle, 0,0,rotz)
-					else
-						setElementPosition(thePed, PathNodes[getPlayerCity(thePed)][nextnode][nextid][2], PathNodes[getPlayerCity(thePed)][nextnode][nextid][3], PathNodes[getPlayerCity(thePed)][nextnode][nextid][4])
-					end
-				end
-			else
-				TimersAgain[thePed] = true
-			end
-		else
-			if(SData["DriverBot"][thePed]) then
-				if(SData["DriverBot"][thePed] ~= "auto") then
-					table.remove(SData["DriverBot"][thePed], 1)
-					if(#SData["DriverBot"][thePed] > 2) then
-						setElementData(thePed, "DynamicBot", toJSON({
-							SData["DriverBot"][thePed][1][1], SData["DriverBot"][thePed][1][2], SData["DriverBot"][thePed][1][3], false,
-							SData["DriverBot"][thePed][2][1], SData["DriverBot"][thePed][2][2], SData["DriverBot"][thePed][2][3], false
-						}))
-					else
-						RemoveDynamicBot(thePed)
-					end
-				end
-			end
-		end
-	end
-	return true
-end
-addEvent("SetNextDynamicNode", true)
-addEventHandler("SetNextDynamicNode", root, SetNextDynamicNode)
-
-
-
-function SetDynamicBot(thePed, x,y,z)
-	if(thePed) then
-		if(not x) then
-			x,y,z = getElementPosition(thePed)
-		end
-		local node = exports["ps2_weather"]:GetZoneName(x,y,z, false, getPlayerCity(thePed))
-		local id = false
-		local mindist = 3000
-		if(PathNodes[getPlayerCity(thePed)][node]) then
-			for i,v in pairs(PathNodes[getPlayerCity(thePed)][node]) do
-				if(v[1]) then
-					local dist = getDistanceBetweenPoints3D(x,y,z, v[2], v[3], v[4])
-					if(dist < mindist) then
-						mindist = dist
-						id = i
-					end
-				end
-			end
-		end
-		
-		if(id) then
-			removeElementData(thePed, "attacker")
-			CreateDynamicBot(thePed, getPlayerCity(thePed), node, id)
-		else
-			destroyElement(thePed)
-		end
-	end
-end
-addEvent("SetDynamicBot", true)
-addEventHandler("SetDynamicBot", root, SetDynamicBot)
-
-
-
-
-
-
-
-
-function CreateDynamicBot(thePed, city, node, id)
-	if(PathNodes[city][node][id][1] == true) then
-		PathNodes[city][node][id][1] = false -- Блокируем ноду
-		local x,y,z = PathNodes[city][node][id][2], PathNodes[city][node][id][3], PathNodes[city][node][id][4]
-		local nextnode, nextid = unpack(FoundNextRandomNode(city, node, id))
-
-		local nextnode2, nextid2 = unpack(FoundNextRandomNode(city, nextnode, nextid))
-
-
-		if(not thePed) then thePed = CreateRandomBot(x,y,z,0,0,0,getZoneName(x,y,z)) end
-
-		SData["DriverBot"][thePed] = "auto"
-
-		setElementData(thePed, "DynamicBot", toJSON({
-			PathNodes[city][nextnode][nextid][2], PathNodes[city][nextnode][nextid][3], PathNodes[city][nextnode][nextid][4], PathNodes[city][nextnode][nextid][5],
-			PathNodes[city][nextnode2][nextid2][2], PathNodes[city][nextnode2][nextid2][3], PathNodes[city][nextnode2][nextid2][4], PathNodes[city][nextnode2][nextid2][5],
-		}))
-
-		setElementData(thePed, "SpawnBlock", "true", false)
-		setElementData(thePed, "CurNode", toJSON({node, id}), false)
-		setElementData(thePed, "NextNode", toJSON({nextnode2, nextid2}), false)
-		if(city ~= "San Andreas") then 
-			if(city == "Liberty City") then
-				setElementDimension(thePed, 1)
-			elseif(city == "Vice City") then
-				setElementDimension(thePed, 2)
-			end
-			setElementData(thePed, "City", city) 
-		end
-		--createBlipAttachedTo(thePed,0,2,255,0,0, 255,0, 99999)
-	else
-		return false
-	end
-end
-
-
-function InitDynamicBot()
-	for city, dat in pairs(PathNodes) do
-		for district, arr in pairs(dat) do
-			for i, k in pairs(arr) do
-				if(k[1] == true) then
-					local rand = math.random(1,70)
-					if(rand == 1) then
-						CreateDynamicBot(false, city, district, i)
-					end
-				end
-			end
-		end
-	end
-	return true
-end
-
-function UpdateBotRequest(thePlayer, thePed)
-	SetNextDynamicNode(thePed, true)
-end
-addEvent("UpdateBotRequest", true)
-addEventHandler("UpdateBotRequest", root, UpdateBotRequest)
-
-
-
 
 
 local Objects = {
@@ -11905,7 +11706,6 @@ function DestroyDoherty()
 		destroyElement(obj)
 	end
 end
-
 addEvent("DestroyDoherty", true)
 addEventHandler("DestroyDoherty", root, DestroyDoherty)
 
@@ -11923,114 +11723,6 @@ function table.copy(t)
 	return t2;
 end
 
-
-function PlayerElementSync(thePlayer, obj, state)
-	if(isElement(obj)) then
-		if(getElementType(obj) == "ped") then
-			if(not SData["PlayerElementSync"][obj]) then
-				SData["PlayerElementSync"][obj] = {}
-				if(getElementData(obj, "DynamicBot")) then
-					if(SData["DriverBot"][obj] == "auto") then
-						local arr = fromJSON(getElementData(obj, "CurNode"))
-						local node, id = arr[1], arr[2]
-						local nextnode, nextid = unpack(FoundNextRandomNode(getPlayerCity(obj), node, id))
-						local team = getElementData(obj, "team")
-
-
-						local vehinfo = false
-						local region = getZoneName(PathNodes[getPlayerCity(obj)][node][id][2], PathNodes[getPlayerCity(obj)][node][id][3], PathNodes[getPlayerCity(obj)][node][id][4], true)
-						if(team == "Полиция") then
-							local zone = getZoneName(PathNodes[getPlayerCity(obj)][node][id][2], PathNodes[getPlayerCity(obj)][node][id][3], PathNodes[getPlayerCity(obj)][node][id][4], false)
-							vehinfo = SData["TeamVehicle"][team][region][math.random(#SData["TeamVehicle"][team][region])]
-						elseif(team == "Мирные жители") then
-							local arr = table.copy(SData["TeamVehicle"][team][region])
-
-							local zone = exports["ps2_weather"]:GetZoneName(PathNodes[getPlayerCity(obj)][node][id][2], PathNodes[getPlayerCity(obj)][node][id][3], PathNodes[getPlayerCity(obj)][node][id][4], false, getElementData(obj, "City"))
-							
-							if(VehicleRegionSpecific[zone]) then
-								for _, model in pairs(VehicleRegionSpecific[zone]) do
-									if(IsVehicleYear(model)) then
-										arr[#arr+1] = {model}
-									end
-								end
-							end
-							vehinfo = arr[math.random(#arr)]
-						else
-							vehinfo = SData["TeamVehicle"][team][math.random(#SData["TeamVehicle"][team])]
-						end
-
-						local x,y,z = PathNodes[getPlayerCity(obj)][node][id][2], PathNodes[getPlayerCity(obj)][node][id][3], PathNodes[getPlayerCity(obj)][node][id][4]+VehicleSystem[vehinfo[1]][1]
-						local x2,y2,z2 = PathNodes[getPlayerCity(obj)][nextnode][nextid][2], PathNodes[getPlayerCity(obj)][nextnode][nextid][3], PathNodes[getPlayerCity(obj)][nextnode][nextid][4]
-						local rotz = findRotation(x,y, x2,y2)
-
-						local theVehicle = CreateVehicle(vehinfo[1], x, y, z, 0, 0, rotz)
-
-						if(getPlayerCity(obj) == "Liberty City") then
-							setElementDimension(theVehicle, 1)
-							setElementData(theVehicle, "model", math.random(612, 664))
-						elseif(getPlayerCity(obj) == "Vice City") then
-							setElementDimension(theVehicle, 2)
-							setElementData(theVehicle, "model", math.random(665, 736))
-						end
-						
-						if(vehinfo[2]) then
-							setVehiclePlateText(theVehicle, vehinfo[2])
-						end
-
-						if(vehinfo[3]) then
-							if(#vehinfo[3] == 4) then
-								setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4])
-							else
-								setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4], vehinfo[3][5], vehinfo[3][6])
-							end
-						end
-						if(vehinfo[4]) then
-							setVehicleVariant(theVehicle, vehinfo[4][1], vehinfo[4][2], vehinfo[4][3], vehinfo[4][4])
-						end
-						if(vehinfo[5]) then
-							triggerEvent(vehinfo[5], theVehicle)
-						end
-
-
-						setElementData(theVehicle, "destroy", "true", false)
-						warpPedIntoVehicle(obj,theVehicle)
-					end
-				end
-			end
-			
-			SData["PlayerElementSync"][obj][getPlayerName(thePlayer)] = state
-
-			if(getArrSize(SData["PlayerElementSync"][obj]) == 0) then
-				SData["PlayerElementSync"][obj] = nil
-				if(getElementData(obj, "DynamicBot")) then
-					if(SData["DriverBot"][obj] == "auto") then
-						local theVehicle = getPedOccupiedVehicle(obj)
-						if(theVehicle) then
-							destroyElement(theVehicle)
-						end
-					end
-				end
-
-
-				if(getElementData(obj, "DestroyAfterStreamOut")) then
-					local theVehicle = getPedOccupiedVehicle(obj)
-					if(theVehicle) then
-						destroyElement(theVehicle)
-					end
-					destroyElement(obj)
-				end
-			end
-		elseif(getElementType(obj, "vehicle")) then
-			if(getElementData(obj, "DestroyAfterStreamOut")) then
-				if(not getElementSyncer(obj)) then
-					destroyElement(obj)
-				end
-			end
-		end
-	end
-end
-addEvent("PlayerElementSync", true)
-addEventHandler("PlayerElementSync", root, PlayerElementSync)
 
 
 
@@ -13412,7 +13104,7 @@ local tmpi = 1
 local tmpcity = ""
 function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local res = getResourceFromName("Unlimited-object") -- Interface
+		local res = getResourceFromName("vehicle_node") -- Interface
 		restartResource(res)
 		--local res = getResourceFromName("ps2_weather") -- Interface
 		--restartResource(res)
@@ -13516,14 +13208,10 @@ addEventHandler("fightstyle", root, fightstyle)
 
 function RemovePedFromVehicle(thePed, thePlayer)
 	if(thePed) then
-		if(not thePlayer) then thePlayer = getElementSyncer(thePed) end
 		local theVehicle = getPedOccupiedVehicle(thePed)
 		if(theVehicle) then
 			local x,y,z = getElementPosition(theVehicle)
 			local _,_,rz = getElementRotation(theVehicle)
-			setElementSyncer(theVehicle, thePlayer)
-			setElementData(theVehicle, "DestroyAfterStreamOut", "true", false)
-			setElementSyncer(thePed, thePlayer)
 			removePedFromVehicle(thePed)
 			
 			local x1,y1,z1 = getPointInFrontOfPoint(x, y, z, rz-180, 1)
@@ -14423,7 +14111,7 @@ addEventHandler("DownReputation", root, DownReputation)
 function getTeamVariable(team)
 	if(team == "Мирные жители" or team == "МЧС") then
 		return "civilian"
-	elseif(team == "Вагос" or team == "Якудзы" or team == "Рифа") then
+	elseif(team == "Вагос" or team == "Da Nang Boys" or team == "Рифа") then
 		return "vagos"
 	elseif(team == "Баллас" or team == "Колумбийский картель" or team == "Русская мафия") then
 		return "ballas"
@@ -14903,7 +14591,7 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 					Respect(killer, "grove", -1)
 					Respect(killer, "ballas", 1)
 					Respect(killer, "vagos", 1)
-				elseif(PTeam == "Вагос" or PTeam == "Якудзы" or PTeam == "Рифа") then
+				elseif(PTeam == "Вагос" or PTeam == "Da Nang Boys" or PTeam == "Рифа") then
 					Respect(killer, "vagos", -1)
 					Respect(killer, "grove", 1)
 				elseif(PTeam == "Полиция" or PTeam == "ФБР") then
@@ -17526,7 +17214,7 @@ end
 function getTeamGroup(team)
 	if(team == "Мирные жители" or team == "МЧС") then
 		return "Мирные жители"
-	elseif(team == "Вагос" or team == "Якудзы" or team == "Рифа") then
+	elseif(team == "Вагос" or team == "Da Nang Boys" or team == "Рифа") then
 		return "Синдикат Локо"
 	elseif(team == "Баллас" or team == "Колумбийский картель" or team == "Русская мафия") then
 		return "Наркомафия"

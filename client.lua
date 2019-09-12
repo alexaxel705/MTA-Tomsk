@@ -311,10 +311,10 @@ function toggleAirBrake()
 	air_brake = not air_brake or nil
 	if air_brake then
 		abx,aby,abz = getElementPosition(localPlayer)
-		addEventHandler("onClientPreRender",root,putPlayerInPosition)
+		addEventHandler("onClientPreRender", root, putPlayerInPosition)
 	else
 		abx,aby,abz = nil
-		removeEventHandler("onClientPreRender",root,putPlayerInPosition)
+		removeEventHandler("onClientPreRender", root, putPlayerInPosition)
 	end
 end
 addCommandHandler("noclip", toggleAirBrake)
@@ -2064,7 +2064,7 @@ function lowPcMode()
 		resetVehiclesLODDistance()
 		setCloudsEnabled(true)
 		setBirdsEnabled(true)
-		addEventHandler("onClientPreRender", root, NotForLowPC)
+		addEventHandler("onClientPreRender", getRootElement(), NotForLowPC)
 		addEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
 		addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
 		
@@ -2091,7 +2091,7 @@ function lowPcMode()
 		setWorldSpecialPropertyEnabled("randomfoliage", false)
 		setCloudsEnabled(false)
 		setBirdsEnabled(false)
-		removeEventHandler("onClientPreRender", root, NotForLowPC)
+		removeEventHandler("onClientPreRender", getRootElement(), NotForLowPC)
 		removeEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
 		removeEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
 
@@ -2617,9 +2617,9 @@ local SkinData = {
 	[117] = {122, "Триады", "Мужчина", 22},
 	[118] = {122, "Триады", "Мужчина", 29},
 	[120] = {122, "Триады", "Мужчина", 30},
-	[121] = {121, "Якудзы", "Мужчина", 22, nil, {"Якудза", "Куми-ин"}},
-	[122] = {121, "Якудзы", "Мужчина", 28, nil, {"Якудза", "Сансита"}},
-	[123] = {121, "Якудзы", "Мужчина", 25, nil, {"Якудза", "Дэката"}},
+	[121] = {121, "Da Nang Boys", "Мужчина", 22, nil, {"DNB", "Куми-ин"}},
+	[122] = {121, "Da Nang Boys", "Мужчина", 28, nil, {"DNB", "Сансита"}},
+	[123] = {121, "Da Nang Boys", "Мужчина", 25, nil, {"DNB", "Дэката"}},
 	[124] = {118, "Мирные жители", "Мужчина"},
 	[125] = {121, "Русская мафия", "Мужчина", 25},
 	[126] = {121, "Русская мафия", "Мужчина", 25},
@@ -2662,7 +2662,7 @@ local SkinData = {
 	[166] = {118, "ЦРУ", "Мужчина", 31},
 	[167] = {118, "Мирные жители", "Мужчина"},
 	[168] = {118, "Мирные жители", "Мужчина"},
-	[169] = {129, "Якудзы", "Женщина", 31, nil, {"Якудза", "Кумитё"}},
+	[169] = {129, "Da Nang Boys", "Женщина", 31, nil, {"DNB", "Кумитё"}},
 	[170] = {118, "Мирные жители", "Мужчина"},
 	[171] = {118, "Мирные жители", "Мужчина"},
 	[172] = {129, "Мирные жители", "Женщина"},
@@ -3466,6 +3466,7 @@ local FirePos = {}
 local MovePlayerTo = {}
 function UpdateBot()
 	for _,thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
+		if(getElementData(thePed, "PedFight")) then return false end -- Для Underlords
 		local theVehicle = getPedOccupiedVehicle(thePed)
 		local attacker = GetElementAttacker(thePed)
 		
@@ -3494,220 +3495,85 @@ function UpdateBot()
 			local vx,vy,vz = getElementPosition(theVehicle)
 			local rx,ry,rz = getElementRotation(theVehicle)
 			local brakes = false
-			local path = false
-			local nextpath = false
 			local maxspd = 40
 			local PointDistance = 4
 			local mreverse = false
-			if(attacker) then
-				PointDistance = 10
-			end
 			
-			if(getElementData(thePed, "DynamicBot")) then
-				local arr = fromJSON(getElementData(thePed, "DynamicBot"))
-				path = {arr[1],arr[2],arr[3]}
-
-				nextpath = {arr[5],arr[6],arr[7]}
+			local pathData = getElementData(thePed, "path")
+			local path = {0,0}
+			local nextpath = {0,0}
+			if(pathData) then
+				path = pathData[1]
+				nextpath = pathData[2] or pathData[1]
 				
-				local distance = getDistanceBetweenPoints2D(path[1], path[2], vx, vy)
-				if(distance < PointDistance) then
-					if(arr[4]) then
-						if(trafficlight[tostring(getTrafficLightState())] == arr[4]) then
-							brakes = true
-						end
-					end
-					
-					if(brakes == false) then -- Если не ждет на светофоре
-						if(StreamData[thePed]["UpdateRequest"]) then
-							StreamData[thePed]["UpdateRequest"] = false
-							triggerServerEvent("SetNextDynamicNode", localPlayer, thePed)
-						end
-					end
-				end
-				if(not StreamData[thePed]["UpdateRequest"]) then
-					path = {arr[5],arr[6],arr[7]}
-					local tmpx, tmpy, tmpz = getPointInFrontOfPoint(arr[5],arr[6],arr[7], rz+90, 20) -- Создает плавность до того как станет известно положение следующей точки
-					
-					nextpath = {tmpx, tmpy, tmpz}
-					distance = getDistanceBetweenPoints2D(path[1], path[2], vx,vy)
-					if(distance < PointDistance) then
-						brakes = true
-					end
+				local dist = getDistanceBetweenPoints2D(path[1], path[2], vx,vy)
+				if(dist <= PointDistance) then
+					triggerServerEvent("DriverBotNextPath", localPlayer, localPlayer, thePed)
 				end
 				
-								
-				if(not attacker) then-- Ближнее торможение аля пробки
-					local x2,y2,z2 = getPositionInFront(theVehicle, 6)
-					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vx,vy,vz, x2,y2,z2, false,true,true, false, false, false, false, false, theVehicle)
-					if(hitElement) then
-						if(getElementType(hitElement) == "vehicle") then
-							brakes = true
-						elseif(getElementType(hitElement) == "player" or getElementType(hitElement) == "ped") then
-							brakes = true
-							HornPed(thePed, hitElement)
-						end
-					end
-				else
-					local ax, ay, az = getElementPosition(attacker)
-					if(isLineOfSightClear(vx,vy,vz, ax, ay, az, true, false, false, false, false, false, false)) then
-						triggerServerEvent("RemoveDynamicBot", localPlayer, thePed)
-					end
-				end
 			else
-				if(getElementModel(theVehicle) == 407) then -- Пожарники
-					if(not FirePos[thePed]) then
-						for _,object in ipairs(getElementsByType("object", getRootElement(), true)) do 
-							if(getElementData(object, "fireid")) then
-								FirePos[thePed] = object
-								if(not getElementData(FirePos[thePed], "tick")) then 
-									setElementData(FirePos[thePed], "tick", 0) 
-								end
-							end
-						end
-					end
-				
-					if(FirePos[thePed]) then
-						if(not isElement(FirePos[thePed])) then
-							FirePos[thePed] = nil
-						else
-							attacker = FirePos[thePed]
-							local fx,fy,fz = getElementPosition(FirePos[thePed])
-							local _,_,rz = getElementRotation(theVehicle)
-							local tt1, tt2 = GetTurretPosition(fx,fy,fz, vx,vy,vz,rz)
-							setVehicleTurretPosition(theVehicle, tt1, tt2)
-							
-							setPedControlState(thePed, "vehicle_fire", true)
-							
-							setElementData(FirePos[thePed], "tick", getElementData(FirePos[thePed], "tick")+1)
-							
-							if(getElementData(FirePos[thePed], "tick") < 4) then
-								local ox, oy, oz = getElementPosition(FirePos[thePed])
-								local effect = createEffect("waterfall_end", ox, oy, oz+1)
-								setElementParent(effect, FirePos[thePed])
-							end
-							
-							if(getElementData(FirePos[thePed], "tick") >= 150) then
-								triggerServerEvent("RemoveFire", localPlayer, localPlayer, FirePos[thePed])
-								FirePos[thePed] = nil
-							end
-						end
-					else
-						FirePos[thePed] = nil
-						setVehicleSirensOn(theVehicle, false)
-						setVehicleTurretPosition(theVehicle, 0, 0)
-						setPedControlState(thePed, "vehicle_fire", false)
-						triggerServerEvent("SetDynamicBot", localPlayer, thePed, vx, vy, vz)
-					end
-				end
-				
-				if(attacker) then
-					local x2,y2,z2 = getElementPosition(attacker)
-					path = {x2,y2,z2}
-					local tmpx, tmpy, tmpz = getPointInFrontOfPoint(x2,y2,z2, rz+90, 20) -- Создает плавность до того как станет известно положение следующей точки
-					nextpath = {tmpx, tmpy, tmpz}
-					
-					
-					if(CopCar[getElementModel(theVehicle)]) then
-						if(getElementData(attacker, "WantedLevel") > 0) then
-							local speedx, speedy, speedz = getElementVelocity(attacker)
-							if(getPedOccupiedVehicle(attacker)) then
-								speedx, speedy, speedz = getElementVelocity(getPedOccupiedVehicle(attacker))
-							end
-							local actualattakerspeed = (speedx^2 + speedy^2 + speedz^2)^(0.5)
-							if(actualattakerspeed < 0.1) then
-								local pedspeedx, pedspeedy, pedspeedz = getElementVelocity(theVehicle)
-								local actualpedspeed = (pedspeedx^2 + pedspeedy^2 + pedspeedz^2)^(0.5)
-								if(getDistanceBetweenPoints2D(x2,y2, vx, vy) < 10) then
-									if(actualpedspeed < 0.1) then
-										triggerServerEvent("RemovePedFromVehicle", localPlayer, getVehicleOccupant(theVehicle), localPlayer)
-									else
-										brakes = true
-									end
-								end
-							else
-								brakes = false -- Давить нахер нарушителя
-							end
-						else
-							setVehicleSirensOn(theVehicle, false)
-							triggerServerEvent("SetDynamicBot", localPlayer, thePed, vx, vy, vz)
-						end
-					elseif(getElementModel(theVehicle) == 497) then
-						if(VehiclesInStream[theVehicle]["attach_searchlight"]) then
-							local x2,y2,z2 = getElementPosition(attacker)
-							local vvx, vvy, vvz = getPositionFromElementOffset(theVehicle, 0, 3.5, -0.5)
-							setSearchLightStartPosition(VehiclesInStream[theVehicle]["attach_searchlight"], vvx, vvy, vvz)
-							
-							setSearchLightEndPosition(VehiclesInStream[theVehicle]["attach_searchlight"], x2,y2,z2)
-						end
-					else
-						if(getDistanceBetweenPoints2D(x2,y2, vx, vy) < 20) then
-							brakes = true
-						end
-					end
-				end
+				brakes = true
 			end
 			
-			if(path) then
-				local vxv, vyv, vzv = getElementVelocity(theVehicle)
-				local s = (vxv^2 + vyv^2 + vzv^2)^(0.5)*156
-
+			
+			local vxv, vyv, vzv = getElementVelocity(theVehicle)
+			local s = (vxv^2 + vyv^2 + vzv^2)^(0.5)*156
+	
+			local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)
+			if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
+			if(nextrot > 90) then nextrot = 90 end
+			
+			if(attacker) then maxspd = 220 end
+			local limitspeed = maxspd-((maxspd-10)*(nextrot/90))
+	
+			
+			if(brakes) then
+				setPedAnalogControlState(thePed, "accelerate", 0)
+				setPedAnalogControlState(thePed, "brake_reverse", 0)
+				setPedControlState(thePed, "handbrake", true)
+				setElementVelocity (theVehicle, 0,0,0)
+			else
+				local rot = GetMarrot(findRotation(vx,vy,path[1], path[2]),rz)
+				if(rot > 80) then 
+					if(rot > 100) then mreverse = true end
+					rot = 20 
+				elseif(rot < -20) then 
+					if(rot < -80) then mreverse = true end
+					rot = -20 
+				end
+	
 				
-				local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)
-				if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
-				if(nextrot > 90) then nextrot = 90 end
-				
-				
-				if(attacker) then maxspd = 220 end
-				local limitspeed = maxspd-((maxspd-10)*(nextrot/90))
-
-				
-				if(brakes) then
+				if(mreverse) then
+					setPedAnalogControlState(thePed, "brake_reverse", 1-(s*1/limitspeed))
 					setPedAnalogControlState(thePed, "accelerate", 0)
-					setPedAnalogControlState(thePed, "brake_reverse", 0)
-					setPedControlState(thePed, "handbrake", true)
-					setElementVelocity (theVehicle, 0,0,0)
-				else
-					local rot = GetMarrot(findRotation(vx,vy,path[1], path[2]),rz)
-					if(rot > 80) then 
-						if(rot > 100) then mreverse = true end
-						rot = 20 
-					elseif(rot < -20) then 
-						if(rot < -80) then mreverse = true end
-						rot = -20 
-					end
-
-					
-					if(mreverse) then
-						setPedAnalogControlState(thePed, "brake_reverse", 1-(s*1/limitspeed))
-						setPedAnalogControlState(thePed, "accelerate", 0)
-						setPedControlState(thePed, "handbrake", false)
-						if(s > 10) then
-							setPedControlState(thePed, "handbrake", true)
-						else
-							if(rot > 0) then
-								setPedAnalogControlState(thePed, "vehicle_left", (rot)/20)
-							else
-								setPedAnalogControlState(thePed, "vehicle_right", -(rot)/20)
-							end
-						end
+					setPedControlState(thePed, "handbrake", false)
+					if(s > 10) then
+						setPedControlState(thePed, "handbrake", true)
 					else
 						if(rot > 0) then
-							setPedAnalogControlState(thePed, "vehicle_right", (rot)/20)
+							setPedAnalogControlState(thePed, "vehicle_left", (rot)/20)
 						else
-							setPedAnalogControlState(thePed, "vehicle_left", -(rot)/20)
+							setPedAnalogControlState(thePed, "vehicle_right", -(rot)/20)
 						end
-					
-						setPedAnalogControlState(thePed, "brake_reverse", 0)
-						setPedControlState(thePed, "handbrake", false)
-						if(s < limitspeed) then 
-							setPedAnalogControlState(thePed, "accelerate", 1-(s*1/limitspeed))
-						else
-							setPedAnalogControlState(thePed, "accelerate", 0)
-							setPedAnalogControlState(thePed, "brake_reverse", (s/limitspeed)-1)
-						end
+					end
+				else
+					if(rot > 0) then
+						setPedAnalogControlState(thePed, "vehicle_right", (rot)/20)
+					else
+						setPedAnalogControlState(thePed, "vehicle_left", -(rot)/20)
+					end
+				
+					setPedAnalogControlState(thePed, "brake_reverse", 0)
+					setPedControlState(thePed, "handbrake", false)
+					if(s < limitspeed) then 
+						setPedAnalogControlState(thePed, "accelerate", 1-(s*1/limitspeed))
+					else
+						setPedAnalogControlState(thePed, "accelerate", 0)
+						setPedAnalogControlState(thePed, "brake_reverse", (s/limitspeed)-1)
 					end
 				end
 			end
+			
 		else
 			local dialogrz = getElementData(thePed, "dialogrz")
 			if(not dialogrz) then
@@ -4176,28 +4042,6 @@ function checkKey()
 
 end
 setTimer(checkKey,700,0)
-
-
-
-
-
-
-addEventHandler("onClientElementDataChange", getRootElement(),
-function(dataName, oldValue)
-	if getElementType(source) == "ped" then
-		if dataName == "DynamicBot" then
-			if(StreamData[source]) then
-				StreamData[source]["UpdateRequest"] = true
-			end
-		end
-	elseif getElementType(source) == "vehicle" then
-		if dataName == "trunk" then
-			 triggerEvent("onClientElementStreamOut", source, true)
-		end
-	end
-end)
-
-
 
 
 
@@ -4721,7 +4565,6 @@ local SoundsTheme = {
 	[2] = "http://109.227.228.4/engine/include/MTA/music/Autumn-Leaves.mp3",
 	[3] = "http://109.227.228.4/engine/include/MTA/music/Almost-blue.mp3", 
 	[4] = "http://109.227.228.4/engine/include/MTA/music/GTA3.mp3", 
-	[5] = "http://109.227.228.4/engine/include/MTA/music/2005.mp3", 
 	
 }
 
@@ -5626,19 +5469,6 @@ end
 
 function DevelopmentRender()
 	AddRage(5)
-	
-	for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
-		local theVehicle = getPedOccupiedVehicle(thePed)
-		if(theVehicle) then
-			if(getElementData(thePed, "DynamicBot")) then
-				local arr = fromJSON(getElementData(thePed, "DynamicBot"))
-				local x,y,z = getElementPosition(theVehicle)
-				path = {arr[1],arr[2],arr[3]}
-				nextpath = {arr[5],arr[6],arr[7]}
-				dxDrawLine3D(x,y,z,arr[1],arr[2],arr[3]+1, tocolor(255,50,50,150), 8)
-			end
-		end
-	end
 end
 
 
@@ -6679,7 +6509,7 @@ function DrawOnClientRender()
 				fract="Рифа"
 				color=getTeamVariable("Вагос")
 			elseif(PLText == "YAZA 228") then
-				fract="Якудзы"
+				fract="Da Nang Boys"
 				color=getTeamVariable("Вагос")
 			elseif(PLText == "METAL228") then
 				fract="Байкеры"
@@ -6991,7 +6821,7 @@ addCommandHandler("sc", sc)
 function getTeamGroup(team)
 	if(team == "Мирные жители" or team == "МЧС") then
 		return "Мирные жители"
-	elseif(team == "Вагос" or team == "Якудзы" or team == "Рифа") then
+	elseif(team == "Вагос" or team == "Da Nang Boys" or team == "Рифа") then
 		return "Синдикат Локо"
 	elseif(team == "Баллас" or team == "Колумбийский картель" or team == "Русская мафия") then
 		return "Наркомафия"
@@ -7008,7 +6838,7 @@ end
 function getTeamGroupColor(team)
 	if(team == "Мирные жители" or team == "МЧС") then
 		return "#CCCCCC"
-	elseif(team == "Вагос" or team == "Якудзы" or team == "Рифа") then
+	elseif(team == "Вагос" or team == "Da Nang Boys" or team == "Рифа") then
 		return "#A00000"
 	elseif(team == "Баллас" or team == "Колумбийский картель" or team == "Русская мафия") then
 		return "#B7410E"
@@ -7027,7 +6857,7 @@ end
 function getTeamVariable(team)
 	if(team == "Мирные жители" or team == "МЧС") then
 		return tonumber(getElementData(localPlayer, "civilian"))
-	elseif(team == "Вагос" or team == "Якудзы" or team == "Рифа") then
+	elseif(team == "Вагос" or team == "Da Nang Boys" or team == "Рифа") then
 		return tonumber(getElementData(localPlayer, "vagos"))
 	elseif(team == "Баллас" or team == "Колумбийский картель" or team == "Русская мафия") then
 		return tonumber(getElementData(localPlayer, "ballas"))	
@@ -7108,8 +6938,8 @@ function hex2rgb(hex) return tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:su
 
 
 
-function findRotation( x1, y1, x2, y2 ) 
-    local t = -math.deg( math.atan2( x2 - x1, y2 - y1 ) )
+function findRotation(x1, y1, x2, y2) 
+    local t = -math.deg(math.atan2(x2 - x1, y2 - y1))
     return t < 0 and t + 360 or t
 end
 
@@ -8040,7 +7870,7 @@ local BandRangs = {
 		[3] = {75, "Зам. Лидера", 120},
 		[4] = {130, "Желтый дракон (Лидер)", 294}
 	},
-	["Якудзы"] = {
+	["Da Nang Boys"] = {
 		[1] = {0, "Куми-ин", 121},
 		[2] = {30, "Сансита", 122},
 		[3] = {75, "Дэката", 123},
@@ -9090,15 +8920,6 @@ function StreamIn(restream)
 		if(not getElementData(source, "owner") and not getVehicleOccupant(source)) then
 			VehiclesInStream[source]["blip"] = createBlipAttachedTo(source, 0, 1, 170,170,170,170,1)
 		end
-
-		if(occupant) then
-			if(getElementType(occupant) == "ped") then
-				if(getElementData(occupant, "DynamicBot")) then
-					setElementVelocity(source, 0, 0, 0)
-				end
-			end
-		end
-		
 		if(getElementData(source, "type")) then
 			if(getElementData(source, "type") == "jobtruck") then
 				if(GetVehicleType(source) == "Trailer") then
@@ -9212,11 +9033,7 @@ function StreamIn(restream)
 			end
 		end
 	end
-	if(not restream) then
-		if(getElementType(source) == "vehicle" or getElementType(source) == "ped") then
-			triggerServerEvent("PlayerElementSync", localPlayer, localPlayer, source, true)
-		end
-	end
+	
 end
 addEvent("onClientElementStreamIn", true)
 addEventHandler("onClientElementStreamIn", getRootElement(), StreamIn)
@@ -9376,10 +9193,6 @@ function StreamOut(restream)
 		end
 	end
 	
-	
-	if(getElementType(source) == "vehicle" or getElementType(source) == "ped") then
-		triggerServerEvent("PlayerElementSync", localPlayer, localPlayer, source, nil)
-	end
 end
 addEventHandler("onClientElementStreamOut", getRootElement(), StreamOut)
 addEventHandler("onClientElementDestroy", getRootElement(), StreamOut)
