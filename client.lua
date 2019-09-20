@@ -2313,12 +2313,13 @@ addEventHandler("BankControl", localPlayer, BankControl)
 function bankControlUpdate(biz, data)
 	PText["bank"] = {}
 	local m = fromJSON(data)
+	
 	local text = "Денег на счету "..COLOR["DOLLAR"]["HEX"].."$"..m[1].." "
 	local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
-	PText["bank"][#PText["bank"]+1] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
-	PText["bank"][#PText["bank"]+1] = {Text("пополнить"), 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "bank", "Введи сумму", toJSON{biz}}}
+	PText["bank"]["money"] = {text, 660*scalex, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {}}
+	PText["bank"]["bank"] = {Text("пополнить"), 660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "bank", "Введи сумму", toJSON{biz}}}
 	local textWidth = textWidth+dxGetTextWidth(Text("пополнить").." ", scale*0.8, "default-bold", true)
-	PText["bank"][#PText["bank"]+1] = {Text("снять"),  660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "withdraw", "Введи сумму", toJSON{biz}}}	
+	PText["bank"]["withdraw"] = {Text("снять"),  660*scalex+textWidth, 400*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*0.8, "default-bold", "left", "top", false, false, false, true, false, 0, 0, 0, {["border"] = true, ["line"] = true}, {"CreateButtonInputInt", localPlayer, "withdraw", "Введи сумму", toJSON{biz}}}	
 	BANKCTL = m[2]
 	showCursor(true)
 end
@@ -4455,20 +4456,6 @@ end
 
 
 
-function CreateButtonInputInt(func, text, args)
-	if(PText["HUD"][8]) then
-		PText["HUD"][8] = nil
-	else
-		BindedKeys["enter"] = {"ServerCall", localPlayer, {func, localPlayer, localPlayer, "", args}}
-		
-		PText["HUD"][8] = {text, screenWidth, screenHeight-(650*scalex), 0, 0, tocolor(0, 0, 0, 255), NewScale*2, "default-bold", "center", "top", false, false, false, true, true, 0, 0, 0, {}}
-	end
-end
-addEvent("CreateButtonInputInt", true)
-addEventHandler("CreateButtonInputInt", root, CreateButtonInputInt)
-
-
-
 
 
 function deathmatchInfo(times, scores)
@@ -4492,7 +4479,7 @@ addEventHandler("deathmatchInfo", localPlayer, deathmatchInfo)
 
 function LoginClient(open)
 	if(open) then
-		CreateButtonInputInt("loginPlayerEvent", Text("Регистрация/Вход"))
+		triggerEvent("CreateButtonInputInt", localPlayer, "loginPlayerEvent", Text("Регистрация/Вход"))
 		showCursor(true)
 		
 		outputChatBox(Text("Нажми {key} чтобы писать в общий чат", {{"{key}", COLOR["KEY"]["HEX"].."T#FFFFFF"}}),  255, 255, 255,true)
@@ -4707,7 +4694,7 @@ addEventHandler("AuthComplete", localPlayer, AuthComplete)
 
 
 function CallPhoneInput()
-	CreateButtonInputInt("CallPhoneOutput", "Введи номер или ИД игрока")
+	triggerEvent("CreateButtonInputInt", localPlayer, "CallPhoneOutput", "Введи номер или ИД игрока")
 end
 addEvent("CallPhoneInput", true)
 addEventHandler("CallPhoneInput", localPlayer, CallPhoneInput)

@@ -13365,6 +13365,7 @@ function wipe()
 	end
 end
 
+
 function GetDatabaseAccount(thePlayer, str)
 	local node = xmlFindChild(PlayerNode, "P"..md5(getPlayerName(thePlayer)), 0)
 	if(node) then
@@ -17454,7 +17455,7 @@ function bank(thePlayer, count, args)
 	if(count) then
 		if(count > 0) then
 			if(AddPlayerMoney(thePlayer, -count)) then
-				local bankMoney=GetDatabaseAccount(thePlayer, "bank")
+				local bankMoney = GetDatabaseAccount(thePlayer, "bank")
 				SetDatabaseAccount(thePlayer, "bank", bankMoney+count)
 
 				BankEvent(thePlayer, false, arg[1], true)
