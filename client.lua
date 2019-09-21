@@ -4283,12 +4283,6 @@ function UpdateTabEvent()
 	
 	local thePlayers = getElementsByType("player")
 	
-	
-	for i, v in pairs(getElementData(root, "ChatOnline")) do
-		thePlayers[#thePlayers+1] = v
-	end
-	
-	
 	if(TabScroll > #thePlayers) then TabScroll = #thePlayers end
 	for slot = TabScroll, #thePlayers do
 		if(TABCurrent < MAXSCROLL) then
@@ -4486,7 +4480,7 @@ function LoginClient(open)
 		outputChatBox(Text("Нажми {key} чтобы писать в командный чат", {{"{key}", COLOR["KEY"]["HEX"].."Y#FFFFFF"}}),  255, 255, 255,true)
 		outputChatBox(Text("Исходный код сервера {link}", {{"{link}", "#2980B9https://github.com/alexaxel705/MTA-Tomsk"}}),  255, 255, 255,true)
 		outputChatBox(Text("Группа ВКонтакте {link}", {{"{link}", "#2980B9http://vk.com/mtatomsk"}}),  255, 255, 255,true)
-		outputChatBox("Обновление 14.04.2019: Добавлены боты в Vice City", 255, 150, 150,true)
+		outputChatBox("Обновление 21.09.2019: Добавлены зоны для общего чата", 255, 150, 150,true)
 	else
 		PText["HUD"][8] = nil
 	end

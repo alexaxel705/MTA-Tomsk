@@ -7494,7 +7494,6 @@ local WargangGates = {
 
 function preLoad(name)
 	setGameType("SAxVCxLC Stories")
-	setElementData(root, "ChatOnline", {})
 	setServerConfigSetting("ped_sync_interval", 50, true)
 	Createkickstart()
 	setGarageOpen(44, true) -- Наркомафия
@@ -16680,19 +16679,6 @@ end
 
 
 
-
-function UPDOnline(chat, minecraft)
-	local Online = {}
-	for _, name in pairs(chat) do
-		Online[#Online+1] = {name, "World Wide Web"}
-	end
-	for _, name in pairs(minecraft) do
-		Online[#Online+1] = {name, "Minecraft"}
-	end
-	setElementData(root, "ChatOnline", Online)
-end
-addEvent("UPDOnline", true)
-addEventHandler("UPDOnline", getRootElement(), UPDOnline)
 
 
 
