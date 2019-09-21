@@ -15431,16 +15431,16 @@ function race(thePlayer, command, h)
 		if(YouRacer == false) then
 			MPPlayerList[thePlayer] = 0
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, SData["RaceArr"][1][1], SData["RaceArr"][1][2], SData["RaceArr"][1][3], "Гонка")
-			outputChatBox("* "..getElementData(thePlayer, "color")..getPlayerName(thePlayer).." #FFFFFFприсоединился к гонке!",getRootElement(),255,255,255,true)
+			
+			OutputChat(thePlayer, "Ты присоеденился к гонке!", "Server")
 			triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, "#9b7c52RACE TOURNAMENT")
 		end
 	else
-		outputChatBox("В настоящий момент гонки не проходят", thePlayer, 255, 255, 255, true)
+		OutputChat(thePlayer, "В настоящий момент гонки не проходят", "Server")
 	end
 end
-addCommandHandler("race", race)
-
-
+addEvent("race", true)
+addEventHandler("race", root, race)
 
 
 
@@ -16486,12 +16486,23 @@ function CheckSiren(theVehicle, thePlayer)
 end
 
 
+
+
+function OutputMainChat(message, from, forced)
+	exports["chat"]:OutputMainChat(message, from, forced)
+end
+
+function OutputChat(thePlayer, message, from)
+	exports["chat"]:OutputChat(thePlayer, message, from)
+end
+
+
 function race(name)
 	SData["RaceArr"] = Races[name]
 	SData["RaceName"] = name
 	local raceblip = createBlip(Races[name][1][1], Races[name][1][2], 0, 33)
-	outputChatBox("Стартует гонка на трассе #FFFF00"..name:gsub('_', ' '), getRootElement(), 255,255,255, true)
-
+	
+	OutputMainChat("Стартует гонка на трассе #FFFF00"..name:gsub('_', ' ').."! #FFFFFFДля участия в гонке напиши #A0A0A0/race", "Server", true)
 	local StartRaceTimeout = 90
 	MPTimer = setTimer(function()
 		if(StartRaceTimeout == 0) then
@@ -16519,8 +16530,9 @@ function race(name)
 		end
 		StartRaceTimeout = StartRaceTimeout-1
 	end, 1000, StartRaceTimeout+1)
-	outputChatBox("Для участия в гонке напиши #A0A0A0/race", getRootElement(), 255,255,255, true)
 end
+
+
 
 
 function VehicleBindKeyEngine(thePlayer)
