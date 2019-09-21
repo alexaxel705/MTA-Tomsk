@@ -5,3 +5,11 @@
 https://github.com/alexaxel705/PS2_Weather
 https://github.com/alexaxel705/Object_Image
 https://github.com/alexaxel705/Inventory
+
+mtaserver.conf
+<resource src="vehicle_node" startup="1" protected="0" />
+<resource src="object_image" startup="1" protected="0" />
+<resource src="Interface" startup="1" protected="0" />
+<resource src="PS2_Weather" startup="1" protected="0" />
+<resource src="chat" startup="1" protected="0" />
+<resource src="228" startup="1" protected="0" />

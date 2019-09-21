@@ -42,7 +42,6 @@ local SourceData = {
 local PData = {}
 local WorldTimer = false
 local SData = {
-	['Chat Message'] = {},
 	["VehAccData"] = {},
 	["DriverBot"] = {},
 	["TrunkUsed"] = {}, 
@@ -607,18 +606,6 @@ function RGBToHex(red, green, blue, alpha)
 end
 
 
-function SendWebPlayer()
-	if(getServerPort() == 22003) then
-		local webplay = ''
-		for theKey,thePlayer in ipairs(getElementsByType("player")) do
-			if(PData[thePlayer]) then
-				local color = getElementData(thePlayer, "color") or "#EEEEEE"
-				webplay = webplay.."<span style=\"color:"..color..";\">"..getPlayerName(thePlayer)..'</span><br />'
-			end
-		end
-		callRemote("http://109.227.228.4/engine/include/MTA/online.php", ResultGet, webplay)
-	end
-end
 
 function setCameraOnPlayerJoin()
 	for i=1,getMaxPlayers() do--Даем ID
@@ -646,11 +633,6 @@ function setCameraOnPlayerJoin()
 	}
 
 	setCameraMatrix(source,1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
-	for i, msg in pairs(SData['Chat Message']) do
-		outputChatBox(msg, source, 255, 255, 255,true)
-	end
-	
-	SendWebPlayer()
 end
 addEventHandler("onPlayerJoin", getRootElement(), setCameraOnPlayerJoin)
 
@@ -7556,10 +7538,6 @@ function preLoad(name)
 	SpawnAllVehicle()
 	SpawnCarForSale()
 
-
-	SendWebPlayer()
-	callRemote("http://109.227.228.4/engine/include/MTA/get_online.php", ResultGet)
-
 	
 	setTimer(function()
 		for theVehicle, _ in pairs(benztimer) do
@@ -9465,17 +9443,6 @@ addEventHandler("DialogBreak", getRootElement(), DialogBreak)
 
 
 
-function CheckVoice(voice, voicebank)
-	if(string.sub(voice, 0, 1) ~= "[") then
-		callRemote("http://109.227.228.4/engine/include/MTA/govorilka.php", ResultGet, voice, voicebank)
-	end
-end
-addEvent("CheckVoice", true)
-addEventHandler("CheckVoice", getRootElement(), CheckVoice)
-
-
-
-
 
 function DialogRelease(thePlayer, release, thePed)
 	local timing = 50
@@ -10797,7 +10764,7 @@ function getPlayerCity(thePlayer)
 end
 
 function SpawnthePlayer(thePlayer, typespawn, zone)
-	if(not PData[thePlayer]["auth"]) then kickPlayer(thePlayer) return false end
+	if(not getElementData(thePlayer, "auth")) then kickPlayer(thePlayer) return false end
 	toggleAllControls(thePlayer,true)
 	toggleControl(thePlayer, "next_weapon", false)
 	toggleControl(thePlayer, "previous_weapon", false)
@@ -11211,7 +11178,6 @@ function worldtime(ignoreweather)
 	setTime(hour, minutes)
 	if(minutes == 0) then
 		setElementData(root, "ServerTime", ServerDate.timestamp)
-		callRemote("http://109.227.228.4/engine/include/MTA/get_online.php", ResultGet)
 		for name, dat in pairs(BizInfo) do
 			local items = GetBizGeneration(name)
 			if(#items["Sell"] > 0) then -- Если есть создаваемые товары
@@ -13104,7 +13070,7 @@ local tmpi = 1
 local tmpcity = ""
 function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local res = getResourceFromName("vehicle_node") -- Interface
+		local res = getResourceFromName("chat") -- Interface
 		restartResource(res)
 		--local res = getResourceFromName("ps2_weather") -- Interface
 		--restartResource(res)
@@ -13459,18 +13425,17 @@ function loginPlayer(thePlayer, password)
 		if(GetDatabaseAccount(thePlayer, "password") == md5(password)) then
 			Respect(thePlayer)
 			SpawnedAfterChange(thePlayer)
-			PData[thePlayer]["auth"] = true
+			setElementData(thePlayer, "auth", true)
 			AuthComplete(thePlayer)
 		else
 			outputChatBox("Неверный пароль", thePlayer, 255, 255, 255, true)
 			triggerClientEvent(thePlayer, "LoginWindow", thePlayer, true)
 		end
 	else
-		PData[thePlayer]["auth"] = true
+		setElementData(thePlayer, "auth", true)
 		AddDatabaseAccount(thePlayer, password)
 		Respect(thePlayer)
 		SpawnedAfterChange(thePlayer)
-		PData[thePlayer]["auth"] = true
 		AuthComplete(thePlayer)
 	end
 end
@@ -13515,7 +13480,7 @@ end
 
 
 function SaveInventory(thePlayer, arr)
-	if(PData[thePlayer]["auth"]) then
+	if(getElementData(thePlayer, "auth")) then
 		SetDatabaseAccount(thePlayer, "inv", arr)
 		setElementData(thePlayer, "inv", arr)
 		setPlayerMoney(thePlayer, GetPlayerMoney(thePlayer))
@@ -13723,93 +13688,6 @@ function PoliceArrest(thePlayer, thePed)
 end
 addEvent("PoliceArrest", true)
 addEventHandler("PoliceArrest", root, PoliceArrest)
-
-
-
-
-Phones = {}
-PhonesTo = {}
-PhonesWaiting = {}
-
-function CallPhones(thePlayer, _, h)
-    if(not Phones[thePlayer]) then
-		if(h) then
-			if(tostring(getElementData(thePlayer, "id")) ~= tostring(h)) then
-				for key,thePlayers in pairs(getElementsByType "player") do
-					if(tostring(getElementData(thePlayers, "id")) == tostring(h)) then
-						if(not PhonesWaiting[thePlayers]) then
-							CallIn(thePlayer)
-							PhonesTo[thePlayer] = thePlayers
-							PhonesWaiting[thePlayers] = thePlayer
-							outputChatBox("Напиши /call чтобы бросить трубку", thePlayer, 255,255,255,true)
-							outputChatBox("Напиши /call чтобы взять трубку", thePlayers, 255,255,255,true)
-							triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 12)
-							triggerClientEvent(thePlayers, "PlaySFXSoundEvent", thePlayers, 13)
-							return true
-						else
-							outputChatBox("* Абонент занят", thePlayer, 255,255,255,true)
-							return true
-						end
-					end
-				end
-				outputChatBox("* "..h.." Номер не найден", thePlayer, 255,255,255,true)
-			else
-				outputChatBox("* Абонент занят", thePlayer, 255,255,255,true) -- сам себе
-			end
-		else
-			if(PhonesWaiting[thePlayer]) then
-				CallIn(thePlayer)
-				outputChatBox("* Абонент взял трубку", PhonesWaiting[thePlayer], 255,255,255,true)
-				PhonesTo[thePlayer] = PhonesWaiting[thePlayer]
-			else
-				outputChatBox("Используй /call id игрока чтобы позвонить", thePlayer, 255,255,255,true)
-				outputChatBox("Напиши /call чтобы бросить трубку", thePlayer, 255,255,255,true)
-			end
-		end
-	else
-		CallOut(thePlayer)
-		if(Phones[PhonesTo[thePlayer]]) then
-			CallOut(PhonesTo[thePlayer])
-			outputChatBox("* Абонент положил трубку", PhonesTo[thePlayer], 255,255,255,true)
-		end
-		if(PhonesWaiting[PhonesTo[thePlayer]]) then
-			PhonesWaiting[PhonesTo[thePlayer]] = nil
-		end
-	end
-end
-addCommandHandler("call", CallPhones)
-
-
-function CallIn(thePlayer)
-	SetControls(thePlayer, "phone", {["fire"] = true, ["action"] = true, ["jump"] = true, ["sprint"] = true})
-
-	StartAnimation(thePlayer, "ped", "phone_in", 1, false, true, true, true)
-	Phones[thePlayer] = true
-	AddPlayerArmas(thePlayer, 330)
-end
-
-
-function CallOut(thePlayer)
-	SetControls(thePlayer, "phone", {["fire"] = false, ["action"] = false, ["jump"] = false, ["sprint"] = false})
-
-	StartAnimation(thePlayer, "ped", "phone_out", 1, false, true, true, true)
-	setTimer(function()
-		RemovePlayerArmas(thePlayer, 330)
-		Phones[thePlayer] = false
-		PhonesTo[thePlayer] = false
-		if(PhonesWaiting[thePlayer]) then
-			PhonesWaiting[thePlayer] = nil
-		end
-	end, 2000, 1)
-end
-
-
-
-function CallPhoneOutput(thePlayer, arg)
-	CallPhones(thePlayer, _, arg)
-end
-addEvent("CallPhoneOutput", true)
-addEventHandler("CallPhoneOutput", root, CallPhoneOutput)
 
 
 
@@ -14030,50 +13908,6 @@ addEventHandler("handsup", root, handsup)
 
 
 
-function CallPolice(Player)
-	if(not Phones[source] and getElementHealth(source) > 20) then
-		CallIn(source)
-		setTimer(PhoneTalk, 1600, 1, source)
-		setTimer(PhoneTalkEnd, 10000, 1, source, Player)
-	end
-end
-addEvent("CallPolice", true)
-addEventHandler("CallPolice", root, CallPolice)
-
-function PhoneTalk(thePlayer)
-	StartAnimation(thePlayer, "ped", "phone_talk", 1)
-	local x,y,z = getElementPosition(thePlayer)
-	triggerEvent("onPlayerChat", thePlayer, "Алло, полиция? Преступник в "..getZoneName(x, y, z), 1)
-end
-
-
-PoliceCallBandints = {}
-
-function PhoneTalkEnd(thePlayer, bandit)
-	CallOut(thePlayer)
-	if(not isPedDead(thePlayer)) then
-		local x,y,z = GetPlayerLocation(getPlayerFromName(bandit))
-		if(PoliceCallBandints[bandit] ~= getZoneName(x,y,z)) then
-			PoliceCallBandints[bandit] = getZoneName(x,y,z)
-			local banditPlayer = getPlayerFromName(bandit)
-			local x,y,z = GetPlayerLocation(banditPlayer)
-			StartAnimation(thePlayer, "ped", "phone_out", false,false,false,false)
-			Respect(thePlayer, "civilian", 1)
-			Respect(thePlayer, "police", 1)
-			Respect(thePlayer, "ugol", -1)
-			MissionCompleted(thePlayer, "УВАЖЕНИЕ +", "ЗАКОНОПОСЛУШНОСТЬ")
-			PoliceCallRemove(x,y,z,"Обнаружен преступник")
-		else
-			outputChatBox("Полиции уже известно о положении преступника.", thePlayer)
-			StartAnimation(thePlayer, "ped", "phone_out", false,false,false,false)
-		end
-	end
-end
-
-
-
-
-
 
 
 
@@ -14176,7 +14010,6 @@ function quitPlayer()
 		end
 		PData[source] = nil
 	end
-	SendWebPlayer()
 end
 addEventHandler("onPlayerQuit", getRootElement(), quitPlayer)
 
@@ -16846,108 +16679,6 @@ end
 
 
 
-function onPlayerChat(message, messageType, messagenovision)
-	if(PData[source]["auth"]) then
-		if(string.len(message:gsub("%s+", "")) == 0) then
-			cancelEvent()
-			return false
-		end
-
-		local theVehicle = getPedOccupiedVehicle(source)
-		if(theVehicle) then
-			if(getElementModel(theVehicle) == 582) then
-				local seat = getPedOccupiedVehicleSeat(source)
-				if(seat == 2 or seat == 3) then
-					cancelEvent()
-					if(getElementModel(source) == 60) then
-						outputChatBox("#FF0033Прямой эфир #CC9966(ведущий):#FFFFFF "..message, getRootElement(), 255,255,255,true)
-					else
-						outputChatBox("#FF0033Прямой эфир #CC9966(гость):#FFFFFF "..message, getRootElement(), 255,255,255,true)
-					end
-				end
-			end
-		end
-
-		if messageType == 0 then
-			if(not isTimer(PData[source]["AntiFlood"])) then
-				for key,thePlayers in pairs(getElementsByType "player") do
-					triggerClientEvent(thePlayers, "PlayerSayEvent", thePlayers, message, source)
-				end
-				if(Phones[source]) then
-					local CallTo = PhonesTo[source]
-					outputChatBox("(ТЕЛЕФОН) ["..getElementData(source, "id").."] "..getPlayerName(source)..": "..message, source,0,255,255, true)
-					if(getPedOccupiedVehicle(source)) then
-						StartAnimation(source, "ped", "phone_talk", false,false,false,false)
-					else
-						StartAnimation(source, "ped", "phone_talk", 1, false, true, true, true)
-					end
-
-					if(Phones[CallTo]) then
-						outputChatBox("(ТЕЛЕФОН) ["..getElementData(source, "id").."] "..getPlayerName(source)..": "..message, CallTo,0,255,255, true)
-					end
-					cancelEvent()
-					return true
-				end
-				local color = getElementData(source, "color")
-				local team = getPlayerTeam(source)
-
-				if(not messagenovision) then
-					callRemote("http://109.227.228.4/engine/include/MTA/index.php", ResultGet, getPlayerName(source):gsub('#%x%x%x%x%x%x', ''), message, color)
-					PData[source]["AntiFlood"] = setTimer(function() end, 1000, 1)
-					outputChatBox(color..getPlayerName(source):gsub('#%x%x%x%x%x%x', '')..": #EEEEEE"..message, getRootElement(), 255, 255, 255, true)
-					table.insert(SData['Chat Message'], color..getPlayerName(source):gsub('#%x%x%x%x%x%x', '')..": #EEEEEE"..message)
-					if(#SData['Chat Message'] > 10) then
-						table.remove(SData['Chat Message'], 1)
-					end
-				end
-				cancelEvent()
-			else
-				outputChatBox("Не флуди!", source,255,255,255,true)
-				cancelEvent()
-			end
-		elseif(messageType == 1) then
-			for key,thePlayers in pairs(getElementsByType "player") do
-				triggerClientEvent(thePlayers, "PlayerActionEvent", thePlayers, message, source)
-			end
-			cancelEvent()
-		elseif(messageType == 2) then
-			cancelEvent()
-			local hex = RGBToHex(getPlayerNametagColor(source))
-
-			local team = getPlayerTeam(source)
-			if not team then
-				return outputChatBox("Ты не состоишь в команде!", source, 255, 255, 255, true)
-			end
-
-			local members = getPlayersInTeam(team) or {}
-			for _, player in ipairs(members) do
-				outputChatBox("* Рация"..hex.." "..getPlayerName(source)..": #FFFFFF"..message, player, 255, 255, 255, true)
-			end
-			for key,thePlayers in pairs(getElementsByType "player") do
-				triggerClientEvent(thePlayers, "PlayerSayEvent", thePlayers, message, source)
-			end
-		end
-	else
-		outputChatBox("Авторизируйся чтобы написать сообщение", source,255,255,255,true)
-		cancelEvent()
-	end
-end
-addEvent("onPlayerChat", true)
-addEvent("CliendSideonPlayerChat", true)
-addEventHandler("onPlayerChat", getRootElement(), onPlayerChat)
-addEventHandler("CliendSideonPlayerChat", getRootElement(), onPlayerChat)
-
-function BurnChatMSG(name, message, nickcolor)
-	outputChatBox(nickcolor..name..": #FFFFFF"..message, getRootElement(), 255, 255, 255, true)
-	table.insert(SData['Chat Message'], nickcolor..name..": #FFFFFF"..message)
-	if(#SData['Chat Message'] > 10) then
-		table.remove(SData['Chat Message'], 1)
-	end
-end
-addEvent("BurnChatMSG", true)
-addEventHandler("BurnChatMSG", getRootElement(), BurnChatMSG)
-
-
 
 
 function UPDOnline(chat, minecraft)
@@ -16984,11 +16715,6 @@ addEventHandler("ForceRemoveFromVehicle", getRootElement(), ForceRemoveFromVehic
 
 
 
-
-
-function ResultGet(sum)
-    --outputChatBox(sum)
-end
 
 
 
