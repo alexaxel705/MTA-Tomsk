@@ -1988,11 +1988,9 @@ end
 function hideinv()
 	if(PData["Interface"]["Full"]) then
 		SetPlayerHudComponentVisible("all", false)
-		showChat(false)
 		removeEventHandler("onClientRender", root, DrawOnClientRender)
 	else
 		SetPlayerHudComponentVisible("all", true)
-		showChat(true)
 		addEventHandler("onClientRender", root, DrawOnClientRender)
 	end
 end
@@ -4588,7 +4586,6 @@ function StartLoad() -- Первый этап загрузки
 	if(HUDPreload()) then
 		PEDChangeSkin = "intro"
 
-		showChat(true)
 		fadeCamera(true, 2.0)
 		SetPlayerHudComponentVisible("all", false)
 
@@ -8086,8 +8083,8 @@ function DrawPlayerMessage()
 				font = "default-bold"
 				tw = dxGetTextWidth(ToolTipText, scale, font, true)+(26*scalex)
 				th = (dxGetFontHeight(scale, font)*linecount)+(20*scaley)
-				dxDrawRectangle(25*scalex, 325*scaley, tw, th, tocolor(0, 0, 0, 180))
-				dxDrawText(ToolTipText, 25*scalex+(13*scalex), 325*scaley+(9*scaley), 0, 0, tocolor(255,255,255,255), scale, font, "left", "top", false, false, false, true)
+				dxDrawRectangle(50*scalex, 50*scaley, tw, th, tocolor(0, 0, 0, 180))
+				dxDrawText(ToolTipText, 50*scalex+(13*scalex), 50*scaley+(9*scaley), 0, 0, tocolor(255,255,255,255), scale, font, "left", "top", false, false, false, true)
 			end
 			
 			
@@ -8408,10 +8405,6 @@ function DrawPlayerMessage()
 				end
 			end
 			local countpl = #getElementsByType("player")
-			
-			for i, v in pairs(getElementData(root, "ChatOnline")) do
-				countpl = countpl + 1
-			end
 			
 			dxDrawBorderedText(Text("Игроков")..": "..countpl, 0, 285*scaley, 510*scalex+(730*NewScale), 0, tocolor(180, 180, 180, 255), NewScale*1.2, "default-bold", "right", "top", false, false, false, true)
 		

@@ -13982,6 +13982,8 @@ addEventHandler("SpawnedAfterChangeEvent", root, SpawnedAfterChange)
 
 
 function quitPlayer()
+	setElementData(source, "auth", nil)
+	
 	for gate, dat in pairs(OpenGates) do
 		for thePlayer, _ in pairs(dat) do
 			if(thePlayer == source) then
