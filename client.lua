@@ -246,11 +246,11 @@ function dxDrawBorderedText(text, left, top, right, bottom, color, scale, font, 
 		if (locsca == 0) then locsca = 1 end
 		for oX = -locsca, locsca do 
 			for oY = -locsca, locsca do 
-				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false, not PData["Interface"]["LowPC"])
+				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false, not getElementData(localPlayer, "LowPCMode"))
 			end
 		end
 
-		dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, true, not PData["Interface"]["LowPC"])
+		dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, true, not getElementData(localPlayer, "LowPCMode"))
 	end
 end
 
@@ -2046,8 +2046,8 @@ addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
 local ReplaceShader = dxCreateShader("texreplace.fx")
 local EmptyTexture = dxCreateTexture(1,1)
 function lowPcMode()
-	if(PData["Interface"]["LowPC"]) then
-		PData["Interface"]["LowPC"] = false
+	if(getElementData(localPlayer, "LowPCMode")) then
+		setElementData(localPlayer, "LowPCMode", false)
 		helpmessage("Режим для #551A8Bслабых#FFFFFF компьютеров выключен")
 		engineRemoveShaderFromWorldTexture(ReplaceShader,"collisionsmoke")
 		engineRemoveShaderFromWorldTexture(ReplaceShader,"bullethitsmoke")
@@ -2073,7 +2073,7 @@ function lowPcMode()
 			end
 		end
 	else
-		PData["Interface"]["LowPC"] = true
+		setElementData(localPlayer, "LowPCMode", true)
 		helpmessage("Режим для #551A8Bслабых#FFFFFF компьютеров включен")
 		dxSetShaderValue(ReplaceShader,"gTexture",EmptyTexture)
 		engineApplyShaderToWorldTexture(ReplaceShader,"collisionsmoke")
@@ -7116,11 +7116,11 @@ function MemText(text, left, top, color, scale, font, border, incline, centerX, 
 			local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
 			for oX = -border, border do 
 				for oY = -border, border do 
-					dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,not PData["Interface"]["LowPC"])
+					dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,not getElementData(localPlayer, "LowPCMode"))
 				end
 			end
 
-			dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,not PData["Interface"]["LowPC"])
+			dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,not getElementData(localPlayer, "LowPCMode"))
 
 			
 			dxSetBlendMode("blend")

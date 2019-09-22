@@ -6614,27 +6614,6 @@ addCommandHandler("inlab", Labfunc)
 
 
 
-
-function sms(thePlayer, _, h, ...)
-	if(h) then
-		if(AddPlayerMoney(thePlayer, -100)) then
-			local stringWithAllParameters = table.concat({...}, " ")
-			for key,thePlayers in pairs(getElementsByType "player") do
-				if(tostring(getElementData(thePlayers, "id")) == tostring(h)) then
-					outputChatBox("(СМС) от ["..getElementData(thePlayer, "id").."] "..getPlayerName(thePlayer)..": "..stringWithAllParameters, thePlayers, 255,255,0,true)
-					outputChatBox("(СМС) для ["..getElementData(thePlayers, "id").."] "..getPlayerName(thePlayers)..": "..stringWithAllParameters, thePlayer, 255,255,0,true)
-				end
-			end
-		end
-	else
-		outputChatBox("Используй /sms id игрока текст", thePlayer, 255,255,255,true)
-	end
-end
-addCommandHandler("sms", sms)
-addCommandHandler("pm", sms)
-
-
-
 function ad(thePlayer, _, ...)
 	if(...) then
 		if(AddPlayerMoney(thePlayer, -#...*500)) then
@@ -16502,7 +16481,7 @@ function race(name)
 	SData["RaceName"] = name
 	local raceblip = createBlip(Races[name][1][1], Races[name][1][2], 0, 33)
 	
-	OutputMainChat("Стартует гонка на трассе #FFFF00"..name:gsub('_', ' ').."! #FFFFFFДля участия в гонке напиши #A0A0A0/race", "Server", true)
+	OutputMainChat("Стартует гонка на трассе #FFFF00"..name:gsub('_', ' ').."! #FFFFFFДля участия в гонке напиши #A0A0A0/race", "SMS", true)
 	local StartRaceTimeout = 90
 	MPTimer = setTimer(function()
 		if(StartRaceTimeout == 0) then
