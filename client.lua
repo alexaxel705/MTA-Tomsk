@@ -72,8 +72,6 @@ end
 local timers = {}
 local timersAction = {}
 local backpackid = false
-local titleText = ""
-local ToolTipText = ""
 local ToolTipRaceText = false
 local ToolTipTimers = false
 toggleAllControls(true)
@@ -301,7 +299,7 @@ function toggleAirBrake()
 	if(getPlayerName(localPlayer) ~= "alexaxel705") then
 		local rand = math.random(1,100)
 		if(rand ~= 1) then
-			ToolTip("Чит код не сработал")
+			triggerEvent("ToolTip", localPlayer, "Чит код не сработал")
 			return false
 		end
 	end
@@ -4008,7 +4006,7 @@ function checkKey()
 			end
 			PData["Target"][k] = {arr[1], arr[2], arr[3]}
 			if(WardrobeObject[k]) then
-				ToolTip(Text("Нажми {key} чтобы переодеться", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
+				triggerEvent("ToolTip", localPlayer, Text("Нажми {key} чтобы переодеться", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
 			
 			end
 		end
@@ -4863,7 +4861,7 @@ function onClientColShapeHit(theElement, matchingDimension)
 			if(getPedOccupiedVehicle(localPlayer)) then return false end
 			if(getElementData(source, "type")) then
 				if(getElementData(source, "type") == "GEnter") then
-					ToolTip(Text("Нажми {key} чтобы войти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
+					triggerEvent("ToolTip", localPlayer, Text("Нажми {key} чтобы войти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
 					triggerServerEvent("GarageColEnter", localPlayer, localPlayer, source)
 					
 					if(getElementData(source, "owner") == getPlayerName(localPlayer)) then
@@ -4874,14 +4872,14 @@ function onClientColShapeHit(theElement, matchingDimension)
 						end
 					end
 				elseif(getElementData(source, "type") == "GExit") then
-					ToolTip(Text("Нажми {key} чтобы выйти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
+					triggerEvent("ToolTip", localPlayer, Text("Нажми {key} чтобы выйти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
 					triggerServerEvent("GarageColEnter", localPlayer, localPlayer, source)
 				end
 			elseif(getElementData(source, "Three")) then
 				triggerServerEvent("ThreeColEnter", localPlayer, localPlayer, source)
 			elseif(getElementData(source, "vending")) then
 				toggleControl("enter_exit", false) 
-				ToolTip(Text("Sprunk стоимость #3B7231$20#FFFFFF").."\n"..Text("Нажми {key} чтобы купить", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
+				triggerEvent("ToolTip", localPlayer, Text("Sprunk стоимость #3B7231$20#FFFFFF").."\n"..Text("Нажми {key} чтобы купить", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
 				
 				triggerServerEvent("VendingColEnter", localPlayer, localPlayer, source)
 			end
@@ -4890,13 +4888,13 @@ function onClientColShapeHit(theElement, matchingDimension)
 		if(theElement == getPedOccupiedVehicle(localPlayer)) then
 			if(getElementData(source, "type")) then
 				if(getElementData(source, "type") == "PetrolFuelCol") then
-					ToolTip(Text("Нажми {key} чтобы заправиться", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
+					triggerEvent("ToolTip", localPlayer, Text("Нажми {key} чтобы заправиться", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
 					triggerServerEvent("PetrolFuelColEnter", localPlayer, localPlayer, source)
 				elseif(getElementData(source, "type") == "GEnter") then
-					ToolTip(Text("Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nзаехать в гараж"))
+					triggerEvent("ToolTip", localPlayer, Text("Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nзаехать в гараж"))
 					triggerServerEvent("GarageColEnter", localPlayer, localPlayer, source)
 				elseif(getElementData(source, "type") == "GExit") then
-					ToolTip("Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nвыехать из гаража")
+					triggerEvent("ToolTip", localPlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nвыехать из гаража")
 					triggerServerEvent("GarageColEnter", localPlayer, localPlayer, source)
 				end
 			elseif(getElementData(source, "Three")) then
@@ -4940,7 +4938,7 @@ function RespectMessage(group, count)
 		if(SkillLevel[group]) then
 			for slot = getPedStat(localPlayer, group)+1, getPedStat(localPlayer, group)+count do
 				 if SkillLevel[group][slot] then
-					ToolTip(SkillLevel[group][slot])
+					triggerEvent("ToolTip", localPlayer, SkillLevel[group][slot])
 				 end
 			end
 		end
@@ -5026,25 +5024,6 @@ addEvent("MissionCompleted", true)
 addEventHandler("MissionCompleted", localPlayer, MissionCompleted)
 
 
-function ToolTip(message)
-	if(message ~= ToolTipText) then
-		playSoundFrontEnd(11)
-		if(isTimer(ToolTipTimers)) then
-			killTimer(ToolTipTimers)
-			ToolTipText = message
-			ToolTipTimers = setTimer(function()
-				ToolTipText = ""
-			end, 1000+(#message*50), 1)
-		else
-			ToolTipText = message
-			ToolTipTimers = setTimer(function()
-				ToolTipText = ""
-			end, 1000+(#message*50), 1)
-		end
-	end
-end
-addEvent("ToolTip", true)
-addEventHandler("ToolTip", root, ToolTip)
 
 
 
@@ -5282,7 +5261,7 @@ function targetingActivated(target)
 				ChangeInfo(t, 5000)
 			elseif(tostring(getElementType(target)) == "object") then
 				if(getElementModel(target) == 1812) then
-					ToolTip(Text("Нажми {key} чтобы лечь", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
+					triggerEvent("ToolTip", localPlayer, Text("Нажми {key} чтобы лечь", {{"{key}", COLOR["KEY"]["HEX"].."F#FFFFFF"}}))
 					PrisonSleep = target
 					bindKey("f", "down", PrisonSleepEv)
 				elseif(getElementModel(target) == 2525) then
@@ -5383,7 +5362,7 @@ function onClientChatMessageHandler(text)
 		if string.find(text, "http?://[%w-_%.%?%.:/%+=&]+") then -- if string.match and text itself are the same
 			local s, e = string.find(text, "http?://[%w-_%.%?%.:/%+=&]+")
 			PData["WebLink"] = string.sub(text, s, e)
-			ToolTip("В чат добавлена ссылка\nНажми F5 чтобы посмотреть")
+			triggerEvent("ToolTip", localPlayer, "В чат добавлена ссылка\nНажми F5 чтобы посмотреть")
 		end
 	end
 
@@ -5533,7 +5512,7 @@ function onClientPlayerWeaponFireFunc(weapon, ammo, ammoInClip, hitX, hitY, hitZ
 			for _, v in pairs(getElementsByType("colshape", getRootElement(), true)) do
 				if(isElementWithinColShape(col, v)) then
 					hitElement = getElementAttachedTo(v)
-				--	ToolTip("Графити")
+				--	triggerEvent("ToolTip", localPlayer, "Графити")
 				end
 			end
 			destroyElement(col)
@@ -5638,7 +5617,7 @@ function CheatCode(code)
 	if(getPlayerName(localPlayer) ~= "alexaxel705") then
 		local rand = math.random(1,100)
 		if(rand ~= 1) then
-			ToolTip("Чит код не сработал")
+			triggerEvent("ToolTip", localPlayer, "Чит код не сработал")
 			return false
 		end
 	end
@@ -5654,7 +5633,7 @@ function CheatCode(code)
 	elseif(code == "wanrltw" or code == "fullclip") then
 		if(getElementData(localPlayer, "FullClip")) then
 			triggerServerEvent("FullClip", localPlayer, localPlayer, false)
-			ToolTip("Чит деактивирован")
+			triggerEvent("ToolTip", localPlayer, "Чит деактивирован")
 			return true
 		else
 			triggerServerEvent("FullClip", localPlayer, localPlayer, true)
@@ -5675,7 +5654,7 @@ function CheatCode(code)
 	elseif(code == "aezakmi") then
 		triggerServerEvent("WantedLevel", localPlayer, localPlayer, "AEZAKMI")
 		if(getElementData(localPlayer, "AEZAKMI")) then
-			ToolTip("Чит деактивирован")
+			triggerEvent("ToolTip", localPlayer, "Чит деактивирован")
 			return true
 		end
 	elseif(code == "cpktnwt") then
@@ -5699,7 +5678,7 @@ function CheatCode(code)
 		triggerServerEvent("ppgwjht", localPlayer, localPlayer)
 	elseif(code == "ysohnul") then
 		if(getGameSpeed() == 2) then 
-			ToolTip("Чит деактивирован") 
+			triggerEvent("ToolTip", localPlayer, "Чит деактивирован") 
 			setGameSpeed(1.2)
 			return true 
 		else
@@ -5707,7 +5686,7 @@ function CheatCode(code)
 		end
 	elseif(code == "liyoaay") then
 		if(getGameSpeed() == 0.5) then 
-			ToolTip("Чит деактивирован") 
+			triggerEvent("ToolTip", localPlayer, "Чит деактивирован") 
 			setGameSpeed(1.2)
 			return true 
 		else
@@ -5715,13 +5694,13 @@ function CheatCode(code)
 		end
 	elseif(code == "jhjoecw") then
 		setWorldSpecialPropertyEnabled("extrabunny", not isWorldSpecialPropertyEnabled("extrabunny"))
-		if(not isWorldSpecialPropertyEnabled("extrabunny")) then ToolTip("Чит деактивирован") return false end
+		if(not isWorldSpecialPropertyEnabled("extrabunny")) then triggerEvent("ToolTip", localPlayer, "Чит деактивирован") return false end
 	elseif(code == "ripazha") then
 		setWorldSpecialPropertyEnabled("aircars", not isWorldSpecialPropertyEnabled("aircars"))
-		if(not isWorldSpecialPropertyEnabled("aircars")) then ToolTip("Чит деактивирован") return false end
+		if(not isWorldSpecialPropertyEnabled("aircars")) then triggerEvent("ToolTip", localPlayer, "Чит деактивирован") return false end
 	elseif(code == "jbgvnb") then
 		setWorldSpecialPropertyEnabled("hovercars", not isWorldSpecialPropertyEnabled("hovercars"))
-		if(not isWorldSpecialPropertyEnabled("hovercars")) then ToolTip("Чит деактивирован") return false end
+		if(not isWorldSpecialPropertyEnabled("hovercars")) then triggerEvent("ToolTip", localPlayer, "Чит деактивирован") return false end
 	elseif(code == "lxgiwyl") then
 		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Кастет", ["txd"] = "Кастет"})
 		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Бита", ["txd"] = "Бита"})
@@ -5801,13 +5780,13 @@ function CheatCode(code)
 	elseif(code == "rocketman" or code == "yecgaa") then
 		triggerServerEvent("rocketman", localPlayer, localPlayer)
 		if(isPedWearingJetpack(localPlayer)) then
-			ToolTip("Чит деактивирован")
+			triggerEvent("ToolTip", localPlayer, "Чит деактивирован")
 			return true
 		end
 	elseif(code == "aiypwzqp") then
 		triggerServerEvent("AddInventoryItem", localPlayer, localPlayer, {["name"] = "Парашют", ["txd"] = "Парашют"})
 	end
-	ToolTip("Чит активирован")
+	triggerEvent("ToolTip", localPlayer, "Чит активирован")
 end
 
 
@@ -7977,17 +7956,6 @@ function DrawPlayerMessage()
 				end
 			end
 					
-			if(ToolTipText ~= "") then
-				local linecount = 1
-				for i in string.gfind(ToolTipText, "\n") do
-				   linecount = linecount + 1
-				end
-				font = "default-bold"
-				tw = dxGetTextWidth(ToolTipText, scale, font, true)+(26*scalex)
-				th = (dxGetFontHeight(scale, font)*linecount)+(20*scaley)
-				dxDrawRectangle(50*scalex, 50*scaley, tw, th, tocolor(0, 0, 0, 180))
-				dxDrawText(ToolTipText, 50*scalex+(13*scalex), 50*scaley+(9*scaley), 0, 0, tocolor(255,255,255,255), scale, font, "left", "top", false, false, false, true)
-			end
 			
 			
 			if(ToolTipRaceText) then
@@ -8969,7 +8937,7 @@ function onAttach(theVehicle)
 				if(material == 40) then
 					if(not PData["HarvestDisplay"]) then
 						PData["HarvestDisplay"] = 0
-						ToolTip("Для сбора урожая удерживай\nскорость в пределах зеленой зоны")
+						triggerEvent("ToolTip", localPlayer, "Для сбора урожая удерживай\nскорость в пределах зеленой зоны")
 					end
 					
 					if(VehicleSpeed >= 18 and VehicleSpeed <= 22) then
