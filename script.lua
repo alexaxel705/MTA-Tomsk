@@ -13069,7 +13069,7 @@ local tmpi = 1
 local tmpcity = ""
 function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local res = getResourceFromName("chat") -- Interface
+		local res = getResourceFromName("statistic") -- Interface
 		restartResource(res)
 		--local res = getResourceFromName("ps2_weather") -- Interface
 		--restartResource(res)
@@ -13674,7 +13674,7 @@ function PoliceArrest(thePlayer, thePed)
 		local x,y,z = getElementPosition(thePlayer)
 		
 		for key,thePlayers in pairs(getElementsByType "player") do
-			triggerClientEvent(thePlayers, "PlayerSayEvent", thePlayers, "Руки вверх!", thePlayer)
+			triggerClientEvent(thePlayers, "PlayerActionEvent", thePlayers, "Руки вверх!", thePlayer)
 		end
 		WastedPoliceTimer[thePed] = thePlayer
 		HelpMessage(thePed, "Нажми "..COLOR["KEY"]["HEX"].."H#FFFFFF чтобы поднять руки")
@@ -13746,7 +13746,7 @@ function PoliceArrestCar()
 		if(getElementModel(theVehicle) == 596 or getElementModel(theVehicle) == 597 or getElementModel(theVehicle) == 598 or getElementModel(theVehicle) == 599 or getElementModel(theVehicle) == 523) then
 			local x,y,z = getElementPosition(source)
 			for key,thePlayers in pairs(getElementsByType "player") do
-				triggerClientEvent(thePlayers, "PlayerSayEvent", thePlayers, "Немедленно остановите машину или мы откроем огонь!", source)
+				triggerClientEvent(thePlayers, "PlayerActionEvent", thePlayers, "Немедленно остановите машину или мы откроем огонь!", source)
 				triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "script", 58, math.random(36, 41),x,y,z, false, 25,100,reverb,true)
 			end
 		end

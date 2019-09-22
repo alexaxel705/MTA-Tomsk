@@ -48,10 +48,7 @@ local PData = {
 	['AnimatedMarker'] = {}, 
 	['Target'] = {}, 
 	['blip'] = {}, 
-	['stamina'] = 8,
-	['LVLUPSTAMINA'] = 10,
 	['rage'] = 0, 
-	['ShakeLVL'] = 0, 
 	['TARR'] = {}, -- Target, по центру, ниже, выше
 	['MultipleAction'] = {},
 }
@@ -1006,7 +1003,6 @@ function PlayerSpawn()
 	triggerEvent("onClientElementStreamIn", localPlayer)
 	local x,y,z = getElementPosition(localPlayer)
 	local zone = getZoneName(x,y,z)
-	PData["stamina"] = 5+math.floor(getPedStat(localPlayer, 22)/40)
 	for v,k in pairs(GPSObject) do
 		destroyElement(GPSObject[v])
 		GPSObject[v] = nil
@@ -2360,7 +2356,7 @@ function PlayerDialog(array, ped, endl)
 			BindedKeys = {}
 			PlayerDialogAction(array, ped)
 		else
-			PlayerSayEvent(dialogTitle, ped)
+			triggerEvent("PlayerActionEvent", localPlayer, dialogTitle, ped)
 			BindedKeys = {}
 			dialogActionTimer = setTimer(function()
 				PlayerDialogAction(array, ped)
@@ -2374,7 +2370,7 @@ function PlayerDialog(array, ped, endl)
 		if(ped) then
 			if(endl) then
 				MyVoice(endl, "dg")
-				PlayerSayEvent(endl, ped)
+				triggerEvent("PlayerActionEvent", localPlayer, endl, ped)
 			end
 			setElementData(ped, "saytome", nil)
 			PData['dialogPed'] = nil
@@ -3975,21 +3971,7 @@ setTimer(updateWorld, 50, 0)
 function checkKey()
 	if(PEDChangeSkin == "play") then
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
-		if(getPedControlState(localPlayer, "sprint")) and PData["stamina"] ~= 0 then
-			PData["stamina"] = PData["stamina"]-1
-			if(getPedStat(localPlayer, 22) ~= 1000) then
-				PData["LVLUPSTAMINA"] = PData["LVLUPSTAMINA"]-1
-				if(PData["LVLUPSTAMINA"] == 0) then
-					triggerServerEvent("StaminaOut", localPlayer, true)
-					PData["LVLUPSTAMINA"] = 10
-				end
-			end
-		end
-		if(PData["stamina"] <= 0) then
-			triggerServerEvent("StaminaOut", localPlayer)
-			setPedControlState(localPlayer, "sprint", false)
-		end
-		
+
 		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
 			UpdateArmas(thePlayer)
 		end
@@ -4212,19 +4194,6 @@ end
 
 
 
-
-function updateStamina()
-	if(PEDChangeSkin == "play") then
-		if PData["stamina"] ~= 8+math.floor(getPedStat(localPlayer, 22)/40) and getPedControlState(localPlayer, "sprint") == false then
-			PData["stamina"] = PData["stamina"] +1
-		end
-		if(PData["ShakeLVL"] > 0) then
-			PData["ShakeLVL"] = PData["ShakeLVL"]-1
-			setCameraShakeLevel(PData["ShakeLVL"])
-		end	
-	end
-end
-setTimer(updateStamina,1000,0)
 
 
 
@@ -6341,12 +6310,6 @@ function CreateTarget(el)
 	end
 end
 
-function ShakeLevel(level)
-	PData["ShakeLVL"] = PData["ShakeLVL"]+level
-end
-addEvent("ShakeLevel", true)
-addEventHandler("ShakeLevel", localPlayer, ShakeLevel)
-
 
 
 
@@ -6656,79 +6619,46 @@ function DrawOnClientRender()
 							dxDrawLine3D(wx,wy,wz,x2,y2,z2, tocolor(arr[1], arr[2], arr[3], arr[4]), 0.8)
 						end
 					end
-					
-					if(skin == 285 or skin == 264) then
-						text["nickname"] = "『 неизвестно 』"
-						local r,g,b = getTeamColor(getTeamFromName(SkinData[skin][2]))
-						text["nicknamecolor"] = tocolor(r,g,b, 200)
-					else
-						--if(thePlayer ~= localPlayer) then
-							text["nickname"] = getPlayerName(thePlayer)
-							local r,g,b = getTeamColor(getTeamFromName(SkinData[skin][2]))
-							text["nicknamecolor"] = tocolor(r,g,b, 200)
-						--end
-						if(skin == 252) then --CENSORED
-							sx, sy, sz = getCameraMatrix()
-							local x2,y2,z2 = getPedBonePosition(thePlayer, 1)
-							local distance = getDistanceBetweenPoints3D(x2,y2,z2, sx, sy, sz)
-							if(isLineOfSightClear(x2,y2,z2, sx, sy, sz, true, true, false, false, false)) then
-								sx,sy = getScreenFromWorldPosition(x2,y2,z2)
-								if(sx) then
-									local CensureColor = {
-										tocolor(50,50,50),
-										tocolor(25,25,25),
-										tocolor(75,75,75),
-										tocolor(150, 90, 60),
-										tocolor(228, 200, 160),
-									}
-									for i = 1, 8 do
-										for i2 = 1, 8 do
-											dxDrawRectangle(sx-(170*scale)/distance+((35*i)*scale/distance), sy-(70*scale)/distance+((35*i2)*scale/distance), (35*scale)/distance,(35*scale)/distance, CensureColor[math.random(#CensureColor)])
-										end
-									end
-								end
-							end
-						elseif(skin == 145) then
-							sx, sy, sz = getCameraMatrix()
-							local x2,y2,z2 = getPedBonePosition(thePlayer, 1)
-							local distance = getDistanceBetweenPoints3D(x2,y2,z2, sx, sy, sz)
-							if(isLineOfSightClear(x2,y2,z2, sx, sy, sz, true, true, false, false, false)) then
-								sx,sy = getScreenFromWorldPosition(x2,y2,z2)
-								if(sx) then
-									local CensureColor = {
-										tocolor(50,50,50),
-										tocolor(25,25,25),
-										tocolor(75,75,75),
-										tocolor(150, 90, 60),
-										tocolor(228, 200, 160),
-									}
-									for i = 1, 8 do
-										for i2 = 1, 8 do
-											dxDrawRectangle(sx-(170*scale)/distance+((35*i)*scale/distance), sy-(90*scale)/distance+((35*i2)*scale/distance), (35*scale)/distance,(35*scale)/distance, CensureColor[math.random(#CensureColor)])
-										end
+					if(skin == 252) then --CENSORED
+						sx, sy, sz = getCameraMatrix()
+						local x2,y2,z2 = getPedBonePosition(thePlayer, 1)
+						local distance = getDistanceBetweenPoints3D(x2,y2,z2, sx, sy, sz)
+						if(isLineOfSightClear(x2,y2,z2, sx, sy, sz, true, true, false, false, false)) then
+							sx,sy = getScreenFromWorldPosition(x2,y2,z2)
+							if(sx) then
+								local CensureColor = {
+									tocolor(50,50,50),
+									tocolor(25,25,25),
+									tocolor(75,75,75),
+									tocolor(150, 90, 60),
+									tocolor(228, 200, 160),
+								}
+								for i = 1, 8 do
+									for i2 = 1, 8 do
+										dxDrawRectangle(sx-(170*scale)/distance+((35*i)*scale/distance), sy-(70*scale)/distance+((35*i2)*scale/distance), (35*scale)/distance,(35*scale)/distance, CensureColor[math.random(#CensureColor)])
 									end
 								end
 							end
 						end
-					end
-					
-					local cx,cy,cz = getCameraMatrix()
-					local depth = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
-					if(depth < 60) then
-						local fh = dxGetFontHeight(NewScale*1.8, "clear")/(60/(60-depth))
-						local sx,sy = getScreenFromWorldPosition(x,y,z+0.30)
-						if(sx and sy) then
-							if(PlayersMessage[thePlayer]) then
-								x, y, z = getWorldFromScreenPosition(sx, sy-fh, depth)
-								create3dtext(PlayersMessage[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(230,230,230,200), "clear")
-							end
-							
-							x, y, z = getWorldFromScreenPosition(sx, sy, depth)
-							create3dtext(text["nickname"].."("..getElementData(thePlayer, "id")..")", x,y,z, NewScale*1.8, 60, text["nicknamecolor"], "clear")
-							
-							if(PlayersAction[thePlayer]) then
-								x, y, z = getWorldFromScreenPosition(sx, sy+fh, depth)
-								create3dtext(PlayersAction[thePlayer], x,y,z, NewScale*1.8, 60, tocolor(255,0,0,200), "clear")
+					elseif(skin == 145) then
+						sx, sy, sz = getCameraMatrix()
+						local x2,y2,z2 = getPedBonePosition(thePlayer, 1)
+						local distance = getDistanceBetweenPoints3D(x2,y2,z2, sx, sy, sz)
+						if(isLineOfSightClear(x2,y2,z2, sx, sy, sz, true, true, false, false, false)) then
+							sx,sy = getScreenFromWorldPosition(x2,y2,z2)
+							if(sx) then
+								local CensureColor = {
+									tocolor(50,50,50),
+									tocolor(25,25,25),
+									tocolor(75,75,75),
+									tocolor(150, 90, 60),
+									tocolor(228, 200, 160),
+								}
+								for i = 1, 8 do
+									for i2 = 1, 8 do
+										dxDrawRectangle(sx-(170*scale)/distance+((35*i)*scale/distance), sy-(90*scale)/distance+((35*i2)*scale/distance), (35*scale)/distance,(35*scale)/distance, CensureColor[math.random(#CensureColor)])
+									end
+								end
 							end
 						end
 					end
@@ -7760,32 +7690,6 @@ addEventHandler("onClientVehicleExplode", getRootElement(), function()
 end)
 
 
-function PlayerSayEvent(message,thePlayer)
-	PlayersMessage[thePlayer]=message
-	if(isTimer(timers[thePlayer])) then
-		killTimer(timers[thePlayer])
-	end
-	timers[thePlayer] = setTimer(function()
-		PlayersMessage[thePlayer]=nil
-	end, 1000+(#message*150), 1)
-end
-addEvent("PlayerSayEvent", true)
-addEventHandler("PlayerSayEvent", localPlayer, PlayerSayEvent)
-
-
-
-
-function PlayerActionEvent(message,thePlayer)
-	PlayersAction[thePlayer]=message
-	if(isTimer(timersAction[thePlayer])) then
-		killTimer(timersAction[thePlayer])
-	end
-	timersAction[thePlayer] = setTimer(function()
-		PlayersAction[thePlayer]=nil
-	end, 300+(#message*75), 1)
-end
-addEvent("PlayerActionEvent", true)
-addEventHandler("PlayerActionEvent", localPlayer, PlayerActionEvent)
 
 
 
