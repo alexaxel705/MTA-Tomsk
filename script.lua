@@ -12421,7 +12421,7 @@ function PayDay()
 		end
 	end
 end
-if(getServerPort() == 22013) then addCommandHandler("payday", PayDay) end
+addCommandHandler("payday", PayDay)
 
 function GetBizOwner(thePlayer)
 	local BN = {}

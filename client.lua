@@ -20,7 +20,6 @@ local COLOR = {
 
 
 local DeathMatch = false
-local ZonesDisplay = {}
 local PedSyncObj = {}
 local ObjectInStream = {}
 local VehiclesInStream = {}
@@ -40,7 +39,6 @@ local PData = {
 		["Full"] = true, 
 		["WantedLevel"] = true,
 		["Inventory"] = true,
-		["AreaName"] = true,
 		["Collections"] = true
 	}, 
 	['Mission'] = false, -- Миссия такси, автобуса, полицейского, пожарника
@@ -176,7 +174,6 @@ local trafficlight = {
 
 local TexturesSize = {
 	["HUD"] = {
-		["LocationTarget"] = NewScale*4, 
 		["ArrowTarget"] = NewScale*3, 
 		["Wanted"] = NewScale*2, 
 	}, 
@@ -244,11 +241,11 @@ function dxDrawBorderedText(text, left, top, right, bottom, color, scale, font, 
 		if (locsca == 0) then locsca = 1 end
 		for oX = -locsca, locsca do 
 			for oY = -locsca, locsca do 
-				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false, not getElementData(localPlayer, "LowPCMode"))
+				dxDrawText(textb, left + oX, top + oY, right + oX, bottom + oY, tocolor(r, g, b, bitExtract(color, 24, 8)), scale, font, alignX, alignY, clip, wordBreak,postGUI,false, subPixelPositioning)
 			end
 		end
 
-		dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, true, not getElementData(localPlayer, "LowPCMode"))
+		dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, true, subPixelPositioning)
 	end
 end
 
@@ -1028,31 +1025,6 @@ function getArrSize(arr)
 end
 
 
-
-
-
-function SetZoneDisplay(zone, notzone)
-	if(zone ~= "Unknown") then
-		if(zone == "Yellow Bell Station") then zone = "Koyoen Station" end
-		
-		if(ZonesDisplay[#ZonesDisplay]) then
-			if(ZonesDisplay[#ZonesDisplay][3]) then
-				if(ZonesDisplay[#ZonesDisplay][3] > 255) then
-					ZonesDisplay[#ZonesDisplay][3] = 255 -- Для ускорения
-				end
-			else
-				ZonesDisplay[#ZonesDisplay][3] = "fast"
-			end
-		end
-		ZonesDisplay[#ZonesDisplay+1] = {zone, 0, false}
-	end
-	
-	if(not notzone) then
-		exports["vehicle_node"]:LoadZone(getPlayerCity(localPlayer), zone)
-	end
-end
-addEvent("SetZoneDisplay", true)
-addEventHandler("SetZoneDisplay", getRootElement(), SetZoneDisplay)
 
 
 
@@ -2046,6 +2018,7 @@ local EmptyTexture = dxCreateTexture(1,1)
 function lowPcMode()
 	if(getElementData(localPlayer, "LowPCMode")) then
 		setElementData(localPlayer, "LowPCMode", false)
+		
 		helpmessage("Режим для #551A8Bслабых#FFFFFF компьютеров выключен")
 		engineRemoveShaderFromWorldTexture(ReplaceShader,"collisionsmoke")
 		engineRemoveShaderFromWorldTexture(ReplaceShader,"bullethitsmoke")
@@ -2209,7 +2182,7 @@ function MarkerHit(hitPlayer, Dimension)
 		elseif(getElementData(source, "type") == "SPRAY") then
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			if(theVehicle) then
-				SetZoneDisplay("Pay 'n' Spray", true)
+				triggerEvent("SetZoneDisplay", localPlayer, "Pay 'n' Spray", true)
 				local x,y,z,lx,ly,lz = getCameraMatrix()
 				local x2, y2, z2 = getElementPosition(source)
 				local lx2,ly2,lz2 = getPointInFrontOfPoint(x2, y2, z2+5, 80-tonumber(getElementData(source, "rz")), 20)
@@ -6359,37 +6332,7 @@ function DrawOnClientRender()
 		end
 	end
 	
-	if(ZonesDisplay[1]) then
-		if(not PData['Minimize']) then
-			if(PData["Interface"]["AreaName"]) then
-				if(getElementData(localPlayer, "City")) then
-					dxDrawImage(screenWidth-(dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.15)-(25*scalex), (screenHeight-(25*scaley))-dxGetFontHeight(NewScale*4, "default-bold"), (dxGetTextWidth(ZonesDisplay[1][1], NewScale*6, "default-bold", true)*1.3), dxGetFontHeight(NewScale*4, "default-bold"), DrawLocationLiberty(ZonesDisplay[1][1]), 0, 0, 0, tocolor(255, 255, 255, ZonesDisplay[1][2]))
-				else
-					dxDrawImage(screenWidth-(dxGetTextWidth(ZonesDisplay[1][1], NewScale*4, "diploma", true))-(25*scalex), (screenHeight)-dxGetFontHeight(NewScale*4, "diploma")-(25*scaley), dxGetTextWidth(ZonesDisplay[1][1], NewScale*4, "diploma", true), dxGetFontHeight(NewScale*4, "diploma"), DrawLocation(ZonesDisplay[1][1]), 0, 0, 0, tocolor(255, 255, 255, ZonesDisplay[1][2]))
-				end
-			end
-		end
-
-		if(tonumber(ZonesDisplay[1][3])) then
-			if(ZonesDisplay[1][3] > 0) then
-				ZonesDisplay[1][3] = ZonesDisplay[1][3]-5
-				if(ZonesDisplay[1][3] <= 255) then
-					ZonesDisplay[1][2] = ZonesDisplay[1][3]
-				end
-			else
-				VideoMemory["HUD"]["LocationTarget"] = nil
-				table.remove(ZonesDisplay, 1)
-			end
-		elseif(ZonesDisplay[1][2] < 255) then
-			ZonesDisplay[1][2] = ZonesDisplay[1][2]+5
-		elseif(ZonesDisplay[1][2] == 255) then
-			if(ZonesDisplay[1][3] == "fast") then
-				ZonesDisplay[1][3] = 255
-			else
-				ZonesDisplay[1][3] = 1200
-			end
-		end
-	end
+	
 
 
 	if(PData['CameraMove']) then
@@ -7226,7 +7169,7 @@ addEventHandler("onClientPlayerWasted", getRootElement(), onWasted)
 
 
 function PlayerNewZone(zone, city, updateweather, interior)
-	SetZoneDisplay(zone)
+	triggerEvent("SetZoneDisplay", localPlayer, zone)
 	triggerServerEvent("ZoneInfo", localPlayer, localPlayer, zone)
 end
 addEventHandler("PlayerNewZone", root, PlayerNewZone)
@@ -7250,9 +7193,9 @@ function PlayerVehicleEnter(theVehicle, seat)
 				name = name.." "..getElementData(theVehicle, "year")
 			end
 			if(getElementData(localPlayer, "City")) then
-				SetZoneDisplay("#9b7c52"..name, true)
+				triggerEvent("SetZoneDisplay", localPlayer, "#9b7c52"..name, true)
 			else
-				SetZoneDisplay("#66935C"..name, true)
+				triggerEvent("SetZoneDisplay", localPlayer, "#66935C"..name, true)
 			end
 		end
 	end
@@ -8014,7 +7957,7 @@ function DrawPlayerMessage()
 			end
 			
 			if(PData["helpmessage"]) then
-				dxDrawBorderedText(Text(PData["helpmessage"]), screenWidth, screenHeight-(200*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2.3, "sans", "center", "top", false, false, false, true, true, 0, 0, 0)
+				dxDrawBorderedText(Text(PData["helpmessage"]), screenWidth, screenHeight-(200*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2.3, "sans", "center", "top", false,false,false,true,not getElementData(localPlayer, "LowPCMode"))
 			end
 			
 			if(PData["HarvestDisplay"]) then
@@ -8645,59 +8588,6 @@ function DrawWanted(level)
 end
 
 
-
-
-function DrawLocation(location)
-	if(not VideoMemory["HUD"]["LocationTarget"]) then
-		VideoMemory["HUD"]["LocationTarget"] = dxCreateRenderTarget(dxGetTextWidth(location, TexturesSize["HUD"]["LocationTarget"], "diploma", true)+(20*scalex), dxGetFontHeight(TexturesSize["HUD"]["LocationTarget"], "diploma"), true)
-		dxSetRenderTarget(VideoMemory["HUD"]["LocationTarget"], true)
-		
-		dxSetBlendMode("modulate_add")
-		
-		dxDrawBorderedText(location, dxGetTextWidth(location, TexturesSize["HUD"]["LocationTarget"], "diploma", true)+(10*scalex), 0, 0, 0, tocolor(147, 160, 168, 255),  TexturesSize["HUD"]["LocationTarget"], "diploma", "center", "top", nil, nil, nil, true)
-
-		dxSetBlendMode("blend")
-		dxSetRenderTarget()
-	end
-	return VideoMemory["HUD"]["LocationTarget"]
-end
-
-
-
-function DrawLocationLiberty(location) 
-	if(not VideoMemory["HUD"]["LocationTarget"]) then
-		VideoMemory["HUD"]["LocationTarget"] = dxCreateRenderTarget((dxGetTextWidth(location, NewScale*6, "default-bold", true)*1.3), dxGetFontHeight(NewScale*6, "default-bold")+4, true)
-		dxSetRenderTarget(VideoMemory["HUD"]["LocationTarget"], true)
-		
-		dxSetBlendMode("modulate_add")
-		
-		dxDrawText(location:gsub('#%x%x%x%x%x%x', ''), (dxGetTextWidth(location, NewScale*6, "default-bold", true)*1.3)+1.5, 4, 0, 0, tocolor(0, 0, 0, 255), NewScale*6, "default-bold", "center", "top", nil, nil, nil, false)
-		dxDrawText(location, (dxGetTextWidth(location, NewScale*6, "default-bold", true)*1.3), 0, 0, 0, tocolor(147, 148, 78, 255), NewScale*6, "default-bold", "center", "top", nil, nil, nil, true)
-
-		dxSetBlendMode("blend")
-		dxSetRenderTarget()
-				
-
-		local pixels = dxGetTexturePixels(VideoMemory["HUD"]["LocationTarget"])
-		local x, y = dxGetPixelsSize(pixels)
-		local texture = dxCreateTexture(x,y, "argb")
-		local pixels2 = dxGetTexturePixels(texture)
-		local pady = 0
-		for y2 = 0, y-1 do
-			for x2 = 0, x-1 do
-				local colors = {dxGetPixelColor(pixels, x2,y2)}
-				if(colors[4] > 0) then
-					dxSetPixelColor(pixels2, x2-pady, y2, colors[1],colors[2],colors[3],colors[4])
-				end
-			end
-			pady = pady+0.15
-		end
-		
-		dxSetTexturePixels(texture, pixels2)
-		VideoMemory["HUD"]["LocationTarget"] = texture
-	end
-	return VideoMemory["HUD"]["LocationTarget"]
-end
 
 
 
