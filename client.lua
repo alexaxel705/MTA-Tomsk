@@ -37,12 +37,10 @@ local VideoMemory = {["HUD"] = {}}
 local PData = {
 	["Interface"] = {
 		["Full"] = true, 
-		["WantedLevel"] = true,
 		["Inventory"] = true,
 		["Collections"] = true
 	}, 
 	['Mission'] = false, -- Миссия такси, автобуса, полицейского, пожарника
-	['WantedFlashing'] = false, 
 	['AnimatedMarker'] = {}, 
 	['Target'] = {}, 
 	['blip'] = {}, 
@@ -89,7 +87,6 @@ local PlayerChangeSkinTeamRang = ""
 local PlayerChangeSkinTeamRespect = ""
 local PlayerChangeSkinTeamRespectNextLevel = ""
 local OriginalArr = false
-local RespectTempFileTimers = false
 local GTASound = false
 local tuningList = false
 local ToC1, ToC2, ToC3, ToC4 = false, false, false, false
@@ -123,10 +120,6 @@ local GPSObject = {}
 local VehicleSpeed = 0
 local SlowTahometer = 0
 local screenSource = dxCreateScreenSource(screenWidth, screenHeight)
-local IDF, NF, RANG, PING = false
-local TabScroll = 1
-local MAXSCROLL = math.floor((screenHeight/2.8)/dxGetFontHeight(scale/1.8, "default-bold"))
-local TABCurrent = 0
 local PText = {["biz"] = {}, ["bank"] = {}, ["INVHUD"] = {}, ["HUD"] = {}}
 --[[ 
 HUD:
@@ -141,7 +134,6 @@ HUD:
 	9 - очки ярости
 --]]
 local RespawnTimer = false
-local RespectMsg = false
 
 local BindedKeys = {} --[key] = {TriggerServerEvent(unpack)}
 
@@ -175,7 +167,6 @@ local trafficlight = {
 local TexturesSize = {
 	["HUD"] = {
 		["ArrowTarget"] = NewScale*3, 
-		["Wanted"] = NewScale*2, 
 	}, 
 }
 
@@ -827,30 +818,7 @@ if getPlayerName(localPlayer) == "alexaxel705" or getPlayerName(localPlayer) == 
 end
 bindKey("num_3", "down", save) -- Для всех
 
-local Day = {
-	[1] = "ВС",
-	[2] = "ПН",
-	[3] = "ВТ",
-	[4] = "СР",
-	[5] = "ЧТ",
-	[6] = "ПТ",
-	[7] = "СБ"
-}
-			
-local Month = {
-	[1] = "Января",
-	[2] = "Февраля",
-	[3] = "Марта",
-	[4] = "Апреля",
-	[5] = "Мая",
-	[6] = "Июня",
-	[7] = "Июля",
-	[8] = "Августа",
-	[9] = "Сентября",
-	[10] = "Октября",
-	[11] = "Ноября",
-	[12] = "Декабря"
-}
+
 
 function Set(list)
 	local set = {}
@@ -2100,7 +2068,6 @@ function SetPlayerHudComponentVisible(component, show)
 	setPlayerHudComponentVisible(component, show)
 	if(component == "all") then
 		if(show) then
-			setPlayerHudComponentVisible("wanted", false)
 			setPlayerHudComponentVisible("area_name", false)
 			setPlayerHudComponentVisible("vehicle_name", false)
 			for name, _ in pairs(PData["Interface"]) do
@@ -3958,7 +3925,6 @@ function checkKey()
 			end
 		end
 	end	
-	if(PING) then UpdateTabEvent() end
 	
 	local x,y,z = getElementPosition(localPlayer)
 	local x2,y2,z2 = getPositionInFront(localPlayer, 1)
@@ -4088,47 +4054,6 @@ end
 
 
 
-	
-local SkillName = {
-	[165] = "Пьяница", 
-	[160] = "Вождение",
-	[229] = "Мотоциклист",
-	[230] = "Велосипедист",
-	[169] = "Летчик",
-	[161] = "Грузоперевозки",
-	[157] = "Рыболов",
-	[177] = "Рукопашный бой",
-	[69] = "Пистолет",
-	[70] = "Пистолет с глуш.",
-	[71] = "Дигл",
-	[72] = "Дробовик",
-	[73] = "Sawn-Off",
-	[74] = "SPAZ-12",
-	[75] = "УЗИ",
-	[76] = "MP5",
-	[77] = "АК-47",
-	[78] = "M4",
-	[79] = "Винтовка",
-	[24] = "Здоровье",
-	[22] = "Выносливость"
-}
-
-
-local SkillLevel = {
-	[165] = {
-		[0] = "Ты понизил свой навык пьяницы\nТеперь ты пьяница застенчивый", 
-		[500] = "Ты повысил свой навык пьяницы\nТеперь ты пьяница выносливый", 
-		[999] = "Ты повысил свой навык пьяницы\nТеперь ты пьяница вездесущий", 
-	}, 
-	[229] = {
-		[0] = "Ты понизил свой навык мотоциклиста", 
-		[500] = "Ты повысил свой навык мотоциклиста\nУ тебя меньше шансов упасть с мотоцикла", 
-		[999] = "Ты повысил свой навык мотоциклиста\nУ тебя меньше шансов упасть с мотоцикла", 
-	}
-	
-}
-
- 
 
  
 function getPointInFrontOfPoint(x, y, z, rZ, dist)
@@ -4206,7 +4131,6 @@ function OpenTAB()
 			triggerServerEvent("BuyCar", localPlayer, Targets["theVehicle"])
 		end
 	end
-	UpdateTabEvent()
 end
 
 
@@ -4214,45 +4138,6 @@ end
 function getPlayerCity(thePlayer)
 	return getElementData(thePlayer, "City") or "San Andreas"
 end
-
-function UpdateTabEvent()
-	IDF, NF, RANG, PING = "","","",""
-	TABCurrent = 0
-	
-	local thePlayers = getElementsByType("player")
-	
-	if(TabScroll > #thePlayers) then TabScroll = #thePlayers end
-	for slot = TabScroll, #thePlayers do
-		if(TABCurrent < MAXSCROLL) then
-			if(isElement(thePlayers[slot])) then
-				if(getElementData(thePlayers[slot], "color")) then
-					RANG=RANG..getPlayerCity(thePlayers[slot]).."\n"
-					IDF = IDF..getElementData(thePlayers[slot], "id").."\n"
-					NF = NF..getElementData(thePlayers[slot], "color")..getPlayerName(thePlayers[slot]):gsub('#%x%x%x%x%x%x', '').."\n"
-					PING = PING..getPlayerPing(thePlayers[slot]).."\n"
-					TABCurrent = TABCurrent+1
-				end
-			else
-				RANG=RANG..thePlayers[slot][2].."\n"
-				IDF = IDF..(TABCurrent+1).."\n"
-				NF = NF.."#FFFFFF"..thePlayers[slot][1].."\n"
-				PING = PING.."0".."\n"
-				TABCurrent = TABCurrent+1
-			end
-		end
-	end
-end
-
-function CloseTAB()
-	IDF = false
-	NF = false
-	RANG = false
-	PING = false
-end
-
-
-
-
 
 
 function isnan(x) 
@@ -4434,44 +4319,6 @@ end
 
 
 
-
-function HUDPreload()
-	VideoMemory["HUD"]["TABPanel"] = dxCreateRenderTarget(screenWidth, screenHeight, true)
-	dxSetRenderTarget(VideoMemory["HUD"]["TABPanel"], true)
-	dxSetBlendMode("modulate_add")
-
-	local x,y = 510*scalex, 270*scaley
-	dxDrawRectangle(x,y, 750*NewScale, 500*NewScale, tocolor(0, 0, 0, 180))	
-	dxDrawBorderedText("Multi Theft Auto: Stories (RPG\\DM) [Russian\Tomsk]", 540*scalex, 285*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawBorderedText(Text("ид"), x+(15*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawBorderedText(Text("ник"), x+(60*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawBorderedText("локация", x+(310*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawBorderedText(Text("пинг"), x+(710*NewScale), y+(40*scaley), 0, 0, tocolor(74, 140, 178, 255), NewScale*1.2, "default-bold", "left", "top")
-	dxDrawLine(510*scalex, 329*scaley, x+(750*NewScale), 329*scaley, tocolor(120,120,120,255), 1)
-	dxDrawRectangle(475*scalex, 810*scaley, 470*NewScale, 215*NewScale, tocolor(0, 0, 0, 170))
-	dxDrawBorderedText(Text("Итоги"), 500*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
-	
-	dxDrawRectangle(975*scalex, 810*scaley, 470*NewScale, 215*NewScale, tocolor(0, 0, 0, 170))
-	dxSetBlendMode("blend")
-
-	VideoMemory["HUD"]["WantedBackground"] = dxCreateRenderTarget(dxGetTextWidth("★★★★★★", NewScale*2, "pricedown", false), dxGetFontHeight(NewScale*2, "pricedown"), true)
-	dxSetRenderTarget(VideoMemory["HUD"]["WantedBackground"], true)
-	dxSetBlendMode("modulate_add")
-	dxDrawBorderedText("★★★★★★", 0, 0, 0, 0, tocolor(40,40,40,200), NewScale*2, "pricedown", "left", "top")
-	dxSetBlendMode("blend")
-	
-	VideoMemory["HUD"]["Cinema"] = dxCreateRenderTarget(screenWidth, screenHeight, true)
-	dxSetRenderTarget(VideoMemory["HUD"]["Cinema"], true)
-	dxSetBlendMode("modulate_add")
-	dxDrawRectangle(0,0,screenWidth, screenHeight/9, tocolor(0,0,0,255))
-	dxDrawRectangle(0,screenHeight-(screenHeight/9),screenWidth, screenHeight/9, tocolor(0,0,0,255))
-	dxSetBlendMode("blend")
-
-	dxSetRenderTarget()
-	return true
-end
-
-
 	
 local SoundsTheme = {
 	[1] = "http://109.227.228.4/engine/include/MTA/music/Blue-In-Green.mp3", 
@@ -4517,17 +4364,15 @@ function StartLoad() -- Первый этап загрузки
 	end
 	fileClose(hFile)
 	
-	if(HUDPreload()) then
-		PEDChangeSkin = "intro"
+	PEDChangeSkin = "intro"
 
-		fadeCamera(true, 2.0)
-		SetPlayerHudComponentVisible("all", false)
+	fadeCamera(true, 2.0)
+	SetPlayerHudComponentVisible("all", false)
 
-		LoginClient(true)
+	LoginClient(true)
 
-		GTASound = playSound(SoundsTheme[math.random(#SoundsTheme)], true)
-		setSoundVolume(GTASound, 0.5)
-	end
+	GTASound = playSound(SoundsTheme[math.random(#SoundsTheme)], true)
+	setSoundVolume(GTASound, 0.5)
 end
 
 function displayLoadedRes(res)
@@ -4899,42 +4744,6 @@ end
 addEventHandler("onClientColShapeLeave", root, onClientColShapeLeave)
 
 
-
-
-function RespectMessage(group, count) 
-	if(PData["wasted"]) then
-		SpawnAction[#SpawnAction+1] = {"RespectMessage", localPlayer, group, count}
-	else
-		count = tonumber(count)
-		group = tonumber(group)
-
-		if(SkillLevel[group]) then
-			for slot = getPedStat(localPlayer, group)+1, getPedStat(localPlayer, group)+count do
-				 if SkillLevel[group][slot] then
-					triggerEvent("ToolTip", localPlayer, SkillLevel[group][slot])
-				 end
-			end
-		end
-					
-					
-		if(isTimer(RespectTempFileTimers)) then
-			if(not RespectMsg[group]) then
-				RespectMsg[group] = count
-			else
-				RespectMsg[group] = RespectMsg[group]+count
-			end
-			resetTimer(RespectTempFileTimers)
-		else
-			RespectMsg = {[group] = count}
-			RespectTempFileTimers = setTimer(function()
-				RespectMsg = false
-			end, 3500, 1)
-			PlaySFXSound(14)
-		end
-	end
-end
-addEvent("RespectMessage", true)
-addEventHandler("RespectMessage", localPlayer, RespectMessage)
 
 
 
@@ -6127,20 +5936,6 @@ function playerPressedKey(button, press)
 					triggerServerEvent("EnterWardrobe", localPlayer, localPlayer, getElementDimension(localPlayer))
 				end
 			end
-		elseif(button == "mouse_wheel_up") then
-			if(PING) then
-				if(TabScroll > 1) then
-					TabScroll=TabScroll-1
-					UpdateTabEvent()
-				end
-			end
-		elseif(button == "mouse_wheel_down") then
-			if(PING) then
-				if(MAXSCROLL < TABCurrent) then
-					TabScroll=TabScroll+1
-					UpdateTabEvent()
-				end
-			end
 		end
     end
 end
@@ -6659,23 +6454,6 @@ function getTeamGroup(team)
 		return "Официалы"
 	elseif(team == "Уголовники" or team == "Байкеры" or team == "Деревенщины") then
 		return "Уголовники"
-	end
-end
-
-
-function getTeamGroupColor(team)
-	if(team == "Мирные жители" or team == "МЧС") then
-		return "#CCCCCC"
-	elseif(team == "Вагос" or team == "Da Nang Boys" or team == "Рифа") then
-		return "#A00000"
-	elseif(team == "Баллас" or team == "Колумбийский картель" or team == "Русская мафия") then
-		return "#B7410E"
-	elseif(team == "Гроув-стрит" or team == "Триады" or team == "Ацтекас") then
-	    return "#4E653D"
-	elseif(team == "Полиция" or team == "Военные" or team == "ЦРУ" or team == "ФБР") then
-		return "#4169E1"
-	elseif(team == "Уголовники" or team == "Байкеры" or team == "Деревенщины") then
-		return "#858585"
 	end
 end
 
@@ -7570,8 +7348,6 @@ function PlaySFXSound(event)
 		playSFX("script", 8, 0, false) -- Звонок набор
 	elseif(event==13) then
 		playSFX("script", 105, 0, false) -- Звонок вызов
-	elseif(event==14) then
-		playSFX("genrl", 52, 15, false)--levelup
 	elseif(event==15) then
 		playSFX("genrl", 52, 17, false)--инвентарь
 	elseif(event==16) then
@@ -7610,112 +7386,6 @@ addEventHandler("onClientVehicleExplode", getRootElement(), function()
 		end
 	end
 end)
-
-
-
-
-
-
-
---[Необходимое уважение = {Звание, id скина}
-local BandRangs = {
-	["Военные"] = {
-		[1] = {0, "Призывник", 312},
-		[2] = {30, "Контрактник", 287},
-	},
-	["Гроув-стрит"] = {
-		[1] = {0, "Укурыш", 293},
-		[2] = {30, "Красавчик Флиззи", 105},
-		[3] = {60, "Гангстерлительный", 106},
-		[4] = {120, "Джин Рамми", 107},
-		[5] = {180, "Big Smoke", 269},
-		[6] = {310, "Консильери", 270}
-	},
-	["Баллас"] = {
-		[1] = {0, "Жаба", 102},
-		[2] = {30, "Гусь", 103},
-		[3] = {60, "Бык", 104}
-	},
-	["Колумбийский картель"] = {
-		[1] = {0, "La Mugre", 222},
-		[2] = {50, "Sombras", 95},
-		[3] = {75, "Sureno", 30},
-		[4] = {120, "Cacos", 242},
-		[5] = {180, "Guerrero", 179},
-		[6] = {250, "Лейтенант колумбийского картеля", 43}
-	},
-	["Вагос"] = {
-		[1] = {0, "Отмычка", 108},
-		[2] = {30, "Браток", 109},
-		[3] = {60, "Комендант", 110}
-	},
-	["Байкеры"] = {
-		[1] = {0, "Тусовщик", 181},
-		[2] = {30, "Вольный ездок", 247},
-		[3] = {75, "Шустрила", 248},
-		[4] = {130, "Дорожный капитан", 100}
-	},
-	["Русская мафия"] = {
-		[1] = {0, "Клоп", 111},
-		[2] = {30, "Вор", 112},
-		[3] = {75, "Пахан", 113},
-	},
-	["Ацтекас"] = {
-		[1] = {0, "Сопляк", 114},
-		[2] = {30, "Кирпич", 115},
-		[3] = {75, "Башка", 116},
-		[4] = {130, "Громоотвод", 292}
-	},
-	["Триады"] = {
-		[1] = {0, "Моль", 117},
-		[2] = {30, "Баклан", 118},
-		[3] = {75, "Зам. Лидера", 120},
-		[4] = {130, "Желтый дракон (Лидер)", 294}
-	},
-	["Da Nang Boys"] = {
-		[1] = {0, "Куми-ин", 121},
-		[2] = {30, "Сансита", 122},
-		[3] = {75, "Дэката", 123},
-		[4] = {130, "Кумитё (Лидер)", 169}
-	},
-	["Деревенщины"] = {
-		[1] = {0, "Опущенный", 162},
-		[2] = {50, "Чёрт", 160},
-		[3] = {75, "Шнырь", 159},
-		[4] = {120, "Блатной", 161},
-		[5] = {180, "Папаша", 158}
-	},
-	["Рифа"] = {
-		[1] = {0, "Упырь", 173},
-		[2] = {30, "Баклан", 174},
-		[3] = {75, "Капореджиме", 175},
-	},
-	["Уголовники"] = {
-		[1] = {0, "Потраченный", 252}, 
-		[2] = {25, "Черт", 213}, 
-		[3] = {50, "Шпана", 268}, 
-		[4] = {100, "Блатной", 62}, 
-	}, 
-	["Мирные жители"] = {
-		[1] = {0, "Житель", 252}
-	}, 
-}
-
-
-function GetBandRang(gang,reps)
-	local maks = {BandRangs[gang][1]}
-	for rang, k in ipairs(BandRangs[gang]) do
-		if(k[1] <= reps) then
-			maks[1] = k
-		else
-			if(rang ~= 1) then
-				maks[2] = k
-				break
-			end
-		end
-	end
-	return maks
-end
 
 
 
@@ -7894,7 +7564,6 @@ function DrawPlayerMessage()
 			
 			if(dialogTitle) then
 				if(not isTimer(dialogActionTimer)) then
-					dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["Cinema"])
 					dxDrawText(dialogTitle, 0, screenHeight/1.12, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*1.2, "default-bold", "center", "top", nil, nil, nil, true)
 				end
 			end
@@ -7970,47 +7639,6 @@ function DrawPlayerMessage()
 				dxDrawRectangle(screenWidth/2-(sx/2)+(HS*NewScale), screenHeight/1.2-(sy/2), 10*NewScale,sy, tocolor(255, 255, 255, 200))
 				dxDrawRectangle(screenWidth/2-(sx/2)+(HS*NewScale), screenHeight/1.2+(sy/2), 10*NewScale, -(NewScale*PData["HarvestDisplay"]), tocolor(255, 153, 0, 255))
 			end
-			
-			local wanted = getElementData(localPlayer, "WantedLevel")
-			if(getElementData(localPlayer, "WantedLevelPrison")) then wanted = getElementData(localPlayer, "WantedLevelPrison") end
-			local TotalDamage = getElementData(localPlayer, "Damage")
-			if(PData["Interface"]["WantedLevel"] and not getElementData(localPlayer, "AEZAKMI")) then
-				if(PData["WantedLevel"]) then
-					if(PData["WantedLevel"] ~= wanted) then
-						VideoMemory["HUD"]["Wanted"] = nil
-						PData['WantedFlashing'] = setTimer(function() end, 100, 7)
-					end
-				end
-				PData["WantedLevel"] = wanted
-				local posx, posy = screenWidth-(screenWidth/4.5), screenHeight/3
-				if(getPedStat(localPlayer, 24) <= 573) then posx, posy = screenWidth-(screenWidth/4.5), screenHeight/3.4 end
-				if(tonumber(wanted)) then
-					local flash = false
-					if(isTimer(PData['WantedFlashing'])) then
-						local _, executesRemaining, _ = getTimerDetails(PData['WantedFlashing'])
-						if(math.fmod(executesRemaining, 2) ~= 0) then
-							flash = true
-						end
-					end
-				
-					if(not PData['Minimize']) then
-						wanted = tonumber(wanted)
-						tw, _ = dxGetTextWidth("★★★★★★", scale, "pricedown", false), dxGetFontHeight(scale, "pricedown")
-						
-						dxDrawImage(posx, posy, dxGetTextWidth("★★★★★★", scale, "pricedown", false), dxGetFontHeight(scale, "pricedown"), VideoMemory["HUD"]["WantedBackground"])
-						if(not flash) then
-							dxDrawImage(posx+(tw*((6-wanted)/6)), posy, dxGetTextWidth("★★★★★★", scale, "pricedown", false), dxGetFontHeight(scale, "pricedown"), DrawWanted(wanted))
-						end
-					end
-					if(TotalDamage) then
-						--MemText("Ущерб: $"..TotalDamage, posx+dxGetTextWidth("★★★★★★", scale, "pricedown", false), posy+dxGetFontHeight(scale, "pricedown"), tocolor(200, 0, 0, 210), NewScale*1.5, "default-bold", NewScale*1.5, 0, "right", false)
-					end
-				else
-					dxDrawBorderedText(wanted, posx, posy, screenWidth, screenHeight, tocolor(200, 200, 200, 180), scale, "default-bold", "left", "top", nil, nil, nil, true)
-				end
-			end
-		
-
 		
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			if(PData["Driver"] and theVehicle and PData["Interface"]["Full"]) then
@@ -8168,117 +7796,8 @@ function DrawPlayerMessage()
 		dxDrawBorderedText(PlayerChangeSkinTeamRespectNextLevel, screenWidth/2-tw/2.15, screenHeight-(th*1.5), screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "sans", nil, nil, nil, nil, nil, true)
 	end
 	
-	if(PING or RespectMsg) then
-		local teams = {"Мирные жители", "Вагос", "Баллас", "Уголовники", "Полиция", "Гроув-стрит"}
-		
-		local FH = dxGetFontHeight(scale, "clear")*1.1
-		local idouble = 0
-		if(RespectMsg and not PING) then
-			for v, key in pairs (RespectMsg) do
-				if(tonumber(v)) then
-					v=tonumber(v)
-					dxDrawBorderedText(Text(SkillName[v]), 0, 530*scaley+(FH*(idouble)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
-					DrawProgressBar(screenWidth-160*scalex, 530*scaley+(FH*(idouble)), getPedStat(localPlayer, v), key, 150)
-				else
-					dxDrawBorderedText(getTeamGroupColor(v)..Text(getTeamGroup(v)), 0, 530*scaley+(FH*(idouble)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
-					DrawProgressBar(screenWidth-160*scalex, 530*scaley+(FH*(idouble)), 500+(getTeamVariable(v)/2), key, 150)
-				end
-				idouble=idouble+1
-			end
-		else
-			for i, v in pairs (teams) do
-				if(getTeamVariable(v)) then
-					dxDrawBorderedText(getTeamGroupColor(v)..Text(getTeamGroup(v)), 0, 530*scaley+(FH*(i-1)), screenWidth-170*scalex, 0, tocolor(255, 255, 255, 255), scale, "clear", "right", "top", false, false, false, true)
-					DrawProgressBar(screenWidth-160*scalex, 530*scaley+(FH*(i-1)), 500+(getTeamVariable(v)/2), nil, 150)
-				end
-			end
-		end
-		
 
-		if(PING) then
-			dxDrawImage(0,0,screenWidth,screenHeight, VideoMemory["HUD"]["TABPanel"])
-
-			
-			local team = getTeamName(getPlayerTeam(localPlayer))
-			if(team) then
-				if(getElementData(localPlayer, "job")) then
-					dxDrawBorderedText(Text("Работа"), 1000*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
-
-					dxDrawText("Название: "..team, 1000*scalex, 840*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
-					dxDrawText("Текущий ранг: "..getElementData(localPlayer, "job"), 1000*scalex, 875*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
-				else
-					dxDrawBorderedText(Text("Банда"), 1000*scalex, 780*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "default-bold", "left", "top")
-
-					dxDrawText("Название: "..team, 1000*scalex, 840*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
-					local carrier = GetBandRang(team, getTeamVariable(team))
-					dxDrawText("Текущий ранг: "..carrier[1][2], 1000*scalex, 875*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
-					if(carrier[2]) then
-						dxDrawText("До повышения "..(carrier[2][1]-getTeamVariable(team)).." репутации", 1000*scalex, 910*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)	
-					end
-				end
-			end
-			local countpl = #getElementsByType("player")
-			
-			dxDrawBorderedText(Text("Игроков")..": "..countpl, 0, 285*scaley, 510*scalex+(730*NewScale), 0, tocolor(180, 180, 180, 255), NewScale*1.2, "default-bold", "right", "top", false, false, false, true)
-		
-			dxDrawBorderedText(IDF,510*scalex+(15*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
-			dxDrawBorderedText(NF, 510*scalex+(60*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
-			dxDrawBorderedText(RANG, 510*scalex+(310*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
-			dxDrawBorderedText(PING, 510*scalex+(710*NewScale), 335*scaley, 0, 0, tocolor(255, 255, 255, 255), NewScale*1.2, "default-bold", "left", "top", false, false, false, true)
-		
-			
-			
-			if(getTeamVariable("Мирные жители")) then
-				local count=0
-				if(getCameraShakeLevel() == 0) then
-					dxDrawText(Text(SkillName[24]), 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
-					DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, 24), nil, 150)
-
-				else
-					dxDrawText(Text(SkillName[165]), 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
-					
-					DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, 165), nil, 150)
-				end
-				
-				
-				count=count+1
-				
-				local Skill = false
-				local theVehicle = getPedOccupiedVehicle(localPlayer)
-				if(theVehicle) then
-					local VehType = GetVehicleType(theVehicle)
-					Skill = VehTypeSkill[VehType]
-					if(Skill == 160) then
-						if(string.sub(getVehiclePlateText(theVehicle), 0, 1) == "I" and string.sub(getVehiclePlateText(theVehicle), 6, 9) == "228") then
-							Skill = 161
-						end
-					end
-					dxDrawText(Text(SkillName[Skill]),  490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
-					DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, Skill), nil, 150)
-				else
-					if(getElementData(localPlayer, "fishpos")) then
-						Skill = 157
-					else
-						Skill = 22
-					end
-					dxDrawText(Text(SkillName[Skill]),  490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
-					DrawProgressBar(780*scalex,840*scaley+((35*scaley)*count), getPedStat(localPlayer, Skill), nil, 150)
-				end
-				count=count+1
-				
-				local weapon = getPedWeapon(localPlayer, slot) 
-				if(SkillName[WeaponModel[weapon][2]]) then
-					dxDrawText(Text(SkillName[WeaponModel[weapon][2]]), 490*scalex, 840*scaley+((35*scaley)*count), 0, 0, tocolor(255, 255, 255, 255), NewScale*2, "default-bold", "left", "top", false, false, false, true)
-					DrawProgressBar(780*scalex, 840*scaley+((35*scaley)*count), getPedStat(localPlayer, WeaponModel[weapon][2]), nil, 150)
-				end
-				local ServerDate = getRealTime(getElementData(root, "ServerTime"), false)
-				dxDrawBorderedText(ServerDate.monthday.." "..Text(Month[ServerDate.month+1]).." "..ServerDate.year+1900, 490*scalex, 960*scaley, 0, 0, tocolor(200, 200, 200, 255), NewScale*2.4, "default-bold", "left", "top", nil, nil, nil, true)		
-				
-
-				dxDrawBorderedText(Text(Day[ServerDate.weekday+1]), screenWidth, 960*scaley, 930*scalex, screenHeight, tocolor(200, 200, 200, 255), NewScale*2.4, "default-bold", "right", "top", nil, nil, nil, true)		
-			end
-		end
-	elseif(PEDChangeSkin == "nowTime") then
+	if(PEDChangeSkin == "nowTime") then
 		dxDrawRectangle(0,0,screenWidth, screenHeight, tocolor(255,255,255,255))
 	elseif(PEDChangeSkin == "cinema") then
 		dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["Cinema"])
@@ -8544,7 +8063,6 @@ addEventHandler("onClientMinimize", root, function()
 	PData['Minimize'] = true
 	VideoMemory["HUD"]["ArrowTarget"] = nil
 	VideoMemory["HUD"]["LocationTarget"] = nil
-	VideoMemory["HUD"]["Wanted"] = nil
 end)
  
 addEventHandler("onClientRestore", root, function ()
@@ -8565,27 +8083,6 @@ function DrawArrow(rotation)
 end
 
 
-function DrawWanted(level)
-	if(not VideoMemory["HUD"]["Wanted"]) then
-		if(level > 0) then
-			local rand = math.random(6)
-			if(rand == 1) then playSFX("script", 0, math.random(0, 163), false)
-			elseif(rand == 2) then playSFX("script", 1, math.random(0, 14), false)
-			elseif(rand == 3) then playSFX("script", 2, math.random(0, 4), false)
-			elseif(rand == 4) then playSFX("script", 3, math.random(0, 8), false)
-			elseif(rand == 5) then playSFX("script", 4, math.random(0, 13), false)
-			elseif(rand == 6) then playSFX("script", 5, math.random(0, 57), false) end
-		end
-		VideoMemory["HUD"]["Wanted"] = dxCreateRenderTarget(dxGetTextWidth("★★★★★★", TexturesSize["HUD"]["Wanted"], "pricedown", false), dxGetFontHeight(TexturesSize["HUD"]["Wanted"], "pricedown"), true)
-		dxSetRenderTarget(VideoMemory["HUD"]["Wanted"], true)
-		dxSetBlendMode("modulate_add")
-
-		dxDrawBorderedText("★★★★★★", 0-(dxGetTextWidth("★★★★★★", TexturesSize["HUD"]["Wanted"], "pricedown", false)*((6-level)/6)), 0, 0, 0, tocolor(255,165,0, 200),TexturesSize["HUD"]["Wanted"], "pricedown", "left", "top", nil, nil, nil, true, false)
-		dxSetBlendMode("blend")
-		dxSetRenderTarget()
-	end
-	return VideoMemory["HUD"]["Wanted"]
-end
 
 
 
@@ -9008,7 +8505,6 @@ addEventHandler("onClientPlayerQuit", getRootElement(), onQuitGame)
 
 bindKey("M", "down", openmap)
 bindKey("tab", "down", OpenTAB)
-bindKey("tab", "up", CloseTAB)
 bindKey("h", "down", handsup)
 bindKey("p", "down", park)
 bindKey('mouse2', 'down', setDoingDriveby)

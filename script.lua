@@ -5322,6 +5322,16 @@ function WantedLevel(thePlayer, count)
 	
 	
 		if(wanted > 0) then
+		
+			local rand = math.random(6)
+			if(rand == 1) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 0, math.random(0, 163), false)
+			elseif(rand == 2) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 1, math.random(0, 14), false)
+			elseif(rand == 3) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 2, math.random(0, 4), false)
+			elseif(rand == 4) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 3, math.random(0, 8), false)
+			elseif(rand == 5) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 4, math.random(0, 13), false)
+			elseif(rand == 6) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 5, math.random(0, 57), false) end
+
+		
 			if(wanted >= 5) then
 			local rand = math.random(1,6)
 			if(rand == 1 or rand == 2) then
@@ -13044,7 +13054,7 @@ local tmpi = 1
 local tmpcity = ""
 function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local res = getResourceFromName("statistic") -- Interface
+		local res = getResourceFromName("interface") -- Interface
 		restartResource(res)
 		--local res = getResourceFromName("ps2_weather") -- Interface
 		--restartResource(res)
