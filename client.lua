@@ -766,12 +766,10 @@ function save()
 		else
 			z = z-1
 		end
-		outputChatBox(math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)) 
 		rx,ry,rz = getElementRotation(getPedOccupiedVehicle(localPlayer))
-		outputChatBox(math.round(rz, 0))
+		triggerEvent("OutputChat", localPlayer, math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)..", "..math.round(rz, 0), "Coord")
 	else
-		outputChatBox(math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)) 
-		outputChatBox(math.round(rz, 0))
+		triggerEvent("OutputChat", localPlayer, math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)..", "..math.round(rz, 0), "Coord")
 	end
 	triggerServerEvent("saveserver", localPlayer, localPlayer, x,y,z,rx,ry,rz)
 end
@@ -3671,12 +3669,33 @@ local bones = {
 	[19] = {44,43,42}, --left foot
 	[20] = {54,53,52} --right foot
 }
-
+local VehTypeSkill = {
+	["Automobile"] = 160,
+	["Monster Truck"] = 160,
+	["Unknown"] = 160,
+	["Trailer"] = 160,
+	["Train"] = 160,
+	["Boat"] = 160,
+	["Bike"] = 229,
+	["Quad"] = 229,
+	["BMX"] = 230,
+	["Helicopter"] = 169,
+	["Plane"] = 169
+}
 
 function updateWorld()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	if(PData["Driver"] and theVehicle) then
 		if(getElementDimension(localPlayer) == 0 or getElementData(localPlayer, "City")) then
+			local x,y,z = getElementPosition(theVehicle)
+			PData["Driver"]["Distance"] = PData["Driver"]["Distance"]+getDistanceBetweenPoints3D(PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"], x, y, z)
+			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = x,y,z
+			if(PData["Driver"]["Distance"] >= 2000) then
+				local VehType = GetVehicleType(theVehicle)
+				PData["Driver"]["Distance"] = 0
+				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 5)
+			end
+			
 			if(VehicleSpeed > 100) then
 				local vxl,vyl,vzl, vxr, vyr, vzr = false
 				local vxc, vyc, vzc = getElementPosition(theVehicle)
@@ -6829,7 +6848,9 @@ function PlayerVehicleEnter(theVehicle, seat)
 		if(seat == 0) then
 			PData["Driver"] = {
 				["Handling"] = getVehicleHandling(theVehicle),
+				["Distance"] = 0
 			}
+			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = getElementPosition(theVehicle)
 			local name = getVehicleName(theVehicle)
 			if(getElementData(theVehicle, "name")) then
 				name = getElementData(theVehicle, "name")
