@@ -7479,6 +7479,7 @@ local WargangGates = {
 
 function preLoad(name)
 	setGameType("SAxVCxLC Stories")
+	setElementData(root, "ServerName", getServerName())
 	setServerConfigSetting("ped_sync_interval", 50, true)
 	Createkickstart()
 	setGarageOpen(44, true) -- Наркомафия

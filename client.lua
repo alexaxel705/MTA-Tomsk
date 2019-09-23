@@ -3566,22 +3566,6 @@ function StartAnimation(thePlayer, block, anim, times, loop, updatePosition, int
 end
 
 
-local VehTypeSkill = {
-	["Automobile"] = 160,
-	["Monster Truck"] = 160,
-	["Unknown"] = 160,
-	["Trailer"] = 160,
-	["Train"] = 160,
-	["Boat"] = 160,
-	["Bike"] = 229,
-	["Quad"] = 229,
-	["BMX"] = 230,
-	["Helicopter"] = 169,
-	["Plane"] = 169
-}
-
-
-
 
 
 
@@ -3693,56 +3677,6 @@ function updateWorld()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	if(PData["Driver"] and theVehicle) then
 		if(getElementDimension(localPlayer) == 0 or getElementData(localPlayer, "City")) then
-			local x,y,z = getElementPosition(theVehicle)
-			PData["Driver"]["Distance"] = PData["Driver"]["Distance"]+getDistanceBetweenPoints3D(PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"], x, y, z)
-			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = x,y,z
-			if(PData["Driver"]["Distance"] >= 2000) then
-				local VehType = GetVehicleType(theVehicle)
-				PData["Driver"]["Distance"] = 0
-				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 5)
-			end
-			
-			if(GetVehicleType(theVehicle) == "Automobile" or GetVehicleType(theVehicle) == "Bike") then
-				if(not isVehicleOnGround(theVehicle)) then
-					if(not PData["Driver"]["jump"]) then 
-						PData["Driver"]["jump"] = {0} 
-						PData["Driver"]["jump"][2], PData["Driver"]["jump"][3], PData["Driver"]["jump"][4] = getElementPosition(theVehicle)
-						PData["Driver"]["jump"][5], PData["Driver"]["jump"][6], PData["Driver"]["jump"][7] = getElementRotation(theVehicle)
-						PData["Driver"]["jump"][8], PData["Driver"]["jump"][9], PData["Driver"]["jump"][10] = 0, 0, 0
-					end
-					PData["Driver"]["jump"][1] = PData["Driver"]["jump"][1]+0.5
-					if(PData["Driver"]["jump"][1] >= 10) then
-						RageInfo(Text("Отрыв от земли +{points}", {{"{points}", math.round(PData["Driver"]["jump"][1], 0)}}))
-						
-						local rx,ry,rz = getElementRotation(theVehicle)
-						PData["Driver"]["jump"][8] = math.round(PData["Driver"]["jump"][8]+MinusToPlus(math.sin(rx-PData["Driver"]["jump"][5])), 0)
-						PData["Driver"]["jump"][9] = math.round(PData["Driver"]["jump"][9]+MinusToPlus(math.sin(ry-PData["Driver"]["jump"][6])), 0)
-						PData["Driver"]["jump"][10] = math.round(PData["Driver"]["jump"][10]+MinusToPlus(math.sin(rz-PData["Driver"]["jump"][7])), 0)
-						
-						PData["Driver"]["jump"][5], PData["Driver"]["jump"][6], PData["Driver"]["jump"][7] = getElementRotation(theVehicle)
-						
-					end
-				else
-					if(PData["Driver"]["jump"]) then
-						if(PData["Driver"]["jump"][1] >= 10) then
-							AddRage(math.round(PData["Driver"]["jump"][1]*10, 0))
-							local x,y,z = getElementPosition(theVehicle)
-							local jumph = math.floor(PData["Driver"]["jump"][4]-z, 1)
-							if(jumph < 0) then jumph = jumph-jumph-jumph end
-							if(jumph > 10) then
-								local salto = (math.round(PData["Driver"]["jump"][8]/360, 0))+(math.round(PData["Driver"]["jump"][9]/360, 0))+(math.round(PData["Driver"]["jump"][10]/360, 0))
-								helpmessage("Дистанция: "..math.floor(getDistanceBetweenPoints2D(PData["Driver"]["jump"][2], PData["Driver"]["jump"][3], x,y), 1)..
-								"м Высота: "..jumph.."м "..
-								"Переворотов: "..salto..
-								" Вращение: "..PData["Driver"]["jump"][8]+PData["Driver"]["jump"][9]+PData["Driver"]["jump"][10].."°")
-							end
-						end
-						PData["Driver"]["jump"] = nil
-					end
-				end
-			end
-				
-				
 			if(VehicleSpeed > 100) then
 				local vxl,vyl,vzl, vxr, vyr, vzr = false
 				local vxc, vyc, vzc = getElementPosition(theVehicle)
@@ -6895,9 +6829,7 @@ function PlayerVehicleEnter(theVehicle, seat)
 		if(seat == 0) then
 			PData["Driver"] = {
 				["Handling"] = getVehicleHandling(theVehicle),
-				["Distance"] = 0
 			}
-			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = getElementPosition(theVehicle)
 			local name = getVehicleName(theVehicle)
 			if(getElementData(theVehicle, "name")) then
 				name = getElementData(theVehicle, "name")
