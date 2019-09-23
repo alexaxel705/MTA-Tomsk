@@ -116,7 +116,6 @@ local SleepTimer = false
 local ArrestTimerEvent = false
 local DrugsTimer = false
 local SpunkTimer = false
-local GPSObject = {}
 local VehicleSpeed = 0
 local SlowTahometer = 0
 local screenSource = dxCreateScreenSource(screenWidth, screenHeight)
@@ -162,12 +161,6 @@ local trafficlight = {
 	["2"] = false,
 	["3"] = "north",
 	["4"] = "north"
-}
-
-local TexturesSize = {
-	["HUD"] = {
-		["ArrowTarget"] = NewScale*3, 
-	}, 
 }
 
 
@@ -966,11 +959,6 @@ function PlayerSpawn()
 	triggerEvent("onClientElementStreamIn", localPlayer)
 	local x,y,z = getElementPosition(localPlayer)
 	local zone = getZoneName(x,y,z)
-	for v,k in pairs(GPSObject) do
-		destroyElement(GPSObject[v])
-		GPSObject[v] = nil
-		destroyElement(v)
-	end
 	PInv["player"] = fromJSON(getElementData(localPlayer, "inv"))
 	SetupInventory() 
 	PData["wasted"] = nil
@@ -1867,7 +1855,7 @@ end
 
 
 function PoliceAddMarker(x, y, z, gpsmessage)
-	GPS(x,y,z,gpsmessage)
+	triggerEvent("AddGPSMarker", localPlayer, x,y,z,gpsmessage)
 	helpmessage("#4682B4"..Text("Поступил новый вызов!\n #FFFFFFОтправляйся на #FF0000красный маркер"))
 	playSFX("script", 58, math.random(22, 35), false)
 end
@@ -1876,36 +1864,6 @@ addEventHandler("PoliceAddMarker", getRootElement(), PoliceAddMarker)
 
 
 
-
-function GPS(x,y,z,info,after)
-	local GPSM = createMarker(x, y, z, "checkpoint", 5, 255, 50, 50, 170)
-	setElementData(GPSM , "type", "GPS")
-	GPSObject[GPSM] = createBlipAttachedTo(GPSM)
-	if(x ~= 228 and y ~= 228 and z ~= 228) then
-		local px, py, pz = getElementPosition(localPlayer)
-		triggerServerEvent("GetPathByCoordsNEW", localPlayer, localPlayer, px, py, pz, x,y,z)
-	end
-	if(info) then setElementData(GPSM, "info", Text(info)) end
-	if(after) then setElementData(GPSM, "after", after) end
-	playSFX("script", 217, 0, false)
-end
-addEvent("AddGPSMarker", true)
-addEventHandler("AddGPSMarker", getRootElement(), GPS)
-
-
-
-
-function RemoveGPSMarker(info)
-	for k,v in pairs(getElementsByType "marker") do
-		if(getElementData(v, "info") == info) then
-			destroyElement(GPSObject[v])
-			GPSObject[v] = nil
-			destroyElement(v)
-		end
-	end
-end
-addEvent("RemoveGPSMarker", true)
-addEventHandler("RemoveGPSMarker", getRootElement(), RemoveGPSMarker)
 
 
 
@@ -2005,12 +1963,6 @@ function lowPcMode()
 			UpdateArmas(thePlayer)
 		end
 		
-		for category, textrzd in pairs(TexturesSize) do
-			for texname, size in pairs(textrzd) do
-				TexturesSize[category][texname] = size*2
-				VideoMemory[category][texname] = nil
-			end
-		end
 	else
 		setElementData(localPlayer, "LowPCMode", true)
 		helpmessage("Режим для #551A8Bслабых#FFFFFF компьютеров включен")
@@ -2036,13 +1988,6 @@ function lowPcMode()
 				end
 			end
 			dat["armas"] = {}
-		end
-		
-		for category, textrzd in pairs(TexturesSize) do
-			for texname, size in pairs(textrzd) do
-				TexturesSize[category][texname] = size/2
-				VideoMemory[category][texname] = nil
-			end
 		end
 	end
 end
@@ -2098,7 +2043,7 @@ function GPSFoundShop(bytype, varname, varval, name) --Тип, имя даты, 
 		end
 	end
 	local x3,y3,z3 = getElementPosition(pic)
-	GPS(x3,y3,z3, name)
+	triggerEvent("AddGPSMarker", localPlayer, x3,y3,z3, name)
 end
 addEvent("GPSFoundShop", true)
 addEventHandler("GPSFoundShop", localPlayer, GPSFoundShop)
@@ -2111,15 +2056,7 @@ addEventHandler("GPSFoundShop", localPlayer, GPSFoundShop)
 function MarkerHit(hitPlayer, Dimension)
 	if(not Dimension) then return false end
 	if(hitPlayer == localPlayer) then
-		if(getElementData(source, "type") == "GPS") then
-			destroyElement(GPSObject[source])
-			GPSObject[source] = nil
-			if(getElementData(source, "after")) then 
-				playSFX("genrl", 52, 14, false) 
-				helpmessage(getElementData(source, "after")) 
-			end
-			destroyElement(source)
-		elseif(getElementData(source, "TrailerInfo")) then
+		if(getElementData(source, "TrailerInfo")) then
 			ChangeInfo(getElementData(source, "TrailerInfo"), 5000)
 		elseif(getElementData(source, "type") == "Race") then
 			NextRaceMarker()
@@ -3753,7 +3690,6 @@ local bones = {
 
 
 function updateWorld()
-	UpdateBot()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	if(PData["Driver"] and theVehicle) then
 		if(getElementDimension(localPlayer) == 0 or getElementData(localPlayer, "City")) then
@@ -3957,7 +3893,7 @@ function checkKey()
 	end
 	
 	
-
+	UpdateBot()
 end
 setTimer(checkKey,700,0)
 
@@ -4322,9 +4258,9 @@ end
 	
 local SoundsTheme = {
 	[1] = "http://109.227.228.4/engine/include/MTA/music/Blue-In-Green.mp3", 
-	[2] = "http://109.227.228.4/engine/include/MTA/music/Autumn-Leaves.mp3",
-	[3] = "http://109.227.228.4/engine/include/MTA/music/Almost-blue.mp3", 
-	[4] = "http://109.227.228.4/engine/include/MTA/music/GTA3.mp3", 
+	--[2] = "http://109.227.228.4/engine/include/MTA/music/Autumn-Leaves.mp3",
+	--[3] = "http://109.227.228.4/engine/include/MTA/music/Almost-blue.mp3", 
+	--[4] = "http://109.227.228.4/engine/include/MTA/music/GTA3.mp3", 
 	
 }
 
@@ -5235,7 +5171,7 @@ function ShowInfoKey()
 			outputConsole(name)
 		end
 
-		--GPS(math.random(-3000,3000), math.random(-3000,3000), math.random(-3000,3000), "Случайная точка ")
+		--triggerEvent("AddGPSMarker", localPlayer, math.random(-3000,3000), math.random(-3000,3000), math.random(-3000,3000), "Случайная точка ")
 	end
 end
 addEvent("ShowInfoKey", true)
@@ -6796,7 +6732,6 @@ function MemText(text, left, top, color, scale, font, border, incline, centerX, 
 	if(text) then
 		local index = text..color
 		
-		TexturesSize["HUD"][index] = scale
 		local w,h = dxGetTextWidth(text, scale, font, true)+(border*2), dxGetFontHeight(scale, font)+(border*2)
 		
 		
@@ -7584,34 +7519,8 @@ function DrawPlayerMessage()
 				dxDrawBorderedText(ToolTipRaceText[2],screenWidth/2-(tw/2)+(33*scalex), screenHeight/1.4+(40*scaley), 0, 0, tocolor(130,143,160,255), scale*1.5, font, "left", "top", false, false, false, true)
 			end
 			
-			
-			if(PData["Interface"]["Full"]) then
-				local line = 1
-				for v,k in pairs(GPSObject) do
-					local x2,y2,z2 = getElementPosition(v)
-					local dist = getDistanceBetweenPoints3D(x,y,z,x2,y2,z2)/2
-					if(dist >= 1000) then
-						dist = math.round((dist/1000), 1).." "..Text("км")
-					else
-						dist = math.round(dist, 0).." "..Text("м")
-					end
-					local _,_,rz = getElementRotation(localPlayer)
-					local marrot = GetMarrot(findRotation(x,y,x2,y2),rz)
-					if(x2 ~= 228 and y2 ~= 228 and z2 ~= 228) then
-						if(not PData['Minimize']) then
-							dxDrawImage(screenWidth-dxGetTextWidth(getElementData(v, "info").." #A9A9A9"..dist, scale, "default-bold", true)-(40*NewScale), screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), dxGetTextWidth("↑", scale, "default-bold", false), dxGetFontHeight(scale, "default-bold"), DrawArrow(), marrot)
-						end
-						dist = " #A9A9A9"..dist.."\n"
-					else
-						dist = ""
-					end
-					dxDrawBorderedText(getElementData(v, "info")..dist, 0, screenHeight/2.7+(dxGetFontHeight(scale, "default-bold")*line), screenWidth-(10*NewScale), screenHeight, tocolor(200, 200, 200, 255), scale, "default-bold", "right", "top", nil, nil, nil, true)
-					line = line+1
-				end
 				
-			end
 
-		
 			if(RobAction) then
 				DrawProgressBar(screenWidth-430*scalex, 420*scaley, RobAction[1], RobAction[2], 250)
 				local advtext = ""
@@ -7641,7 +7550,7 @@ function DrawPlayerMessage()
 			end
 		
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
-			if(PData["Driver"] and theVehicle and PData["Interface"]["Full"]) then
+			if(PData["Driver"] and theVehicle) then
 				tick = getTickCount()
 				local angulo,velocidad = angle()
 				
@@ -8055,32 +7964,6 @@ local VehicleTrunks = {
 }
 
 
-
-
-
-
-addEventHandler("onClientMinimize", root, function()
-	PData['Minimize'] = true
-	VideoMemory["HUD"]["ArrowTarget"] = nil
-	VideoMemory["HUD"]["LocationTarget"] = nil
-end)
- 
-addEventHandler("onClientRestore", root, function ()
-	PData['Minimize'] = nil
-end)
-
-
-function DrawArrow(rotation)
-	if(not VideoMemory["HUD"]["ArrowTarget"]) then
-		VideoMemory["HUD"]["ArrowTarget"] = dxCreateRenderTarget(dxGetTextWidth("↑", TexturesSize["HUD"]["ArrowTarget"], "default-bold", false), dxGetFontHeight(TexturesSize["HUD"]["ArrowTarget"], "default-bold"), true)
-		dxSetRenderTarget(VideoMemory["HUD"]["ArrowTarget"], true)
-		dxSetBlendMode("modulate_add")
-		dxDrawBorderedText("↑", 0, 0, 0, 0, tocolor(200, 0, 0, 255), TexturesSize["HUD"]["ArrowTarget"], "default-bold", "left", "top", nil, nil, nil, true, false)
-		dxSetBlendMode("blend")
-		dxSetRenderTarget()
-	end
-	return VideoMemory["HUD"]["ArrowTarget"]
-end
 
 
 
