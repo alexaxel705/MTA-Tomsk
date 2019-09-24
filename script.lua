@@ -10650,7 +10650,7 @@ addEventHandler("BuyCar", root, BuyCar)
 
 
 
-function el(thePlayer, command, h)
+function el(thePlayer)
 	local HouseNodes = xmlNodeGetChildren(HouseNode)
 	local out = 0
 	for i,node in ipairs(HouseNodes) do
@@ -10668,8 +10668,8 @@ function el(thePlayer, command, h)
 	out = "Ты заплатил "..COLOR["DOLLAR"]["HEX"].."$"..out.." #FFFFFFза электричество"
 	ToolTip(thePlayer, out)
 end
-addCommandHandler("el", el)
-
+addEvent("el", true)
+addEventHandler("el", root, el)
 
 
 function ServerSave()
@@ -13479,6 +13479,10 @@ addEventHandler("SaveInventory", root, SaveInventory)
 
 function buyshopitem(thePlayer, count, args)
 	if(not tonumber(count)) then return false end
+	if(tonumber(count) <= 0) then 
+		ToolTip(thePlayer, "Неверное количество!")
+		return false 
+	end
 	local item, cost, x,y = args[1], args[2]*count, args[3], args[4]
 	item["ForSale"] = nil
 	
