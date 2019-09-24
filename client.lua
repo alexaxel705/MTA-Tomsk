@@ -7456,11 +7456,12 @@ function DrawPlayerMessage()
 			
 			if(dialogTitle) then
 				if(not isTimer(dialogActionTimer)) then
+					dxDrawRectangle(0,0,screenWidth, screenHeight/9, tocolor(0,0,0,255))
+					dxDrawRectangle(0,screenHeight-(screenHeight/9),screenWidth, screenHeight/9, tocolor(0,0,0,255))
 					dxDrawText(dialogTitle, 0, screenHeight/1.12, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*1.2, "default-bold", "center", "top", nil, nil, nil, true)
 				end
 			end
 					
-			
 			
 			if(ToolTipRaceText) then
 				local linecount = 1
@@ -7666,7 +7667,7 @@ function DrawPlayerMessage()
 	if(PEDChangeSkin == "nowTime") then
 		dxDrawRectangle(0,0,screenWidth, screenHeight, tocolor(255,255,255,255))
 	elseif(PEDChangeSkin == "cinema") then
-		dxDrawImage(0, 0, screenWidth, screenHeight, VideoMemory["HUD"]["Cinema"])
+	
 	else
 		if(PData["wasted"]) then
 			local Block, Anim = getPedAnimation(localPlayer)
