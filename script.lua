@@ -1,4 +1,5 @@
 local ids = {}
+local OneMinute = 1000 -- 1 минута = 1 секунда
 
 -- Хранит исходные значения, которые в дальнейшем будут отфильтрованы в SData
 local SourceData = {
@@ -7733,7 +7734,7 @@ function preLoad(name)
 		table.remove(availzones, rand)
 	end
 
-	WorldTimer = setTimer(worldtime, 1000, 0)
+	WorldTimer = setTimer(worldtime, OneMinute, 0)
 end
 addEventHandler("onResourceStart", getResourceRootElement(), preLoad)
 
@@ -7746,7 +7747,7 @@ function ppgwjht(thePlayer)
 		if(totalExecutes == 1000) then
 			WorldTimer = setTimer(worldtime, 50, 0)
 		else
-			WorldTimer = setTimer(worldtime, 1000, 0)
+			WorldTimer = setTimer(worldtime, OneMinute, 0)
 		end
 	end
 end
@@ -7763,7 +7764,7 @@ function nightprowler(thePlayer)
 		
 		worldtime()
 	else
-		WorldTimer = setTimer(worldtime, 1000, 0)
+		WorldTimer = setTimer(worldtime, OneMinute, 0)
 	end
 end
 addEvent("nightprowler", true)
@@ -7779,7 +7780,7 @@ function ofviac(thePlayer)
 		
 		worldtime(true)
 	else
-		WorldTimer = setTimer(worldtime, 1000, 0)
+		WorldTimer = setTimer(worldtime, OneMinute, 0)
 	end
 end
 addEvent("ofviac", true)

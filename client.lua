@@ -2201,8 +2201,8 @@ addEventHandler("bankControlUpdate", localPlayer, bankControlUpdate)
 
 
 function MyVoice(voice, voicebank)
-	triggerServerEvent("CheckVoice", localPlayer, voice, voicebank)
-	local voi = playSound("http://109.227.228.4/engine/include/MTA/"..voicebank.."/"..md5(voice)..".wav")
+	triggerServerEvent("CheckVoice", localPlayer, localPlayer, voice, voicebank)
+	local voi = playSound("http://109.227.228.4/engine/include/MTA/"..voicebank.."/"..md5(utf8.upper(voice))..".wav")
 	setSoundVolume(voi, 0.7)
 end
 addEvent("MyVoice", true)
@@ -4966,6 +4966,10 @@ function getVehicleHandlingProperty(theVehicle, property)
     local HT = getVehicleHandling(theVehicle) 
 	return HT[property]
 end
+
+
+
+
 
 
 
