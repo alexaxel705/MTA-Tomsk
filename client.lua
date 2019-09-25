@@ -126,7 +126,6 @@ HUD:
 	2 - Встать с койки, DeathMatch 2
 	3 - ChangeInfo
 	4 - ChangeInfoAdv
-	5 - helpmessage
 	6 - MissionCompleted
 	7 - MissionCompleted
 	8 - input
@@ -778,7 +777,7 @@ local SaveTimer = false
 function saveauto()
 	if(PData["Driver"]) then
 		if(not isTimer(SaveTimer)) then
-			helpmessage("Запись начата")
+			triggerEvent("helpmessageEvent", localPlayer, "Запись начата")
 			SaveTimer = setTimer(function() 
 				if(PData["Driver"]["Distance"] > 10) then
 					PData["Driver"]["Distance"] = 0
@@ -786,7 +785,7 @@ function saveauto()
 				end
 			end, 50, 0)
 		else
-			helpmessage("Запись остановлена")
+			triggerEvent("helpmessageEvent", localPlayer, "Запись остановлена")
 			killTimer(SaveTimer)
 		end
 	end
@@ -1010,13 +1009,13 @@ function()
 		if(c1 ~= getElementData(source, "TuningColor1")) then
 			setVehicleColor(theVehicle, getElementData(source, "TuningColor1"), c2, c3, c4)
 			playSFX("genrl", 53, 5, false)
-			helpmessage("Перекрасить\n$500")
+			triggerEvent("helpmessageEvent", localPlayer, "Перекрасить\n$500")
 		else
 			if(getElementData(source, "TuningColor1") ~= ToC1) then
 				playSFX("genrl", 53, 6, false)
 				triggerServerEvent("BuyColor", localPlayer, c1,c2,c3,c4,500)
 			else
-				helpmessage("Твой авто уже такого цвета!")
+				triggerEvent("helpmessageEvent", localPlayer, "Твой авто уже такого цвета!")
 			end
 		end
 	elseif(getElementData(source, "TuningColor2")) then
@@ -1025,13 +1024,13 @@ function()
 		if(c2 ~= getElementData(source, "TuningColor2")) then
 			setVehicleColor(theVehicle, c1, getElementData(source, "TuningColor2"), c3, c4)
 			playSFX("genrl", 53, 5, false)
-			helpmessage("Перекрасить\n$500")
+			triggerEvent("helpmessageEvent", localPlayer, "Перекрасить\n$500")
 		else
 			if(getElementData(source, "TuningColor2") ~= ToC2) then
 				playSFX("genrl", 53, 6, false)
 				triggerServerEvent("BuyColor", localPlayer, c1,c2,c3,c4,500)
 			else
-				helpmessage("Твой авто уже такого цвета!")
+				triggerEvent("helpmessageEvent", localPlayer, "Твой авто уже такого цвета!")
 			end
 		end
 	end
@@ -1745,7 +1744,8 @@ function BuyUpgrade(handl, othercomp)
 		LoadUpgrade(true, handl, othercomp)
 	else
 		upgrades = getVehicleUpgrades(getPedOccupiedVehicle(localPlayer))
-		helpmessage("#009900"..Text("КУПЛЕНО").."!")
+		
+		triggerEvent("helpmessageEvent", localPlayer, "#009900"..Text("КУПЛЕНО").."!")
 		LoadUpgrade()
 	end
 end
@@ -1754,14 +1754,14 @@ addEventHandler("BuyUpgrade", getRootElement(), BuyUpgrade)
 
 
 function UpgradePreload(razdel, name, upgr, cost) 
-	helpmessage("")
+	triggerEvent("helpmessageEvent", localPlayer, "")
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 
 
 	if(tonumber(upgr)) then
 		OriginVehicleUpgrade(theVehicle)
 		addVehicleUpgrade(theVehicle, upgr)
-		helpmessage(COLOR["DOLLAR"]["HEX"].."$"..cost)
+		triggerEvent("helpmessageEvent", localPlayer, COLOR["DOLLAR"]["HEX"].."$"..cost)
 		UpdateTuningPerformans()
 	else
 		if(cost == "Установлено") then
@@ -1790,7 +1790,7 @@ end
 
 
 function UpgradeServerPreload() 
-	helpmessage(COLOR["DOLLAR"]["HEX"]..Text("БЕСПЛАТНО"))
+	triggerEvent("helpmessageEvent", localPlayer, COLOR["DOLLAR"]["HEX"]..Text("БЕСПЛАТНО"))
 	UpdateTuningPerformans(true)
 end
 addEvent("UpgradeServerPreload", true )
@@ -1854,7 +1854,7 @@ end
 
 function PoliceAddMarker(x, y, z, gpsmessage)
 	triggerEvent("AddGPSMarker", localPlayer, x,y,z,gpsmessage)
-	helpmessage("#4682B4"..Text("Поступил новый вызов!\n #FFFFFFОтправляйся на #FF0000красный маркер"))
+	triggerEvent("helpmessageEvent", localPlayer, "#4682B4"..Text("Поступил новый вызов!\n #FFFFFFОтправляйся на #FF0000красный маркер"))
 	playSFX("script", 58, math.random(22, 35), false)
 end
 addEvent("PoliceAddMarker", true)
@@ -1939,11 +1939,23 @@ addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
 
 local ReplaceShader = dxCreateShader("texreplace.fx")
 local EmptyTexture = dxCreateTexture(1,1)
+setElementData(root, "RenderQuality", nil)
+
 function lowPcMode()
 	if(getElementData(localPlayer, "LowPCMode")) then
+		local check = getElementData(root, "RenderQuality")
+		if(check) then
+			if(check-0.1 < 0) then
+				setElementData(root, "RenderQuality", nil)
+			else
+				setElementData(root, "RenderQuality", check-0.1)
+				triggerEvent("helpmessageEvent", localPlayer, "Режим для #551A8Bслабых#FFFFFF компьютеров "..(11-(check*10)).." уровень")
+				return true
+			end
+		end
 		setElementData(localPlayer, "LowPCMode", false)
 		
-		helpmessage("Режим для #551A8Bслабых#FFFFFF компьютеров выключен")
+		triggerEvent("helpmessageEvent", localPlayer, "Режим для #551A8Bслабых#FFFFFF компьютеров выключен")
 		engineRemoveShaderFromWorldTexture(ReplaceShader,"collisionsmoke")
 		engineRemoveShaderFromWorldTexture(ReplaceShader,"bullethitsmoke")
 		engineRemoveShaderFromWorldTexture(ReplaceShader,"bullethitsmoke1")
@@ -1962,8 +1974,9 @@ function lowPcMode()
 		end
 		
 	else
+		setElementData(root, "RenderQuality", 0.9)
 		setElementData(localPlayer, "LowPCMode", true)
-		helpmessage("Режим для #551A8Bслабых#FFFFFF компьютеров включен")
+		triggerEvent("helpmessageEvent", localPlayer, "Режим для #551A8Bслабых#FFFFFF компьютеров 1 уровень")
 		dxSetShaderValue(ReplaceShader,"gTexture",EmptyTexture)
 		engineApplyShaderToWorldTexture(ReplaceShader,"collisionsmoke")
 		engineApplyShaderToWorldTexture(ReplaceShader,"bullethitsmoke")
@@ -3087,7 +3100,7 @@ function StartLookZonesBeta(zones, update)
 		LookHouse(SpawnPoints[1])
 	else
 		playSFX("genrl", 75, 1, false)
-		helpmessage("")
+		triggerEvent("helpmessageEvent", localPlayer, "")
 		MissionCompleted(update, "")
 		local x,y,z = getElementPosition(localPlayer)
 		setCameraMatrix(x+20, y-20, z+30, x, y, z)
@@ -3717,7 +3730,7 @@ function updateWorld()
 							if(not PData["VehicleBonus3"]) then PData["VehicleBonus3"] = 0 end
 							PData["VehicleBonus3"] = PData["VehicleBonus3"] + 0.2
 							if(PData["VehicleBonus3"] > 1) then 
-								RageInfo(Text("Преследование +{points}", {{"{points}", math.round(PData["VehicleBonus3"], 0)}}))
+								triggerEvent("helpmessageEvent", localPlayer, Text("#ffe800Преследование +{points}", {{"{points}", math.round(PData["VehicleBonus3"], 0)}}))
 							end
 						elseif(getElementType(hitElement) == "ped") then
 							StartAnimation(hitElement, "ped", "ev_dive", 3000,false,true,true,false)
@@ -3742,14 +3755,14 @@ function updateWorld()
 								if(brz-rz >= 40 or brz-rz <= -40) then
 									if(not isTimer(PData["VehicleBonus"])) then
 										AddRage(math.round(VehicleSpeed-50, 0))
-										RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-50, 0)}}))
+										--triggerEvent("helpmessageEvent", localPlayer, Text("#ffe800Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-50, 0)}}))
 										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 									end
 									HornPed(occ)
 								else
 									if(not isTimer(PData["VehicleBonus"])) then
 										AddRage(math.round(VehicleSpeed-50, 0))
-										RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-50, 0)}}))
+										--triggerEvent("helpmessageEvent", localPlayer, Text("#ffe800Обгон +{points}", {{"{points}", math.round(VehicleSpeed-50, 0)}}))
 										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 									end
 									HornPed(occ)
@@ -3770,14 +3783,14 @@ function updateWorld()
 								if(brz-rz >= 40 or brz-rz <= -40) then
 									if(not isTimer(PData["VehicleBonus"])) then
 										AddRage(math.round(VehicleSpeed-100, 0))
-										RageInfo(Text("Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
+										--triggerEvent("helpmessageEvent", localPlayer, Text("#ffe800Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
 										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 									end
 									HornPed(occ)
 								else	
 									if(not isTimer(PData["VehicleBonus"])) then
 										AddRage(math.round(VehicleSpeed-100, 0))
-										RageInfo(Text("Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
+										--triggerEvent("helpmessageEvent", localPlayer, Text("#ffe800Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
 										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
 									end
 									HornPed(occ)
@@ -4573,9 +4586,9 @@ function onClientColShapeHit(theElement, matchingDimension)
 					
 					if(getElementData(source, "owner") == getPlayerName(localPlayer)) then
 						if(getElementData(source, "locked") == 1) then
-							helpmessage(Text("Нажми {key} чтобы открыть гараж", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}}))
+							triggerEvent("helpmessageEvent", localPlayer, Text("Нажми {key} чтобы открыть гараж", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}}))
 						else
-							helpmessage(Text("Нажми {key} чтобы закрыть гараж", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}}))
+							triggerEvent("helpmessageEvent", localPlayer, Text("Нажми {key} чтобы закрыть гараж", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}}))
 						end
 					end
 				elseif(getElementData(source, "type") == "GExit") then
@@ -4635,20 +4648,6 @@ addEventHandler("onClientColShapeLeave", root, onClientColShapeLeave)
 
 
 
-
-function helpmessage(message)
-	if(isTimer(PData["helpmessageTimer"])) then
-		killTimer(PData["helpmessageTimer"])
-	end
-	
-	PData["helpmessage"] = message
-
-	PData["helpmessageTimer"] = setTimer(function()
-		PData["helpmessage"] = nil
-	end, 3500, 1)
-end
-addEvent("helpmessageEvent", true)
-addEventHandler("helpmessageEvent", localPlayer, helpmessage)
 
 
 
@@ -4908,7 +4907,7 @@ function targetingActivated(target)
 						if(PTeam == "Полиция") then
 							bindKey ("e", "down", PoliceArrestEvent)
 							if(getElementModel(theVehicle) == 596 or getElementModel(theVehicle) == 597 or getElementModel(theVehicle) == 598 or getElementModel(theVehicle) == 599 or getElementModel(theVehicle) == 523) then
-								helpmessage("Нажми #A0A0A0E#FFFFFF чтобы\nпотребовать остановить автомобиль", 3000)
+								triggerEvent("helpmessageEvent", localPlayer, "Нажми #A0A0A0E#FFFFFF чтобы\nпотребовать остановить автомобиль", 3000)
 							end
 						end
 					end
@@ -5194,7 +5193,7 @@ function onClientPlayerWeaponFireFunc(weapon, ammo, ammoInClip, hitX, hitY, hitZ
 		end
 		
 		if(weapon == 39) then
-			 helpmessage("Используй ПКМ чтобы взорвать взрывчатку")
+			 triggerEvent("helpmessageEvent", localPlayer, "Используй ПКМ чтобы взорвать взрывчатку")
 		end
 	end
 end
@@ -7492,9 +7491,6 @@ function DrawPlayerMessage()
 				dxDrawImage(25*scale, 150*scale, 150*scale, 100*scale, cameraimage) -- Камера
 			end
 			
-			if(PData["helpmessage"]) then
-				dxDrawBorderedText(Text(PData["helpmessage"]), screenWidth, screenHeight-(200*scalex), 0, 0, tocolor(255, 255, 255, 255), NewScale*2.3, "sans", "center", "top", false,false,false,true,not getElementData(localPlayer, "LowPCMode"))
-			end
 			
 			if(PData["HarvestDisplay"]) then
 				local HS = VehicleSpeed*10
@@ -7531,7 +7527,7 @@ function DrawPlayerMessage()
 				if tick - (idleTime or 0) < 50 then
 					if(score > 500) then
 						AddRage(1)
-						RageInfo("Дрифт +"..math.round(score/100, 0))
+						--triggerEvent("helpmessageEvent", localPlayer, "#ffe800Дрифт +"..math.round(score/100, 0))
 					end
 				end
 
@@ -7748,13 +7744,6 @@ end
 
 
 
-function RageInfo(info)
-	if(isTimer(PData['rageinfotimer'])) then killTimer(PData['rageinfotimer']) end
-	PText["HUD"][9] = {info, 0, 910*NewScale, screenWidth-230*NewScale, 0, tocolor(255,232,25,200), NewScale*2, "default-bold", "right", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
-	PData['rageinfotimer'] = setTimer(function() 
-		PText["HUD"][9] = nil
-	end, 2000, 1)
-end
 
 function AddRage(count)
 	if(count < 0) then
@@ -8118,7 +8107,7 @@ function ClientVehicleEnter(thePlayer, seat)
 		if(seat == 0) then
 			PData["ClearDriving"] = setTimer(function() 
 				AddRage(150)
-				RageInfo("Чистое вождение +150")
+				--triggerEvent("helpmessageEvent", localPlayer, "#ffe800Чистое вождение +150")
 			end, 25000, 0)
 
 			if(getElementModel(source) == 532 or getElementModel(source) == 531) then
