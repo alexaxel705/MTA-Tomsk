@@ -4210,6 +4210,50 @@ addEventHandler("LoginWindow", localPlayer, LoginClient)
 
 
 
+
+local DisplayInput = false
+
+
+
+
+function DrawPlayerInput()
+	dxDrawRectangle(screenWidth/2-(75*scale), screenHeight-(330*scale), 150*scale, 75*scale, tocolor(233, 165, 58, 180))	
+
+	if(BindedKeys["enter"][3][1] == "loginPlayerEvent") then
+		local text = ""
+		for _ = 1, #BindedKeys["enter"][3][4] do
+			text = text.."*"
+		end
+		dxDrawBorderedText(text.."|", screenWidth/2-(55*scale), screenHeight-(285*scale), 0, 0, tocolor(0, 0, 0, 255), scale, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
+	else
+		dxDrawBorderedText(BindedKeys["enter"][3][4].."|", screenWidth/2-(55*scale), screenHeight-(285*scale), 0, 0, tocolor(0, 0, 0, 255), scale, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
+	end
+	dxDrawText(DisplayInput, screenWidth, screenHeight-(325*scale), 0, 0, tocolor(0, 0, 0, 255), scale, "default-bold", "center", "top", false, false, false, true, true)
+end
+
+
+function CreateButtonInput(func, text, args)
+	if(DisplayInput) then
+		DisplayInput = nil		
+		removeEventHandler("onClientHUDRender", getRootElement(), DrawPlayerInput)
+	else
+		BindedKeys["enter"] = {"ServerCall", localPlayer, {func, localPlayer, localPlayer, "", args}}
+		
+		DisplayInput = text
+		addEventHandler("onClientHUDRender", getRootElement(), DrawPlayerInput)
+	end
+end
+addEvent("CreateButtonInputInt", true)
+addEventHandler("CreateButtonInputInt", root, CreateButtonInput)
+
+
+
+
+
+
+
+
+
 function StartUnload()
 	LoginClient(false)
 	for name, dat in pairs(VideoMemory) do
@@ -5738,10 +5782,22 @@ function playerPressedKey(button, press)
 		if(BindedKeys[button]) then
 			triggerEvent(unpack(BindedKeys[button]))
 			if(button == "enter") then
-				PText["HUD"][8] = nil
+				CreateButtonInput()
 				BindedKeys[button] = nil
 			end
 			cancelEvent()
+		end
+		
+		if(DisplayInput) then
+			if(button == "space") then
+				button = " "
+			elseif(button == "backspace") then
+				BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]:sub(1, -2)
+			end
+			if(#button == 1) then
+				BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]..button
+				cancelEvent()
+			end
 		end
 		
 		if(PText["HUD"][8]) then
@@ -6691,52 +6747,51 @@ function MemText(text, left, top, color, scale, font, border, incline, centerX, 
 		
 		local w,h = dxGetTextWidth(text, scale, font, true)+(border*2), dxGetFontHeight(scale, font)+(border*2)
 		
-		
 		if(not VideoMemory["HUD"][index]) then
 			VideoMemory["HUD"][index] = dxCreateRenderTarget(w+((w*incline)/4),h, true)
-			
-			dxSetRenderTarget(VideoMemory["HUD"][index], true)
-			dxSetBlendMode("modulate_add")
-			
-			local posx, posy = ((w*incline)/4),0
-			if(border) then
-				posx = posx+border
-				posy = posy+border
+		end
+		
+		dxSetRenderTarget(VideoMemory["HUD"][index], true)
+		dxSetBlendMode("modulate_add")
+		
+		local posx, posy = ((w*incline)/4),0
+		if(border) then
+			posx = posx+border
+			posy = posy+border
+		end
+		
+		
+		local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
+		for oX = -border, border do 
+			for oY = -border, border do 
+				dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,not getElementData(root, "LowPCMode"))
 			end
-			
-			
-			local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
-			for oX = -border, border do 
-				for oY = -border, border do 
-					dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,not getElementData(root, "LowPCMode"))
-				end
-			end
+		end
 
-			dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,not getElementData(root, "LowPCMode"))
+		dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,not getElementData(root, "LowPCMode"))
 
-			
-			dxSetBlendMode("blend")
-			dxSetRenderTarget()
-			
-			if(incline > 0) then 
-				local pixels = dxGetTexturePixels(VideoMemory["HUD"][index])
-				local x, y = dxGetPixelsSize(pixels)
-				local texture = dxCreateTexture(x,y, "argb")
-				local pixels2 = dxGetTexturePixels(texture)
-				local pady = 0
-				for y2 = 0, y-1 do
-					for x2 = 0, x-1 do
-						local colors = {dxGetPixelColor(pixels, x2,y2)}
-						if(colors[4] > 0) then
-							dxSetPixelColor(pixels2, x2-pady, y2, colors[1],colors[2],colors[3],colors[4])
-						end
+		
+		dxSetBlendMode("blend")
+		dxSetRenderTarget()
+		
+		if(incline > 0) then 
+			local pixels = dxGetTexturePixels(VideoMemory["HUD"][index])
+			local x, y = dxGetPixelsSize(pixels)
+			local texture = dxCreateTexture(x,y, "argb")
+			local pixels2 = dxGetTexturePixels(texture)
+			local pady = 0
+			for y2 = 0, y-1 do
+				for x2 = 0, x-1 do
+					local colors = {dxGetPixelColor(pixels, x2,y2)}
+					if(colors[4] > 0) then
+						dxSetPixelColor(pixels2, x2-pady, y2, colors[1],colors[2],colors[3],colors[4])
 					end
-					pady = pady+incline
 				end
-				
-				dxSetTexturePixels(texture, pixels2)
-				VideoMemory["HUD"][index] = texture
+				pady = pady+incline
 			end
+			
+			dxSetTexturePixels(texture, pixels2)
+			VideoMemory["HUD"][index] = texture
 		end
 		
 		if(scale3D) then 
