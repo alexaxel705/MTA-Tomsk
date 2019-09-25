@@ -1940,9 +1940,10 @@ addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
 local ReplaceShader = dxCreateShader("texreplace.fx")
 local EmptyTexture = dxCreateTexture(1,1)
 setElementData(root, "RenderQuality", nil)
+setElementData(root, "LowPCMode", nil)
 
 function lowPcMode()
-	if(getElementData(localPlayer, "LowPCMode")) then
+	if(getElementData(root, "LowPCMode")) then
 		local check = getElementData(root, "RenderQuality")
 		if(check) then
 			if(check-0.1 < 0) then
@@ -1953,7 +1954,7 @@ function lowPcMode()
 				return true
 			end
 		end
-		setElementData(localPlayer, "LowPCMode", false)
+		setElementData(root, "LowPCMode", nil)
 		
 		triggerEvent("helpmessageEvent", localPlayer, "Режим для #551A8Bслабых#FFFFFF компьютеров выключен")
 		engineRemoveShaderFromWorldTexture(ReplaceShader,"collisionsmoke")
@@ -1975,7 +1976,7 @@ function lowPcMode()
 		
 	else
 		setElementData(root, "RenderQuality", 0.9)
-		setElementData(localPlayer, "LowPCMode", true)
+		setElementData(root, "LowPCMode", true)
 		triggerEvent("helpmessageEvent", localPlayer, "Режим для #551A8Bслабых#FFFFFF компьютеров 1 уровень")
 		dxSetShaderValue(ReplaceShader,"gTexture",EmptyTexture)
 		engineApplyShaderToWorldTexture(ReplaceShader,"collisionsmoke")
@@ -3706,7 +3707,7 @@ function updateWorld()
 			if(PData["Driver"]["Distance"] >= 2000) then
 				local VehType = GetVehicleType(theVehicle)
 				PData["Driver"]["Distance"] = 0
-				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 5)
+				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 1)
 			end
 			
 			if(VehicleSpeed > 100) then
@@ -6707,11 +6708,11 @@ function MemText(text, left, top, color, scale, font, border, incline, centerX, 
 			local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
 			for oX = -border, border do 
 				for oY = -border, border do 
-					dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,not getElementData(localPlayer, "LowPCMode"))
+					dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,not getElementData(root, "LowPCMode"))
 				end
 			end
 
-			dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,not getElementData(localPlayer, "LowPCMode"))
+			dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,not getElementData(root, "LowPCMode"))
 
 			
 			dxSetBlendMode("blend")

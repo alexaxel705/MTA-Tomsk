@@ -16388,7 +16388,7 @@ function RacePriceGeneration(thePlayer)
 			Parkings[park[1]][park[2]][park[3]][1] = v
 			setElementData(v, "owner", getPlayerName(thePlayer))
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, park[4], park[5], park[6], "Приз")
-			outputChatBox("Забери свой приз на красном маркере!", thePlayer, 255,255,255,true)
+			OutputChat(thePlayer, "Забери свой приз на красном маркере!", "Server")
 		end
 	else
 		--[[for i ,v in pairs(VCompVehicleTypes["Automobile"]) do
@@ -16399,7 +16399,7 @@ function RacePriceGeneration(thePlayer)
 		end--]]
 		local parts = VCompVehicleTypes["Automobile"][math.random(#VCompVehicleTypes["Automobile"])]
 		AddPlayerVehiclePart(thePlayer, parts[1], parts[2])
-		outputChatBox("Ты выиграл #FFFFFF"..parts[1].." "..parts[2], thePlayer, math.random(255),math.random(255),math.random(255),true)
+		OutputChat(thePlayer, "Ты выиграл #00ff00"..parts[1].." "..parts[2], "Server")
 	end
 end
 
@@ -16501,6 +16501,8 @@ function race(name)
 			for Player, _ in pairs(MPPlayerList) do
 				if(isElement(Player)) then
 					triggerClientEvent(Player, "StartRace", Player, SData["RaceArr"], MPPlayerList)
+					triggerClientEvent(Player, "RemoveGPSMarker", Player, "Гонка")
+					HelpMessage(Player, "Гонка началась!")
 				end
 			end
 			raceGlobalTimer = setTimer(function()
