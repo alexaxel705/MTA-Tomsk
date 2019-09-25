@@ -1939,28 +1939,28 @@ addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
 
 local ReplaceShader = dxCreateShader("texreplace.fx")
 local EmptyTexture = dxCreateTexture(1,1)
-setElementData(root, "RenderQuality", nil)
-setElementData(root, "LowPCMode", nil)
+local LowPcShaders = {"collisionsmoke", "bullethitsmoke", "bullethitsmoke1", "boatsplash"}
+
+
 
 function lowPcMode()
-	if(getElementData(root, "LowPCMode")) then
-		local check = getElementData(root, "RenderQuality")
+	if(getElementData(localPlayer, "LowPCMode")) then
+		local check = getElementData(localPlayer, "RenderQuality")
 		if(check) then
-			if(check-0.1 < 0) then
-				setElementData(root, "RenderQuality", nil)
+			check = math.round(check, 1)
+			if(check-0.1 <= 0) then
+				triggerServerEvent("setQuality", localPlayer, localPlayer, false, false)
 			else
-				setElementData(root, "RenderQuality", check-0.1)
+				triggerServerEvent("setQuality", localPlayer, localPlayer, true, check-0.1)
 				triggerEvent("helpmessageEvent", localPlayer, "Режим для #551A8Bслабых#FFFFFF компьютеров "..(11-(check*10)).." уровень")
 				return true
 			end
 		end
-		setElementData(root, "LowPCMode", nil)
 		
 		triggerEvent("helpmessageEvent", localPlayer, "Режим для #551A8Bслабых#FFFFFF компьютеров выключен")
-		engineRemoveShaderFromWorldTexture(ReplaceShader,"collisionsmoke")
-		engineRemoveShaderFromWorldTexture(ReplaceShader,"bullethitsmoke")
-		engineRemoveShaderFromWorldTexture(ReplaceShader,"bullethitsmoke1")
-		engineRemoveShaderFromWorldTexture(ReplaceShader,"boatsplash")
+		for _, name in pairs(LowPcShaders) do
+			engineRemoveShaderFromWorldTexture(ReplaceShader, name)
+		end
 		setWorldSpecialPropertyEnabled("randomfoliage", true)
 		resetPedsLODDistance()
 		resetVehiclesLODDistance()
@@ -1975,14 +1975,12 @@ function lowPcMode()
 		end
 		
 	else
-		setElementData(root, "RenderQuality", 0.9)
-		setElementData(root, "LowPCMode", true)
+		triggerServerEvent("setQuality", localPlayer, localPlayer, true, 0.9)
 		triggerEvent("helpmessageEvent", localPlayer, "Режим для #551A8Bслабых#FFFFFF компьютеров 1 уровень")
 		dxSetShaderValue(ReplaceShader,"gTexture",EmptyTexture)
-		engineApplyShaderToWorldTexture(ReplaceShader,"collisionsmoke")
-		engineApplyShaderToWorldTexture(ReplaceShader,"bullethitsmoke")
-		engineApplyShaderToWorldTexture(ReplaceShader,"bullethitsmoke1")
-		engineApplyShaderToWorldTexture(ReplaceShader,"boatsplash")
+		for _, name in pairs(LowPcShaders) do
+			engineApplyShaderToWorldTexture(ReplaceShader, name)
+		end
 		setPedsLODDistance(50)
 		setVehiclesLODDistance(50)
 		setWorldSpecialPropertyEnabled("randomfoliage", false)
@@ -1992,7 +1990,6 @@ function lowPcMode()
 		removeEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
 		removeEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
 
-		
 		for thePlayer, dat in pairs(StreamData) do
 			if(dat["armas"]) then
 				for _, v in pairs(dat["armas"]) do
@@ -2003,6 +2000,7 @@ function lowPcMode()
 		end
 	end
 end
+
 
 
 function StartMission()
@@ -5111,12 +5109,6 @@ function DevelopmentRender()
 end
 
 
-
-
-
-
-
-
 function isEventHandlerAdded(sEventName, pElementAttachedTo, func)
 	if 
 		type(sEventName) == 'string' and 
@@ -5134,6 +5126,15 @@ function isEventHandlerAdded(sEventName, pElementAttachedTo, func)
 	end
 	return false
 end
+
+
+function removeshader(command, h)		
+	dxSetShaderValue(ReplaceShader,"gTexture",EmptyTexture)
+	engineApplyShaderToWorldTexture(ReplaceShader, h)
+	outputConsole(h.." shader remove")
+end
+addCommandHandler("removeshader", removeshader)
+
 
 
 
@@ -6764,11 +6765,11 @@ function MemText(text, left, top, color, scale, font, border, incline, centerX, 
 		local textb = string.gsub(text, "#%x%x%x%x%x%x", "")
 		for oX = -border, border do 
 			for oY = -border, border do 
-				dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,not getElementData(root, "LowPCMode"))
+				dxDrawText(textb, posx+oX, posy+oY, 0+oX, 0+oY, tocolor(0, 0, 0, 255), scale, font, "left", "top", false, false,false,false,not getElementData(localPlayer, "LowPCMode"))
 			end
 		end
 
-		dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,not getElementData(root, "LowPCMode"))
+		dxDrawText(text, posx, posy, 0, 0, color, scale, font, "left", "top", false,false,false,true,not getElementData(localPlayer, "LowPCMode"))
 
 		
 		dxSetBlendMode("blend")

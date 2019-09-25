@@ -7509,7 +7509,7 @@ function preLoad(name)
 	for theKey,thePlayer in ipairs(players) do
 		triggerEvent("onPlayerJoin", thePlayer)
 	end
-
+	
 
 	setTime(ServerDate.hour, ServerDate.minute)
 	setElementData(root, "ServerTime", ServerDate.timestamp)
@@ -7753,6 +7753,19 @@ function ppgwjht(thePlayer)
 end
 addEvent("ppgwjht", true)
 addEventHandler("ppgwjht", root, ppgwjht)
+
+
+
+function setQualityHandler(thePlayer, lowPCMode, Quality) 
+	setElementData(thePlayer, "LowPCMode", lowPCMode)
+	setElementData(thePlayer, "RenderQuality", Quality)
+end
+addEvent("setQuality", true)
+addEventHandler("setQuality", root, setQualityHandler)
+
+
+
+
 
 
 function nightprowler(thePlayer) 
