@@ -32,6 +32,7 @@ local RobAction = false
 local FireTimer = {}
 local StreamData = {}
 local VideoMemory = {["HUD"] = {}}
+local VehicleSpeed = 0
 
 
 local PData = {
@@ -44,7 +45,6 @@ local PData = {
 	['AnimatedMarker'] = {}, 
 	['Target'] = {}, 
 	['blip'] = {}, 
-	['rage'] = 0, 
 	['TARR'] = {}, -- Target, по центру, ниже, выше
 	['MultipleAction'] = {},
 }
@@ -116,8 +116,6 @@ local SleepTimer = false
 local ArrestTimerEvent = false
 local DrugsTimer = false
 local SpunkTimer = false
-local VehicleSpeed = 0
-local SlowTahometer = 0
 local screenSource = dxCreateScreenSource(screenWidth, screenHeight)
 local PText = {["biz"] = {}, ["bank"] = {}, ["INVHUD"] = {}, ["HUD"] = {}}
 --[[ 
@@ -125,9 +123,6 @@ HUD:
 	1 - DeathMatch
 	2 - Встать с койки, DeathMatch 2
 	3 - ChangeInfo
-	4 - ChangeInfoAdv
-	6 - MissionCompleted
-	7 - MissionCompleted
 	8 - input
 	9 - очки ярости
 --]]
@@ -166,45 +161,6 @@ local trafficlight = {
 
  
 
-
-function dxDrawCircleCustom( posX, posY, radius, width, angleAmount, startAngle, stopAngle, color, postGUI, text)
-	if(startAngle == stopAngle) then
-		return false
-	end
- 
-	local function clamp( val, lower, upper )
-		if ( lower > upper ) then lower, upper = upper, lower end
-		return math.max( lower, math.min( upper, val ) )
-	end
- 
-	radius = type( radius ) == "number" and radius or 50
-	width = type( width ) == "number" and width or 5
-	angleAmount = type( angleAmount ) == "number" and angleAmount or 1
-	startAngle = clamp( type( startAngle ) == "number" and startAngle or 0, 0, 360 )
-	stopAngle = clamp( type( stopAngle ) == "number" and stopAngle or 360, 0, 360 )
-	color = color or tocolor( 255, 255, 255, 200 )
-	postGUI = type( postGUI ) == "boolean" and postGUI or false
- 
-	if ( stopAngle < startAngle ) then
-		local tempAngle = stopAngle
-		stopAngle = startAngle
-		startAngle = tempAngle
-	end
- 
-	local n = 0
-	for i = startAngle, stopAngle, angleAmount do
-		local startX = math.cos( math.rad( i ) ) * ( radius - width )
-		local startY = math.sin( math.rad( i ) ) * ( radius - width )
-		local endX = math.cos( math.rad( i ) ) * ( radius + width )
-		local endY = math.sin( math.rad( i ) ) * ( radius + width )
-		dxDrawLine(startX + posX, startY + posY, endX + posX, endY + posY, color, width, postGUI)
-		if(text) then
-			dxDrawText(n, (startX/1.17)+posX,(startY/1.17)+posY, (startX/1.17)+posX,(startY/1.17)+posY, tocolor(160,160,160,255), scale/2, "default-bold", "center", "center")
-			n=n+1
-		end
-	end
-	return true
-end
 
 
 function math.round(number, decimals, method)
@@ -1598,7 +1554,6 @@ function LoadUpgrade(Update, handl, othercomp)
 			end
 		end
 	end
-	ChangeInfo("")
 	TuningSelector = 1
 	tuningList=true
 	PText["tuning"] = {}
@@ -1740,12 +1695,12 @@ function BuyUpgrade(handl, othercomp)
 	ToC1, ToC2, ToC3, ToC4 = getVehicleColor(getPedOccupiedVehicle(localPlayer))
 	guiSetAlpha(TCButton[ToC1+1], 0.5)
 	guiSetAlpha(TCButton2[ToC2+1], 0.5)
+	
+	playSFX("script", 150, 0, false)
 	if(handl) then
 		LoadUpgrade(true, handl, othercomp)
 	else
 		upgrades = getVehicleUpgrades(getPedOccupiedVehicle(localPlayer))
-		
-		triggerEvent("helpmessageEvent", localPlayer, "#009900"..Text("КУПЛЕНО").."!")
 		LoadUpgrade()
 	end
 end
@@ -1790,7 +1745,6 @@ end
 
 
 function UpgradeServerPreload() 
-	triggerEvent("helpmessageEvent", localPlayer, COLOR["DOLLAR"]["HEX"]..Text("БЕСПЛАТНО"))
 	UpdateTuningPerformans(true)
 end
 addEvent("UpgradeServerPreload", true )
@@ -2311,7 +2265,7 @@ end
 
 function bizControl(name, data)
 	PText["biz"] = {}
-	MissionCompleted("", "")
+	triggerEvent(localPlayer, "MissionCompleted", "", "")
 	if(data["money"]) then
 		local text = "Текущий баланс "..COLOR["DOLLAR"]["HEX"].."$"..data["money"].." "
 		local textWidth = dxGetTextWidth(text, scale*0.8, "default-bold", true)
@@ -2883,7 +2837,8 @@ local CityColor = {
 }
 
 
-function LookHouse(h)
+function LookHouse(h, timer)
+	h = fromJSON(h)
 	setElementDimension(localPlayer, 0)
 	setElementInterior(localPlayer, 0) 
 	local x,y,z = h[1], h[2], h[3]
@@ -2910,26 +2865,34 @@ function LookHouse(h)
 	else
 		setCameraMatrix(x-100, y-100, z+150, x, y, z)
 	end
+	
+	if(timer) then
+		setTimer(function(thePlayer)
+			setCameraTarget(localPlayer)
+		end, timer, 1)
+	end
 end
+addEvent("LookHouse", true)
+addEventHandler("LookHouse", localPlayer, LookHouse)
 
 
 
 function NextSkinMinus()
 	if(SpawnPoints[ViewHouse-1]) then
-		LookHouse(SpawnPoints[ViewHouse-1])
+		LookHouse(toJSON(SpawnPoints[ViewHouse-1]))
 		ViewHouse=ViewHouse-1
 	else
-		LookHouse(SpawnPoints[#SpawnPoints])
+		LookHouse(toJSON(SpawnPoints[#SpawnPoints]))
 		ViewHouse=#SpawnPoints
 	end
 end
 
 function NextSkinPlus()
 	if(SpawnPoints[ViewHouse+1]) then
-		LookHouse(SpawnPoints[ViewHouse+1])
+		LookHouse(toJSON(SpawnPoints[ViewHouse+1]))
 		ViewHouse=ViewHouse+1
 	else
-		LookHouse(SpawnPoints[1])
+		LookHouse(toJSON(SpawnPoints[1]))
 		ViewHouse=1
 	end
 end
@@ -3003,7 +2966,7 @@ function StartLookZones(zones, update)
 		bindKey ("arrow_l", "down", NextSkinMinus) 
 		bindKey ("arrow_r", "down", NextSkinPlus) 
 		bindKey ("enter", "down", NextSkinEnter)
-		LookHouse(SpawnPoints[1])
+		LookHouse(toJSON(SpawnPoints[1]))
 	end
 end
 addEvent("StartLookZones", true)
@@ -3096,11 +3059,11 @@ function StartLookZonesBeta(zones, update)
 		bindKey ("arrow_l", "down", NextSkinMinus) 
 		bindKey ("arrow_r", "down", NextSkinPlus) 
 		bindKey ("enter", "down", NextSkinEnter)
-		LookHouse(SpawnPoints[1])
+		LookHouse(toJSON(SpawnPoints[1]))
 	else
 		playSFX("genrl", 75, 1, false)
 		triggerEvent("helpmessageEvent", localPlayer, "")
-		MissionCompleted(update, "")
+		triggerEvent(localPlayer, "MissionCompleted", update, "")
 		local x,y,z = getElementPosition(localPlayer)
 		setCameraMatrix(x+20, y-20, z+30, x, y, z)
 		PEDChangeSkin = "cinema"
@@ -3579,60 +3542,6 @@ end
 
 
 
-function getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears) -- engineAcceleration, dragCoeff, numberOfGears
-	return (math.sqrt(3300*engineAcceleration/dragCoeff)*1.18)/numberOfGears
-end
-
-
-function getVehicleGear(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
-	local onegear = getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears)
-	local result = 0
-	for Gear = 0, numberOfGears, 1 do
-		if(getVehicleCurrentGear(theVehicle) > 0) then
-			if(onegear*Gear <= VehicleSpeed) then
-				if((Gear+1) <= numberOfGears) then
-					result = (Gear+1)
-				end
-			end
-		else
-			result = 0
-		end
-	end
-    return result
-end
-
-
-
-function getVehicleRPM(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
-	local onegear = getVehicleOneGear(engineAcceleration, dragCoeff, numberOfGears)
-	local MaxRPM = GetVehicleMaxRPM(engineAcceleration)
-	local Gear = getVehicleGear(theVehicle, engineAcceleration, dragCoeff, numberOfGears)
-	local crpm = 0
-	if(getKeyState("w") and getKeyState("s") or getKeyState("w") and getKeyState("space")) then
-		crpm = MaxRPM/onegear*(onegear-((onegear*Gear)-onegear))
-	else
-		if(Gear > 0) then
-			crpm = MaxRPM/onegear*(onegear-((onegear*Gear)-VehicleSpeed))
-		else
-			crpm = MaxRPM/onegear*((VehicleSpeed-onegear*Gear))
-		end
-	end
-	if getVehicleEngineState(theVehicle) == true then
-		if(crpm < 800) then 
-			crpm = 800
-		else
-			if(crpm > MaxRPM) then crpm = MaxRPM end -- Костыль
-		end
-	end
-    return crpm
-end
-
-
-function GetVehicleMaxRPM(engineAcceleration)
-	return (((10*(engineAcceleration))*1.5))*40
-end
-
-
 local PedHorn = {}
 function HornPed(thePed, thePlayer)
 	if(not isTimer(PedHorn[thePed])) then
@@ -3708,6 +3617,8 @@ function updateWorld()
 				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 1)
 			end
 			
+			local vx, vy, vz = getElementVelocity(theVehicle)
+			VehicleSpeed = (vx^2 + vy^2 + vz^2)^(0.5)*156
 			if(VehicleSpeed > 100) then
 				local vxl,vyl,vzl, vxr, vyr, vzr = false
 				local vxc, vyc, vzc = getElementPosition(theVehicle)
@@ -3725,21 +3636,8 @@ function updateWorld()
 					local x,y,z = getPointInFrontOfPoint(vxc, vyc, vzc, rz-270, 30)
 					local _,_,_,_,hitElement,_,_,_,_ = processLineOfSight(vxc, vyc, vzc,x,y,z, false, true, true, false, false, false, false, false, theVehicle,false,false)
 					if(hitElement) then
-						if(getElementType(hitElement) == "vehicle") then
-							if(not PData["VehicleBonus3"]) then PData["VehicleBonus3"] = 0 end
-							PData["VehicleBonus3"] = PData["VehicleBonus3"] + 0.2
-							if(PData["VehicleBonus3"] > 1) then 
-								triggerEvent("helpmessageEvent", localPlayer, Text("#ffe800Преследование +{points}", {{"{points}", math.round(PData["VehicleBonus3"], 0)}}))
-							end
-						elseif(getElementType(hitElement) == "ped") then
+						if(getElementType(hitElement) == "ped") then
 							StartAnimation(hitElement, "ped", "ev_dive", 3000,false,true,true,false)
-						end
-					else
-						if(PData["VehicleBonus3"]) then
-							if(PData["VehicleBonus3"] > 1) then 
-								AddRage(math.round(PData["VehicleBonus3"], 0))
-								PData["VehicleBonus3"] = nil
-							end
 						end
 					end
 					
@@ -3752,18 +3650,8 @@ function updateWorld()
 							if(getElementType(occ) == "ped") then
 								local _, _, brz = getElementRotation(hitElement)
 								if(brz-rz >= 40 or brz-rz <= -40) then
-									if(not isTimer(PData["VehicleBonus"])) then
-										AddRage(math.round(VehicleSpeed-50, 0))
-										--triggerEvent("helpmessageEvent", localPlayer, Text("#ffe800Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-50, 0)}}))
-										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-									end
 									HornPed(occ)
 								else
-									if(not isTimer(PData["VehicleBonus"])) then
-										AddRage(math.round(VehicleSpeed-50, 0))
-										--triggerEvent("helpmessageEvent", localPlayer, Text("#ffe800Обгон +{points}", {{"{points}", math.round(VehicleSpeed-50, 0)}}))
-										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-									end
 									HornPed(occ)
 								end
 							end
@@ -3780,18 +3668,8 @@ function updateWorld()
 							if(getElementType(occ) == "ped") then
 								local _, _, brz = getElementRotation(hitElement)
 								if(brz-rz >= 40 or brz-rz <= -40) then
-									if(not isTimer(PData["VehicleBonus"])) then
-										AddRage(math.round(VehicleSpeed-100, 0))
-										--triggerEvent("helpmessageEvent", localPlayer, Text("#ffe800Опасное вождение +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
-										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-									end
 									HornPed(occ)
 								else	
-									if(not isTimer(PData["VehicleBonus"])) then
-										AddRage(math.round(VehicleSpeed-100, 0))
-										--triggerEvent("helpmessageEvent", localPlayer, Text("#ffe800Обгон +{points}", {{"{points}", math.round(VehicleSpeed-100, 0)}}))
-										PData["VehicleBonus"] = setTimer(function() end, 2000, 1)
-									end
 									HornPed(occ)
 								end
 							end
@@ -3809,21 +3687,11 @@ setTimer(updateWorld, 50, 0)
 
 function checkKey()
 	if(PEDChangeSkin == "play") then
-		local theVehicle = getPedOccupiedVehicle(localPlayer)
-
 		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
 			UpdateArmas(thePlayer)
 		end
 		for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
 			UpdateArmas(thePed)
-		end
-		if(theVehicle and PData["ClearDriving"]) then
-			if(VehicleSpeed < 1) then
-				if(isTimer(PData["ClearDriving"])) then resetTimer(PData["ClearDriving"]) end
-				if(getElementData(theVehicle, "owner") == getPlayerName(localPlayer)) then
-					ChangeInfo(Text("Нажми {key} чтобы припарковать машину", {{"{key}", COLOR["KEY"]["HEX"].."P#FFFFFF"}}), 1000)
-				end
-			end
 		end
 	end	
 	
@@ -4695,49 +4563,6 @@ addEventHandler("onClientColShapeLeave", root, onClientColShapeLeave)
 
 
 
-function MissionCompleted(job, money, removetarget, cinema)
-	if(removetarget) then
-		Targets["thePlayer"] = nil
-	end
-	if(isTimer(PData["MissionCompletedTimer"])) then
-		killTimer(PData["MissionCompletedTimer"])
-	end
-	
-	
-	if(job) then
-		PText["HUD"][6] = {"#744D02"..Text(job), screenWidth, screenHeight/2-dxGetFontHeight(NewScale*6, "sans")/2, 0, 0, tocolor(255, 255, 255, 255), NewScale*6, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
-	end
-	
-	if(money) then
-		if(tonumber(money)) then
-			PText["HUD"][7] = {"$"..money, screenWidth, screenHeight/2+(dxGetFontHeight(NewScale*4, "pricedown")/2), 0, 0, tocolor(255, 255, 255, 255), NewScale*4, "pricedown", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}	
-		else
-			PText["HUD"][7] = {money, screenWidth, screenHeight/2+(dxGetFontHeight(NewScale*6, "sans")/2), 0, 0, tocolor(255, 255, 255, 255), NewScale*6, "sans", "center", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}	
-		end
-	end
-	
-	PData["MissionCompletedTimer"] = setTimer(function()
-		PText["HUD"][6] = nil
-		PText["HUD"][7] = nil
-	end, 3500, 1)
-	
-	if(cinema) then
-		cinema = fromJSON(cinema)
-		playSFX("genrl", 75, 1, false)
-		local x,y,z = getElementPosition(localPlayer)
-		LookHouse(cinema[1])
-		PEDChangeSkin = "cinema"
-		setTimer(function(thePlayer)
-			setCameraTarget(localPlayer)
-			PEDChangeSkin = "play"
-		end, 3500, 1)
-	end
-end
-addEvent("MissionCompleted", true)
-addEventHandler("MissionCompleted", localPlayer, MissionCompleted)
-
-
-
 
 
 
@@ -4993,8 +4818,6 @@ function targetingActivated(target)
 				end
 				Targets["thePed"] = target
 			end
-		else 
-			if(not theVehicle) then ChangeInfo() end
 		end
 	end
 end
@@ -5064,13 +4887,6 @@ addEventHandler("onMyClientScreenShot", resourceRoot,
  
  
 
-local score = 0
-local tick
-local idleTime
-local multTime
-local mult = 1
-
-
 
 
 
@@ -5104,10 +4920,6 @@ end
 
 
 
-function DevelopmentRender()
-	AddRage(5)
-end
-
 
 function isEventHandlerAdded(sEventName, pElementAttachedTo, func)
 	if 
@@ -5137,6 +4949,10 @@ addCommandHandler("removeshader", removeshader)
 
 
 
+
+function DevelopmentRender()
+
+end
 
 function ShowInfoKey()
 	if(isEventHandlerAdded("onClientRender", root, DevelopmentRender)) then
@@ -5741,26 +5557,6 @@ function playerPressedKey(button, press)
 		end
 	end
 	
-	if(getPedOccupiedVehicle(localPlayer)) then
-		if(getPedOccupiedVehicleSeat(localPlayer) == 0) then
-			if(button == "lshift") then
-				if(PData['rage'] > 0) then
-					if(press) then
-						AddRage(-2)
-						PData['ragetimer'] = setTimer(function() 
-							AddRage(-2)
-						end, 50, 0)
-						triggerServerEvent("Acceleration", localPlayer, localPlayer)
-					else
-						killTimer(PData['ragetimer'])
-						triggerServerEvent("AccelerationDown", localPlayer, localPlayer)
-					end
-				end
-			end
-		end
-	end
-	
-	
     if (press) then
 		if(#Cheatkeys > 99) then
 			table.remove(Cheatkeys, 1)
@@ -6363,10 +6159,6 @@ addEventHandler("FadeOut", localPlayer, FadeOut)
 
 
 
-function race(command, h)
-	triggerServerEvent("race", localPlayer, localPlayer)
-end
-addCommandHandler("race", race)
 
 function vp(command, h)
 	local x,y,z = getElementPosition(localPlayer)
@@ -6427,51 +6219,6 @@ function getTeamVariable(team)
 end
 
 
-function angle()
-	local theVehicle = getPedOccupiedVehicle(localPlayer)
-	local vx,vy,vz = getElementVelocity(theVehicle)
-	local modV = math.sqrt(vx*vx + vy*vy)
-	
-	if not isVehicleOnGround(theVehicle) then return 0,modV end
-	
-	local rx,ry,rz = getElementRotation(theVehicle)
-	local sn,cs = -math.sin(math.rad(rz)), math.cos(math.rad(rz))
-	
-	local deltaT = tick - (multTime or 0)
-	if mult~= 1 and modV <= 0.3 and deltaT > 750 then
-		mult = mult-1
-		multTime = tick
-	elseif deltaT > 1500 then
-		local temp = 1
-		if score >= 1000 then
-			temp = 5
-		elseif score >= 500 then
-			temp = 4
-		elseif score >= 250 then
-			temp = 3
-		elseif score >= 100 then
-			temp = 2
-		end
-		if temp>mult then
-			mult = temp
-			multTime = tick
-		end
-	end
-	
-
-	local cosX = (sn*vx + cs*vy)/modV
-	if cosX > 0.966 or cosX < 0 then return 0,modV end
-	return math.deg(math.acos(cosX))*0.5, modV
-end
-
-addEvent("driftCarCrashed", true)
-addEventHandler("driftCarCrashed", getRootElement(), function()
-	resetTimer(PData["ClearDriving"])
-	if score ~= 0 then
-		score = 0
-		mult = 1
-	end
-end)
 
 
 
@@ -6854,11 +6601,6 @@ addEventHandler("normalspeed", localPlayer, normalspeed)
 
 function onWasted(killer, weapon, bodypart)
 	if(source == localPlayer) then 
-		if(getPedOccupiedVehicle(localPlayer)) then
-			ClientVehicleExit(localPlayer, getPedOccupiedVehicleSeat(localPlayer))
-		end
-		
-	
 		if(getElementData(localPlayer, "fishpos")) then
 			triggerServerEvent("StopFish", localPlayer, localPlayer)
 		end
@@ -6902,44 +6644,6 @@ addEventHandler("PlayerNewZone", root, PlayerNewZone)
 
 
 
-function PlayerVehicleEnter(theVehicle, seat)
-	if(source == localPlayer) then 
-		Targets["theVehicle"] = nil
-		if(seat == 0) then
-			PData["Driver"] = {
-				["Handling"] = getVehicleHandling(theVehicle),
-				["Distance"] = 0
-			}
-			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = getElementPosition(theVehicle)
-			local name = getVehicleName(theVehicle)
-			if(getElementData(theVehicle, "name")) then
-				name = getElementData(theVehicle, "name")
-			end
-			if(getElementData(theVehicle, "year")) then
-				name = name.." "..getElementData(theVehicle, "year")
-			end
-			if(getElementData(localPlayer, "City")) then
-				triggerEvent("SetZoneDisplay", localPlayer, "#9b7c52"..name, true)
-			else
-				triggerEvent("SetZoneDisplay", localPlayer, "#66935C"..name, true)
-			end
-		end
-	end
-end
-addEventHandler("onClientPlayerVehicleEnter",getRootElement(),PlayerVehicleEnter)
-
-
-function PlayerVehicleExit(theVehicle, seat)
-	if(source == localPlayer) then 
-		ChangeInfo() 
-		if(seat == 0) then
-			PData["Driver"] = nil
-		end
-	end
-end
-addEventHandler("onClientPlayerVehicleExit", getRootElement(), PlayerVehicleExit)
-
-
 
 function ChangeInfo(text, ctime)
 	if(isTimer(PData["ChangeInfoTimer"])) then
@@ -6950,6 +6654,8 @@ function ChangeInfo(text, ctime)
 		PText["HUD"][3] = {text, 10, screenHeight/2, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
 	end
 	
+	if(not ctime) then ctime = 3500 end
+	
 	if(ctime) then
 		PData["ChangeInfoTimer"] = setTimer(function()
 			PText["HUD"][3] = nil
@@ -6958,27 +6664,6 @@ function ChangeInfo(text, ctime)
 end
 addEvent("ChangeInfo", true)
 addEventHandler("ChangeInfo", localPlayer, ChangeInfo)
-
-
-
-function ChangeInfoAdv(text, ctime)
-	if(isTimer(PData["ChangeInfoAdvTimer"])) then
-		killTimer(PData["ChangeInfoAdvTimer"])
-	end
-	
-	PText["HUD"][4] = {text, 10, screenHeight/1.7, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale, "default-bold", "left", "top", false, false, false, true, true, 0, 0, 0, {["border"] = true}}
-	
-
-	if(ctime) then
-		PData["ChangeInfoAdvTimer"] = setTimer(function()
-			PText["HUD"][4] = nil
-		end, ctime, 1)
-	end
-end
-addEvent("ChangeInfoAdv", true)
-addEventHandler("ChangeInfoAdv", localPlayer, ChangeInfoAdv)
-
-
 
 
 
@@ -7063,7 +6748,7 @@ function EndRace(pos, oldbest)
 			ToolTipRace(pos, "#828FA0Твоё время: #EEEEEE"..string.format("%02.f", mins)..":"..string.format("%02.f", secs)..":"..string.format("%02.f", msec).."\n"..
 			"#828FA0Рекорд трассы: #EEEEEE"..string.format("%02.f", mins2)..":"..string.format("%02.f", secs2)..":"..string.format("%02.f", msec2))
 		else
-			 MissionCompleted("#A2151AМИССИЯ ПРОВАЛЕНА!")
+			 triggerEvent(localPlayer, "MissionCompleted", "#A2151AМИССИЯ ПРОВАЛЕНА!")
 		end
 	end
 	
@@ -7562,130 +7247,22 @@ function DrawPlayerMessage()
 		
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			if(PData["Driver"] and theVehicle) then
-				tick = getTickCount()
-				local angulo,velocidad = angle()
-				
-				local tempBool = tick - (idleTime or 0) < 750
-				if not tempBool and score ~= 0 then
-					score = 0
-				end
-				
-				if angulo ~= 0 then
-					if tempBool then
-						score = score + math.floor(angulo*velocidad)*mult
-					else
-						score = math.floor(angulo*velocidad)*mult
-					end
-
-					idleTime = tick
-				end
-				
-
-				if tick - (idleTime or 0) < 50 then
-					if(score > 500) then
-						AddRage(1)
-						--triggerEvent("helpmessageEvent", localPlayer, "#ffe800Дрифт +"..math.round(score/100, 0))
-					end
-				end
-
-				
-				local vx, vy, vz = getElementVelocity(theVehicle)
-				VehicleSpeed = (vx^2 + vy^2 + vz^2)^(0.5)*156
-
-				local MaxRPM = GetVehicleMaxRPM(PData["Driver"]["Handling"]["engineAcceleration"])
-				local RPMMeter = false
-				local RPMDate = false 
-				
-				if(MaxRPM <= 4000) then
-					RPMMeter = 45
-					RPMDate = 4000
-				elseif(MaxRPM > 4000 and MaxRPM <= 6000) then
-					RPMMeter = 37.5
-					RPMDate = 6000
-				elseif(MaxRPM > 6000 and MaxRPM <= 7000) then
-					RPMMeter = 32.1
-					RPMDate = 7000
-				elseif(MaxRPM > 7000 and MaxRPM <= 8000) then
-					RPMMeter = 28
-					RPMDate = 8000
-				elseif(MaxRPM > 8000 and MaxRPM <= 10000) then
-					RPMMeter = 22.5
-					RPMDate = 10000
-				elseif(MaxRPM > 10000 and MaxRPM <= 12000) then
-					RPMMeter = 18.7
-					RPMDate = 12000
-				elseif(MaxRPM > 12000 and MaxRPM <= 14000) then
-					RPMMeter = 16
-					RPMDate = 14000
-				elseif(MaxRPM > 14000 and MaxRPM <= 16000) then
-					RPMMeter = 14
-					RPMDate = 16000
-				elseif(MaxRPM > 16000 and MaxRPM <= 18000) then
-					RPMMeter = 12.5
-					RPMDate = 18000
-				elseif(MaxRPM > 18000 and MaxRPM <= 20000) then
-					RPMMeter = 11.2
-					RPMDate = 20000
-				end
-				
-				if(RPMDate) then
-					local RPM = (225*(getVehicleRPM(theVehicle, PData["Driver"]["Handling"]["engineAcceleration"], PData["Driver"]["Handling"]["dragCoeff"], PData["Driver"]["Handling"]["numberOfGears"])/RPMDate))
-					local RedRPMZone = 225*((MaxRPM/RPMDate))
-					if(SlowTahometer < RPM) then
-						SlowTahometer = SlowTahometer+(RPM-SlowTahometer)/20
-					elseif(SlowTahometer > RPM) then
-						SlowTahometer = SlowTahometer-(SlowTahometer-RPM)/20
-					end
-					sx = screenWidth-(150*scalex)
-					sy = screenHeight-(247*scaley)
-					local TS = NewScale
-					dxDrawCircle(sx,sy, 108*TS, 0, 360, tocolor(0,0,0,50))
-					dxDrawCircleCustom(sx,sy, 100*TS, 5*TS, 4, 120, 120+RedRPMZone, tocolor(0,0,0,200))
-					dxDrawCircleCustom(sx,sy, 100*TS, 5*TS, 4, 120+RedRPMZone, 345, tocolor(255,51,51,200))
-					dxDrawCircleCustom(sx,sy, 100*TS, 5*TS, 4, 120, 120+math.floor(SlowTahometer), tocolor(255,255,255,255))
-					if(getVehicleNitroCount(theVehicle)) then
-						dxDrawCircleCustom(sx,sy, 120*TS, 9*TS, 1, 118, 158, tocolor(0,0,0,20))
-						dxDrawCircleCustom(sx,sy, 120*TS, 5*TS, 4, 120, 157, tocolor(100,100,100,200))
-						dxDrawCircleCustom(sx,sy, 120*TS, 5*TS, 4, 120, 120+(3.7*getVehicleNitroCount(theVehicle)), tocolor(40,200,255,160))
-					end
+				if(PData["Race"]) then
+					local pos = GetRacePosition()
+					dxDrawRectangle(sx-(327*scalex),sy-(82*scaley), 139*NewScale, 154*NewScale, tocolor(0,0,0))
+					dxDrawRectangle(sx-(325*scalex),sy-(80*scaley), 135*NewScale, 150*NewScale, tocolor(121,137,153))
+					dxDrawRectangle(sx-(320*scalex),sy-(75*scaley), 125*NewScale, 140*NewScale, tocolor(0,0,0))
+					dxDrawText(pos, sx-(305*scalex),sy-(82*scaley),0,0, tocolor(121,137,153,255), NewScale*7, "default-bold", "left", "top")
+					dxDrawText(PosVar[pos] or "ый", sx-(255*scalex),sy-(70*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
+					dxDrawText("/"..getArrSize(PData["Race"]["Racers"]), sx-(255*scalex),sy-(35*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
 					
-					dxDrawCircleCustom(sx,sy, 120*TS, 9*TS, 1, 158, 345, tocolor(0,0,0,20))
-					dxDrawCircleCustom(sx,sy, 120*TS, 5*TS, 4, 160, 344, tocolor(100,100,100,200))
-					dxDrawCircleCustom(sx,sy, 120*TS, 5*TS, 4, 160, 160+(184*(PData['rage']/1000)), tocolor(255,200,40,160))
-					
-					dxDrawCircleCustom(sx,sy, 90*TS, 2*TS, RPMMeter, 120, 345, tocolor(255,255,255,255), nil, true)
-					dxDrawCircleCustom(sx,sy, 87*TS, 1*TS, 0.8, 120, 345, tocolor(255,255,255,255))
-					
-					dxDrawCircle(sx,sy, 65*TS, 0, 360, tocolor(0,0,0,150))
-					dxDrawText(getVehicleGear(theVehicle, PData["Driver"]["Handling"]["engineAcceleration"], PData["Driver"]["Handling"]["dragCoeff"], PData["Driver"]["Handling"]["numberOfGears"]), sx,sy-(30*scaley),sx,sy-(30*scaley), tocolor(255,255,255,255), scale*2.5, "default-bold", "center", "center")
+					local seconds = (getTickCount()-PData["Race"]["Start"])/1000
+					local hours = math.floor(seconds/3600)
+					local mins = math.floor(seconds/60 - (hours*60))
+					local secs = math.floor(seconds - hours*3600 - mins *60)
+					local msec =  math.floor(((getTickCount()-PData["Race"]["Start"])-(secs*1000)-(mins*60000)-(hours*3600000))/10)
+					dxDrawText(string.format("%02.f", mins)..":"..string.format("%02.f", secs), sx-(257*scalex), sy+(5*scaley), sx-(257*scalex), sy+(5*scaley), tocolor(121,137,153,255), NewScale*3, "default-bold", "center", "top")
 
-					if(getElementData(theVehicle, "Fuel")) then
-						local handlingTable = getOriginalHandling(getElementModel(theVehicle))
-						dxDrawCircleCustom(sx,sy, 90*TS, 4*TS, 1, 10, 90, tocolor(0,0,0,60))
-						local maxfuel = math.floor(handlingTable["mass"]/30)
-						dxDrawCircleCustom(sx,sy, 90*TS, 4*TS, 1, 10+math.floor(80-(80*(getElementData(theVehicle, "Fuel")/maxfuel))), 90, tocolor(255,255,255,60))
-					end
-
-					dxDrawText(string.format("%03.f", VehicleSpeed), sx,sy+(15*scaley),sx,sy+(15*scaley), tocolor(120,120,120,255), scale*1.25, "default-bold", "center", "center")
-					dxDrawText(Text("КМ/Ч"), sx,sy+(45*scaley),sx,sy+(45*scaley), tocolor(120,120,120,255), scale/1.5, "default-bold", "center", "center")
-				
-					if(PData["Race"]) then
-						local pos = GetRacePosition()
-						dxDrawRectangle(sx-(327*scalex),sy-(82*scaley), 139*NewScale, 154*NewScale, tocolor(0,0,0))
-						dxDrawRectangle(sx-(325*scalex),sy-(80*scaley), 135*NewScale, 150*NewScale, tocolor(121,137,153))
-						dxDrawRectangle(sx-(320*scalex),sy-(75*scaley), 125*NewScale, 140*NewScale, tocolor(0,0,0))
-						dxDrawText(pos, sx-(305*scalex),sy-(82*scaley),0,0, tocolor(121,137,153,255), NewScale*7, "default-bold", "left", "top")
-						dxDrawText(PosVar[pos] or "ый", sx-(255*scalex),sy-(70*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
-						dxDrawText("/"..getArrSize(PData["Race"]["Racers"]), sx-(255*scalex),sy-(35*scaley),0,0, tocolor(121,137,153,255), NewScale*3, "default-bold", "left", "top")
-						
-						local seconds = (getTickCount()-PData["Race"]["Start"])/1000
-						local hours = math.floor(seconds/3600)
-						local mins = math.floor(seconds/60 - (hours*60))
-						local secs = math.floor(seconds - hours*3600 - mins *60)
-						local msec =  math.floor(((getTickCount()-PData["Race"]["Start"])-(secs*1000)-(mins*60000)-(hours*3600000))/10)
-						dxDrawText(string.format("%02.f", mins)..":"..string.format("%02.f", secs), sx-(257*scalex), sy+(5*scaley), sx-(257*scalex), sy+(5*scaley), tocolor(121,137,153,255), NewScale*3, "default-bold", "center", "top")
-
-					end
 				end
 				
 				local hardtruck = theVehicle
@@ -7802,20 +7379,31 @@ end
 
 
 
-function AddRage(count)
-	if(count < 0) then
-		count = count+(count*((1000-getPedStat(localPlayer, 160))/200))
-	end
-	if(PData['rage']+count < 0) then
-		if(isTimer(PData['ragetimer'])) then killTimer(PData['ragetimer']) end
-		triggerServerEvent("AccelerationDown", localPlayer, localPlayer)
-		PData['rage'] = 0
-	elseif(PData['rage'] + count > 1000) then
-		PData['rage'] = 1000
-	else
-		PData['rage'] = PData['rage'] + count
+
+function PlayerVehicleEnter(theVehicle, seat)
+	if(source == localPlayer) then 
+		if(seat == 0) then
+			PData["Driver"] = {
+				["Handling"] = getVehicleHandling(theVehicle),
+				["Distance"] = 0
+			}
+			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = getElementPosition(theVehicle)
+		end
 	end
 end
+addEventHandler("onClientPlayerVehicleEnter",getRootElement(),PlayerVehicleEnter)
+
+
+function PlayerVehicleExit(theVehicle, seat)
+	if(source == localPlayer) then 
+		if(seat == 0) then
+			PData["Driver"] = nil
+		end
+	end
+end
+addEventHandler("onClientPlayerVehicleExit", getRootElement(), PlayerVehicleExit)
+
+
 
 
 function GetMarrot(angle, rz)
@@ -8156,46 +7744,6 @@ end
 addEvent("onClientElementStreamIn", true)
 addEventHandler("onClientElementStreamIn", getRootElement(), StreamIn)
 
-
---Для работы дальнобойщиком без прицепа
-
-function ClientVehicleEnter(thePlayer, seat)
-	if(thePlayer == localPlayer) then
-		if(seat == 0) then
-			PData["ClearDriving"] = setTimer(function() 
-				AddRage(150)
-				--triggerEvent("helpmessageEvent", localPlayer, "#ffe800Чистое вождение +150")
-			end, 25000, 0)
-
-			if(getElementModel(source) == 532 or getElementModel(source) == 531) then
-				onAttach(source)
-			end
-			if(getElementData(source, "type")) then
-				if(getElementData(source, "type") == "jobtruck") then
-					triggerEvent("onClientTrailerAttach", source)
-				end
-			end
-		end
-	end
-end
-addEventHandler("onClientVehicleEnter", getRootElement(), ClientVehicleEnter)
-
-function ClientVehicleExit(thePlayer, seat)
-	if(thePlayer == localPlayer) then
-		if(seat == 0) then
-			killTimer(PData["ClearDriving"])
-			if(getElementModel(source) == 532 or getElementModel(source) == 531) then
-				deAttach(source)
-			end
-			if(getElementData(source, "type")) then
-				if(getElementData(source, "type") == "jobtruck") then
-					triggerEvent("onClientTrailerDetach", source, source)
-				end
-			end
-		end
-	end
-end
-addEventHandler("onClientVehicleExit", getRootElement(), ClientVehicleExit)
 
 
 function onAttach(theVehicle)

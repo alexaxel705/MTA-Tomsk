@@ -9777,8 +9777,9 @@ function buybiz(thePlayer, biz)
 			if(BPrice ~= 0) then
 				local SpawnArr = {}
 				local x,y,z = getElementPosition(biz)
-				SpawnArr[#SpawnArr+1] = {x,y,z, "", "", 270}
-				MissionCompleted(thePlayer, "КУПЛЕНО", getElementData(biz, "biz"), false, toJSON(SpawnArr))
+				SpawnArr = {x,y,z, "", "", 270}
+				triggerClientEvent(thePlayer, "LookHouse", thePlayer, toJSON(SpawnArr), 3500)				
+				triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "genrl", 75, 1, false)
 				
 				local bizNode = xmlFindChild(BizNode, getElementData(biz, "name"), 0)
 				xmlNodeSetAttribute(bizNode, "owner", getPlayerName(thePlayer))
@@ -9794,8 +9795,9 @@ function buybiz(thePlayer, biz)
 				AddPlayerMoney(thePlayer, BPrice/2)
 				local SpawnArr = {}
 				local x,y,z = getElementPosition(biz)
-				SpawnArr[#SpawnArr+1] = {x,y,z, "", "", 270}
-				MissionCompleted(thePlayer, "ПРОДАНО", getElementData(biz, "biz"), false, toJSON(SpawnArr))
+				SpawnArr = {x,y,z, "", "", 270}
+				triggerClientEvent(thePlayer, "LookHouse", thePlayer, toJSON(SpawnArr), 3500)		
+				triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "genrl", 75, 1, false)
 				
 				local bizNode = xmlFindChild(BizNode, getElementData(biz, "name"), 0)
 				xmlNodeSetAttribute(bizNode, "owner", "")
@@ -10051,7 +10053,7 @@ function okCap(zone,r,g,b, PlayerTeam)
 	for playerKey, thePlayer in ipairs (players) do
 		local x,y,z = getElementPosition(thePlayer)
 		if(getZoneName(x,y,z) == zone) then
-			triggerClientEvent(thePlayer, "ChangeInfoAdv", thePlayer)
+			triggerClientEvent(thePlayer, "ChangeInfo", thePlayer)
 			MissionCompleted(thePlayer, "УВАЖЕНИЕ +", "ТЕРРИТОРИЯ ЗАХВАЧЕНА!")
 			Respect(thePlayer, getTeamVariable(PlayerTeam), 1)
 			triggerEvent("ZoneInfo", thePlayer, thePlayer, zone)
@@ -10416,8 +10418,9 @@ function buyHouse(thePlayer, buyhouse)
 		
 		local SpawnArr = {}
 		local x,y,z = getElementPosition(getElementByID(buyhouse))
-		SpawnArr[#SpawnArr+1] = {x,y,z, "", "", 270}
-		MissionCompleted(thePlayer, "ПРОДАНО", false, false, toJSON(SpawnArr))
+		SpawnArr = {x,y,z, "", "", 270}
+		triggerClientEvent(thePlayer, "LookHouse", thePlayer, toJSON(SpawnArr), 3500)		
+		triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "genrl", 75, 1, false)
 
 		if(xmlNodeGetAttribute(HouseNode, "dolg")) then
 			xmlNodeSetAttribute(HouseNode, "dolg", nil)
@@ -10456,8 +10459,9 @@ function buyHouse(thePlayer, buyhouse)
 				
 				local SpawnArr = {}
 				local x,y,z = getElementPosition(getElementByID(buyhouse))
-				SpawnArr[#SpawnArr+1] = {x,y,z, "", "", 270}
-				MissionCompleted(thePlayer, "КУПЛЕНО", false, false, toJSON(SpawnArr))
+				SpawnArr = {x,y,z, "", "", 270}
+				triggerClientEvent(thePlayer, "LookHouse", thePlayer, toJSON(SpawnArr), 3500)		
+				triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "genrl", 75, 1, false)
 			end
 		end
 	end
@@ -11054,8 +11058,8 @@ function moneyPickupHit(thePlayer)
 		if(getElementData(source, "house")) then
 			local x,y,z = getElementPosition(source)
 			local ZName = getZoneName(x,y,z)
-			if(getElementData(source, "owner") == "") then
-				MissionCompleted(thePlayer, "$"..getElementData(source, "price"), ZName.." "..getElementData(source, "zone"))
+			if(getElementData(source, "owner") == "") then 
+				if(isTargetPlayer(thePlayer)) then MissionCompleted(thePlayer, "$"..getElementData(source, "price"), ZName.." "..getElementData(source, "zone")) end
 				text = text.."\n"..Text(thePlayer, "Нажми {key} чтобы купить дом", {{"{key}", COLOR["KEY"]["HEX"].."TAB#FFFFFF"}})
 			end
 		end
@@ -11425,7 +11429,7 @@ function worldtime(ignoreweather)
 					advinfo = advinfo.."#FFFFFFУбей врагов "..TotalBot.."\n"
 				end
 				for playerKey, playerValue in ipairs (PlayerInZone) do
-					triggerClientEvent(playerValue, "ChangeInfoAdv", playerValue, advinfo, 2000)
+					triggerClientEvent(playerValue, "ChangeInfo", playerValue, advinfo, 2000)
 					triggerEvent("ZoneInfo", playerValue, playerValue, zone)
 				end
 			end
@@ -13097,7 +13101,7 @@ local tmpi = 1
 local tmpcity = ""
 function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local res = getResourceFromName("chat") -- Interface
+		local res = getResourceFromName("Interface") -- Interface
 		restartResource(res)
 		--local res = getResourceFromName("ps2_weather") -- Interface
 		--restartResource(res)
@@ -14868,7 +14872,7 @@ function MarkerHit(hitElement, Dimension)
 		if(getElementData(source, "house")) then
 			local x,y,z = getElementPosition(source)
 			local ZName = getZoneName(x,y,z)
-			MissionCompleted(thePlayer, getElementData(source, "owner"), ZName.." "..getElementData(source, "zone"))
+			if(isTargetPlayer(thePlayer)) then MissionCompleted(thePlayer, getElementData(source, "owner"), ZName.." "..getElementData(source, "zone")) end
 			if(getElementData(source, "owner") == getPlayerName(thePlayer)) then
 				if(getElementData(source, "locked") == 1) then
 					text =  text.."\n"..Text(thePlayer, "Нажми {key} чтобы открыть дом", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}})
@@ -14888,6 +14892,16 @@ function MarkerHit(hitElement, Dimension)
 end
 addEventHandler("onMarkerHit", getRootElement(), MarkerHit)
 
+
+
+function isTargetPlayer(thePlayer)
+    local target = getCameraTarget(thePlayer)
+    if(getElementType(target) == "player") then
+        return true 
+    else
+        return false
+    end
+end
 
 
 
@@ -17341,8 +17355,6 @@ function VehicleUpgrade(upgrade, count)
 	if(GetPlayerMoney(source) >= count) then
 		if(ModificationVehicle[upgrade]) then
 			PData[source]["theVehicleTuningHandl"] = getElementData(theVehicle, "handl")
-
-			AddPlayerMoney(source, 0, "УСТАНОВЛЕНО!")
 
 			if(getElementData(theVehicle, "x")) then
 				local CarNodes = xmlNodeGetChildren(CarNode)
