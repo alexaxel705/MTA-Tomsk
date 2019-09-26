@@ -1819,16 +1819,6 @@ addEventHandler("PoliceAddMarker", getRootElement(), PoliceAddMarker)
 
 
 
-
-function openmap()
-	if(isPlayerMapForced()) then
-		forcePlayerMap(false)
-	else
-		forcePlayerMap(true)
-	end
-end
-
-
 function hideinv()
 	if(PData["Interface"]["Full"]) then
 		SetPlayerHudComponentVisible("all", false)
@@ -4312,179 +4302,6 @@ addEventHandler("onClientVehicleStartEnter",getRootElement(),stopVehicleEntry)
 
 
 
-
-function CreateBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance, info)
-	createBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance)
-	--PData['blip'][#PData['blip']+1] = createBlip(x, y, z, icon, size, r, g, b, a, ordering, visibleDistance)
-	--setElementData(PData['blip'][#PData['blip']], 'info', Text(info))
-	--return PData['blip'][#PData['blip']]
-end
-
-
-
-CreateBlip(2071, -1794, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерская")
-CreateBlip(824, -1588, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерская")
-CreateBlip(672, -496, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерская")
-CreateBlip(2080, 2123, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерская")
-CreateBlip(-1450, 2592, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерская")
-CreateBlip(-2571, 246, 0, 7, 0, 0, 0, 0, 0, 0, 300, "Парикмахерская")
-CreateBlip(2067, -1780, 0, 39, 0, 0, 0, 0, 0, 0, 300, "Тату салон")
-CreateBlip(2095, 2123, 0, 39, 0, 0, 0, 0, 0, 0, 300, "Тату салон")
-CreateBlip(-2491, -39, 0, 39, 0, 0, 0, 0, 0, 0, 300, "Тату салон")
-CreateBlip(648, 873, 0, 11, 0, 0, 0, 0, 0, 0, 300, "Карьер «Hunter Quarry»")
-CreateBlip(-1857, -1680, 0, 11, 0, 0, 0, 0, 0, 0, 300, "Свалка Angel Pine")
-CreateBlip(1642, -2286, 0, 5, 0, 0, 0, 0, 0, 0, 300, "Аэропорт Los Santos")
-CreateBlip(-1409, -298, 0, 5, 0, 0, 0, 0, 0, 0, 300, "Аэропорт San Fierro")
-CreateBlip(1672, 1448, 0, 5, 0, 0, 0, 0, 0, 0, 300, "Аэропорт Las Venturas")
-CreateBlip(1742, -1458, 0, 20, 0, 0, 0, 0, 0, 0, 300, "Пожарная станция Los Santos")
-CreateBlip(-2026, 84, 0, 20, 0, 0, 0, 0, 0, 0, 300, "Пожарная станция San Fierro")
-CreateBlip(1760, 2081, 0, 20, 0, 0, 0, 0, 0, 0, 300, "Пожарная станция Las Venturas №3")
-CreateBlip(-52, -1131, 0, 51, 0, 0, 0, 0, 0, 0, 300, "База грузоперевозок")
-CreateBlip(-330, 2671, 0, 51, 0, 0, 0, 0, 0, 0, 300, "Pecker's Feed & Seed")
-CreateBlip(1096, 1902, 0, 51, 0, 0, 0, 0, 0, 0, 300, "База грузоперевозок")
-CreateBlip(261, 1410, 0, 51, 0, 0, 0, 0, 0, 0, 300, "НПЗ «Green Palms»")
-CreateBlip(-1035, -614, 0, 51, 0, 0, 0, 0, 0, 0, 300, "Easter Bay Chemicals")
-CreateBlip(1760, -2056, 0, 51, 0, 0, 0, 0, 0, 0, 300, "База грузоперевозок")
-CreateBlip(1676, 2325, 0, 51, 0, 0, 0, 0, 0, 0, 300, "Склад «Redsands West»")
-CreateBlip(2390, 2760, 0, 51, 0, 0, 0, 0, 0, 0, 300, "База грузоперевозок")
-CreateBlip(2220, -1721, 0, 54, 0, 0, 0, 0, 0, 0, 300, "Тренажерный зал")
-CreateBlip(-2271, -156, 0, 54, 0, 0, 0, 0, 0, 0, 300, "Тренажерный зал")
-CreateBlip(1969, 2296, 0, 54, 0, 0, 0, 0, 0, 0, 300, "Тренажерный зал")
-CreateBlip(-2026, -102, 0, 36, 0, 0, 0, 0, 0, 0, 300, "Автошкола")
-CreateBlip(-2624, 1412, 0, 23, 0, 0, 0, 0, 0, 0, 300, "Синдикат локо")
-CreateBlip(-217, 979, 0, 30, 0, 0, 0, 0, 0, 0, 300, "Шериф округа Bone County")
-CreateBlip(-1395, 2642, 0, 30, 0, 0, 0, 0, 0, 0, 300, "Шериф El Quebrados")
-CreateBlip(-2161, -2384, 0, 30, 0, 0, 0, 0, 0, 0, 300, "Шериф Angel Pine")
-CreateBlip(626, -571, 0, 30, 0, 0, 0, 0, 0, 0, 300, "Шериф округа Red County")
-CreateBlip(1555, -1675, 0, 30, 0, 0, 0, 0, 0, 0, 300, "Полицейский участок Los Santos")
-CreateBlip(2297, 2459, 0, 30, 0, 0, 0, 0, 0, 0, 300, "Полицейский участок Las Venturas")
-CreateBlip(-1581, 719, 0, 30, 0, 0, 0, 0, 0, 0, 300, "Полицейский участок San Fierro")
-CreateBlip(1481, -1772, 0, 19, 0, 0, 0, 0, 0, 0, 300, "Мэрия Los Santos")
-CreateBlip(-2766, 375, 0, 19, 0, 0, 0, 0, 0, 0, 300, "Мэрия San Fierro")
-CreateBlip(2389, 2466, 0, 19, 0, 0, 0, 0, 0, 0, 300, "Мэрия Las Venturas")
-CreateBlip(-1420, 2583, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
-CreateBlip(-99, 1117, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
-CreateBlip(2064, -1831, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
-CreateBlip(1024, -1023, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
-CreateBlip(487, -1739, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
-CreateBlip(-1904, 283, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
-CreateBlip(-2425, 1021, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
-CreateBlip(1974, 2162, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
-CreateBlip(720, -456, 0, 63, 0, 0, 0, 0, 0, 0, 300, "Pay 'n' Spray")
-CreateBlip(-1957, 276, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон «Wang Cars»")
-CreateBlip(-1657, 1212, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
-CreateBlip(520, 2372, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
-CreateBlip(1943, 2068, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
-CreateBlip(2200, 1389, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
-CreateBlip(553, -1279, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
-CreateBlip(2127, -1139, 0, 55, 0, 0, 0, 0, 0, 0, 300, "Автосалон")
-CreateBlip(701, -519,  0, 55, 0, 0, 0, 0, 0, 0, 300, "Мотосалон «Dillmore»")
-CreateBlip(2693, -1706, 0, 33, 0, 0, 0, 0, 0, 0, 300, "Стадион LS")
-CreateBlip(1097, 1598,  0, 33, 0, 0, 0, 0, 0, 0, 300, "Стадион LV")
-CreateBlip(-1514, 2518, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
-CreateBlip(-320, 1048, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Медицинский центр Fort Caston")
-CreateBlip(1607, 1815, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Госпиталь Las Venturas")
-CreateBlip(1172, -1323, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
-CreateBlip(2034, -1401, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
-CreateBlip(1225, 313, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
-CreateBlip(-2204, -2309, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Больница")
-CreateBlip(-2655, 640, 0, 22, 0, 0, 0, 0, 0, 0, 300, "Медицинский центр San Fierro")
-CreateBlip(2644, -2044, 0, 27, 0, 0, 0, 0, 0, 0, 300, "Тюнинг")
-CreateBlip(1041, -1015, 0, 27, 0, 0, 0, 0, 0, 0, 300, "TransFender")
-CreateBlip(-1935, 246, 0, 27, 0, 0, 0, 0, 0, 0, 300, "TransFender")
-CreateBlip(2386, 1052, 0, 27, 0, 0, 0, 0, 0, 0, 300, "Тюнинг")
-CreateBlip(-2721, 217, 0, 27, 0, 0, 0, 0, 0, 0, 300, "Wheel Arch Angels")
-CreateBlip(-1213, 1830, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(172, 1176, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(2397, -1899, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(928, -1352, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(928, -1352, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(2420, -1508, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(2393, 2041, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(2638, 1671, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(2838, 2407, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(2101, 2228, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(-2672, 258, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(-2155, -2460, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(-1816, 618, 0, 14, 0, 0, 0, 0, 0, 0, 300, "Cluckin' Bell")
-CreateBlip(2105, -1806, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(2331, 75, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(1367, 248, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(-1721, 1359, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(2638, 1849, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(2541, 2148, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(2351, 2533, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(2083, 2224, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(-1808, 945, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(203, -202, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(2756, 2477, 0, 29, 0, 0, 0, 0, 0, 0, 300, "The Well Stacked Pizza Co.")
-CreateBlip(810, -1616, 0, 10, 0, 0, 0, 0, 0, 0, 300, "Burger Shot")
-CreateBlip(1199, -918, 0, 10, 0, 0, 0, 0, 0, 0, 300, "Burger Shot")
-CreateBlip(-2336, -166, 0, 10, 0, 0, 0, 0, 0, 0, 300, "Burger Shot")
-CreateBlip(-1912, 827, 0, 10, 0, 0, 0, 0, 0, 0, 300, "Burger Shot")
-CreateBlip(-2355, 1008, 0, 10, 0, 0, 0, 0, 0, 0, 300, "Burger Shot")
-CreateBlip(2169, 2795, 0, 10, 0, 0, 0, 0, 0, 0, 300, "Burger Shot")
-CreateBlip(1157, 2072, 0, 10, 0, 0, 0, 0, 0, 0, 300, "Burger Shot")
-CreateBlip(2472, 2034, 0, 10, 0, 0, 0, 0, 0, 0, 300, "Burger Shot")
-CreateBlip(1872, 2071, 0, 10, 0, 0, 0, 0, 0, 0, 300, "Burger Shot")
-CreateBlip(2367, 2071, 0, 10, 0, 0, 0, 0, 0, 0, 300, "Burger Shot")
-CreateBlip(1836, -1682, 0, 48, 0, 0, 0, 0, 0, 0, 300, "Клуб")
-CreateBlip(2507, 1242, 0, 48, 0, 0, 0, 0, 0, 0, 300, "Клуб")
-CreateBlip(387, -1817, 0, 50, 0, 0, 0, 0, 0, 0, 300, "Закусочная")
-CreateBlip(24, -2646, 0, 50, 0, 0, 0, 0, 0, 0, 300, "Закусочная")
-CreateBlip(-384, 2206, 0, 50, 0, 0, 0, 0, 0, 0, 300, "Закусочная")
-CreateBlip(-53, 1188, 0, 50, 0, 0, 0, 0, 0, 0, 300, "Закусочная")
-CreateBlip(875, -968, 0, 17, 0, 0, 0, 0, 0, 0, 300, "Ресторан")
-CreateBlip(-2524, 1216, 0, 17, 0, 0, 0, 0, 0, 0, 300, "Ресторан")
-CreateBlip(-1942, 2379, 0, 17, 0, 0, 0, 0, 0, 0, 300, "Ресторан")
-CreateBlip(-858, 1535, 0, 17, 0, 0, 0, 0, 0, 0, 300, "Ресторан")
-CreateBlip(-187, 1210, 0, 17, 0, 0, 0, 0, 0, 0, 300, "Ресторан")
-CreateBlip(2244, -1665, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Binco")
-CreateBlip(-2373, 910, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Binco")
-CreateBlip(2101, 2257, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Binco")
-CreateBlip(1657, 1733, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Binco")
-CreateBlip(-1882, 866, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Zip")
-CreateBlip(2090, 2224, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Zip")
-CreateBlip(1456, -1137, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Zip")
-CreateBlip(2572, 1904, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Zip")
-CreateBlip(461, -1500, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Victim")
-CreateBlip(2803, 2430, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Victim")
-CreateBlip(454, -1478, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Didier Sachs")
-CreateBlip(2112, -1211, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Sub Urban")
-CreateBlip(-2489, -29, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Sub Urban")
-CreateBlip(2779, 2453, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Sub Urban")
-CreateBlip(823, -1757, 0, 45, 0, 0, 0, 0, 0, 0, 300, "BOBO")
-CreateBlip(499, -1360, 0, 45, 0, 0, 0, 0, 0, 0, 300, "ProLaps")
-CreateBlip(-2492, 2363, 0, 45, 0, 0, 0, 0, 0, 0, 300, "ProLaps")
-CreateBlip(2826, 2407, 0, 45, 0, 0, 0, 0, 0, 0, 300, "ProLaps")
-CreateBlip(-1694, 951, 0, 45, 0, 0, 0, 0, 0, 0, 300, "Victim")
-CreateBlip(-179, 1133, 0, 52, 0, 0, 0, 0, 0, 0, 300, "Банк")
-CreateBlip(-2456, 503, 0, 52, 0, 0, 0, 0, 0, 0, 300, "Банк")
-CreateBlip(-828, 1504, 0, 52, 0, 0, 0, 0, 0, 0, 300, "Банк")
-CreateBlip(2447, 2376, 0, 52, 0, 0, 0, 0, 0, 0, 300, "Банк")
-CreateBlip(593, -1251, 0, 52, 0, 0, 0, 0, 0, 0, 300, "Credit and Commerce Bank of San Andreas")
-CreateBlip(1368, -1279, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(2400, -1981, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(-1508, 2610, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(2159, 943, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(776, 1871, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(-316, 829, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(-2626, 208, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(2333, 61, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(-2093, -2464, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(2539, 2083, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(243, -178, 0, 6, 0, 0, 0, 0, 0, 0, 300, "Ammu-Nation")
-CreateBlip(-179, 1087, 0, 49, 0, 0, 0, 0, 0, 0, 300, "Attica Bar")
-CreateBlip(2310, -1643, 0, 49, 0, 0, 0, 0, 0, 0, 300, "Ten Green Bottle")
-CreateBlip(1945, -2042, 0, 49, 0, 0, 0, 0, 0, 0, 300, "Attica Bar")
-CreateBlip(2441, -1376, 0, 49, 0, 0, 0, 0, 0, 0, 300, "Attica Bar")
-CreateBlip(2460, -1344, 0, 49, 0, 0, 0, 0, 0, 0, 300, "Attica Bar")
-CreateBlip(2361, -1332, 0, 49, 0, 0, 0, 0, 0, 0, 300, "Attica Bar")
-CreateBlip(2441, 2065, 0, 49, 0, 0, 0, 0, 0, 0, 300, "The Craw Bar")
-
-
-
-
 function onClientColShapeHit(theElement, matchingDimension)
 	if(not matchingDimension) then return false end
 	if getElementType(theElement) == "player" then 
@@ -5547,16 +5364,6 @@ local UpperSymbols = {
 
 
 function playerPressedKey(button, press)
-	if(button == "mouse2") then
-		if(isPlayerMapForced()) then
-			if(press) then
-				showCursor(true)
-			else
-				showCursor(false)
-			end
-		end
-	end
-	
     if (press) then
 		if(#Cheatkeys > 99) then
 			table.remove(Cheatkeys, 1)
@@ -5885,10 +5692,6 @@ function DrawOnClientRender()
 			newx, newy, newz, newlx, newly, newlz = (newx/100)*percent, (newy/100)*percent, (newz/100)*percent, (newlx/100)*percent, (newly/100)*percent, (newlz/100)*percent 
 			setCameraMatrix(a1[1]-newx, a1[2]-newy, a1[3]-newz, a1[4]-newlx, a1[5]-newly, a1[6]-newlz)
 		end
-	end
-
-	if(isPlayerMapForced()) then
-		return false
 	end
 
 	if(not PData["wasted"]) then
@@ -7075,7 +6878,7 @@ function DrawPlayerMessage()
 	end
 	PData["MultipleAction"] = {}
 		
-	if(PEDChangeSkin == "play" and initializedInv and not isPlayerMapForced()) then
+	if(PEDChangeSkin == "play" and initializedInv) then
 		if(tuningList) then
 			sx,sy = (screenWidth/2.55), screenHeight-(150*scaley)
 		
@@ -7179,7 +6982,7 @@ function DrawPlayerMessage()
 
 			if(PData["Interface"]["Inventory"]) then
 				local sx, sy, font, tw, th, color
-				if(PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer) and not isPlayerMapForced()) then
+				if(PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer)) then
 					if(PData["BizControlName"]) then
 						dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(20, 25, 20, 245))
 						dxDrawBorderedText(PData["BizControlName"][2], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
@@ -7938,13 +7741,11 @@ addEventHandler("onClientPlayerQuit", getRootElement(), onQuitGame)
 
 
 
-bindKey("M", "down", openmap)
 bindKey("tab", "down", OpenTAB)
 bindKey("h", "down", handsup)
 bindKey("p", "down", park)
 bindKey('mouse2', 'down', setDoingDriveby)
 bindKey("F1", "down", ShowInfoKey)
-bindKey("F11", "down", openmap)
 bindKey("F12", "down", hideinv)
 bindKey("F9", "down", lowPcMode)
 bindKey("2", "down", StartMission)
