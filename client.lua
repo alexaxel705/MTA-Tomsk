@@ -1969,6 +1969,14 @@ function SetPlayerHudComponentVisible(component, show)
 		if(show) then
 			setPlayerHudComponentVisible("area_name", false)
 			setPlayerHudComponentVisible("vehicle_name", false)
+			setPlayerHudComponentVisible("money", false)
+			setPlayerHudComponentVisible("health", false)
+			setPlayerHudComponentVisible("armour", false)
+			setPlayerHudComponentVisible("clock", false)
+			setPlayerHudComponentVisible("wanted", false)
+			setPlayerHudComponentVisible("weapon", false)
+			setPlayerHudComponentVisible("breath", false)
+			
 			for name, _ in pairs(PData["Interface"]) do
 				PData["Interface"][name] = true
 			end
