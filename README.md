@@ -12,3 +12,4 @@ mtaserver.conf
 <resource src="228" startup="1" protected="0" />
 <resource src="statistic" startup="1" protected="0" />
 <resource src="unique_jumps" startup="1" protected="0" />
+<resource src="map" startup="1" protected="0" />
