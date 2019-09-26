@@ -17501,12 +17501,6 @@ addCommandHandler("edithome", edithome)
 
 
 
-function testhp(thePlayer, command, h)
-	AddSkill(thePlayer, 24, 50)
-end
-addCommandHandler("testhp", testhp)
-
-
 function createNewHome(thePlayer, command, h)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
 		local HouseNodes = xmlNodeGetChildren(HouseNode)
