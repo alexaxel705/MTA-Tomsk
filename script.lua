@@ -3675,6 +3675,10 @@ end
 
 -- theVehicle, model, x,y,z,rx,ry,rz, plateNumber, {характеристики}, "название"
 local NonRandVeh = {
+-- Las Venturas
+	-- Электростанция
+	{false, 452, -795.9, 1816.3, -28.6, 0,0,180},
+
 -- San Fierro
 	-- Электростанция
 	{false, 552, -2520.6, -602.3, 131.6, 0,0,180, "IEL0 228"},
@@ -5033,20 +5037,10 @@ end
 
 
 
-
-
-
-
-
-
-local cs = 96
 function tp(thePlayer, command, h)
 	if(getServerPort() == 22013) then
 		local theVehicle = getPedOccupiedVehicle(thePlayer)
-		cs = cs+1
 
-		--local x,y,z,i,d = tags[cs][1], tags[cs][2], tags[cs][3], 0,0
-		--outputChatBox(cs)
 
 		local x,y,z,i,d  = 261.1, 284.5, 26.4, 0, 1 -- 8152, -9143, 6.3
 
@@ -5055,9 +5049,10 @@ function tp(thePlayer, command, h)
 		else
 			SetPlayerPosition(thePlayer, x,y,z,i,d)
 		end
-		--SetPlayerPosition(thePlayer, 240.3, 77.7, 1005.2, 6, 1)
 	end
 end
+addEvent("tp", true)
+addEventHandler("tp", root, tp)
 addCommandHandler("tp", tp)
 
 
@@ -5150,6 +5145,7 @@ addEventHandler("StartAnimation", root, StartAnimation)
 
 
 CreateEnter(-1749.2, 868.7, 25.1, 180, 0, 0, false, -1753.7, 883.9, 295.6, 0, 0, 0, "Крыша") -- Крыша SF
+CreateEnter(-830.9, 1984.7, 9.4, 190, 0, 0, false, -959.5, 1956.5, 9, 190, 17, 0, "Sherman dam")
 CreateEnter(1570.7, -1337.2, 16.5, 312, 0, 0, false, 1548.6, -1363.7, 326.2, 180, 0, 0, "Крыша") -- Крыша LS
 CreateEnter(2495.35, -1690.85, 14.75, 0, 0, 0, false, 2496, -1692.3, 1014.75, 180, 3, 0) -- CJ
 CreateEnter(2459.5, -1691.3, 13.5, 0, 0, 0, false, 2468.5, -1698.2, 1013.5, 180, 2, 0) -- Ryder
@@ -6707,14 +6703,15 @@ addEvent("RandomDance", true)
 addEventHandler("RandomDance", root, RandomDance)
 
 
-function dance(thePlayer, command, h)
+function dance(thePlayer, h)
 	if(h) then
 		StartAnimation(thePlayer, "DANCING", DancingArr[tonumber(h)],-1,true,false,false)
 	else
 		outputChatBox("Используй /dance [1-13]",thePlayer,255,255,255,true)
 	end
 end
-addCommandHandler("dance", dance)
+addEvent("dance", true)
+addEventHandler("dance", root, dance)
 
 
 
@@ -6946,6 +6943,9 @@ addEventHandler("usekanistra", root, usekanistra)
 
 
 
+
+
+
 function usezapaska(thePlayer, slot)
 	local tar = getPedTarget(thePlayer)
 	if(tar) then
@@ -7147,6 +7147,7 @@ local ItemsNamesArr = {
 	["Чемодан"] = 1210,
 	["Рюкзак"] = 3026,
 	["Канистра"] = 1650,
+	["Запчасти"] = 1221,
 	["Запаска"] = 1025,
 	["Нефть"] = 3632,
 	["Пропан"] = 1370,
@@ -11097,6 +11098,41 @@ addEvent("Udobrenya", true)
 addEventHandler("Udobrenya", getRootElement(), Udobrenya)
 
 
+local VCompVehicleTypes = {}
+for nameparts, data in pairs(VComp) do
+	for name, types in pairs(data) do
+		if(not VCompVehicleTypes[types[1]]) then VCompVehicleTypes[types[1]] = {} end
+		VCompVehicleTypes[types[1]][#VCompVehicleTypes[types[1]]+1] = {nameparts, name}
+	end
+end
+
+
+
+
+
+
+
+
+function usezapt(thePlayer, x,y) 
+	if(x and y) then
+		RemoveInventoryItemCount(thePlayer, x, y)
+	end
+	
+	local RussianPartName = {
+		["Engines"] = "двигатель",
+		["Turbo"] = "турбину",
+		["Transmission"] = "трансмиссию",
+		["Suspension"] = "подвеску",
+		["Brakes"] = "тормоза",
+		["Tires"] = "шины"
+	}
+	
+	local parts = VCompVehicleTypes["Automobile"][math.random(#VCompVehicleTypes["Automobile"])]
+	AddPlayerVehiclePart(thePlayer, parts[1], parts[2])
+	ToolTip(thePlayer, "Ты достал из ящика "..RussianPartName[parts[1]].." #00ff00"..parts[2])
+end
+addEvent("usezapt", true)
+addEventHandler("usezapt", getRootElement(), usezapt)
 
 
 
@@ -11261,9 +11297,9 @@ function worldtime(ignoreweather)
 					if(srok == 0) then
 						if(not SData["Vibori"]) then
 							xmlNodeSetAttribute(node, "srok", 420)--Неделя
-							outputChatBox("Стартуют выборы на пост "..xmlNodeGetAttribute(node, "biz"), getRootElement(), 255, 255, 255, true)
-							outputChatBox("Напиши "..COLOR["KEY"]["HEX"].."/st #FFFFFFчтобы выдвинуть свою кандидатуру", getRootElement(), 255, 255, 255, true)
-							SData["Vibori"]=xmlNodeGetName(node)
+							OutputMainChat("Стартуют выборы на пост "..xmlNodeGetAttribute(node, "biz"), "Server", true)
+							OutputMainChat("Напиши "..COLOR["KEY"]["HEX"].."/st #FFFFFFчтобы выдвинуть свою кандидатуру", "Server", true)
+							SData["Vibori"] = xmlNodeGetName(node)
 							setTimer(ststart, 60000, 1)
 						end
 					else
@@ -12242,13 +12278,13 @@ function st(thePlayer)
 				kandidats[getPlayerName(thePlayer)] = 0
 				HelpMessage(thePlayer, "Ты предложил свою кандидатуру\nОжидай начала голосования")
 			else
-				outputChatBox("К сожалению ты не успел, число кандидатов превысило 9 чел.", thePlayer, 255, 255, 255, true)
+				HelpMessage(thePlayer, "К сожалению ты не успел, число кандидатов превысило 9 чел.")
 			end
 		else
-			outputChatBox("Ты уже участник выборов!", thePlayer, 255, 255, 255, true)
+			HelpMessage(thePlayer, "Ты уже участник выборов!")
 		end
 	else
-		outputChatBox("В настоящий момент выборы не проходят", thePlayer, 255, 255, 255, true)
+		HelpMessage(thePlayer, "В настоящий момент выборы не проходят")
 	end
 end
 addCommandHandler("st", st)
@@ -12267,8 +12303,8 @@ function srok(thePlayer, command, h)
 			else
 				if(h == xmlNodeGetName(node)) then
 					xmlNodeSetAttribute(node, "srok", 420)--Неделя
-					outputChatBox("Стартуют выборы на пост "..xmlNodeGetAttribute(node, "biz"), getRootElement(), 255, 255, 255, true)
-					outputChatBox("Напиши "..COLOR["KEY"]["HEX"].."/st #FFFFFFчтобы выдвинуть свою кандидатуру", getRootElement(), 255, 255, 255, true)
+					OutputMainChat("Стартуют выборы на пост "..xmlNodeGetAttribute(node, "biz"), "Server", true)
+					OutputMainChat("Напиши "..COLOR["KEY"]["HEX"].."/st #FFFFFFчтобы выдвинуть свою кандидатуру", "Server", true)
 					SData["Vibori"] = xmlNodeGetName(node)
 					setTimer(ststart, 60000, 1)
 				end
@@ -12336,14 +12372,14 @@ function ststart()
 		setTimer(ststop, 60000, 1)
 	else
 		SData["Vibori"] = false
-		outputChatBox("Выборы не состоялись из-за отсутствия кандидатов", getRootElement(), 255, 255, 255, true)
+		OutputMainChat("Выборы не состоялись из-за отсутствия кандидатов", "Server", true)
 	end
 end
 
 
 function ststop()
 	for k,v in spairs(kandidats, function(t,a,b) return t[b] < t[a] end) do
-		outputChatBox(k.." победил в выборах!", getRootElement(), 255, 255, 255, true)
+		OutputMainChat(k.." победил в выборах!", "Server", true)
 		local bizNode = xmlFindChild(BizNode, SData["Vibori"], 0)
 		xmlNodeSetAttribute(bizNode, "owner", k)
 		setElementData(biz, "bizowner", k)
@@ -12442,7 +12478,7 @@ function PayDay()
 		end
 	end
 end
-addCommandHandler("payday", PayDay)
+
 
 function GetBizOwner(thePlayer)
 	local BN = {}
@@ -13052,14 +13088,6 @@ end
 
 
 
-local VCompVehicleTypes = {}
-for nameparts, data in pairs(VComp) do
-	for name, types in pairs(data) do
-		if(not VCompVehicleTypes[types[1]]) then VCompVehicleTypes[types[1]] = {} end
-		VCompVehicleTypes[types[1]][#VCompVehicleTypes[types[1]]+1] = {nameparts, name}
-	end
-end
-
 
 
 
@@ -13202,12 +13230,12 @@ addEventHandler("usecellphone", root, usecellphone)
 function info(thePlayer, command, h)
 	if(PlayersEnteredPickup[thePlayer]) then
 		if(getElementData(PlayersEnteredPickup[thePlayer], "house")) then
-			outputChatBox(getElementData(PlayersEnteredPickup[thePlayer], "house"))
+			OutputChat(thePlayer, getElementData(PlayersEnteredPickup[thePlayer], "house"), "Server")
 		end
 	end
 	local x,y,z = getElementPosition(thePlayer)
 	local zone = getZoneName(x, y, z)
-	outputChatBox(zone, thePlayer)
+	OutputChat(thePlayer, zone, "Server")
 end
 addCommandHandler("inform", info)
 
@@ -13427,7 +13455,7 @@ function loginPlayer(thePlayer, password)
 			setElementData(thePlayer, "auth", true)
 			AuthComplete(thePlayer)
 		else
-			outputChatBox("Неверный пароль", thePlayer, 255, 255, 255, true)
+			OutputChat(thePlayer, "Неверный пароль", "Server")
 			triggerClientEvent(thePlayer, "LoginWindow", thePlayer, true)
 		end
 	else
@@ -13472,7 +13500,6 @@ addEventHandler("AddCollections", root, AddCollections)
 
 
 function AuthComplete(thePlayer)
-	outputChatBox("* ["..getElementData(source, "id").."] "..getElementData(source, "color")..getPlayerName(thePlayer).." #FFFFFFПодключился к серверу", getRootElement(), 255,255,255,true)
 	triggerClientEvent(thePlayer, "AuthInterface", thePlayer, GetDatabaseAccount(thePlayer, "inv"))
 	triggerClientEvent(thePlayer, "AuthComplete", thePlayer, GetDatabaseAccount(thePlayer, "Collections"))
 end
@@ -13640,8 +13667,8 @@ addEventHandler("PrisonGavno", root, PrisonGavno)
 function piss(thePlayer, command, h)
 	StartAnimation(thePlayer, "PAULNMAC", "Piss_out",false,false,false,false)
 end
-addEvent("PrisonPiss", true)
-addEventHandler("PrisonPiss", root, piss)
+addEvent("piss", true)
+addEventHandler("piss", root, piss)
 addCommandHandler("piss", piss)
 
 
@@ -13649,11 +13676,11 @@ function addPlayerBolezn(thePlayer, name, count)
 	if(thePlayer) then
 		local arr = fromJSON(GetDatabaseAccount(thePlayer, "bolezni"))
 		if(count > 0) then
-			arr[name]=1
-			outputChatBox("Ты получил болезнь #FFCCEE'"..name.."'#FFFFFF!", thePlayer, 255,255,255,true)
+			arr[name] = 1
+			ToolTip(thePlayer, "Ты получил болезнь #FFCCEE'"..name.."'#FFFFFF!")
 		else
-			arr[name]=nil
-			outputChatBox("Ты вылечился от #FFCCEE'"..name.."'#FFFFFF!", thePlayer, 255,255,255,true)
+			arr[name] = nil
+			ToolTip(thePlayer, "Ты вылечился от #FFCCEE'"..name.."'#FFFFFF!")
 		end
 		SetDatabaseAccount(thePlayer, "bolezni", toJSON(arr))
 	end
@@ -13702,8 +13729,8 @@ function MCHSEventHealth(thePlayer, thePed)
 		if(health >= 1) then
 			Respect(thePlayer, "civilian", 1)
 			AddInventoryItem(thePlayer, {["txd"] = "Кровь", ["name"] = "Кровь", ["quality"] = math.random(0,1000)})
-			outputChatBox("У тебя взяли кровь, кровь в организме со временем восполнится", thePed, 255,255,255,true)
-			outputChatBox("Ты взял кровь у "..getPlayerName(thePed), thePlayer, 255,255,255,true)
+			ToolTip(thePed, "У тебя взяли кровь, кровь в организме со временем восполнится")
+			ToolTip(thePlayer, "Ты взял кровь у "..getPlayerName(thePed))
 			AddSkill(thePed, 24, -100)
 			setElementHealth(thePed, PlayerHealth)
 		else
@@ -13722,14 +13749,14 @@ addEventHandler("MCHSEventHealth", root, MCHSEventHealth)
 function MCHSEvent(thePlayer, thePed, x,y)
 	if(isPlayerBolezn(thePed, "СПИД")) then
 		addPlayerBolezn(thePed, "СПИД", -1)
-		outputChatBox("Ты вылечил "..getPlayerName(thePed).." от СПИДа",thePlayer ,255,255,255,true)
+		ToolTip(thePlayer, "Ты вылечил "..getPlayerName(thePed).." от СПИДа")
 	elseif(isPlayerBolezn(thePed, "Порванный анус")) then
 		addPlayerBolezn(thePed, "Порванный анус", -1)
 		BloodFoot(thePed, false)
-		outputChatBox("Ты зашил анус "..getPlayerName(thePed),thePlayer ,255,255,255,true)
+		ToolTip(thePlayer, "Ты зашил анус "..getPlayerName(thePed))
 	elseif(isPlayerBolezn(thePed, "Дизентерия")) then
 		addPlayerBolezn(thePed, "Дизентерия", -1)
-		outputChatBox("Ты вылечил от дизентерии "..getPlayerName(thePed),thePlayer ,255,255,255,true)
+		ToolTip(thePlayer, "Ты вылечил от дизентерии "..getPlayerName(thePed))
 	else
 		return ToolTip(thePlayer, "Пациент не болен!")
 	end
@@ -14112,7 +14139,7 @@ end
 
 function F4_Loding(thePlayer)
 	PData[thePlayer]["SkinChange"] = true
-	outputChatBox("Смена скина будет доступна после смерти.", thePlayer, 255, 255, 255, true)
+	ToolTip(thePlayer, "Смена скина будет доступна после смерти")
 end
 
 local NoAmmoTitle = {"Кончились патроны", "Нет патрон", "Нужно найти патроны"}
@@ -14217,19 +14244,6 @@ end
 
 
 
-
-
-
-function helpcmd(thePlayer)
-	outputChatBox("/piss - обоссать, /wank - подрочить, /dance [1-13] - танцевать", thePlayer)
-	outputChatBox("/arm - служить в армии, /teamleave - покинуть фракцию", thePlayer)
-	outputChatBox("/changepass старый пароль новый пароль", thePlayer)
-	
-	if(getPlayerName(thePlayer) == "alexaxel705") then
-		outputChatBox("/srok - Досрочные выборы", thePlayer)
-	end
-end
-addCommandHandler("cmd", helpcmd)
 
 
 local SpizPlayer = {}
@@ -15417,8 +15431,9 @@ function wank(thePlayer, command, h)
 		wanktimers[thePlayer] = setTimer(function() end, 240000, 1)
 	end
 end
+addEvent("wank", true)
+addEventHandler("wank", root, wank)
 addCommandHandler("wank", wank)
-
 
 
 
@@ -16404,15 +16419,7 @@ function RacePriceGeneration(thePlayer)
 			OutputChat(thePlayer, "Забери свой приз на красном маркере!", "Server")
 		end
 	else
-		--[[for i ,v in pairs(VCompVehicleTypes["Automobile"]) do
-			local parts = VCompVehicleTypes[i]
-			AddPlayerVehiclePart(thePlayer, v[1], v[2])
-			outputChatBox("Ты выиграл #FFFFFF"..v[1].." "..v[2], thePlayer, math.random(255),math.random(255),math.random(255),true)
-
-		end--]]
-		local parts = VCompVehicleTypes["Automobile"][math.random(#VCompVehicleTypes["Automobile"])]
-		AddPlayerVehiclePart(thePlayer, parts[1], parts[2])
-		OutputChat(thePlayer, "Ты выиграл #00ff00"..parts[1].." "..parts[2], "Server")
+		AddInventoryItem(thePlayer, {["txd"] = "Запчасти", ["name"] = "Запчасти", ["quality"] = math.random(0,1000)})
 	end
 end
 
@@ -16859,6 +16866,8 @@ function dm(thePlayer, command, h)
 		
 	end
 end
+addEvent("dm", true)
+addEventHandler("dm", root, dm)
 addCommandHandler("dm", dm)
 
 
