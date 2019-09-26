@@ -23,13 +23,13 @@
 	
 	<file src="models/prison-gates.col" download="true" />
 	<file src="models/prison-gates.dff" download="true" />
-	
 	<file src="models/kb_tr_main.col" download="true" />
 	<file src="models/trukstp01.col" download="true" />
 	<file src="models/bdupsnew.col" download="true" />
 	<file src="models/mc_straps_int.col" download="true" />
 	<file src="models/kylie_barn.col" download="true" />
 	<file src="models/bdups_main.col" download="true" />
+	<file src="models/BDups_interior.col" download="true" />
 	
 	<script src="client.lua" type="client" validate="true" />
 	<script src="script.lua" type="server" />

@@ -4207,6 +4207,8 @@ function displayLoadedRes(res)
 			engineReplaceCOL(col, 14871)
 			col = engineLoadCOL("models/bdups_main.col")
 			engineReplaceCOL(col, 14801)
+			col = engineLoadCOL("models/BDups_interior.col")
+			engineReplaceCOL(col, 14802)
 		end
 		
 		if(tonumber(getElementData(root, "ServerTime")) < 696902400) then
@@ -7425,10 +7427,6 @@ function StreamIn(restream)
 		end
 	elseif(getElementType(source) == "vehicle") then
 		local occupant = getVehicleOccupant(source)
-		VehiclesInStream[source] = {}
-		if(not getElementData(source, "owner") and not getVehicleOccupant(source)) then
-			VehiclesInStream[source]["blip"] = createBlipAttachedTo(source, 0, 1, 170,170,170,170,1)
-		end
 		if(getElementData(source, "type")) then
 			if(getElementData(source, "type") == "jobtruck") then
 				if(GetVehicleType(source) == "Trailer") then
