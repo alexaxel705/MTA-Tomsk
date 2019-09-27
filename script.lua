@@ -60,8 +60,6 @@ local CYear = NowTime.year+1900
 local OpenGates = {}
 local OpenGatesTimer = {}
 local PathNodes = exports["vehicle_node"]:GetVehicleNodes()
-
-
 local PedNodes = exports["vehicle_node"]:GetPedNodes()
 
 
@@ -13681,10 +13679,10 @@ function addPlayerBolezn(thePlayer, name, count)
 		local arr = fromJSON(GetDatabaseAccount(thePlayer, "bolezni"))
 		if(count > 0) then
 			arr[name] = 1
-			ToolTip(thePlayer, "Ты получил болезнь #FFCCEE'"..name.."'#FFFFFF!")
+			ToolTip(thePlayer, "Ты получил болезнь #FFCCEE"..name.."#FFFFFF")
 		else
 			arr[name] = nil
-			ToolTip(thePlayer, "Ты вылечился от #FFCCEE'"..name.."'#FFFFFF!")
+			ToolTip(thePlayer, "Ты вылечился от #FFCCEE"..name.."#FFFFFF")
 		end
 		SetDatabaseAccount(thePlayer, "bolezni", toJSON(arr))
 	end

@@ -1888,6 +1888,7 @@ local LowPcShaders = {"collisionsmoke", "bullethitsmoke", "bullethitsmoke1", "bo
 
 
 
+
 function lowPcMode()
 	if(getElementData(localPlayer, "LowPCMode")) then
 		local check = getElementData(localPlayer, "RenderQuality")
@@ -1901,7 +1902,6 @@ function lowPcMode()
 				return true
 			end
 		end
-		
 		triggerEvent("helpmessageEvent", localPlayer, "Режим для #551A8Bслабых#FFFFFF компьютеров выключен")
 		for _, name in pairs(LowPcShaders) do
 			engineRemoveShaderFromWorldTexture(ReplaceShader, name)
@@ -3613,7 +3613,7 @@ function updateWorld()
 			local x,y,z = getElementPosition(theVehicle)
 			PData["Driver"]["Distance"] = PData["Driver"]["Distance"]+getDistanceBetweenPoints3D(PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"], x, y, z)
 			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = x,y,z
-			if(PData["Driver"]["Distance"] >= 2000) then
+			if(PData["Driver"]["Distance"] >= 3000) then
 				local VehType = GetVehicleType(theVehicle)
 				PData["Driver"]["Distance"] = 0
 				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 1)
@@ -4236,9 +4236,6 @@ function displayLoadedRes(res)
 		end
 		
 		StartLoad()
-	elseif(getResourceName(res) == "vehicle_node") then
-		local x,y,z = getElementPosition(localPlayer)
-		exports["vehicle_node"]:LoadZone(getPlayerCity(localPlayer), exports["ps2_weather"]:GetZoneName(x,y,z, false, getPlayerCity(localPlayer)))
 	end
 end
 addEventHandler("onClientResourceStart", getRootElement(), displayLoadedRes)
@@ -7508,9 +7505,6 @@ function StreamIn(restream)
 		end
 	elseif(getElementType(source) == "ped") then
 		local x,y,z = getElementPosition(source)
-		local zone = getZoneName(x,y,z,false)
-		exports["vehicle_node"]:LoadZone(getPlayerCity(source), zone)
-		
 		
 		StreamData[source] = {["armas"] = {}, ["UpdateRequest"] = true}
 		UpdateArmas(source)
@@ -7602,22 +7596,24 @@ function deAttach(theVehicle)
 		killTimer(PData["Harvest"])
 		PData["HarvestDisplay"] = false
 	else
-		local x,y,z = getElementPosition(source)
-		VehiclesInStream[source]["info"] = createMarker(x,y,z, "corona", 15, 255, 10, 10, 0)
-
-		local x,y,z,resx,resy,resz = getElementData(source, "x"),getElementData(source, "y"),getElementData(source, "z"),getElementData(source, "resx"),getElementData(source, "resy"),getElementData(source, "resz")
-		local dist = getDistanceBetweenPoints3D(x,y,z,resx,resy,resz)/2
-		if(dist >= 1000) then
-			dist=math.round((dist/1000), 1).." км"
-		else
-			dist=math.round(dist, 0).." м"
+		if(VehiclesInStream[source]) then
+			local x,y,z = getElementPosition(source)
+			VehiclesInStream[source]["info"] = createMarker(x,y,z, "corona", 15, 255, 10, 10, 0)
+	
+			local x,y,z,resx,resy,resz = getElementData(source, "x"),getElementData(source, "y"),getElementData(source, "z"),getElementData(source, "resx"),getElementData(source, "resy"),getElementData(source, "resz")
+			local dist = getDistanceBetweenPoints3D(x,y,z,resx,resy,resz)/2
+			if(dist >= 1000) then
+				dist=math.round((dist/1000), 1).." км"
+			else
+				dist=math.round(dist, 0).." м"
+			end
+			
+			local money = getElementData(source, "money")
+			local rl = fromJSON(getElementData(source, "BaseDat"))
+			setElementData(VehiclesInStream[source]["info"], "TrailerInfo", "Груз: #FF0000"..getElementData(source, "product").."\n#FFFFFFКуда: "..rl[1].."\nРасстояние: "..dist.."\n#FFFFFFОплата: #3B7231$"..money)
+			
+			attachElements(VehiclesInStream[source]["info"], source)
 		end
-		
-		local money = getElementData(source, "money")
-		local rl = fromJSON(getElementData(source, "BaseDat"))
-		setElementData(VehiclesInStream[source]["info"], "TrailerInfo", "Груз: #FF0000"..getElementData(source, "product").."\n#FFFFFFКуда: "..rl[1].."\nРасстояние: "..dist.."\n#FFFFFFОплата: #3B7231$"..money)
-		
-		attachElements(VehiclesInStream[source]["info"], source)
 	end
 end
 addEventHandler("onClientTrailerDetach", getRootElement(), deAttach)
