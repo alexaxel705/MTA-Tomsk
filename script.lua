@@ -13101,7 +13101,7 @@ local tmpi = 1
 local tmpcity = ""
 function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local res = getResourceFromName("Interface") -- Interface
+		local res = getResourceFromName("interface") -- Interface
 		restartResource(res)
 		--local res = getResourceFromName("ps2_weather") -- Interface
 		--restartResource(res)
@@ -14100,7 +14100,14 @@ function Acceleration(thePlayer)
 			if(getPedOccupiedVehicleSeat(thePlayer) == 0) then
 				local HT = getVehicleHandling(theVehicle)
 				SData["VehAccData"][thePlayer] = {theVehicle, HT}
-				setVehicleHandling(theVehicle, "engineAcceleration", HT["engineAcceleration"]*2)
+				local nitro = getVehicleUpgradeOnSlot(theVehicle, 8)-1007
+				
+				if(nitro > 0) then
+					triggerClientEvent(thePlayer, "Nitro", thePlayer, true)
+				else
+					setVehicleHandling(theVehicle, "engineAcceleration", HT["engineAcceleration"]*2)
+				end
+				
 				if(HT["driveType"] == "rwd") then
 					setVehicleHandling(theVehicle, "centerOfMass", {0,-1,0})
 				end
@@ -14115,6 +14122,10 @@ addEventHandler("Acceleration", root, Acceleration)
 
 function AccelerationDown(thePlayer)
 	if(SData["VehAccData"][thePlayer]) then
+		if(getVehicleUpgradeOnSlot(SData["VehAccData"][thePlayer][1], 8) > 0) then
+			triggerClientEvent(thePlayer, "Nitro", thePlayer, false)
+		end
+		
 		for name, val in pairs(SData["VehAccData"][thePlayer][2]) do
 			setVehicleHandling(SData["VehAccData"][thePlayer][1], name, val)
 		end
@@ -14221,7 +14232,7 @@ end
 
 function BindVehicleKey(thePlayer)
 	bindKey(thePlayer,"special_control_up", "down",VehicleBindKeyLight)
-	bindKey(thePlayer,"vehicle_secondary_fire", "down",VehicleBindKeyEngine)
+	bindKey(thePlayer,"num_0", "down",VehicleBindKeyEngine)
 	bindKey(thePlayer,"num_5","down",VehicleBindKeyHood)
 	bindKey(thePlayer,"special_control_down","down",VehicleBindKeyTrunk)
 	bindKey(thePlayer,"special_control_left","down",VehicleBindKeyFL)
@@ -14235,7 +14246,7 @@ end
 
 function UnBindAllVehicleKey(thePlayer)
 	unbindKey(thePlayer,"special_control_up", "down",VehicleBindKeyLight)
-	unbindKey(thePlayer,"vehicle_secondary_fire", "down",VehicleBindKeyEngine)
+	unbindKey(thePlayer,"num_0", "down",VehicleBindKeyEngine)
 	unbindKey(thePlayer,"num_5", "down",VehicleBindKeyHood)
 	unbindKey(thePlayer,"special_control_down","down",VehicleBindKeyTrunk)
 	unbindKey(thePlayer,"special_control_left","down",VehicleBindKeyFL)

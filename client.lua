@@ -1766,6 +1766,7 @@ function TuningExit()
 		destroyElement(TCButton2[slot])
 	end
 	OriginVehicleUpgrade(theVehicle)
+	setVehicleNitroCount(theVehicle, 0)
 	triggerServerEvent("ExitTuning", localPlayer, theVehicle)
 	PText["tuning"] = {}
 end
@@ -1976,6 +1977,9 @@ function SetPlayerHudComponentVisible(component, show)
 			setPlayerHudComponentVisible("wanted", false)
 			setPlayerHudComponentVisible("weapon", false)
 			setPlayerHudComponentVisible("breath", false)
+			setPlayerHudComponentVisible("ammo", false)
+			
+			
 			
 			for name, _ in pairs(PData["Interface"]) do
 				PData["Interface"][name] = true
@@ -4471,7 +4475,6 @@ function PrisonGavnoEv()
 	end
 end
 
-function PrisonPiss() triggerServerEvent("PrisonPiss", localPlayer, localPlayer) end
 
 
 function SleepSound(bank,id,id2)
@@ -5622,6 +5625,8 @@ end
 
 
 
+
+function PrisonPiss() triggerServerEvent("piss", localPlayer, localPlayer) end
 
 local PlayerPissing = {}
 local PlayerPissingTimer = {}
