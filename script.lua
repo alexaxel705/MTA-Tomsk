@@ -2782,6 +2782,8 @@ function AddPlayerArmas(thePlayer, model)
 		triggerClientEvent(thePlayer, "AddPlayerArmas", thePlayer, thePlayer, model)
 	end
 end
+addEvent("AddPlayerArmas", true)
+addEventHandler("AddPlayerArmas", root, AddPlayerArmas)
 
 
 function RemovePlayerArmas(thePlayer, model)
@@ -2792,6 +2794,8 @@ function RemovePlayerArmas(thePlayer, model)
 		triggerClientEvent(thePlayer, "RemovePlayerArmas", thePlayer, thePlayer, model)
 	end
 end
+addEvent("RemovePlayerArmas", true)
+addEventHandler("RemovePlayerArmas", root, RemovePlayerArmas)
 
 
 
@@ -13823,6 +13827,11 @@ setElementData(PrisonStreetGate, "gates", toJSON({209.842, 1874.571, 13.903,0,0,
 setElementData(PrisonStreetGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 
+PrisonFoodGate1 = createObject(2927, 238.6, 1862.5, 14.6, 0,0,0)
+setElementData(PrisonFoodGate1, "gates", toJSON({236.6, 1862.5, 14.6, 0,0,0}))
+setElementData(PrisonFoodGate1, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
+
+
 PrisonStreetGate = createObject(3115, -1456.719, 501.297, 9.914, 0,0,0) -- SF
 setElementData(PrisonStreetGate, "gates", toJSON({-1456.719, 501.297, 16.914,0,0,0}))
 setElementData(PrisonStreetGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР"}))
@@ -13889,14 +13898,6 @@ setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "П
 
 
 
-
-PrisonFoodGate1 = createObject(2930, 226.6, 1874.1, 15.4)
-setElementData(PrisonFoodGate1, "gates", toJSON({226.6, 1875.1,15.4, 0,0,0}))
-setElementData(PrisonFoodGate1, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
-
-PrisonFoodGate2 = createObject(2930, 226.6, 1872.4, 15.4)
-setElementData(PrisonFoodGate2, "gates", toJSON({226.6, 1871.4, 15.4, 0,0,0}))
-setElementData(PrisonFoodGate2, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 PrisonFoodGate2 = createObject(3095, 268.664, 1884.06, 15.925, 0, 0, 90)
 setElementData(PrisonFoodGate2, "gates", toJSON({275.664, 1884.06, 15.925, 0, 0, 0}))

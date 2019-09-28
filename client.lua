@@ -4069,8 +4069,6 @@ function LoginClient(open)
 	if(open) then
 		triggerEvent("CreateButtonInputInt", localPlayer, "loginPlayerEvent", Text("Регистрация/Вход"))
 		showCursor(true)
-	else
-		PText["HUD"][8] = nil
 	end
 end
 addEvent("LoginWindow", true)
@@ -4079,9 +4077,9 @@ addEventHandler("LoginWindow", localPlayer, LoginClient)
 
 
 
+
+
 local DisplayInput = false
-
-
 
 
 function DrawPlayerInput()
@@ -4089,33 +4087,32 @@ function DrawPlayerInput()
 
 	if(BindedKeys["enter"][3][1] == "loginPlayerEvent") then
 		local text = ""
-		for _ = 1, #BindedKeys["enter"][3][4] do
+		for _ = 1, utf8.width(BindedKeys["enter"][3][4]) do
 			text = text.."*"
 		end
 		dxDrawBorderedText(text.."|", screenWidth/2-(55*scale), screenHeight-(285*scale), 0, 0, tocolor(0, 0, 0, 255), scale, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
 	else
 		dxDrawBorderedText(BindedKeys["enter"][3][4].."|", screenWidth/2-(55*scale), screenHeight-(285*scale), 0, 0, tocolor(0, 0, 0, 255), scale, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
 	end
-	dxDrawText(DisplayInput, screenWidth, screenHeight-(325*scale), 0, 0, tocolor(0, 0, 0, 255), scale, "default-bold", "center", "top", false, false, false, true, true)
+	dxDrawBorderedText(DisplayInput, screenWidth, screenHeight-(325*scale), 0, 0, tocolor(255, 255, 255, 255), scale, "defailt-bold", "center", "top", false, false, false, true, true)
 end
 
 
 function CreateButtonInput(func, text, args)
 	if(DisplayInput) then
-		DisplayInput = nil		
+		DisplayInput = false		
 		removeEventHandler("onClientHUDRender", getRootElement(), DrawPlayerInput)
+		removeEventHandler("onClientCharacter", getRootElement(), outputPressedCharacter)
 	else
 		BindedKeys["enter"] = {"ServerCall", localPlayer, {func, localPlayer, localPlayer, "", args}}
 		
 		DisplayInput = text
 		addEventHandler("onClientHUDRender", getRootElement(), DrawPlayerInput)
+		addEventHandler("onClientCharacter", getRootElement(), outputPressedCharacter)
 	end
 end
 addEvent("CreateButtonInputInt", true)
 addEventHandler("CreateButtonInputInt", root, CreateButtonInput)
-
-
-
 
 
 
@@ -4137,9 +4134,10 @@ end
 	
 local SoundsTheme = {
 	[1] = "http://109.227.228.4/engine/include/MTA/music/Blue-In-Green.mp3", 
-	--[2] = "http://109.227.228.4/engine/include/MTA/music/Autumn-Leaves.mp3",
-	--[3] = "http://109.227.228.4/engine/include/MTA/music/Almost-blue.mp3", 
-	--[4] = "http://109.227.228.4/engine/include/MTA/music/GTA3.mp3", 
+	[2] = "http://109.227.228.4/engine/include/MTA/music/we-met.mp3", 
+	--[3] = "http://109.227.228.4/engine/include/MTA/music/Autumn-Leaves.mp3",
+	--[4] = "http://109.227.228.4/engine/include/MTA/music/Almost-blue.mp3", 
+	--[5] = "http://109.227.228.4/engine/include/MTA/music/GTA3.mp3", 
 	
 }
 
@@ -4278,7 +4276,7 @@ addEventHandler("AuthComplete", localPlayer, AuthComplete)
 
 
 function CallPhoneInput()
-	triggerEvent("CreateButtonInputInt", localPlayer, "CallPhoneOutput", "Введи номер или ИД игрока")
+	triggerEvent("CreateButtonInputInt", localPlayer, "CallPhoneOutput", "Введи ID игрока")
 end
 addEvent("CallPhoneInput", true)
 addEventHandler("CallPhoneInput", localPlayer, CallPhoneInput)
@@ -5373,6 +5371,22 @@ local UpperSymbols = {
 }
 
 
+
+
+
+
+function outputPressedCharacter(character)
+	if(DisplayInput) then
+		BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]..character
+	end
+end
+
+
+
+
+
+
+
 function playerPressedKey(button, press)
     if (press) then
 		if(#Cheatkeys > 99) then
@@ -5403,30 +5417,8 @@ function playerPressedKey(button, press)
 		end
 		
 		if(DisplayInput) then
-			if(button == "space") then
-				button = " "
-			elseif(button == "backspace") then
-				BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]:sub(1, -2)
-			end
-			if(#button == 1) then
-				BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]..button
-				cancelEvent()
-			end
-		end
-		
-		if(PText["HUD"][8]) then
-			if(button == "space") then
-				button = " "
-			elseif(button == "backspace") then
-				BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]:sub(1, -2)
-			end
-			if(#button == 1) then
-				if getKeyState("lshift") == true or getKeyState("rshift") == true then
-					button = string.upper(button)
-					if(UpperSymbols[button]) then button = UpperSymbols[button] end
-				end
-				BindedKeys["enter"][3][4] = BindedKeys["enter"][3][4]..button
-				cancelEvent()
+			if(button == "backspace") then
+				BindedKeys["enter"][3][4] = utf8.remove(BindedKeys["enter"][3][4], -1, -1)
 			end
 		end
 		
@@ -7132,19 +7124,6 @@ function DrawPlayerMessage()
 		end
 	end
 
-	if(PText["HUD"][8]) then
-		dxDrawRectangle(screenWidth/2-(150*scaley), screenHeight-(660*scalex), 300*NewScale, 150*NewScale, tocolor(233, 165, 58, 180))	
-
-		if(BindedKeys["enter"][3][1] == "loginPlayerEvent") then
-			local text = ""
-			for _ = 1, #BindedKeys["enter"][3][4] do
-				text = text.."*"
-			end
-			dxDrawBorderedText(text.."|", screenWidth/2-(120*scaley), screenHeight-(580*scalex), 0, 0, tocolor(0, 0, 0, 255), NewScale*2, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
-		else
-			dxDrawBorderedText(BindedKeys["enter"][3][4].."|", screenWidth/2-(120*scaley), screenHeight-(580*scalex), 0, 0, tocolor(0, 0, 0, 255), NewScale*2, "sans", "left", "top", false, false, false, true, true, 0, 0, 0)
-		end
-	end
 	
 	for name,arr in pairs(PText) do
 		for i,el in pairs(arr) do
