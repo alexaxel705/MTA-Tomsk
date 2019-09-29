@@ -871,7 +871,7 @@ local InteriorsObject = {
 
 --x, y, z, rotz, камера угол, владелец, i, d, инфа для тюрьмы
 local SpawnPoint = {
-	["AREA51"] = {212, 1865, 13, 90, false, false,0, 0, "#FFA500Психиатрическая больница", "До выписки"},
+	["AREA51"] = {212, 1865, 13, 90, false, false,0, 0, "#FFA500Психиатрическая больница", "До лоботомии"},
 	["LSPD"] = {264.5, 77.6, 1001, 90, false, false, 6, 1, "#FFA500Тюрьма Los Santos", "До освобождения"},
 	["SFPD"] = {219.5, 110, 999, 0, false, false, 10, 1, "#FFA500Тюрьма San Fierro", "До освобождения"},
 	["LVPD"] = {193.5, 174.8, 1003, 0, false, false, 3, 1, "#FFA500Тюрьма Las Venturas", "До освобождения"},
@@ -8684,6 +8684,11 @@ local Dialogs = {
 			["dialog"] = {"наркоман наверное", "вот я в твои годы", "куда катится мир", "какая молодежь пошла"}
 		}
 	},
+	["Служащий"] = {
+		[1] = {
+			["dialog"] = {"Тебе не положено тут находиться!", "Убирайся!"}
+		}
+	},
 	["Haruhi Suzumiya"] = {
 		[1] = {
 			["dialog"] = {"Отвали!"},
@@ -9384,18 +9389,24 @@ function BandInvite(thePlayer, thePed, arg)
 		return false
 	end
 
-	if(BannedSkin[getElementModel(thePlayer)]) then
-		triggerClientEvent(thePlayer, "PlayerDialog", thePlayer, false, thePed, "Если кто-то выглядит как черт, ходит как черт и разговаривает как черт, то это, вероятно, и есть черт")
-		HelpMessage(thePlayer, "Для вступления в "..RGBToHex(getTeamColor(getTeamFromName(arg)))..arg.."\n#FFFFFFНужно быть одетым по приличнее")	
-		return false
-	end
 	
 	if(arg == "Триады" or arg == "Колумбийский картель" or arg == "Полиция") then
+		if(BannedSkin[getElementModel(thePlayer)]) then
+			triggerClientEvent(thePlayer, "PlayerDialog", thePlayer, false, thePed, "Если кто-то выглядит как черт, ходит как черт и разговаривает как черт, то это, вероятно, и есть черт")
+			HelpMessage(thePlayer, "Для вступления в "..RGBToHex(getTeamColor(getTeamFromName(arg)))..arg.."\n#FFFFFFНужно быть одетым по приличнее")	
+			return false
+		end
+	
 		if(GetDatabaseAccount(thePlayer, "ATUT") ~= 3) then
 			triggerClientEvent(thePlayer, "PlayerDialog", thePlayer, false, thePed, "Для вступления в "..arg.." тебе нужно сначала отслужить в армии")
 			HelpMessage(thePlayer, "Для вступления в армию\n#FFFFFFНапиши /arm")	
 			return false
 		end
+	end
+	
+	
+	if(GetDatabaseAccount(thePlayer, "CTUT") == 0) then
+		SetDatabaseAccount(thePlayer, "CTUT", 1)
 	end
 	
 	triggerClientEvent(thePlayer, "PlayerDialog", thePlayer, false, thePed, "Ты принят")
@@ -9849,7 +9860,6 @@ function ZoneInfo(thePlayer, zone)
 			elseif(PlayerTeam == "Уголовники") then
 				if(GetDatabaseAccount(thePlayer, "Prison") == "AREA51") then
 					if(zone ~= "Restricted Area") then
-						local ptime = GetDatabaseAccount(thePlayer, "PrisonTime")
 						SetDatabaseAccount(thePlayer, "PrisonTime", nil)
 						SetDatabaseAccount(thePlayer, "Prison", nil)
 						MissionCompleted(thePlayer, "", "СБЕЖАЛ")
@@ -9862,10 +9872,15 @@ function ZoneInfo(thePlayer, zone)
 						SetDatabaseAccount(thePlayer, "prisoninv", nil)
 						triggerClientEvent(thePlayer, "PlayerSpawn", thePlayer)
 						removeElementData(thePlayer, "WantedLevelPrison")
+						
+						if(GetDatabaseAccount(thePlayer, "UTUT") <= 2) then
+							SetDatabaseAccount(thePlayer, "UTUT", 3)
+						end
+						
+						UpdateTutorial(thePlayer)
 					end
 				else
 					if(getElementDimension(thePlayer) == 0) then
-						local ptime = GetDatabaseAccount(thePlayer, "PrisonTime")
 						SetDatabaseAccount(thePlayer, "PrisonTime", nil)
 						SetDatabaseAccount(thePlayer, "Prison", nil)
 						MissionCompleted(thePlayer, "", "СБЕЖАЛ")
@@ -10916,11 +10931,17 @@ addEventHandler("SpawnthePlayer", root, SpawnthePlayer)
 
 function UpdateTutorial(thePlayer)
 	local team = getTeamName(getPlayerTeam(thePlayer))
-	if(team == "Мирные жители") then
+	if(team == "Уголовники") then
+		if(GetDatabaseAccount(thePlayer, "UTUT") == 0) then
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 226, 1859.2, 13.1, "Побег", "Разбей #596289вентиляцию")
+		elseif(GetDatabaseAccount(thePlayer, "UTUT") == 1) then
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 247.2, 1863.1, 16, "Побег", "Разбей #596289решетку\r\n#FFFFFFБей в правый верхний угол")
+		elseif(GetDatabaseAccount(thePlayer, "UTUT") == 2) then
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 96.7, 1920.6, 18.1, "Побег", "Покинь зону")
+		end
+	elseif(team == "Мирные жители") then
 		if(GetDatabaseAccount(thePlayer, "CTUT") == 0) then
-			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, -255, 2603.3, 62.96, "Дойди до магазина", "Зайди в магазин и купи пачку #596289сигарет")
-		elseif(GetDatabaseAccount(thePlayer, "CTUT") == 1) then
-			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Зайди в бар и вступи в банду")
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 2507.4, 1242.6, 11.5, "Доедь до бара", "Зайди в бар и вступи в банду")
 		end
 	elseif(team == "Полиция") then
 		outputChatBox("Используй клавишу #A0A0A0B#FFFFFF чтобы вызвать подмогу", thePlayer, 255, 255, 255, true)
@@ -10966,6 +10987,29 @@ function UpdateTutorial(thePlayer)
 		end
 	end
 end
+
+
+
+
+function UpdateTutorialByText(thePlayer, text)
+	if(text == "Разбей #596289вентиляцию") then
+		ToolTip(thePlayer, "Используй ПКМ чтобы прицелиться\r\nЗатем клавишу F чтобы\r\nИспользовать специальную атаку")
+		SetDatabaseAccount(thePlayer, "UTUT", 1)
+		UpdateTutorial(thePlayer)
+	elseif(text == "Разбей #596289решетку\r\n#FFFFFFБей в правый верхний угол") then
+		ToolTip(thePlayer, "Опасайся прожекторов")
+		SetDatabaseAccount(thePlayer, "UTUT", 2)
+		UpdateTutorial(thePlayer)
+	end
+end
+addEvent("UpdateTutorialByText", true)
+addEventHandler("UpdateTutorialByText", getRootElement(), UpdateTutorialByText)
+
+
+
+
+
+
 
 local Soviet = {"Никогда не заводи машину во время заправки",
 "Закрытую машину можно вскрыть грубой силой (выбить дверь)",
@@ -11196,7 +11240,6 @@ for _, v in pairs(SearchLights) do
 	setElementRotation(v["A51_SPOTBULB"], 330,ry,math.random(0,360))
 	attachElements(v["A51_SPOTHOUSING"], v["A51_SPOTBULB"])
 end
-
 
 
 
@@ -11819,6 +11862,7 @@ CreateDialogBot(256, -2240.2, -1748.8, 480.9, 180, 0, 0, "Haruhi Suzumiya", "С�
 
 
 
+
 CreateEnter(1555.5, -1675.7, 16.1, 90, 0, 0, false, 246.8, 62.3, 1003.8, 0, 6, 1, "Полицейский участок Los Santos", true)
 CreateEnter(1568.7, -1690, 6.2, 180, 0, 0, false, 246.4, 88, 1003.6, 180, 6, 1, "Полицейский участок Los Santos")
 CreateEnter(1524.5, -1677.9, 6.2, 270, 0, 0, false, 1564.9, -1667, 28.4, 0, 0, 0)
@@ -12237,7 +12281,8 @@ function PrisonEvent(hour, minutes)
 	end
 
 	local players = getPlayersInTeam(getTeamFromName("Уголовники"))
-	PrisonMessage="#858585Распорядок дня\n#DCDCDC"..PrisonMessage
+	--PrisonMessage="#858585Распорядок дня\n#DCDCDC"..PrisonMessage
+	PrisonMessage = ""
 	for playerKey, playerValue in ipairs (players) do
 		if(GetDatabaseAccount(playerValue, "PrisonTime") < 1) then
 			SetDatabaseAccount(playerValue, "inv", GetDatabaseAccount(playerValue, "prisoninv"))
@@ -13534,17 +13579,7 @@ function buyshopitem(thePlayer, count, args)
 	item["ForSale"] = nil
 	
 	if(AddPlayerMoney(thePlayer, -cost)) then
-		if(item["name"] == "CoK") then
-			local PlayerTeam = getTeamName(getPlayerTeam(thePlayer))
-			if(PlayerTeam == "Мирные жители") then
-				if(GetDatabaseAccount(thePlayer, "CTUT") == 0) then
-					SetDatabaseAccount(thePlayer, "CTUT", 1)
-					MissionCompleted(thePlayer, "СООБРАЗИТЕЛЬНОСТЬ +", "МИССИЯ ВЫПОЛНЕНА")
-					triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 18)
-					UpdateTutorial(thePlayer)
-				end
-			end
-		elseif(item["name"] == "Газета") then
+		if(item["name"] == "Газета") then
 			item["date"] = {ServerDate.month+1, ServerDate.year+1900}
 		elseif(item["name"] == "Лазерный прицел") then
 			item["color"] = {math.random(0,255), math.random(0,255), math.random(0,255), math.random(180,255)}
@@ -13784,7 +13819,7 @@ function PoliceArrestCar()
 			local x,y,z = getElementPosition(source)
 			for key,thePlayers in pairs(getElementsByType "player") do
 				triggerClientEvent(thePlayers, "PlayerActionEvent", thePlayers, "Немедленно остановите машину или мы откроем огонь!", source)
-				triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "script", 58, math.random(36, 41),x,y,z, false, 25,100,reverb,true)
+				triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "script", 58, math.random(36, 41),x,y,z, false, 25,100)
 			end
 		end
 	end
@@ -13808,9 +13843,6 @@ PrisonMainGate = createObject(10184, 285.6, 1821.3, 19.1, 0,0,180)
 setElementData(PrisonMainGate, "gates", toJSON({285.6, 1821.3, 23.3, 0,0,0}))
 setElementData(PrisonMainGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
-createObject(1412, 96.7, 1920.9, 18.4, 0,0,90)
-createObject(1412, 96.7, 1920.9, 20.4, 0,0,90)
-
 
 local wall = createObject(3059, 2522, -1272.9301, 35.61, 0,0,0)
 setElementFrozen(wall, true)
@@ -13826,10 +13858,6 @@ PrisonStreetGate = createObject(2927,  211.842, 1874.571, 13.903,0,0,0)
 setElementData(PrisonStreetGate, "gates", toJSON({209.842, 1874.571, 13.903,0,0,0}))
 setElementData(PrisonStreetGate, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
-
-PrisonFoodGate1 = createObject(2927, 238.6, 1862.5, 14.6, 0,0,0)
-setElementData(PrisonFoodGate1, "gates", toJSON({236.6, 1862.5, 14.6, 0,0,0}))
-setElementData(PrisonFoodGate1, "team",  toJSON({"МЧС", "Военные", "Полиция", "ФБР", "ЦРУ"}))
 
 
 PrisonStreetGate = createObject(3115, -1456.719, 501.297, 9.914, 0,0,0) -- SF
@@ -16868,6 +16896,39 @@ function lockhouse(thePlayer)
 	end
 end
 
+
+
+
+-- Area 51
+local PrisonPersonal = {
+	[1] = CreateBot(287, 265.2, 1895.3, 33.9, 90, 0, 0, "Служащий", 1), 
+	[2] = CreateBot(287, 233.7, 1933, 33.9, 180, 0, 0, "Служащий", 2), 
+	[3] = CreateBot(287, 102.4, 1902.2, 33.9, 41, 0, 0, "Служащий", 3),
+	[4] = CreateBot(287, 115, 1812.6, 33.9, 230, 0, 0, "Служащий", 4),
+	[5] = CreateBot(287, 229, 1921.1, 25.8, 90, 0, 0, "Служащий", 5),
+	[6] = CreateBot(287, 128.6, 1938.2, 19.3, 180, 0, 0, "Служащий", 5),
+	[7] = CreateBot(287, 282.4, 1814.7, 17.6, 90, 0, 0, "Служащий", 5),
+	[8] = CreateBot(287, 211.6, 1812.3, 21.9, 0, 0, 0, "Служащий", 5),
+	
+	
+}
+
+
+for _, thePed in pairs(PrisonPersonal) do
+	giveWeapon(thePed, 34,9999,true)
+end
+
+function PrisonAlert(thePlayer)
+	for _, thePed in pairs(PrisonPersonal) do
+		setElementData(thePed, "attacker", getPlayerName(thePlayer))
+	end
+	
+	for key,thePlayers in pairs(getElementsByType "player") do
+		triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "script", 20, 1, 165.5, 1850.5, 37.7, false, 100,200)
+	end
+end
+addEvent("PrisonAlert", true)
+addEventHandler("PrisonAlert", getRootElement(), PrisonAlert)
 
 
 

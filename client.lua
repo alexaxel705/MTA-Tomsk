@@ -2098,7 +2098,6 @@ addEventHandler("onClientMarkerHit", getRootElement(), MarkerHit)
 
 
 function markerLeave(hitPlayer, Dimension)
-	--Костыль, не работает Dimension
 	if(hitPlayer == localPlayer) then
 		if(getElementData(source, "TriggerBot")) then
 			local thePed = FoundPedByTINF(source)
@@ -3426,7 +3425,7 @@ function UpdateBot()
 					if(attacker) then
 						local x,y,z = getPedBonePosition(attacker, ActualBones[math.random(#ActualBones)])
 						MovePlayerTo[thePed] = {x,y,z,0,"fast",false,false,true} -- x,y,z,rz,speed,event,args,fire
-						if(getTeamGroup(getElementData(thePed, "team")) == "Официалы") then
+						if(getElementData(thePed, "team") == "Полиция") then
 							if(getElementData(attacker, "NoFireMePolice")) then
 								MovePlayerTo[thePed][8] = false
 								if(GetDistance(thePed, attacker) < 15) then
@@ -3435,7 +3434,6 @@ function UpdateBot()
 									end
 								end
 							end
-							
 							
 							if(getElementData(attacker, "WantedLevel") == 0) then
 								triggerServerEvent("NoAttack", localPlayer, attacker, thePed)
@@ -3607,6 +3605,7 @@ local VehTypeSkill = {
 }
 
 function updateWorld()
+	UpdateBot()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	if(PData["Driver"] and theVehicle) then
 		if(getElementDimension(localPlayer) == 0 or getElementData(localPlayer, "City")) then
@@ -3726,9 +3725,6 @@ function checkKey()
 			PData["Target"][i] = nil
 		end
 	end
-	
-	
-	UpdateBot()
 end
 setTimer(checkKey,700,0)
 
@@ -4470,6 +4466,14 @@ function PrisonGavnoEv()
 	end
 end
 
+
+local AlertTrigger = false
+function PrisonAlert()
+	if(not AlertTrigger) then
+		triggerServerEvent("PrisonAlert", localPlayer, localPlayer)
+		AlertTrigger = true
+	end
+end
 
 
 function SleepSound(bank,id,id2)
@@ -5843,10 +5847,13 @@ function DrawOnClientRender()
 			for obj, dat in pairs(ObjectInStream) do
 				if(isElement(dat["attach_searchlight"])) then
 					local sx, sy, sz = getPositionFromElementOffset(obj, 0, 1.181, 0.768)
-					local ex, ey, ez = getPositionFromElementOffset(obj, 0, 30, 0)
-					
+					local ex, ey, ez = getPositionFromElementOffset(obj, 0, 50, 0)
+					local hit, hitx, hity, hitz, _, _, _, _, surface = processLineOfSight(sx, sy, sz, ex, ey, ez, true, true, true, false)
 					setSearchLightStartPosition(dat["attach_searchlight"], sx, sy, sz)
-					setSearchLightEndPosition(dat["attach_searchlight"], ex, ey, ez)
+					setSearchLightEndPosition(dat["attach_searchlight"],hitx, hity, hitz)
+					if(getDistanceBetweenPoints3D(x,y,z,hitx, hity, hitz) < 5) then
+						PrisonAlert()
+					end
 				end
 			end
 		
@@ -7462,7 +7469,7 @@ function StreamIn(restream)
 				local datCord = fromJSON(getElementData(source, "NativePos"))
 				x,y,z = datCord[1], datCord[2], datCord[3]
 			end
-			ObjectInStream[source]["collision"] = createMarker(x,y,z, "corona", getElementRadius(source)*2, 0,0,0,0)
+			ObjectInStream[source]["collision"] = createMarker(x,y,z, "corona", getElementRadius(source)*1.5, 0,0,0,0)
 			setElementInterior(ObjectInStream[source]["collision"], getElementInterior(source))
 			setElementDimension(ObjectInStream[source]["collision"], getElementDimension(source))
 			setElementParent(ObjectInStream[source]["collision"], source)	
