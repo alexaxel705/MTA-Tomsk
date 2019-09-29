@@ -116,7 +116,6 @@ local SleepTimer = false
 local ArrestTimerEvent = false
 local DrugsTimer = false
 local SpunkTimer = false
-local screenSource = dxCreateScreenSource(screenWidth, screenHeight)
 local PText = {["biz"] = {}, ["bank"] = {}, ["INVHUD"] = {}, ["HUD"] = {}}
 --[[ 
 HUD:
