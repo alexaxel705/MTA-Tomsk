@@ -9069,10 +9069,14 @@ local Dialogs = {
 				["action"] = {"TradePlayerWindow", {{ItemsTrade["Liquor Shop"], ""}}},
 			},
 			[2] = {
+				["text"] = "Что за песня играет?",
+				["end"] = {"Frank Sinatra - One For My Baby"}
+			},
+			[3] = {
 				["text"] = "[ограбить]",
 				["action"] = {"RobShop", {}},
 			},
-			[3] = {
+			[4] = {
 				["text"] = "[промолчать]"
 			}
 		}
@@ -10882,7 +10886,7 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 		setElementData(thePlayer, "armasplus", toJSON({}))
 		PData[thePlayer]["Timer"] = setTimer(function(thePlayer)
 			if(GetDatabaseAccount(thePlayer, "wanted") > 0) then
-				WantedLevel(thePlayer, -0.25)
+				WantedLevel(thePlayer, -1)
 			end
 			if(isPlayerBolezn(thePlayer, "СПИД")) then
 				setElementHealth(thePlayer, getElementHealth(thePlayer)-5)
@@ -12125,6 +12129,8 @@ CreateBar(2460.7, -1344, 24,90, "Attica Bar")
 CreateBar(2361.4, -1332.5, 24,270, "Attica Bar")
 CreateBar(2441.2, 2065.5, 10.8,180, "The Craw Bar")
 CreateBar(-2242.1, -88.2, 35.3,180, "Misty's")
+
+
 
 
 

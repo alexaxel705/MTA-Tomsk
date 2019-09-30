@@ -6452,15 +6452,6 @@ addEventHandler("onClientPlayerWasted", getRootElement(), onWasted)
 
 
 
-function PlayerNewZone(zone, city, updateweather, interior)
-	triggerEvent("SetZoneDisplay", localPlayer, zone)
-	triggerServerEvent("ZoneInfo", localPlayer, localPlayer, zone)
-end
-addEventHandler("PlayerNewZone", root, PlayerNewZone)
-
-
-
-
 function ChangeInfo(text, ctime)
 	if(isTimer(PData["ChangeInfoTimer"])) then
 		killTimer(PData["ChangeInfoTimer"])
