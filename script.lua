@@ -14128,11 +14128,11 @@ function Acceleration(thePlayer)
 					triggerClientEvent(thePlayer, "Nitro", thePlayer, true)
 				else
 					setVehicleHandling(theVehicle, "engineAcceleration", HT["engineAcceleration"]*2)
+					if(HT["driveType"] == "rwd") then
+						setVehicleHandling(theVehicle, "centerOfMass", {0,-1,0})
+					end
 				end
 				
-				if(HT["driveType"] == "rwd") then
-					setVehicleHandling(theVehicle, "centerOfMass", {0,-1,0})
-				end
 			end
 		end
 	end
@@ -14144,13 +14144,15 @@ addEventHandler("Acceleration", root, Acceleration)
 
 function AccelerationDown(thePlayer)
 	if(SData["VehAccData"][thePlayer]) then
-		if(getVehicleUpgradeOnSlot(SData["VehAccData"][thePlayer][1], 8) > 0) then
+		local nitro = getVehicleUpgradeOnSlot(SData["VehAccData"][thePlayer][1], 8)-1007
+		if(nitro > 0) then
 			triggerClientEvent(thePlayer, "Nitro", thePlayer, false)
+		else
+			for name, val in pairs(SData["VehAccData"][thePlayer][2]) do
+				setVehicleHandling(SData["VehAccData"][thePlayer][1], name, val)
+			end
 		end
 		
-		for name, val in pairs(SData["VehAccData"][thePlayer][2]) do
-			setVehicleHandling(SData["VehAccData"][thePlayer][1], name, val)
-		end
 		SData["VehAccData"][thePlayer] = nil
 	end
 end

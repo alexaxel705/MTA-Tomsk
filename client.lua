@@ -2167,9 +2167,12 @@ addEventHandler("bankControlUpdate", localPlayer, bankControlUpdate)
 
 
 function MyVoice(voice, voicebank)
-	triggerServerEvent("CheckVoice", localPlayer, localPlayer, voice, voicebank)
-	local voi = playSound("http://109.227.228.4/engine/include/MTA/"..voicebank.."/"..md5(utf8.upper(voice))..".wav")
-	setSoundVolume(voi, 0.7)
+	if(string.sub(voice, 0, 1) ~= "[" and voice ~= " ") then
+		outputConsole(voice)
+		triggerServerEvent("CheckVoice", localPlayer, localPlayer, voice, voicebank)
+		local voi = playSound("http://109.227.228.4/engine/include/MTA/"..voicebank.."/"..md5(utf8.upper(voice))..".wav")
+		setSoundVolume(voi, 0.7)
+	end
 end
 addEvent("MyVoice", true)
 addEventHandler("MyVoice", localPlayer, MyVoice)
