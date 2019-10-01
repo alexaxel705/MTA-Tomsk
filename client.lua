@@ -1965,6 +1965,7 @@ end
 
 function SetPlayerHudComponentVisible(component, show)
 	setPlayerHudComponentVisible(component, show)
+	setElementData(localPlayer, "HUD", show)
 	if(component == "all") then
 		if(show) then
 			setPlayerHudComponentVisible("area_name", false)
