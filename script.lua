@@ -13486,7 +13486,7 @@ function AddDatabaseAccount(thePlayer, password)
 	setElementData(thePlayer, "inv", StandartInventory)
 
 	xmlNodeSetAttribute(NewNode, "prisoninv", StandartInventory)
-	xmlNodeSetAttribute(NewNode, "PrisonTime", 10) 
+	xmlNodeSetAttribute(NewNode, "PrisonTime", 500) 
 	xmlNodeSetAttribute(NewNode, "OldTeam", "Мирные жители")
 	xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
 
