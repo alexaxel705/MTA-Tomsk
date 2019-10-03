@@ -913,6 +913,7 @@ function PlayerSpawn()
 	if(FirstSpawn) then
 		stopSound(GTASound)
 		FirstSpawn = false
+		PEDChangeSkin = "play"
 	end
 	triggerEvent("onClientElementStreamIn", localPlayer)
 	local x,y,z = getElementPosition(localPlayer)
@@ -2799,7 +2800,6 @@ function NewNextSkinEnter(_, _, closed)
 	unbindKey ("arrow_l", "down", NewNextSkinMinus) 
 	unbindKey ("arrow_r", "down", NewNextSkinPlus) 
 	unbindKey ("enter", "down", NewNextSkinEnter) 
-	PEDChangeSkin = "play"
 	showCursor(false)
 	if(closed) then 
 		triggerServerEvent("buywardrobe", localPlayer, localPlayer)

@@ -13534,9 +13534,9 @@ function loginPlayer(thePlayer, password)
 
 	if(account) then
 		if(GetDatabaseAccount(thePlayer, "password") == md5(password)) then
+			setElementData(thePlayer, "auth", true)
 			Respect(thePlayer)
 			SpawnedAfterChange(thePlayer)
-			setElementData(thePlayer, "auth", true)
 			AuthComplete(thePlayer)
 		else
 			OutputChat(thePlayer, "Неверный пароль", "Server")
@@ -14118,16 +14118,6 @@ addEventHandler("onPlayerQuit", getRootElement(), quitPlayer)
 
 function changeNick()
 	kickPlayer(source)
-	--[[
-	destroyElement(source)
-
-	if(PData[source]) then
-		if(PData[source]["Timer"]) then
-			killTimer(PData[source]["Timer"])
-		end
-		PData[source] = {}
-	end
-	--]]
 end
 addEventHandler("onPlayerChangeNick", getRootElement(), changeNick)
 
