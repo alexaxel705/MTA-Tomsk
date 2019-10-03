@@ -13,3 +13,4 @@ mtaserver.conf
 <resource src="statistic" startup="1" protected="0" />
 <resource src="unique_jumps" startup="1" protected="0" />
 <resource src="map" startup="1" protected="0" />
+<resource src="casino" startup="1" protected="0" />

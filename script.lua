@@ -12284,33 +12284,63 @@ function PrisonEvent(hour, minutes)
 	local players = getPlayersInTeam(getTeamFromName("Уголовники"))
 	--PrisonMessage="#858585Распорядок дня\n#DCDCDC"..PrisonMessage
 	PrisonMessage = ""
-	for playerKey, playerValue in ipairs (players) do
-		if(GetDatabaseAccount(playerValue, "PrisonTime") < 1) then
-			SetDatabaseAccount(playerValue, "inv", GetDatabaseAccount(playerValue, "prisoninv"))
-			setElementData(playerValue, "inv", GetDatabaseAccount(playerValue, "prisoninv"))
-			SetDatabaseAccount(playerValue, "prisoninv", nil)
-			SetDatabaseAccount(playerValue, "PrisonTime", nil)
-			SetDatabaseAccount(playerValue, "Prison", nil)
-			if(GetDatabaseAccount(playerValue, "OldTeam") ~= 0) then
-				SetTeam(playerValue, GetDatabaseAccount(playerValue, "OldTeam"))
-				SetDatabaseAccount(playerValue, "OldTeam", nil)
+	for _, thePlayer in ipairs (players) do
+		local Prison = GetDatabaseAccount(thePlayer, "Prison")
+		if(GetDatabaseAccount(thePlayer, "PrisonTime") < 1) then -- Освобождение
+			if(Prison == "AREA51") then -- Лоботомия
+				if(not isTimer(InLabTimer[thePlayer])) then
+					InLabTimer[thePlayer] = setTimer(function() end, 2000, 1) -- заглушка
+					fadeCamera(thePlayer, false, 1.0, 0, 0, 0)
+					Pain(thePlayer)
+					setTimer(function()
+						triggerClientEvent(thePlayer, "PlaySound3D", thePlayer, "http://109.227.228.4/engine/include/MTA/music/baker.mp3", 292.2, 1835.5, 8, false)
+
+						setElementCollisionsEnabled(thePlayer, true)
+						toggleAllControls(thePlayer, false)
+						if(setElementRotation(thePlayer, 0,0,35,"default",true)) then
+							SetPlayerPosition(thePlayer, 289.9, 1831.1, 9.14,0, 0)
+							StartAnimation(thePlayer, "CRACK", "crckidle4", -1, true, true, true)
+						end
+						triggerClientEvent(thePlayer, "ShakeLevel", thePlayer, 100)
+						fadeCamera(thePlayer, true, 2.0, 0, 0, 0)
+						setElementData(thePlayer, "sleep", "true")
+						UnBindAllKey(thePlayer)
+						InLabTimer[thePlayer] = setTimer(function()
+							fadeCamera(thePlayer, false, 1.0, 0, 0, 0)
+							setTimer(function()
+								RemoveDatabaseAccount(getPlayerName(thePlayer))
+								kickPlayer(thePlayer)
+							end, 1000, 1)
+						end, 22000, 1)
+					end, 1000, 1)
+				end
 			else
-				SetTeam(playerValue, "Мирные жители")
-			end
-			
-			removeElementData(playerValue, "WantedLevelPrison")
-			SpawnedAfterChange(playerValue)
-		else
-			if(isTimer(InLabTimer[playerValue])) then
-				remaining, executesRemaining, totalExecutes = getTimerDetails(InLabTimer[playerValue])
-				setElementData(playerValue, "WantedLevelPrison", "Научные опыты еще "..math.floor(remaining/1000).." сек.")
-			else
-				SetDatabaseAccount(playerValue, "PrisonTime", GetDatabaseAccount(playerValue, "PrisonTime")-1)
-				local Prison = GetDatabaseAccount(playerValue, "Prison")
-				if(Prison == "AREA51") then
-					setElementData(playerValue, "WantedLevelPrison", SpawnPoint[Prison][9].."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(playerValue, "PrisonTime").." сек.\n"..PrisonMessage)
+		
+				SetDatabaseAccount(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
+				setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "prisoninv"))
+				SetDatabaseAccount(thePlayer, "prisoninv", nil)
+				SetDatabaseAccount(thePlayer, "PrisonTime", nil)
+				SetDatabaseAccount(thePlayer, "Prison", nil)
+				if(GetDatabaseAccount(thePlayer, "OldTeam") ~= 0) then
+					SetTeam(thePlayer, GetDatabaseAccount(thePlayer, "OldTeam"))
+					SetDatabaseAccount(thePlayer, "OldTeam", nil)
 				else
-					setElementData(playerValue, "WantedLevelPrison", SpawnPoint[Prison][9].."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(playerValue, "PrisonTime").." сек.")
+					SetTeam(thePlayer, "Мирные жители")
+				end
+				
+				removeElementData(thePlayer, "WantedLevelPrison")
+				SpawnedAfterChange(thePlayer)
+			end
+		else
+			if(isTimer(InLabTimer[thePlayer])) then
+				remaining, executesRemaining, totalExecutes = getTimerDetails(InLabTimer[thePlayer])
+				setElementData(thePlayer, "WantedLevelPrison", "Научные опыты еще "..math.floor(remaining/1000).." сек.")
+			else
+				SetDatabaseAccount(thePlayer, "PrisonTime", GetDatabaseAccount(thePlayer, "PrisonTime")-1)
+				if(Prison == "AREA51") then
+					setElementData(thePlayer, "WantedLevelPrison", SpawnPoint[Prison][9].."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(thePlayer, "PrisonTime").." сек.\n"..PrisonMessage)
+				else
+					setElementData(thePlayer, "WantedLevelPrison", SpawnPoint[Prison][9].."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(thePlayer, "PrisonTime").." сек.")
 				end
 			end
 		end
@@ -13456,7 +13486,7 @@ function AddDatabaseAccount(thePlayer, password)
 	setElementData(thePlayer, "inv", StandartInventory)
 
 	xmlNodeSetAttribute(NewNode, "prisoninv", StandartInventory)
-	xmlNodeSetAttribute(NewNode, "PrisonTime", 500)
+	xmlNodeSetAttribute(NewNode, "PrisonTime", 10) 
 	xmlNodeSetAttribute(NewNode, "OldTeam", "Мирные жители")
 	xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
 
@@ -13481,6 +13511,8 @@ function CheckDatabasePlayer(thePlayer)
 	if(node) then return true
 	else return false end
 end
+
+
 
 function RemoveDatabaseAccount(thePlayerName)
 	local node = xmlFindChild(PlayerNode, "P"..md5(thePlayerName), 0)
@@ -14036,7 +14068,12 @@ function SpawnedAfterChange(thePlayer, typespawn, zone)
 		SpawnthePlayer(thePlayer, typespawn, zone)
 		triggerClientEvent(thePlayer, "CloseSkinSwitchEvent", thePlayer)
 	else
-		triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))))
+		local SpawnPoints = GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))
+		if(#SpawnPoints > 1) then
+			triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(SpawnPoints))
+		else
+			SpawnthePlayer(thePlayer, SpawnPoints[1][4], SpawnPoints[1][5])
+		end
 	end
 end
 addEvent("SpawnedAfterChangeEvent", true)

@@ -907,7 +907,13 @@ local ColorArray = {"000000","F5F5F5",
 
 
 local SpawnAction = {}
+local FirstSpawn = true
+
 function PlayerSpawn()
+	if(FirstSpawn) then
+		stopSound(GTASound)
+		FirstSpawn = false
+	end
 	triggerEvent("onClientElementStreamIn", localPlayer)
 	local x,y,z = getElementPosition(localPlayer)
 	local zone = getZoneName(x,y,z)
@@ -2793,7 +2799,6 @@ function NewNextSkinEnter(_, _, closed)
 	unbindKey ("arrow_l", "down", NewNextSkinMinus) 
 	unbindKey ("arrow_r", "down", NewNextSkinPlus) 
 	unbindKey ("enter", "down", NewNextSkinEnter) 
-	stopSound(GTASound)
 	PEDChangeSkin = "play"
 	showCursor(false)
 	if(closed) then 
@@ -4067,7 +4072,6 @@ addEventHandler("deathmatchInfo", localPlayer, deathmatchInfo)
 function LoginClient(open)
 	if(open) then
 		triggerEvent("CreateButtonInputInt", localPlayer, "loginPlayerEvent", Text("Регистрация/Вход"))
-		showCursor(true)
 	end
 end
 addEvent("LoginWindow", true)
@@ -4690,6 +4694,17 @@ function PlaySFXClient(c,b,s)
 end
 addEvent("PlaySFXClient", true)
 addEventHandler("PlaySFXClient", localPlayer, PlaySFXClient)
+
+
+
+function PlaySound3D(soundPath, x, y, z, looped)
+	playSound3D(soundPath, x, y, z, looped)
+end
+addEvent("PlaySound3D", true)
+addEventHandler("PlaySound3D", localPlayer, PlaySound3D)
+
+
+
 
 
 function bloodfoot(thePlayer, bool) 
