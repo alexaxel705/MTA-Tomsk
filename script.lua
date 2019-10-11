@@ -7482,7 +7482,7 @@ local WargangGates = {
 
 
 function preLoad(name)
-	setGameType("SAxVCxLC Stories")
+	setGameType("San Andreas")
 	setElementData(root, "ServerName", getServerName())
 	setServerConfigSetting("ped_sync_interval", 50, true)
 	Createkickstart()
@@ -17445,6 +17445,7 @@ function ExitTuning(theVehicle)
 	fadeCamera(source, true)
 	setPlayerHudComponentVisible(source, "radar", true)
 	setCameraTarget(source, source)
+	triggerClientEvent(source, "TuningExits", source)
 end
 addEvent("ExitTuning", true)
 addEventHandler("ExitTuning", root, ExitTuning)

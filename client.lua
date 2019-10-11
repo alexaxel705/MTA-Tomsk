@@ -33,7 +33,7 @@ local FireTimer = {}
 local StreamData = {}
 local VideoMemory = {["HUD"] = {}}
 local VehicleSpeed = 0
-
+setWorldSpecialPropertyEnabled("extraairresistance", false)
 
 local PData = {
 	["Interface"] = {
@@ -248,6 +248,8 @@ function toggleAirBrake()
 	end
 end
 addCommandHandler("noclip", toggleAirBrake)
+
+
 
 
 
@@ -1761,10 +1763,9 @@ addEventHandler("UpgradeServerPreload", getRootElement(), UpgradeServerPreload)
 
 function TuningExit()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
-	PData["Driver"]["Handling"] = getVehicleHandling(theVehicle)
 	setVehicleColor(theVehicle ,ToC1, ToC2, ToC3, ToC4)
 	showCursor(false)
-	tuningList=false
+	tuningList = false
 	for slot = 1, #TCButton do
 		destroyElement(TCButton[slot])
 	end
@@ -7139,6 +7140,7 @@ function DrawPlayerMessage()
 			end
 		end
 	end
+	
 
 	
 	for name,arr in pairs(PText) do
