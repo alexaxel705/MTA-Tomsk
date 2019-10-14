@@ -11581,8 +11581,8 @@ function kr(thePlayer, vmodel, pedmodel)
 					if(vmodel == 497 or vmodel == 488) then -- Вертолеты
 						bz = bz+25
 					end
-					CreateDriverBot(vmodel, pedmodel, bx, by, bz, rz, 0, d, City, arr[name], thePlayer)
-					
+					local theVehicle = CreateDriverBot(vmodel, pedmodel, bx, by, bz, rz, 0, d, City, arr[name], thePlayer)
+					setVehicleSirensOn(theVehicle, true)
 					PData[thePlayer]["PoliceTimer"] = setTimer(function(thePlayer) end, 5000, 1, thePlayer)
 				end
 			end
@@ -11609,6 +11609,10 @@ function CreateDriverBot(vmodel, pedmodel, x, y, z, rz, i, d, City, path, target
 	end
 	
 	setElementData(thePed, "path", ClientPath)
+	if(targetPlayer) then
+		setElementData(thePed, "attacker", getPlayerName(targetPlayer))
+	end
+	return theVehicle
 end
 
 
@@ -11625,6 +11629,14 @@ function DriverBotNextPath(thePlayer, thePed)
 end
 addEvent("DriverBotNextPath", true)
 addEventHandler("DriverBotNextPath", root, DriverBotNextPath)
+
+
+
+function RemoveDriverBot(thePed)
+	removeElementData(thePed, "path")
+end
+addEvent("RemoveDriverBot", true)
+addEventHandler("RemoveDriverBot", root, RemoveDriverBot)
 
 
 
@@ -13572,6 +13584,8 @@ function AddCollections(thePlayer, model, id)
 		[953] = {"Ракушек", 50, "Ракушка"},
 		[1276] = {"Скрытых пакетов", 100, "Реликвия"}
 	}
+	
+	triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 144, 2)
 	AddInventoryItem(thePlayer, {["txd"] = CollectionNames[model][3], ["name"] = CollectionNames[model][3]})
 	MissionCompleted(thePlayer, "#169AFA"..CollectionNames[model][1].." найдено "..getArrSize(dat[tostring(model)]).." из "..CollectionNames[model][2])
 end

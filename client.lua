@@ -3349,12 +3349,31 @@ function UpdateBot()
 			local rx,ry,rz = getElementRotation(theVehicle)
 			local brakes = false
 			local maxspd = 40
+			
 			local PointDistance = 4
 			local mreverse = false
 			
 			local pathData = getElementData(thePed, "path")
 			local path = {0,0}
 			local nextpath = {0,0}
+			local limitspeed = false
+			
+			
+			if(attacker) then 
+				maxspd = 220
+				local ax, ay, az = getElementPosition(attacker)
+				if(isLineOfSightClear(vx,vy,vz,ax,ay,az, true, false, false, true)) then
+					pathData = {
+						[1] = {ax,ay,az}, 
+					}
+					if(getElementData(thePed, "path")) then
+						triggerServerEvent("RemoveDriverBot", localPlayer, thePed)
+					end
+					limitspeed = 240
+				end
+			end
+			
+			
 			if(pathData) then
 				path = pathData[1]
 				nextpath = pathData[2] or pathData[1]
@@ -3363,9 +3382,6 @@ function UpdateBot()
 				if(dist <= PointDistance) then
 					triggerServerEvent("DriverBotNextPath", localPlayer, localPlayer, thePed)
 				end
-				
-			else
-				brakes = true
 			end
 			
 			
@@ -3375,16 +3391,16 @@ function UpdateBot()
 			local nextrot = GetMarrot(findRotation(path[1], path[2], nextpath[1], nextpath[2]),rz)
 			if(nextrot < 0) then nextrot = nextrot-nextrot-nextrot end
 			if(nextrot > 90) then nextrot = 90 end
-			
-			if(attacker) then maxspd = 220 end
-			local limitspeed = maxspd-((maxspd-10)*(nextrot/90))
-	
+
+			if(not limitspeed) then
+				limitspeed = maxspd-((maxspd-10)*(nextrot/90))
+			end
 			
 			if(brakes) then
 				setPedAnalogControlState(thePed, "accelerate", 0)
 				setPedAnalogControlState(thePed, "brake_reverse", 0)
 				setPedControlState(thePed, "handbrake", true)
-				setElementVelocity (theVehicle, 0,0,0)
+				setElementVelocity(theVehicle, 0,0,0)
 			else
 				local rot = GetMarrot(findRotation(vx,vy,path[1], path[2]),rz)
 				if(rot > 80) then 
