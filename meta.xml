@@ -8,6 +8,8 @@
     <sync_map_element_data>true</sync_map_element_data> 
 	<oop>false</oop>
 	
+	<export function="CreateVehicle" type="server"/>
+	
 	<file src="lang/Ru_ru.po" download="true" />
 	<file src="lang/Ru_az.po" download="true" />
 	<file src="lang/Ru_en.po" download="true" />

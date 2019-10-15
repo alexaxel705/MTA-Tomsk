@@ -11603,32 +11603,13 @@ function CreateDriverBot(vmodel, pedmodel, x, y, z, rz, i, d, City, path, target
 	setElementDimension(thePed, d)
 	warpPedIntoVehicle(thePed, theVehicle)
 	
-	local ClientPath = {}
-	for i, v in pairs(path) do
-		ClientPath[i] = {PathNodes[City][v[1]][v[2]][2], PathNodes[City][v[1]][v[2]][3], PathNodes[City][v[1]][v[2]][4]} -- x,y,z
-	end
-	
-	setElementData(thePed, "path", ClientPath)
+	setElementData(thePed, "path", path)
 	if(targetPlayer) then
 		setElementData(thePed, "attacker", getPlayerName(targetPlayer))
 	end
 	return theVehicle
 end
 
-
-function DriverBotNextPath(thePlayer, thePed)
-	local path = getElementData(thePed, "path")
-	if(path) then
-		table.remove(path, 1)
-		if(#path == 0) then
-			removeElementData(thePed, "path")
-		else
-			setElementData(thePed, "path", path)
-		end
-	end
-end
-addEvent("DriverBotNextPath", true)
-addEventHandler("DriverBotNextPath", root, DriverBotNextPath)
 
 
 
