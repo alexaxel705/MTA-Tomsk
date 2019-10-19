@@ -6714,15 +6714,6 @@ function DrawPlayerMessage()
 					dxDrawText(string.format("%02.f", mins)..":"..string.format("%02.f", secs), sx-(257*scalex), sy+(5*scaley), sx-(257*scalex), sy+(5*scaley), tocolor(121,137,153,255), NewScale*3, "default-bold", "center", "top")
 
 				end
-				
-				local hardtruck = theVehicle
-				if(getVehicleTowedByVehicle(theVehicle)) then
-					hardtruck = getVehicleTowedByVehicle(theVehicle)
-				end
-				
-				if(getElementData(hardtruck, "product")) then
-					ChangeInfo("Груз: "..getElementData(hardtruck, "product").."\nСостояние: "..math.floor(getElementHealth(hardtruck)/10).."%", 5000)
-				end			
 			end
 		end
 	else
