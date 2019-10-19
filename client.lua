@@ -142,14 +142,6 @@ end
 
 
 
-local trafficlight = {
-	["0"] = "west",
-	["1"] = "west",
-	["2"] = false,
-	["3"] = "north",
-	["4"] = "north"
-}
-
 
 
  
@@ -2690,10 +2682,7 @@ function wardrobe(arr,types)
 	wardprobeArr=fromJSON(arr)
 
 	setCameraMatrix(255.5, -41.4, 1002.5,  258.3, -41.8, 1002.5)
-	PEDChangeSkin=true
-
-	GTASound = playSound("http://109.227.228.4/engine/include/MTA/music/Bossa-Nova.mp3", true)
-	setSoundVolume(GTASound, 0.25)
+	PEDChangeSkin = true
 	
 	SwitchButtonL = guiCreateButton(0.5-(0.08), 0.8, 0.04, 0.04, "<-", true)
 	SwitchButtonR = guiCreateButton(0.5+(0.04), 0.8, 0.04, 0.04, "->", true)
@@ -3840,57 +3829,53 @@ function StartLoad() -- Первый этап загрузки
 	setSoundVolume(GTASound, 0.5)
 end
 
-function displayLoadedRes(res)
-	if(getResourceName(res) == "228") then
-		if(getPlayerCity(localPlayer) == "San Andreas") then
-			local col = engineLoadCOL("models/des_a51infenc.col")
-			engineReplaceCOL(col, 16094)
-			local dff = engineLoadDFF("models/des_a51infenc.dff")
-			engineReplaceModel(dff, 16094)
-			
-			
-			col = engineLoadCOL("models/des_a51_labs.col")
-			engineReplaceCOL(col, 16639)
-			
-			col = engineLoadCOL("models/prison-gates.col")
-			engineReplaceCOL(col, 14883)
-			dff = engineLoadDFF("models/prison-gates.dff")
-			engineReplaceModel(dff, 14883)
-			
-			col = engineLoadCOL("models/kb_tr_main.col")
-			engineReplaceCOL(col, 14385)
-			col = engineLoadCOL("models/trukstp01.col")
-			engineReplaceCOL(col, 14655)
-			col = engineLoadCOL("models/bdupsnew.col")
-			engineReplaceCOL(col, 14803)
-			col = engineLoadCOL("models/mc_straps_int.col")
-			engineReplaceCOL(col, 14821)
-			col = engineLoadCOL("models/kylie_barn.col")
-			engineReplaceCOL(col, 14871)
-			col = engineLoadCOL("models/bdups_main.col")
-			engineReplaceCOL(col, 14801)
-			col = engineLoadCOL("models/BDups_interior.col")
-			engineReplaceCOL(col, 14802)
-		end
+function Start()
+	if(getPlayerCity(localPlayer) == "San Andreas") then
+		local col = engineLoadCOL("models/des_a51infenc.col")
+		engineReplaceCOL(col, 16094)
+		local dff = engineLoadDFF("models/des_a51infenc.dff")
+		engineReplaceModel(dff, 16094)
 		
-		if(tonumber(getElementData(root, "ServerTime")) < 696902400) then
-			txd = engineLoadTXD("models/copcarvg.txd")
-			engineImportTXD(txd, 596)
-			dff = engineLoadDFF("models/copcarvg.dff")
-			engineReplaceModel(dff, 596)
-			
-			txd = engineLoadTXD("models/copcarvg.txd")
-			engineImportTXD(txd, 597)
-			dff = engineLoadDFF("models/copcarvg.dff")
-			engineReplaceModel(dff, 597)
-		end
 		
-		StartLoad()
+		col = engineLoadCOL("models/des_a51_labs.col")
+		engineReplaceCOL(col, 16639)
+		
+		col = engineLoadCOL("models/prison-gates.col")
+		engineReplaceCOL(col, 14883)
+		dff = engineLoadDFF("models/prison-gates.dff")
+		engineReplaceModel(dff, 14883)
+		
+		col = engineLoadCOL("models/kb_tr_main.col")
+		engineReplaceCOL(col, 14385)
+		col = engineLoadCOL("models/trukstp01.col")
+		engineReplaceCOL(col, 14655)
+		col = engineLoadCOL("models/bdupsnew.col")
+		engineReplaceCOL(col, 14803)
+		col = engineLoadCOL("models/mc_straps_int.col")
+		engineReplaceCOL(col, 14821)
+		col = engineLoadCOL("models/kylie_barn.col")
+		engineReplaceCOL(col, 14871)
+		col = engineLoadCOL("models/bdups_main.col")
+		engineReplaceCOL(col, 14801)
+		col = engineLoadCOL("models/BDups_interior.col")
+		engineReplaceCOL(col, 14802)
 	end
+	
+	if(tonumber(getElementData(root, "ServerTime")) < 696902400) then
+		txd = engineLoadTXD("models/copcarvg.txd")
+		engineImportTXD(txd, 596)
+		dff = engineLoadDFF("models/copcarvg.dff")
+		engineReplaceModel(dff, 596)
+		
+		txd = engineLoadTXD("models/copcarvg.txd")
+		engineImportTXD(txd, 597)
+		dff = engineLoadDFF("models/copcarvg.dff")
+		engineReplaceModel(dff, 597)
+	end
+	
+	StartLoad()
 end
-addEventHandler("onClientResourceStart", getRootElement(), displayLoadedRes)
-
-
+addEventHandler("onClientResourceStart", getResourceRootElement(), Start)
 
 
 
