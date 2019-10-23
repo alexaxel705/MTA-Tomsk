@@ -1544,7 +1544,7 @@ function LoadUpgrade(Update, handl, othercomp)
 		end
 	end
 	TuningSelector = 1
-	tuningList=true
+	tuningList = true
 	PText["tuning"] = {}
 	local FH = dxGetFontHeight(scale, "default-bold")*1.1
 	local x,y = 30*scalex, (screenHeight/4)
@@ -5504,7 +5504,10 @@ function DrawOnClientRender()
 					setSearchLightStartPosition(dat["attach_searchlight"], sx, sy, sz)
 					setSearchLightEndPosition(dat["attach_searchlight"],hitx, hity, hitz)
 					if(getDistanceBetweenPoints3D(x,y,z,hitx, hity, hitz) < 5) then
-						PrisonAlert()
+						local team = getPlayerTeam(localPlayer)
+						if(getTeamName(team) ~= "Военные") then
+							PrisonAlert()
+						end
 					end
 				end
 			end

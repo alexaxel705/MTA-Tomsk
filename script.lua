@@ -2845,25 +2845,6 @@ end
 
 
 
---[[
-local vs = CreateVehicle(576, -217, 2603.3, 62.7, 0, 0, 81, "test", true, 3, 3)
-setElementData(vs, "trunk", toJSON({{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-{"Зерно", 1, 1, toJSON({})}, {"Зерно", 1, 1, toJSON({})}, {"Зерно", 1, 1, toJSON({})},
-{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-{"Запаска", 1, 1, toJSON({})}, {"АК-47", 1, 1, toJSON({})}, {"Пакет", 1, 1, toJSON({})},
-
-}))
-
-setVehicleDoorOpenRatio(vs, 1, 1)
---]]
-
 
 
 --FARMLS2
@@ -10575,7 +10556,7 @@ function ParkMyCar(theVehicle)
 		xmlNodeSetAttribute(node, "vinyl", getVehiclePaintjob(theVehicle))
 		local upgr={}
 		for upgradeKey, upgradeValue in ipairs (getVehicleUpgrades(theVehicle)) do
-			upgr[upgradeKey]=upgradeValue
+			upgr[upgradeKey] = upgradeValue
 		end
 		xmlNodeSetAttribute(node, "upgrades", toJSON(upgr))
 
@@ -10832,15 +10813,6 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 		elseif(frname == "Военные" and GetDatabaseAccount(thePlayer, "ATUT") <= 2) then
 			removeElementData(thePlayer, "job")
 			spawnPlayer(thePlayer, SpawnPoint["Zone 51 Army"][1], SpawnPoint["Zone 51 Army"][2], SpawnPoint["Zone 51 Army"][3], SpawnPoint["Zone 51 Army"][4], skin, 0, 0)
-			if(GetDatabaseAccount(thePlayer, "ATUT") == 0) then
-				SetDatabaseAccount(thePlayer, "ATUT", 1)
-				AddInventoryItem(thePlayer, {["name"] = "АК-47", ["txd"] = "АК-47"})
-				triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
-			elseif(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
-				triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
-			elseif(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
-				triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Посади заключенного на бутылку")
-			end
 		else
 			local job = IsPlayerJob(thePlayer)
 			if(job) then 
@@ -10968,6 +10940,17 @@ function UpdateTutorial(thePlayer)
 		elseif(GetDatabaseAccount(thePlayer, "BTUT") == 3) then
 			HelpMessage(thePlayer, "Отправляйся в притон и изготовь #558833косяк")
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 1257.3, 241.8, 18.9, "Притон", "Зайди в притон и изготовь #558833косяк")
+		end
+		
+	elseif(team == "Военные") then
+		if(GetDatabaseAccount(thePlayer, "ATUT") == 0) then
+			SetDatabaseAccount(thePlayer, "ATUT", 1)
+			AddInventoryItem(thePlayer, {["name"] = "АК-47", ["txd"] = "АК-47"})
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
+		elseif(GetDatabaseAccount(thePlayer, "ATUT") == 1) then
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Служба: найди способ нажраться")
+		elseif(GetDatabaseAccount(thePlayer, "ATUT") == 2) then
+			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, 228, 228, 228, "Посади заключенного на бутылку")
 		end
 	elseif(team == "Колумбийский картель") then
 		if(GetDatabaseAccount(thePlayer, "KTUT") == 0) then
@@ -12406,7 +12389,8 @@ function arm(thePlayer)
 		ToolTip(thePlayer, "Сначала отсиди!")
 	end
 end
-addCommandHandler("arm", arm)
+addEvent("arm", true)
+addEventHandler("arm", root, arm)
 
 
 
@@ -15528,7 +15512,7 @@ function race(thePlayer, command, h)
 			MPPlayerList[thePlayer] = 0
 			triggerClientEvent(thePlayer, "AddGPSMarker", thePlayer, SData["RaceArr"][1][1], SData["RaceArr"][1][2], SData["RaceArr"][1][3], "Гонка")
 			
-			OutputChat(thePlayer, "Ты присоеденился к гонке!", "Server")
+			OutputChat(thePlayer, "Ты присоединился к гонке!", "Server")
 			triggerClientEvent(thePlayer, "SetZoneDisplay", thePlayer, "#9b7c52RACE TOURNAMENT")
 		end
 	else
@@ -16343,11 +16327,14 @@ function turnEngineOn(theVehicle, leftSeat, jackerPlayer, unbindkey)
 			end
 		end
 
+		local model = getElementModel(theVehicle)
+		
 		if leftSeat == 0 then
 			CheckSiren(theVehicle, source)
-			if(GetVehicleType(getElementModel(theVehicle)) ~= "BMX" and GetVehicleType(getElementModel(theVehicle)) ~= "Train") then
+			if(GetVehicleType(model) ~= "BMX" and GetVehicleType(model) ~= "Train") then
 				if(not getElementData(theVehicle, "Fuel")) then
 					setElementData(theVehicle, "Fuel", 25)
+					setElementData(theVehicle, "MaxFuel", VehicleSystem[model][8])
 				end
 
 				if(getElementData(theVehicle, "Fuel") > 0) then
@@ -16360,7 +16347,7 @@ function turnEngineOn(theVehicle, leftSeat, jackerPlayer, unbindkey)
 		end
 
 
-		if(getElementModel(theVehicle) == 515 or getElementModel(theVehicle) == 514 or getElementModel(theVehicle) == 403) then
+		if(model == 515 or model == 514 or model == 403) then
 			if(leftSeat == 0) then
 				local trailer = getVehicleTowedByVehicle(theVehicle)
 				if(trailer) then
@@ -16516,7 +16503,7 @@ end
 
 function displayVehicleLoss(loss)
 	toggleVehicleRespawn(source, true)
-	setVehicleIdleRespawnDelay(source, 300000)
+	setVehicleIdleRespawnDelay(source, 900000)
 	local vehh = getVehicleHandling(source)
 	local occupants = getVehicleOccupants(source) or {}
 	local passagers = 0
@@ -17501,14 +17488,14 @@ function VehicleUpgrade(upgrade, count)
 				end
 			end
 		else
-			local upgr={}
+			local upgr = {}
 			local removeUpgr = false
 			for upgradeKey, upgradeValue in ipairs (getVehicleUpgrades(theVehicle)) do
 				if(upgradeValue == upgrade) then
 					removeUpgr = true
 					removeVehicleUpgrade(theVehicle, upgrade)
 				else
-					upgr[upgradeKey]=upgradeValue
+					upgr[upgradeKey] = upgradeValue
 				end
 			end
 			if(not removeUpgr) then
