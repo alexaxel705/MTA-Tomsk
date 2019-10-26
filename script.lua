@@ -12202,14 +12202,14 @@ function CreateShop(x,y,z, interior)
 end
 
 CreateDialogBot(147, 1927.7, -1770.3, 13.5, 90, 0, 0, "24/7", "Продавец")
-
+CreateDialogBot(147, -255.8, 2598.1, 62.9, 90, 0, 0, "24/7", "Продавец")
 
 
 
 CreateShop(-553.2, 2593.9, 54, 4) --BC
 CreateShop(-1271.6, 2713.2, 50.25, 16) --BC
 CreateShop(-19.2, 1175.6, 19.56, 17) --BC
-CreateShop(-255, 2603.3, 62.8, 10) --BC
+--CreateShop(-255, 2603.3, 62.8, 10) --BC
 CreateShop(-1465.8, 1873.4, 32.6, 18) --BC
 CreateShop(-311.3, 1303.5, 53.7,6)--BC
 CreateShop(1833.7, -1842.55, 13.5, 17) --LS
