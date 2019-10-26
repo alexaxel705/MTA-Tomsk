@@ -6351,7 +6351,11 @@ function CreatePizza(x,y,z)
 	SData["Pizza"] = SData["Pizza"]+1
 end
 
-CreatePizza(2105.5, -1806.5, 13.6) --LS
+CreateDialogBot(155, 2120.6, -1806.6, 13.6, 90, 0, 0, "The Well Stacked Pizza Co.", "Продавец")
+
+
+
+--CreatePizza(2105.5, -1806.5, 13.6) --LS
 CreatePizza(2331.8, 75, 26.6) --Laguna
 CreatePizza(1367.5, 248.4, 19.5)--LS
 CreatePizza(-1721.1, 1359.7, 7.2)--SF
@@ -12197,6 +12201,11 @@ function CreateShop(x,y,z, interior)
 	SData["Shop"]=SData["Shop"]+1
 end
 
+CreateDialogBot(147, 1927.7, -1770.3, 13.5, 90, 0, 0, "24/7", "Продавец")
+
+
+
+
 CreateShop(-553.2, 2593.9, 54, 4) --BC
 CreateShop(-1271.6, 2713.2, 50.25, 16) --BC
 CreateShop(-19.2, 1175.6, 19.56, 17) --BC
@@ -12210,7 +12219,7 @@ CreateShop(1976.65, -2036.7, 13.55, 6) --LS
 CreateShop(1000.4, -919.9, 42.3, 17) --LS
 CreateShop(-78.6, -1169.9, 2.1, 18) --LS
 CreateShop(1383.3, 465.5, 20.2, 6) --LS
-CreateShop(1928.7, -1776.3, 13.5, 6) --LS
+--CreateShop(1928.7, -1776.3, 13.5, 6) --LS
 CreateShop(2751.9, -1461.2, 30.5, 10) --LS
 CreateShop(2139.4, -1191.9, 24, 18) --LS
 CreateShop(2117.5, 896.8, 11.26, 4)
@@ -13156,7 +13165,7 @@ local tmpi = 1
 local tmpcity = ""
 function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local res = getResourceFromName("interface") -- Interface
+		local res = getResourceFromName("OpenSA") -- Interface
 		restartResource(res)
 		--local res = getResourceFromName("ps2_weather") -- Interface
 		--restartResource(res)

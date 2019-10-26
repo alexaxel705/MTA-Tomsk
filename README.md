@@ -4,6 +4,7 @@
 
 mtaserver.conf    
 <resource src="vehicle_node" startup="1" protected="0" />
+<resource src="vintage-wheels" startup="1" protected="0" />
 <resource src="draw_intro" startup="1" protected="0" />
 <resource src="object_image" startup="1" protected="0" />
 <resource src="Interface" startup="1" protected="0" />
@@ -15,5 +16,4 @@ mtaserver.conf
 <resource src="unique_jumps" startup="1" protected="0" />
 <resource src="map" startup="1" protected="0" />
 <resource src="casino" startup="1" protected="0" />
-    
-    
+<resource src="opensa" startup="1" protected="0" />
