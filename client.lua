@@ -3776,10 +3776,10 @@ end
 local SoundsTheme = {
 	[1] = "http://109.227.228.4/engine/include/MTA/music/Blue-In-Green.mp3", 
 	[2] = "http://109.227.228.4/engine/include/MTA/music/we-met.mp3", 
-	--[3] = "http://109.227.228.4/engine/include/MTA/music/Autumn-Leaves.mp3",
-	--[4] = "http://109.227.228.4/engine/include/MTA/music/Almost-blue.mp3", 
-	--[5] = "http://109.227.228.4/engine/include/MTA/music/GTA3.mp3", 
-	
+	[3] = "http://109.227.228.4/engine/include/MTA/music/Autumn-Leaves.mp3",
+	[4] = "http://109.227.228.4/engine/include/MTA/music/Almost-blue.mp3", 
+	[5] = "http://109.227.228.4/engine/include/MTA/music/GTA3.mp3", 
+	[6] = "http://109.227.228.4/engine/include/MTA/music/when-i-fall-in-love.mp3", 
 }
 
 function StartLoad() -- Первый этап загрузки
@@ -3825,7 +3825,7 @@ function StartLoad() -- Первый этап загрузки
 
 	LoginClient(true)
 
-	GTASound = playSound(SoundsTheme[math.random(#SoundsTheme)], true)
+	GTASound = playSound(SoundsTheme[math.random(1, #SoundsTheme)], true)
 	setSoundVolume(GTASound, 0.5)
 end
 
