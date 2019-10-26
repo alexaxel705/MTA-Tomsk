@@ -2,7 +2,7 @@
 Перевод на другие языки: https://www.transifex.com/multi-theft-auto-tomsk/server-7/dashboard/
 
 
-mtaserver.conf    
+mtaserver.conf        
 <resource src="vehicle_node" startup="1" protected="0" />
 <resource src="vintage-wheels" startup="1" protected="0" />
 <resource src="draw_intro" startup="1" protected="0" />
@@ -17,3 +17,5 @@ mtaserver.conf
 <resource src="map" startup="1" protected="0" />
 <resource src="casino" startup="1" protected="0" />
 <resource src="opensa" startup="1" protected="0" />
+<resource src="bodyline" startup="1" protected="0" />
+    
