@@ -19,6 +19,7 @@ local COLOR = {
 
 
 
+math.randomseed(os.time())
 local DeathMatch = false
 local PedSyncObj = {}
 local ObjectInStream = {}
@@ -3824,8 +3825,7 @@ function StartLoad() -- Первый этап загрузки
 	SetPlayerHudComponentVisible("all", false)
 
 	LoginClient(true)
-
-	GTASound = playSound(SoundsTheme[math.random(1, #SoundsTheme)], true)
+	GTASound = playSound(SoundsTheme[math.random(#SoundsTheme)], true)
 	setSoundVolume(GTASound, 0.5)
 end
 
