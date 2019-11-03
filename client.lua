@@ -2029,16 +2029,6 @@ function MarkerHit(hitPlayer, Dimension)
 					PData["MarkerTrigger"] = nil
 				end
 			end
-		elseif(getElementData(source, "type") == "GEnter") then
-			local theVehicle = getPedOccupiedVehicle(localPlayer)
-			if(theVehicle) then
-				setPedCanBeKnockedOffBike(localPlayer, false)
-			end
-		elseif(getElementData(source, "type") == "GExit") then
-			local theVehicle = getPedOccupiedVehicle(localPlayer)
-			if(theVehicle) then
-				setPedCanBeKnockedOffBike(localPlayer, false)
-			end
 		elseif(getElementData(source, "type") == "SPRAY") then
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			if(theVehicle) then
@@ -3953,23 +3943,8 @@ function onClientColShapeHit(theElement, matchingDimension)
 	if getElementType(theElement) == "player" then 
 		if(theElement == localPlayer) then
 			if(getPedOccupiedVehicle(localPlayer)) then return false end
-			if(getElementData(source, "type")) then
-				if(getElementData(source, "type") == "GEnter") then
-					triggerEvent("ToolTip", localPlayer, Text("Нажми {key} чтобы войти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
-					triggerServerEvent("GarageColEnter", localPlayer, localPlayer, source)
-					
-					if(getElementData(source, "owner") == getPlayerName(localPlayer)) then
-						if(getElementData(source, "locked") == 1) then
-							triggerEvent("helpmessageEvent", localPlayer, Text("Нажми {key} чтобы открыть гараж", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}}))
-						else
-							triggerEvent("helpmessageEvent", localPlayer, Text("Нажми {key} чтобы закрыть гараж", {{"{key}", COLOR["KEY"]["HEX"].."F3#FFFFFF"}}))
-						end
-					end
-				elseif(getElementData(source, "type") == "GExit") then
-					triggerEvent("ToolTip", localPlayer, Text("Нажми {key} чтобы выйти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
-					triggerServerEvent("GarageColEnter", localPlayer, localPlayer, source)
-				end
-			elseif(getElementData(source, "Three")) then
+			
+			if(getElementData(source, "Three")) then
 				triggerServerEvent("ThreeColEnter", localPlayer, localPlayer, source)
 			elseif(getElementData(source, "vending")) then
 				toggleControl("enter_exit", false) 
@@ -3984,12 +3959,6 @@ function onClientColShapeHit(theElement, matchingDimension)
 				if(getElementData(source, "type") == "PetrolFuelCol") then
 					triggerEvent("ToolTip", localPlayer, Text("Нажми {key} чтобы заправиться", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}}))
 					triggerServerEvent("PetrolFuelColEnter", localPlayer, localPlayer, source)
-				elseif(getElementData(source, "type") == "GEnter") then
-					triggerEvent("ToolTip", localPlayer, Text("Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nзаехать в гараж"))
-					triggerServerEvent("GarageColEnter", localPlayer, localPlayer, source)
-				elseif(getElementData(source, "type") == "GExit") then
-					triggerEvent("ToolTip", localPlayer, "Нажми "..COLOR["KEY"]["HEX"].."Alt#FFFFFF чтобы\nвыехать из гаража")
-					triggerServerEvent("GarageColEnter", localPlayer, localPlayer, source)
 				end
 			elseif(getElementData(source, "Three")) then
 				if(getElementModel(theElement) == 532) then
@@ -4880,10 +4849,6 @@ local StandartObjects = {
 	[3083] = { -- #md_poster
 		{2167.82, -1518.193, 20.237,0,0,0}
 	},
-	[2947] = { -- #cr_door_01
-		{2322.845, 8.304, 25.483, 0,0,0}, 
-		{2316.233, 0.712, 25.742, 0,0,270}
-	}, 
 	[2946] = { -- #cr_door_03
 		{2304.257, -17.744, 25.742, 0,0,0}, 
 		{2304.257, -14.583, 25.742, 0,0,180}

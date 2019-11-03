@@ -897,6 +897,7 @@ local SpawnPoint = {
 	["Linden Station"] = {2857.3, 1290, 11.4, 180, false, false, 0, 0},
 	["Koyoen Station"] = {1433.9, 2617.6, 11.4, 180, false, false, 0, 0},
 	["Las Payasadas"] = {-214, 2602, 62, 270, 90, false, 0, 0},
+	["Palomino Creek"] = {2259.5, -90.6, 26.5, 180, 90, false, 0, 0},
 	["El Corona"] = {1774, -1896, 13.6, 270, 180, false, 0, 0},
 	["Willowfield"] = {2466, -1953, 16.8, 270, 180, false, 0, 0},
 	["Chinatown"] = {-2176, 655, 49.4, 90, 180, false, 0, 0},
@@ -5516,40 +5517,11 @@ end
 
 
 
-function GarageColEnter(thePlayer, Colshape)
-	PData[thePlayer]["GarageCol"] = Colshape
-end
-addEvent("GarageColEnter", true)
-addEventHandler("GarageColEnter", root, GarageColEnter)
-
-
-
-
-
 
 function laltEnteredPickup(thePlayer)
 	local theVehicle = getPedOccupiedVehicle(thePlayer)
 	local x,y,z = getElementPosition(thePlayer)
 	if(theVehicle) then
-		if(PData[thePlayer]["GarageCol"]) then
-			if(isElementWithinColShape(thePlayer, PData[thePlayer]["GarageCol"])) then
-				if(getElementData(PData[thePlayer]["GarageCol"], "type") == "GEnter") then
-					if(getElementData(PData[thePlayer]["GarageCol"], "locked")) then
-						if(getElementData(PData[thePlayer]["GarageCol"], "locked") == 1) then
-							HelpMessage(thePlayer, "Дверь закрыта!")
-							return false
-						end
-					end
-					local x,y,z = getElementPosition(theVehicle)
-					local rx,ry,rz = getElementRotation(theVehicle)
-					EnterGarage(thePlayer, getElementData(PData[thePlayer]["GarageCol"], "h"), getElementData(PData[thePlayer]["GarageCol"], "number"),x,y,z,rz)
-				elseif(getElementData(PData[thePlayer]["GarageCol"], "type") == "GExit") then
-					EnterGarage(thePlayer, getElementData(PData[thePlayer]["GarageCol"], "h"), getElementData(PData[thePlayer]["GarageCol"], "number"))
-				end
-			end
-		end
-		
-	
 		if(isTimer(FuelTimer[theVehicle])) then
 			killTimer(FuelTimer[theVehicle])
 			triggerEvent("onPlayerVehicleEnter", thePlayer, theVehicle, 0, 0, true)
@@ -5604,16 +5576,6 @@ function laltEnteredPickup(thePlayer)
 			end
 		end
 	else
-		
-		
-		if(PData[thePlayer]["GarageCol"]) then
-			if(isElementWithinColShape(thePlayer, PData[thePlayer]["GarageCol"])) then
-				local pic = PData[thePlayer]["GarageCol"]
-				SetPlayerPosition(thePlayer, getElementData(pic, "x"), getElementData(pic, "y"), getElementData(pic, "z"), getElementData(pic, "i"), getElementData(pic, "d"), getElementData(pic, "rz"), true, getElementData(pic, "name"))
-			end
-		end
-		
-		
 		if(PData[thePlayer]["ThreeCol"]) then
 			if(isElementWithinColShape(thePlayer, PData[thePlayer]["ThreeCol"])) then
 				HarvestThree(thePlayer, PData[thePlayer]["ThreeCol"])
@@ -6048,157 +6010,6 @@ addEventHandler("StopBizControl", root, StopBizControl)
 
 
 
-local Garages = {}
-function CreateGarage(x,y,z,rz,locked,house,owner)
-	local d = string.gsub(house, "h", "")
-	if(not Garages[house]) then Garages[house] = {} end
-	local n = #Garages[house]+1
-	if(n == 1) then
-		local o = createObject(10671, 609, -76.5, 998.8, 0,0,180)
-		setElementInterior(o, 2)
-		setElementDimension(o, d)
-		Garages[house][n] = {}
-		Garages[house][n]["enter"] = createColCuboid(x-2.5,y-2.5,z-1.5, 5.0, 5.0, 3.0)
-		setElementData(Garages[house][n]["enter"], "type", "GEnter")
-		setElementData(Garages[house][n]["enter"], "x", 611, false)
-		setElementData(Garages[house][n]["enter"], "y", -72.3, false)
-		setElementData(Garages[house][n]["enter"], "z", 998, false)
-		setElementData(Garages[house][n]["enter"], "rz", 90, false)
-		setElementData(Garages[house][n]["enter"], "locked", locked, false)
-		setElementData(Garages[house][n]["enter"], "i", 2, false)
-		setElementData(Garages[house][n]["enter"], "d", d, false)
-		setElementData(Garages[house][n]["enter"], "owner", owner, false)
-		setElementData(Garages[house][n]["enter"], "h", house, false)
-		setElementData(Garages[house][n]["enter"], "number", n, false)
-
-		Garages[house][n]["exit"] = createColCuboid(610-5, -76.5-5,997.5-1.5, 10.0, 10.0, 3.0)
-		setElementInterior(Garages[house][n]["exit"], 2)
-		setElementDimension(Garages[house][n]["exit"], d)
-		setElementData(Garages[house][n]["exit"], "type", "GExit")
-		setElementData(Garages[house][n]["exit"], "x", x, false)
-		setElementData(Garages[house][n]["exit"], "y", y, false)
-		setElementData(Garages[house][n]["exit"], "z", z, false)
-		setElementData(Garages[house][n]["exit"], "i", 0, false)
-		setElementData(Garages[house][n]["exit"], "d", 0, false)
-		setElementData(Garages[house][n]["exit"], "rz", rz, false)
-		setElementData(Garages[house][n]["exit"], "h", house, false)
-		setElementData(Garages[house][n]["exit"], "number", n, false)
-	elseif(n == 2) then
-		local o = createObject(10671, 609.4, -125.6, 999, 0,0,180)
-		setElementInterior(o, 3)
-		setElementDimension(o, d)
-
-		Garages[house][n] = {}
-		Garages[house][n]["enter"] = createColCuboid(x-2.5,y-2.5,z-1.5, 5.0, 5.0, 3.0)
-		setElementData(Garages[house][n]["enter"], "type", "GEnter")
-		setElementData(Garages[house][n]["enter"], "x", 610.7, false)
-		setElementData(Garages[house][n]["enter"], "y", -120.8, false)
-		setElementData(Garages[house][n]["enter"], "z", 998, false)
-		setElementData(Garages[house][n]["enter"], "rz", 90, false)
-		setElementData(Garages[house][n]["enter"], "locked", locked, false)
-		setElementData(Garages[house][n]["enter"], "i", 3, false)
-		setElementData(Garages[house][n]["enter"], "d", d, false)
-		setElementData(Garages[house][n]["enter"], "owner", owner, false)
-		setElementData(Garages[house][n]["enter"], "h", house, false)
-		setElementData(Garages[house][n]["enter"], "number", n, false)
-
-		Garages[house][n]["exit"] = createColCuboid(609.9-5, -126-5,998-1.5, 10.0, 10.0, 3.0)
-		setElementInterior(Garages[house][n]["exit"], 3)
-		setElementDimension(Garages[house][n]["exit"], d)
-		setElementData(Garages[house][n]["exit"], "type", "GExit")
-		setElementData(Garages[house][n]["exit"], "x", x, false)
-		setElementData(Garages[house][n]["exit"], "y", y, false)
-		setElementData(Garages[house][n]["exit"], "z", z, false)
-		setElementData(Garages[house][n]["exit"], "i", 0, false)
-		setElementData(Garages[house][n]["exit"], "d", 0, false)
-		setElementData(Garages[house][n]["exit"], "rz", rz, false)
-		setElementData(Garages[house][n]["exit"], "h", house, false)
-		setElementData(Garages[house][n]["exit"], "number", n, false)
-	elseif(n == 3) then
-		local o = createObject(10671, 302.4, 300.4, 999.1, 0,0,180)
-		setElementInterior(o, 4)
-		setElementDimension(o, d)
-
-		Garages[house][n] = {}
-		Garages[house][n]["enter"] = createColCuboid(x-2.5,y-2.5,z-1.5, 5.0, 5.0, 3.0)
-		setElementData(Garages[house][n]["enter"], "type", "GEnter")
-		setElementData(Garages[house][n]["enter"], "x", 610.7, false)
-		setElementData(Garages[house][n]["enter"], "y", -120.8, false)
-		setElementData(Garages[house][n]["enter"], "z", 998, false)
-		setElementData(Garages[house][n]["enter"], "rz", 90, false)
-		setElementData(Garages[house][n]["enter"], "locked", locked, false)
-		setElementData(Garages[house][n]["enter"], "i", 4, false)
-		setElementData(Garages[house][n]["enter"], "d", d, false)
-		setElementData(Garages[house][n]["enter"], "owner", owner, false)
-		setElementData(Garages[house][n]["enter"], "h", house, false)
-		setElementData(Garages[house][n]["enter"], "number", n, false)
-
-		Garages[house][n]["exit"] = createColCuboid(302.4-5, 300.4-5,999.1-1.5, 10.0, 10.0, 3.0)
-		setElementInterior(Garages[house][n]["exit"], 4)
-		setElementDimension(Garages[house][n]["exit"], d)
-		setElementData(Garages[house][n]["exit"], "type", "GExit")
-		setElementData(Garages[house][n]["exit"], "x", x, false)
-		setElementData(Garages[house][n]["exit"], "y", y, false)
-		setElementData(Garages[house][n]["exit"], "z", z, false)
-		setElementData(Garages[house][n]["exit"], "i", 0, false)
-		setElementData(Garages[house][n]["exit"], "d", 0, false)
-		setElementData(Garages[house][n]["exit"], "rz", rz, false)
-		setElementData(Garages[house][n]["exit"], "h", house, false)
-		setElementData(Garages[house][n]["exit"], "number", n, false)
-	end
-end
-
-
-
-function EnterGarage(thePlayer, house, n, gx,gy,gz,grz)
-	local theVehicle = getPedOccupiedVehicle(thePlayer)
-	local x,y,z,rz,i = 616.9, -75, 997+VehicleSystem[getElementModel(theVehicle)][1], 90, 2
-	if(n == 2) then x,y,z,rz,i = 615.4, -125.1, 997+VehicleSystem[getElementModel(theVehicle)][1], 90, 3 end
-	if(gx) then
-		local i = getElementData(Garages[house][n]["enter"], "i")
-		local d = getElementData(Garages[house][n]["enter"], "d")
-		setElementData(theVehicle, "gx", gx, false)
-		setElementData(theVehicle, "gy", gy, false)
-		setElementData(theVehicle, "gz", gz, false)
-		setElementData(theVehicle, "grz", grz, false)
-		setTimer(function()
-			BindAllKey(thePlayer)
-			fadeCamera(thePlayer, true, 1, 0, 0, 0)
-			setElementRotation(theVehicle,0,0,rz)
-			setElementInterior(theVehicle, i, x, y, z)
-			setElementDimension(theVehicle, d)
-			setElementInterior(thePlayer, i, x, y, z)
-			setElementDimension(thePlayer, d)
-		end, 1000, 1)
-	else -- Выход из гаража
-		local x = getElementData(theVehicle, "gx")
-		local y = getElementData(theVehicle, "gy")
-		local z = getElementData(theVehicle, "gz")+VehicleSystem[getElementModel(theVehicle)][1]
-		local rz = getElementData(theVehicle, "grz")
-		setTimer(function()
-			BindAllKey(thePlayer)
-			fadeCamera(thePlayer, true, 1, 0, 0, 0)
-			if(theVehicle) then
-				setElementRotation(theVehicle,0,0,rz)
-				setElementInterior(theVehicle, 0, x,y,z)
-				setElementDimension(theVehicle, 0)
-			end
-			setElementInterior(thePlayer, 0,x,y,z)
-			setElementDimension(thePlayer, 0)
-		end, 1000, 1)
-	end
-	fadeCamera(thePlayer, false, 1, 0, 0, 0)
-	UnBindAllKey(thePlayer)
-end
-addEvent("EnterGarage", true)
-addEventHandler("EnterGarage", root, EnterGarage)
-
-
-
-
-
-
-
 
 local ShmalTimer = {}
 function CreateSpirt()
@@ -6351,11 +6162,12 @@ function CreatePizza(x,y,z)
 end
 
 CreateDialogBot(155, 2120.6, -1806.6, 13.6, 90, 0, 0, "The Well Stacked Pizza Co.", "Продавец")
+CreateDialogBot(155, 2328.8, 70.8, 26.5, 0, 0, 0, "The Well Stacked Pizza Co.", "Продавец")
 
 
 
 --CreatePizza(2105.5, -1806.5, 13.6) --LS
-CreatePizza(2331.8, 75, 26.6) --Laguna
+--CreatePizza(2331.8, 75, 26.6) --Laguna
 CreatePizza(1367.5, 248.4, 19.5)--LS
 CreatePizza(-1721.1, 1359.7, 7.2)--SF
 CreatePizza(2638.6, 1849.8, 11)--LV
@@ -7613,12 +7425,6 @@ function preLoad(name)
 	local HouseNodes = xmlNodeGetChildren(HouseNode)
 	for i,node in ipairs(HouseNodes) do
 		CreateInterior(xmlNodeGetName(node), xmlNodeGetAttribute(node, "int"), xmlNodeGetAttribute(node, "x"), xmlNodeGetAttribute(node, "y"), xmlNodeGetAttribute(node, "z"), xmlNodeGetValue(node), GetHousePrice(node), xmlNodeGetAttribute(node, "locked"))
-		if(xmlNodeGetAttribute(node, "Garage")) then
-			local arr = fromJSON(xmlNodeGetAttribute(node, "Garage"))
-			for slot = 1, #arr do
-				CreateGarage(arr[slot][1], arr[slot][2], arr[slot][3], arr[slot][4], arr[slot][5], xmlNodeGetName(node), xmlNodeGetValue(node))
-			end
-		end
 	end
 
 	local CarNodes = xmlNodeGetChildren(CarNode) -- tut
@@ -10383,11 +10189,13 @@ function GetAvailableSpawn(thePlayer, team)
 	if(team == "Da Nang Boys") then
 		SpawnArr[#SpawnArr+1] = {SpawnPoint["Koyoen Station"][1], SpawnPoint["Koyoen Station"][2], SpawnPoint["Koyoen Station"][3], "street", "Koyoen Station", SpawnPoint["Koyoen Station"][5]}
 	else
-		SpawnArr[#SpawnArr+1] = {SpawnPoint["Unity Station"][1], SpawnPoint["Unity Station"][2], SpawnPoint["Unity Station"][3], "street", "Unity Station", SpawnPoint["Unity Station"][5]}
-		SpawnArr[#SpawnArr+1] = {SpawnPoint["Market Station"][1], SpawnPoint["Market Station"][2], SpawnPoint["Market Station"][3], "street", "Market Station", SpawnPoint["Market Station"][5]}
-		SpawnArr[#SpawnArr+1] = {SpawnPoint["Cranberry Station"][1], SpawnPoint["Cranberry Station"][2], SpawnPoint["Cranberry Station"][3], "street", "Cranberry Station", SpawnPoint["Cranberry Station"][5]}
-		SpawnArr[#SpawnArr+1] = {SpawnPoint["Linden Station"][1], SpawnPoint["Linden Station"][2], SpawnPoint["Linden Station"][3], "street", "Linden Station", SpawnPoint["Linden Station"][5]}
-		SpawnArr[#SpawnArr+1] = {SpawnPoint["Las Payasadas"][1], SpawnPoint["Las Payasadas"][2], SpawnPoint["Las Payasadas"][3], "street", "Las Payasadas", SpawnPoint["Las Payasadas"][5]}
+		SpawnArr[#SpawnArr+1] = {SpawnPoint["Palomino Creek"][1], SpawnPoint["Palomino Creek"][2], SpawnPoint["Palomino Creek"][3], "street", "Palomino Creek", SpawnPoint["Palomino Creek"][5]}
+
+		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Unity Station"][1], SpawnPoint["Unity Station"][2], SpawnPoint["Unity Station"][3], "street", "Unity Station", SpawnPoint["Unity Station"][5]}
+		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Market Station"][1], SpawnPoint["Market Station"][2], SpawnPoint["Market Station"][3], "street", "Market Station", SpawnPoint["Market Station"][5]}
+		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Cranberry Station"][1], SpawnPoint["Cranberry Station"][2], SpawnPoint["Cranberry Station"][3], "street", "Cranberry Station", SpawnPoint["Cranberry Station"][5]}
+		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Linden Station"][1], SpawnPoint["Linden Station"][2], SpawnPoint["Linden Station"][3], "street", "Linden Station", SpawnPoint["Linden Station"][5]}
+		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Las Payasadas"][1], SpawnPoint["Las Payasadas"][2], SpawnPoint["Las Payasadas"][3], "street", "Las Payasadas", SpawnPoint["Las Payasadas"][5]}
 	end
 	return SpawnArr
 end
@@ -10426,11 +10234,6 @@ function buyHouse(thePlayer, buyhouse)
 			xmlNodeSetAttribute(HouseNode, "dolg", nil)
 		end
 		setElementData(getElementByID(buyhouse), "price", GetHousePrice(HouseNode))
-		if(Garages[buyhouse]) then
-			for slot = 1, #Garages[buyhouse] do
-				setElementData(Garages[buyhouse][slot]["enter"], "owner", "")
-			end
-		end
 	else
 		if(getElementData(getElementByID(buyhouse), "owner") == "") then
 			if(AddPlayerMoney(thePlayer, -tonumber(getElementData(getElementByID(buyhouse), "price")))) then
@@ -10449,11 +10252,6 @@ function buyHouse(thePlayer, buyhouse)
 					end
 					setElementID(el, buyhouse)
 				end
-				if(Garages[buyhouse]) then
-					for slot = 1, #Garages[buyhouse] do
-						setElementData(Garages[buyhouse][slot]["enter"], "owner", getPlayerName(thePlayer))
-					end
-				end
 				triggerEvent("onPickupUse", getElementByID(buyhouse), thePlayer)
 				triggerClientEvent(thePlayer, "StartLookZones", thePlayer, toJSON(GetAvailableSpawn(thePlayer, GetDatabaseAccount(thePlayer, "team"))), true)
 				
@@ -10467,26 +10265,6 @@ function buyHouse(thePlayer, buyhouse)
 	end
 end
 
-
-
-
-
-function AddGarage(thePlayer, command, h)
-	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local HouseNodes = xmlNodeGetChildren(HouseNode)
-		local node = xmlFindChild(HouseNode, h, 0)
-		local arr = {}
-		if(xmlNodeGetAttribute(node, "Garage")) then arr = fromJSON(xmlNodeGetAttribute(node, "Garage")) end
-		local newgar = #arr+1
-		local x,y,z = getElementPosition(thePlayer)
-		local rx,ry,rz = getElementRotation(thePlayer)
-		--x,y,z,rz,locked
-		arr[newgar] = {math.round(x, 1),math.round(y, 1),math.round(z, 1),math.round(rz, 1), 1}
-		xmlNodeSetAttribute(node, "Garage", toJSON(arr))
-		CreateGarage(arr[newgar][1], arr[newgar][2], arr[newgar][3], arr[newgar][4], arr[newgar][5], xmlNodeGetName(node), xmlNodeGetValue(node))
-	end
-end
-addCommandHandler("garage", AddGarage)
 
 
 
@@ -13425,7 +13203,6 @@ function wipe()
 	end
 end
 
-
 function GetDatabaseAccount(thePlayer, str)
 	local node = xmlFindChild(PlayerNode, "P"..md5(getPlayerName(thePlayer)), 0)
 	if(node) then
@@ -13474,15 +13251,18 @@ function AddDatabaseAccount(thePlayer, password)
 	xmlNodeSetAttribute(NewNode, "PrisonTime", 500) 
 	xmlNodeSetAttribute(NewNode, "OldTeam", "Мирные жители")
 	xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
-
+	xmlNodeSetAttribute(NewNode, "team", "Уголовники")
+	xmlNodeSetAttribute(NewNode, "skin", 213)
+	
+	--xmlNodeSetAttribute(NewNode, "team", "Мирные жители")
+	--xmlNodeSetAttribute(NewNode, "skin", math.random(157, 162))
+	
 	xmlNodeSetAttribute(NewNode, "Collections", Collections)
 	xmlNodeSetAttribute(NewNode, "password", md5(password))
 	xmlNodeSetAttribute(NewNode, "skill", toJSON({[24] = 569}))
 	xmlNodeSetAttribute(NewNode, "wardrobe", toJSON({[252] = 999, [145] = 999, [0] = 999}))
 	xmlNodeSetAttribute(NewNode, "bolezni", toJSON({}))
-	xmlNodeSetAttribute(NewNode, "skin", 213)
 	xmlNodeSetAttribute(NewNode, "about", toJSON({["Birthday"] = ServerDate.timestamp}))
-	xmlNodeSetAttribute(NewNode, "team", "Уголовники")
 end
 
 
@@ -16863,31 +16643,6 @@ addCommandHandler("smi", smi)
 
 
 function lockhouse(thePlayer)
-	if(PData[thePlayer]["GarageCol"]) then
-		if(isElementWithinColShape(thePlayer, PData[thePlayer]["GarageCol"])) then
-			if(getElementData(PData[thePlayer]["GarageCol"], "type") == "GEnter") then
-				local HouseNodes = xmlNodeGetChildren(HouseNode)
-				local node = xmlFindChild(HouseNode, getElementData(PData[thePlayer]["GarageCol"], "h"), 0)
-				if(getPlayerName(thePlayer) == xmlNodeGetValue(node)) then
-					local arr = fromJSON(xmlNodeGetAttribute(node, "Garage"))
-					if(arr[getElementData(PData[thePlayer]["GarageCol"], "number")][5] == 1) then
-						arr[getElementData(PData[thePlayer]["GarageCol"], "number")][5] = 0
-						HelpMessage(thePlayer, "Ты открыл гараж")
-						triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 17)
-					else
-						arr[getElementData(PData[thePlayer]["GarageCol"], "number")][5] = 1
-						HelpMessage(thePlayer, "Ты закрыл гараж")
-						triggerClientEvent(thePlayer, "PlaySFXSoundEvent", thePlayer, 16)
-					end
-					setElementData(Garages[getElementData(PData[thePlayer]["GarageCol"], "h")][getElementData(PData[thePlayer]["GarageCol"], "number")]["enter"], "locked", arr[getElementData(PData[thePlayer]["GarageCol"], "number")][5])
-					xmlNodeSetAttribute(node, "Garage", toJSON(arr))
-				end
-			end
-		end
-	end
-
-
-
 	if(PlayersEnteredPickup[thePlayer]) then
 		local x,y,z = getElementPosition(PlayersEnteredPickup[thePlayer])
 		local px,py,pz = getElementPosition(thePlayer)
