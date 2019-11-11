@@ -2954,112 +2954,6 @@ addEventHandler("StartLookZones", localPlayer, StartLookZones)
 
 
 
-local EditHomeKey = {
-	["1"] = "Трейлер", 
-	["2"] = "Маленькая комната", 
-	["3"] = "Дом 1 этаж (бедный)", 
-	["4"] = "Дом 1 этаж (нормальный)", 
-	["5"] = "Дом 1 этаж (богатый)", 
-	["6"] = "Дом 2 этажа (бедный)", 
-	["7"] = "Дом 2 этажа (нормальный)", 
-	["8"] = "Дом 2 этаж (богатый)", 
-	["9"] = "Special", 
-	["0"] = "Гараж"
-}
-
-
-function sendEditHome(key)
-	triggerServerEvent("SetHomeType", localPlayer, localPlayer, PlayerChangeSkinTeamRang:gsub('#%x%x%x%x%x%x', ''), EditHomeKey[key])
-end
-
-
-
-function StartLookZonesBeta(zones, update)
-	if(#MyHouseBlip > 0) then 
-		for slot = 1, #MyHouseBlip do
-			destroyElement(MyHouseBlip[slot])
-		end
-		MyHouseBlip={}
-	end
-	
-	
-	
-	bindKey ("0", "down", sendEditHome, 0)
-	bindKey ("1", "down", sendEditHome, 1)
-	bindKey ("2", "down", sendEditHome, 2)
-	bindKey ("3", "down", sendEditHome, 3)
-	bindKey ("4", "down", sendEditHome, 4)
-	bindKey ("5", "down", sendEditHome, 5)
-	bindKey ("6", "down", sendEditHome, 6)
-	bindKey ("7", "down", sendEditHome, 7)
-	bindKey ("8", "down", sendEditHome, 8)
-	bindKey ("9", "down", sendEditHome, 9)
-	
-	
-	SpawnPoints = fromJSON(zones)
-	for i = 1, #SpawnPoints do
-		if(SpawnPoints[i][4] == "house") then
-			local x,y,z = SpawnPoints[i][1],SpawnPoints[i][2],SpawnPoints[i][3]
-			MyHouseBlip[#MyHouseBlip+1]=createBlip(x, y, z, 31)
-			local angle = SpawnPoints[i][6]
-			if(not angle) then 
-				if(not processLineOfSight(x, y, z, x+1, y, z, true)) then
-					angle = 90
-				elseif(not processLineOfSight(x, y, z, x-1, y, z, true)) then
-					angle = 180
-				elseif(not processLineOfSight(x, y, z, x, y+1, z, true)) then
-					angle = 270
-				elseif(not processLineOfSight(x, y, z, x, y-1, z, true)) then
-					angle = 360
-				else
-					angle = 0
-				end
-			end
-			SpawnPoints[i][6] = angle
-		end
-	end
-	
-	if(not update) then
-		setElementDimension(localPlayer, getElementData(localPlayer,"id"))
-		setElementInterior(localPlayer, 0)	
-		PEDChangeSkin = true
-		
-		SwitchButtonL = guiCreateButton(0.5-(0.08), 0.8, 0.04, 0.04, "<-", true)
-		SwitchButtonR = guiCreateButton(0.5+(0.04), 0.8, 0.04, 0.04, "->", true)
-		
-		SwitchButtonAccept = guiCreateButton(0.5-(0.04), 0.8, 0.08, 0.04, "ВЫБРАТЬ", true)
-		setElementData(SwitchButtonL, "data", "SwitchButtonL")
-		setElementData(SwitchButtonR, "data", "SwitchButtonR")
-		setElementData(SwitchButtonAccept, "data", "SwitchButtonAccept")
-		setElementData(SwitchButtonL, "ped", PEDChangeSkin)
-		setElementData(SwitchButtonR, "ped", PEDChangeSkin)
-		setElementData(SwitchButtonAccept, "ped", PEDChangeSkin)
-		showCursor(true)
-		bindKey ("arrow_l", "down", NextSkinMinus) 
-		bindKey ("arrow_r", "down", NextSkinPlus) 
-		bindKey ("enter", "down", NextSkinEnter)
-		LookHouse(toJSON(SpawnPoints[1]))
-	else
-		playSFX("genrl", 75, 1, false)
-		triggerEvent("helpmessageEvent", localPlayer, "")
-		triggerEvent(localPlayer, "MissionCompleted", update, "")
-		local x,y,z = getElementPosition(localPlayer)
-		setCameraMatrix(x+20, y-20, z+30, x, y, z)
-		PEDChangeSkin = "cinema"
-		setTimer(function(thePlayer)
-			setCameraTarget(localPlayer)
-			PEDChangeSkin = "play"
-		end, 4000, 1)
-	end
-end
-addEvent("StartLookZonesBeta", true)
-addEventHandler("StartLookZonesBeta", localPlayer, StartLookZonesBeta)
-
-
-
-
-
-
 function CloseSkinSwitch()
 	if(GTASound) then
 		stopSound(GTASound)
@@ -3769,8 +3663,7 @@ local SoundsTheme = {
 	[2] = "http://109.227.228.4/engine/include/MTA/music/we-met.mp3", 
 	[3] = "http://109.227.228.4/engine/include/MTA/music/Autumn-Leaves.mp3",
 	[4] = "http://109.227.228.4/engine/include/MTA/music/Almost-blue.mp3", 
-	[5] = "http://109.227.228.4/engine/include/MTA/music/GTA3.mp3", 
-	[6] = "http://109.227.228.4/engine/include/MTA/music/when-i-fall-in-love.mp3", 
+	[5] = "http://109.227.228.4/engine/include/MTA/music/when-i-fall-in-love.mp3", 
 }
 
 function StartLoad() -- Первый этап загрузки

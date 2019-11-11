@@ -4739,89 +4739,6 @@ end
 
 
 
-
-
-
-
-local InteriorsClass = {
-	["Трейлер"] = {
-		"Angel Pine Trailer"
-	},
-	["Маленькая комната"] = {
-		"Millie's Bedroom",
-		"Denise's Place",
-		"Katie's Place",
-		"Big bear apartament",
-		"Abandonded AC Woter",
-		"Safe House 4",
-		"Safe House 10",
-		"BDups Crack Palace",
-		"OG Loc's House",
-	},
-	["Дом 1 этаж (бедный)"] = {
-		"The Crack Den",
-		"Burglary House 1",
-		"Unknown safe house",
-		"Burglary House 18",
-	},
-	["Дом 1 этаж (нормальный)"] = {
-		"Wu Zi Mu's Betting place",
-		"Burglary House 21",
-		"Burglary House 20",
-		"Burglary House 19",
-		"Budget Inn Motel Room",
-		"Safe House 12",
-		"Safe House 3",
-		"Burglary House 16",
-		"Safe House 6",
-		"Burglary House 22",
-		"Sweet's House",
-		"Ryder House",
-		"Burglary House 2",
-		"Burglary House 8",
-		"Burglary House 9",
-		"Burglary House 13",
-		"Burglary House 7",
-	},
-	["Дом 1 этаж (богатый)"] = {
-		"Safe House 11",
-		"Safe House 14",
-		"Safe House 228",
-		"Safe House 5",
-		"Burglary House 3",
-	},
-	["Дом 2 этажа (бедный)"] = {
-		"Michelle's Place", 
-		"Helena's Place", 
-	},
-	["Дом 2 этажа (нормальный)"] = {
-		"Johnson House",
-		"Colonel Fuhrberger's House",
-		"Burglary House 6",
-		"Burglary House 14",
-		"Burglary House 12",
-		"Burglary House 4",
-		"Burglary House 5",
-		"Burglary House 10",
-	},
-	["Дом 2 этаж (богатый)"] = {
-		"Burglary House 11",
-		"Safe House 18",
-		"Burglary House 15",
-		"Modern safe house"
-		--"Burglary House 17" --Забагованный
-	},
-	["Особые (связанные с историей)"] = {
-		"Mad Doggs Manson 2",
-		"Burning Desire House",
-		"Jeffeson Motel",
-		"Big Smoke's Crack Palace"
-	}
-}
-
-
-
-
 local Tags = {
 	["Glen Park"] = {
 		[1] = {false, 1974.1, -1351.2, 24.6, 90},
@@ -5132,8 +5049,6 @@ CreateEnter(-1749.2, 868.7, 25.1, 180, 0, 0, false, -1753.7, 883.9, 295.6, 0, 0,
 CreateEnter(-830.9, 1984.7, 9.4, 190, 0, 0, false, -959.5, 1956.5, 9, 190, 17, 0, "Sherman dam")
 CreateEnter(1570.7, -1337.2, 16.5, 312, 0, 0, false, 1548.6, -1363.7, 326.2, 180, 0, 0, "Крыша") -- Крыша LS
 CreateEnter(2459.5, -1691.3, 13.5, 0, 0, 0, false, 2468.5, -1698.2, 1013.5, 180, 2, 0) -- Ryder
-CreateEnter(279.5, 1829, 8.14, 90, 0, 0, false, 283.9, 1829, 8.14, 270, 0, 0) -- Zone 51 кабинет ученого
-CreateEnter(193.4, 1931.4, 17.6, 270, 0, 0, false, 264.3, 1857.9, 8.86, 0, 0, 0) -- Zone 51 вход к ученым
 CreateEnter(-2026.7, -102.1, 35.2, 270, 0, 0, false, -2026.9, -103.6, 1035.2, 180, 3, 0) -- Автошкола SF
 CreateEnter(-2029.7, -120.5, 35.2, 270, 0, 0, false, -2029.7, -119.4, 1035.2, 0, 3, 0) -- Автошкола SF 2
 CreateEnter(2019.4, 1007.8, 10.8, 270, 0, 0, false, 2018.9, 1017.8, 996.9, 90, 10, 0, "Казино «The Four Dragons»")
@@ -13088,18 +13003,6 @@ addCommandHandler("inform", info)
 
 function GetVehiclePower(mass, acceleration) return math.ceil(mass/(140)*(acceleration)) end
 function saved(thePlayer, command, h)
-
-	local HouseNodes = xmlNodeGetChildren(HouseNode)
-	for i,node in ipairs(HouseNodes) do
-		local types = xmlNodeGetAttribute(node, "type")
-		if(InteriorsClass[types]) then
-
-			xmlNodeSetAttribute(node, "int", InteriorsClass[types][math.random(#InteriorsClass[types])])
-		end
-	end
-
-
-
 	local PlayerNodes = xmlNodeGetChildren(PlayerNode)
 	for i,node in ipairs(PlayerNodes) do
 		--local arr = fromJSON(xmlNodeGetAttribute(node, "inv"))
@@ -17307,68 +17210,6 @@ function BuyColor(c1,c2,c3,c4,money)
 end
 addEvent("BuyColor", true)
 addEventHandler("BuyColor", root, BuyColor)
-
-
-
-
-function SetHomeType(thePlayer, home, types)
-	local node = xmlFindChild(HouseNode, home, 0)
-	xmlNodeSetAttribute(node, "type", types)
-	if(InteriorsClass[types]) then
-		xmlNodeSetAttribute(node, "int", InteriorsClass[types][math.random(#InteriorsClass[types])])
-	end
-	outputChatBox("* Установлен "..types,thePlayer, 255,255,255, true)
-end
-addEvent("SetHomeType", true)
-addEventHandler("SetHomeType", root, SetHomeType)
-
-
-
-
-
-
-
-
-
-function edithome(thePlayer, command, h)
-	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local HouseNodes = xmlNodeGetChildren(HouseNode)
-		local arr = {}
-		for i,node in ipairs(HouseNodes) do
-			local int = xmlNodeGetAttribute(node, "type")
-			if(not int) then
-				arr[#arr+1] = {xmlNodeGetAttribute(node, "x"), xmlNodeGetAttribute(node, "y"), xmlNodeGetAttribute(node, "z"), "street", xmlNodeGetName(node), 270}
-			end
-		end
-		outputChatBox(#arr)
-		triggerClientEvent(thePlayer, "StartLookZonesBeta", thePlayer, toJSON(arr))
-	end
-end
-addCommandHandler("edithome", edithome)
-
-
-
-function createNewHome(thePlayer, command, h)
-	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local HouseNodes = xmlNodeGetChildren(HouseNode)
-		local count=0
-		for i,node in ipairs(HouseNodes) do
-			count=count+1
-		end
-		if(not h) then h = 35000 end
-		local NewNode = xmlCreateChild(HouseNode, "h"..count)
-		local x,y,z=getElementPosition(thePlayer)
-		xmlNodeSetAttribute(NewNode, "x", math.round(x, 1))
-		xmlNodeSetAttribute(NewNode, "y", math.round(y, 1))
-		xmlNodeSetAttribute(NewNode, "z", math.round(z, 1))
-		xmlNodeSetAttribute(NewNode, "price", h)
-		xmlNodeSetAttribute(NewNode, "locked", "1")
-	end
-end
-addCommandHandler("newhome", createNewHome)
-
-
-
 
 
 
