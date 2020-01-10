@@ -604,7 +604,8 @@ function RGBToHex(red, green, blue, alpha)
 	else return string.format("#%.2X%.2X%.2X", red,green,blue) end
 end
 
-
+function ResultGet(back)
+end
 
 function setCameraOnPlayerJoin()
 	for i=1,getMaxPlayers() do--Даем ID
@@ -632,6 +633,7 @@ function setCameraOnPlayerJoin()
 	}
 
 	setCameraMatrix(source,1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)
+	callRemote("http://109.227.228.4/engine/include/MTA/index.php", ResultGet, "<b>Системное оповещение</b>", getPlayerName(source):gsub('#%x%x%x%x%x%x', '').." Подключился к серверу", "#000")
 end
 addEventHandler("onPlayerJoin", getRootElement(), setCameraOnPlayerJoin)
 
@@ -10104,13 +10106,13 @@ function GetAvailableSpawn(thePlayer, team)
 	if(team == "Da Nang Boys") then
 		SpawnArr[#SpawnArr+1] = {SpawnPoint["Koyoen Station"][1], SpawnPoint["Koyoen Station"][2], SpawnPoint["Koyoen Station"][3], "street", "Koyoen Station", SpawnPoint["Koyoen Station"][5]}
 	else
-		SpawnArr[#SpawnArr+1] = {SpawnPoint["Palomino Creek"][1], SpawnPoint["Palomino Creek"][2], SpawnPoint["Palomino Creek"][3], "street", "Palomino Creek", SpawnPoint["Palomino Creek"][5]}
+		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Palomino Creek"][1], SpawnPoint["Palomino Creek"][2], SpawnPoint["Palomino Creek"][3], "street", "Palomino Creek", SpawnPoint["Palomino Creek"][5]}
 
 		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Unity Station"][1], SpawnPoint["Unity Station"][2], SpawnPoint["Unity Station"][3], "street", "Unity Station", SpawnPoint["Unity Station"][5]}
 		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Market Station"][1], SpawnPoint["Market Station"][2], SpawnPoint["Market Station"][3], "street", "Market Station", SpawnPoint["Market Station"][5]}
 		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Cranberry Station"][1], SpawnPoint["Cranberry Station"][2], SpawnPoint["Cranberry Station"][3], "street", "Cranberry Station", SpawnPoint["Cranberry Station"][5]}
 		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Linden Station"][1], SpawnPoint["Linden Station"][2], SpawnPoint["Linden Station"][3], "street", "Linden Station", SpawnPoint["Linden Station"][5]}
-		--SpawnArr[#SpawnArr+1] = {SpawnPoint["Las Payasadas"][1], SpawnPoint["Las Payasadas"][2], SpawnPoint["Las Payasadas"][3], "street", "Las Payasadas", SpawnPoint["Las Payasadas"][5]}
+		SpawnArr[#SpawnArr+1] = {SpawnPoint["Las Payasadas"][1], SpawnPoint["Las Payasadas"][2], SpawnPoint["Las Payasadas"][3], "street", "Las Payasadas", SpawnPoint["Las Payasadas"][5]}
 	end
 	return SpawnArr
 end
@@ -10490,6 +10492,12 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 
 	setElementData(thePlayer, "inv", GetDatabaseAccount(thePlayer, "inv"))
 	setElementData(thePlayer, "NoFireMePolice", "0")
+
+	--if(not PData[thePlayer]["FirstSpawn"]) then
+	--	PData[thePlayer]["FirstSpawn"] = true
+	--	triggerEvent("dm", thePlayer, thePlayer)
+	--	return true
+	--end
 
 	if(PData[thePlayer]["DeathMatch"]) then
 		local rand = DeathMatchs[SData["DmName"]][math.random(#DeathMatchs[SData["DmName"]])]
@@ -13150,15 +13158,15 @@ function AddDatabaseAccount(thePlayer, password)
 	xmlNodeSetAttribute(NewNode, "inv", StandartInventory)
 	setElementData(thePlayer, "inv", StandartInventory)
 
-	xmlNodeSetAttribute(NewNode, "prisoninv", StandartInventory)
-	xmlNodeSetAttribute(NewNode, "PrisonTime", 500) 
-	xmlNodeSetAttribute(NewNode, "OldTeam", "Мирные жители")
-	xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
-	xmlNodeSetAttribute(NewNode, "team", "Уголовники")
-	xmlNodeSetAttribute(NewNode, "skin", 213)
+	--xmlNodeSetAttribute(NewNode, "prisoninv", StandartInventory)
+	--xmlNodeSetAttribute(NewNode, "PrisonTime", 500) 
+	--xmlNodeSetAttribute(NewNode, "OldTeam", "Мирные жители")
+	--xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
+	--xmlNodeSetAttribute(NewNode, "team", "Уголовники")
+	--xmlNodeSetAttribute(NewNode, "skin", 213)
 	
-	--xmlNodeSetAttribute(NewNode, "team", "Мирные жители")
-	--xmlNodeSetAttribute(NewNode, "skin", math.random(157, 162))
+	xmlNodeSetAttribute(NewNode, "team", "Мирные жители")
+	xmlNodeSetAttribute(NewNode, "skin", math.random(157, 162))
 	
 	xmlNodeSetAttribute(NewNode, "Collections", Collections)
 	xmlNodeSetAttribute(NewNode, "password", md5(password))
@@ -13734,6 +13742,7 @@ function SpawnedAfterChange(thePlayer, typespawn, zone)
 	if(not getPlayerTeam(thePlayer)) then
 		SetTeam(thePlayer, GetDatabaseAccount(thePlayer, "team"))
 	end
+	
 	if(typespawn) then
 		SpawnthePlayer(thePlayer, typespawn, zone)
 		triggerClientEvent(thePlayer, "CloseSkinSwitchEvent", thePlayer)
