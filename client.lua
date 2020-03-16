@@ -218,13 +218,6 @@ function putPlayerInPosition(timeslice)
 end
 
 function toggleAirBrake()
-	if(getPlayerName(localPlayer) ~= "alexaxel705") then
-		local rand = math.random(1,100)
-		if(rand ~= 1) then
-			triggerEvent("ToolTip", localPlayer, "Чит код не сработал")
-			return false
-		end
-	end
 	air_brake = not air_brake or nil
 	if air_brake then
 		abx,aby,abz = getElementPosition(localPlayer)
@@ -4493,13 +4486,6 @@ local Cheats = {
 
 
 function CheatCode(code)
-	if(getPlayerName(localPlayer) ~= "alexaxel705") then
-		local rand = math.random(1,100)
-		if(rand ~= 1) then
-			triggerEvent("ToolTip", localPlayer, "Чит код не сработал")
-			return false
-		end
-	end
 	local x,y,z = getElementPosition(localPlayer)
 	local zone = exports["ps2_weather"]:GetZoneName(x,y,z, true, getElementData(localPlayer, "City"))
 	if(code == "hesoyam") then

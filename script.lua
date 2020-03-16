@@ -7226,10 +7226,7 @@ function preLoad(name)
 		triggerEvent("onPlayerJoin", thePlayer)
 	end
 	
-
-	setTime(ServerDate.hour, ServerDate.minute)
 	setElementData(root, "ServerTime", ServerDate.timestamp)
-
 
 	if(ServerDate.year+1900 >= 1988) then
 		if(ServerDate.month >= 1) then
@@ -7483,7 +7480,6 @@ function nightprowler(thePlayer)
 		killTimer(WorldTimer) 
 		
 		ServerDate = getRealTime((math.ceil(ServerDate.timestamp/43200)*43200)-60, false)
-		setTime(ServerDate.hour, ServerDate.minute)
 		
 		worldtime()
 	else
@@ -7499,7 +7495,6 @@ function ofviac(thePlayer)
 		killTimer(WorldTimer) 
 		
 		ServerDate = getRealTime((math.ceil(ServerDate.timestamp/86400)*86400)+75600-(60), false)
-		setTime(ServerDate.hour, ServerDate.minute)
 		
 		worldtime(true)
 	else
@@ -10945,9 +10940,8 @@ function worldtime(ignoreweather)
 
 	ServerDate = getRealTime(ServerDate.timestamp+60, false)
 	local hour, minutes = ServerDate.hour, ServerDate.minute
-	setTime(hour, minutes)
+	setElementData(root, "ServerTime", ServerDate.timestamp)
 	if(minutes == 0) then
-		setElementData(root, "ServerTime", ServerDate.timestamp)
 		for name, dat in pairs(BizInfo) do
 			local items = GetBizGeneration(name)
 			if(#items["Sell"] > 0) then -- Если есть создаваемые товары
@@ -11968,7 +11962,7 @@ function PrisonEvent(hour, minutes)
 
 	local players = getPlayersInTeam(getTeamFromName("Уголовники"))
 	--PrisonMessage="#858585Распорядок дня\n#DCDCDC"..PrisonMessage
-	PrisonMessage = ""
+	PrisonMessage = "Дистопическая шизофрения"
 	for _, thePlayer in ipairs (players) do
 		local Prison = GetDatabaseAccount(thePlayer, "Prison")
 		if(GetDatabaseAccount(thePlayer, "PrisonTime") < 1) then -- Освобождение
@@ -12023,7 +12017,7 @@ function PrisonEvent(hour, minutes)
 			else
 				SetDatabaseAccount(thePlayer, "PrisonTime", GetDatabaseAccount(thePlayer, "PrisonTime")-1)
 				if(Prison == "AREA51") then
-					setElementData(thePlayer, "WantedLevelPrison", SpawnPoint[Prison][9].."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(thePlayer, "PrisonTime").." сек.\n"..PrisonMessage)
+					setElementData(thePlayer, "WantedLevelPrison", SpawnPoint[Prison][9].."\n#A9C1DB"..PrisonMessage.."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(thePlayer, "PrisonTime").." сек.\n")
 				else
 					setElementData(thePlayer, "WantedLevelPrison", SpawnPoint[Prison][9].."\n#FFFFFF"..SpawnPoint[Prison][10].." "..GetDatabaseAccount(thePlayer, "PrisonTime").." сек.")
 				end
@@ -13158,15 +13152,15 @@ function AddDatabaseAccount(thePlayer, password)
 	xmlNodeSetAttribute(NewNode, "inv", StandartInventory)
 	setElementData(thePlayer, "inv", StandartInventory)
 
-	--xmlNodeSetAttribute(NewNode, "prisoninv", StandartInventory)
-	--xmlNodeSetAttribute(NewNode, "PrisonTime", 500) 
-	--xmlNodeSetAttribute(NewNode, "OldTeam", "Мирные жители")
-	--xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
-	--xmlNodeSetAttribute(NewNode, "team", "Уголовники")
-	--xmlNodeSetAttribute(NewNode, "skin", 213)
+	xmlNodeSetAttribute(NewNode, "prisoninv", StandartInventory)
+	xmlNodeSetAttribute(NewNode, "PrisonTime", 500) 
+	xmlNodeSetAttribute(NewNode, "OldTeam", "Мирные жители")
+	xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
+	xmlNodeSetAttribute(NewNode, "team", "Уголовники")
+	xmlNodeSetAttribute(NewNode, "skin", 213)
 	
-	xmlNodeSetAttribute(NewNode, "team", "Мирные жители")
-	xmlNodeSetAttribute(NewNode, "skin", math.random(157, 162))
+	--xmlNodeSetAttribute(NewNode, "team", "Мирные жители")
+	--xmlNodeSetAttribute(NewNode, "skin", math.random(157, 162))
 	
 	xmlNodeSetAttribute(NewNode, "Collections", Collections)
 	xmlNodeSetAttribute(NewNode, "password", md5(password))
