@@ -7,7 +7,6 @@ mtaserver.conf
 <resource src="vintage-wheels" startup="1" protected="0" />
 <resource src="draw_intro" startup="1" protected="0" />
 <resource src="object_image" startup="1" protected="0" />
-<resource src="Interface" startup="1" protected="0" />
 <resource src="PS2_Weather" startup="1" protected="0" />
 <resource src="chat" startup="1" protected="0" />
 <resource src="ai" startup="1" protected="0" />
@@ -18,4 +17,4 @@ mtaserver.conf
 <resource src="casino" startup="1" protected="0" />
 <resource src="opensa" startup="1" protected="0" />
 <resource src="bodyline" startup="1" protected="0" />
-    
+<resource src="Interface" startup="1" protected="0" />
