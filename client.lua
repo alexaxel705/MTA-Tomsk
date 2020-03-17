@@ -25,7 +25,8 @@ local PedSyncObj = {}
 local ObjectInStream = {}
 local VehiclesInStream = {}
 local VehicleTrunk = {}
-local SkinList,SwitchButtonL,SwitchButtonR,SwitchButtonAccept,PEDChangeSkin = false
+local SkinList,SwitchButtonL,SwitchButtonR,SwitchButtonAccept = false
+setElementData(localPlayer, "PlayerStatus", "loading")
 local SkinFlag = true
 local PlayersMessage = {}
 local PlayersAction = {}
@@ -41,12 +42,12 @@ local PData = {
 		["Inventory"] = true,
 		["Collections"] = true
 	}, 
-	['Mission'] = false, -- Миссия такси, автобуса, полицейского, пожарника
-	['AnimatedMarker'] = {}, 
-	['Target'] = {}, 
-	['blip'] = {}, 
-	['TARR'] = {}, -- Target, по центру, ниже, выше
-	['MultipleAction'] = {},
+	["Mission"] = false, -- Миссия такси, автобуса, полицейского, пожарника
+	["AnimatedMarker"] = {}, 
+	["Target"] = {}, 
+	["blip"] = {}, 
+	["TARR"] = {}, -- Target, по центру, ниже, выше
+	["MultipleAction"] = {},
 }
 
 
@@ -690,63 +691,6 @@ local Collections = {
 
 
 
-
-
-function save()
-	local x,y,z = getElementPosition(localPlayer)
-	local rx,ry,rz = getElementRotation(localPlayer)
-	if(getPedOccupiedVehicle(localPlayer)) then
-		x,y,z = getElementPosition(getPedOccupiedVehicle(localPlayer))
-		if(not getElementData(localPlayer, "City")) then 
-			z = getGroundPosition(x,y,z)
-		else
-			z = z-1
-		end
-		rx,ry,rz = getElementRotation(getPedOccupiedVehicle(localPlayer))
-		triggerEvent("OutputChat", localPlayer, math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)..", "..math.round(rz, 0), "Coord")
-	else
-		triggerEvent("OutputChat", localPlayer, math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)..", "..math.round(rz, 0), "Coord")
-	end
-	triggerServerEvent("saveserver", localPlayer, localPlayer, x,y,z,rx,ry,rz)
-end
-
-local SaveTimer = false
-function saveauto()
-	if(PData["Driver"]) then
-		if(not isTimer(SaveTimer)) then
-			triggerEvent("helpmessageEvent", localPlayer, "Запись начата")
-			SaveTimer = setTimer(function() 
-				if(PData["Driver"]["Distance"] > 10) then
-					PData["Driver"]["Distance"] = 0
-					save()
-				end
-			end, 50, 0)
-		else
-			triggerEvent("helpmessageEvent", localPlayer, "Запись остановлена")
-			killTimer(SaveTimer)
-		end
-	end
-end
-
-
-function cursor() 
-    if isCursorShowing(thePlayer) then
-		showCursor(false)
-	else
-		showCursor(true)
-    end
-
-end
-
-
-if getPlayerName(localPlayer) == "alexaxel705" or getPlayerName(localPlayer) == "Mishel'"  then
-	bindKey("num_1", "down", saveauto) 
-	bindKey("F2", "down", cursor) 
-end
-bindKey("num_3", "down", save) -- Для всех
-
-
-
 function Set(list)
 	local set = {}
 	for _, l in ipairs(list) do set[l] = true end
@@ -890,7 +834,7 @@ function PlayerSpawn()
 	if(FirstSpawn) then
 		stopSound(GTASound)
 		FirstSpawn = false
-		PEDChangeSkin = "play"
+		setElementData(localPlayer, "PlayerStatus", "play")
 	end
 	triggerEvent("onClientElementStreamIn", localPlayer)
 	local x,y,z = getElementPosition(localPlayer)
@@ -2161,7 +2105,7 @@ function PlayerDialog(array, ped, endl)
 	if(array) then
 	
 		setElementData(ped, "saytome", "true")
-		PData['dialogPed'] = ped
+		PData["dialogPed"] = ped
 		
 		PText["dialog"] = {}
 		dialogTitle = array["dialog"][math.random(#array["dialog"])]
@@ -2189,7 +2133,7 @@ function PlayerDialog(array, ped, endl)
 				triggerEvent("PlayerActionEvent", localPlayer, endl, ped)
 			end
 			setElementData(ped, "saytome", nil)
-			PData['dialogPed'] = nil
+			PData["dialogPed"] = nil
 		else
 			showCursor(false)
 		end
@@ -2666,7 +2610,8 @@ function wardrobe(arr,types)
 	wardprobeArr=fromJSON(arr)
 
 	setCameraMatrix(255.5, -41.4, 1002.5,  258.3, -41.8, 1002.5)
-	PEDChangeSkin = true
+	
+	setElementData(localPlayer, "PlayerStatus", "loading")
 	
 	SwitchButtonL = guiCreateButton(0.5-(0.08), 0.8, 0.04, 0.04, "<-", true)
 	SwitchButtonR = guiCreateButton(0.5+(0.04), 0.8, 0.04, 0.04, "->", true)
@@ -2922,7 +2867,8 @@ function StartLookZones(zones, update)
 	if(not update) then
 		setElementDimension(localPlayer, getElementData(localPlayer,"id"))
 		setElementInterior(localPlayer, 0)	
-		PEDChangeSkin = true
+		
+		setElementData(localPlayer, "PlayerStatus", "loading")
 		
 		SwitchButtonL = guiCreateButton(0.5-(0.08), 0.8, 0.04, 0.04, "<-", true)
 		SwitchButtonR = guiCreateButton(0.5+(0.04), 0.8, 0.04, 0.04, "->", true)
@@ -2931,9 +2877,9 @@ function StartLookZones(zones, update)
 		setElementData(SwitchButtonL, "data", "SwitchButtonL")
 		setElementData(SwitchButtonR, "data", "SwitchButtonR")
 		setElementData(SwitchButtonAccept, "data", "SwitchButtonAccept")
-		setElementData(SwitchButtonL, "ped", PEDChangeSkin)
-		setElementData(SwitchButtonR, "ped", PEDChangeSkin)
-		setElementData(SwitchButtonAccept, "ped", PEDChangeSkin)
+		setElementData(SwitchButtonL, "ped", true)
+		setElementData(SwitchButtonR, "ped", true)
+		setElementData(SwitchButtonAccept, "ped", true)
 		showCursor(true)
 		bindKey ("arrow_l", "down", NextSkinMinus) 
 		bindKey ("arrow_r", "down", NextSkinPlus) 
@@ -2955,7 +2901,6 @@ function CloseSkinSwitch()
 	unbindKey ("arrow_l", "down", NextSkinMinus) 
 	unbindKey ("arrow_r", "down", NextSkinPlus) 
 	unbindKey ("enter", "down", NextSkinEnter) 
-	PEDChangeSkin="play"
 	showCursor(false)
 	guiSetVisible(SwitchButtonAccept, false)
 	guiSetVisible(SwitchButtonL, false)
@@ -3204,33 +3149,13 @@ local bones = {
 	[19] = {44,43,42}, --left foot
 	[20] = {54,53,52} --right foot
 }
-local VehTypeSkill = {
-	["Automobile"] = 160,
-	["Monster Truck"] = 160,
-	["Unknown"] = 160,
-	["Trailer"] = 160,
-	["Train"] = 160,
-	["Boat"] = 160,
-	["Bike"] = 229,
-	["Quad"] = 229,
-	["BMX"] = 230,
-	["Helicopter"] = 169,
-	["Plane"] = 169
-}
+
 
 function updateWorld()
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
-	if(PData["Driver"] and theVehicle) then
+	if(theVehicle) then
 		if(getElementDimension(localPlayer) == 0 or getElementData(localPlayer, "City")) then
-			local x,y,z = getElementPosition(theVehicle)
-			PData["Driver"]["Distance"] = PData["Driver"]["Distance"]+getDistanceBetweenPoints3D(PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"], x, y, z)
-			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = x,y,z
-			if(PData["Driver"]["Distance"] >= 3000) then
-				local VehType = GetVehicleType(theVehicle)
-				PData["Driver"]["Distance"] = 0
-				triggerServerEvent("AddSkill", localPlayer, localPlayer, VehTypeSkill[VehType], 1)
-			end
-			
+
 			local vx, vy, vz = getElementVelocity(theVehicle)
 			VehicleSpeed = (vx^2 + vy^2 + vz^2)^(0.5)*156
 			if(VehicleSpeed > 100) then
@@ -3300,7 +3225,7 @@ setTimer(updateWorld, 50, 0)
 
 
 function checkKey()
-	if(PEDChangeSkin == "play") then
+	if(getElementData(localPlayer, "PlayerStatus") == "play") then
 		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
 			UpdateArmas(thePlayer)
 		end
@@ -3695,8 +3620,8 @@ function StartLoad() -- Первый этап загрузки
 	end
 	fileClose(hFile)
 	
-	PEDChangeSkin = "intro"
-
+	setElementData(localPlayer, "PlayerStatus", "intro")
+	
 	fadeCamera(true, 2.0)
 	SetPlayerHudComponentVisible("all", false)
 
@@ -4034,7 +3959,7 @@ setElementDimension(o, 1)
 DrugsEffect = {}
 DrugsAnimation = {"PLY_CASH","PUN_CASH","PUN_HOLLER","PUN_LOOP","strip_A","strip_B","strip_C","strip_D","strip_E","strip_F","strip_G","STR_A2B","STR_B2A","STR_B2C","STR_C1","STR_C2", "STR_C2B", "STR_Loop_A","STR_Loop_B","STR_Loop_C"}
 function targetingActivated(target)
-	if(PEDChangeSkin == "play") then
+	if(getElementData(localPlayer, "PlayerStatus") == "play") then
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
 		local PTeam = getTeamName(getPlayerTeam(localPlayer))
 		if(isTimer(SpunkTimer)) then
@@ -4227,7 +4152,7 @@ addEventHandler("onMyClientScreenShot", resourceRoot,
 
 
 function onClientChatMessageHandler(text)
-	if(PEDChangeSkin == "play") then
+	if(getElementData(localPlayer, "PlayerStatus") == "play") then
 		if string.find(text, "http?://[%w-_%.%?%.:/%+=&]+") then -- if string.match and text itself are the same
 			local s, e = string.find(text, "http?://[%w-_%.%?%.:/%+=&]+")
 			PData["WebLink"] = string.sub(text, s, e)
@@ -5183,11 +5108,11 @@ function DrawOnClientRender()
 	
 
 
-	if(PData['CameraMove']) then
-		if(isTimer(PData['CameraMove']['timer'])) then
-			local remaining, _, totalExecutes = getTimerDetails(PData['CameraMove']['timer'])
+	if(PData["CameraMove"]) then
+		if(isTimer(PData["CameraMove"]["timer"])) then
+			local remaining, _, totalExecutes = getTimerDetails(PData["CameraMove"]["timer"])
 			local percent = 100-(remaining/totalExecutes)*100
-			local a1, a2 = PData['CameraMove']['sourcePosition'], PData['CameraMove']['needPosition']
+			local a1, a2 = PData["CameraMove"]["sourcePosition"], PData["CameraMove"]["needPosition"]
 			local newx, newy, newz, newlx, newly, newlz = a1[1]-a2[1], a1[2]-a2[2], a1[3]-a2[3], a1[4]-a2[4], a1[5]-a2[5], a1[6]-a2[6]
 			newx, newy, newz, newlx, newly, newlz = (newx/100)*percent, (newy/100)*percent, (newz/100)*percent, (newlx/100)*percent, (newly/100)*percent, (newlz/100)*percent 
 			setCameraMatrix(a1[1]-newx, a1[2]-newy, a1[3]-newz, a1[4]-newlx, a1[5]-newly, a1[6]-newlz)
@@ -5872,7 +5797,7 @@ end
 
 
 function GenerateTextureCompleted(textures) 
-	if(PEDChangeSkin == "intro") then
+	if(getElementData(localPlayer, "PlayerStatus") == "intro") then
 		call(getResourceFromName("Draw_Intro"), "StartIntro")
 	end
 end
@@ -6368,7 +6293,7 @@ function DrawPlayerMessage()
 	end
 	PData["MultipleAction"] = {}
 		
-	if(PEDChangeSkin == "play" and initializedInv) then
+	if(getElementData(localPlayer, "PlayerStatus") == "play" and initializedInv) then
 		if(tuningList) then
 			sx,sy = (screenWidth/2.55), screenHeight-(150*scaley)
 		
@@ -6472,7 +6397,7 @@ function DrawPlayerMessage()
 
 			if(PData["Interface"]["Inventory"]) then
 				local sx, sy, font, tw, th, color
-				if(PEDChangeSkin == "play" and initializedInv and not isPedDead(localPlayer)) then
+				if(getElementData(localPlayer, "PlayerStatus") == "play" and initializedInv and not isPedDead(localPlayer)) then
 					if(PData["BizControlName"]) then
 						dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(20, 25, 20, 245))
 						dxDrawBorderedText(PData["BizControlName"][2], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
@@ -6484,8 +6409,8 @@ function DrawPlayerMessage()
 			end
 			
 			
-			if(PData['dialogPed']) then
-				CreateTarget(PData['dialogPed'])
+			if(PData["dialogPed"]) then
+				CreateTarget(PData["dialogPed"])
 			end
 			
 			if(dialogTitle) then
@@ -6539,9 +6464,10 @@ function DrawPlayerMessage()
 			end
 		
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
-			if(PData["Driver"] and theVehicle) then
+			if(theVehicle) then
 				if(PData["Race"]) then
 					local pos = GetRacePosition()
+					sx,sy = 1800*NewScale, 850*NewScale
 					dxDrawRectangle(sx-(327*scalex),sy-(82*scaley), 139*NewScale, 154*NewScale, tocolor(0,0,0))
 					dxDrawRectangle(sx-(325*scalex),sy-(80*scaley), 135*NewScale, 150*NewScale, tocolor(121,137,153))
 					dxDrawRectangle(sx-(320*scalex),sy-(75*scaley), 125*NewScale, 140*NewScale, tocolor(0,0,0))
@@ -6578,10 +6504,8 @@ function DrawPlayerMessage()
 	end
 	
 
-	if(PEDChangeSkin == "nowTime") then
+	if(getElementData(localPlayer, "PlayerStatus") == "nowTime") then
 		dxDrawRectangle(0,0,screenWidth, screenHeight, tocolor(255,255,255,255))
-	elseif(PEDChangeSkin == "cinema") then
-	
 	else
 		if(PData["wasted"]) then
 			local Block, Anim = getPedAnimation(localPlayer)
@@ -6634,46 +6558,19 @@ addEventHandler("onClientHUDRender", getRootElement(), DrawPlayerMessage)
 
 
 function SmoothCameraMove(x,y,z,x2,y2,z2,times,targetafter)
-	PData['CameraMove'] = {}
+	PData["CameraMove"] = {}
 	local x1, y1, z1, lx1, ly1, lz1 = getCameraMatrix()
-	PData['CameraMove']['sourcePosition'] = {x1, y1, z1, lx1, ly1, lz1}
-	PData['CameraMove']['needPosition'] = {x,y,z,x2,y2,z2}
+	PData["CameraMove"]["sourcePosition"] = {x1, y1, z1, lx1, ly1, lz1}
+	PData["CameraMove"]["needPosition"] = {x,y,z,x2,y2,z2}
 	
-	PData['CameraMove']['timer'] = setTimer(function(targetafter)
+	PData["CameraMove"]["timer"] = setTimer(function(targetafter)
 		if(targetafter) then
 			setCameraTarget(localPlayer)
 		end
-		PData['CameraMove'] = nil
+		PData["CameraMove"] = nil
 	end, times, 1, targetafter)
 end
 
-
-
-
-
-
-function PlayerVehicleEnter(theVehicle, seat)
-	if(source == localPlayer) then 
-		if(seat == 0) then
-			PData["Driver"] = {
-				["Handling"] = getVehicleHandling(theVehicle),
-				["Distance"] = 0
-			}
-			PData["Driver"]["drx"], PData["Driver"]["dry"], PData["Driver"]["drz"] = getElementPosition(theVehicle)
-		end
-	end
-end
-addEventHandler("onClientPlayerVehicleEnter",getRootElement(),PlayerVehicleEnter)
-
-
-function PlayerVehicleExit(theVehicle, seat)
-	if(source == localPlayer) then 
-		if(seat == 0) then
-			PData["Driver"] = nil
-		end
-	end
-end
-addEventHandler("onClientPlayerVehicleExit", getRootElement(), PlayerVehicleExit)
 
 
 
