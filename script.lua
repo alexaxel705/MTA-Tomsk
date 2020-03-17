@@ -15666,22 +15666,14 @@ addEventHandler("startfish", getRootElement(), startfish)
 
 
 
-function ChangePlayerPassword(thePlayer, command, oldpass, newpass)
-	if(CheckDatabasePlayer) then
-		local password_check = GetDatabaseAccount(thePlayer, "password")
-		if(password_check == md5(oldpass)) then
-			if (string.len(newpass)>=1) then
-				SetDatabaseAccount(thePlayer, "password", md5(newpass))
-				outputChatBox("Пароль удачно изменен!", thePlayer)
-			else
-				outputChatBox("Новый пароль должен иметь не менее 1 символа!", thePlayer)
-			end
-		else
-			outputChatBox("Старый пароль неправильный!", thePlayer)
-		end
+function ChangePass(thePlayer, pass)
+	if(getElementData(thePlayer, "auth")) then
+		SetDatabaseAccount(thePlayer, "password", md5(pass))
+		ToolTip(thePlayer, "Пароль удачно изменен!")
 	end
 end
-addCommandHandler("changepass", ChangePlayerPassword)
+addEvent("ChangePass", true)
+addEventHandler("ChangePass", getRootElement(), ChangePass)
 
 
 

@@ -3524,8 +3524,6 @@ addEventHandler("LoginWindow", localPlayer, LoginClient)
 
 
 
-
-
 local DisplayInput = false
 
 
