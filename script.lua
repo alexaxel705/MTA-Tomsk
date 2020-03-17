@@ -16491,20 +16491,6 @@ addEventHandler("ForceRemoveFromVehicle", getRootElement(), ForceRemoveFromVehic
 
 
 
-function StaminaOut(method)
-	local HP = getElementHealth(source)
-	if(method) then
-		if(HP > 20) then
-			AddSkill(source, 22, 1)
-			AddSkill(source, 24, 1)
-		end
-	end
-end
-addEvent("StaminaOut", true)
-addEventHandler("StaminaOut", root, StaminaOut)
-
-
-
 
 function doTakeScreenShot()
     takePlayerScreenShot(source, 300, 200)

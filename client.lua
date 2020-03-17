@@ -1918,6 +1918,9 @@ function SetPlayerHudComponentVisible(component, show)
 		end
 	end
 end
+addEvent("SetPlayerHudComponentVisible", true)
+addEventHandler("SetPlayerHudComponentVisible", getRootElement(), SetPlayerHudComponentVisible)
+
 
 
 
