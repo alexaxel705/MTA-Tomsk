@@ -9,6 +9,7 @@
 	<oop>false</oop>
 	
 	<export function="CreateVehicle" type="server"/>
+	<export function="GetSkinJob" type="shared"/>
 	
 	<file src="lang/Ru_ru.po" download="true" />
 	<file src="lang/Ru_az.po" download="true" />
@@ -33,6 +34,7 @@
 	<file src="models/bdups_main.col" download="true" />
 	<file src="models/BDups_interior.col" download="true" />
 	
+	<script src="shared.lua" type="shared" />
 	<script src="client.lua" type="client" validate="true" />
 	<script src="script.lua" type="server" />
 </meta>
