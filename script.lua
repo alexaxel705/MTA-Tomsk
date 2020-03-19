@@ -724,24 +724,6 @@ local BotSkinSpecific = {
 }
 
 
-local VehicleRegionSpecific = {
-	["Red County"] = {431,437},
-	["Los Santos"] = {431,437},
-	["San Fierro"] = {431,437},
-	["Las Payasadas"] = {431,437},
-	["Whetstone"] = {431,437},
-	["Las Venturas"] = {431,437},
-	["Flint County"] = {431,437},
-	["Tierra Robada"] = {431,437},
-	["Bone County"] = {431,437},
-	["Julius Thruway South"] = {443, 431,437},
-	["Julius Thruway West"] = {443, 431,437},
-	["Julius Thruway North"] = {443, 431,437},
-	["Julius Thruway East"] = {443, 431,437},
-	["Las Venturas Airport"] = {431,437},
-	["Easter Bay Airport"] = {431,437},
-	["Ocean Docks"] = {515, 514, 403, 499, 524, 609, 498, 455, 414, 456, 440},
-}
 
 
 -- ИД обьекта, Навык
@@ -2060,6 +2042,14 @@ local VehicleSystem = {
 	[573] = {1.65, "MT 3", "", "A5 110", "Macpherson V109", "Wilwood 212mm", "Michelin 85", 333, {2, 2002}, {8, CYear}, "MTL"},
 }
 
+
+
+
+
+function getVehicleZ(theVehicle)
+	local model = getElementModel(theVehicle)
+	return VehicleSystem[model][1]
+end
 
 
 --[[
@@ -10877,119 +10867,6 @@ end
 
 
 
-function RemoveDriverBot(thePed)
-	removeElementData(thePed, "path")
-end
-addEvent("RemoveDriverBot", true)
-addEventHandler("RemoveDriverBot", root, RemoveDriverBot)
-
-
-
-
-
-local FireTruckModel = {
-	["Los Santos"] = 277,
-	["San Fierro"] = 279,
-	["Las Venturas"] = 278,
-	["Red County"] = 277,
-	["Whetstone"] = 279,
-	["Flint County"] = 277, 
-	["Bone County"] = 278,
-	["Tierra Robada"] = 278,
-}
-
-function FireTruck(x,y,z,i,d)
-	local zone = getZoneName(x,y,z, true)
-	
-	if(FireTruckModel[zone] and d == 0) then
-		local City = "San Andreas"
-		local arr = {
-			["west"] = exports["vehicle_node"]:NEWGPSFound(City, x-120,y,z, x,y,z),
-			["east"] = exports["vehicle_node"]:NEWGPSFound(City, x+120,y,z, x,y,z),
-			["south"] = exports["vehicle_node"]:NEWGPSFound(City, x,y+120,z, x,y,z),
-			["north"] = exports["vehicle_node"]:NEWGPSFound(City, x,y-120,z, x,y,z)
-		}
-
-		for name, dat in pairs(arr) do
-			if(dat) then
-				if(#dat < 5) then -- Отсекаем слишком короткие пути
-					arr[name] = nil
-				end
-			else
-				arr[name] = nil
-			end
-		end
-		if(getArrSize(arr) > 0) then
-			local ind = 0
-			local minarrindex = math.random(getArrSize(arr))
-			for name, dat in pairs(arr) do
-				ind = ind+1
-				if(ind == minarrindex) then
-					local bx,by,bz = PathNodes["San Andreas"][arr[name][1][1]][arr[name][1][2]][2], PathNodes["San Andreas"][arr[name][1][1]][arr[name][1][2]][3], PathNodes["San Andreas"][arr[name][1][1]][arr[name][1][2]][4]
-					local bx2,by2,bz2 = PathNodes["San Andreas"][arr[name][2][1]][arr[name][2][2]][2], PathNodes["San Andreas"][arr[name][2][1]][arr[name][2][2]][3], PathNodes["San Andreas"][arr[name][2][1]][arr[name][2][2]][4]
-					local rz = findRotation(bx,by, bx2,by2)
-					
-					return CreateDriverBot(407, FireTruckModel[zone], bx, by, bz, rz, 0, 0, "San Andreas", arr[name])
-				end
-			end
-		end
-	end
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function FoundNextRandomNode(city, node, id)
-	local nextnodes = {}
-	if(PathNodes[city][node][id][6]) then
-		for v,k in pairs(PathNodes[city][node][id][6]) do
-			--if(PathNodes[city][k[1]][k[2]][1] ~= "Closed") then
-				table.insert(nextnodes, {k[1], k[2]})
-			--end
-		end
-	end
-	if(PathNodes[city][node][id+1]) then
-		table.insert(nextnodes, {node, id+1})
-	end
-	return nextnodes[math.random(#nextnodes)]
-end
-
-
-
-
-local trafficlight = {
-	["0"] = "west",
-	["1"] = "west",
-	["2"] = false,
-	["3"] = "north",
-	["4"] = "north"
-}
-
-
-
-
-
-
-
 local Objects = {
 	["Doherty"] = { -- Будет разрушен в 1987
 		[1] = createObject(10989, -2130.8, 149.10001, 45.6, 0,0,180.2),
@@ -12735,15 +12612,15 @@ function AddDatabaseAccount(thePlayer, password)
 	xmlNodeSetAttribute(NewNode, "inv", StandartInventory)
 	setElementData(thePlayer, "inv", StandartInventory)
 
-	xmlNodeSetAttribute(NewNode, "prisoninv", StandartInventory)
-	xmlNodeSetAttribute(NewNode, "PrisonTime", 500) 
-	xmlNodeSetAttribute(NewNode, "OldTeam", "Мирные жители")
-	xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
-	xmlNodeSetAttribute(NewNode, "team", "Уголовники")
-	xmlNodeSetAttribute(NewNode, "skin", 213)
+	--xmlNodeSetAttribute(NewNode, "prisoninv", StandartInventory)
+	--xmlNodeSetAttribute(NewNode, "PrisonTime", 500) 
+	--xmlNodeSetAttribute(NewNode, "OldTeam", "Мирные жители")
+	--xmlNodeSetAttribute(NewNode, "Prison", "AREA51")
+	--xmlNodeSetAttribute(NewNode, "team", "Уголовники")
+	--xmlNodeSetAttribute(NewNode, "skin", 213)
 	
-	--xmlNodeSetAttribute(NewNode, "team", "Мирные жители")
-	--xmlNodeSetAttribute(NewNode, "skin", math.random(157, 162))
+	xmlNodeSetAttribute(NewNode, "team", "Мирные жители")
+	xmlNodeSetAttribute(NewNode, "skin", math.random(157, 162))
 	
 	xmlNodeSetAttribute(NewNode, "Collections", Collections)
 	xmlNodeSetAttribute(NewNode, "password", md5(password))
@@ -14182,9 +14059,7 @@ function MarkerHit(hitElement, Dimension)
 		end
 	elseif(elementType == "player" and Dimension) then
 		thePlayer = hitElement
-		if(getElementData(source, "type") == "FIRE") then
-			setPedOnFire(thePlayer, true)
-		elseif(getElementData(source, "type") == "enter") then
+		if(getElementData(source, "type") == "enter") then
 		local r,g,b,a = getMarkerColor(source)
 		local text = Text(thePlayer, "Нажми {key} чтобы войти", {{"{key}", COLOR["KEY"]["HEX"].."Alt#FFFFFF"}})
 		if(r == 255 and g == 255) then
@@ -14954,46 +14829,6 @@ function FireVehicle(theVehicle, weapon, loss, tyre)
 end
 addEvent("FireVehicle", true)
 addEventHandler("FireVehicle", getRootElement(), FireVehicle)
-
-
-local AllFires = {}
-function CreateFire(arr)
-	arr = fromJSON(arr)
-	local x, y, z = false
-	for v, k in pairs(arr) do
-		x, y, z = k[1], k[2], k[3]
-		local fireId = #AllFires+1
-		AllFires[fireId] = {}
-		AllFires[fireId]["obj"] = createObject(1362, k[1],k[2],k[3]-0.6)
-		setElementData(AllFires[fireId]["obj"], "fireid", fireId)
-		
-		AllFires[fireId]["mar"] = createMarker(k[1], k[2], k[3], "checkpoint", 1, 0,0,0,0)
-		setElementVisibleTo(AllFires[fireId]["mar"], root, false)
-		setElementData(AllFires[fireId]["mar"], "type", "FIRE")
-
-		AllFires[fireId]["timer"] = setTimer(function(obj, mar, ped)
-			destroyElement(obj)
-			destroyElement(mar)
-		end, 120000, 1, AllFires[fireId]["obj"], AllFires[fireId]["mar"]) -- 120000
-	end
-	if(x) then
-		FireTruck(x, y, z, 0, 0)
-	end
-end
-addEvent("CreateFire", true)
-addEventHandler("CreateFire", getRootElement(), CreateFire)
-
-
-function RemoveFire(thePlayer, fire)
-	if(isElement(fire)) then
-		local fireId = getElementData(fire, "fireid")
-		killTimer(AllFires[fireId]["timer"])
-		destroyElement(AllFires[fireId]["obj"])
-		destroyElement(AllFires[fireId]["mar"])
-	end
-end
-addEvent("RemoveFire", true)
-addEventHandler("RemoveFire", getRootElement(), RemoveFire)
 
 
 

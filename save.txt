@@ -1,2 +1,9 @@
-	["Redsands West"] = {
-		[1700] = {true, 1564.9, 2013, 9.8
+	["Las Payasadas"] = {
+		[1000] = {true, -240.8, 2621.1, 63, false}, 
+		[1001] = {true, -240.7, 2620.3, 62.9, false}, 
+		[1002] = {true, -240.9, 2619.5, 62.9, false, {{"Fort Carson", 5200}}}, 
+	["Fort Carson"] = {
+		[5200] = {true, -298.7, 1020.8, 19.6, false, {{"Verdant Meadows", 700}}}, 
+	["Verdant Meadows"] = {
+		[700] = {true, 268.8, 2613.1, 16.5, false}, 
+		[701] = {true, 266.5, 2617.5, 16.5

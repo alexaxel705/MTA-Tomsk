@@ -5913,39 +5913,6 @@ addEventHandler("PlaySFXSoundEvent", localPlayer, PlaySFXSound)
 
 
 
-addEventHandler("onClientVehicleExplode", getRootElement(), function()
-	if(isElementSyncer(source)) then
-		local x,y,z = getElementPosition(source)
-		local rand = math.random(0, 4)
-		if(rand > 0) then
-			local arr = {}
-			for slot = 1, rand do
-				local randx, randy = math.random(-5,5), math.random(-5,5)
-				z = getGroundPosition(x+randx,y+randy,z)
-				arr[#arr+1] = {x+randx, y+randy, z}
-			end
-			triggerServerEvent("CreateFire", localPlayer, toJSON(arr))
-		end
-	end
-	if(getElementModel(source) == 592) then
-		local x,y,z = getElementPosition(source)
-		for slot = 1, 40 do
-			createExplosion(x+(math.random(-40,40)), y+(math.random(-40,40)), z, 6)
-			createEffect("explosion_large", x+(math.random(-40,40)), y+(math.random(-40,40)), z)
-		end
-	end
-end)
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -6500,15 +6467,7 @@ function StreamIn(restream)
 			end
 		end
 	elseif(getElementType(source) == "object") then
-		if(getElementModel(source) == 1362) then
-			local x,y,z = getElementPosition(source)
-			ObjectInStream[source] = {}
-			ObjectInStream[source]["fire"] = createEffect("fire", x,y,z+0.7,x,y,z+2,500)
-			ObjectInStream[source]["light"] = createLight(0, x,y,z+0.7, 6, 255, 165, 0, nil, nil, nil, true)
-			ObjectInStream[source]["collision"] = createColSphere(x,y,z+1, 1)
-			attachElements(ObjectInStream[source]["collision"], source)
-			setElementAttachedOffsets(ObjectInStream[source]["collision"], 0,0,1)
-		elseif(getElementModel(source) == 2887) then
+		if(getElementModel(source) == 2887) then
 			ObjectInStream[source] = {}
 			ObjectInStream[source]["attach_searchlight"] = createSearchLight(0,0,0, 0,0,0, 0.5, 10.5)
 		elseif(getElementData(source, "gates")) then
