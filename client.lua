@@ -6661,7 +6661,6 @@ function StreamOut(restream)
 			return false
 		end
 	end
-	
 end
 addEventHandler("onClientElementStreamOut", getRootElement(), StreamOut)
 addEventHandler("onClientElementDestroy", getRootElement(), StreamOut)

@@ -4751,19 +4751,7 @@ CreateEnter(-2172.4, 679.9, 55.2, 270, 0, 0, false, 2548.8, -1294.6, 1061, 270, 
 
 
 
--- [Зона] = {{Модель авто, модель скина}, {Модель авто 2, модель скина 2}}
-local PoliceSpecificZone = {
-	["Los Santos"] = {{523, 284}, {596, 280}},
-	["San Fierro"] = {{597, 281}},
-	["Las Venturas"] = {{598, 282}},
-	["Red County"] = {{523, 284}, {599, 283}},
-	["Whetstone"] = {{523, 284}, {599, 283}},
-	["Flint County"] = {{523, 284}, {599, 283}},
-	["Bone County"] = {{599, 283}},
-	["Tierra Robada"] = {{599, 283}},
-	["UNDERWATER"] = {{596, 280}},
-	["Unknown"] = {{596, 280}},
-}
+
 
 function WantedLevel(thePlayer, count)
 	if(getElementData(thePlayer, "AEZAKMI") or PData[thePlayer]["DeathMatch"]) then
@@ -4775,8 +4763,6 @@ function WantedLevel(thePlayer, count)
 			setElementData(thePlayer, "AEZAKMI", "true")
 			count = -6
 		end
-		local x,y,z = getElementPosition(thePlayer)
-		local zone = getZoneName(x,y,z, true)
 	
 		local wanted = GetDatabaseAccount(thePlayer, "wanted")
 	
@@ -4790,9 +4776,7 @@ function WantedLevel(thePlayer, count)
 		if(wanted > 6) then wanted = 6
 		elseif(wanted < 0) then wanted = 0 end
 	
-	
 		if(wanted > 0) then
-		
 			local rand = math.random(6)
 			if(rand == 1) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 0, math.random(0, 163), false)
 			elseif(rand == 2) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 1, math.random(0, 14), false)
@@ -4800,29 +4784,11 @@ function WantedLevel(thePlayer, count)
 			elseif(rand == 4) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 3, math.random(0, 8), false)
 			elseif(rand == 5) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 4, math.random(0, 13), false)
 			elseif(rand == 6) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 5, math.random(0, 57), false) end
-
-		
-			if(wanted >= 5) then
-			local rand = math.random(1,6)
-			if(rand == 1 or rand == 2) then
-				kr(thePlayer, 433, 287) -- Армия
-			elseif(rand == 3 or rand == 4) then
-				kr(thePlayer, 470, 287) -- Армия
-			elseif(rand == 5) then
-				kr(thePlayer, 488, 170) -- San News
-			elseif(rand == 6) then
-				kr(thePlayer, 497, 280) -- Вертолет
-			end
-			
-			elseif(wanted >= 4) then
-				kr(thePlayer, 490, 286) -- ФБР
-			elseif(wanted >= 3) then
-				kr(thePlayer, 427, 285) -- SWAT
-			elseif(wanted < 3) then
-				local rand = PoliceSpecificZone[zone][math.random(#PoliceSpecificZone[zone])]
-				kr(thePlayer, rand[1], rand[2]) -- Выезжает полиция
-			end
 		end
+			
+	
+	
+	
 		SetDatabaseAccount(thePlayer, "wanted", wanted)
 		setElementData(thePlayer, "WantedLevel", wanted)
 	end
@@ -10801,69 +10767,6 @@ local PlateNumber = {
 
 
 
-function kr(thePlayer, vmodel, pedmodel)
-	if(not isTimer(PData[thePlayer]["PoliceTimer"])) then
-		local x,y,z = getElementPosition(thePlayer)
-		local i, d = getElementInterior(thePlayer), getElementDimension(thePlayer)
-		local City = getPlayerCity(thePlayer)
-		local arr = {
-			["west"] = exports["vehicle_node"]:NEWGPSFound(City, x-100,y,z, x,y,z),
-			["east"] = exports["vehicle_node"]:NEWGPSFound(City, x+100,y,z, x,y,z),
-			["south"] = exports["vehicle_node"]:NEWGPSFound(City, x,y+100,z, x,y,z),
-			["north"] = exports["vehicle_node"]:NEWGPSFound(City, x,y-100,z, x,y,z)
-		}
-
-		for name, dat in pairs(arr) do
-			if(dat) then
-				if(#dat < 5) then -- Отсекаем слишком короткие пути
-					arr[name] = nil
-				end
-			else
-				arr[name] = nil
-			end
-		end
-		if(getArrSize(arr) > 0) then
-			local ind = 0
-			local minarrindex = math.random(getArrSize(arr))
-			for name, dat in pairs(arr) do
-				ind = ind+1
-				if(ind == minarrindex) then
-					local bx,by,bz = PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][2], PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][3], PathNodes[getPlayerCity(thePlayer)][arr[name][1][1]][arr[name][1][2]][4]
-					local bx2,by2,bz2 = PathNodes[getPlayerCity(thePlayer)][arr[name][2][1]][arr[name][2][2]][2], PathNodes[getPlayerCity(thePlayer)][arr[name][2][1]][arr[name][2][2]][3], PathNodes[getPlayerCity(thePlayer)][arr[name][2][1]][arr[name][2][2]][4]
-					local rz = findRotation(bx, by, bx2, by2)
-
-					if(vmodel == 497 or vmodel == 488) then -- Вертолеты
-						bz = bz+25
-					end
-					local theVehicle = CreateDriverBot(vmodel, pedmodel, bx, by, bz, rz, 0, d, City, arr[name], thePlayer)
-					setVehicleSirensOn(theVehicle, true)
-					PData[thePlayer]["PoliceTimer"] = setTimer(function(thePlayer) end, 5000, 1, thePlayer)
-				end
-			end
-		end
-	end
-	
-end
-
-
-
-
-function CreateDriverBot(vmodel, pedmodel, x, y, z, rz, i, d, City, path, targetPlayer)
-	local theVehicle = CreateVehicle(vmodel, x,y,z+VehicleSystem[vmodel][1], 0,0,rz)
-	setElementInterior(theVehicle, i)
-	setElementDimension(theVehicle, d)
-	local thePed = createPed(pedmodel, x,y,z)
-	setElementInterior(thePed, i)
-	setElementDimension(thePed, d)
-	warpPedIntoVehicle(thePed, theVehicle)
-	
-	setElementData(thePed, "path", path)
-	if(targetPlayer) then
-		setElementData(thePed, "attacker", getPlayerName(targetPlayer))
-	end
-	return theVehicle
-end
-
 
 
 
@@ -12419,23 +12322,6 @@ end
 addEvent("fightstyle", true)
 addEventHandler("fightstyle", root, fightstyle)
 
-
-
-function RemovePedFromVehicle(thePed, thePlayer)
-	if(thePed) then
-		local theVehicle = getPedOccupiedVehicle(thePed)
-		if(theVehicle) then
-			local x,y,z = getElementPosition(theVehicle)
-			local _,_,rz = getElementRotation(theVehicle)
-			removePedFromVehicle(thePed)
-			
-			local x1,y1,z1 = getPointInFrontOfPoint(x, y, z, rz-180, 1)
-			setElementPosition(thePed, x1,y1,z1, true)
-		end
-	end
-end
-addEvent("RemovePedFromVehicle", true)
-addEventHandler("RemovePedFromVehicle", root, RemovePedFromVehicle)
 
 
 
