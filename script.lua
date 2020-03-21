@@ -8868,7 +8868,7 @@ function Koryachka(thePlayer)
 	if(getElementHealth(thePlayer) < 20) then
 		if(getPedOccupiedVehicle(thePlayer)) then
 			if(getElementType(thePlayer) == "ped") then
-				RemovePedFromVehicle(thePlayer)
+				removePedFromVehicle(thePlayer)
 			else
 				removePedFromVehicle(thePlayer)
 			end
@@ -15872,8 +15872,6 @@ local PrisonPersonal = {
 	[6] = CreateBot(287, 128.6, 1938.2, 19.3, 180, 0, 0, "Служащий", 5),
 	[7] = CreateBot(287, 282.4, 1814.7, 17.6, 90, 0, 0, "Служащий", 5),
 	[8] = CreateBot(287, 211.6, 1812.3, 21.9, 0, 0, 0, "Служащий", 5),
-	
-	
 }
 
 

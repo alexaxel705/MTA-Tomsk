@@ -10,6 +10,7 @@
 	
 	<export function="CreateVehicle" type="server"/>
 	<export function="GetSkinJob" type="shared"/>
+	<export function="GetSkinData" type="shared"/>
 	
 	<file src="lang/Ru_ru.po" download="true" />
 	<file src="lang/Ru_az.po" download="true" />

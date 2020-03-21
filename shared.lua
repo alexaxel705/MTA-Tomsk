@@ -438,3 +438,15 @@ function GetSkinJob(model)
 	end
 	return Zvanie
 end
+
+
+
+function GetSkinData()
+	return SkinData
+end
+addEvent("GetSkinData", true)
+addEventHandler("GetSkinData", getRootElement(), GetSkinData)
+
+
+
+
