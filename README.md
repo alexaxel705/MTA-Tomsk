@@ -9,7 +9,6 @@ mtaserver.conf
 <resource src="object_image" startup="1" protected="0" />
 <resource src="PS2_Weather" startup="1" protected="0" />
 <resource src="chat" startup="1" protected="0" />
-<resource src="ai" startup="1" protected="0" />
 <resource src="228" startup="1" protected="0" />
 <resource src="statistic" startup="1" protected="0" />
 <resource src="unique_jumps" startup="1" protected="0" />
@@ -18,3 +17,5 @@ mtaserver.conf
 <resource src="opensa" startup="1" protected="0" />
 <resource src="bodyline" startup="1" protected="0" />
 <resource src="Interface" startup="1" protected="0" />
+<resource src="ai" startup="1" protected="0" />
+    

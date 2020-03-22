@@ -635,93 +635,7 @@ local ClinicSpawn = {
 
 
 
-local BotSkin = {
-	["Полиция"] = {7,9,10,12,13, 280 ,14,15,17,18,19, 281 ,20,21,22,23,44, 282 ,48,72,236,56},  --Каждые 5 педов охраняет 1 коп
-	["Баллас"] = {102,103,104,28},  --Доп. Наркодиллер
-	["Гроув-стрит"] = {105,106,107}, 
-	["Вагос"] = {108,109,110,29},  --Доп. Наркодиллер
-	["Рифа"] = {173,174,175}, 
-	["Деревенщины"] = {159,160,161,162}, 
-	["Триады"] = {117,118,120,32},  --Доп. Оружие
-	["Da Nang Boys"] = {121,122,123}, 
-	["Ацтекас"] = {114,115,116}, 
-	["Байкеры"] = {181,247,248,100,261, 64},  --Доп. Шлюха
-	["Русская мафия"] = {111,112,113}, 
-	["Колумбийский картель"] = {222,221,95,30,242,179}, 
-}
 
--- Старухи, итд
-local BotSkinSpecific = {
-	["Мирные жители"] = {
-		["Las Venturas"] = {
-			["Starfish Casino"] = {27,153,260},
-			["Yellow Bell Golf Course"] = {36,37},
-			["The Four Dragons Casino"] = {82,83,84,85,141,150,147,233},
-			["The Strip"] = {82,83,84,85,141,150,147,233},
-			["Greenglass College"] = {23, 56, 60, 72, 93, 141, 150, 181, 190, 188, 193, 195, 211, 226},
-			["all"] = {7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,90,92,99,236,56}
-		},
-		["Tierra Robada"] = {
-			["all"] = {38,89, 198, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56,128}
-		},
-		["Bone County"] = {
-			["all"] = {39,129, 198, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56,128}
-		},
-		["San Fierro"] = {
-			["all"] = {196, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,92,99,236,56}
-		},
-		["Red County"] = {
-			["all"] = {130,199, 201, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56}
-		},
-		["Whetstone"] = {
-			["all"] = {218, 201, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56}
-		},
-		["Flint County"] = {
-			["all"] = {197, 201, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56}
-		},
-		["Los Santos"] = {
-			["all"] = {10, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,90,92,99,236,56,243}
-		},
-		["Unknown"] = {
-			["all"] = {10,38,39,89,129,130,196,197,199,218, 7,9,12,13,14,15,17,18,19,20,21,22,23,44,48,72,236,56}
-		},
-		["Unknown Bar"] = {
-			["Unknown Bar"] = {102,103,104, 105,106,107, 108,109,110, 173,174,175, 159,160,161,162, 117,118,120, 121,122,123, 114,115,116, 181,247,248,100, 111,112,113, 222,95,30,242,179}
-		}
-	},
-	["Полиция"] = {
-		["Las Venturas"] = {
-			["all"] = {282}
-		},
-		["Tierra Robada"] = {
-			["all"] = {283}
-		},
-		["Bone County"] = {
-			["all"] = {283}
-		},
-		["San Fierro"] = {
-			["all"] = {284}
-		},
-		["Red County"] = {
-			["all"] = {288}
-		},
-		["Whetstone"] = {
-			["all"] = {288}
-		},
-		["Flint County"] = {
-			["all"] = {288}
-		},
-		["Los Santos"] = {
-			["all"] = {280}
-		},
-		["Unknown"] = {
-			["all"] = {280, 281, 282, 283, 284, 288}
-		},
-		["Unknown Bar"] = {
-			["Unknown Bar"] = {280, 281, 282, 283, 284, 288}
-		}
-	}
-}
 
 
 
@@ -743,6 +657,7 @@ local WeaponModel = {
 	[12] = {323, 177},
 	[14] = {325, 177},
 	[15] = {326, 177},
+	[19] = {nil, nil}, 
 	[22] = {346, 69},
 	[23] = {347, 70},
 	[24] = {348, 71},
@@ -780,181 +695,6 @@ local WeaponModel = {
 
 
 
-
-
-local ZonesRegion = {
-	["Unknown Bar"] = "Unknown Bar",
-	["Unknown"] = "Unknown",
-	["Linden Side"] = "Las Venturas",
-	["Las Venturas Airport"] = "Las Venturas",
-	["Harry Gold Parkway"] = "Las Venturas",
-	["Los Santos International"] = "Los Santos",
-	["Come-A-Lot"] = "Las Venturas",
-	["Juniper Hill"] = "San Fierro",
-	["City Hall"] = "San Fierro",
-	["Julius Thruway North"] = "Las Venturas",
-	["Montgomery"] = "Red County",
-	["El Corona"] = "Los Santos",
-	["Queens"] = "San Fierro",
-	["The High Roller"] = "Las Venturas",
-	["K.A.C.C. Military Fuels"] = "Las Venturas",
-	["Pilson Intersection"] = "Las Venturas",
-	["Vinewood"] = "Los Santos",
-	["Mulholland Intersection"] = "Los Santos",
-	["The Emerald Isle"] = "Las Venturas",
-	["Flint County"] = "Flint County",
-	["El Quebrados"] = "Tierra Robada",
-	["Tierra Robada"] = "Tierra Robada",
-	["Linden Station"] = "Las Venturas",
-	["Blackfield Chapel"] = "Las Venturas",
-	["San Andreas Sound"] = "Red County",
-	["Conference Center"] = "Los Santos",
-	["Roca Escalante"] = "Las Venturas",
-	["The Camel's Toe"] = "Las Venturas",
-	["El Castillo del Diablo"] = "Bone County",
-	["Lil' Probe Inn"] = "Bone County",
-	["Martin Bridge"] = "Red County",
-	["Beacon Hill"] = "Flint County",
-	["Battery Point"] = "San Fierro",
-	["Missionary Hill"] = "San Fierro",
-	["The Pink Swan"] = "Las Venturas",
-	["Easter Tunnel"] = "San Fierro",
-	["Red County"] = "Red County",
-	["Commerce"] = "Los Santos",
-	["Palomino Creek"] = "Red County",
-	["Blueberry"] = "Red County",
-	["Montgomery Intersection"] = "Red County",
-	["Santa Maria Beach"] = "Los Santos",
-	["Las Barrancas"] = "Tierra Robada",
-	["Regular Tom"] = "Bone County",
-	["Shady Creeks"] = "Whetstone",
-	["Kincaid Bridge"] = "Tierra Robada",
-	["Los Flores"] = "Los Santos",
-	["Valle Ocultado"] = "Tierra Robada",
-	["Julius Thruway West"] = "Las Venturas",
-	["Jefferson"] = "Los Santos",
-	["Hashbury"] = "San Fierro",
-	["'The Big Ear'"] = "Bone County",
-	["Back o Beyond"] = "Flint County",
-	["Los Santos"] = "Los Santos",
-	["Playa del Seville"] = "Los Santos",
-	["Last Dime Motel"] = "Las Venturas",
-	["Temple"] = "Los Santos",
-	["San Fierro"] = "San Fierro",
-	["Rockshore East"] = "Las Venturas",
-	["The Mako Span"] = "Red County",
-	["Hilltop Farm"] = "Red County",
-	["Avispa Country Club"] = "San Fierro",
-	["The Sherman Dam"] = "Tierra Robada",
-	["Ganton"] = "Los Santos",
-	["Fisher's Lagoon"] = "Red County",
-	["Pirates in Men's Pants"] = "Las Venturas",
-	["Ocean Flats"] = "San Fierro",
-	["Rockshore West"] = "Las Venturas",
-	["Cranberry Station"] = "San Fierro",
-	["Hankypanky Point"] = "Red County",
-	["The Clown's Pocket"] = "Las Venturas",
-	["Doherty"] = "San Fierro",
-	["Esplanade North"] = "San Fierro",
-	["North Rock"] = "Red County",
-	["Bayside Marina"] = "Tierra Robada",
-	["The Four Dragons Casino"] = "Las Venturas",
-	["Richman"] = "Red County",
-	["Calton Heights"] = "San Fierro",
-	["The Strip"] = "Las Venturas",
-	["Yellow Bell Golf Course"] = "Las Venturas",
-	["Spinybed"] = "Las Venturas",
-	["Verona Beach"] = "Los Santos",
-	["King's"] = "San Fierro",
-	["Garver Bridge"] = "Tierra Robada",
-	["Easter Basin"] = "San Fierro",
-	["LVA Freight Depot"] = "Las Venturas",
-	["Restricted Area"] = "Bone County",
-	["Greenglass College"] = "Las Venturas",
-	["San Fierro Bay"] = "Tierra Robada",
-	["Prickle Pine"] = "Las Venturas",
-	["Redsands East"] = "Las Venturas",
-	["Royal Casino"] = "Las Venturas",
-	["Aldea Malvada"] = "Tierra Robada",
-	["Verdant Meadows"] = "Bone County",
-	["Randolph Industrial Estate"] = "Las Venturas",
-	["Arco del Oeste"] = "Tierra Robada",
-	["Willowfield"] = "Los Santos",
-	["Bayside"] = "Tierra Robada",
-	["Julius Thruway East"] = "Las Venturas",
-	["Las Brujas"] = "Bone County",
-	["Old Venturas Strip"] = "Las Venturas",
-	["Leafy Hollow"] = "Flint County",
-	["Flint Intersection"] = "Flint County",
-	["Redsands West"] = "Las Venturas",
-	["Starfish Casino"] = "Las Venturas",
-	["Bone County"] = "Bone County",
-	["The Visage"] = "Las Venturas",
-	["Yellow Bell Station"] = "Las Venturas",
-	["Flint Range"] = "Flint County",
-	["Sherman Reservoir"] = "Tierra Robada",
-	["Fern Ridge"] = "Red County",
-	["Sobell Rail Yards"] = "Las Venturas",
-	["Hampton Barns"] = "Red County",
-	["Caligula's Palace"] = "Las Venturas",
-	["Los Santos Inlet"] = "Flint County",
-	["Bayside Tunnel"] = "Tierra Robada",
-	["Idlewood"] = "Los Santos",
-	["Green Palms"] = "Bone County",
-	["East Beach"] = "Los Santos",
-	["Chinatown"] = "San Fierro",
-	["Whitewood Estates"] = "Las Venturas",
-	["Rodeo"] = "Los Santos",
-	["Garcia"] = "San Fierro",
-	["Verdant Bluffs"] = "Los Santos",
-	["Downtown Los Santos"] = "Los Santos",
-	["Foster Valley"] = "San Fierro",
-	["Fallen Tree"] = "Red County",
-	["Marina"] = "Los Santos",
-	["Las Venturas"] = "Las Venturas",
-	["Esplanade East"] = "San Fierro",
-	["Gant Bridge"] = "Tierra Robada",
-	["Blackfield"] = "Las Venturas",
-	["Market Station"] = "Los Santos",
-	["Pilgrim"] = "Las Venturas",
-	["Financial"] = "San Fierro",
-	["Little Mexico"] = "Los Santos",
-	["Mulholland"] = "Red County",
-	["Angel Pine"] = "Whetstone",
-	["Julius Thruway South"] = "Las Venturas",
-	["Fort Carson"] = "Bone County",
-	["Glen Park"] = "Los Santos",
-	["Robada Intersection"] = "Tierra Robada",
-	["Mount Chiliad"] = "San Fierro",
-	["Juniper Hollow"] = "San Fierro",
-	["East Los Santos"] = "Los Santos",
-	["Las Payasadas"] = "Bone County",
-	["Shady Cabin"] = "Whetstone",
-	["Frederick Bridge"] = "Red County",
-	["Octane Springs"] = "Bone County",
-	["The Panopticon"] = "Red County",
-	["Blackfield Intersection"] = "Las Venturas",
-	["Paradiso"] = "San Fierro",
-	["Flint Water"] = "Red County",
-	["Easter Bay Chemicals"] = "Red County",
-	["Hunter Quarry"] = "Bone County",
-	["Creek"] = "Las Venturas",
-	["Las Colinas"] = "Los Santos",
-	["Santa Flora"] = "San Fierro",
-	["Palisades"] = "San Fierro",
-	["Market"] = "Los Santos",
-	["Blueberry Acres"] = "Red County",
-	["Dillimore"] = "Red County",
-	["Pershing Square"] = "Los Santos",
-	["Fallow Bridge"] = "Red County",
-	["Easter Bay Airport"] = "Red County",
-	["Ocean Docks"] = "Los Santos",
-	["Whetstone"] = "Whetstone",
-	["Unity Station"] = "Los Santos",
-	["Downtown"] = "San Fierro"
-}
-
---Модель, номер, цвет, вариант, команда (если есть)
 
 
 
@@ -4787,8 +4527,6 @@ function WantedLevel(thePlayer, count)
 		end
 			
 	
-	
-	
 		SetDatabaseAccount(thePlayer, "wanted", wanted)
 		setElementData(thePlayer, "WantedLevel", wanted)
 	end
@@ -6953,33 +6691,6 @@ function preLoad(name)
 	StartMP()
 
 
-	-- Пешеходы
-	local CountRandomBot = 500
-	local availzones = {}
-	
-	for city, dat1 in pairs(PedNodes) do
-		for name, dat in pairs(dat1) do
-			for _, dat2 in pairs(dat) do
-				for slot = 1, dat2[4]-dat2[1]+dat2[5]-dat2[2] do
-					availzones[#availzones+1] = dat2
-				end
-			end
-		end
-	end
-	
-	for slot = 1, CountRandomBot do
-		local rand = math.random(#availzones)
-		local randx = math.random(availzones[rand][1], availzones[rand][4])
-		local randy = math.random(availzones[rand][2], availzones[rand][5])
-		local randz = GetZCoord(randx, randy, availzones[rand])+1
-	
-		local rot = availzones[rand][7]
-		local randrot = math.random(1,2)
-		if(randrot == 1) then rot = rot+180 end
-		CreateRandomBot(randx,randy,randz,rot,nil,nil, getZoneName(randx,randy,randz, false))
-		table.remove(availzones, rand)
-	end
-
 	WorldTimer = setTimer(worldtime, OneMinute, 0)
 end
 addEventHandler("onResourceStart", getResourceRootElement(), preLoad)
@@ -7130,39 +6841,6 @@ function CreateBot(skin,x,y,z,rz,i,d,zone,ind)
 end
 
 
-function CreateRandomBot(x,y,z,rz,i,d,zone,ind)
-	local skin = 299
-
-	local team = GetDatabaseZoneNode(zone)
-	if(not team) then team = "Полиция" end
-
-
-	local rand = math.random(1,4)
-	if(rand > 1) then
-		team = "Мирные жители"
-	end
-
-	if(BotSkin[team]) then
-		skin = BotSkin[team][math.random(#BotSkin[team])]
-	end
-
-	if(BotSkinSpecific[team]) then
-		if(BotSkinSpecific[team][ZonesRegion[zone]]) then
-			if(BotSkinSpecific[team][ZonesRegion[zone]][zone]) then
-				skin = BotSkinSpecific[team][ZonesRegion[zone]][zone][math.random(#BotSkinSpecific[team][ZonesRegion[zone]][zone])]
-			else
-				if(BotSkinSpecific[team][ZonesRegion[zone]]["all"]) then
-					skin = BotSkinSpecific[team][ZonesRegion[zone]]["all"][math.random(#BotSkinSpecific[team][ZonesRegion[zone]]["all"])]
-				end
-			end
-		end
-	end
-	return CreateBot(skin,x,y,z,rz,i,d,zone,ind)
-end
-
-
-
-
 
 
 function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
@@ -7179,10 +6857,10 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 		if(getElementType(killer) == "player") then
 			local PTeam = getElementData(source, "team")
 			local KTeam = getTeamName(getPlayerTeam(killer))
-
-			if(WeaponModel[weapon][2]) then
-				AddSkill(killer, WeaponModel[weapon][2])
+			if(weapon) then
+				if(WeaponModel[weapon][2]) then AddSkill(killer, WeaponModel[weapon][2]) end
 			end
+			
 			local dropWeapon = getPedWeapon(source)
 			if(WeaponModel[dropWeapon][1]) then
 				local weaponName = FoundWName(dropWeapon)
@@ -7243,38 +6921,6 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 			end
 		end
 	end
-	setTimer(function(ped)
-		if(isElement(ped)) then
-			if(getElementData(ped, "SpawnBlock")) then
-				destroyElement(ped)
-			else
-				local TINF = getElementData(ped, "TINF")
-				local i, d = getElementInterior(ped), getElementDimension(ped)
-				if(TINF) then
-					TINF = fromJSON(TINF)
-					if(tostring(TINF)) then
-						local data = getAllElementData(ped)
-						data["anim"] = nil
-						local x,y,z = getElementPosition(ped)
-						local _,_,rz = getElementRotation(ped)
-						local model = getElementModel(ped)
-						destroyElement(ped)
-						ped = createPed(model,x,y,z,rz, true)
-						setElementInterior(ped, i)
-						setElementDimension(ped, d)
-						for k, v in pairs (data) do
-							if(k ~= "attacker") then
-								setElementData(ped, k, v)--tut2
-							end
-						end
-					else
-						destroyElement(BotCreated[zone][TINF[2]])
-						CreateRandomBot(TINF[3], TINF[4], TINF[5],TINF[6],i,d,TINF[1],TINF[2])
-					end
-				end
-			end
-		end
-	end, 20000, 1, source)
 end
 addEvent("OnPedWasted", true)
 addEventHandler("onPedWasted", root, WastedPed)
@@ -8884,6 +8530,9 @@ function Koryachka(thePlayer)
 	end
 end
 
+
+
+
 function InviteBot(ped)
 	local Team = getElementData(ped, "team")
 	if(Team) then
@@ -8932,7 +8581,7 @@ function cap(thePlayer, zone)
 								end
 							end
 						end
-						CapZone[zone]=PlayerTeam
+						CapZone[zone] = PlayerTeam
 					end
 				end
 			end
@@ -9230,72 +8879,12 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 		end
 	end
 
-	local availzones = {}
-	for name, dat in pairs(PedNodes["San Andreas"][zone]) do -- доделать
-		for slotx = dat[1], dat[4] do
-			for sloty = dat[2], dat[5] do
-				availzones[#availzones+1] = {slotx, sloty, dat[6], dat[7]}
-			end
-		end
-	end
-
 
 	if(BotCreated[zone]) then
-		if(spawnbot) then -- Прервали захват (восстановление)
-			for slot = 1, #BotCreated[zone] do
-				if(isElement(DynamicBlip[BotCreated[zone][slot]])) then
-					destroyElement(DynamicBlip[BotCreated[zone][slot]])
-					destroyElement(DynamicMar[BotCreated[zone][slot]])
-				end
-				local createornot = false
-				if(isElement(BotCreated[zone][slot])) then
-					if(isPedDead(BotCreated[zone][slot])) then
-						createornot = true
-					else
-						removeElementData(BotCreated[zone][slot], "SpawnBlock")
-					end
-				else
-					createornot = true
-				end
-
-				if(createornot) then
-					local randnum = math.random(#availzones)
-					local rand = availzones[randnum]
-
-					local rot = rand[4]
-					local randrot = math.random(1,2)
-					if(randrot == 1) then rot = rot+180 end
-					CreateRandomBot(rand[1], rand[2], rand[3]+1.1,rot,nil,nil,zone, slot)
-					table.remove(availzones, randnum)
-				end
-			end
-		else -- Новые боты
-			for slot = 1, #BotCreated[zone] do
-				if(isElement(DynamicBlip[BotCreated[zone][slot]])) then
-					destroyElement(DynamicBlip[BotCreated[zone][slot]])
-					destroyElement(DynamicMar[BotCreated[zone][slot]])
-				end
-				local createornot = false
-				if(isElement(BotCreated[zone][slot])) then
-					if(isPedDead(BotCreated[zone][slot])) then
-						createornot = true
-					else
-						removeElementData(BotCreated[zone][slot], "SpawnBlock")
-					end
-				else
-					createornot = true
-				end
-
-				if(createornot) then
-					local randnum = math.random(#availzones)
-					local rand = availzones[randnum]
-
-					local rot = rand[4]
-					local randrot = math.random(1,2)
-					if(randrot == 1) then rot = rot+180 end
-					CreateRandomBot(rand[1], rand[2], rand[3]+1,rot,nil,nil,zone, slot)
-					table.remove(availzones, randnum)
-				end
+		for slot = 1, #BotCreated[zone] do
+			if(isElement(DynamicBlip[BotCreated[zone][slot]])) then
+				destroyElement(DynamicBlip[BotCreated[zone][slot]])
+				destroyElement(DynamicMar[BotCreated[zone][slot]])
 			end
 		end
 	end
@@ -10834,12 +10423,12 @@ function CreateClub(x,y,z)
 	StartAnimation(ped, "DANCING", DancingArr[math.random(1, #DancingArr)], -1, true)
 
 
-	for slot = 1, 20 do
-		local ped = CreateRandomBot(488+math.random(-5,3.5), -14+math.random(-4,5), 1000.7, 0, 17, SData["ClubIds"],"Unknown Bar",nil)
-		if(ped) then
-			StartAnimation(ped, "DANCING", DancingArr[math.random(1, #DancingArr)], -1, true)
-		end
-	end
+	--for slot = 1, 20 do
+	--	local ped = CreateRandomBot(488+math.random(-5,3.5), -14+math.random(-4,5), 1000.7, 0, 17, SData["ClubIds"],"Unknown Bar",nil)
+	--	if(ped) then
+	--		StartAnimation(ped, "DANCING", DancingArr[math.random(1, #DancingArr)], -1, true)
+	--	end
+	--end
 
 
 	CreateVending(1775, 495.97, -24.32, 1000.73, 180, 17, SData["ClubIds"])
@@ -10912,12 +10501,10 @@ CreateEnter(-1605.5, 710.3, 13.9, 270, 0, 0, false, 246.4, 107.3, 1003.2, 0, 10,
 CreateDialogBot(281, 246.5, 120.4, 1003.3,180, 10, 1, "SFPD")
 ped = CreateDialogBot(280, 243.7, 120.2, 1010.2,0, 10, 1, "SFPD BIZ", "HR-менеджер")
 StartAnimation(ped,"INT_OFFICE", "OFF_Sit_Bored_Loop", -1, true)
-CreateRandomBot(268, 125.3, 1004.6,90,10, 1,"Unknown",nil)
 
 CreateEnter(2287.1, 2432.4, 10.8, 270, 0, 0, false, 238.7, 138.7, 1003, 0, 3, 1, "Полицейский участок Las Venturas", true)
 CreateEnter(2337.2, 2459.3, 15, 270, 0, 0, false, 288.8, 167.1, 1007.3, 0, 3, 1, "Полицейский участок Las Venturas")
-CreateRandomBot(251.4, 194.9, 1008.2,90,3, 1,"Unknown",nil)
-CreateRandomBot(284.8, 172.2, 1007.2,58,3, 1,"Unknown",nil)
+
 
 CreateDialogBot(282, 232.4, 160.7, 1003,237, 3, 1, "LVPD")
 CreateDialogBot(282, 293.7, 182.1, 1007.2,148, 3, 1, "LVPD")
@@ -10935,14 +10522,12 @@ StartAnimation(ped,"smoking", "m_smklean_loop", -1, true, false,false,true)
 SData["BincoIds"] = 1
 function CreateBinco(x,y,z,rz,types)
 	if(types == "Binco") then
-		CreateRandomBot(201.1, -103.7, 1005.3, 240, 15,SData["BincoIds"],"Unknown",nil)
 		CreateDialogBot(233, 209, -98.7, 1005.3, 180, 15, SData["BincoIds"], "Binco", "Продавщица")
 
 		CreateEnter(x,y,z,rz, 0, 0, false, 207.6, -111.3, 1005.1, 0, 15, SData["BincoIds"], types)
 		local p = CreatePickup(217.6, -98.5, 1005.3, 3, 1275, 0, 0, 15, SData["BincoIds"])
 		setElementData(p, "wardrobeShop", types)
 	elseif(types == "Zip") then
-		CreateRandomBot(169.5, -89.5, 1001.8, 90, 18,SData["BincoIds"],"Unknown",nil)
 		CreateDialogBot(233, 162.4, -81.2, 1001.8, 180, 18, SData["BincoIds"], "Zip", "Продавщица")
 
 		CreateEnter(x,y,z,rz, 0, 0, false, 161.3, -97.1, 1001.8, 0, 18, SData["BincoIds"], types)
@@ -10955,7 +10540,6 @@ function CreateBinco(x,y,z,rz,types)
 		
 		CreateDialogBot(93, 204.9, -7.8, 1001.2, 270, 5, SData["BincoIds"], "Victum", "Продавец")
 	elseif(types == "ProLaps") then
-		CreateRandomBot(215.4, -131.6, 1003.5,146, 3,SData["BincoIds"],"Unknown",nil)
 		CreateDialogBot(124, 207.1, -127.8, 1003.5, 180, 3, SData["BincoIds"], "ProLaps", "Продавец")
 
 		CreateEnter(x,y,z,rz, 0, 0, false, 206.9, -140.4, 1003.5, 0, 3, SData["BincoIds"], types)
@@ -11140,13 +10724,6 @@ CreateSex(2213.5, 1433.1, 11.1)
 
 SData["Bar"] = 1
 function CreateBar(x,y,z,rz, types)
-	CreateRandomBot(510.1, -83.4, 999,180, 11, SData["Bar"],"Unknown Bar",nil)
-	CreateRandomBot(506.5, -83.4, 999,180, 11, SData["Bar"],"Unknown Bar",nil)
-	CreateRandomBot(510.1, -86.3, 999,0, 11, SData["Bar"],"Unknown Bar",nil)
-	CreateRandomBot(506.5, -86.3, 999,360, 11, SData["Bar"],"Unknown Bar",nil)
-	CreateRandomBot(489.7, -78.7, 998.8,180, 11, SData["Bar"],"Unknown Bar",nil)
-	CreateRandomBot(489.9, -81.7, 998.8,0, 11, SData["Bar"],"Unknown Bar",nil)
-
 	CreateEnter(x,y,z,rz, 0, 0, false, 502, -67.6, 998.8, 180, 11, SData["Bar"], types)
 
 	local ped = CreateDialogBot(11, 496.8, -77.5, 998.8, 0, 11, SData["Bar"], "Liquor Shop", "Бармен")
@@ -11177,8 +10754,6 @@ function CreateLiquor(x,y,z)
 
 	CreateDialogBot(44, -223.3, 1404, 27.7, 90, 18, SData["Liquor"], "Liquor Shop", "Продавец")
 
-	CreateRandomBot(-224.3, 1396.3, 28.4, 90, 18, SData["Liquor"],"Unknown Bar",nil)
-	CreateRandomBot(-227.2, 1396.2, 28.4, 270, 18, SData["Liquor"],"Unknown Bar",nil)
 	triggerEvent("CreatePoolTable", root, -225.745, 1396.245, 27.35,180, 18, SData["Liquor"])	
 	SData["Liquor"]=SData["Liquor"]+1
 end
@@ -11205,7 +10780,6 @@ CreateLiquor(1556.8, 959.7, 10.8)
 SData["Shop"] = 1
 function CreateShop(x,y,z, interior)
 	if(interior == 6) then
-		CreateRandomBot(-28.5, -50, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -27.4, -58.2, 1003.5, 90, interior, SData["Shop"], "24/7", true)
 
 		CreateVending(1775, -19.03, -57.83, 1003.63, 180,interior,SData["Shop"])
@@ -11214,14 +10788,10 @@ function CreateShop(x,y,z, interior)
 
 		CreateDialogBot(147, -23, -57.3, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 4) then
-		CreateRandomBot(-27.4, -3.8, 1003.6,180,interior,SData["Shop"],"Unknown",nil)
-		CreateRandomBot(-29.9, -25.3, 1003.6,0,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -27.3, -31.2, 1003.55, 90, interior, SData["Shop"], "24/7", true)
 
 		CreateDialogBot(147, -30.1, -30.6, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 16) then
-		CreateRandomBot(-24.6, -133.4, 1003.5,0,interior,SData["Shop"],"Unknown",nil)
-		CreateRandomBot(-29, -124.1, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -25.9, -141.3, 1003.55, 90, interior, SData["Shop"], "24/7", true)
 
 		CreateVending(1775, -15.10, -140.22, 1003.63, 180, interior, SData["Shop"])
@@ -11229,8 +10799,6 @@ function CreateShop(x,y,z, interior)
 		CreateVending(1775, -35.72, -140.22, 1003.63, 180, interior, SData["Shop"])
 		CreateDialogBot(147, -21, -140.3, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 18) then
-		CreateRandomBot(-32.5, -77, 1003.5,180,interior,SData["Shop"],"Unknown",nil)
-		CreateRandomBot(-24.5, -89.7, 1003.5,270,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -30.95, -91.55, 1003.55, 90, interior, SData["Shop"], "24/7", true)
 
 		CreateVending(1775, -16.11, -91.64, 1003.63, 180, interior, SData["Shop"])
@@ -11238,15 +10806,10 @@ function CreateShop(x,y,z, interior)
 
 		CreateDialogBot(147, -27, -91.6, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 10) then
-		CreateRandomBot(7.9, -16.9, 1003.5,0,interior,SData["Shop"],"Unknown",nil)
-		CreateRandomBot(0.4, -28.3, 1003.5,90,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, 6, -31.7, 1003.55, 0, interior, SData["Shop"], "24/7", true)
 
 		CreateDialogBot(147, 3, -30.7, 1003.5, 0, interior, SData["Shop"], "24/7", "Продавец")
 	elseif(interior == 17) then
-		CreateRandomBot(-14.2, -171.9, 1003.5,145,interior,SData["Shop"],"Unknown",nil)
-		CreateRandomBot(-25.1, -170.6, 1003.5,90,interior,SData["Shop"],"Unknown",nil)
-		CreateRandomBot(-33.6, -171.7, 1003.5,180,interior,SData["Shop"],"Unknown",nil)
 		CreateEnter(x,y,z, 0, 0, 0, {"24/7"}, -25.9, -187.87, 1003.55, 0, interior, SData["Shop"], "24/7", true)
 
 		CreateVending(1775, -32.44, -186.69, 1003.63, 180, interior, SData["Shop"])
@@ -12222,7 +11785,7 @@ local tmpi = 1
 local tmpcity = ""
 function restartMode(thePlayer)
 	if(getPlayerName(thePlayer) == "alexaxel705") then
-		local res = getResourceFromName("OpenSA") -- Interface
+		local res = getResourceFromName("vehicle_node") -- Interface
 		restartResource(res)
 		--local res = getResourceFromName("ps2_weather") -- Interface
 		--restartResource(res)
@@ -12245,31 +11808,35 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 		datess = datess..x.."\n"
 	elseif(savetype == "PedPath") then
 		local zone = exports["ps2_weather"]:GetZoneName(x,y,z, false, getElementData(thePlayer, "City"))
-		local angle = findRotation(x,y, x,ry)
-		if(angle <= 0) then angle = 0 end
 		if(tmpcity ~= zone) then
 			if(PedNodes[getPlayerCity(thePlayer)][zone]) then
-				tmpi = #PedNodes[getPlayerCity(thePlayer)][zone]+1
+				local maxkey = 1
+				for i, v in pairs(PedNodes[getPlayerCity(thePlayer)][zone]) do
+					if(i > maxkey) then
+						maxkey = i
+					end
+				end
+				tmpi = (math.ceil(maxkey/100))*100
 			else
 				PedNodes[getPlayerCity(thePlayer)][zone] = {}
 				tmpi = 1
 			end
 
+			if(PedNodes[getPlayerCity(thePlayer)][zone][tmpi]) then tmpi = tmpi+100 end
+
 			if(tmpcity ~= "") then
-				datess = datess.."\n"
+				datess = datess..", false, {{\""..zone.."\", "..tmpi.."}}}, \n"
 			end
 			tmpcity = zone
 
 
 			datess = datess.."	[\""..zone.."\"] = {\n"
-			datess = datess.."		["..tmpi.."] = {"..math.round(x, 0)..", "..math.round(y, 0)..", "..math.round(z, 1)..
-			", "..math.round(rx, 0)..", "..math.round(ry, 0)..", "..math.round(rz, 1)..", "..angle.."}, "
-			PedNodes[getPlayerCity(thePlayer)][zone][tmpi] = {math.round(x, 0), math.round(y, 0), math.round(z, 1), math.round(rx, 0), math.round(ry, 0), math.round(rz, 1), angle}
+			datess = datess.."		["..tmpi.."] = {true, "..math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)
+			PedNodes[getPlayerCity(thePlayer)][zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		else
 			tmpi = tmpi+1
-			datess = datess.."\n		["..tmpi.."] = {"..math.round(x, 0)..", "..math.round(y, 0)..", "..math.round(z, 1)..
-			", "..math.round(rx, 0)..", "..math.round(ry, 0)..", "..math.round(rz, 1)..", "..angle.."}, "
-			PedNodes[getPlayerCity(thePlayer)][zone][tmpi] = {math.round(x, 0), math.round(y, 0), math.round(z, 1), math.round(rx, 0), math.round(ry, 0), math.round(rz, 1), angle}
+			datess = datess..", false}, \n		["..tmpi.."] = {true, "..math.round(x, 1)..", "..math.round(y, 1)..", "..math.round(z, 1)
+			PedNodes[getPlayerCity(thePlayer)][zone][tmpi] = {true, math.round(x, 1), math.round(y, 1), math.round(z, 1), false}
 		end
 	else
 		local zone = exports["ps2_weather"]:GetZoneName(x,y,z, false, getElementData(thePlayer, "City"))
@@ -13489,7 +13056,10 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 				local PTeam = getTeamName(getPlayerTeam(source))
 				local KTeam = getTeamName(getPlayerTeam(killer))
 
-				if(WeaponModel[weapon][2]) then AddSkill(killer, WeaponModel[weapon][2]) end
+				if(weapon) then
+					if(WeaponModel[weapon][2]) then AddSkill(killer, WeaponModel[weapon][2]) end
+				end
+				
 				if(PData[source]["DeathMatch"]) then 
 					if(DMPlayerList[killer]) then
 						DMPlayerList[killer] = DMPlayerList[killer] + 1
