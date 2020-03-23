@@ -1279,9 +1279,15 @@ local VComp = {
 	},
 	["Turbo"] = { -- VehicleType, +Engine acceleration, -Drag Coeff
 		["Ticso 365"] = {"Automobile", 2, 1},
-		["Twin Turbo C"] = {"Automobile", 0, 0.7000000476837}
+		["Twin Turbo C"] = {"Automobile", 0, 0.7000000476837}, 
+		["Vapid Turbo"] = {"Automobile", 0, 0.85714292526}, 
+		["TF Turbo 450"] = {"Automobile", 0, 1.07142877579},
+		["MT 800"] = {"Automobile", 0, 1.73749995232},  
+		["MT 1200"] = {"Automobile", 0, 1.75}, 
 	},
 	["Engines"] = { -- VehicleType, Engine acceleration, Drag Coeff, EngineType, при весе авто, количество лс
+		["TF D 1.8 L v2"] = {"Automobile", 10, 2.5, "diesel", 3500, 250},
+		["LPE D 1.3 L"] = {"Automobile", 7.1999998092651, 3, "diesel", 2600, 134},
 		["LPE 2.2 L"] = {"Automobile", 7.1999998092651, 1.7999999523163, "petrol", 2200, 114},
 		["BMX 1"] = {"BMX", 10, 5, "petrol", 100, 8},
 		["SFP 2.0 L"] = {"Automobile", 9.6000003814697, 2, "petrol", 1500, 103},
@@ -1313,7 +1319,6 @@ local VComp = {
 		["TESLA 2"] = {"Unknown", 8, 5, "electric", 400, 23},
 		["SAF D 1.3 L"] = {"Automobile", 12, 3, "diesel", 2500, 215},
 		["HLR GL 1.8 L"] = {"Automobile", 8.3999996185303, 2.2000000476837, "petrol", 1850, 111},
-		["TF D 1.8 L v2"] = {"Automobile", 10, 2.5, "diesel", 3500, 250},
 		["SAF 1.1 L"] = {"Automobile", 12, 4, "petrol", 1200, 103},
 		["BE 600 CC"] = {"Boat", 0.56000000238419, 1, "petrol", 2200, 9},
 		["HRD 110 CC"] = {"Bike", 12, 5, "petrol", 350, 30},
@@ -1379,6 +1384,7 @@ local VComp = {
 		["RC Bandit Engine"] = {"RC", 14, 6, "electric", 100, 10},
 		["ODL 1.6 L v2"] = {"Automobile", 11.199999809265, 2.5, "petrol", 1600, 128},
 		["TRBD 1.3 L"] = {"Automobile", 5.5999999046326, 3, "diesel", 3500, 140},
+		["TRBD 1.3 L v2"] = {"Automobile", 5.5999999046326, 3, "diesel", 5500, 220},
 		["HLR GT 1.7 L v2"] = {"Automobile", 8.8000001907349, 2.5, "petrol", 1600, 101},
 		["BE 800 CC"] = {"Boat", 0.47999998927116, 1, "petrol", 800, 3},
 		["LPE GT 1.6 L"] = {"Automobile", 7.5999999046326, 2.7999999523163, "petrol", 1000, 55},
@@ -1426,7 +1432,6 @@ local VComp = {
 		["IAE V1000"] = {"Plane", 6.4000000953674, 10, "petrol", 5000, 229},
 		["BSHEE 3.0 L"] = {"Automobile", 13.199999809265, 2, "petrol", 1400, 132},
 		["MT 1"] = {"Monster Truck", 18, 3, "petrol", 5000, 643},
-		["TRBD 1.3 L v2"] = {"Automobile", 5.5999999046326, 3, "diesel", 5500, 220},
 		["SFP 1.7 L v2"] = {"Automobile", 9.6000003814697, 2.5, "petrol", 2200, 151},
 		["HRD 900 CC"] = {"Bike", 20, 5, "petrol", 500, 72},
 		["RR 800"] = {"Helicopter", 6.4000000953674, 0.20000000298023, "petrol", 3500, 161},
@@ -1440,7 +1445,6 @@ local VComp = {
 		["IAE V100"] = {"Plane", 0.80000001192093, 20, "petrol", 1900, 11},
 		["TF 1.7 L"] = {"Automobile", 10, 2.5, "petrol", 2500, 179},
 		["IAE V2800"] = {"RC", 0.40000000596046, 120, "petrol", 100, 1},
-		["LPE D 1.3 L"] = {"Automobile", 7.1999998092651, 3, "diesel", 2600, 134},
 		["ODL 1.6 L"] = {"Automobile", 11.199999809265, 2.5, "petrol", 1400, 112},
 		["HLR D 1.0 L"] = {"Automobile", 8, 5, "diesel", 5500, 315},
 		["SFP 1.8 L"] = {"Automobile", 9.6000003814697, 2.2999999523163, "petrol", 1800, 124},
@@ -1552,25 +1556,16 @@ local VComp = {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- Высота от земли, Двигатель, турбо, трансмиссия, подвеска, тормоза, резина, бензобак, год выпуска, прекращение выпуска (CYear - наши дни), завод (Export - Неизвестные)
 local VehicleSystem = {
+	[490] = {1.13, "HLR GT 2.2 L", "MT 800", "A5 170", "Macpherson V59", "Brembo 245mm", "Michelin 54", 116, {1, 1970}, {0, 1996}, "Export"},
+	[455] = {1.45, "TF D 2.0 L", "MT 1200", "R5 140", "Macpherson V29", "Wilwood 262mm", "Michelin 28", 283, {8, 1967}, {9, CYear}, "MTL"},
+	[532] = {1.96, "TF D 1.8 L v2", "TF Turbo 450", "A5 140", "Macpherson V61", "Wilwood 262mm", "Michelin 56", 283, {11, 1930}, {0, CYear}, "Export"},
+	[609] = {1, "TRBD 1.3 L v2", "", "R5 140", "Macpherson V147", "Endless 165mm", "Michelin 113", 183, {1, 1978}, {10, 1993}, "Brute"},
+	[525] = {0.88, "TF D 1.8 L v2", "", "R5 160", "Macpherson V25", "Endless 193mm", "ANNAITE", 116, {10, 1960}, {3, 1998}, "Vapid"},
+	[552] = {0.69, "LPE D 1.3 L", "", "R5 160", "Macpherson V3", "Endless 193mm", "ANNAITE", 86, {7, 1998}, {6, CYear}, "Vapid"},
 	[500] = {1.1, "SFP D 1.3 L", "", "A5 160", "Macpherson V1", "Brembo 230mm", "Brigestone", 43, {11, 1987}, {10, 1995}, "Canis"},
 	[520] = {1.93, "IAE V2600", "", "A1 200", "Macpherson V2", "Brembo 2", "Hankook", 300, {11, 2006}, {0, CYear}, "Mammoth"},
-	[552] = {0.69, "LPE D 1.3 L", "", "R5 160", "Macpherson V3", "Endless 193mm", "ANNAITE", 86, {7, 1998}, {6, CYear}, "Vapid"},
 	[584] = {2, "Trailer", "", "R5 120", "Macpherson TR", "Brembo 4", "ANNAITE TR", 126, {1, 1930}, {5, CYear}, "Export"},
 	[521] = {0.67, "HRD 1000 CC", "", "R5 190", "Macpherson V5", "Brembo 5", "Michelin 5", 16, {7, 1985}, {5, CYear}, "Export"},
 	[553] = {2.3, "IAE V2700", "", "A1 200", "Macpherson V91", "Brembo 33", "Hankook", 833, {2, 1936}, {1, 1942}, "Export"},
@@ -1594,11 +1589,9 @@ local VehicleSystem = {
 	[524] = {1.94, "HLR D 2.0 L", "", "R4 110", "Macpherson V22", "Brembo 15", "Michelin 22", 183, {11, 1978}, {9, 1986}, "DUDE"},
 	[556] = {1.38, "MT 1", "", "A5 110", "Macpherson V23", "Wilwood 212mm", "Michelin 23", 166, {0, 1994}, {9, 2004}, "Cheval"},
 	[588] = {0.91, "TRBD 1.3 L v2", "", "R5 140", "Macpherson V24", "Endless 165mm", "Michelin 24", 183, {6, 1964}, {1, 1970}, "Export"},
-	[525] = {0.88, "TF D 1.8 L v2", "", "R5 160", "Macpherson V25", "Endless 193mm", "ANNAITE", 116, {10, 1960}, {3, 1998}, "Vapid"},
 	[557] = {1.38, "MT 1", "", "A5 110", "Macpherson V23", "Wilwood 212mm", "Michelin 23", 166, {5, 1994}, {0, 2004}, "Cheval"},
 	[423] = {1, "TRBD 1.2 L", "", "R5 145", "Macpherson V152", "Endless 155mm", "Michelin 116", 56, {9, 1978}, {7, 1993}, "Brute"},
 	[439] = {0.9, "SFP LX 2.0 L v2", "", "R4 160", "Macpherson V28", "Endless 236mm", "Michelin 27", 53, {6, 1964}, {5, 1973}, "Vapid"},
-	[455] = {1.45, "TF D 1.8 L", "", "R5 140", "Macpherson V29", "Wilwood 262mm", "Michelin 28", 283, {8, 1967}, {9, CYear}, "MTL"},
 	[471] = {0.48, "HRD 500 CC", "", "A4 160", "Macpherson V30", "Brembo 230mm", "Michelin 29", 13, {11, 1986}, {3, CYear}, "Export"},
 	[487] = {1.17, "RR 700", "", "A1 200", "Macpherson V31", "Brembo 10", "Hankook", 166, {1, 1962}, {2, CYear}, "Buckingham"},
 	[503] = {0.9, "TF GLE 4.0 L", "", "R5 220", "Macpherson V21", "Endless 260mm", "Yokohama", 53, {1, 1980}, {5, 1982}, "Export"},
@@ -1609,7 +1602,7 @@ local VehicleSystem = {
 	[408] = {1.54, "HLR D 1.0 L", "", "R4 110", "Macpherson V36", "Wilwood 120mm", "Michelin 33", 183, {3, 1984}, {0, CYear}, "Jobuilt"},
 	[424] = {0.77, "SAF 1.1 L", "", "R4 170", "Macpherson V37", "Brembo 190mm", "Michelin 34", 40, {2, 1930}, {4, CYear}, "Export"},
 	[440] = {1.14, "LPE 2.4 L", "", "F5 160", "Macpherson V38", "Endless 185mm", "Michelin 35", 66, {2, 1971}, {11, 2003}, "Bravado"},
-	[456] = {1.17, "TRBD 1.3 L", "", "R5 160", "Macpherson V39", "Endless 160mm", "Michelin 36", 150, {7, 1982}, {6, CYear}, "Vapid"},
+	[456] = {1.17, "TRBD 1.3 L", "Vapid Turbo", "R5 160", "Macpherson V39", "Endless 160mm", "Michelin 36", 150, {7, 1982}, {6, CYear}, "Vapid"},
 	[472] = {0.77, "BE 700 CC", "", "R5 190", "Macpherson V40", "Brembo 18", "Michelin 37", 40, {7, 1978}, {4, CYear}, "Export"},
 	[488] = {1.21, "RR 800", "", "A1 200", "Macpherson V10", "Brembo 10", "Hankook", 116, {4, 1962}, {4, CYear}, "Buckingham"},
 	[504] = {0.78, "SFP 2.0 L v2", "", "R5 160", "Macpherson V41", "Endless 205mm", "Michelin 38", 70, {4, 1959}, {3, 1973}, "Benefactor"},
@@ -1633,9 +1626,7 @@ local VehicleSystem = {
 	[442] = {0.83, "RST GLE 2.0 L v3", "", "R5 150", "Macpherson V56", "Endless 153mm", "Michelin 51", 83, {0, 1977}, {10, 1984}, "Albany"},
 	[458] = {0.88, "HLR 2.0 L v3", "", "R4 165", "Macpherson V57", "Endless 175mm", "Michelin 52", 66, {4, 2000}, {10, 2003}, "Willard"},
 	[474] = {0.76, "LPE 2.0 L v3", "", "F5 160", "Macpherson V58", "Endless 120mm", "Michelin 53", 65, {9, 1950}, {3, 1957}, "Export"},
-	[490] = {1.13, "HLR GT 1.8 L", "", "A5 170", "Macpherson V59", "Brembo 245mm", "Michelin 54", 116, {1, 1970}, {0, 1996}, "Export"},
 	[506] = {0.71, "TF GLE 2.6 L", "", "R5 230", "Macpherson V60", "Endless 235mm", "Michelin 55", 46, {3, 1990}, {3, 2001}, "Dewbauchee"},
-	[532] = {1.96, "TF D 1.1 L", "", "A5 140", "Macpherson V61", "Wilwood 262mm", "Michelin 56", 283, {11, 1930}, {0, CYear}, "Export"},
 	[564] = {0.17, "RC Tiger Engine", "", "A1 75", "Macpherson V62", "Brembo 170mm", "Michelin 29", 3, {5, 1992}, {11, CYear}, "RC"},
 	[596] = {0.72, "TF 2.0 L", "", "R5 200", "Macpherson V63", "Endless 265mm", "Michelin 34", 53, {4, 1964}, {4, 1994}, "Declasse"},
 	[533] = {0.71, "ODL 1.6 L v2", "", "R5 200", "Macpherson V64", "Endless 210mm", "Hankook", 53, {3, 1971}, {8, 1989}, "Benefactor"},
@@ -1673,7 +1664,6 @@ local VehicleSystem = {
 	[570] = {0, "TR 2", "", "R4 110", "Macpherson V89", "Brembo 15", "Michelin 22", 183, {11, 1988}, {2, 1998}, "Export"},
 	[602] = {0.8, "SFP LX 2.0 L", "", "R5 200", "Macpherson V90", "Endless 215mm", "Brigestone", 50, {11, 1990}, {8, 2000}, "Albany"},
 	[417] = {1.08, "RR 300", "", "A1 200", "Macpherson V130", "Brembo 10", "Hankook", 500, {4, 1959}, {9, 1979}, "Export"},
-	[609] = {1, "TRBD 1.3 L", "", "R5 140", "Macpherson V147", "Endless 165mm", "Michelin 113", 183, {1, 1978}, {10, 1993}, "Brute"},
 	[414] = {1.09, "LPE D 1.2 L", "", "R5 140", "Macpherson V96", "Endless 165mm", "Matador 74", 116, {4, 1989}, {0, CYear}, "Maibatsu Corporation"},
 	[420] = {0.78, "LPE GT 1.8 L", "", "F5 180", "Macpherson V94", "Endless 255mm", "Michelin 72", 48, {7, 1992}, {3, 1994}, "Declasse"},
 	[551] = {0.8, "HLR GT 1.8 L", "", "R5 165", "Macpherson V103", "Endless 250mm", "Michelin 80", 60, {6, 1991}, {8, 1996}, "Declasse"},
@@ -2097,19 +2087,19 @@ function CreateVehicle(model, x, y, z, rx, ry, rz, numberplate, bDirection, vari
 		setElementData(theVehicle, "trunk", toJSON(arr))
 	end
 
-	--[[local h = getVehicleHandling(theVehicle)
+	local h = getVehicleHandling(theVehicle)
 	local hh = getModelHandling(model)
 	for k in pairs(hh) do
 		if(tonumber(h[k])) then
 			if(h[k] ~= hh[k]) then
-				outputChatBox(h[k].." ~= "..hh[k].." "..k.." "..model)
+				outputConsole(h[k].." ~= "..hh[k].." "..k.." "..model.." ("..hh["mass"].."kg)")
 				fileDelete("save.txt")
 				local hFile = fileCreate("save.txt")
 				fileWrite(hFile, h[k].." ~= "..hh[k].." "..k.." "..model) -- write a text line
 				fileClose(hFile)
 			end
 		end
-	end--]]
+	end
 	return theVehicle
 end
 

@@ -1755,8 +1755,6 @@ function hideinv()
 		addEventHandler("onClientRender", root, DrawOnClientRender)
 	end
 end
-addEvent("hideinv", true)
-addEventHandler("hideinv", getRootElement(), hideinv)
 
 
 
