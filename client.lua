@@ -222,10 +222,10 @@ function toggleAirBrake()
 	air_brake = not air_brake or nil
 	if air_brake then
 		abx,aby,abz = getElementPosition(localPlayer)
-		addEventHandler("onClientPreRender",root, putPlayerInPosition)
+		addEventHandler("onClientPreRender", root, putPlayerInPosition)
 	else
 		abx,aby,abz = nil
-		removeEventHandler("onClientPreRender",root, putPlayerInPosition)
+		removeEventHandler("onClientPreRender", root, putPlayerInPosition)
 	end
 end
 addCommandHandler("noclip", toggleAirBrake)
@@ -1749,10 +1749,10 @@ addEventHandler("PoliceAddMarker", root, PoliceAddMarker)
 function hideinv()
 	if(PData["Interface"]["Full"]) then
 		SetPlayerHudComponentVisible("all", false)
-		removeEventHandler("onClientRender",root, DrawOnClientRender)
+		removeEventHandler("onClientRender", root, DrawOnClientRender)
 	else
 		SetPlayerHudComponentVisible("all", true)
-		addEventHandler("onClientRender",root, DrawOnClientRender)
+		addEventHandler("onClientRender", root, DrawOnClientRender)
 	end
 end
 
@@ -1787,7 +1787,7 @@ function NotForLowPC()
 		end
 	end
 end
-addEventHandler("onClientPreRender",root, NotForLowPC)
+addEventHandler("onClientPreRender", root, NotForLowPC)
 
 
 
@@ -3015,7 +3015,7 @@ function DrugsPlayerEffect()
 	end
 end
 addEvent("DrugsPlayerEffect", true)
-addEventHandler("DrugsPlayerEffect",root, DrugsPlayerEffect)
+addEventHandler("DrugsPlayerEffect", root, DrugsPlayerEffect)
 
 
 function SpunkPlayerEffect()
@@ -3028,7 +3028,7 @@ function SpunkPlayerEffect()
 	end
 end
 addEvent("SpunkPlayerEffect", true)
-addEventHandler("SpunkPlayerEffect",root, SpunkPlayerEffect)
+addEventHandler("SpunkPlayerEffect", root, SpunkPlayerEffect)
 
 
 
@@ -3247,7 +3247,7 @@ function CreateButtonInput(func, text, args)
 	end
 end
 addEvent("CreateButtonInputInt", true)
-addEventHandler("CreateButtonInputInt",root, CreateButtonInput)
+addEventHandler("CreateButtonInputInt", root, CreateButtonInput)
 
 
 
@@ -3372,7 +3372,7 @@ function AuthComplete(CollectDat)
 	call(getResourceFromName("Draw_Intro"), "StopIntro")
 end
 addEvent("AuthComplete", true)
-addEventHandler("AuthComplete",root, AuthComplete)
+addEventHandler("AuthComplete", root, AuthComplete)
 
 
 
@@ -3407,7 +3407,7 @@ function stopVehicleEntry(thePlayer, seat, door)
 		end
 	end
 end
-addEventHandler("onClientVehicleStartEnter",root,stopVehicleEntry)
+addEventHandler("onClientVehicleStartEnter", root,stopVehicleEntry)
 
 
 
@@ -3445,7 +3445,7 @@ function onClientColShapeHit(theElement, matchingDimension)
 		end
 	end	
 end
-addEventHandler("onClientColShapeHit",root, onClientColShapeHit)
+addEventHandler("onClientColShapeHit", root, onClientColShapeHit)
 
 
 
@@ -3463,7 +3463,7 @@ function onClientColShapeLeave(thePlayer, matchingDimension)
 		end
 	end	
 end
-addEventHandler("onClientColShapeLeave",root, onClientColShapeLeave)
+addEventHandler("onClientColShapeLeave", root, onClientColShapeLeave)
 
 
 
@@ -3876,9 +3876,9 @@ function DevelopmentRender()
 end
 
 function ShowInfoKey()
-	if(isEventHandlerAdded("onClientRender",root, DevelopmentRender)) then
+	if(isEventHandlerAdded("onClientRender", root, DevelopmentRender)) then
 		setDevelopmentMode(false)
-		removeEventHandler("onClientRender",root, DevelopmentRender)
+		removeEventHandler("onClientRender", root, DevelopmentRender)
 	else
 		outputChatBox("Player model: "..getElementModel(localPlayer))
 		local tar = getPedTarget(localPlayer)
@@ -3902,7 +3902,7 @@ function ShowInfoKey()
 
 		
 		setDevelopmentMode(true)
-		addEventHandler("onClientRender",root, DevelopmentRender)
+		addEventHandler("onClientRender", root, DevelopmentRender)
 		
 		
 		
@@ -4575,7 +4575,7 @@ function playerPressedKey(button, press)
 		end
     end
 end
-addEventHandler("onClientKey",root, playerPressedKey)
+addEventHandler("onClientKey", root, playerPressedKey)
 
 
 
@@ -5017,7 +5017,7 @@ function DrawOnClientRender()
 		end
 	end
 end
-addEventHandler("onClientRender",root, DrawOnClientRender)
+addEventHandler("onClientRender", root, DrawOnClientRender)
 
 
 
@@ -5706,7 +5706,7 @@ addEventHandler("PlaySFXSoundEvent", localPlayer, PlaySFXSound)
 
 
 
-addEventHandler("onClientVehicleCollision",root,
+addEventHandler("onClientVehicleCollision", root,
     function(HitElement,force, bodyPart, x, y, z, nx, ny, nz, hitElementForce)
          if(source == getPedOccupiedVehicle(localPlayer)) then
 			if(force > 500) then

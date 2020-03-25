@@ -1826,7 +1826,7 @@ function usearmor(thePlayer, slot)
 	setPedArmor(thePlayer, 100)
 end
 addEvent("usearmor", true)
-addEventHandler("usearmor",root, usearmor)
+addEventHandler("usearmor", root, usearmor)
 
 
 
@@ -2038,7 +2038,7 @@ function AddPlayerArmas(thePlayer, model)
 	end
 end
 addEvent("AddPlayerArmas", true)
-addEventHandler("AddPlayerArmas",root, AddPlayerArmas)
+addEventHandler("AddPlayerArmas", root, AddPlayerArmas)
 
 
 function RemovePlayerArmas(thePlayer, model)
@@ -2050,7 +2050,7 @@ function RemovePlayerArmas(thePlayer, model)
 	end
 end
 addEvent("RemovePlayerArmas", true)
-addEventHandler("RemovePlayerArmas",root, RemovePlayerArmas)
+addEventHandler("RemovePlayerArmas", root, RemovePlayerArmas)
 
 
 
@@ -3652,7 +3652,7 @@ function UpgradePreload(thePlayer, name, upgr)
 	end
 end
 addEvent("UpgradePreload", true)
-addEventHandler("UpgradePreload",root, UpgradePreload)
+addEventHandler("UpgradePreload", root, UpgradePreload)
 
 
 
@@ -4206,7 +4206,7 @@ function tp(thePlayer, command, h)
 	end
 end
 addEvent("tp", true)
-addEventHandler("tp",root, tp)
+addEventHandler("tp", root, tp)
 addCommandHandler("tp", tp)
 
 
@@ -4293,7 +4293,7 @@ function StartAnimation(thePlayer, block, anim, times, loop, updatePosition, int
 	return true
 end
 addEvent("StartAnimation", true)
-addEventHandler("StartAnimation",root, StartAnimation)
+addEventHandler("StartAnimation", root, StartAnimation)
 
 
 
@@ -4470,7 +4470,7 @@ function WantedLevel(thePlayer, count)
 	end
 end
 addEvent("WantedLevel", true)
-addEventHandler("WantedLevel",root, WantedLevel)
+addEventHandler("WantedLevel", root, WantedLevel)
 
 
 
@@ -4557,7 +4557,7 @@ function RobShop(thePlayer, thePed)
 	end
 end
 addEvent("RobShop", true)
-addEventHandler("RobShop",root, RobShop)
+addEventHandler("RobShop", root, RobShop)
 
 
 function AddRobPresure(thePed, count)
@@ -4603,7 +4603,7 @@ function PetrolFuelColEnter(thePlayer, Colshape)
 	PData[thePlayer]["FuelCol"] = Colshape
 end
 addEvent("PetrolFuelColEnter", true)
-addEventHandler("PetrolFuelColEnter",root, PetrolFuelColEnter)
+addEventHandler("PetrolFuelColEnter", root, PetrolFuelColEnter)
 
 
 function ThreeColEnter(thePlayer, Colshape)
@@ -4618,7 +4618,7 @@ function ThreeColEnter(thePlayer, Colshape)
 	end
 end
 addEvent("ThreeColEnter", true)
-addEventHandler("ThreeColEnter",root, ThreeColEnter)
+addEventHandler("ThreeColEnter", root, ThreeColEnter)
 
 
 
@@ -4626,7 +4626,7 @@ function VendingColEnter(thePlayer, Colshape)
 	PData[thePlayer]["VendingCol"] = Colshape
 end
 addEvent("VendingColEnter", true)
-addEventHandler("VendingColEnter",root, VendingColEnter)
+addEventHandler("VendingColEnter", root, VendingColEnter)
 
 
 
@@ -4816,7 +4816,7 @@ function EnterWardrobe(thePlayer, house)
 	triggerClientEvent(thePlayer, "wardrobe", thePlayer, arr, "house")
 end
 addEvent("EnterWardrobe", true)
-addEventHandler("EnterWardrobe",root, EnterWardrobe)
+addEventHandler("EnterWardrobe", root, EnterWardrobe)
 
 
 
@@ -5045,7 +5045,7 @@ function StartLookBiz(thePlayer,thePed,biz,control)
 	end
 end
 addEvent("StartLookBiz", true)
-addEventHandler("StartLookBiz",root, StartLookBiz)
+addEventHandler("StartLookBiz", root, StartLookBiz)
 
 
 
@@ -5081,7 +5081,7 @@ function Travel(thePlayer, thePed, City)
 	end
 end
 addEvent("Travel", true)
-addEventHandler("Travel",root, Travel)
+addEventHandler("Travel", root, Travel)
 
 
 
@@ -5093,7 +5093,7 @@ function sa(thePlayer, thePed, City)
 	end
 end
 addEvent("sa", true)
-addEventHandler("sa",root, sa)
+addEventHandler("sa", root, sa)
 
 
 function LeaveLC(thePlayer, thePed, City)
@@ -5106,7 +5106,7 @@ function LeaveLC(thePlayer, thePed, City)
 	end
 end
 addEvent("LeaveLC", true)
-addEventHandler("LeaveLC",root, LeaveLC)
+addEventHandler("LeaveLC", root, LeaveLC)
 
 
 function WhoBizOwner(thePlayer,thePed,biz,vibori)
@@ -5128,7 +5128,7 @@ function WhoBizOwner(thePlayer,thePed,biz,vibori)
 	end
 end
 addEvent("WhoBizOwner", true)
-addEventHandler("WhoBizOwner",root, WhoBizOwner)
+addEventHandler("WhoBizOwner", root, WhoBizOwner)
 
 
 
@@ -5138,7 +5138,7 @@ function StopBizControl(biz)
 	BizControls[biz][source] = nil
 end
 addEvent("StopBizControl", true)
-addEventHandler("StopBizControl",root, StopBizControl)
+addEventHandler("StopBizControl", root, StopBizControl)
 
 
 
@@ -5163,7 +5163,7 @@ function CreateSpirt()
 	end
 end
 addEvent("CreateSpirt", true)
-addEventHandler("CreateSpirt",root, CreateSpirt)
+addEventHandler("CreateSpirt", root, CreateSpirt)
 
 
 
@@ -5576,7 +5576,7 @@ function vpc(thePlayer, model, x,y,z)
 	setElementData(v, "destroy", "true", false)
 end
 addEvent("vpc", true)
-addEventHandler("vpc",root, vpc)
+addEventHandler("vpc", root, vpc)
 
 
 
@@ -5591,7 +5591,7 @@ function vp(thePlayer, model, x,y,z)
 	setElementData(v, "destroy", "true", false)
 end
 addEvent("vp", true)
-addEventHandler("vp",root, vp)
+addEventHandler("vp", root, vp)
 
 
 
@@ -5612,7 +5612,7 @@ function vpr(thePlayer, model, x,y,z)
 	end
 end
 addEvent("vpr", true)
-addEventHandler("vpr",root, vpr)
+addEventHandler("vpr", root, vpr)
 
 
 
@@ -5630,7 +5630,7 @@ function RandomDance(thePlayer, thePed)
 	StartAnimation(thePed, "DANCING", DancingArr[math.random(#DancingArr)],-1,true,false,false)
 end
 addEvent("RandomDance", true)
-addEventHandler("RandomDance",root, RandomDance)
+addEventHandler("RandomDance", root, RandomDance)
 
 
 function dance(thePlayer, h)
@@ -5641,7 +5641,7 @@ function dance(thePlayer, h)
 	end
 end
 addEvent("dance", true)
-addEventHandler("dance",root, dance)
+addEventHandler("dance", root, dance)
 
 
 
@@ -5664,7 +5664,7 @@ function CreateThree(model, x,y,z, name, quality)
 	end
 end
 addEvent("CreateThree", true)
-addEventHandler("CreateThree",root, CreateThree)
+addEventHandler("CreateThree", root, CreateThree)
 
 
 
@@ -5683,7 +5683,7 @@ function BankEvent(thePlayer, thePed, biz, update)
 
 end
 addEvent("BankEvent", true)
-addEventHandler("BankEvent",root, BankEvent)
+addEventHandler("BankEvent", root, BankEvent)
 
 
 
@@ -5761,7 +5761,7 @@ function CreateThreePlayer(thePlayer, ix, iy, x,y,z)
 	end
 end
 addEvent("CreateThreePlayer", true)
-addEventHandler("CreateThreePlayer",root, CreateThreePlayer)
+addEventHandler("CreateThreePlayer", root, CreateThreePlayer)
 
 
 function RemoveThree(name)
@@ -5842,7 +5842,7 @@ function HarvestThree(thePlayer, pic, isVeh)
 	end
 end
 addEvent("HarvestThree", true)
-addEventHandler("HarvestThree",root, HarvestThree)
+addEventHandler("HarvestThree", root, HarvestThree)
 
 
 
@@ -5868,7 +5868,7 @@ function usekanistra(thePlayer, slot)
 	ToolTip(thePlayer, "Подойди к машине")
 end
 addEvent("usekanistra", true)
-addEventHandler("usekanistra",root, usekanistra)
+addEventHandler("usekanistra", root, usekanistra)
 
 
 
@@ -5898,7 +5898,7 @@ function usezapaska(thePlayer, slot)
 	ToolTip(thePlayer, "Подойди к машине")
 end
 addEvent("usezapaska", true)
-addEventHandler("usezapaska",root, usezapaska)
+addEventHandler("usezapaska", root, usezapaska)
 
 
 
@@ -5932,7 +5932,7 @@ function usesmoke(thePlayer, slot)
     end
 end
 addEvent("usesmoke", true)
-addEventHandler("usesmoke",root, usesmoke)
+addEventHandler("usesmoke", root, usesmoke)
 
 
 
@@ -5958,7 +5958,7 @@ function usedrink(thePlayer)
 	end
 end
 addEvent("usedrink", true)
-addEventHandler("usedrink",root, usedrink)
+addEventHandler("usedrink", root, usedrink)
 
 
 
@@ -5973,7 +5973,7 @@ function eatcrap(thePlayer)
 	end
 end
 addEvent("eatcrap", true)
-addEventHandler("eatcrap",root, eatcrap)
+addEventHandler("eatcrap", root, eatcrap)
 
 
 
@@ -5994,7 +5994,7 @@ function usedrugs(thePlayer)
 	end
 end
 addEvent("usedrugs", true)
-addEventHandler("usedrugs",root, usedrugs)
+addEventHandler("usedrugs", root, usedrugs)
 
 
 
@@ -6013,7 +6013,7 @@ function usespunk(thePlayer)
 	end
 end
 addEvent("usespunk", true)
-addEventHandler("usespunk",root, usespunk)
+addEventHandler("usespunk", root, usespunk)
 
 
 
@@ -6229,7 +6229,7 @@ function useinvweapon(thePlayer, slots)
 	end
 end
 addEvent("useinvweapon", true)
-addEventHandler("useinvweapon",root, useinvweapon)
+addEventHandler("useinvweapon", root, useinvweapon)
 
 
 
@@ -6238,7 +6238,7 @@ function rocketman(thePlayer)
 	setPedWearingJetpack(thePlayer, not isPedWearingJetpack(thePlayer))
 end
 addEvent("rocketman", true)
-addEventHandler("rocketman",root, rocketman)
+addEventHandler("rocketman", root, rocketman)
 
 
 
@@ -6375,7 +6375,7 @@ function DropHarvest(x,y,z)
 	Drop({["txd"] = "Зерно", ["name"] = "Зерно"}, x,y,z,0,0)
 end
 addEvent("DropHarvest", true)
-addEventHandler("DropHarvest",root, DropHarvest)
+addEventHandler("DropHarvest", root, DropHarvest)
 
 
 
@@ -6386,7 +6386,7 @@ function NewDropItem(thePlayer, item)
 	Drop(item, x, y, z, getElementInterior(thePlayer), getElementDimension(thePlayer))
 end
 addEvent("NewDropItem", true)
-addEventHandler("NewDropItem",root, NewDropItem)
+addEventHandler("NewDropItem", root, NewDropItem)
 
 
 
@@ -6620,7 +6620,7 @@ function ppgwjht(thePlayer)
 	end
 end
 addEvent("ppgwjht", true)
-addEventHandler("ppgwjht",root, ppgwjht)
+addEventHandler("ppgwjht", root, ppgwjht)
 
 
 
@@ -6629,7 +6629,7 @@ function setQualityHandler(thePlayer, lowPCMode, Quality)
 	setElementData(thePlayer, "RenderQuality", Quality)
 end
 addEvent("setQuality", true)
-addEventHandler("setQuality",root, setQualityHandler)
+addEventHandler("setQuality", root, setQualityHandler)
 
 
 
@@ -6648,7 +6648,7 @@ function nightprowler(thePlayer)
 	end
 end
 addEvent("nightprowler", true)
-addEventHandler("nightprowler",root, nightprowler)
+addEventHandler("nightprowler", root, nightprowler)
 
 
 function ofviac(thePlayer) 
@@ -6663,7 +6663,7 @@ function ofviac(thePlayer)
 	end
 end
 addEvent("ofviac", true)
-addEventHandler("ofviac",root, ofviac)
+addEventHandler("ofviac", root, ofviac)
 
 
 
@@ -6834,7 +6834,7 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 	end
 end
 addEvent("OnPedWasted", true)
-addEventHandler("onPedWasted",root, WastedPed)
+addEventHandler("onPedWasted", root, WastedPed)
 
 
 
@@ -8344,7 +8344,7 @@ function PedDialog(thePlayer, thePed)
 	end
 end
 addEvent("PedDialog", true)
-addEventHandler("PedDialog",root, PedDialog)
+addEventHandler("PedDialog", root, PedDialog)
 
 
 
@@ -8461,7 +8461,7 @@ addEventHandler("InviteBot", root, InviteBot)
 
 
 
-addEventHandler("onPlayerWeaponFire",root, function(weapon, endX, endY, endZ, hitElement, startX, startY, startZ)
+addEventHandler("onPlayerWeaponFire", root, function(weapon, endX, endY, endZ, hitElement, startX, startY, startZ)
    	local x,y,z = getElementPosition(source)
 	local zone = getZoneName(x,y,z, false)
 	if(GetDatabaseZoneNode(zone)) then
@@ -8703,7 +8703,7 @@ function ZoneInfo(thePlayer, zone)
 	end
 end
 addEvent("ZoneInfo", true)
-addEventHandler("ZoneInfo",root, ZoneInfo)
+addEventHandler("ZoneInfo", root, ZoneInfo)
 
 
 
@@ -8755,7 +8755,7 @@ function ToolTip(thePlayer, message)
 	triggerClientEvent(thePlayer, "ToolTip", thePlayer, message)
 end
 addEvent("ToolTip", true)
-addEventHandler("ToolTip",root, ToolTip)
+addEventHandler("ToolTip", root, ToolTip)
 
 
 
@@ -8813,7 +8813,7 @@ function EnterHouse(buyhouse, spawn)
 	end
 end
 addEvent("EnterHouse", true)
-addEventHandler("EnterHouse",root, EnterHouse)
+addEventHandler("EnterHouse", root, EnterHouse)
 
 
 
@@ -8826,7 +8826,7 @@ function ExitHouse(house)
 	removeElementData(source, "EntHouse")
 end
 addEvent("ExitHouse", true)
-addEventHandler("ExitHouse",root, ExitHouse)
+addEventHandler("ExitHouse", root, ExitHouse)
 
 
 
@@ -8948,7 +8948,7 @@ function opengate(TargetGate, state)
 
 end
 addEvent("opengate", true)
-addEventHandler("opengate",root, opengate)
+addEventHandler("opengate", root, opengate)
 
 
 
@@ -9218,7 +9218,7 @@ function ParkMyCar(theVehicle)
 	end
 end
 addEvent("ParkMyCar", true)
-addEventHandler("ParkMyCar",root, ParkMyCar)
+addEventHandler("ParkMyCar", root, ParkMyCar)
 
 
 
@@ -9307,7 +9307,7 @@ function BuyCar(theVehicle)
 	end
 end
 addEvent("BuyCar", true)
-addEventHandler("BuyCar",root, BuyCar)
+addEventHandler("BuyCar", root, BuyCar)
 
 
 
@@ -9332,7 +9332,7 @@ function el(thePlayer)
 	ToolTip(thePlayer, out)
 end
 addEvent("el", true)
-addEventHandler("el",root, el)
+addEventHandler("el", root, el)
 
 
 function ServerSave()
@@ -9545,7 +9545,7 @@ function SpawnthePlayer(thePlayer, typespawn, zone)
 	end
 end
 addEvent("SpawnthePlayer", true)
-addEventHandler("SpawnthePlayer",root, SpawnthePlayer)
+addEventHandler("SpawnthePlayer", root, SpawnthePlayer)
 
 
 
@@ -9669,7 +9669,7 @@ local Soviet = {"Никогда не заводи машину во время �
 "Используй клавишу #A0A0A0F10#FFFFFF чтобы открыть карту ресурсов",
 "Используй клавишу #A0A0A0F9#FFFFFF чтобы выключить режим для слабых компьютеров",
 }
-function DatSoviet() outputChatBox("#4682B4* Совет#FFFFFF "..Soviet[math.random(1,#Soviet)],root, 255, 255, 255, true) end
+function DatSoviet() outputChatBox("#4682B4* Совет#FFFFFF "..Soviet[math.random(1,#Soviet)], root, 255, 255, 255, true) end
 setTimer(function() DatSoviet() end, 600000, 0)
 
 
@@ -10025,18 +10025,18 @@ function worldtime(ignoreweather)
 					if(zone == getZoneName(vx,vy,vz) and getElementHealth(theVehicle) > 0) then
 						if(not isElement(DynamicBlip[theVehicle])) then
 							DynamicBlip[theVehicle] = createBlipAttachedTo(theVehicle, 0, 1, r,g,b, 200, 2)
-							setElementVisibleTo(DynamicBlip[theVehicle],root, false)
+							setElementVisibleTo(DynamicBlip[theVehicle], root, false)
 							DynamicMar[theVehicle] = createMarker(vx,vy,vz, "arrow", 1, 255, 0, 0, 200)
 							attachElements(DynamicMar[theVehicle], theVehicle, 0, 0, 2)
-							setElementVisibleTo(DynamicMar[theVehicle],root, false)
+							setElementVisibleTo(DynamicMar[theVehicle], root, false)
 
 							for _,k in pairs(PlayerInZone) do
 								setElementVisibleTo(DynamicBlip[theVehicle], k, true)
 								setElementVisibleTo(DynamicMar[theVehicle], k, true)
 							end
 						else
-							setElementVisibleTo(DynamicBlip[theVehicle],root, false)
-							setElementVisibleTo(DynamicMar[theVehicle],root, false)
+							setElementVisibleTo(DynamicBlip[theVehicle], root, false)
+							setElementVisibleTo(DynamicMar[theVehicle], root, false)
 							for _,k in pairs(PlayerInZone) do
 								setElementVisibleTo(DynamicBlip[theVehicle], k, true)
 								setElementVisibleTo(DynamicMar[theVehicle], k, true)
@@ -10065,17 +10065,17 @@ function worldtime(ignoreweather)
 							if(zone == getZoneName(vx,vy,vz, false) and not isPedDead(ped)) then
 								if(not isElement(DynamicBlip[ped])) then
 									DynamicBlip[ped] = createBlipAttachedTo(ped, 0, 1, r,g,b, 200, 2)
-									setElementVisibleTo(DynamicBlip[ped],root, false)
+									setElementVisibleTo(DynamicBlip[ped], root, false)
 									DynamicMar[ped] = createMarker(vx,vy,vz, "arrow", 1, 255, 0, 0, 200)
 									attachElements(DynamicMar[ped], ped, 0, 0, 2)
-									setElementVisibleTo(DynamicMar[ped],root, false)
+									setElementVisibleTo(DynamicMar[ped], root, false)
 									for _,k in pairs(PlayerInZone) do
 										setElementVisibleTo(DynamicBlip[ped], k, true)
 										setElementVisibleTo(DynamicMar[ped], k, false)
 									end
 								else
-									setElementVisibleTo(DynamicBlip[ped],root, false)
-									setElementVisibleTo(DynamicMar[ped],root, false)
+									setElementVisibleTo(DynamicBlip[ped], root, false)
+									setElementVisibleTo(DynamicMar[ped], root, false)
 									for _,k in pairs(PlayerInZone) do
 										setElementVisibleTo(DynamicBlip[ped], k, true)
 										setElementVisibleTo(DynamicMar[ped], k, true)
@@ -10167,7 +10167,7 @@ function DestroyDoherty()
 	end
 end
 addEvent("DestroyDoherty", true)
-addEventHandler("DestroyDoherty",root, DestroyDoherty)
+addEventHandler("DestroyDoherty", root, DestroyDoherty)
 
 
 
@@ -10514,9 +10514,9 @@ function CreateBar(x,y,z,rz, types)
 	local ped = CreateDialogBot(11, 496.8, -77.5, 998.8, 0, 11, SData["Bar"], "Liquor Shop", "Бармен")
 	StartAnimation(ped, "BAR", "BARman_idle", -1, true)
 
-	triggerEvent("CreatePoolTable",root, 506.48, -84.84, 997.94,270,11, SData["Bar"])
-	triggerEvent("CreatePoolTable",root, 510.11, -84.84, 997.94,270,11, SData["Bar"])
-	triggerEvent("CreatePoolTable",root, 489.75, -80.21, 997.73,270,11, SData["Bar"])
+	triggerEvent("CreatePoolTable", root, 506.48, -84.84, 997.94,270,11, SData["Bar"])
+	triggerEvent("CreatePoolTable", root, 510.11, -84.84, 997.94,270,11, SData["Bar"])
+	triggerEvent("CreatePoolTable", root, 489.75, -80.21, 997.73,270,11, SData["Bar"])
 
 	SData["Bar"]=SData["Bar"]+1
 end
@@ -10539,7 +10539,7 @@ function CreateLiquor(x,y,z)
 
 	CreateDialogBot(44, -223.3, 1404, 27.7, 90, 18, SData["Liquor"], "Liquor Shop", "Продавец")
 
-	triggerEvent("CreatePoolTable",root, -225.745, 1396.245, 27.35,180, 18, SData["Liquor"])	
+	triggerEvent("CreatePoolTable", root, -225.745, 1396.245, 27.35,180, 18, SData["Liquor"])	
 	SData["Liquor"]=SData["Liquor"]+1
 end
 CreateLiquor(-180.7, 1034.8, 19.7)
@@ -10804,7 +10804,7 @@ function arm(thePlayer)
 	end
 end
 addEvent("arm", true)
-addEventHandler("arm",root, arm)
+addEventHandler("arm", root, arm)
 
 
 
@@ -10834,7 +10834,7 @@ function golos(thePlayer, vibor)
 	end
 end
 addEvent("golos", true)
-addEventHandler("golos",root, golos)
+addEventHandler("golos", root, golos)
 
 
 function ststart()
@@ -11662,7 +11662,7 @@ function saveserver(thePlayer, x,y,z,rx,ry,rz, savetype)
 	fileClose(hFile)
 end
 addEvent("saveserver", true)
-addEventHandler("saveserver",root, saveserver)
+addEventHandler("saveserver", root, saveserver)
 
 
 
@@ -11672,7 +11672,7 @@ function fightstyle(thePlayer, thePed, id)
 	setPedFightingStyle(thePlayer, tonumber(id))
 end
 addEvent("fightstyle", true)
-addEventHandler("fightstyle",root, fightstyle)
+addEventHandler("fightstyle", root, fightstyle)
 
 
 
@@ -11684,7 +11684,7 @@ function usecellphone(thePlayer, number)
 	DialogStart(thePlayer, Dialogs["Телефон"][1], false)
 end
 addEvent("usecellphone", true)
-addEventHandler("usecellphone",root, usecellphone)
+addEventHandler("usecellphone", root, usecellphone)
 
 
 function info(thePlayer, command, h)
@@ -11919,7 +11919,7 @@ function loginPlayer(thePlayer, password)
 	end
 end
 addEvent("loginPlayerEvent", true)
-addEventHandler("loginPlayerEvent",root, loginPlayer)
+addEventHandler("loginPlayerEvent", root, loginPlayer)
 
 
 
@@ -11946,7 +11946,7 @@ function AddCollections(thePlayer, model, id)
 	MissionCompleted(thePlayer, "#169AFA"..CollectionNames[model][1].." найдено "..getArrSize(dat[tostring(model)]).." из "..CollectionNames[model][2])
 end
 addEvent("AddCollections", true)
-addEventHandler("AddCollections",root, AddCollections)
+addEventHandler("AddCollections", root, AddCollections)
 
 
 
@@ -11967,7 +11967,7 @@ function SaveInventory(thePlayer, arr)
 	end
 end
 addEvent("SaveInventory", true)
-addEventHandler("SaveInventory",root, SaveInventory)
+addEventHandler("SaveInventory", root, SaveInventory)
 
 
 
@@ -12001,7 +12001,7 @@ function buyshopitem(thePlayer, count, args)
 	end
 end
 addEvent("buyshopitem", true)
-addEventHandler("buyshopitem",root, buyshopitem)
+addEventHandler("buyshopitem", root, buyshopitem)
 
 
 
@@ -12017,7 +12017,7 @@ function SellShopItem(thePlayer, count)
 	--end
 end
 addEvent("SellShopItem", true)
-addEventHandler("SellShopItem",root, SellShopItem)
+addEventHandler("SellShopItem", root, SellShopItem)
 
 
 
@@ -12062,7 +12062,7 @@ function DrinkSprunk(thePlayer, model)
 	end
 end
 addEvent("DrinkSprunk", true)
-addEventHandler("DrinkSprunk",root, DrinkSprunk)
+addEventHandler("DrinkSprunk", root, DrinkSprunk)
 
 
 
@@ -12089,7 +12089,7 @@ function PrisonSleep(x,y,z,rz)
 	end
 end
 addEvent("PrisonSleep", true)
-addEventHandler("PrisonSleep",root, PrisonSleep)
+addEventHandler("PrisonSleep", root, PrisonSleep)
 
 
 
@@ -12103,7 +12103,7 @@ function PrisonGavno(x,y,z,rz)
 	end
 end
 addEvent("PrisonGavno", true)
-addEventHandler("PrisonGavno",root, PrisonGavno)
+addEventHandler("PrisonGavno", root, PrisonGavno)
 
 
 
@@ -12112,7 +12112,7 @@ function piss(thePlayer, command, h)
 	StartAnimation(thePlayer, "PAULNMAC", "Piss_out",false,false,false,false)
 end
 addEvent("piss", true)
-addEventHandler("piss",root, piss)
+addEventHandler("piss", root, piss)
 addCommandHandler("piss", piss)
 
 
@@ -12161,7 +12161,7 @@ function PoliceArrest(thePlayer, thePed)
 	end
 end
 addEvent("PoliceArrest", true)
-addEventHandler("PoliceArrest",root, PoliceArrest)
+addEventHandler("PoliceArrest", root, PoliceArrest)
 
 
 
@@ -12185,7 +12185,7 @@ function MCHSEventHealth(thePlayer, thePed)
 	end
 end
 addEvent("MCHSEventHealth", true)
-addEventHandler("MCHSEventHealth",root, MCHSEventHealth)
+addEventHandler("MCHSEventHealth", root, MCHSEventHealth)
 
 
 
@@ -12207,7 +12207,7 @@ function MCHSEvent(thePlayer, thePed, x,y)
 	RemoveInventoryItemCount(thePlayer, x,y)
 end
 addEvent("MCHSEvent", true)
-addEventHandler("MCHSEvent",root, MCHSEvent)
+addEventHandler("MCHSEvent", root, MCHSEvent)
 
 
 
@@ -12228,7 +12228,7 @@ function PoliceArrestCar()
 	end
 end
 addEvent("PoliceArrestCar", true)
-addEventHandler("PoliceArrestCar",root, PoliceArrestCar)
+addEventHandler("PoliceArrestCar", root, PoliceArrestCar)
 
 
 
@@ -12344,7 +12344,7 @@ function NoAttack(thePlayer, thePed)
 	removeElementData(thePed, "attacker")
 end
 addEvent("NoAttack", true)
-addEventHandler("NoAttack",root, NoAttack)
+addEventHandler("NoAttack", root, NoAttack)
 
 function handsup(thePlayer)
 	if(getElementHealth(thePlayer) > 20 and not getPedOccupiedVehicle(thePlayer)) then
@@ -12365,7 +12365,7 @@ function handsup(thePlayer)
 	end
 end
 addEvent("handsup", true)
-addEventHandler("handsup",root, handsup)
+addEventHandler("handsup", root, handsup)
 
 
 
@@ -12386,7 +12386,7 @@ function UpReputation(thePlayer, thePed)
 	end
 end
 addEvent("UpReputation", true)
-addEventHandler("UpReputation",root, UpReputation)
+addEventHandler("UpReputation", root, UpReputation)
 
 function DownReputation(thePlayer, thePed)
 	local team = getTeamVariable(getTeamName(getPlayerTeam(thePlayer)))
@@ -12399,7 +12399,7 @@ function DownReputation(thePlayer, thePed)
 	end
 end
 addEvent("DownReputation", true)
-addEventHandler("DownReputation",root, DownReputation)
+addEventHandler("DownReputation", root, DownReputation)
 
 
 
@@ -12448,7 +12448,7 @@ function SpawnedAfterChange(thePlayer, typespawn, zone)
 	end
 end
 addEvent("SpawnedAfterChangeEvent", true)
-addEventHandler("SpawnedAfterChangeEvent",root, SpawnedAfterChange)
+addEventHandler("SpawnedAfterChangeEvent", root, SpawnedAfterChange)
 
 
 
@@ -12542,7 +12542,7 @@ function Acceleration(thePlayer)
 	end
 end
 addEvent("Acceleration", true)
-addEventHandler("Acceleration",root, Acceleration)
+addEventHandler("Acceleration", root, Acceleration)
 
 
 
@@ -12561,7 +12561,7 @@ function AccelerationDown(thePlayer)
 	end
 end
 addEvent("AccelerationDown", true)
-addEventHandler("AccelerationDown",root, AccelerationDown)
+addEventHandler("AccelerationDown", root, AccelerationDown)
 
 
 
@@ -13886,7 +13886,7 @@ function wank(thePlayer, command, h)
 	end
 end
 addEvent("wank", true)
-addEventHandler("wank",root, wank)
+addEventHandler("wank", root, wank)
 addCommandHandler("wank", wank)
 
 
@@ -13913,7 +13913,7 @@ function race(thePlayer, command, h)
 	end
 end
 addEvent("race", true)
-addEventHandler("race",root, race)
+addEventHandler("race", root, race)
 
 
 
@@ -14862,7 +14862,7 @@ function displayVehicleLoss(loss)
 	end
 	thePlayer = getVehicleOccupant(source, 0)
 	if thePlayer then
-		triggerClientEvent(thePlayer, "driftCarCrashed",root, source)
+		triggerClientEvent(thePlayer, "driftCarCrashed", root, source)
 	end
 
 	if(passagers == 0) then
@@ -15147,7 +15147,7 @@ function doTakeScreenShot()
     takePlayerScreenShot(source, 300, 200)
 end
 addEvent("doTakeScreenShot", true)
-addEventHandler("doTakeScreenShot",root, doTakeScreenShot)
+addEventHandler("doTakeScreenShot", root, doTakeScreenShot)
 
 
 
@@ -15156,7 +15156,7 @@ addEventHandler("doTakeScreenShot",root, doTakeScreenShot)
 
 
 local photo={}
-addEventHandler("onPlayerScreenShot",root,
+addEventHandler("onPlayerScreenShot", root,
 	function(theResource, status, pixels, timestamp, tag)
         triggerClientEvent(source, "onMyClientScreenShot", resourceRoot, pixels)
 		photo[source]=pixels
@@ -15268,7 +15268,7 @@ function dm(thePlayer, command, h)
 	end
 end
 addEvent("dm", true)
-addEventHandler("dm",root, dm)
+addEventHandler("dm", root, dm)
 addCommandHandler("dm", dm)
 
 
@@ -15430,7 +15430,7 @@ function startBizVacancy(thePlayer, name, args)
 	end
 end
 addEvent("startBizVacancy", true)
-addEventHandler("startBizVacancy",root, startBizVacancy)
+addEventHandler("startBizVacancy", root, startBizVacancy)
 
 
 function stopBizVacancy(thePlayer, name, args)
@@ -15466,7 +15466,7 @@ function stopBizVacancy(thePlayer, name, args)
 	end
 end
 addEvent("stopBizVacancy", true)
-addEventHandler("stopBizVacancy",root, stopBizVacancy)
+addEventHandler("stopBizVacancy", root, stopBizVacancy)
 
 
 
@@ -15561,7 +15561,7 @@ function editBizVacancy(thePlayer, name, args)
 	end
 end
 addEvent("editBizVacancy", true)
-addEventHandler("editBizVacancy",root, editBizVacancy)
+addEventHandler("editBizVacancy", root, editBizVacancy)
 
 
 function IsPlayerJob(thePlayer)
@@ -15606,7 +15606,7 @@ function bank(thePlayer, count, args)
 	end
 end
 addEvent("bank", true)
-addEventHandler("bank",root, bank)
+addEventHandler("bank", root, bank)
 
 
 
@@ -15625,7 +15625,7 @@ function withdraw(thePlayer, count, args)
 	end
 end
 addEvent("withdraw", true)
-addEventHandler("withdraw",root, withdraw)
+addEventHandler("withdraw", root, withdraw)
 
 
 
@@ -15646,7 +15646,7 @@ function givebizmoney(thePlayer, count, args)
 	end
 end
 addEvent("givebizmoney", true)
-addEventHandler("givebizmoney",root, givebizmoney)
+addEventHandler("givebizmoney", root, givebizmoney)
 
 
 
@@ -15670,7 +15670,7 @@ function removebizmoney(thePlayer, count, args)
 	end
 end
 addEvent("removebizmoney", true)
-addEventHandler("removebizmoney",root, removebizmoney)
+addEventHandler("removebizmoney", root, removebizmoney)
 
 
 
@@ -15721,7 +15721,7 @@ function ExitTuning(theVehicle)
 	triggerClientEvent(source, "TuningExits", source)
 end
 addEvent("ExitTuning", true)
-addEventHandler("ExitTuning",root, ExitTuning)
+addEventHandler("ExitTuning", root, ExitTuning)
 
 
 
@@ -15811,7 +15811,7 @@ function VehicleUpgrade(upgrade, count)
 	end
 end
 addEvent("VehicleUpgrade", true)
-addEventHandler("VehicleUpgrade",root, VehicleUpgrade)
+addEventHandler("VehicleUpgrade", root, VehicleUpgrade)
 
 function BuyColor(c1,c2,c3,c4,money)
 	if(AddPlayerMoney(source, -money)) then
@@ -15834,7 +15834,7 @@ function BuyColor(c1,c2,c3,c4,money)
 	end
 end
 addEvent("BuyColor", true)
-addEventHandler("BuyColor",root, BuyColor)
+addEventHandler("BuyColor", root, BuyColor)
 
 
 
