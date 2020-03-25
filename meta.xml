@@ -18,9 +18,6 @@
 	
 	<file src="texreplace.fx" download="true" />
 	
-	<file src="models/copcarvg.dff" download="true" />
-	<file src="models/copcarvg.txd" download="true" />
-	
 	<file src="models/des_a51infenc.col" download="true" />
 	<file src="models/des_a51infenc.dff" download="true" />
 	<file src="models/des_a51_labs.col" download="true" />

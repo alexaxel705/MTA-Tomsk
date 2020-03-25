@@ -445,7 +445,7 @@ function GetSkinData()
 	return SkinData
 end
 addEvent("GetSkinData", true)
-addEventHandler("GetSkinData", getRootElement(), GetSkinData)
+addEventHandler("GetSkinData", root, GetSkinData)
 
 
 

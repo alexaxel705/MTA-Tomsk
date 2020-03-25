@@ -19,6 +19,7 @@ local COLOR = {
 
 
 
+
 math.randomseed(os.time())
 local DeathMatch = false
 local PedSyncObj = {}
@@ -94,7 +95,6 @@ local ToC1, ToC2, ToC3, ToC4 = false, false, false, false
 local upgrades = false
 local TCButton = {}
 local TCButton2 = {}
-local usableslot = 1
 local CallPolice = false
 local BANKCTL = false
 local Targets = {}
@@ -222,10 +222,10 @@ function toggleAirBrake()
 	air_brake = not air_brake or nil
 	if air_brake then
 		abx,aby,abz = getElementPosition(localPlayer)
-		addEventHandler("onClientPreRender", root, putPlayerInPosition)
+		addEventHandler("onClientPreRender",root, putPlayerInPosition)
 	else
 		abx,aby,abz = nil
-		removeEventHandler("onClientPreRender", root, putPlayerInPosition)
+		removeEventHandler("onClientPreRender",root, putPlayerInPosition)
 	end
 end
 addCommandHandler("noclip", toggleAirBrake)
@@ -851,7 +851,7 @@ function PlayerSpawn()
 end
 addEventHandler("onClientPlayerSpawn", getLocalPlayer(), PlayerSpawn)
 addEvent("PlayerSpawn", true)
-addEventHandler("PlayerSpawn", getRootElement(), PlayerSpawn)
+addEventHandler("PlayerSpawn", resourceRoot, PlayerSpawn)
 
 
 function getArrSize(arr)
@@ -1313,7 +1313,7 @@ function CameraTuning(handl, othercomp)
 	guiSetAlpha(TCButton2[ToC2+1], 0.5)
 end
 addEvent("CameraTuning", true )
-addEventHandler("CameraTuning", getRootElement(), CameraTuning)
+addEventHandler("CameraTuning", root, CameraTuning)
 
 
 	
@@ -1601,7 +1601,7 @@ function TuningListOpen(num, page)
 	UpgradePreload(Upgrading[num]["text"], PText["tuning"][TuningSelector][20][3], PText["tuning"][TuningSelector][20][4], PText["tuning"][TuningSelector][20][5])
 end
 addEvent("TuningListOpen", true )
-addEventHandler("TuningListOpen", getRootElement(), TuningListOpen)
+addEventHandler("TuningListOpen", root, TuningListOpen)
 
 
 
@@ -1613,7 +1613,7 @@ function BuyTuningShop(item, upgrd, cost)
 	end
 end
 addEvent("BuyTuningShop", true )
-addEventHandler("BuyTuningShop", getRootElement(), BuyTuningShop)
+addEventHandler("BuyTuningShop", root, BuyTuningShop)
 
 
 function BuyUpgrade(handl, othercomp)
@@ -1632,7 +1632,7 @@ function BuyUpgrade(handl, othercomp)
 	end
 end
 addEvent("BuyUpgrade", true )
-addEventHandler("BuyUpgrade", getRootElement(), BuyUpgrade)
+addEventHandler("BuyUpgrade", root, BuyUpgrade)
 
 
 function UpgradePreload(razdel, name, upgr, cost) 
@@ -1675,7 +1675,7 @@ function UpgradeServerPreload()
 	UpdateTuningPerformans(true)
 end
 addEvent("UpgradeServerPreload", true )
-addEventHandler("UpgradeServerPreload", getRootElement(), UpgradeServerPreload)
+addEventHandler("UpgradeServerPreload", root, UpgradeServerPreload)
 
 
 
@@ -1739,7 +1739,7 @@ function PoliceAddMarker(x, y, z, gpsmessage)
 	playSFX("script", 58, math.random(22, 35), false)
 end
 addEvent("PoliceAddMarker", true)
-addEventHandler("PoliceAddMarker", getRootElement(), PoliceAddMarker)
+addEventHandler("PoliceAddMarker", root, PoliceAddMarker)
 
 
 
@@ -1749,10 +1749,10 @@ addEventHandler("PoliceAddMarker", getRootElement(), PoliceAddMarker)
 function hideinv()
 	if(PData["Interface"]["Full"]) then
 		SetPlayerHudComponentVisible("all", false)
-		removeEventHandler("onClientRender", root, DrawOnClientRender)
+		removeEventHandler("onClientRender",root, DrawOnClientRender)
 	else
 		SetPlayerHudComponentVisible("all", true)
-		addEventHandler("onClientRender", root, DrawOnClientRender)
+		addEventHandler("onClientRender",root, DrawOnClientRender)
 	end
 end
 
@@ -1761,10 +1761,10 @@ end
 
 
 function NotForLowPC()
-	for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
+	for _, thePlayer in pairs(getElementsByType("player", root, true)) do
 		UpdateDisplayArmas(thePlayer)
 	end
-	for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
+	for _, thePed in pairs(getElementsByType("ped", root, true)) do
 		UpdateDisplayArmas(thePed)
 	end
 
@@ -1787,7 +1787,7 @@ function NotForLowPC()
 		end
 	end
 end
-addEventHandler("onClientPreRender", root, NotForLowPC)
+addEventHandler("onClientPreRender",root, NotForLowPC)
 
 
 
@@ -1802,8 +1802,8 @@ function onWastedEffect(killer, weapon, bodypart)
 	local e = createEffect("insects", x, y, z, 0, 0, 0, 10, true)
 	setElementParent(e, source)
 end
-addEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
-addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
+addEventHandler("onClientPedWasted", root, onWastedEffect)
+addEventHandler("onClientPlayerWasted", root, onWastedEffect)
 
 
 
@@ -1837,9 +1837,9 @@ function lowPcMode()
 		resetVehiclesLODDistance()
 		setCloudsEnabled(true)
 		setBirdsEnabled(true)
-		addEventHandler("onClientPreRender", getRootElement(), NotForLowPC)
-		addEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
-		addEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
+		addEventHandler("onClientPreRender", root, NotForLowPC)
+		addEventHandler("onClientPedWasted", root, onWastedEffect)
+		addEventHandler("onClientPlayerWasted", root, onWastedEffect)
 		
 		for thePlayer, dat in pairs(StreamData) do
 			UpdateArmas(thePlayer)
@@ -1857,9 +1857,9 @@ function lowPcMode()
 		setWorldSpecialPropertyEnabled("randomfoliage", false)
 		setCloudsEnabled(false)
 		setBirdsEnabled(false)
-		removeEventHandler("onClientPreRender", getRootElement(), NotForLowPC)
-		removeEventHandler("onClientPedWasted", getRootElement(), onWastedEffect)
-		removeEventHandler("onClientPlayerWasted", getRootElement(), onWastedEffect)
+		removeEventHandler("onClientPreRender", root, NotForLowPC)
+		removeEventHandler("onClientPedWasted", root, onWastedEffect)
+		removeEventHandler("onClientPlayerWasted", root, onWastedEffect)
 
 		for thePlayer, dat in pairs(StreamData) do
 			if(dat["armas"]) then
@@ -1919,7 +1919,7 @@ function SetPlayerHudComponentVisible(component, show)
 	end
 end
 addEvent("SetPlayerHudComponentVisible", true)
-addEventHandler("SetPlayerHudComponentVisible", getRootElement(), SetPlayerHudComponentVisible)
+addEventHandler("SetPlayerHudComponentVisible", root, SetPlayerHudComponentVisible)
 
 
 
@@ -2014,7 +2014,7 @@ function MarkerHit(hitPlayer, Dimension)
 		end
 	end
 end
-addEventHandler("onClientMarkerHit", getRootElement(), MarkerHit)
+addEventHandler("onClientMarkerHit", root, MarkerHit)
 
 
 function markerLeave(hitPlayer, Dimension)
@@ -2032,17 +2032,17 @@ function markerLeave(hitPlayer, Dimension)
 		end
 	end
 end
-addEventHandler("onClientMarkerLeave", getRootElement(), markerLeave)
+addEventHandler("onClientMarkerLeave", root, markerLeave)
 
 
 function FoundPedByTINF(thePed)
 	local TINF = getElementData(thePed, "TriggerBot")
-	for _,ped in pairs(getElementsByType("ped", getRootElement(), true)) do
+	for _,ped in pairs(getElementsByType("ped", root, true)) do
 		if(getElementData(ped, "TINF") == TINF) then
 			return ped
 		end
 	end
-	for _,ped in pairs(getElementsByType("player", getRootElement(), true)) do
+	for _,ped in pairs(getElementsByType("player", root, true)) do
 		if(getPlayerName(ped) == TINF) then
 			return ped
 		end
@@ -2090,7 +2090,7 @@ addEventHandler("bankControlUpdate", localPlayer, bankControlUpdate)
 function MyVoice(voice, voicebank)
 	if(string.sub(voice, 0, 1) ~= "[" and voice ~= " ") then
 		outputConsole(voice)
-		triggerServerEvent("CheckVoice", localPlayer, localPlayer, voice, voicebank)
+		triggerServerEvent("CheckVoice", localPlayer, {getPlayerName(localPlayer)}, voice, voicebank)
 		local voi = playSound("http://109.227.228.4/engine/include/MTA/"..voicebank.."/"..md5(utf8.upper(voice))..".wav")
 		setSoundVolume(voi, 0.7)
 	end
@@ -2710,13 +2710,6 @@ end
 
 
 
-function table.empty(self)
-    for _, _ in pairs(self) do
-        return false
-    end
-    return true
-end
-
 
 function UpdateArmas(thePlayer)
 	if(getElementData(thePlayer, "armasplus")) then
@@ -2926,10 +2919,10 @@ setTimer(updateWorld, 50, 0)
 
 function checkKey()
 	if(getElementData(localPlayer, "PlayerStatus") == "play") then
-		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
+		for _, thePlayer in pairs(getElementsByType("player", root, true)) do
 			UpdateArmas(thePlayer)
 		end
-		for _, thePed in pairs(getElementsByType("ped", getRootElement(), true)) do
+		for _, thePed in pairs(getElementsByType("ped", root, true)) do
 			UpdateArmas(thePed)
 		end
 	end	
@@ -3022,7 +3015,7 @@ function DrugsPlayerEffect()
 	end
 end
 addEvent("DrugsPlayerEffect", true)
-addEventHandler("DrugsPlayerEffect", root, DrugsPlayerEffect)
+addEventHandler("DrugsPlayerEffect",root, DrugsPlayerEffect)
 
 
 function SpunkPlayerEffect()
@@ -3035,7 +3028,7 @@ function SpunkPlayerEffect()
 	end
 end
 addEvent("SpunkPlayerEffect", true)
-addEventHandler("SpunkPlayerEffect", root, SpunkPlayerEffect)
+addEventHandler("SpunkPlayerEffect",root, SpunkPlayerEffect)
 
 
 
@@ -3243,32 +3236,18 @@ end
 function CreateButtonInput(func, text, args)
 	if(DisplayInput) then
 		DisplayInput = false		
-		removeEventHandler("onClientHUDRender", getRootElement(), DrawPlayerInput)
-		removeEventHandler("onClientCharacter", getRootElement(), outputPressedCharacter)
+		removeEventHandler("onClientHUDRender", root, DrawPlayerInput)
+		removeEventHandler("onClientCharacter", root, outputPressedCharacter)
 	else
 		BindedKeys["enter"] = {"ServerCall", localPlayer, {func, localPlayer, localPlayer, "", args}}
 		
 		DisplayInput = text
-		addEventHandler("onClientHUDRender", getRootElement(), DrawPlayerInput)
-		addEventHandler("onClientCharacter", getRootElement(), outputPressedCharacter)
+		addEventHandler("onClientHUDRender", root, DrawPlayerInput)
+		addEventHandler("onClientCharacter", root, outputPressedCharacter)
 	end
 end
 addEvent("CreateButtonInputInt", true)
-addEventHandler("CreateButtonInputInt", root, CreateButtonInput)
-
-
-
-
-
-
-function StartUnload()
-	LoginClient(false)
-	for name, dat in pairs(VideoMemory) do
-		VideoMemory[name] = {}
-	end
-	stopSound(GTASound)
-	return true
-end
+addEventHandler("CreateButtonInputInt",root, CreateButtonInput)
 
 
 
@@ -3283,12 +3262,6 @@ local SoundsTheme = {
 }
 
 function StartLoad() -- Первый этап загрузки
-	setTime(12, 0)
-	setWeather(0)
-	setFogDistance(300)
-	setFarClipDistance(300)
-	setMinuteDuration(10000000)
-	
 	local LangCode = getLocalization()["code"]
 	local Lang = {
 		["ru"] = "Ru_ru.po", 
@@ -3318,14 +3291,22 @@ function StartLoad() -- Первый этап загрузки
 	end
 	fileClose(hFile)
 	
-	setElementData(localPlayer, "PlayerStatus", "intro")
+	if(not getElementData(localPlayer, "auth")) then
+		setTime(12, 0)
+		setWeather(0)
+		setFogDistance(300)
+		setFarClipDistance(300)
+		setMinuteDuration(10000000)
+		
+		setElementData(localPlayer, "PlayerStatus", "intro")
+		
+		fadeCamera(true, 2.0)
+		SetPlayerHudComponentVisible("all", false)
 	
-	fadeCamera(true, 2.0)
-	SetPlayerHudComponentVisible("all", false)
-
-	LoginClient(true)
-	GTASound = playSound(SoundsTheme[math.random(#SoundsTheme)], true)
-	setSoundVolume(GTASound, 0.5)
+		LoginClient(true)
+		GTASound = playSound(SoundsTheme[math.random(#SoundsTheme)], true)
+		setSoundVolume(GTASound, 0.5)
+	end
 end
 
 function Start()
@@ -3359,19 +3340,6 @@ function Start()
 		col = engineLoadCOL("models/BDups_interior.col")
 		engineReplaceCOL(col, 14802)
 	end
-	
-	if(tonumber(getElementData(root, "ServerTime")) < 696902400) then
-		txd = engineLoadTXD("models/copcarvg.txd")
-		engineImportTXD(txd, 596)
-		dff = engineLoadDFF("models/copcarvg.dff")
-		engineReplaceModel(dff, 596)
-		
-		txd = engineLoadTXD("models/copcarvg.txd")
-		engineImportTXD(txd, 597)
-		dff = engineLoadDFF("models/copcarvg.dff")
-		engineReplaceModel(dff, 597)
-	end
-	
 	StartLoad()
 end
 addEventHandler("onClientResourceStart", getResourceRootElement(), Start)
@@ -3404,7 +3372,7 @@ function AuthComplete(CollectDat)
 	call(getResourceFromName("Draw_Intro"), "StopIntro")
 end
 addEvent("AuthComplete", true)
-addEventHandler("AuthComplete", localPlayer, AuthComplete)
+addEventHandler("AuthComplete",root, AuthComplete)
 
 
 
@@ -3439,7 +3407,7 @@ function stopVehicleEntry(thePlayer, seat, door)
 		end
 	end
 end
-addEventHandler("onClientVehicleStartEnter",getRootElement(),stopVehicleEntry)
+addEventHandler("onClientVehicleStartEnter",root,stopVehicleEntry)
 
 
 
@@ -3477,7 +3445,7 @@ function onClientColShapeHit(theElement, matchingDimension)
 		end
 	end	
 end
-addEventHandler("onClientColShapeHit", root, onClientColShapeHit)
+addEventHandler("onClientColShapeHit",root, onClientColShapeHit)
 
 
 
@@ -3495,7 +3463,7 @@ function onClientColShapeLeave(thePlayer, matchingDimension)
 		end
 	end	
 end
-addEventHandler("onClientColShapeLeave", root, onClientColShapeLeave)
+addEventHandler("onClientColShapeLeave",root, onClientColShapeLeave)
 
 
 
@@ -3763,7 +3731,7 @@ function targetingActivated(target)
 		end
 	end
 end
-addEventHandler("onClientPlayerTarget", getRootElement(), targetingActivated)
+addEventHandler("onClientPlayerTarget", root, targetingActivated)
 
 
  
@@ -3853,7 +3821,7 @@ function onClientChatMessageHandler(text)
 	end
 
 end
-addEventHandler("onClientChatMessage", getRootElement(), onClientChatMessageHandler)
+addEventHandler("onClientChatMessage", root, onClientChatMessageHandler)
 
 
 
@@ -3908,9 +3876,9 @@ function DevelopmentRender()
 end
 
 function ShowInfoKey()
-	if(isEventHandlerAdded("onClientRender", root, DevelopmentRender)) then
+	if(isEventHandlerAdded("onClientRender",root, DevelopmentRender)) then
 		setDevelopmentMode(false)
-		removeEventHandler("onClientRender", root, DevelopmentRender)
+		removeEventHandler("onClientRender",root, DevelopmentRender)
 	else
 		outputChatBox("Player model: "..getElementModel(localPlayer))
 		local tar = getPedTarget(localPlayer)
@@ -3934,7 +3902,7 @@ function ShowInfoKey()
 
 		
 		setDevelopmentMode(true)
-		addEventHandler("onClientRender", root, DevelopmentRender)
+		addEventHandler("onClientRender",root, DevelopmentRender)
 		
 		
 		
@@ -3998,7 +3966,7 @@ function onClientPlayerWeaponFireFunc(weapon, ammo, ammoInClip, hitX, hitY, hitZ
 	if source == localPlayer then
 		if(not hitElement) then
 			local col = createObject(16635, hitX, hitY, hitZ)
-			for _, v in pairs(getElementsByType("colshape", getRootElement(), true)) do
+			for _, v in pairs(getElementsByType("colshape", root, true)) do
 				if(isElementWithinColShape(col, v)) then
 					hitElement = getElementAttachedTo(v)
 				--	triggerEvent("ToolTip", localPlayer, "Графити")
@@ -4106,7 +4074,7 @@ function CheatCode(code)
 	local x,y,z = getElementPosition(localPlayer)
 	local zone = exports["ps2_weather"]:GetZoneName(x,y,z, true, getElementData(localPlayer, "City"))
 	if(code == "hesoyam") then
-		triggerServerEvent("hesoyam", localPlayer, localPlayer)
+		triggerServerEvent("hesoyam", resourceRoot, localPlayer)
 	elseif(code == "ofviac") then
 		triggerServerEvent("ofviac", localPlayer, localPlayer)		
 		triggerServerEvent("CheatWeather", localPlayer, zone, code)
@@ -4114,11 +4082,11 @@ function CheatCode(code)
 		triggerServerEvent("nightprowler", localPlayer, localPlayer)
 	elseif(code == "wanrltw" or code == "fullclip") then
 		if(getElementData(localPlayer, "FullClip")) then
-			triggerServerEvent("FullClip", localPlayer, localPlayer, false)
+			triggerServerEvent("FullClip", resourceRoot, localPlayer, false)
 			triggerEvent("ToolTip", localPlayer, "Чит деактивирован")
 			return true
 		else
-			triggerServerEvent("FullClip", localPlayer, localPlayer, true)
+			triggerServerEvent("FullClip", resourceRoot, localPlayer, true)
 		end
 	elseif(code == "ogxsdag" or code == "worshipme") then
 		triggerServerEvent("Respect", localPlayer, localPlayer, "civilian", 1000)
@@ -4140,12 +4108,12 @@ function CheatCode(code)
 			return true
 		end
 	elseif(code == "cpktnwt") then
-		for _, Vehicle in pairs(getElementsByType("vehicle", getRootElement(), true)) do
+		for _, Vehicle in pairs(getElementsByType("vehicle", root, true)) do
 			local x,y,z = getElementPosition(Vehicle)
 			createExplosion(x,y,z, 0, true)
 		end
 	elseif(code == "szcmawo") then
-		triggerServerEvent("kill", localPlayer, localPlayer)
+		triggerServerEvent("kill", resourceRoot, localPlayer)
 	elseif(code == "vkypqcf") then
 		triggerServerEvent("AddSkill", localPlayer, localPlayer, 22, 1000)
 	elseif(code == "afzllqll" or
@@ -4607,7 +4575,7 @@ function playerPressedKey(button, press)
 		end
     end
 end
-addEventHandler("onClientKey", root, playerPressedKey)
+addEventHandler("onClientKey",root, playerPressedKey)
 
 
 
@@ -4925,7 +4893,7 @@ function DrawOnClientRender()
 			CreateTarget(Targets["thePed"])
 		end
 		
-		for _, ped in pairs(getElementsByType("ped", getRootElement(), true)) do
+		for _, ped in pairs(getElementsByType("ped", root, true)) do
 			local text = ""
 			
 			local x,y,z = getElementPosition(localPlayer)
@@ -4982,7 +4950,7 @@ function DrawOnClientRender()
 			end
 		end
 		
-		for _, thePlayer in pairs(getElementsByType("player", getRootElement(), true)) do
+		for _, thePlayer in pairs(getElementsByType("player", root, true)) do
 			if(thePlayer) then
 				local Team = getPlayerTeam(thePlayer)
 				if(Team) then
@@ -5049,7 +5017,7 @@ function DrawOnClientRender()
 		end
 	end
 end
-addEventHandler("onClientRender", root, DrawOnClientRender)
+addEventHandler("onClientRender",root, DrawOnClientRender)
 
 
 
@@ -5190,155 +5158,7 @@ function addLabelOnClick(button, state, absoluteX, absoluteY, worldX, worldY, wo
 		end
 	end
 end
-addEventHandler("onClientClick", getRootElement(), addLabelOnClick)
-
-
-
-
-
-
-function DropInvItem(name, id, komu)
-	if(backpackid) then
-		if(backpackid == id) then
-			if(name == "player") then
-				return false
-			end
-		end
-	end
-	if(name == "backpack") then
-		triggerServerEvent("dropinvitem", localPlayer, localPlayer, name, id, backpackid, komu)
-	elseif(name == "trunk") then
-		return false -- Доделать потом
-	else
-		triggerServerEvent("dropinvitem", localPlayer, localPlayer, name, id, false, komu)	
-	end
-	SetInventoryItem(name, id, nil, nil, nil, nil)
-end
-addEvent("DropInvItem", true)
-addEventHandler("DropInvItem", localPlayer, DropInvItem)
-
-
-
-
-function AddButtonData(name, i1, dragname, i2, razdel)
-	local oldData = PInv[name][i1][4][razdel]
-	local d1,d2,d3,d4 = PInv[dragname][i2][1], PInv[dragname][i2][2], PInv[dragname][i2][3], PInv[dragname][i2][4]
-	if(oldData) then
-		local o1, o2, o3, o4 = oldData[1], oldData[2], oldData[3], oldData[4]
-		PInv[name][i1][4][razdel] = {d1,d2,d3,toJSON(d4)}
-		SetInventoryItem(name, i2, o1,o2,o3,o4)
-	else
-		PInv[name][i1][4][razdel] = {d1,d2,d3,toJSON(d4)}
-		SetInventoryItem(dragname, i2, nil,nil,nil,nil)
-	end
-end
-addEvent("AddButtonData", true)
-addEventHandler("AddButtonData", localPlayer, AddButtonData)
-
-
-function RemoveButtonDataNew(name, i, key, count)
-	PInv[name][i][4][key][2] = PInv[name][i][4][key][2]+count
-	if(PInv[name][i][4][key][2] == 0) then
-		PInv[name][i][4][key] = nil
-	end	
-	
-	SetInventoryItem(name, i, PInv[name][i][1],PInv[name][i][2],PInv[name][i][3],toJSON(PInv[name][i][4]))
-end
-addEvent("RemoveButtonDataNew", true)
-addEventHandler("RemoveButtonDataNew", localPlayer, RemoveButtonDataNew)
-
-
-
-function RemoveButtonData(name, i1, key)
-	local newslot = false
-	for i2 = 1, #PInv[name] do
-		if(not PInv[name][i2][1]) then
-			newslot=i2
-			break
-		end
-	end
-	if(newslot) then
-		local item = PInv[name][i1][4][key]
-		PInv[name][i1][4][key] = nil
-		SetInventoryItem(name, newslot, item[1],item[2],item[3],item[4])
-	end
-end
-addEvent("RemoveButtonData", true)
-addEventHandler("RemoveButtonData", localPlayer, RemoveButtonData)
-
-
-function ReplaceInventoryItem(name1, item1, name2, item2)
-	if(backpackid) then
-		if(name1 == "player") then
-			if(item1 == backpackid) then
-				return false
-			end
-		end
-		
-		if(name2 == "player") then
-			if(item2 == backpackid) then
-				return false
-			end
-		end
-	end
-	local inv = PInv[name1][item1][1]
-	local count = PInv[name1][item1][2]
-	local quality = PInv[name1][item1][3]
-	local data = PInv[name1][item1][4]
-	
-	local inv2 = PInv[name2][item2][1]
-	local count2 = PInv[name2][item2][2]
-	local quality2 = PInv[name2][item2][3]
-	local data2 = PInv[name2][item2][4]
-	SetInventoryItem(name1, item1, inv2, count2, quality2, toJSON(data2))
-	SetInventoryItem(name2, item2, inv, count, quality, toJSON(data))
-end
-
-
-
-function SetInventoryItem(name, i, item, count, quality, data)
-	if(not isPedDead(localPlayer)) then
-		if(data) then data = fromJSON(data) end
-		if(name == "backpack") then
-			PInv["player"][backpackid][4]["content"][i][1] = item
-			PInv["player"][backpackid][4]["content"][i][2] = count
-			PInv["player"][backpackid][4]["content"][i][3] = quality
-			PInv["player"][backpackid][4]["content"][i][4] = data
-		else
-			PInv[name][i][1] = item
-			PInv[name][i][2] = count
-			PInv[name][i][3] = quality
-			PInv[name][i][4] = data
-		end
-		
-		
-	end
-end
-
-
-
-
-
-function MoveMouse(x, y, absoluteX, absoluteY)
-	if(DragElement) then
-		DragX = absoluteX-DragStart[1]
-		DragY = absoluteY-DragStart[2]
-	end
-	MouseX = absoluteX
-	MouseY = absoluteY
-	local hx,hy,hz = getWorldFromScreenPosition(screenWidth/2, screenHeight/2, 10)
-	setPedLookAt(localPlayer, hx,hy,hz)
-end
-addEventHandler("onClientCursorMove", getRootElement(), MoveMouse)
-
-
-
-function useinvslot(val)
-	usableslot=val
-end
-addEvent("useinvslot", true)
-addEventHandler("useinvslot", localPlayer, useinvslot)
-
+addEventHandler("onClientClick", root, addLabelOnClick)
 
 
 
@@ -5387,10 +5207,6 @@ function vibori(arr)
 end
 addEvent("vibori", true)
 addEventHandler("vibori", localPlayer, vibori)
-
-
-
-
 
 
 
@@ -5542,8 +5358,8 @@ function onWasted(killer, weapon, bodypart)
 	end
 end
 addEvent("onClientWastedLocalPlayer", true)
-addEventHandler("onClientWastedLocalPlayer", getRootElement(), onWasted)
-addEventHandler("onClientPlayerWasted", getRootElement(), onWasted)
+addEventHandler("onClientWastedLocalPlayer", root, onWasted)
+addEventHandler("onClientPlayerWasted", root, onWasted)
 
 
 
@@ -5670,18 +5486,6 @@ addEventHandler("EndRace", localPlayer, EndRace)
 
 
 
-
-function outputLoss(attacker)
-	if(getElementType(attacker) == "vehicle") then attacker = getVehicleOccupant(attacker) end
-	if(attacker) then
-		if(attacker == localPlayer) then
-			triggerServerEvent("DestroyObject", localPlayer, localPlayer, source)
-		end
-	end
-end
-addEventHandler("onClientObjectBreak", root, outputLoss)
-
-
 function CreatePlayerArmas(thePlayer, model) 
 	if(StreamData[thePlayer]["armas"]) then
 		if(ModelPlayerPosition[tonumber(model)]) then
@@ -5704,7 +5508,7 @@ function AddPlayerArmas(thePlayer, model)
 	end
 end
 addEvent("AddPlayerArmas", true)
-addEventHandler("AddPlayerArmas", getRootElement(), AddPlayerArmas)
+addEventHandler("AddPlayerArmas", root, AddPlayerArmas)
 
 
 function RemovePlayerArmas(thePlayer, model)
@@ -5714,7 +5518,7 @@ function RemovePlayerArmas(thePlayer, model)
 	end
 end
 addEvent("RemovePlayerArmas", true)
-addEventHandler("RemovePlayerArmas", getRootElement(), RemovePlayerArmas)
+addEventHandler("RemovePlayerArmas", root, RemovePlayerArmas)
 
 
 
@@ -5902,13 +5706,11 @@ addEventHandler("PlaySFXSoundEvent", localPlayer, PlaySFXSound)
 
 
 
-
-
-addEventHandler("onClientVehicleCollision", root,
+addEventHandler("onClientVehicleCollision",root,
     function(HitElement,force, bodyPart, x, y, z, nx, ny, nz, hitElementForce)
          if(source == getPedOccupiedVehicle(localPlayer)) then
 			if(force > 500) then
-				--triggerServerEvent("ForceRemoveFromVehicle", localPlayer, localPlayer, force/1000)
+				--triggerServerEvent("ForceRemoveFromVehicle", resourceRoot, localPlayer, force/1000)
 			end
          end
     end
@@ -6036,7 +5838,7 @@ function DrawPlayerMessage()
 				end
 			end	
 		else -- Не в тюнинге
-			for _, thePickup in pairs(getElementsByType("pickup", getRootElement(), true)) do
+			for _, thePickup in pairs(getElementsByType("pickup", root, true)) do
 				local owner = getElementData(thePickup, "bizowner") or ""
 				if(owner == getPlayerName(localPlayer)) then
 					if(getElementData(thePickup, "money")) then
@@ -6205,7 +6007,7 @@ function DrawPlayerMessage()
 		end
 	end
 end
-addEventHandler("onClientHUDRender", getRootElement(), DrawPlayerMessage)
+addEventHandler("onClientHUDRender", root, DrawPlayerMessage)
 
 
 
@@ -6530,7 +6332,7 @@ function StreamIn(restream)
 	
 end
 addEvent("onClientElementStreamIn", true)
-addEventHandler("onClientElementStreamIn", getRootElement(), StreamIn)
+addEventHandler("onClientElementStreamIn", root, StreamIn)
 
 
 
@@ -6568,7 +6370,7 @@ function onAttach(theVehicle)
 		destroyElement(VehiclesInStream[source]["info"]) -- Для дальнобойщиков
 	end
 end
-addEventHandler("onClientTrailerAttach", getRootElement(), onAttach)
+addEventHandler("onClientTrailerAttach", root, onAttach)
 
 
 function deAttach(theVehicle)
@@ -6596,7 +6398,7 @@ function deAttach(theVehicle)
 		end
 	end
 end
-addEventHandler("onClientTrailerDetach", getRootElement(), deAttach)
+addEventHandler("onClientTrailerDetach", root, deAttach)
 
 
 
@@ -6613,7 +6415,7 @@ function clientPickupHit(thePlayer, matchingDimension)
 		end
 	end
 end
-addEventHandler("onClientPickupHit", getRootElement(), clientPickupHit)
+addEventHandler("onClientPickupHit", root, clientPickupHit)
 
 function StreamOut(restream)
 	if(StreamData[source]) then 
@@ -6649,8 +6451,8 @@ function StreamOut(restream)
 		end
 	end
 end
-addEventHandler("onClientElementStreamOut", getRootElement(), StreamOut)
-addEventHandler("onClientElementDestroy", getRootElement(), StreamOut)
+addEventHandler("onClientElementStreamOut", root, StreamOut)
+addEventHandler("onClientElementDestroy", root, StreamOut)
 			
 
 
@@ -6676,7 +6478,7 @@ function onQuitGame(reason)
 		PlayersAction[source] = nil
 	end
 end
-addEventHandler("onClientPlayerQuit", getRootElement(), onQuitGame)
+addEventHandler("onClientPlayerQuit", root, onQuitGame)
 
 
 
@@ -6697,7 +6499,6 @@ function SwitchNick()
 	RemoveInventory()
 	LoginClient(true)
 end
-
 addEventHandler("onClientPlayerChangeNick", getLocalPlayer(), SwitchNick)
 
 
