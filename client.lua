@@ -3532,12 +3532,6 @@ addEventHandler("TrunkReq", localPlayer, TrunkReq)
 
 
 
-function CarJack()
-	triggerServerEvent("RemovePedFromVehicle", localPlayer, getVehicleOccupant(Targets["theVehicle"]), localPlayer) 
-end
-addEvent("CarJack", true)
-addEventHandler("CarJack", localPlayer, CarJack)
-
 
 function PedDialog()
 	triggerServerEvent("PedDialog", localPlayer, localPlayer, Targets["thePlayer"] or Targets["thePed"])
@@ -4625,14 +4619,7 @@ function CreateTarget(el)
 	if(dist < 30) then
 		local types = getElementType(el)
 		if(dist < 2) then
-			if(types == "vehicle") then 
-				local driver = getVehicleOccupant(el)
-				if(driver) then
-					if(getElementType(driver) == "ped") then
-						PData["MultipleAction"]["f"] = {"CarJack", false, false, false}
-					end
-				end
-			elseif(types == "player" or types == "ped") then
+			if(types == "player" or types == "ped") then
 				sx,sy = getScreenFromWorldPosition(ex,ey,ez)
 				if(sx and sy) then
 					PData["MultipleAction"]["e"] = {"PedDialog", "Начать разговор", sx,sy}

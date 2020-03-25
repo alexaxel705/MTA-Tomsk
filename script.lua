@@ -1,45 +1,7 @@
 local ids = {}
 local OneMinute = 1000 -- 1 минута = 1 секунда
+local PriceAuto = {434, 461, 494, 495, 502, 503, 504, 521, 522, 568, 573, 581, 429, 587, 602}
 
--- Хранит исходные значения, которые в дальнейшем будут отфильтрованы в SData
-local SourceData = {
-	["PriceAuto"] = {434, 461, 494, 495, 502, 503, 504, 521, 522, 568, 573, 581, 429, 587, 602},
-	["TeamVehicle"] = {
-		["Гроув-стрит"] = {{567,"GRST 228",{86, 86, 86, 86}}, {492 ,"GROVE4L_",{59,34,86,86}}, {412,"GRST 228",{86, 86, 86, 86}}},
-		["Баллас"] = {{517,"BALS 228",{30, 30, 30, 30}}, {412,"BALS 228",{30, 30, 30, 30}}, {566 ,"BALS 228",{30, 30, 30, 30}}},
-		["Ацтекас"] = {{466,"AZTC 228",{93, 71, 0, 0}}, {576,"AZTC 228",{93, 71, 0, 0}}, {474 ,"AZTC 228",{93, 71, 0, 0}}},
-		["Байкеры"] = {{468,"METAL228"}, {463,"METAL228"}, {586 ,"METAL228"}},
-		--{для всех}, {такси}, {эксклюзивы}, {полиция}
-		["Полиция"] = {
-			["Los Santos"] = {{596, "POLS 228"}, {523, "PBKE 228"}},
-			["Red County"] = {{599, "PORC"}, {523, "PBKE 228"}},
-			["Whetstone"] = {{599, "POWS 228"}, {523, "PBKE 228"}},
-			["Flint County"] = {{599, "POFC 228"}, {523, "PBKE 228"}},
-			["San Fierro"] = {{597, "POSF 228"}, {523, "PBKE 228"}},
-			["Bone County"] = {{598, "POBC 228"}, {523, "PBKE 228"}},
-			["Tierra Robada"] = {{598, "POTR 228"}, {523, "PBKE 228"}},
-			["Las Venturas"] = {{598, "POLV 228"}, {523, "PBKE 228"}},
-		},
-		["Мирные жители"] = {
-			["Los Santos"] = {{404},{419},{421},{439},{496},{475}, {420}, {603}, {467},{436},{585},{462},{602},{458},{526},{527},{529},{566},{540},{547},{546},{466},{491},{507},{516},{426}}, -- Phoenix эксклюзив
-			["Red County"] = {{404},{419},{439},{496},{475}, {477}, {478},{489},{554},{483},{468}}, -- ZR-350 эксклюзив
-			["Whetstone"] = {{404},{419},{439},{496},{475}, {506}, {478},{483},{489},{554},{468}}, -- Super GT эксклюзив
-			["Flint County"] = {{404},{419},{439},{496},{475}, {402}, {478},{483},{489},{554},{468}}, -- Buffalo эксклюзив
-			["San Fierro"] = {{404},{419},{439},{496},{475}, {415}, {438},{579},{554},{468},{550},{580},{405},{421},{426},{445},{507},{540},{551},{418}}, -- Cheetah эксклюзив
-			["Bone County"] = {{404},{419},{439},{496},{475}, {480}, {549},{554},{500},{586},{505},{518},{542},{543},{604},{605},{508}}, -- Comet эксклюзив
-			["Tierra Robada"] = {{404},{419},{439},{496},{475}, {533}, {549},{500},{586},{505},{518},{542},{543},{604},{605},{508}}, -- Feltzer эксклюзив
-			["Las Venturas"] = {{404},{419},{439},{496},{475}, {420}, {541}, {400},{555},{587},{589},{463},{561},{560},{559},{558},{562},{400},{565},{575}}, -- Bullet эксклюзив
-			["Unknown"] = {{404},{419},{439},{496},{475}}
-		},
-		["Вагос"] = {{474,"VAGOS228",{6, 6, 0, 0}}, {467,"VAGOS228",{6, 6, 0, 0}}, {576 ,"VAGOS228",{6, 6, 0, 0}}},
-		["Колумбийский картель"] = {{422,"COKA 228",{116, 116, 116, 116},{2, 2}}, {440,"COKA 228",{116, 116, 116, 116},{1, 1}}, {600 ,"COKA 228",{116, 116, 116, 116},{2, 2}}, {543 ,"COKA 228",{116, 116, 116, 116},{4, 4}}},
-		["Русская мафия"] = {{404,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {560,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {445,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {581,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}, {409,"RUSM 228",{1,1,1,1},nil,"createRusMaf"}},
-		["Триады"] = {{466,"TRIA 228",{0,0,0,0}}, {560,"TRIA 228",{0,0,0,0}}, {445,"TRIA 228",{0,0,0,0}}, {414,"TRIA 228",{83,83,83,83},{5,5}}},
-		["Da Nang Boys"] = {{439,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {482,"YAZA 228",{177,15,11, 255,255,255}, nil, "createYakuza"}, {467,"YAZA 228",{177,15,11, 255,255,255}, {0, 0}, "createYakuza"}},
-		["Рифа"] = {{536,"RIFA 228",{94, 94, 0, 0}}, {439,"RIFA 228",{94, 94, 0, 0}}, {475 ,"RIFA 228",{94, 94, 0, 0}}},
-		["Деревенщины"] = {{478,"KOLHZ228",{61, 61, 0, 0}}, {543 ,"KOLHZ228",{61, 61, 0, 0}}, {531,"KOLHZ228",{61, 61, 0, 0}}}
-	},
-}
 local PData = {}
 local WorldTimer = false
 local SData = {
@@ -1366,7 +1328,7 @@ local VComp = {
 		["TRBD 1.8 L"] = {"Automobile", 5.5999999046326, 2.2999999523163, "diesel", 3500, 140},
 		["HRD 1000 CC"] = {"Bike", 20, 4, "petrol", 500, 72},
 		["HLR 2.0 L"] = {"Automobile", 8, 2, "petrol", 1700, 98},
-		["УЗАМ 412 1.5 L"] = {"Automobile", 8, 3, "diesel", 2000, 115},
+		["Gunder D-243"] = {"Automobile", 8, 3, "diesel", 2000, 115},
 		["BE 100 CC"] = {"Boat", 0.60000002384186, 1, "petrol", 2200, 10},
 		["HLR 1.7 L v2"] = {"Automobile", 8, 2.5, "petrol", 2500, 143},
 		["2JZ GTE 3.0 L"] = {"Automobile", 11.199999809265, 2.2000000476837, "petrol", 1500, 120},
@@ -1620,7 +1582,7 @@ local VehicleSystem = {
 	[530] = {0.76, "HLR E GLE", "", "F3 60", "Macpherson V50", "Brembo 190mm", "Michelin 47", 33, {6, 1965}, {5, CYear}, "DUDE"},
 	[562] = {0.66, "2JZ GTE 3.0 L", "", "R5 200", "Macpherson V51", "Brembo 230mm", "Hankook", 50, {5, 1988}, {6, 1994}, "Export"},
 	[594] = {0.17, "RC CAM ENGINE", "", "A1 60", "Macpherson V52", "Brembo 12", "Michelin 48", 3, {9, 1992}, {6, CYear}, "RC"},
-	[531] = {0.96, "УЗАМ 412 1.5 L", "", "R4 70", "Macpherson V53", "Wilwood 340mm", "Michelin 49", 66, {6, 1930}, {6, 1970}, "Export"},
+	[531] = {0.96, "Gunder D-243", "", "R4 70", "Macpherson V53", "Wilwood 340mm", "Michelin 49", 66, {6, 1930}, {6, 1970}, "Export"},
 	[563] = {1.68, "RR 1200", "", "A1 200", "Macpherson V93", "Brembo 10", "Hankook", 333, {11, 1970}, {6, CYear}, "Export"},
 	[426] = {0.74, "HLR GT 2.2 L", "", "R5 200", "Macpherson V55", "Endless 265mm", "Michelin 50", 53, {1, 1992}, {5, 1994}, "Declasse"},
 	[442] = {0.83, "RST GLE 2.0 L v3", "", "R5 150", "Macpherson V56", "Endless 153mm", "Michelin 51", 83, {0, 1977}, {10, 1984}, "Albany"},
@@ -1771,7 +1733,12 @@ local VehicleSystem = {
 	[484] = {0.54, "BE 900 CC", "", "R5 190", "Macpherson V175", "Brembo 82", "Michelin 134", 166, {9, 1965}, {10, 1987}, "Dinka"},
 	[573] = {1.65, "MT 3", "", "A5 110", "Macpherson V109", "Wilwood 212mm", "Michelin 85", 333, {2, 2002}, {8, CYear}, "MTL"},
 }
-
+VehicleSystem[712] = VehicleSystem[462]
+VehicleSystem[713] = VehicleSystem[487]
+VehicleSystem[714] = VehicleSystem[413]
+VehicleSystem[715] = VehicleSystem[426]
+VehicleSystem[716] = VehicleSystem[438]
+VehicleSystem[717] = VehicleSystem[489]
 
 
 
@@ -2051,25 +2018,21 @@ local VehicleTrunks = {
 
 
 
-
-
-
-
-
 function CreateVehicle(model, x, y, z, rx, ry, rz, numberplate, bDirection, variant1, variant2)
 	if(model == 522) then
 		bDirection, variant1, variant2 = false, 4, 4
 	end
 	
 	local Fake = model
-	if(model > 611) then 
+	if(model > 611) then
 		Fake = 404
-		VehicleSystem[model] = VehicleSystem[411]
+		if(not VehicleSystem[model]) then
+			VehicleSystem[model] = VehicleSystem[439]
+		end
 	end
 	
 	local theVehicle = createVehicle(Fake, x, y, z, rx, ry, rz, numberplate, bDirection, variant1, variant2)	
 	setElementData(theVehicle, "model", model) -- For vehicle resource
-
 
 	setVehicleFuelTankExplodable(theVehicle, true)
 	local comp = {VehicleSystem[model][2], VehicleSystem[model][3], VehicleSystem[model][4], VehicleSystem[model][5], VehicleSystem[model][6], VehicleSystem[model][7]}
@@ -2087,22 +2050,21 @@ function CreateVehicle(model, x, y, z, rx, ry, rz, numberplate, bDirection, vari
 		setElementData(theVehicle, "trunk", toJSON(arr))
 	end
 
-	local h = getVehicleHandling(theVehicle)
-	local hh = getModelHandling(model)
-	for k in pairs(hh) do
-		if(tonumber(h[k])) then
-			if(h[k] ~= hh[k]) then
-				outputConsole(h[k].." ~= "..hh[k].." "..k.." "..model.." ("..hh["mass"].."kg)")
-				fileDelete("save.txt")
-				local hFile = fileCreate("save.txt")
-				fileWrite(hFile, h[k].." ~= "..hh[k].." "..k.." "..model) -- write a text line
-				fileClose(hFile)
-			end
-		end
-	end
+	--local h = getVehicleHandling(theVehicle)
+	--local hh = getModelHandling(model)
+	--for k in pairs(hh) do
+	--	if(tonumber(h[k])) then
+	--		if(h[k] ~= hh[k]) then
+	--			outputConsole(h[k].." ~= "..hh[k].." "..k.." "..model.." ("..hh["mass"].."kg)")
+	--			fileDelete("save.txt")
+	--			local hFile = fileCreate("save.txt")
+	--			fileWrite(hFile, h[k].." ~= "..hh[k].." "..k.." "..model) -- write a text line
+	--			fileClose(hFile)
+	--		end
+	--	end
+	--end
 	return theVehicle
 end
-
 
 
 function AddPlayerArmas(thePlayer, model)
@@ -2135,6 +2097,19 @@ function UpdateVehicleHandling(theVehicle, arr)
 	setElementData(theVehicle, "handl", toJSON(arr), false)
 	local engine,turbo,transmission,suspension,brakes,tires = arr[1], arr[2], arr[3], arr[4], arr[5], arr[6]
 
+	if(not VComp["Engines"][engine] or -- Для того чтобы использовать запчасти устаревшие
+	   not VComp["Transmission"][transmission] or
+	   not VComp["Suspension"][suspension] or
+	   not VComp["Brakes"][brakes] or
+	   not VComp["Tires"][tires]) then  
+		engine = VehicleSystem[404][2]
+		transmission = VehicleSystem[404][4]
+		suspension = VehicleSystem[404][5]
+		brakes = VehicleSystem[404][6]
+		tires = VehicleSystem[404][7]
+	end
+	
+	
 	local model = getElementModel(theVehicle)
 	local NewEngineMass = VComp["Engines"][engine][5]/14
 	local OldEngineMass = VComp["Engines"][VehicleSystem[model][2]][5]/14
@@ -3395,39 +3370,74 @@ local RandVeh = {
 	{-911.5, 2022.3, 59.9, 0, 0, 313},
 	{-929.8, 2015.6, 59.9, 0, 0, 130},
 	{-1528.3, 2526.5, 54.7, 0, 0, 0},
-	{-1519.4, 2526, 54.7, 0, 0, 180}
+	{-1519.4, 2526, 54.7, 0, 0, 180},
+	{-2763.2, -312, 6,0,0,3}, 
+	{2486.5, -1654.9, 12.3, 0, 0, 90},
+	{2489.9, -1682.9, 12.3, 0, 0, 270},
+	{2298.8, -1646.1, 13.7, 0, 0, 270},
+	{2508.2, -1672.5, 12.3, 0, 0, 347},
+	{-2175.8, 293.2, 34.1, 0, 0, 0}, 
+	{-2222.6, 306.2, 34.1, 0, 0, 180},
+	{1803.4, -1931, 12.4, 0, 0, 0}, 
+	{1782.2, -1886.1, 12.4, 0, 0, 270},
+	{1834.9, -1871.3, 12.4, 0, 0, 0}, 
+	{1775.5, -1907.9, 12.4, 0, 0, 180}, 
+	{1752.8, -1858.9, 12.4, 0, 0, 270}, 
+	{-26, 2347, 23.1, 0, 0, 180}, 
+	{-12, 2343, 23.1, 0, 0, 90}, 
+	{-40, 2344, 23.1, 0, 0, 230}, 
+	{-34, 2325, 23.1, 0, 0, 120},
+	{343.7, -1809.6, 3.5, 0, 0, 0}, 
+	{1809, -1718.2, 12.5, 0, 0 ,0},
+	{1943.4, 1342.7, 8.1, 0, 0, 180}, 
+	{1943.4, 1349.4, 8.1, 0, 0, 180}, 
+	{2160, 1676.6, 9.7, 0, 0, 350}, 
+	{2160.2, 1683.5, 9.7, 0, 0, 6}, 
+	{2159.6, 1644.7, 10.1, 0, 0, 20},
+	{2153.4, 1683.6, 9.7, 0, 0, 185}, 
+	{2158.8, 1689.7, 9.7,  0, 0, 20},
+	{1245.5, -2024, 58.8,  0, 0, 270}, 
+	{1246, -2044, 58.8, 0, 0, 270}, 
+	{1274.9, -2044.7, 58.8,  0, 0, 90}, 
+	{1245.5, -2020, 58.8, 0, 0, 270},
+	{1245.5, -2028, 58.8,  0, 0, 270}, 
+	{1925.9, -1788.6, 12.4, 0, 0, 270},
+	{2479.5, -1953.9, 12.4,0,0,0}, 
+	{2489, -1953.9, 12.4,0,0,0}, 
+	{2492.4, -1953.9, 12.4,0,0,0}, 
+	{2483, -1944.5, 12.4,0,0,270}, 
+	{2495.6, -1953.9, 12.4,0,0,0}, 
+	{2502, -1953.9, 12.4,0,0,0},
+	{1052, 2080.75, 10.83,  0, 0, 40}, 
+	{1042, 2080.75, 10.83,  0, 0, 320}, 
+	{1032.9, 2098, 10.4, 0, 0, 270}, 
+	{1047, 2080.75, 10.83,  0, 0, 0},
+	{2772.7, -1615, 9.9, 0, 0, 270}, 
+	{2772.7, -1606.5, 9.9, 0, 0, 270}, 
+	{2792.8, -1623.5, 9.9, 0, 0, 350},
+	{-2176, 638, 48.4, 0, 0, 70}, 
+	{-2213, 637.5, 48.4, 0, 0, 270},
+	{-2180, 702, 52.9, 0, 0, 230}, 
+	{-2219.4, 608.3, 34.2, 0, 0, 250},
+	{-2182.6, 1032.8, 79, 0, 0, 180}, 
+	{-2190, 1032.8, 79, 0, 0, 180}, 
+	{-2197.8, 996.3, 79, 0, 0, 270},
+	{-2187.7, 976, 79, 0, 0, 30}, 
+	{-2197.8, 1032.8, 79, 0, 0, 180},
 }
+
+
+
+
 
 local RandomVehicles = {}
 function SpawnAllVehicle()
 	SData["PriceAuto"] = {}
-	for _, model in pairs(SourceData["PriceAuto"]) do
+	for _, model in pairs(PriceAuto) do
 		if(IsVehicleYear(model)) then
 			SData["PriceAuto"][#SData["PriceAuto"]+1] = model
 		end
 	end
-
-
-	SData["TeamVehicle"] = {}
-	for team, arr in pairs(SourceData["TeamVehicle"]) do
-		for region, arr2 in pairs(arr) do
-			if(tonumber(region)) then -- Если не указана местность
-				if(IsVehicleYear(arr2[1])) then
-					if(not SData["TeamVehicle"][team]) then SData["TeamVehicle"][team] = {} end
-					SData["TeamVehicle"][team][#SData["TeamVehicle"][team]+1] = arr2
-				end
-			else
-				for i, arr3 in pairs(arr2) do
-					if(IsVehicleYear(arr3[1])) then
-						if(not SData["TeamVehicle"][team]) then SData["TeamVehicle"][team] = {} end
-						if(not SData["TeamVehicle"][team][region]) then SData["TeamVehicle"][team][region] = {} end
-						SData["TeamVehicle"][team][region][#SData["TeamVehicle"][team][region]+1] = arr3
-					end
-				end
-			end
-		end
-	end
-
 
 	for _, theVehicle in pairs(RandomVehicles) do
 		local occ = false
@@ -3439,17 +3449,13 @@ function SpawnAllVehicle()
 		end
 		if(not occ) then destroyElement(theVehicle) end
 	end
+	
+	local VehicleRegionAll = {400,401,402,404,405,410,418,419,420,421,422,426,436,438,439,445,458,466,467,475,474,479,482,489,491,492,496,500,505,507,516,518,526,527,529,533,540,547,546,550,551,576,580,585,602}
+
 	for _,k in pairs(RandVeh) do
 		local region = getZoneName(k[1], k[2], k[3], true)
-		local vehinfo = SData["TeamVehicle"]["Мирные жители"][region][math.random(#SData["TeamVehicle"]["Мирные жители"][region])]
-		RandomVehicles[#RandomVehicles+1] = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6], vehinfo[2], true)
-
-		--if(getElementData(RandomVehicles[#RandomVehicles], "trunk")) then
-		--	local arr = fromJSON(getElementData(RandomVehicles[#RandomVehicles], "trunk"))
-		--	if(arr[1]) then arr[1] = {"Запаска", 1, math.random(250,550), {}} end
-		--	if(arr[2]) then arr[2] = {"Огнетушитель", 1, math.random(250,550), {}} end
-		--	setElementData(RandomVehicles[#RandomVehicles], "trunk", toJSON(arr))
-		--end
+		local model = VehicleRegionAll[math.random(#VehicleRegionAll)]
+		RandomVehicles[#RandomVehicles+1] = CreateVehicle(model, k[1], k[2], k[3]+VehicleSystem[model][1], k[4], k[5], k[6], "", true)
 	end
 
 
@@ -3660,26 +3666,6 @@ local WARGANG = {}
 
 
 
-
--- Первая обычная, вторая символ банды, третья грузовая, четвертая большая
-local VehicleSpawnPoint = {
-	["Avispa Country Club"] = {{-2763.2, -312, 6,0,0,3}}, 
-	["Ganton"] = {{2486.5, -1654.9, 12.3, 0, 0, 90}, {2489.9, -1682.9, 12.3, 0, 0, 270}, {2298.8, -1646.1, 13.7, 0, 0, 270}, {2508.2, -1672.5, 12.3, 0, 0, 347}},
-	["El Corona"] = {{1803.4, -1931, 12.4, 0, 0, 0}, {1782.2, -1886.1, 12.4, 0, 0, 270}, {1834.9, -1871.3, 12.4, 0, 0, 0}, {1775.5, -1907.9, 12.4, 0, 0, 180}, {1752.8, -1858.9, 12.4, 0, 0, 270}},
-	["Willowfield"] = {{2479.5, -1953.9, 12.4,0,0,0}, {2489, -1953.9, 12.4,0,0,0}, {2492.4, -1953.9, 12.4,0,0,0}, {2483, -1944.5, 12.4,0,0,270}, {2495.6, -1953.9, 12.4,0,0,0}, {2502, -1953.9, 12.4,0,0,0}},
-	["East Beach"] = {{2772.7, -1615, 9.9, 0, 0, 270}, {2772.7, -1606.5, 9.9, 0, 0, 270}, {2792.8, -1623.5, 9.9, 0, 0, 350}},
-	["Chinatown"] = {{-2176, 638, 48.4, 0, 0, 70}, {-2213, 637.5, 48.4, 0, 0, 270}, {-2180, 702, 52.9, 0, 0, 230}, {-2219.4, 608.3, 34.2, 0, 0, 250}},
-	["Calton Heights"] = {{-2182.6, 1032.8, 79, 0, 0, 180}, {-2190, 1032.8, 79, 0, 0, 180}, {-2197.8, 996.3, 79, 0, 0, 270}, {-2187.7, 976, 79, 0, 0, 30}, {-2197.8, 1032.8, 79, 0, 0, 180}},
-	["Whitewood Estates"] = {{1052, 2080.75, 10.83,  0, 0, 40}, {1042, 2080.75, 10.83,  0, 0, 320}, {1032.9, 2098, 10.4, 0, 0, 270}, {1047, 2080.75, 10.83,  0, 0, 0}},
-	["Idlewood"] = {{1925.9, -1788.6, 12.4, 0, 0, 270}},
-	["Verdant Bluffs"] = {{1245.5, -2028, 58.8,  0, 0, 270}, {1245.5, -2024, 58.8,  0, 0, 270}, {1246, -2044, 58.8, 0, 0, 270}, {1274.9, -2044.7, 58.8,  0, 0, 90}, {1245.5, -2020, 58.8, 0, 0, 270}},
-	["Caligula's Palace"] = {{2160, 1676.6, 9.7, 0, 0, 350}, {2160.2, 1683.5, 9.7, 0, 0, 6}, {2159.6, 1644.7, 10.1, 0, 0, 20}, {2153.4, 1683.6, 9.7, 0, 0, 185}, {2158.8, 1689.7, 9.7,  0, 0, 20}},
-	--["El Castillo del Diablo"] = {{-26, 2347, 23.1, 0, 0, 180}, {-12, 2343, 23.1, 0, 0, 90}, {-40, 2344, 23.1, 0, 0, 230}, {-34, 2325, 23.1, 0, 0, 120}},
-	["King's"] = {{-2175.8, 293.2, 34.1, 0, 0, 0}, {-2222.6, 306.2, 34.1, 0, 0, 180}},
-	["The High Roller"] = {{1943.4, 1342.7, 8.1, 0, 0, 180}, {1943.4, 1349.4, 8.1, 0, 0, 180}},
-	["Santa Maria Beach"] = {{343.7, -1809.6, 3.5, 0, 0, 0}},
-	["Little Mexico"] = {{1809, -1718.2, 12.5, 0, 0 ,0}}
-}
 
 
 local ModificationVehicle = {
@@ -6548,51 +6534,6 @@ function preLoad(name)
 					setElementData(dat[1], "team",  toJSON({zoneowner}))
 				end
 			end
-			
-
-			if(SpawnPoint[name]) then
-				SpawnPoint[name][6] = zoneowner
-			else
-				SpawnPoint[name] = {false,false,false,false,false,zoneowner}
-			end
-			if(VehicleSpawnPoint[name] and SData["TeamVehicle"][zoneowner]) then
-				VehicleBand[name] = {}
-				local VehicleCount = 1
-				for v,k in pairs(VehicleSpawnPoint[name]) do
-					local vehinfo = false
-					if(zoneowner == "Полиция" or zoneowner == "Мирные жители") then
-						local region = getZoneName(k[1], k[2], k[3], true)
-						vehinfo = SData["TeamVehicle"]["Мирные жители"][region][math.random(#SData["TeamVehicle"]["Мирные жители"][region])]
-					else
-						if(not SData["TeamVehicle"][zoneowner][VehicleCount]) then
-							VehicleCount = 1
-						end
-						vehinfo = SData["TeamVehicle"][zoneowner][VehicleCount]
-					end
-
-					local theVehicle = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6])
-
-					if(vehinfo[2]) then
-						setVehiclePlateText(theVehicle, vehinfo[2])
-					end
-
-					if(vehinfo[3]) then
-						if(#vehinfo[3] == 4) then
-							setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4])
-						else
-							setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4], vehinfo[3][5], vehinfo[3][6])
-						end
-					end
-					if(vehinfo[4]) then
-						setVehicleVariant(theVehicle, vehinfo[4][1], vehinfo[4][2], vehinfo[4][3], vehinfo[4][4])
-					end
-					if(vehinfo[5]) then
-						triggerEvent(vehinfo[5], theVehicle)
-					end
-					VehicleBand[name][#VehicleBand[name]+1]=theVehicle
-					VehicleCount=VehicleCount+1
-				end
-			end
 		end
 	end
 
@@ -8790,83 +8731,6 @@ function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
 	CapZone[zone] = nil
 	for slot = 1, #WARGANG[zone] do
 		setRadarAreaColor(WARGANG[zone][slot], r,g,b,140)
-	end
-
-	if(VehicleBand[zone]) then
-		if(spawnveh) then -- Прервали захват (восстановление)
-			for slot = 1, #VehicleBand[zone] do
-				if(isElement(VehicleBand[zone][slot])) then
-					removeElementData(VehicleBand[zone][slot], "destroy")
-				else
-					local k = VehicleSpawnPoint[zone][slot]
-					local vehinfo = false
-					if(PlayerTeam == "Полиция") then
-						local region = getZoneName(k[1], k[2], k[3], true)
-						vehinfo = SData["TeamVehicle"][PlayerTeam][region][math.random(#SData["TeamVehicle"][PlayerTeam][region])]
-					else
-						vehinfo = SData["TeamVehicle"][PlayerTeam][math.random(1, #SData["TeamVehicle"][PlayerTeam])]
-					end
-
-					local theVehicle = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6], vehinfo[2], true)
-					if(vehinfo[3]) then
-						if(#vehinfo[3] == 4) then
-							setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4])
-						else
-							setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4], vehinfo[3][5], vehinfo[3][6])
-						end
-					end
-					if(vehinfo[4]) then
-						setVehicleVariant(theVehicle, vehinfo[4][1], vehinfo[4][2], vehinfo[4][3], vehinfo[4][4])
-					end
-					if(vehinfo[5]) then
-						triggerEvent(vehinfo[5], theVehicle)
-					end
-					VehicleBand[zone][slot] = theVehicle
-				end
-				if(isElement(DynamicBlip[VehicleBand[zone][slot]])) then
-					destroyElement(DynamicBlip[VehicleBand[zone][slot]])
-					destroyElement(DynamicMar[VehicleBand[zone][slot]])
-				end
-			end
-		else -- Новые автомобили
-			for slot = 1, #VehicleBand[zone] do
-				if(isElement(DynamicBlip[VehicleBand[zone][slot]])) then
-					destroyElement(DynamicBlip[VehicleBand[zone][slot]])
-					destroyElement(DynamicMar[VehicleBand[zone][slot]])
-				end
-			end
-			VehicleBand[zone] = {}
-			local VehicleCount = 1
-			for v,k in pairs(VehicleSpawnPoint[zone]) do
-				local vehinfo = false
-				if(PlayerTeam == "Полиция") then
-					local region = getZoneName(k[1], k[2], k[3], true)
-					vehinfo = SData["TeamVehicle"][PlayerTeam][region][math.random(#SData["TeamVehicle"][PlayerTeam][region])]
-				else
-					if(not SData["TeamVehicle"][PlayerTeam][VehicleCount]) then
-						VehicleCount = 1
-					end
-					vehinfo = SData["TeamVehicle"][PlayerTeam][VehicleCount]
-				end
-
-				local theVehicle = CreateVehicle(vehinfo[1], k[1], k[2], k[3]+VehicleSystem[vehinfo[1]][1], k[4], k[5], k[6], vehinfo[2], true)
-				if(vehinfo[3]) then
-					if(#vehinfo[3] == 4) then
-						setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4])
-					else
-						setVehicleColor(theVehicle, vehinfo[3][1], vehinfo[3][2], vehinfo[3][3], vehinfo[3][4], vehinfo[3][5], vehinfo[3][6])
-					end
-				end
-				if(vehinfo[4]) then
-					setVehicleVariant(theVehicle, vehinfo[4][1], vehinfo[4][2], vehinfo[4][3], vehinfo[4][4])
-				end
-				if(vehinfo[5]) then
-					triggerEvent(vehinfo[5], theVehicle)
-				end
-				VehicleBand[zone][#VehicleBand[zone]+1]=theVehicle
-				VehicleCount=VehicleCount+1
-			end
-		end
 	end
 
 
@@ -15024,7 +14888,7 @@ function RacePriceGeneration(thePlayer)
 	if(Prices == 1) then
 		local park = GetRandomParking(zone)
 		if(park) then
-			local RacePrice = SData["PriceAuto"][math.random(1, #SData["PriceAuto"])]
+			local RacePrice = PriceAuto[math.random(1, #PriceAuto)]
 			local v = CreateVehicle(RacePrice, park[4], park[5], park[6]+VehicleSystem[RacePrice][1], 0,0,park[7], getPlayerName(thePlayer))
 
 			Parkings[park[1]][park[2]][park[3]][1] = v
