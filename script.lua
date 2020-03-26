@@ -419,7 +419,6 @@ local ThreesNames = {
 	[823] = "Конопля", 
 	[870] = "Роза", 
 }
-local BotCreated = {}
 local CapZone = {}
 local BizControls = {}
 local VacancyList = {}
@@ -566,7 +565,8 @@ local SpawnPoint = {
 	["Verdant Bluffs"] = {1209, -2037, 69, 270, false, false, 0, 0},
 	["Caligula's Palace"] = {2170.6, 1684, 10.8, 0, false, false, 0, 0},
 	["Pershing Square Meria"] = {1481.6, -1765.4, 18.8, 0, false, false, 0, 0}, 
-	["Avispa Country Club"] = {-2724.2, -314.4, 7.2, 48, false, false, 0, 0}
+	["Avispa Country Club"] = {-2724.2, -314.4, 7.2, 48, false, false, 0, 0},
+	["El Castillo del Diablo"] = {-36, 2348.1, 23.1, 180, false, false, 0, 0}
 }
 
 local ClinicSpawn = {
@@ -2984,9 +2984,9 @@ local NonRandVeh = {
 	{false, 523, -226, 994, 18.7,0,0,270, "POLICETR"},
 	{false, 523, -226, 996, 18.7,0,0,270, "POLICETR"},
 	{false, 523, -226, 998, 18.7,0,0,270, "POLICETR"},
-	{false, 599, -211, 999, 18.7,0,0,90, "POLICETR", false, nil, nil, {29,8,0,0}},
-	{false, 596, -211, 995, 18.7,0,0,90, "POLICETR", false, nil, nil, {29,8,0,0}},
-	{false, 598, -211, 991, 18.7,0,0,90, "POLICETR", false, nil, nil, {29,8,0,0}},
+	{false, 599, -211, 999, 18.7,0,0,90, "POLICETR"},
+	{false, 598, -211, 995, 18.7,0,0,90, "POLICETR"},
+	{false, 598, -211, 991, 18.7,0,0,90, "POLICETR"},
 
 
 
@@ -4454,7 +4454,7 @@ function WantedLevel(thePlayer, count)
 		if(wanted > 6) then wanted = 6
 		elseif(wanted < 0) then wanted = 0 end
 	
-		if(wanted > 0) then
+		if(count > 1) then
 			local rand = math.random(6)
 			if(rand == 1) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 0, math.random(0, 163), false)
 			elseif(rand == 2) then triggerClientEvent(thePlayer, "PlaySFXClient", thePlayer, "script", 1, math.random(0, 14), false)
@@ -6694,64 +6694,6 @@ end
 
 
 
-function CreateBot(skin,x,y,z,rz,i,d,zone,ind)
-	if(not BotCreated[zone]) then BotCreated[zone] = {} end
-
-	if(not ind) then ind = #BotCreated[zone]+1 end
-	if(not rz) then rz = math.random(0,360) end
-	BotCreated[zone][ind] = createPed(skin, x, y, z, rz, true)
-	setElementData(BotCreated[zone][ind], "TINF", toJSON({zone,ind,x,y,z,rz}))
-	setElementData(BotCreated[zone][ind], "team", SkinData[skin][2])
-
-	setPedWalkingStyle(BotCreated[zone][ind], SkinData[skin][1])
-	if(i) then setElementInterior(BotCreated[zone][ind], i) end
-	if(d) then setElementDimension(BotCreated[zone][ind], d) end
-
-	local name = SkinData[skin][3]
-	if(SkinData[skin][6]) then
-		name = SkinData[skin][6][math.random(#SkinData[skin][6])]
-	end
-
-	local botinv = {}
-	if(SkinData[skin][4]) then
-		botinv[#botinv+1] = {["txd"] = FoundWName(SkinData[skin][4]), ["name"] = FoundWName(SkinData[skin][4])}
-		giveWeapon(BotCreated[zone][ind], SkinData[skin][4], 9999, true)
-	end
-
-	local randitem = math.random(20)
-
-	if(randitem == 1) then
-		if(SkinData[skin][2] == "Мирные жители") then
-			botinv[#botinv+1] = {["txd"] = "Пакет", ["name"] = "Пакет"}
-			name=name.." с пакетом"
-		end
-	elseif(randitem == 2) then
-		if(SkinData[skin][2] == "Мирные жители") then
-			botinv[#botinv+1] = {["txd"] = "Чемодан", ["name"] = "Чемодан"}
-			name=name.." с чемоданом"
-		end
-	elseif(randitem == 3) then
-		if(SkinData[skin][3] == "Мужчина") then
-			name="Пьяный "..utf8.lower(name)
-			setElementData(BotCreated[zone][ind], "dialog", "Пьяный Мужчина")
-		elseif(SkinData[skin][3] == "Женщина") then
-			name="Пьяная "..utf8.lower(name)
-		end
-
-		local DrunkObj = {1543, 1544, 1669, 1950, 1951}
-		setElementData(BotCreated[zone][ind], "armasplus", toJSON({[DrunkObj[math.random(#DrunkObj)]] = true}))
-		setPedWalkingStyle(BotCreated[zone][ind], 126)
-	elseif(randitem == 4) then
-		name=name.." с сигаретой"
-		setElementData(BotCreated[zone][ind], "armasplus", toJSON({[3027] = true}))
-	end
-
-	setElementData(BotCreated[zone][ind], "inv", toJSON({botinv}))
-	setElementData(BotCreated[zone][ind], "name", name)
-	return BotCreated[zone][ind]
-end
-
-
 
 
 function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
@@ -6792,6 +6734,10 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 				end
 			end
 			if(PTeam) then
+				if(PTeam == "Da Nang Boys" or PTeam == "Триады" or PTeam == "Русская мафия") then
+					Respect(killer, "police", 1)
+				end
+			
 				if(PTeam == "Мирные жители") then
 					Respect(killer, "civilian", -1)
 					WantedLevel(killer, 1)
@@ -6803,29 +6749,30 @@ function WastedPed(totalAmmo, killer, weapon, bodypart, stealth)
 							setElementData(p, "arr", toJSON({["txd"] = "Деньги", ["name"] = "Деньги", ["count"] = amount}))
 						end
 					end
-				elseif(PTeam == "Баллас" or PTeam == "Колумбийский картель" or PTeam == "Русская мафия") then
+				elseif(PTeam == "Баллас" or PTeam == "Колумбийский картель") then
 					Respect(killer, "grove", 1)
 					Respect(killer, "ballas", -1)
-				elseif(PTeam == "Гроув-стрит" or PTeam == "Триады" or PTeam == "Ацтекас") then
+				elseif(PTeam == "Гроув-стрит" or PTeam == "Ацтекас") then
 					Respect(killer, "grove", -1)
 					Respect(killer, "ballas", 1)
-					Respect(killer, "vagos", 1)
-				elseif(PTeam == "Вагос" or PTeam == "Da Nang Boys" or PTeam == "Рифа") then
+				elseif(PTeam == "Вагос" or PTeam == "Рифа") then
 					Respect(killer, "vagos", -1)
-					Respect(killer, "grove", 1)
+					Respect(killer, "ugol", 1)
 				elseif(getTeamGroup(PTeam) == "Официалы") then
-					Respect(killer, "ugol", 3)
-					Respect(killer, "police", -3)
-					Respect(killer, "civilian", -3)
+					Respect(killer, "ugol", 1)
+					Respect(killer, "police", -1)
+					Respect(killer, "civilian", -1)
 					WantedLevel(killer, 1)
 				elseif(PTeam == "Уголовники" and KTeam == "Уголовники") then
 					Respect(killer, "ugol", 1)
 					SetDatabaseAccount(killer, "PrisonTime", GetDatabaseAccount(killer, "PrisonTime")+100)
 					MissionCompleted(killer, "СРОК +", "ПЛОХОЕ ПОВЕДЕНИЕ")
 				elseif(PTeam == "Деревенщины" and KTeam == "Деревенщины") then
+					Respect(killer, "vagos", 1)
 					Respect(killer, "ugol", 1)
 					WantedLevel(killer, 1)
 				elseif(PTeam == "Байкеры" and KTeam == "Байкеры") then
+					Respect(killer, "vagos", 1)
 					Respect(killer, "ugol", 1)
 					WantedLevel(killer, 1)
 				end
@@ -8480,19 +8427,7 @@ function cap(thePlayer, zone)
 					local r,g,b,_ = getRadarAreaColor(WARGANG[zone][1])
 					local tr,tg,tb = getTeamColor(getPlayerTeam(thePlayer))
 					if(tr ~= r or tg ~= g or tb ~= b) then
-						if(VehicleBand[zone]) then
-							for slot = 1, #VehicleBand[zone] do
-								setElementData(VehicleBand[zone][slot], "destroy", "true", false)
-							end
-						end
-						if(BotCreated[zone]) then
-							for slot = 1, #BotCreated[zone] do
-								if(isElement(BotCreated[zone][slot])) then
-									setElementData(BotCreated[zone][slot], "SpawnBlock", "true", false)
-								end
-							end
-						end
-						CapZone[zone] = PlayerTeam
+						CapZone[zone] = {0, PlayerTeam}
 					end
 				end
 			end
@@ -8707,20 +8642,10 @@ addEventHandler("ZoneInfo", root, ZoneInfo)
 
 
 
-function stopCap(zone,r,g,b, PlayerTeam, spawnveh, spawnbot)
+function stopCap(zone,r,g,b)
 	CapZone[zone] = nil
 	for slot = 1, #WARGANG[zone] do
 		setRadarAreaColor(WARGANG[zone][slot], r,g,b,140)
-	end
-
-
-	if(BotCreated[zone]) then
-		for slot = 1, #BotCreated[zone] do
-			if(isElement(DynamicBlip[BotCreated[zone][slot]])) then
-				destroyElement(DynamicBlip[BotCreated[zone][slot]])
-				destroyElement(DynamicMar[BotCreated[zone][slot]])
-			end
-		end
 	end
 end
 
@@ -8747,7 +8672,7 @@ function okCap(zone,r,g,b, PlayerTeam)
 		end
 		ToolTip(thePlayer, "Зарплата "..RGBToHex(r,g,b)..PlayerTeam.."#FFFFFF\nвыросла на "..COLOR["DOLLAR"]["HEX"].."$"..GetZoneSize(zone))
 	end
-	stopCap(zone,r,g,b, PlayerTeam)
+	stopCap(zone,r,g,b)
 end
 
 
@@ -9945,7 +9870,6 @@ function worldtime(ignoreweather)
 		end
 
 
-
 		if(hour == 3 or hour == 9 or hour == 15 or hour == 21 and not ignoreweather) then
 			triggerEvent("NewWeather", root)
 		end
@@ -9993,9 +9917,9 @@ function worldtime(ignoreweather)
 		end
 	end
 
-	for zone, team in pairs(CapZone) do
+	for zone, dat in pairs(CapZone) do
 		local r,g,b = getTeamColor(getTeamFromName(GetDatabaseZoneNode(zone)))
-		local tr,tg,tb = getTeamColor(getTeamFromName(team))
+		local tr,tg,tb = getTeamColor(getTeamFromName(dat[2]))
 		local c1,c2,c3,_ = getRadarAreaColor(WARGANG[zone][1])
 		if(c1 == r and c2 == g and c3 == b) then
 			for slot = 1, #WARGANG[zone] do
@@ -10008,105 +9932,29 @@ function worldtime(ignoreweather)
 		end
 
 		local PlayerInZone = {}
-		local players = getPlayersInTeam(getTeamFromName(team))
+		local players = getPlayersInTeam(getTeamFromName(dat[2]))
 		for playerKey, playerValue in ipairs (players) do
 			local x,y,z = getElementPosition(playerValue)
 			if(getZoneName(x,y,z) == zone) then
-				PlayerInZone[#PlayerInZone+1]=playerValue
-			end
-		end
-
-		local TotalVehicle = 0
-		if(VehicleBand[zone]) then
-			for slot = 1, #VehicleBand[zone] do
-				local theVehicle = VehicleBand[zone][slot]
-				if(isElement(theVehicle)) then
-					local vx,vy,vz = getElementPosition(theVehicle)
-					if(zone == getZoneName(vx,vy,vz) and getElementHealth(theVehicle) > 0) then
-						if(not isElement(DynamicBlip[theVehicle])) then
-							DynamicBlip[theVehicle] = createBlipAttachedTo(theVehicle, 0, 1, r,g,b, 200, 2)
-							setElementVisibleTo(DynamicBlip[theVehicle], root, false)
-							DynamicMar[theVehicle] = createMarker(vx,vy,vz, "arrow", 1, 255, 0, 0, 200)
-							attachElements(DynamicMar[theVehicle], theVehicle, 0, 0, 2)
-							setElementVisibleTo(DynamicMar[theVehicle], root, false)
-
-							for _,k in pairs(PlayerInZone) do
-								setElementVisibleTo(DynamicBlip[theVehicle], k, true)
-								setElementVisibleTo(DynamicMar[theVehicle], k, true)
-							end
-						else
-							setElementVisibleTo(DynamicBlip[theVehicle], root, false)
-							setElementVisibleTo(DynamicMar[theVehicle], root, false)
-							for _,k in pairs(PlayerInZone) do
-								setElementVisibleTo(DynamicBlip[theVehicle], k, true)
-								setElementVisibleTo(DynamicMar[theVehicle], k, true)
-							end
-						end
-						TotalVehicle = TotalVehicle+1
-					else
-						if(isElement(DynamicBlip[theVehicle])) then
-							destroyElement(DynamicBlip[theVehicle])
-							destroyElement(DynamicMar[theVehicle])
-						end
-					end
+				local rand = math.random(1,5) 
+				if(rand == 5) then
+					exports["ai"]:bandits(playerValue, GetDatabaseZoneNode(zone))
 				end
+				
+				PlayerInZone[#PlayerInZone+1] = playerValue
 			end
 		end
+		
+		dat[1] = dat[1]+1
 
-		local TotalBot = 0
-		if(BotCreated[zone]) then
-			for slot = 1, #BotCreated[zone] do
-				local ped = BotCreated[zone][slot]
-				if(isElement(ped)) then
-					local vx,vy,vz = getElementPosition(ped)
-					local team = getElementData(ped, "team")
-					if(team == GetDatabaseZoneNode(zone)) then
-						if(not getElementData(ped, "NextNode")) then
-							if(zone == getZoneName(vx,vy,vz, false) and not isPedDead(ped)) then
-								if(not isElement(DynamicBlip[ped])) then
-									DynamicBlip[ped] = createBlipAttachedTo(ped, 0, 1, r,g,b, 200, 2)
-									setElementVisibleTo(DynamicBlip[ped], root, false)
-									DynamicMar[ped] = createMarker(vx,vy,vz, "arrow", 1, 255, 0, 0, 200)
-									attachElements(DynamicMar[ped], ped, 0, 0, 2)
-									setElementVisibleTo(DynamicMar[ped], root, false)
-									for _,k in pairs(PlayerInZone) do
-										setElementVisibleTo(DynamicBlip[ped], k, true)
-										setElementVisibleTo(DynamicMar[ped], k, false)
-									end
-								else
-									setElementVisibleTo(DynamicBlip[ped], root, false)
-									setElementVisibleTo(DynamicMar[ped], root, false)
-									for _,k in pairs(PlayerInZone) do
-										setElementVisibleTo(DynamicBlip[ped], k, true)
-										setElementVisibleTo(DynamicMar[ped], k, true)
-									end
-								end
-								TotalBot = TotalBot + 1
-							else
-								if(isElement(DynamicBlip[ped])) then
-									destroyElement(DynamicBlip[ped])
-									destroyElement(DynamicMar[ped])
-								end
-							end
-						end
-					end
-				end
-			end
-		end
 
 		if(#PlayerInZone == 0) then
-			stopCap(zone,r,g,b, SpawnPoint[zone][6], true, true)
+			stopCap(zone,r,g,b)
 		else
-			if(TotalVehicle == 0 and TotalBot == 0) then
-				okCap(zone,tr,tg,tb, team)
+			if(dat[1] == 100) then
+				okCap(zone,tr,tg,tb, dat[2])
 			else
-				local advinfo = "Захват "..RGBToHex(r,g,b)..zone.."\n"
-				if(TotalVehicle > 0) then
-					advinfo = advinfo.."#FFFFFFУничтожь вражескую технику "..#VehicleBand[zone]-TotalVehicle.."/"..#VehicleBand[zone].."\n"
-				end
-				if(TotalBot > 0) then
-					advinfo = advinfo.."#FFFFFFУбей врагов "..TotalBot.."\n"
-				end
+				local advinfo = "Захват "..RGBToHex(r,g,b)..zone.."\n#FFFFFFПрогресс "..dat[1].."%"
 				for playerKey, playerValue in ipairs (PlayerInZone) do
 					triggerClientEvent(playerValue, "ChangeInfo", playerValue, advinfo, 2000)
 					triggerEvent("ZoneInfo", playerValue, playerValue, zone)
@@ -14375,11 +14223,14 @@ end
 
 function Respect(thePlayer, Group, count)
 	if(Group and count) then
-		count = count*5 -- Множитель для ускорения...
-		local Total = GetDatabaseAccount(thePlayer, Group)+(count)
-		if(Total > 1000) then Total = 1000
-		elseif(Total < -1000) then Total = -1000 end
-		SetDatabaseAccount(thePlayer, Group, Total)
+		local total = GetDatabaseAccount(thePlayer, Group)
+		local newResp = total+(count)
+		if(newResp > 1000) then newResp = 1000
+		elseif(newResp < -1000) then newResp = -1000 end
+		if(total == 1000 and newResp == 1000) then return false end
+		if(total == -1000 and newResp == -1000) then return false end
+		
+		SetDatabaseAccount(thePlayer, Group, newResp)
 		local GroupName=""
 		local countName=""
 		if(Group == "ballas") then GroupName="Баллас" end
@@ -14388,8 +14239,13 @@ function Respect(thePlayer, Group, count)
 		if(Group == "grove") then GroupName="Гроув-стрит" end
 		if(Group == "police") then GroupName="Полиция" end
 		if(Group == "ugol") then GroupName="Уголовники" end
-
-		triggerClientEvent(thePlayer, "RespectMessage", thePlayer, GroupName, count)
+		
+		for i = 0, ReversePlus(count) do
+			if(isint((total+i)/10)) then
+				triggerClientEvent(thePlayer, "RespectMessage", thePlayer, GroupName, count)
+				break
+			end
+		end
 	end
 
 	setElementData(thePlayer, "civilian", GetDatabaseAccount(thePlayer, "civilian"))
@@ -15217,28 +15073,9 @@ end
 
 
 
--- Area 51
-local PrisonPersonal = {
-	[1] = CreateBot(287, 265.2, 1895.3, 33.9, 90, 0, 0, "Служащий", 1), 
-	[2] = CreateBot(287, 233.7, 1933, 33.9, 180, 0, 0, "Служащий", 2), 
-	[3] = CreateBot(287, 102.4, 1902.2, 33.9, 41, 0, 0, "Служащий", 3),
-	[4] = CreateBot(287, 115, 1812.6, 33.9, 230, 0, 0, "Служащий", 4),
-	[5] = CreateBot(287, 229, 1921.1, 25.8, 90, 0, 0, "Служащий", 5),
-	[6] = CreateBot(287, 128.6, 1938.2, 19.3, 180, 0, 0, "Служащий", 5),
-	[7] = CreateBot(287, 282.4, 1814.7, 17.6, 90, 0, 0, "Служащий", 5),
-	[8] = CreateBot(287, 211.6, 1812.3, 21.9, 0, 0, 0, "Служащий", 5),
-}
-
-
-for _, thePed in pairs(PrisonPersonal) do
-	giveWeapon(thePed, 34,9999,true)
-end
 
 function PrisonAlert(thePlayer)
-	for _, thePed in pairs(PrisonPersonal) do
-		setElementData(thePed, "attacker", getPlayerName(thePlayer))
-	end
-	
+
 	for key,thePlayers in pairs(getElementsByType "player") do
 		triggerClientEvent(thePlayers, "PlaySFX3DforAll", thePlayers, "script", 20, 1, 165.5, 1850.5, 37.7, false, 100,200)
 	end
