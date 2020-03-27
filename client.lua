@@ -100,7 +100,6 @@ local BANKCTL = false
 local Targets = {}
 local MyHouseBlip = {}
 local SpawnPoints = {}
-local initializedInv = false
 local DragElement = false
 local DragElementId = false
 local DragElementName = false
@@ -921,9 +920,15 @@ end)
 
 
 
+function AddVehicleUpgrade(theVehicle, upgrade)
+	addVehicleUpgrade(theVehicle, upgrade)
+	triggerEvent("VehicleUpgrade", theVehicle, upgrade)
+end
+
+
 function OriginVehicleUpgrade(theVehicle)
 	for upgradeKey, upgradeValue in ipairs (getVehicleUpgrades(theVehicle)) do removeVehicleUpgrade(theVehicle, upgradeValue) end
-	for upgradeKey, upgradeValue in ipairs (upgrades) do addVehicleUpgrade(theVehicle, upgradeValue) end
+	for upgradeKey, upgradeValue in ipairs (upgrades) do AddVehicleUpgrade(theVehicle, upgradeValue) end
 	return true
 end
 
@@ -1642,7 +1647,7 @@ function UpgradePreload(razdel, name, upgr, cost)
 
 	if(tonumber(upgr)) then
 		OriginVehicleUpgrade(theVehicle)
-		addVehicleUpgrade(theVehicle, upgr)
+		AddVehicleUpgrade(theVehicle, upgr)
 		triggerEvent("helpmessageEvent", localPlayer, COLOR["DOLLAR"]["HEX"].."$"..cost)
 		UpdateTuningPerformans()
 	else
@@ -1719,7 +1724,7 @@ function LatencyUpgrade(Upgrade)
 		end
 	end
 	
-	addVehicleUpgrade(theVehicle, Upgrade)
+	AddVehicleUpgrade(theVehicle, Upgrade)
 	local CurrentUpgrades = getVehicleUpgrades(theVehicle)
 	for slot = 0, #CurrentUpgrades do
 		if(Upgrade == CurrentUpgrades[slot]) then
@@ -3306,6 +3311,8 @@ function StartLoad() -- Первый этап загрузки
 		LoginClient(true)
 		GTASound = playSound(SoundsTheme[math.random(#SoundsTheme)], true)
 		setSoundVolume(GTASound, 0.5)
+	else
+		setElementData(localPlayer, "PlayerStatus", "play")
 	end
 end
 
@@ -3811,35 +3818,6 @@ addEventHandler("onMyClientScreenShot", resourceRoot,
 
 
 
-function onClientChatMessageHandler(text)
-	if(getElementData(localPlayer, "PlayerStatus") == "play") then
-		if string.find(text, "http?://[%w-_%.%?%.:/%+=&]+") then -- if string.match and text itself are the same
-			local s, e = string.find(text, "http?://[%w-_%.%?%.:/%+=&]+")
-			PData["WebLink"] = string.sub(text, s, e)
-			triggerEvent("ToolTip", localPlayer, "В чат добавлена ссылка\nНажми F5 чтобы посмотреть")
-		end
-	end
-
-end
-addEventHandler("onClientChatMessage", root, onClientChatMessageHandler)
-
-
-
-function RemoveInventory()
-	if(initializedInv) then
-		initializedInv=false
-		PBut["player"] = {}
-	end
-end
-
-
-
-
-
-
-
-
-
 
 
 function isEventHandlerAdded(sEventName, pElementAttachedTo, func)
@@ -3987,19 +3965,15 @@ addEventHandler("onClientPlayerWeaponFire", localPlayer, onClientPlayerWeaponFir
 
 
 function SetupInventory()
-	if(not initializedInv) then
-		local StPosx = (screenWidth)-((80*NewScale)*10)
-		local StPosxy = (screenHeight)-(80*NewScale)
-		local binvx = 0
-		local binvy = 0
+	local StPosx = (screenWidth)-((80*NewScale)*10)
+	local StPosxy = (screenHeight)-(80*NewScale)
+	local binvx = 0
+	local binvy = 0
 
-		for i,val in pairs(PInv["player"]) do
-			PBut["player"][i] = {StPosx+binvx, StPosxy+binvy, 80*NewScale, 60*NewScale}
+	for i,val in pairs(PInv["player"]) do
+		PBut["player"][i] = {StPosx+binvx, StPosxy+binvy, 80*NewScale, 60*NewScale}
 
-			binvx = binvx+(80.5*NewScale)
-		end
-		
-		initializedInv = true
+		binvx = binvx+(80.5*NewScale)
 	end
 end
 addEvent("SetupInventory", true)
@@ -4664,7 +4638,7 @@ function CreateTarget(el)
 			
 			local text = false
 			if(types == "vehicle") then 
-				text = getVehicleName(el)
+				text = getElementData(el, "name") or getVehicleName(el)
 				if(getElementData(el, "year")) then
 					text = text.." "..getElementData(el, "year")
 				end
@@ -5336,7 +5310,6 @@ function onWasted(killer, weapon, bodypart)
 		if(not DeathMatch) then
 			setGameSpeed(0.7)
 		end
-		RemoveInventory()
 		RespawnTimer = true
 		PData["wasted"] = Text("ПОТРАЧЕНО")
 		if(killer) then
@@ -5747,7 +5720,7 @@ function DrawPlayerMessage()
 	end
 	PData["MultipleAction"] = {}
 		
-	if(getElementData(localPlayer, "PlayerStatus") == "play" and initializedInv) then
+	if(getElementData(localPlayer, "PlayerStatus") == "play") then
 		if(tuningList) then
 			sx,sy = (screenWidth/2.55), screenHeight-(150*scaley)
 		
@@ -5851,7 +5824,7 @@ function DrawPlayerMessage()
 
 			if(PData["Interface"]["Inventory"]) then
 				local sx, sy, font, tw, th, color
-				if(getElementData(localPlayer, "PlayerStatus") == "play" and initializedInv and not isPedDead(localPlayer)) then
+				if(getElementData(localPlayer, "PlayerStatus") == "play" and not isPedDead(localPlayer)) then
 					if(PData["BizControlName"]) then
 						dxDrawRectangle(640*scalex, 360*scaley, 950*scalex, 525*scaley, tocolor(20, 25, 20, 245))
 						dxDrawBorderedText(PData["BizControlName"][2], 660*scalex, 330*scaley, screenWidth, screenHeight, tocolor(255, 255, 255, 255), scale*2, "default-bold", "left", "top", false, false, false, true)	
@@ -6496,7 +6469,6 @@ bindKey("2", "down", StartMission)
 
 
 function SwitchNick()
-	RemoveInventory()
 	LoginClient(true)
 end
 addEventHandler("onClientPlayerChangeNick", getLocalPlayer(), SwitchNick)
