@@ -3848,15 +3848,16 @@ addCommandHandler("removeshader", removeshader)
 
 
 
-
-function DevelopmentRender()
+function DevelopmentRender(msSinceLastFrame)
 
 end
 
+
+
 function ShowInfoKey()
-	if(isEventHandlerAdded("onClientRender", root, DevelopmentRender)) then
+	if(isEventHandlerAdded("onClientPreRender", root, DevelopmentRender)) then
 		setDevelopmentMode(false)
-		removeEventHandler("onClientRender", root, DevelopmentRender)
+		removeEventHandler("onClientPreRender", root, DevelopmentRender)
 	else
 		outputChatBox("Player model: "..getElementModel(localPlayer))
 		local tar = getPedTarget(localPlayer)
@@ -3880,7 +3881,7 @@ function ShowInfoKey()
 
 		
 		setDevelopmentMode(true)
-		addEventHandler("onClientRender", root, DevelopmentRender)
+		addEventHandler("onClientPreRender", root, DevelopmentRender)
 		
 		
 		
@@ -5982,6 +5983,12 @@ function DrawPlayerMessage()
 end
 addEventHandler("onClientHUDRender", root, DrawPlayerMessage)
 
+
+function MoveMouse(x, y, absoluteX, absoluteY)
+	MouseX = absoluteX
+	MouseY = absoluteY
+end
+addEventHandler("onClientCursorMove", root, MoveMouse)
 
 
 function SmoothCameraMove(x,y,z,x2,y2,z2,times,targetafter)

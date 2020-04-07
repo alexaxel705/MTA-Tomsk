@@ -293,6 +293,7 @@ function setCameraOnPlayerJoin()
 
 	if(getElementData(source, "auth")) then
 		SetTeam(source, GetDatabaseAccount(source, "team"))
+		BindAllKey(source)
 	else
 		setCameraMatrix(source,1698.9, -1538.9, 13.4, 1694.2, -1529, 13.5)	
 		callRemote("http://109.227.228.4/engine/include/MTA/index.php", ResultGet, "<b>Системное оповещение</b>", getPlayerName(source):gsub('#%x%x%x%x%x%x', '').." Подключился к серверу", "#000")
@@ -4298,6 +4299,7 @@ addEventHandler("StartAnimation", root, StartAnimation)
 
 
 
+CreateEnter(279.4, 1829.3, 7.7, 0, 0, 0, false, 284, 1829, 7.7, 0, 0, 0, "Лаборатория") -- Лаборатория Zone 51
 CreateEnter(-1749.2, 868.7, 25.1, 180, 0, 0, false, -1753.7, 883.9, 295.6, 0, 0, 0, "Крыша") -- Крыша SF
 CreateEnter(-830.9, 1984.7, 9.4, 190, 0, 0, false, -959.5, 1956.5, 9, 190, 17, 0, "Sherman dam")
 CreateEnter(1570.7, -1337.2, 16.5, 312, 0, 0, false, 1548.6, -1363.7, 326.2, 180, 0, 0, "Крыша") -- Крыша LS
@@ -11741,7 +11743,7 @@ end
 
 function kill(thePlayer) killPed(thePlayer, thePlayer, 0, 8) end
 addEvent("kill", true)
-addEventHandler("kill", resourceRoot, kill)
+addEventHandler("kill", root, kill)
 addCommandHandler("kill", kill)
 
 
@@ -12674,13 +12676,18 @@ function player_Wasted(ammo, killer, weapon, bodypart, stealth)
 						if(GetPlayerMoney(source) >= GetDatabaseAccount(source, "wanted")*100) then
 							AddPlayerMoney(source, -(GetDatabaseAccount(source, "wanted")*100))
 						end
-						SetDatabaseAccount(source, "PrisonTime", GetDatabaseAccount(source, "wanted")*20)
 						SetDatabaseAccount(source, "prisoninv", GetDatabaseAccount(source, "inv"))
 						SetDatabaseAccount(source, "inv", StandartInventory)
 						local x,y,z = GetPlayerLocation(source)
 						local zone = exports["ps2_weather"]:GetZoneName(x,y,z,true, getElementData(source, "City"))
 						SetDatabaseAccount(source, "OldTeam", PTeam)
-						SetDatabaseAccount(source, "Prison", PrisonVariable[zone])
+						if(GetDatabaseAccount(source, "wanted") < 6) then
+							SetDatabaseAccount(source, "Prison", PrisonVariable[zone])
+							SetDatabaseAccount(source, "PrisonTime", GetDatabaseAccount(source, "wanted")*20)
+						else
+							SetDatabaseAccount(source, "Prison", "AREA51")
+							SetDatabaseAccount(source, "PrisonTime", 228322)
+						end
 						SetTeam(source, "Уголовники")
 					end
 				end
