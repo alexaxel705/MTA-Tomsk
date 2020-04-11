@@ -109,9 +109,6 @@ local DragY = false
 local MouseX, MouseY = 0, 0
 local PBut = {["player"] = {}, ["shop"] = {}, ["backpack"] = {}, ["trunk"] = {}}
 local PInv = {["player"] = {}, ["shop"] = {}, ["backpack"] = {}, ["trunk"] = {}}
-local InventoryMass = 0
-local MaxMass = 0
-local MassColor = tocolor(255,255,255,255)
 local SleepTimer = false
 local ArrestTimerEvent = false
 local DrugsTimer = false
@@ -2778,24 +2775,10 @@ local WardrobeObject = {
 
 
 
-
-
-function getPointFromDistanceRotation(x, y, dist, angle)
-    local a = math.rad(90 - angle);
-    local dx = math.cos(a) * dist;
-    local dy = math.sin(a) * dist;
-    return x+dx, y+dy;
-end
-
-
-
-
 		
 function StartAnimation(thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame, forced)
 	triggerServerEvent("StartAnimation", localPlayer, thePlayer, block, anim, times, loop, updatePosition, interruptable, freezeLastFrame, forced)
 end
-
-
 
 
 
@@ -2923,15 +2906,6 @@ setTimer(updateWorld, 50, 0)
 
 
 function checkKey()
-	if(getElementData(localPlayer, "PlayerStatus") == "play") then
-		for _, thePlayer in pairs(getElementsByType("player", root, true)) do
-			UpdateArmas(thePlayer)
-		end
-		for _, thePed in pairs(getElementsByType("ped", root, true)) do
-			UpdateArmas(thePed)
-		end
-	end	
-	
 	local x,y,z = getElementPosition(localPlayer)
 	local x2,y2,z2 = getPositionInFront(localPlayer, 1)
 	PData["TARR"] = {} 
@@ -3138,7 +3112,7 @@ local ModelPlayerPosition = {
 function UpdateDisplayArmas(thePlayer)
 	if(isElementAttached(thePlayer)) then
 		local ATT = getElementAttachedTo(thePlayer)
-		local rx,ry,rz=getElementRotation(ATT)
+		local rx,ry,rz = getElementRotation(ATT)
 		setElementRotation(thePlayer,rx,ry,rz,"default",true)
 	end
 	if(StreamData[thePlayer]) then
@@ -3414,7 +3388,7 @@ function stopVehicleEntry(thePlayer, seat, door)
 		end
 	end
 end
-addEventHandler("onClientVehicleStartEnter", root,stopVehicleEntry)
+addEventHandler("onClientVehicleStartEnter", root, stopVehicleEntry)
 
 
 
@@ -4600,19 +4574,10 @@ function CreateTarget(el)
 		
 				x,y = getScreenFromWorldPosition(x,y,z)
 				if(x and y) then
-					if(x > maxx) then
-						maxx = x
-					end
-					if(x < minx) then
-						minx = x
-					end
-					
-					if(y > maxy) then
-						maxy = y
-					end
-					if(y < miny) then
-						miny = y
-					end
+					maxx = math.max(x, maxx)
+					maxy = math.max(y, maxy)
+					minx = math.min(x, minx)
+					miny = math.min(y, miny)
 				end
 			end
 
@@ -4870,13 +4835,6 @@ function DrawOnClientRender()
 		
 		for _, ped in pairs(getElementsByType("ped", root, true)) do
 			local text = ""
-			
-			local x,y,z = getElementPosition(localPlayer)
-			local pedx, pedy, pedz = getElementPosition(ped)
-			local distance = getDistanceBetweenPoints3D(x,y,z, pedx, pedy, pedz)
-			if(distance < 10) then
-				--text = "『 В разработке 』\n "
-			end
 			if(PlayersMessage[ped]) then
 				text = text.."#EEEEEE"..PlayersMessage[ped]
 			end
@@ -5680,15 +5638,15 @@ addEventHandler("PlaySFXSoundEvent", localPlayer, PlaySFXSound)
 
 
 
-addEventHandler("onClientVehicleCollision", root,
-    function(HitElement,force, bodyPart, x, y, z, nx, ny, nz, hitElementForce)
-         if(source == getPedOccupiedVehicle(localPlayer)) then
-			if(force > 500) then
-				--triggerServerEvent("ForceRemoveFromVehicle", resourceRoot, localPlayer, force/1000)
-			end
-         end
-    end
-)
+--addEventHandler("onClientVehicleCollision", root,
+--    function(HitElement,force, bodyPart, x, y, z, nx, ny, nz, hitElementForce)
+--         if(source == getPedOccupiedVehicle(localPlayer)) then
+--			if(force > 500) then
+--				triggerServerEvent("ForceRemoveFromVehicle", resourceRoot, localPlayer, force/1000)
+--			end
+--         end
+--    end
+--)
 
 
 
@@ -6382,20 +6340,20 @@ addEventHandler("onClientTrailerDetach", root, deAttach)
 
 
 
-function clientPickupHit(thePlayer, matchingDimension)
-	if(thePlayer == localPlayer) then
-		local x,y,z = getElementPosition(thePlayer)
-		local zone = getZoneName(x,y,z)
-		local model = getElementModel(source)
-		if(model == 954 or model == 1276 or model == 953) then
-			if(getElementData(source, "id")) then
-				triggerServerEvent("AddCollections", localPlayer, localPlayer, model, getElementData(source, "id"))
-				destroyElement(source)
-			end
+function clientPickupHit(thePickup, matchingDimension)
+	local x,y,z = getElementPosition(localPlayer)
+	local zone = getZoneName(x,y,z)
+	local model = getElementModel(thePickup)
+	if(model == 954 or model == 1276 or model == 953) then
+		if(getElementData(thePickup, "id")) then
+			triggerServerEvent("AddCollections", localPlayer, localPlayer, model, getElementData(thePickup, "id"))
+			destroyElement(thePickup)
 		end
 	end
 end
-addEventHandler("onClientPickupHit", root, clientPickupHit)
+addEventHandler("onClientPlayerPickupHit", localPlayer, clientPickupHit)
+
+
 
 function StreamOut(restream)
 	if(StreamData[source]) then 
