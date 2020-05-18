@@ -8316,7 +8316,9 @@ function PedDamage(ped, weapon, bodypart, loss)
 			end
 			setElementData(ped, "attacker", getPlayerName(source))
 			if(weapon >= 0 and weapon <=9) then
-				AddSkill(source, 177)
+				if(loss > 0) then
+					AddSkill(source, 177, 1)
+				end
 				if(weapon == 6) then
 					local rand = math.random(4)
 					if(rand == 4) then
@@ -13657,7 +13659,9 @@ function playerDamage(attacker, weapon, bodypart, loss)
 				WantedLevel(attacker, 0.1)
 			end
 			if(weapon >= 0 and weapon <= 9) then
-				AddSkill(attacker, 177)
+				if(loss > 0) then
+					AddSkill(attacker, 177, 1)
+				end
 				if(weapon == 6) then
 					local rand = math.random(4)
 					if(rand == 4) then
