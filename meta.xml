@@ -12,6 +12,7 @@
 	<export function="AddPlayerMoney" type="server"/>
 	<export function="AddSkill" type="server"/>
 	<export function="Respect" type="server"/>
+	<export function="GetVehicleGround" type="server"/>
 	
 	<export function="GetSkinJob" type="shared"/>
 	<export function="GetSkinData" type="shared"/>

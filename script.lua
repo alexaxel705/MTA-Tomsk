@@ -1705,10 +1705,15 @@ VehicleSystem[717] = VehicleSystem[489]
 
 
 
-function getVehicleZ(theVehicle)
-	local model = getElementModel(theVehicle)
-	return VehicleSystem[model][1]
+function GetVehicleGround(model)
+	if(VehicleSystem[model]) then
+		return VehicleSystem[model][1]
+	else
+		return 0
+	end
 end
+addEvent("GetVehicleGround", true)
+addEventHandler("GetVehicleGround", root, GetVehicleGround)
 
 
 --[[
@@ -3653,6 +3658,8 @@ function UpgradePreload(thePlayer, name, upgr)
 end
 addEvent("UpgradePreload", true)
 addEventHandler("UpgradePreload", root, UpgradePreload)
+
+
 
 
 

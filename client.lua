@@ -6315,25 +6315,6 @@ function deAttach(theVehicle)
 	if(getElementModel(theVehicle) == 532 or getElementModel(theVehicle) == 531) then
 		killTimer(PData["Harvest"])
 		PData["HarvestDisplay"] = false
-	else
-		if(VehiclesInStream[source]) then
-			local x,y,z = getElementPosition(source)
-			VehiclesInStream[source]["info"] = createMarker(x,y,z, "corona", 15, 255, 10, 10, 0)
-	
-			local x,y,z,resx,resy,resz = getElementData(source, "x"),getElementData(source, "y"),getElementData(source, "z"),getElementData(source, "resx"),getElementData(source, "resy"),getElementData(source, "resz")
-			local dist = getDistanceBetweenPoints3D(x,y,z,resx,resy,resz)/2
-			if(dist >= 1000) then
-				dist=math.round((dist/1000), 1).." км"
-			else
-				dist=math.round(dist, 0).." м"
-			end
-			
-			local money = getElementData(source, "money")
-			local rl = fromJSON(getElementData(source, "BaseDat"))
-			setElementData(VehiclesInStream[source]["info"], "TrailerInfo", "Груз: #FF0000"..getElementData(source, "product").."\n#FFFFFFКуда: "..rl[1].."\nРасстояние: "..dist.."\n#FFFFFFОплата: #3B7231$"..money)
-			
-			attachElements(VehiclesInStream[source]["info"], source)
-		end
 	end
 end
 addEventHandler("onClientTrailerDetach", root, deAttach)
